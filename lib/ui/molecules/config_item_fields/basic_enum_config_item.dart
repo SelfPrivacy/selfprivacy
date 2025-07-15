@@ -21,14 +21,13 @@ class BasicEnumConfigItem extends StatefulWidget {
 class _BasicEnumConfigItemState extends State<BasicEnumConfigItem> {
   @override
   Widget build(final BuildContext context) {
-    final List<DropdownMenuItem<String>> options = widget.configItem.options
-        .map<DropdownMenuItem<String>>(
-          (final String option) => DropdownMenuItem<String>(
-            value: option,
-            child: Text(option),
-          ),
-        )
-        .toList();
+    final List<DropdownMenuItem<String>> options =
+        widget.configItem.options
+            .map<DropdownMenuItem<String>>(
+              (final String option) =>
+                  DropdownMenuItem<String>(value: option, child: Text(option)),
+            )
+            .toList();
     if (!widget.configItem.options.contains(widget.configItem.value)) {
       options.add(
         DropdownMenuItem<String>(
@@ -37,8 +36,8 @@ class _BasicEnumConfigItemState extends State<BasicEnumConfigItem> {
           child: Text(
             widget.configItem.value,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.error.withOpacity(0.7),
-                ),
+              color: Theme.of(context).colorScheme.error.withOpacity(0.7),
+            ),
           ),
         ),
       );
@@ -47,10 +46,13 @@ class _BasicEnumConfigItemState extends State<BasicEnumConfigItem> {
       children: [
         ListTile(
           title: Text(widget.configItem.description),
-          subtitle: (widget.newValue != null &&
-                  widget.newValue != widget.configItem.value)
-              ? Text('service_page.modified'.tr())
-              : (!widget.configItem.options.contains(widget.configItem.value))
+          subtitle:
+              (widget.newValue != null &&
+                      widget.newValue != widget.configItem.value)
+                  ? Text('service_page.modified'.tr())
+                  : (!widget.configItem.options.contains(
+                    widget.configItem.value,
+                  ))
                   ? Text('service_page.invalid_value_detected'.tr())
                   : null,
           trailing: DropdownButton<String>(

@@ -13,31 +13,23 @@ part 'server_jobs_state.dart';
 part 'server_jobs_event.dart';
 
 class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
-  ServerJobsBloc()
-      : super(
-          ServerJobsInitialState(),
-        ) {
+  ServerJobsBloc() : super(ServerJobsInitialState()) {
     on<ServerJobsListChanged>(
       _mapServerJobsListChangedToState,
       transformer: sequential(),
     );
-    on<RemoveServerJob>(
-      _mapRemoveServerJobToState,
-      transformer: sequential(),
-    );
+    on<RemoveServerJob>(_mapRemoveServerJobToState, transformer: sequential());
     on<RemoveAllFinishedJobs>(
       _mapRemoveAllFinishedJobsToState,
       transformer: droppable(),
     );
 
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        add(
-          ServerJobsListChanged([...apiData.serverJobs.data ?? []]),
-        );
-      },
-    );
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(ServerJobsListChanged([...apiData.serverJobs.data ?? []]));
+    });
   }
 
   StreamSubscription? _apiDataSubscription;
@@ -50,8 +42,9 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
       emit(ServerJobsListEmptyState());
       return;
     }
-    final newState =
-        ServerJobsListWithJobsState(serverJobList: event.serverJobList);
+    final newState = ServerJobsListWithJobsState(
+      serverJobList: event.serverJobList,
+    );
     emit(newState);
   }
 
@@ -70,20 +63,21 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
   }
 
   Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
-    final fallbackDrive = getIt<ApiConnectionRepository>()
-            .apiData
-            .volumes
-            .data
+    final fallbackDrive =
+        getIt<ApiConnectionRepository>().apiData.volumes.data
             ?.where((final drive) => drive.root)
             .first
             .name ??
         'sda1';
-    final result = await getIt<ApiConnectionRepository>()
-        .api
-        .migrateToBinds(serviceToDisk, fallbackDrive);
+    final result = await getIt<ApiConnectionRepository>().api.migrateToBinds(
+      serviceToDisk,
+      fallbackDrive,
+    );
     if (result.data == null) {
-      getIt<NavigationService>()
-          .showSnackBar(result.message!, behavior: SnackBarBehavior.floating);
+      getIt<NavigationService>().showSnackBar(
+        result.message!,
+        behavior: SnackBarBehavior.floating,
+      );
       return;
     }
   }

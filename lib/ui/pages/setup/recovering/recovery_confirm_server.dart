@@ -43,172 +43,165 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        heroTitle: _isExtended
+    heroTitle:
+        _isExtended
             ? 'recovering.choose_server'.tr()
             : 'recovering.confirm_server'.tr(),
-        heroSubtitle: _isExtended
+    heroSubtitle:
+        _isExtended
             ? 'recovering.choose_server_description'.tr()
             : 'recovering.confirm_server_description'.tr(),
-        hasBackButton: true,
-        ignoreBreakpoints: true,
-        onBackButtonPressed: () {
-          Navigator.of(context).popUntil((final route) => route.isFirst);
-        },
-        hasFlashButton: false,
-        children: [
-          FutureBuilder<List<ServerBasicInfoWithValidators>>(
-            future: context
-                .read<ServerInstallationCubit>()
-                .getAvailableServers(server: widget.server),
-            builder: (final context, final snapshot) {
-              if (snapshot.hasData) {
-                final servers = snapshot.data;
-                return Column(
-                  children: [
-                    if (servers != null && servers.isNotEmpty)
-                      Column(
-                        children: [
-                          if (!_isExtended && _isServerFound(servers))
-                            confirmServer(
-                              context,
-                              _firstValidServer(servers),
-                              servers.length > 1,
-                            ),
-                          if (_isExtended || !_isServerFound(servers))
-                            chooseServer(context, servers),
-                        ],
-                      ),
-                    if (servers?.isEmpty ?? true)
-                      Center(
-                        child: Text(
-                          'recovering.no_servers'.tr(),
-                          style: Theme.of(context).textTheme.titleLarge,
+    hasBackButton: true,
+    ignoreBreakpoints: true,
+    onBackButtonPressed: () {
+      Navigator.of(context).popUntil((final route) => route.isFirst);
+    },
+    hasFlashButton: false,
+    children: [
+      FutureBuilder<List<ServerBasicInfoWithValidators>>(
+        future: context.read<ServerInstallationCubit>().getAvailableServers(
+          server: widget.server,
+        ),
+        builder: (final context, final snapshot) {
+          if (snapshot.hasData) {
+            final servers = snapshot.data;
+            return Column(
+              children: [
+                if (servers != null && servers.isNotEmpty)
+                  Column(
+                    children: [
+                      if (!_isExtended && _isServerFound(servers))
+                        confirmServer(
+                          context,
+                          _firstValidServer(servers),
+                          servers.length > 1,
                         ),
-                      ),
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
-            },
-          ),
-        ],
-      );
+                      if (_isExtended || !_isServerFound(servers))
+                        chooseServer(context, servers),
+                    ],
+                  ),
+                if (servers?.isEmpty ?? true)
+                  Center(
+                    child: Text(
+                      'recovering.no_servers'.tr(),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+        },
+      ),
+    ],
+  );
 
   Widget confirmServer(
     final BuildContext context,
     final ServerBasicInfoWithValidators server,
     final bool showMoreServersButton,
-  ) =>
-      Column(
-        children: [
-          serverCard(
-            context: context,
-            server: server,
-          ),
-          const SizedBox(height: 16),
-          BrandButton.filled(
-            child: Text('recovering.confirm_server_accept'.tr()),
-            onPressed: () => _showConfirmationDialog(context, server),
-          ),
-          const SizedBox(height: 16),
-          if (showMoreServersButton)
-            BrandButton.text(
-              title: 'recovering.confirm_server_decline'.tr(),
-              onPressed: () => setState(() => _isExtended = true),
-            ),
-        ],
-      );
+  ) => Column(
+    children: [
+      serverCard(context: context, server: server),
+      const SizedBox(height: 16),
+      BrandButton.filled(
+        child: Text('recovering.confirm_server_accept'.tr()),
+        onPressed: () => _showConfirmationDialog(context, server),
+      ),
+      const SizedBox(height: 16),
+      if (showMoreServersButton)
+        BrandButton.text(
+          title: 'recovering.confirm_server_decline'.tr(),
+          onPressed: () => setState(() => _isExtended = true),
+        ),
+    ],
+  );
 
   Widget chooseServer(
     final BuildContext context,
     final List<ServerBasicInfoWithValidators> servers,
-  ) =>
-      Column(
-        children: [
-          for (final server in servers)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: serverCard(
-                context: context,
-                server: server,
-                onTap: () => _showConfirmationDialog(context, server),
-              ),
-            ),
-        ],
-      );
+  ) => Column(
+    children: [
+      for (final server in servers)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: serverCard(
+            context: context,
+            server: server,
+            onTap: () => _showConfirmationDialog(context, server),
+          ),
+        ),
+    ],
+  );
 
   Widget serverCard({
     required final BuildContext context,
     required final ServerBasicInfoWithValidators server,
     final VoidCallback? onTap,
-  }) =>
-      FilledCard(
-        child: ListTile(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          onTap: onTap,
-          title: Text(
-            server.name,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-          ),
-          leading: Icon(
-            Icons.dns_outlined,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  }) => FilledCard(
+    child: ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      onTap: onTap,
+      title: Text(
+        server.name,
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      leading: Icon(
+        Icons.dns_outlined,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Icon(
-                    server.isReverseDnsValid ? Icons.check : Icons.close,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'rDNS: ${server.reverseDns}',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    ),
-                  ),
-                ],
+              Icon(
+                server.isReverseDnsValid ? Icons.check : Icons.close,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
-              Row(
-                children: [
-                  Icon(
-                    server.isIpValid ? Icons.check : Icons.close,
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'rDNS: ${server.reverseDns}',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'IP: ${server.ip}',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
-        ),
-      );
+          Row(
+            children: [
+              Icon(
+                server.isIpValid ? Icons.check : Icons.close,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'IP: ${server.ip}',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 
   Future _showConfirmationDialog(
     final BuildContext context,
     final ServerBasicInfoWithValidators server,
-  ) =>
-      showDialog(
-        context: context,
-        builder: (final context) => AlertDialog(
+  ) => showDialog(
+    context: context,
+    builder:
+        (final context) => AlertDialog(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -264,12 +257,12 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                 if (widget.server != null &&
                     widget.serverProviderCredential != null) {
                   context.read<TokensBloc>().add(
-                        ServerSelectedForProviderToken(
-                          server,
-                          widget.server!,
-                          widget.serverProviderCredential!,
-                        ),
-                      );
+                    ServerSelectedForProviderToken(
+                      server,
+                      widget.server!,
+                      widget.serverProviderCredential!,
+                    ),
+                  );
                   Navigator.of(context).pop();
                   widget.submitCallback?.call();
                 } else {
@@ -280,7 +273,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
             ),
           ],
         ),
-      );
+  );
 }
 
 class IsValidStringDisplay extends StatelessWidget {
@@ -297,28 +290,29 @@ class IsValidStringDisplay extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (isValid)
-            Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface)
-          else
-            Icon(Icons.close, color: Theme.of(context).colorScheme.error),
-          const SizedBox(width: 8),
-          Expanded(
-            child: isValid
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      if (isValid)
+        Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface)
+      else
+        Icon(Icons.close, color: Theme.of(context).colorScheme.error),
+      const SizedBox(width: 8),
+      Expanded(
+        child:
+            isValid
                 ? Text(
-                    textIfValid,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                  )
-                : Text(
-                    textIfInvalid,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
+                  textIfValid,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-          ),
-        ],
-      );
+                )
+                : Text(
+                  textIfInvalid,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+      ),
+    ],
+  );
 }

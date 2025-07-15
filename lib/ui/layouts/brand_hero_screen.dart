@@ -48,7 +48,8 @@ class BrandHeroScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final Widget heroIconWidget = this.heroIconWidget ??
+    final Widget heroIconWidget =
+        this.heroIconWidget ??
         Icon(
           heroIcon ?? Icons.help,
           size: 48.0,
@@ -81,8 +82,8 @@ class BrandHeroScreen extends StatelessWidget {
                   Text(
                     heroSubtitle!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ]),
@@ -90,9 +91,7 @@ class BrandHeroScreen extends StatelessWidget {
             ),
           SliverPadding(
             padding: bodyPadding,
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(children),
-            ),
+            sliver: SliverList(delegate: SliverChildListDelegate(children)),
           ),
         ],
       ),
@@ -130,9 +129,10 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
   Widget build(final BuildContext context) {
     final isMobile =
         widget.ignoreBreakpoints ? true : Breakpoints.small.isActive(context);
-    final isJobsListEmpty = widget.hasFlashButton
-        ? context.watch<JobsCubit>().state is JobsStateEmpty
-        : true;
+    final isJobsListEmpty =
+        widget.hasFlashButton
+            ? context.watch<JobsCubit>().state is JobsStateEmpty
+            : true;
     return SliverAppBar(
       expandedHeight:
           widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,
@@ -140,9 +140,10 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
       pinned: isMobile,
       stretch: true,
       surfaceTintColor: isMobile ? null : Colors.transparent,
-      leading: (widget.hasBackButton && isMobile)
-          ? const AutoLeadingButton()
-          : const SizedBox.shrink(),
+      leading:
+          (widget.hasBackButton && isMobile)
+              ? const AutoLeadingButton()
+              : const SizedBox.shrink(),
       actions: [
         if (widget.hasFlashButton && isMobile)
           AnimatedSwitcher(
@@ -154,9 +155,10 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
               icon: Icon(
                 isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
               ),
-              color: isJobsListEmpty
-                  ? Theme.of(context).colorScheme.onSurface
-                  : Theme.of(context).colorScheme.primary,
+              color:
+                  isJobsListEmpty
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Theme.of(context).colorScheme.primary,
               tooltip: 'jobs.title'.tr(),
             ),
           ),
@@ -164,28 +166,26 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: LayoutBuilder(
-          builder: (final context, final constraints) => SizedBox(
-            width: constraints.maxWidth - 72.0,
-            child: WidgetSize(
-              onChange: (final Size size) => setState(() => _size = size),
-              child: Text(
-                widget.heroTitle,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          builder:
+              (final context, final constraints) => SizedBox(
+                width: constraints.maxWidth - 72.0,
+                child: WidgetSize(
+                  onChange: (final Size size) => setState(() => _size = size),
+                  child: Text(
+                    widget.heroTitle,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
-                overflow: TextOverflow.fade,
-                textAlign: TextAlign.center,
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-            ),
-          ),
         ),
         expandedTitleScale: 1.2,
         centerTitle: true,
         collapseMode: CollapseMode.pin,
-        titlePadding: const EdgeInsets.only(
-          bottom: 12.0,
-          top: 16.0,
-        ),
+        titlePadding: const EdgeInsets.only(bottom: 12.0, top: 16.0),
         background: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

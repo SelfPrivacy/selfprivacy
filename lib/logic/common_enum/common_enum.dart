@@ -1,9 +1,4 @@
-enum LoadingStatus {
-  uninitialized,
-  refreshing,
-  success,
-  error,
-}
+enum LoadingStatus { uninitialized, refreshing, success, error }
 
 enum Period {
   hour,

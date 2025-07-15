@@ -8,15 +8,11 @@ part 'digital_ocean_dns_adapter.dart';
 /// https://docs.digitalocean.com/reference/api/api-reference/#tag/Domains
 @JsonSerializable()
 class DigitalOceanDomain {
-  DigitalOceanDomain({
-    required this.name,
-    this.ttl,
-  });
+  DigitalOceanDomain({required this.name, this.ttl});
 
   factory DigitalOceanDomain.fromServerDomain(
     final ServerDomain serverDomain,
-  ) =>
-      _fromServerDomain(serverDomain);
+  ) => _fromServerDomain(serverDomain);
 
   /// The name of the domain itself.
   /// This should follow the standard domain format of domain.TLD.
@@ -51,11 +47,7 @@ class DigitalOceanDnsRecord {
   factory DigitalOceanDnsRecord.fromDnsRecord(
     final DnsRecord dnsRecord,
     final String rootDomain,
-  ) =>
-      _fromDnsRecord(
-        dnsRecord,
-        rootDomain,
-      );
+  ) => _fromDnsRecord(dnsRecord, rootDomain);
 
   /// A unique identifier for each domain record.
   final int? id;

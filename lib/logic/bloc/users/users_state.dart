@@ -1,9 +1,8 @@
 part of 'users_bloc.dart';
 
 sealed class UsersState extends Equatable {
-  UsersState({
-    required final List<User> users,
-  }) : _hashCode = Object.hashAll(users);
+  UsersState({required final List<User> users})
+    : _hashCode = Object.hashAll(users);
 
   final int _hashCode;
 
@@ -47,10 +46,7 @@ sealed class UsersState extends Equatable {
           a.login.toLowerCase().compareTo(b.login.toLowerCase()),
     );
 
-    return [
-      ...primaryUsers,
-      ...normalUsers,
-    ];
+    return [...primaryUsers, ...normalUsers];
   }
 
   bool isLoginRegistered(final String login) =>

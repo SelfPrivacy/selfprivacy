@@ -10,11 +10,7 @@ import 'package:flutter/scheduler.dart';
 /// size of the widget is different from the previous render.
 class WidgetSize extends StatefulWidget {
   /// Creates a helper widget that calls a callback when its size changes.
-  const WidgetSize({
-    required this.onChange,
-    required this.child,
-    super.key,
-  });
+  const WidgetSize({required this.onChange, required this.child, super.key});
 
   /// The child widget, the size of which is to be measured.
   final Widget child;
@@ -30,10 +26,7 @@ class _WidgetSizeState extends State<WidgetSize> {
   @override
   Widget build(final BuildContext context) {
     SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
-    return Container(
-      key: widgetKey,
-      child: widget.child,
-    );
+    return Container(key: widgetKey, child: widget.child);
   }
 
   var widgetKey = GlobalKey();

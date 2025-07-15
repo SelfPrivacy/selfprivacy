@@ -59,15 +59,11 @@ class _ChangeAutobackupsPeriodModalState
               selectedPeriod = value;
             });
           },
-          title: Text(
-            'backup.autobackup_period_disable'.tr(),
-          ),
+          title: Text('backup.autobackup_period_disable'.tr()),
           value: null,
           groupValue: selectedPeriod,
         ),
-        const Divider(
-          height: 1.0,
-        ),
+        const Divider(height: 1.0),
         ...autobackupPeriods.map(
           (final Duration period) => RadioListTile<Duration?>.adaptive(
             onChanged: (final Duration? value) {
@@ -87,17 +83,16 @@ class _ChangeAutobackupsPeriodModalState
         const SizedBox(height: 16),
         // Create backup button
         FilledButton(
-          onPressed: selectedPeriod == initialAutobackupPeriod
-              ? null
-              : () {
-                  context
-                      .read<BackupsBloc>()
-                      .add(SetAutobackupPeriod(selectedPeriod));
-                  Navigator.of(context).pop();
-                },
-          child: Text(
-            'backup.autobackup_set_period'.tr(),
-          ),
+          onPressed:
+              selectedPeriod == initialAutobackupPeriod
+                  ? null
+                  : () {
+                    context.read<BackupsBloc>().add(
+                      SetAutobackupPeriod(selectedPeriod),
+                    );
+                    Navigator.of(context).pop();
+                  },
+          child: Text('backup.autobackup_set_period'.tr()),
         ),
       ],
     );

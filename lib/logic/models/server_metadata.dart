@@ -10,9 +10,7 @@ enum MetadataType {
 
   other(icon: Icons.info_outlined);
 
-  const MetadataType({
-    required this.icon,
-  });
+  const MetadataType({required this.icon});
 
   final IconData icon;
 }

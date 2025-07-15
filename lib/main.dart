@@ -27,17 +27,13 @@ void main() async {
   // }
 
   try {
-    await Future.wait(
-      <Future<void>>[
-        HiveConfig.init(),
-        EasyLocalization.ensureInitialized(),
-      ],
-    );
+    await Future.wait(<Future<void>>[
+      HiveConfig.init(),
+      EasyLocalization.ensureInitialized(),
+    ]);
     await getItSetup();
   } on PlatformException catch (e) {
-    runApp(
-      FailedToInitSecureStorageScreen(e: e),
-    );
+    runApp(FailedToInitSecureStorageScreen(e: e));
   }
 
   tz.initializeTimeZones();
@@ -48,9 +44,7 @@ void main() async {
     Localization(
       child: InheritedPreferencesRepository(
         dataSource: PreferencesHiveDataSource(),
-        child: const InheritedAppController(
-          child: AppBuilder(),
-        ),
+        child: const InheritedAppController(child: AppBuilder()),
       ),
     ),
   );
@@ -78,19 +72,17 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => const ColoredBox(
-        color: Colors.white,
-        child: Center(
-          child: CircularProgressIndicator.adaptive(
-            valueColor: AlwaysStoppedAnimation(BrandColors.primary),
-          ),
-        ),
-      );
+    color: Colors.white,
+    child: Center(
+      child: CircularProgressIndicator.adaptive(
+        valueColor: AlwaysStoppedAnimation(BrandColors.primary),
+      ),
+    ),
+  );
 }
 
 class SelfprivacyApp extends StatefulWidget {
-  const SelfprivacyApp({
-    super.key,
-  });
+  const SelfprivacyApp({super.key});
 
   @override
   State<SelfprivacyApp> createState() => _SelfprivacyAppState();
@@ -123,8 +115,9 @@ class _SelfprivacyAppState extends State<SelfprivacyApp> {
         darkTheme: appController.darkTheme,
         // other preferences
         debugShowCheckedModeBanner: false,
-        scrollBehavior:
-            const MaterialScrollBehavior().copyWith(scrollbars: false),
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          scrollbars: false,
+        ),
         builder: _builder,
       ),
     );

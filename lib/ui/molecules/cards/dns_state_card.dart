@@ -17,43 +17,28 @@ class DnsStateCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     String description = '';
     String subtitle = '';
-    Icon icon = const Icon(
-      Icons.check_circle_outline,
-      size: 24.0,
-    );
+    Icon icon = const Icon(Icons.check_circle_outline, size: 24.0);
     bool isError = false;
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
         description = 'domain.uninitialized'.tr();
-        icon = const Icon(
-          Icons.refresh,
-          size: 24.0,
-        );
+        icon = const Icon(Icons.refresh, size: 24.0);
         isError = false;
         break;
       case DnsRecordsStatus.refreshing:
         description = 'domain.refreshing'.tr();
-        icon = const Icon(
-          Icons.refresh,
-          size: 24.0,
-        );
+        icon = const Icon(Icons.refresh, size: 24.0);
         isError = false;
         break;
       case DnsRecordsStatus.good:
         description = 'domain.ok'.tr();
-        icon = const Icon(
-          Icons.check_circle_outline,
-          size: 24.0,
-        );
+        icon = const Icon(Icons.check_circle_outline, size: 24.0);
         isError = false;
         break;
       case DnsRecordsStatus.error:
         description = 'domain.error'.tr();
         subtitle = 'domain.error_subtitle'.tr();
-        icon = const Icon(
-          Icons.error_outline,
-          size: 24.0,
-        );
+        icon = const Icon(Icons.error_outline, size: 24.0);
         isError = true;
         break;
     }
@@ -64,12 +49,14 @@ class DnsStateCard extends StatelessWidget {
         leading: icon,
         title: Text(description),
         subtitle: subtitle != '' ? Text(subtitle) : null,
-        textColor: isError
-            ? Theme.of(context).colorScheme.onErrorContainer
-            : Theme.of(context).colorScheme.onSurfaceVariant,
-        iconColor: isError
-            ? Theme.of(context).colorScheme.onErrorContainer
-            : Theme.of(context).colorScheme.onSurfaceVariant,
+        textColor:
+            isError
+                ? Theme.of(context).colorScheme.onErrorContainer
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+        iconColor:
+            isError
+                ? Theme.of(context).colorScheme.onErrorContainer
+                : Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }

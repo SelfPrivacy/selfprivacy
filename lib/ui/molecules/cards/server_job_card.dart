@@ -4,10 +4,7 @@ import 'package:selfprivacy/ui/atoms/icons/job_icon.dart';
 import 'package:selfprivacy/ui/atoms/progress_indicators/brand_linear_indicator.dart';
 
 class ServerJobCard extends StatelessWidget {
-  const ServerJobCard({
-    required this.serverJob,
-    super.key,
-  });
+  const ServerJobCard({required this.serverJob, super.key});
 
   final ServerJob serverJob;
 
@@ -48,17 +45,15 @@ class ServerJobCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(
-                    icon,
-                    color: color,
-                  ),
+                  Icon(icon, color: color),
                 ],
               ),
               const SizedBox(height: 8),
               BrandLinearIndicator(
-                value: serverJob.progress == null
-                    ? 0.0
-                    : serverJob.progress! / 100.0,
+                value:
+                    serverJob.progress == null
+                        ? 0.0
+                        : serverJob.progress! / 100.0,
                 color: color,
                 backgroundColor:
                     Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -69,8 +64,8 @@ class ServerJobCard extends StatelessWidget {
                 Text(
                   statusString,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
             ],
           ),

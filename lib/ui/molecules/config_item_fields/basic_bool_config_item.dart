@@ -21,18 +21,19 @@ class BasicBoolConfigItem extends StatefulWidget {
 class _BasicBoolConfigItemState extends State<BasicBoolConfigItem> {
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
-          SwitchListTile.adaptive(
-            title: Text(widget.configItem.description),
-            subtitle: (widget.newValue != null &&
+    children: [
+      SwitchListTile.adaptive(
+        title: Text(widget.configItem.description),
+        subtitle:
+            (widget.newValue != null &&
                     widget.newValue != widget.configItem.value)
                 ? Text('service_page.modified'.tr())
                 : null,
-            value: widget.newValue ?? widget.configItem.value,
-            onChanged: (final bool value) {
-              widget.onChanged(value);
-            },
-          ),
-        ],
-      );
+        value: widget.newValue ?? widget.configItem.value,
+        onChanged: (final bool value) {
+          widget.onChanged(value);
+        },
+      ),
+    ],
+  );
 }

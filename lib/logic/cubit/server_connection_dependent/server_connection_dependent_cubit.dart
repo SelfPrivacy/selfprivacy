@@ -9,14 +9,15 @@ export 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 part 'server_connection_dependent_state.dart';
 
 abstract class ServerConnectionDependentCubit<
-    T extends ServerInstallationDependendState> extends Cubit<T> {
-  ServerConnectionDependentCubit(
-    super.initState,
-  ) {
+  T extends ServerInstallationDependendState
+>
+    extends Cubit<T> {
+  ServerConnectionDependentCubit(super.initState) {
     final connectionRepository = getIt<ApiConnectionRepository>();
 
-    apiStatusSubscription =
-        connectionRepository.connectionStatusStream.listen(checkAuthStatus);
+    apiStatusSubscription = connectionRepository.connectionStatusStream.listen(
+      checkAuthStatus,
+    );
     checkAuthStatus(connectionRepository.connectionStatus);
   }
 

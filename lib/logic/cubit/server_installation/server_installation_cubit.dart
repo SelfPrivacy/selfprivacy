@@ -76,19 +76,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   void setDnsProviderType(final DnsProviderType providerType) async {
     await repository.saveDnsProviderType(providerType);
     ProvidersController.initDnsProvider(
-      DnsProviderSettings(
-        provider: providerType,
-      ),
+      DnsProviderSettings(provider: providerType),
     );
   }
 
   Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
   ) async {
-    final GenericResult<bool> apiResponse =
-        await ProvidersController.currentServerProvider!.tryInitApiByToken(
-      providerToken,
-    );
+    final GenericResult<bool> apiResponse = await ProvidersController
+        .currentServerProvider!
+        .tryInitApiByToken(providerToken);
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -106,13 +103,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResponse.data;
   }
 
-  Future<bool?> isDnsProviderApiTokenValid(
-    final String providerToken,
-  ) async {
-    final GenericResult<bool> apiResponse =
-        await ProvidersController.currentDnsProvider!.tryInitApiByToken(
-      providerToken,
-    );
+  Future<bool?> isDnsProviderApiTokenValid(final String providerToken) async {
+    final GenericResult<bool> apiResponse = await ProvidersController
+        .currentDnsProvider!
+        .tryInitApiByToken(providerToken);
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -135,9 +129,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    final GenericResult apiResponse = await ProvidersController
-        .currentServerProvider!
-        .getAvailableLocations();
+    final GenericResult apiResponse =
+        await ProvidersController.currentServerProvider!
+            .getAvailableLocations();
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -230,8 +224,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.setDnsApiToken(dnsApiToken);
 
     emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(dnsApiToken: dnsApiToken),
+      (state as ServerInstallationNotFinished).copyWith(
+        dnsApiToken: dnsApiToken,
+      ),
     );
   }
 
@@ -244,13 +239,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     final BackblazeBucket? bucket;
     await repository.saveBackupsCredential(backblazeCredential);
     if (state is ServerInstallationRecovery) {
-      final configuration = await ServerApi(
-        customToken:
-            (state as ServerInstallationRecovery).serverDetails!.apiToken,
-        isWithToken: true,
-        overrideDomain:
-            (state as ServerInstallationRecovery).serverDomain!.domainName,
-      ).getBackupsConfiguration();
+      final configuration =
+          await ServerApi(
+            customToken:
+                (state as ServerInstallationRecovery).serverDetails!.apiToken,
+            isWithToken: true,
+            overrideDomain:
+                (state as ServerInstallationRecovery).serverDomain!.domainName,
+          ).getBackupsConfiguration();
       if (configuration != null) {
         try {
           final settings = BackupsProviderSettings(
@@ -261,8 +257,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           );
           final provider =
               BackupsProviderFactory.createBackupsProviderInterface(settings);
-          final result =
-              await provider.getStorage(backblazeCredential, configuration);
+          final result = await provider.getStorage(
+            backblazeCredential,
+            configuration,
+          );
           bucket = result.data;
           await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
         } catch (e) {
@@ -273,16 +271,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return;
     }
     emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(backblazeCredential: backblazeCredential),
+      (state as ServerInstallationNotFinished).copyWith(
+        backblazeCredential: backblazeCredential,
+      ),
     );
   }
 
   void setDomain(final ServerDomain serverDomain) async {
     await repository.saveDomain(serverDomain);
     emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(serverDomain: serverDomain),
+      (state as ServerInstallationNotFinished).copyWith(
+        serverDomain: serverDomain,
+      ),
     );
   }
 
@@ -344,10 +344,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       location: state.serverLocation!,
     );
 
-    final result =
-        await ProvidersController.currentServerProvider!.launchInstallation(
-      installationData,
-    );
+    final result = await ProvidersController.currentServerProvider!
+        .launchInstallation(installationData);
 
     if (!result.success && result.data != null) {
       emit(
@@ -403,11 +401,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dnsMatches: matches,
       );
       emit(newState);
-      runDelayed(
-        startServerIfDnsIsOkay,
-        const Duration(seconds: 30),
-        newState,
-      );
+      runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), newState);
     }
   }
 
@@ -557,8 +551,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       domainName: domain,
       provider: DnsProviderType.unknown,
     );
-    final ServerRecoveryCapabilities recoveryCapabilities =
-        await repository.getRecoveryCapabilities(serverDomain);
+    final ServerRecoveryCapabilities recoveryCapabilities = await repository
+        .getRecoveryCapabilities(serverDomain);
 
     await repository.saveDomain(serverDomain);
     await repository.saveIsRecoveringServer(true);
@@ -577,25 +571,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         state as ServerInstallationRecovery;
     switch (method) {
       case ServerRecoveryMethods.newDeviceKey:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.newDeviceKey,
-          ),
-        );
+        emit(dataState.copyWith(currentStep: RecoveryStep.newDeviceKey));
         break;
       case ServerRecoveryMethods.recoveryKey:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.recoveryKey,
-          ),
-        );
+        emit(dataState.copyWith(currentStep: RecoveryStep.recoveryKey));
         break;
       case ServerRecoveryMethods.oldToken:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.oldToken,
-          ),
-        );
+        emit(dataState.copyWith(currentStep: RecoveryStep.oldToken));
         break;
     }
   }
@@ -615,7 +597,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ServerDomain,
         String,
         ServerRecoveryCapabilities,
-      ) recoveryFunction;
+      )
+      recoveryFunction;
       switch (method) {
         case ServerRecoveryMethods.newDeviceKey:
           recoveryFunction = repository.authorizeByNewDeviceKey;
@@ -626,27 +609,28 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         case ServerRecoveryMethods.oldToken:
           recoveryFunction = repository.authorizeByApiToken;
           break;
-        default:
-          throw Exception('Unknown recovery method');
       }
       final ServerHostingDetails serverDetails = await recoveryFunction(
         serverDomain,
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProviderType serverProvider = await ServerApi(
-        customToken: serverDetails.apiToken,
-        isWithToken: true,
-        overrideDomain: serverDomain.domainName,
-      ).getServerProviderType();
-      final dnsProvider = await ServerApi(
-        customToken: serverDetails.apiToken,
-        isWithToken: true,
-        overrideDomain: serverDomain.domainName,
-      ).getDnsProviderType();
+      final ServerProviderType serverProvider =
+          await ServerApi(
+            customToken: serverDetails.apiToken,
+            isWithToken: true,
+            overrideDomain: serverDomain.domainName,
+          ).getServerProviderType();
+      final dnsProvider =
+          await ServerApi(
+            customToken: serverDetails.apiToken,
+            isWithToken: true,
+            overrideDomain: serverDomain.domainName,
+          ).getDnsProviderType();
       if (dnsProvider == DnsProviderType.unknown) {
-        getIt<NavigationService>()
-            .showSnackBar('recovering.generic_error'.tr());
+        getIt<NavigationService>().showSnackBar(
+          'recovering.generic_error'.tr(),
+        );
         return;
       }
       final newServerDetails = ServerHostingDetails(
@@ -675,12 +659,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ),
       );
     } on ServerAuthorizationException {
-      getIt<NavigationService>()
-          .showSnackBar('recovering.authorization_failed'.tr());
+      getIt<NavigationService>().showSnackBar(
+        'recovering.authorization_failed'.tr(),
+      );
       return;
     } on IpNotFoundException {
-      getIt<NavigationService>()
-          .showSnackBar('recovering.domain_recover_error'.tr());
+      getIt<NavigationService>().showSnackBar(
+        'recovering.domain_recover_error'.tr(),
+      );
       return;
     }
   }
@@ -699,19 +685,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       case RecoveryStep.recoveryKey:
       case RecoveryStep.newDeviceKey:
       case RecoveryStep.oldToken:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.selecting,
-          ),
-        );
+        emit(dataState.copyWith(currentStep: RecoveryStep.selecting));
         break;
       case RecoveryStep.dnsProviderToken:
         repository.deleteServerDetails();
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.serverSelection,
-          ),
-        );
+        emit(dataState.copyWith(currentStep: RecoveryStep.serverSelection));
         break;
       // We won't revert steps after client is authorized
       default:
@@ -739,19 +717,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
           (final ServerBasicInfo hostingServer) =>
               ServerBasicInfoWithValidators.fromServerBasicInfo(
-            serverBasicInfo: hostingServer,
-            isIpValid: hostingServer.ip == server.hostingDetails.ip4,
-            isReverseDnsValid:
-                hostingServer.reverseDns == server.domain.domainName ||
+                serverBasicInfo: hostingServer,
+                isIpValid: hostingServer.ip == server.hostingDetails.ip4,
+                isReverseDnsValid:
+                    hostingServer.reverseDns == server.domain.domainName ||
                     hostingServer.reverseDns ==
                         server.domain.domainName.split('.')[0],
-          ),
+              ),
         );
         validatedList = validated.toList();
       } catch (e) {
         print(e);
-        getIt<NavigationService>()
-            .showSnackBar('modals.server_validators_error'.tr());
+        getIt<NavigationService>().showSnackBar(
+          'modals.server_validators_error'.tr(),
+        );
       }
     } else {
       final ServerInstallationRecovery dataState =
@@ -762,19 +741,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
           (final ServerBasicInfo server) =>
               ServerBasicInfoWithValidators.fromServerBasicInfo(
-            serverBasicInfo: server,
-            isIpValid: server.ip == dataState.serverDetails?.ip4,
-            isReverseDnsValid:
-                server.reverseDns == dataState.serverDomain?.domainName ||
+                serverBasicInfo: server,
+                isIpValid: server.ip == dataState.serverDetails?.ip4,
+                isReverseDnsValid:
+                    server.reverseDns == dataState.serverDomain?.domainName ||
                     server.reverseDns ==
                         dataState.serverDomain?.domainName.split('.')[0],
-          ),
+              ),
         );
         validatedList = validated.toList();
       } catch (e) {
         print(e);
-        getIt<NavigationService>()
-            .showSnackBar('modals.server_validators_error'.tr());
+        getIt<NavigationService>().showSnackBar(
+          'modals.server_validators_error'.tr(),
+        );
       }
     }
 
@@ -821,8 +801,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (serverDomain == null) {
       return;
     }
-    final isTokenValidResult =
-        await repository.validateDnsToken(token, serverDomain.domainName);
+    final isTokenValidResult = await repository.validateDnsToken(
+      token,
+      serverDomain.domainName,
+    );
     if (!isTokenValidResult.success) {
       getIt<NavigationService>().showSnackBar(
         isTokenValidResult.message ??
@@ -830,11 +812,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       return;
     }
-    final dnsProviderType = await ServerApi(
-      customToken: dataState.serverDetails!.apiToken,
-      isWithToken: true,
-      overrideDomain: serverDomain.domainName,
-    ).getDnsProviderType();
+    final dnsProviderType =
+        await ServerApi(
+          customToken: dataState.serverDetails!.apiToken,
+          isWithToken: true,
+          overrideDomain: serverDomain.domainName,
+        ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,
@@ -874,9 +857,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveHasFinalChecked(true);
     final ServerInstallationRecovery updatedState =
         (state as ServerInstallationRecovery).copyWith(
-      backblazeCredential: backblazeCredential,
-      serverTypeIdentificator: serverType?.data?.identifier,
-    );
+          backblazeCredential: backblazeCredential,
+          serverTypeIdentificator: serverType?.data?.identifier,
+        );
     emit(updatedState.finish());
     getIt<ApiConnectionRepository>().init();
   }

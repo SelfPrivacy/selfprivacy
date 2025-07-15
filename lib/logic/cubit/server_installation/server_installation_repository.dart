@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
@@ -142,8 +142,9 @@ class ServerInstallationRepository {
           wizardData.serverDomain!,
           wizardData.serverDetails,
         ),
-        recoveryCapabilities:
-            await getRecoveryCapabilities(wizardData.serverDomain!),
+        recoveryCapabilities: await getRecoveryCapabilities(
+          wizardData.serverDomain!,
+        ),
       );
     }
 
@@ -200,8 +201,8 @@ class ServerInstallationRepository {
     final String token,
     final String domain,
   ) async {
-    final result =
-        await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
+    final result = await ProvidersController.currentDnsProvider!
+        .tryInitApiByToken(token);
     if (!result.success) {
       return result;
     }
@@ -243,10 +244,7 @@ class ServerInstallationRepository {
       rethrow;
     }
 
-    await ProvidersController.currentDnsProvider!.setDnsRecord(
-      record,
-      domain,
-    );
+    await ProvidersController.currentDnsProvider!.setDnsRecord(record, domain);
   }
 
   Future<bool> isHttpServerWorking() async {
@@ -263,13 +261,20 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> restart() async {
     final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
 
-    final result = await ServerApi(
-      overrideDomain:
-          getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
-      customToken:
-          getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
-      isWithToken: true,
-    ).reboot();
+    final result =
+        await ServerApi(
+          overrideDomain:
+              getIt<WizardDataModel>()
+                  .serverInstallation!
+                  .serverDomain!
+                  .domainName,
+          customToken:
+              getIt<WizardDataModel>()
+                  .serverInstallation!
+                  .serverDetails!
+                  .apiToken,
+          isWithToken: true,
+        ).reboot();
 
     if (result.success && result.data != null) {
       server.copyWith(startTime: result.data);
@@ -309,13 +314,11 @@ class ServerInstallationRepository {
 
   Future<String> getServerIpFromDomain(final ServerDomain serverDomain) async {
     String? domain;
-    await InternetAddress.lookup(serverDomain.domainName).then(
-      (final records) {
-        for (final record in records) {
-          domain = record.address;
-        }
-      },
-    );
+    await InternetAddress.lookup(serverDomain.domainName).then((final records) {
+      for (final record in records) {
+        domain = record.address;
+      }
+    });
     if (domain == null || domain!.isEmpty) {
       throw IpNotFoundException('No IP found for domain $serverDomain');
     }
@@ -357,9 +360,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(
-      result.message ?? result.data,
-    );
+    throw ServerAuthorizationException(result.message ?? result.data);
   }
 
   Future<ServerHostingDetails> authorizeByRecoveryKey(
@@ -394,9 +395,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(
-      result.message ?? result.data,
-    );
+    throw ServerAuthorizationException(result.message ?? result.data);
   }
 
   Future<ServerHostingDetails> authorizeByApiToken(
@@ -460,9 +459,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(
-      result.message ?? result.data,
-    );
+    throw ServerAuthorizationException(result.message ?? result.data);
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async =>

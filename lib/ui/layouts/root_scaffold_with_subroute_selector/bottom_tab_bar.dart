@@ -21,30 +21,32 @@ class _BottomTabBar extends SubrouteSelector {
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
-      child: Platform.isIOS
-          ? CupertinoTabBar(
-              currentIndex: activeIndex,
-              onTap: openSubpage(context),
-              items: [
-                for (final destination in subroutes)
-                  BottomNavigationBarItem(
-                    icon: Icon(destination.icon),
-                    label: destination.label.tr(),
-                  ),
-              ],
-            )
-          : NavigationBar(
-              selectedIndex: activeIndex,
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              onDestinationSelected: openSubpage(context),
-              destinations: [
-                for (final destination in subroutes)
-                  NavigationDestination(
-                    icon: Icon(destination.icon),
-                    label: destination.label.tr(),
-                  ),
-              ].toList(),
-            ),
+      child:
+          Platform.isIOS
+              ? CupertinoTabBar(
+                currentIndex: activeIndex,
+                onTap: openSubpage(context),
+                items: [
+                  for (final destination in subroutes)
+                    BottomNavigationBarItem(
+                      icon: Icon(destination.icon),
+                      label: destination.label.tr(),
+                    ),
+                ],
+              )
+              : NavigationBar(
+                selectedIndex: activeIndex,
+                labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                onDestinationSelected: openSubpage(context),
+                destinations:
+                    [
+                      for (final destination in subroutes)
+                        NavigationDestination(
+                          icon: Icon(destination.icon),
+                          label: destination.label.tr(),
+                        ),
+                    ].toList(),
+              ),
     );
   }
 }

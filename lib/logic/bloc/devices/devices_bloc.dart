@@ -17,19 +17,14 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       _mapDevicesListChangedToState,
       transformer: sequential(),
     );
-    on<DeleteDevice>(
-      _mapDeleteDeviceToState,
-      transformer: sequential(),
-    );
+    on<DeleteDevice>(_mapDeleteDeviceToState, transformer: sequential());
 
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        add(
-          DevicesListChanged(apiData.devices.data),
-        );
-      },
-    );
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(DevicesListChanged(apiData.devices.data));
+    });
   }
 
   StreamSubscription? _apiDataSubscription;
@@ -60,9 +55,10 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     // Optimistically remove the device from the list
     emit(
       DevicesDeleting(
-        devices: state.devices
-            .where((final d) => d.name != event.device.name)
-            .toList(),
+        devices:
+            state.devices
+                .where((final d) => d.name != event.device.name)
+                .toList(),
       ),
     );
 
@@ -73,14 +69,16 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       getIt<ApiConnectionRepository>().apiData.devices.invalidate();
       emit(
         DevicesLoaded(
-          devices: state.devices
-              .where((final d) => d.name != event.device.name)
-              .toList(),
+          devices:
+              state.devices
+                  .where((final d) => d.name != event.device.name)
+                  .toList(),
         ),
       );
     } else {
-      getIt<NavigationService>()
-          .showSnackBar(response.message ?? 'Error deleting device');
+      getIt<NavigationService>().showSnackBar(
+        response.message ?? 'Error deleting device',
+      );
       emit(DevicesLoaded(devices: state.devices));
     }
   }

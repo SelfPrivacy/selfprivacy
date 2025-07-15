@@ -73,10 +73,7 @@ class BackblazeApi extends RestApiMap {
     if (token.isEmpty || tokenId.isEmpty) {
       throw Exception('Backblaze credential is null');
     }
-    final String encodedApiKey = encodedBackblazeKey(
-      tokenId,
-      token,
-    );
+    final String encodedApiKey = encodedBackblazeKey(tokenId, token);
     final Response response = await client.get(
       'b2_authorize_account',
       options: Options(headers: {'Authorization': 'Basic $encodedApiKey'}),
@@ -100,14 +97,16 @@ class BackblazeApi extends RestApiMap {
         'b2_authorize_account',
         options: Options(
           followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+          validateStatus:
+              (final status) =>
+                  status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Basic $encodedApiKey'},
         ),
       );
       if (response.statusCode == HttpStatus.ok) {
-        isTokenValid =
-            response.data['allowed']['capabilities'].contains('listBuckets');
+        isTokenValid = response.data['allowed']['capabilities'].contains(
+          'listBuckets',
+        );
       } else if (response.statusCode == HttpStatus.unauthorized) {
         isTokenValid = false;
       } else {
@@ -115,19 +114,12 @@ class BackblazeApi extends RestApiMap {
       }
     } on DioException catch (e) {
       print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       close(client);
     }
 
-    return GenericResult(
-      data: isTokenValid,
-      success: true,
-    );
+    return GenericResult(data: isTokenValid, success: true);
   }
 
   // Create bucket
@@ -146,19 +138,14 @@ class BackblazeApi extends RestApiMap {
             'daysFromHidingToDeleting': 30,
             'daysFromUploadingToHiding': null,
             'fileNamePrefix': '',
-          }
+          },
         ],
       },
-      options: Options(
-        headers: {'Authorization': auth.authorizationToken},
-      ),
+      options: Options(headers: {'Authorization': auth.authorizationToken}),
     );
     close(client);
     if (response.statusCode == HttpStatus.ok) {
-      return GenericResult(
-        data: response.data['bucketId'],
-        success: true,
-      );
+      return GenericResult(data: response.data['bucketId'], success: true);
     } else {
       return GenericResult(
         data: '',
@@ -183,9 +170,7 @@ class BackblazeApi extends RestApiMap {
         'capabilities': ['listBuckets', 'listFiles', 'readFiles', 'writeFiles'],
         'keyName': 'selfprivacy-restricted-server-key',
       },
-      options: Options(
-        headers: {'Authorization': auth.authorizationToken},
-      ),
+      options: Options(headers: {'Authorization': auth.authorizationToken}),
     );
     close(client);
     if (response.statusCode == HttpStatus.ok) {
@@ -199,10 +184,7 @@ class BackblazeApi extends RestApiMap {
     } else {
       return GenericResult(
         success: false,
-        data: BackblazeApplicationKey(
-          applicationKeyId: '',
-          applicationKey: '',
-        ),
+        data: BackblazeApplicationKey(applicationKeyId: '', applicationKey: ''),
         message: 'code: ${response.statusCode}, ${response.data}',
       );
     }
@@ -221,9 +203,7 @@ class BackblazeApi extends RestApiMap {
       queryParameters: {
         'accountId': getIt<ResourcesModel>().backblazeCredential!.keyId,
       },
-      options: Options(
-        headers: {'Authorization': auth.authorizationToken},
-      ),
+      options: Options(headers: {'Authorization': auth.authorizationToken}),
     );
     close(client);
     if (response.statusCode == HttpStatus.ok) {
@@ -238,10 +218,7 @@ class BackblazeApi extends RestApiMap {
           );
         }
       }
-      return GenericResult(
-        success: bucket != null,
-        data: bucket,
-      );
+      return GenericResult(success: bucket != null, data: bucket);
     } else {
       return GenericResult(
         success: false,

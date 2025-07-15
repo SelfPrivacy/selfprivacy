@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 part 'backblaze_bucket.g.dart';
 
@@ -36,12 +36,11 @@ class BackblazeBucket {
     final String? applicationKey,
     final String? bucketName,
     final String? encryptionKey,
-  }) =>
-      BackblazeBucket(
-        bucketId: bucketId ?? this.bucketId,
-        applicationKeyId: applicationKeyId ?? this.applicationKeyId,
-        applicationKey: applicationKey ?? this.applicationKey,
-        bucketName: bucketName ?? this.bucketName,
-        encryptionKey: encryptionKey ?? this.encryptionKey,
-      );
+  }) => BackblazeBucket(
+    bucketId: bucketId ?? this.bucketId,
+    applicationKeyId: applicationKeyId ?? this.applicationKeyId,
+    applicationKey: applicationKey ?? this.applicationKey,
+    bucketName: bucketName ?? this.bucketName,
+    encryptionKey: encryptionKey ?? this.encryptionKey,
+  );
 }

@@ -20,28 +20,28 @@ class QuotaSelectionTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ExpansionTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: Text(
-          value == -1 ? '∞' : value.toString(),
-          style: Theme.of(context).textTheme.headlineMedium,
+    title: Text(title),
+    subtitle: Text(subtitle),
+    trailing: Text(
+      value == -1 ? '∞' : value.toString(),
+      style: Theme.of(context).textTheme.headlineMedium,
+    ),
+    children: [
+      // Discrete slider to select the new value
+      if (value >= -1 && value <= max)
+        Slider.adaptive(
+          value: value == -1 ? max + 1 : value.toDouble(),
+          min: min.toDouble(),
+          max: (max + 1).toDouble(),
+          divisions: max - min + 1,
+          label: value == -1 ? '∞' : value.toString(),
+          onChanged: callback,
         ),
-        children: [
-          // Discrete slider to select the new value
-          if (value >= -1 && value <= max)
-            Slider.adaptive(
-              value: value == -1 ? max + 1 : value.toDouble(),
-              min: min.toDouble(),
-              max: (max + 1).toDouble(),
-              divisions: max - min + 1,
-              label: value == -1 ? '∞' : value.toString(),
-              onChanged: callback,
-            ),
-          if (value < -1 || value > max)
-            Text(
-              'Manually set to $value',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-        ],
-      );
+      if (value < -1 || value > max)
+        Text(
+          'Manually set to $value',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+    ],
+  );
 }

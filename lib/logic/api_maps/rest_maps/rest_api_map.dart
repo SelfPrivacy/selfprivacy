@@ -88,10 +88,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
         data: jsonEncode(response.data),
       ),
     );
-    return super.onResponse(
-      response,
-      handler,
-    );
+    return super.onResponse(response, handler);
   }
 
   @override
@@ -111,7 +108,8 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     addConsoleLog(
       ManualConsoleLog.warning(
         customTitle: 'RestAPI error',
-        content: '"uri": "${response?.realUri}",\n'
+        content:
+            '"uri": "${response?.realUri}",\n'
             '"status_code": ${response?.statusCode},\n'
             '"response": $responseEncoded',
       ),

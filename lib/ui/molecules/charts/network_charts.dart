@@ -26,10 +26,10 @@ class NetworkChart extends GenericLineChart {
 
     final averageUsageIn =
         data[0].map((final e) => e.value).reduce((final a, final b) => a + b) /
-            data[0].length;
+        data[0].length;
     final averageUsageOut =
         data[1].map((final e) => e.value).reduce((final a, final b) => a + b) /
-            data[1].length;
+        data[1].length;
 
     final maxUsageIn = data[0]
         .map((final e) => e.value)
@@ -52,12 +52,14 @@ class NetworkChart extends GenericLineChart {
         'averageUsageOut': DiskSize(byte: averageUsageOut.toInt()).toString(),
         'maxUsageIn': DiskSize(byte: maxUsageIn.toInt()).toString(),
         'maxUsageOut': DiskSize(byte: maxUsageOut.toInt()).toString(),
-        'maxUsageTimeIn':
-            DateFormat('HH:mm dd MMMM', context.locale.languageCode)
-                .format(maxUsageTimeIn),
-        'maxUsageTimeOut':
-            DateFormat('HH:mm dd MMMM', context.locale.languageCode)
-                .format(maxUsageTimeOut),
+        'maxUsageTimeIn': DateFormat(
+          'HH:mm dd MMMM',
+          context.locale.languageCode,
+        ).format(maxUsageTimeIn),
+        'maxUsageTimeOut': DateFormat(
+          'HH:mm dd MMMM',
+          context.locale.languageCode,
+        ).format(maxUsageTimeOut),
       },
     );
 
@@ -79,14 +81,13 @@ class NetworkChart extends GenericLineChart {
     required final double value,
     required final LineBarSpot spot,
     required final BuildContext context,
-  }) =>
-      LineTooltipItem(
-        '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${spot.barIndex == 0 ? 'resource_chart.in'.tr() : 'resource_chart.out'.tr()} ${DiskSize(byte: value.toInt()).toString()}',
-        TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.bold,
-        ),
-      );
+  }) => LineTooltipItem(
+    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${spot.barIndex == 0 ? 'resource_chart.in'.tr() : 'resource_chart.out'.tr()} ${DiskSize(byte: value.toInt()).toString()}',
+    TextStyle(
+      color: Theme.of(context).colorScheme.onSurface,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 
   @override
   String getRightTitle(final double value) =>

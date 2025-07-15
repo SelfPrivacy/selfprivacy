@@ -25,61 +25,46 @@ import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
 class NewUserPage extends StatelessWidget {
-  const NewUserPage({
-    this.user,
-    super.key,
-  });
+  const NewUserPage({this.user, super.key});
 
   final User? user;
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-        create: (final BuildContext context) => UserFormCubit(
+    create:
+        (final BuildContext context) => UserFormCubit(
           fieldFactory: FieldCubitFactory(context),
           initialUser: user,
         ),
-        child: BlocConsumer<UserFormCubit, FormCubitState>(
-          listener: (
-            final BuildContext context,
-            final FormCubitState state,
-          ) {
-            final formCubit = context.read<UserFormCubit>();
-            if (state.isSubmitted) {
-              if (formCubit.userCreationMessage?.isNotEmpty ?? false) {
-                getIt<NavigationService>()
-                    .showSnackBar(formCubit.userCreationMessage!.tr());
-              }
-              context.router.replace(
-                UserDetailsRoute(
-                  login: formCubit.login.state.value,
-                ),
-              );
-            }
-            if (state.isErrorShown) {
-              final errorMessage = formCubit.errorMessage;
-              if (errorMessage.isNotEmpty) {
-                getIt<NavigationService>().showSnackBar(errorMessage);
-              }
-            }
-          },
-          builder: (
-            final BuildContext context,
-            final FormCubitState state,
-          ) =>
-              NewUserScreen(
-            state: state,
-            user: user,
-          ),
-        ),
-      );
+    child: BlocConsumer<UserFormCubit, FormCubitState>(
+      listener: (final BuildContext context, final FormCubitState state) {
+        final formCubit = context.read<UserFormCubit>();
+        if (state.isSubmitted) {
+          if (formCubit.userCreationMessage?.isNotEmpty ?? false) {
+            getIt<NavigationService>().showSnackBar(
+              formCubit.userCreationMessage!.tr(),
+            );
+          }
+          context.router.replace(
+            UserDetailsRoute(login: formCubit.login.state.value),
+          );
+        }
+        if (state.isErrorShown) {
+          final errorMessage = formCubit.errorMessage;
+          if (errorMessage.isNotEmpty) {
+            getIt<NavigationService>().showSnackBar(errorMessage);
+          }
+        }
+      },
+      builder:
+          (final BuildContext context, final FormCubitState state) =>
+              NewUserScreen(state: state, user: user),
+    ),
+  );
 }
 
 class NewUserScreen extends StatelessWidget {
-  const NewUserScreen({
-    required this.state,
-    this.user,
-    super.key,
-  });
+  const NewUserScreen({required this.state, this.user, super.key});
   final User? user;
   final FormCubitState state;
 
@@ -94,20 +79,15 @@ class NewUserScreen extends StatelessWidget {
     return BrandHeroScreen(
       heroTitle: user != null ? 'users.edit_user'.tr() : 'users.new_user'.tr(),
       heroIcon: user != null ? null : Icons.person_add_outlined,
-      heroIconWidget: user != null
-          ? CircleAvatar(
-              child: Text(
-                user!.login[0].toUpperCase(),
-              ),
-            )
-          : null,
+      heroIconWidget:
+          user != null
+              ? CircleAvatar(child: Text(user!.login[0].toUpperCase()))
+              : null,
       children: [
         if (state.isErrorShown)
           Text(
             'users.username_rule'.tr(),
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.error,
-            ),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         const Gap(8),
         IntrinsicHeight(
@@ -116,13 +96,13 @@ class NewUserScreen extends StatelessWidget {
             autofocus: true,
             formFieldCubit: formCubit.login,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: user != null
-                      ? Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.38)
+              color:
+                  user != null
+                      ? Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.38)
                       : Theme.of(context).colorScheme.onSurface,
-                ),
+            ),
             decoration: InputDecoration(
               labelText: 'users.login'.tr(),
               suffixText: '@$domainName',
@@ -146,9 +126,7 @@ class NewUserScreen extends StatelessWidget {
           ),
         ),
         const Gap(16),
-        GroupsSelector(
-          formFieldCubit: formCubit.groups,
-        ),
+        GroupsSelector(formFieldCubit: formCubit.groups),
         const Gap(24),
         BrandButton.filled(
           onPressed: state.isSubmitting ? null : () => formCubit.trySubmit(),
@@ -161,10 +139,7 @@ class NewUserScreen extends StatelessWidget {
 }
 
 class GroupsSelector extends StatefulWidget {
-  const GroupsSelector({
-    required this.formFieldCubit,
-    super.key,
-  });
+  const GroupsSelector({required this.formFieldCubit, super.key});
 
   final FieldCubit<List<String>> formFieldCubit;
 
@@ -179,16 +154,16 @@ class _GroupsSelectorState extends State<GroupsSelector> {
   late StreamSubscription subscription;
 
   List<String> getSelectedGroups() => [
-        if (primaryGroup != '') primaryGroup,
-        ...explicitGroups,
-      ];
+    if (primaryGroup != '') primaryGroup,
+    ...explicitGroups,
+  ];
 
   String getPrimaryGroupFromSelection(final List<String> groups) =>
       groups.contains('sp.admins')
           ? 'sp.admins'
           : groups.contains('sp.full_users')
-              ? 'sp.full_users'
-              : '';
+          ? 'sp.full_users'
+          : '';
 
   List<String> getExplicitGroupsFromSelection(final List<String> groups) =>
       groups
@@ -217,17 +192,19 @@ class _GroupsSelectorState extends State<GroupsSelector> {
         state is ExternalChangeFieldCubitState) {
       final groups = state.value;
       setState(() {
-        primaryGroup = groups.contains('sp.admins')
-            ? 'sp.admins'
-            : groups.contains('sp.full_users')
+        primaryGroup =
+            groups.contains('sp.admins')
+                ? 'sp.admins'
+                : groups.contains('sp.full_users')
                 ? 'sp.full_users'
                 : '';
-        explicitGroups = groups
-            .where(
-              (final String group) =>
-                  group != 'sp.full_users' && group != 'sp.admins',
-            )
-            .toList();
+        explicitGroups =
+            groups
+                .where(
+                  (final String group) =>
+                      group != 'sp.full_users' && group != 'sp.admins',
+                )
+                .toList();
       });
     }
   }
@@ -239,175 +216,170 @@ class _GroupsSelectorState extends State<GroupsSelector> {
   }
 
   @override
-  Widget build(final BuildContext context) =>
-      BlocBuilder<FieldCubit, FieldCubitState>(
-        bloc: widget.formFieldCubit,
-        builder: (final context, final state) {
-          final serviceGroups = context.watch<GroupsBloc>().state.serviceGroups;
-          final unrecognizedGroups =
-              context.watch<GroupsBloc>().state.unrecognizedGroups;
-          final isGroupsEmpty = context.watch<GroupsBloc>().state.isEmpty;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SectionTitle(
-                title: 'users.group'.tr(),
-              ),
-              const Gap(8),
-              RadioSelectionCard(
-                isSelected: primaryGroup == '',
-                title: 'users.groups_only_email_title'.tr(),
-                subtitle: 'users.groups_only_email_subtitle'.tr(),
-                onTap: () {
-                  setState(() {
-                    primaryGroup = '';
-                  });
-                  widget.formFieldCubit.setValue(getSelectedGroups());
-                },
-              ),
-              const Gap(8),
-              RadioSelectionCard(
-                isSelected: primaryGroup == 'sp.full_users',
-                title: 'users.groups_full_user_title'.tr(),
-                subtitle: 'users.groups_full_user_subtitle'.tr(),
-                onTap: () {
-                  setState(() {
-                    primaryGroup = 'sp.full_users';
-                    widget.formFieldCubit.setValue(getSelectedGroups());
-                  });
-                },
-              ),
-              const Gap(16),
-              RadioSelectionCard(
-                isSelected: primaryGroup == 'sp.admins',
-                title: 'users.groups_admin_title'.tr(),
-                subtitle: 'users.groups_admin_subtitle'.tr(),
-                onTap: () {
-                  setState(() {
-                    primaryGroup = 'sp.admins';
-                    widget.formFieldCubit.setValue(getSelectedGroups());
-                  });
-                },
-              ),
-              const Gap(16),
-              FilledCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTileOnSurfaceVariant(
-                      title: 'users.explicit_permissions_title'.tr(),
-                      subtitle: 'users.explicit_permissions_subtitle'.tr(),
+  Widget build(
+    final BuildContext context,
+  ) => BlocBuilder<FieldCubit, FieldCubitState>(
+    bloc: widget.formFieldCubit,
+    builder: (final context, final state) {
+      final serviceGroups = context.watch<GroupsBloc>().state.serviceGroups;
+      final unrecognizedGroups =
+          context.watch<GroupsBloc>().state.unrecognizedGroups;
+      final isGroupsEmpty = context.watch<GroupsBloc>().state.isEmpty;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionTitle(title: 'users.group'.tr()),
+          const Gap(8),
+          RadioSelectionCard(
+            isSelected: primaryGroup == '',
+            title: 'users.groups_only_email_title'.tr(),
+            subtitle: 'users.groups_only_email_subtitle'.tr(),
+            onTap: () {
+              setState(() {
+                primaryGroup = '';
+              });
+              widget.formFieldCubit.setValue(getSelectedGroups());
+            },
+          ),
+          const Gap(8),
+          RadioSelectionCard(
+            isSelected: primaryGroup == 'sp.full_users',
+            title: 'users.groups_full_user_title'.tr(),
+            subtitle: 'users.groups_full_user_subtitle'.tr(),
+            onTap: () {
+              setState(() {
+                primaryGroup = 'sp.full_users';
+                widget.formFieldCubit.setValue(getSelectedGroups());
+              });
+            },
+          ),
+          const Gap(16),
+          RadioSelectionCard(
+            isSelected: primaryGroup == 'sp.admins',
+            title: 'users.groups_admin_title'.tr(),
+            subtitle: 'users.groups_admin_subtitle'.tr(),
+            onTap: () {
+              setState(() {
+                primaryGroup = 'sp.admins';
+                widget.formFieldCubit.setValue(getSelectedGroups());
+              });
+            },
+          ),
+          const Gap(16),
+          FilledCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTileOnSurfaceVariant(
+                  title: 'users.explicit_permissions_title'.tr(),
+                  subtitle: 'users.explicit_permissions_subtitle'.tr(),
+                ),
+                const Divider(height: 0),
+                if (isGroupsEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      child: EmptyPagePlaceholder(
+                        title: 'basis.network_error'.tr(),
+                        iconData: Icons.error_outline_outlined,
+                      ),
                     ),
-                    const Divider(height: 0),
-                    if (isGroupsEmpty)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24.0),
-                          child: EmptyPagePlaceholder(
-                            title: 'basis.network_error'.tr(),
-                            iconData: Icons.error_outline_outlined,
+                  ),
+                if (!isGroupsEmpty &&
+                    (serviceGroups.isEmpty && unrecognizedGroups.isEmpty))
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      child: EmptyPagePlaceholder(
+                        title: 'users.no_groups'.tr(),
+                        description: 'users.no_groups_subtitle'.tr(),
+                        iconData: Icons.group_remove_outlined,
+                      ),
+                    ),
+                  ),
+                ...serviceGroups.entries.map((final serviceEntry) {
+                  final service = context
+                      .watch<ServicesBloc>()
+                      .state
+                      .getServiceById(serviceEntry.key);
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading:
+                            service != null
+                                ? SvgPicture.string(
+                                  service.svgIcon,
+                                  width: 24.0,
+                                  height: 24.0,
+                                  colorFilter: ColorFilter.mode(
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                    BlendMode.srcIn,
+                                  ),
+                                )
+                                : Icon(
+                                  Icons.question_mark_outlined,
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                ),
+                        title: Text(service?.displayName ?? serviceEntry.key),
+                      ),
+                      ...serviceEntry.value.entries.map(
+                        (final permissionEntry) => CheckboxListTile.adaptive(
+                          value: explicitGroups.contains(permissionEntry.value),
+                          title: Text(
+                            UiHelpers.permissionTitle(
+                              permissionEntry.key,
+                              serviceEntry.key,
+                            ),
                           ),
+                          onChanged: (final bool? value) {
+                            setState(() {
+                              if (value ?? true) {
+                                explicitGroups.add(permissionEntry.value);
+                              } else {
+                                explicitGroups.remove(permissionEntry.value);
+                              }
+                              widget.formFieldCubit.setValue(
+                                getSelectedGroups(),
+                              );
+                            });
+                          },
                         ),
                       ),
-                    if (!isGroupsEmpty &&
-                        (serviceGroups.isEmpty && unrecognizedGroups.isEmpty))
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24.0),
-                          child: EmptyPagePlaceholder(
-                            title: 'users.no_groups'.tr(),
-                            description: 'users.no_groups_subtitle'.tr(),
-                            iconData: Icons.group_remove_outlined,
-                          ),
-                        ),
-                      ),
-                    ...serviceGroups.entries.map(
-                      (final serviceEntry) {
-                        final service = context
-                            .watch<ServicesBloc>()
-                            .state
-                            .getServiceById(serviceEntry.key);
-                        return Column(
+                      ...unrecognizedGroups.map(
+                        (final String group) => Column(
                           children: [
-                            ListTile(
-                              leading: service != null
-                                  ? SvgPicture.string(
-                                      service.svgIcon,
-                                      width: 24.0,
-                                      height: 24.0,
-                                      colorFilter: ColorFilter.mode(
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                        BlendMode.srcIn,
-                                      ),
-                                    )
-                                  : Icon(
-                                      Icons.question_mark_outlined,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
-                              title: Text(
-                                service?.displayName ?? serviceEntry.key,
-                              ),
-                            ),
-                            ...serviceEntry.value.entries.map(
-                              (final permissionEntry) =>
-                                  CheckboxListTile.adaptive(
-                                value: explicitGroups.contains(
-                                  permissionEntry.value,
-                                ),
-                                title: Text(
-                                  UiHelpers.permissionTitle(
-                                    permissionEntry.key,
-                                    serviceEntry.key,
-                                  ),
-                                ),
-                                onChanged: (final bool? value) {
-                                  setState(() {
-                                    if (value ?? true) {
-                                      explicitGroups.add(permissionEntry.value);
-                                    } else {
-                                      explicitGroups
-                                          .remove(permissionEntry.value);
-                                    }
-                                    widget.formFieldCubit
-                                        .setValue(getSelectedGroups());
-                                  });
-                                },
-                              ),
-                            ),
-                            ...unrecognizedGroups.map(
-                              (final String group) => Column(
-                                children: [
-                                  CheckboxListTile.adaptive(
-                                    value: explicitGroups.contains(group),
-                                    title: Text(group),
-                                    onChanged: (final bool? value) {
-                                      setState(() {
-                                        if (value ?? true) {
-                                          explicitGroups.add(group);
-                                        } else {
-                                          explicitGroups.remove(group);
-                                        }
-                                        widget.formFieldCubit
-                                            .setValue(getSelectedGroups());
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
+                            CheckboxListTile.adaptive(
+                              value: explicitGroups.contains(group),
+                              title: Text(group),
+                              onChanged: (final bool? value) {
+                                setState(() {
+                                  if (value ?? true) {
+                                    explicitGroups.add(group);
+                                  } else {
+                                    explicitGroups.remove(group);
+                                  }
+                                  widget.formFieldCubit.setValue(
+                                    getSelectedGroups(),
+                                  );
+                                });
+                              },
                             ),
                           ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              ],
+            ),
+          ),
+        ],
       );
+    },
+  );
 }

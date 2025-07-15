@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
@@ -46,14 +47,13 @@ Widget fadeThroughTransition(
   final Animation<double> animation,
   final Animation<double> secondaryAnimation,
   final Widget child,
-) =>
-    SharedAxisTransition(
-      key: UniqueKey(),
-      animation: animation,
-      secondaryAnimation: secondaryAnimation,
-      transitionType: SharedAxisTransitionType.vertical,
-      child: child,
-    );
+) => SharedAxisTransition(
+  key: UniqueKey(),
+  animation: animation,
+  secondaryAnimation: secondaryAnimation,
+  transitionType: SharedAxisTransitionType.vertical,
+  child: child,
+);
 
 @AutoRouterConfig(
   // transitionsBuilder: fadeThroughTransition,
@@ -61,7 +61,7 @@ Widget fadeThroughTransition(
 )
 class RootRouter extends RootStackRouter {
   RootRouter(final GlobalKey<NavigatorState> navigatorKey)
-      : super(navigatorKey: navigatorKey);
+    : super(navigatorKey: navigatorKey);
 
   @override
   RouteType get defaultRouteType => const RouteType.material();

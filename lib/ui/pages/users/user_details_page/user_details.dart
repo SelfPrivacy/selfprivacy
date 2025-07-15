@@ -16,10 +16,7 @@ import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
 class UserDetailsPage extends StatelessWidget {
-  const UserDetailsPage({
-    required this.login,
-    super.key,
-  });
+  const UserDetailsPage({required this.login, super.key});
 
   final String login;
 
@@ -31,13 +28,11 @@ class UserDetailsPage extends StatelessWidget {
     final String domainName = UiHelpers.getDomainName(config);
 
     final User user = context.watch<UsersBloc>().state.users.firstWhere(
-          (final User user) => user.login == login,
-          orElse: () => const User(
-            type: UserType.normal,
-            login: 'error',
-            note: 'ERROR',
-          ),
-        );
+      (final User user) => user.login == login,
+      orElse:
+          () =>
+              const User(type: UserType.normal, login: 'error', note: 'ERROR'),
+    );
 
     if (user.note == 'ERROR') {
       return BrandHeroScreen(
@@ -64,9 +59,7 @@ class UserDetailsPage extends StatelessWidget {
         hasFlashButton: true,
         heroTitle: 'ssh.root_title'.tr(),
         heroSubtitle: 'ssh.root_subtitle'.tr(),
-        children: [
-          SshKeysCard(user: user),
-        ],
+        children: [SshKeysCard(user: user)],
       );
     }
 
@@ -74,14 +67,11 @@ class UserDetailsPage extends StatelessWidget {
       hasBackButton: true,
       hasFlashButton: true,
       heroTitle: user.displayName ?? user.login,
-      heroSubtitle: user.displayName != null && user.displayName != user.login
-          ? user.login
-          : null,
-      heroIconWidget: CircleAvatar(
-        child: Text(
-          user.login[0].toUpperCase(),
-        ),
-      ),
+      heroSubtitle:
+          user.displayName != null && user.displayName != user.login
+              ? user.login
+              : null,
+      heroIconWidget: CircleAvatar(child: Text(user.login[0].toUpperCase())),
       children: [
         UserEmailLoginCard(user: user, domainName: domainName),
         const Gap(8),

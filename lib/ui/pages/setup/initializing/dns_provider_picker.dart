@@ -74,10 +74,7 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
 }
 
 class ProviderPageInfo {
-  const ProviderPageInfo({
-    required this.providerType,
-    required this.pathToHow,
-  });
+  const ProviderPageInfo({required this.providerType, required this.pathToHow});
 
   final String pathToHow;
   final DnsProviderType providerType;
@@ -95,41 +92,42 @@ class ProviderInputDataPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'initializing.connect_to_dns'.tr(),
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'initializing.connect_to_server_provider_text'.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 32),
-          CubitFormTextField(
-            autofocus: true,
-            formFieldCubit: providerCubit.apiKey,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Provider API Token',
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'initializing.connect_to_dns'.tr(),
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      const SizedBox(height: 16),
+      Text(
+        'initializing.connect_to_server_provider_text'.tr(),
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 32),
+      CubitFormTextField(
+        autofocus: true,
+        formFieldCubit: providerCubit.apiKey,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Provider API Token',
+        ),
+      ),
+      const SizedBox(height: 32),
+      BrandButton.filled(
+        title: 'basis.connect'.tr(),
+        onPressed: () => providerCubit.trySubmit(),
+      ),
+      const SizedBox(height: 10),
+      BrandOutlinedButton(
+        child: Text('initializing.how'.tr()),
+        onPressed:
+            () => context.read<SupportSystemCubit>().showArticle(
+              article: providerInfo.pathToHow,
+              context: context,
             ),
-          ),
-          const SizedBox(height: 32),
-          BrandButton.filled(
-            title: 'basis.connect'.tr(),
-            onPressed: () => providerCubit.trySubmit(),
-          ),
-          const SizedBox(height: 10),
-          BrandOutlinedButton(
-            child: Text('initializing.how'.tr()),
-            onPressed: () => context.read<SupportSystemCubit>().showArticle(
-                  article: providerInfo.pathToHow,
-                  context: context,
-                ),
-          ),
-        ],
-      );
+      ),
+    ],
+  );
 }
 
 class ProviderSelectionPage extends StatelessWidget {
@@ -144,189 +142,190 @@ class ProviderSelectionPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    width: double.infinity,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
 
-          /// TODO: Remove obvious repetition
-          children: [
-            Text(
-              'initializing.select_dns'.tr(),
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'initializing.select_provider'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 10),
-            OutlinedCard(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 245, 229, 82),
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/images/logos/desec.svg',
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'deSEC',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_price_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_price_free'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    BrandButton.filled(
-                      title: 'basis.select'.tr(),
-                      onPressed: () {
-                        serverInstallationCubit
-                            .setDnsProviderType(DnsProviderType.desec);
-                        callback(DnsProviderType.desec);
-                      },
-                    ),
-                    // Outlined button that will open website
-                    BrandOutlinedButton(
-                      onPressed: () => launchUrlString('https://desec.io/'),
-                      title: 'initializing.select_provider_site_button'.tr(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            OutlinedCard(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 244, 128, 31),
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/images/logos/cloudflare.svg',
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Cloudflare',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_price_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_price_free'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    BrandButton.filled(
-                      title: 'basis.select'.tr(),
-                      onPressed: () {
-                        serverInstallationCubit
-                            .setDnsProviderType(DnsProviderType.cloudflare);
-                        callback(DnsProviderType.cloudflare);
-                      },
-                    ),
-                    // Outlined button that will open website
-                    BrandOutlinedButton(
-                      onPressed: () =>
-                          launchUrlString('https://dash.cloudflare.com/'),
-                      title: 'initializing.select_provider_site_button'.tr(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            OutlinedCard(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: const Color.fromARGB(255, 1, 126, 251),
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/images/logos/digital_ocean.svg',
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Digital Ocean',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'initializing.select_provider_price_title'.tr(),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'initializing.select_provider_price_free'.tr(),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 16),
-                    BrandButton.filled(
-                      title: 'basis.select'.tr(),
-                      onPressed: () {
-                        serverInstallationCubit
-                            .setDnsProviderType(DnsProviderType.digitalOcean);
-                        callback(DnsProviderType.digitalOcean);
-                      },
-                    ),
-                    // Outlined button that will open website
-                    BrandOutlinedButton(
-                      onPressed: () =>
-                          launchUrlString('https://cloud.digitalocean.com/'),
-                      title: 'initializing.select_provider_site_button'.tr(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+      /// TODO: Remove obvious repetition
+      children: [
+        Text(
+          'initializing.select_dns'.tr(),
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
-      );
+        const SizedBox(height: 10),
+        Text(
+          'initializing.select_provider'.tr(),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 10),
+        OutlinedCard(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: const Color.fromARGB(255, 245, 229, 82),
+                      ),
+                      child: SvgPicture.asset('assets/images/logos/desec.svg'),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      'deSEC',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'initializing.select_provider_price_title'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                Text(
+                  'initializing.select_provider_price_free'.tr(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 16),
+                BrandButton.filled(
+                  title: 'basis.select'.tr(),
+                  onPressed: () {
+                    serverInstallationCubit.setDnsProviderType(
+                      DnsProviderType.desec,
+                    );
+                    callback(DnsProviderType.desec);
+                  },
+                ),
+                // Outlined button that will open website
+                BrandOutlinedButton(
+                  onPressed: () => launchUrlString('https://desec.io/'),
+                  title: 'initializing.select_provider_site_button'.tr(),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        OutlinedCard(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: const Color.fromARGB(255, 244, 128, 31),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/images/logos/cloudflare.svg',
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      'Cloudflare',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'initializing.select_provider_price_title'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                Text(
+                  'initializing.select_provider_price_free'.tr(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 16),
+                BrandButton.filled(
+                  title: 'basis.select'.tr(),
+                  onPressed: () {
+                    serverInstallationCubit.setDnsProviderType(
+                      DnsProviderType.cloudflare,
+                    );
+                    callback(DnsProviderType.cloudflare);
+                  },
+                ),
+                // Outlined button that will open website
+                BrandOutlinedButton(
+                  onPressed:
+                      () => launchUrlString('https://dash.cloudflare.com/'),
+                  title: 'initializing.select_provider_site_button'.tr(),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        OutlinedCard(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: const Color.fromARGB(255, 1, 126, 251),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/images/logos/digital_ocean.svg',
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      'Digital Ocean',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'initializing.select_provider_price_title'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                Text(
+                  'initializing.select_provider_price_free'.tr(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 16),
+                BrandButton.filled(
+                  title: 'basis.select'.tr(),
+                  onPressed: () {
+                    serverInstallationCubit.setDnsProviderType(
+                      DnsProviderType.digitalOcean,
+                    );
+                    callback(DnsProviderType.digitalOcean);
+                  },
+                ),
+                // Outlined button that will open website
+                BrandOutlinedButton(
+                  onPressed:
+                      () => launchUrlString('https://cloud.digitalocean.com/'),
+                  title: 'initializing.select_provider_site_button'.tr(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

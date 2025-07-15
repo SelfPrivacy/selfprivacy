@@ -6,10 +6,7 @@ part 'device_token.g.dart';
 class DeviceToken {
   factory DeviceToken.fromJson(final Map<String, dynamic> json) =>
       _$DeviceTokenFromJson(json);
-  DeviceToken({
-    required this.device,
-    required this.token,
-  });
+  DeviceToken({required this.device, required this.token});
 
   final String device;
   final String token;

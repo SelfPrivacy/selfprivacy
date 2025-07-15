@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/models/hive/email_password_metadata.dart';
@@ -26,22 +26,23 @@ class User extends Equatable {
   });
 
   User.fromGraphQL(final Fragment$userFields user)
-      : this(
-          login: user.username,
-          type: UserType.fromGraphQL(user.userType),
-          sshKeys: user.sshKeys ?? const [],
-          isFoundOnServer: true,
-          directmemberof: user.directmemberof,
-          memberof: user.memberof,
-          emailPasswordMetadata: user.emailPasswordMetadata
-              ?.map(
-                (final Fragment$userFields$emailPasswordMetadata metadata) =>
-                    EmailPasswordMetadata.fromGraphQL(metadata),
-              )
-              .toList(),
-          displayName: user.displayName,
-          email: user.email,
-        );
+    : this(
+        login: user.username,
+        type: UserType.fromGraphQL(user.userType),
+        sshKeys: user.sshKeys ?? const [],
+        isFoundOnServer: true,
+        directmemberof: user.directmemberof,
+        memberof: user.memberof,
+        emailPasswordMetadata:
+            user.emailPasswordMetadata
+                ?.map(
+                  (final Fragment$userFields$emailPasswordMetadata metadata) =>
+                      EmailPasswordMetadata.fromGraphQL(metadata),
+                )
+                .toList(),
+        displayName: user.displayName,
+        email: user.email,
+      );
 
   const User.fake({
     this.login = 'fake_username',
@@ -92,13 +93,13 @@ class User extends Equatable {
 
   @override
   List<Object?> get props => [
-        login,
-        password,
-        sshKeys,
-        isFoundOnServer,
-        note,
-        type,
-      ];
+    login,
+    password,
+    sshKeys,
+    isFoundOnServer,
+    note,
+    type,
+  ];
 
   Color get color => stringToColor(login);
 
@@ -118,21 +119,19 @@ class User extends Equatable {
     final List<String>? directmemberof,
     final List<String>? memberof,
     final List<EmailPasswordMetadata>? emailPasswordMetadata,
-  }) =>
-      User(
-        login: login ?? this.login,
-        password: password ?? this.password,
-        sshKeys: sshKeys ?? this.sshKeys,
-        isFoundOnServer: isFoundOnServer ?? this.isFoundOnServer,
-        note: note ?? this.note,
-        type: type ?? this.type,
-        email: email ?? this.email,
-        displayName: displayName ?? this.displayName,
-        directmemberof: directmemberof ?? this.directmemberof,
-        memberof: memberof ?? this.memberof,
-        emailPasswordMetadata:
-            emailPasswordMetadata ?? this.emailPasswordMetadata,
-      );
+  }) => User(
+    login: login ?? this.login,
+    password: password ?? this.password,
+    sshKeys: sshKeys ?? this.sshKeys,
+    isFoundOnServer: isFoundOnServer ?? this.isFoundOnServer,
+    note: note ?? this.note,
+    type: type ?? this.type,
+    email: email ?? this.email,
+    displayName: displayName ?? this.displayName,
+    directmemberof: directmemberof ?? this.directmemberof,
+    memberof: memberof ?? this.memberof,
+    emailPasswordMetadata: emailPasswordMetadata ?? this.emailPasswordMetadata,
+  );
 }
 
 @HiveType(typeId: 102)

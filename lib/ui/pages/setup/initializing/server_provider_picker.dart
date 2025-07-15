@@ -51,10 +51,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
           providerInfo: ProviderPageInfo(
             providerType: ServerProviderType.hetzner,
             pathToHow: 'how_hetzner',
-            image: Image.asset(
-              'assets/images/logos/hetzner.png',
-              width: 150,
-            ),
+            image: Image.asset('assets/images/logos/hetzner.png', width: 150),
           ),
         );
 
@@ -98,51 +95,51 @@ class ProviderInputDataPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ResponsiveLayoutWithInfobox(
-        topChild: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'initializing.connect_to_server_provider'.tr(
-                namedArgs: {'provider': providerInfo.providerType.displayName},
-              ),
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'initializing.connect_to_server_provider_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
+    topChild: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'initializing.connect_to_server_provider'.tr(
+            namedArgs: {'provider': providerInfo.providerType.displayName},
+          ),
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
-        primaryColumn: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CubitFormTextField(
-              autofocus: true,
-              formFieldCubit: providerCubit.apiKey,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Provider API Token',
-              ),
-            ),
-            const SizedBox(height: 32),
-            BrandButton.filled(
-              child: Text('basis.connect'.tr()),
-              onPressed: () => providerCubit.trySubmit(),
-            ),
-            const SizedBox(height: 10),
-            BrandOutlinedButton(
-              child: Text('initializing.how'.tr()),
-              onPressed: () {
-                context.read<SupportSystemCubit>().showArticle(
-                      article: providerInfo.pathToHow,
-                      context: context,
-                    );
-              },
-            ),
-          ],
+        const SizedBox(height: 16),
+        Text(
+          'initializing.connect_to_server_provider_text'.tr(),
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
-      );
+      ],
+    ),
+    primaryColumn: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CubitFormTextField(
+          autofocus: true,
+          formFieldCubit: providerCubit.apiKey,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Provider API Token',
+          ),
+        ),
+        const SizedBox(height: 32),
+        BrandButton.filled(
+          child: Text('basis.connect'.tr()),
+          onPressed: () => providerCubit.trySubmit(),
+        ),
+        const SizedBox(height: 10),
+        BrandOutlinedButton(
+          child: Text('initializing.how'.tr()),
+          onPressed: () {
+            context.read<SupportSystemCubit>().showArticle(
+              article: providerInfo.pathToHow,
+              context: context,
+            );
+          },
+        ),
+      ],
+    ),
+  );
 }
 
 class ProviderSelectionPage extends StatelessWidget {
@@ -157,189 +154,186 @@ class ProviderSelectionPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => SizedBox(
-        width: double.infinity,
-        child: ResponsiveLayoutWithInfobox(
-          topChild: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'initializing.connect_to_server'.tr(),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'initializing.select_provider'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
+    width: double.infinity,
+    child: ResponsiveLayoutWithInfobox(
+      topChild: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'initializing.connect_to_server'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-          primaryColumn: Column(
-            children: [
-              OutlinedCard(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 10),
+          Text(
+            'initializing.select_provider'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+      primaryColumn: Column(
+        children: [
+          OutlinedCard(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: const Color(0xFFD50C2D),
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/images/logos/hetzner.svg',
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            'Hetzner Cloud',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
+                      Container(
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color(0xFFD50C2D),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/images/logos/hetzner.svg',
+                        ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(width: 16),
                       Text(
-                        'initializing.select_provider_countries_title'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        'initializing.select_provider_countries_text_hetzner'
-                            .tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'initializing.select_provider_price_title'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        'initializing.select_provider_price_text_hetzner'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'initializing.select_provider_payment_title'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        'initializing.select_provider_payment_text_hetzner'
-                            .tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'initializing.select_provider_email_notice'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      BrandButton.filled(
-                        child: Text('basis.select'.tr()),
-                        onPressed: () {
-                          serverInstallationCubit.setServerProviderType(
-                            ServerProviderType.hetzner,
-                          );
-                          callback(ServerProviderType.hetzner);
-                        },
-                      ),
-                      // Outlined button that will open website
-                      BrandOutlinedButton(
-                        onPressed: () =>
-                            launchURL('https://www.hetzner.com/cloud'),
-                        title: 'initializing.select_provider_site_button'.tr(),
+                        'Hetzner Cloud',
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_countries_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    'initializing.select_provider_countries_text_hetzner'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_price_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    'initializing.select_provider_price_text_hetzner'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_payment_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    'initializing.select_provider_payment_text_hetzner'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_email_notice'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  BrandButton.filled(
+                    child: Text('basis.select'.tr()),
+                    onPressed: () {
+                      serverInstallationCubit.setServerProviderType(
+                        ServerProviderType.hetzner,
+                      );
+                      callback(ServerProviderType.hetzner);
+                    },
+                  ),
+                  // Outlined button that will open website
+                  BrandOutlinedButton(
+                    onPressed: () => launchURL('https://www.hetzner.com/cloud'),
+                    title: 'initializing.select_provider_site_button'.tr(),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              OutlinedCard(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+          ),
+          const SizedBox(height: 16),
+          OutlinedCard(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: const Color(0xFF0080FF),
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/images/logos/digital_ocean.svg',
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            'Digital Ocean',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
+                      Container(
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color(0xFF0080FF),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/images/logos/digital_ocean.svg',
+                        ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(width: 16),
                       Text(
-                        'initializing.select_provider_countries_title'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        'initializing.select_provider_countries_text_do'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'initializing.select_provider_price_title'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        'initializing.select_provider_price_text_do'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'initializing.select_provider_payment_title'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        'initializing.select_provider_payment_text_do'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'initializing.server_provider_email_unavailable'.tr(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 16),
-                      BrandButton.filled(
-                        child: Text('basis.select'.tr()),
-                        onPressed: () {
-                          serverInstallationCubit.setServerProviderType(
-                            ServerProviderType.digitalOcean,
-                          );
-                          callback(ServerProviderType.digitalOcean);
-                        },
-                      ),
-                      // Outlined button that will open website
-                      BrandOutlinedButton(
-                        onPressed: () =>
-                            launchURL('https://www.digitalocean.com'),
-                        title: 'initializing.select_provider_site_button'.tr(),
+                        'Digital Ocean',
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_countries_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    'initializing.select_provider_countries_text_do'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_price_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    'initializing.select_provider_price_text_do'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.select_provider_payment_title'.tr(),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    'initializing.select_provider_payment_text_do'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.server_provider_email_unavailable'.tr(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  BrandButton.filled(
+                    child: Text('basis.select'.tr()),
+                    onPressed: () {
+                      serverInstallationCubit.setServerProviderType(
+                        ServerProviderType.digitalOcean,
+                      );
+                      callback(ServerProviderType.digitalOcean);
+                    },
+                  ),
+                  // Outlined button that will open website
+                  BrandOutlinedButton(
+                    onPressed: () => launchURL('https://www.digitalocean.com'),
+                    title: 'initializing.select_provider_site_button'.tr(),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-          secondaryColumn:
-              InfoBox(text: 'initializing.select_provider_notice'.tr()),
-        ),
-      );
+        ],
+      ),
+      secondaryColumn: InfoBox(
+        text: 'initializing.select_provider_notice'.tr(),
+      ),
+    ),
+  );
 }

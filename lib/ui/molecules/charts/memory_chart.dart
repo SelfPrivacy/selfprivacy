@@ -18,7 +18,8 @@ class MemoryChart extends GenericLineChart {
     final lastData = data.first.last;
     final lastValue = lastData.value;
 
-    final averageUsage = data.first
+    final averageUsage =
+        data.first
             .map((final e) => e.value)
             .reduce((final a, final b) => a + b) /
         data.length;
@@ -28,9 +29,10 @@ class MemoryChart extends GenericLineChart {
     final maxUsageTime =
         data.first.firstWhere((final e) => e.value == maxUsage).time;
 
-    final labelKey = isSwap
-        ? 'resource_chart.swap_chart_screen_reader_explanation'
-        : 'resource_chart.memory_chart_screen_reader_explanation';
+    final labelKey =
+        isSwap
+            ? 'resource_chart.swap_chart_screen_reader_explanation'
+            : 'resource_chart.memory_chart_screen_reader_explanation';
 
     final label = labelKey.tr(
       namedArgs: {
@@ -38,8 +40,10 @@ class MemoryChart extends GenericLineChart {
         'lastValue': lastValue.toStringAsFixed(1),
         'averageUsage': averageUsage.toStringAsFixed(1),
         'maxUsage': maxUsage.toStringAsFixed(1),
-        'maxUsageTime': DateFormat('HH:mm dd MMMM', context.locale.languageCode)
-            .format(maxUsageTime),
+        'maxUsageTime': DateFormat(
+          'HH:mm dd MMMM',
+          context.locale.languageCode,
+        ).format(maxUsageTime),
       },
     );
 

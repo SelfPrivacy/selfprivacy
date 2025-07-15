@@ -21,24 +21,18 @@ class ListTileOnSurfaceVariant extends StatelessWidget {
       return null;
     }
     if (disableSubtitleOverflow) {
-      return Text(
-        subtitle!,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      );
+      return Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis);
     }
-    return Text(
-      subtitle!,
-    );
+    return Text(subtitle!);
   }
 
   @override
   Widget build(final BuildContext context) => ListTile(
-        title: Text(title),
-        subtitle: getSubtitle(),
-        onTap: onTap,
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        leading: leadingIcon != null ? Icon(leadingIcon) : null,
-        iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-      );
+    title: Text(title),
+    subtitle: getSubtitle(),
+    onTap: onTap,
+    textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+    leading: leadingIcon != null ? Icon(leadingIcon) : null,
+    iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+  );
 }

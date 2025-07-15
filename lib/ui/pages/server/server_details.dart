@@ -44,8 +44,9 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
 
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
 
     if (!isReady) {
       return BrandHeroScreen(
@@ -62,9 +63,7 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
       heroTitle: 'server.card_title'.tr(),
       heroSubtitle: 'server.description'.tr(),
       children: [
-        StorageCard(
-          diskStatus: context.watch<VolumesBloc>().state.diskStatus,
-        ),
+        StorageCard(diskStatus: context.watch<VolumesBloc>().state.diskStatus),
         const SizedBox(height: 16),
         ListTile(
           title: Text('server.settings'.tr()),
@@ -77,9 +76,7 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
           onTap: () => context.pushRoute(ServerLogsRoute()),
         ),
         const Divider(height: 32),
-        SectionHeadline(
-          title: 'server.resource_usage'.tr(),
-        ),
+        SectionHeadline(title: 'server.resource_usage'.tr()),
         const SizedBox(height: 8),
         BlocProvider(
           create: (final context) => MetricsCubit()..restart(),

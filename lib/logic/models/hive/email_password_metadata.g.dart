@@ -8,7 +8,7 @@ part of 'email_password_metadata.dart';
 
 class EmailPasswordMetadataAdapter extends TypeAdapter<EmailPasswordMetadata> {
   @override
-  final int typeId = 10;
+  final typeId = 10;
 
   @override
   EmailPasswordMetadata read(BinaryReader reader) {

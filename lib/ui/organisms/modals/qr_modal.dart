@@ -16,28 +16,28 @@ class QrModal extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListView(
-        padding: const EdgeInsets.all(16.0),
-        controller: scrollController,
-        children: [
-          const Gap(16.0),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const Gap(16.0),
-          QrImageView(
-            data: qrData,
-            version: QrVersions.auto,
-            dataModuleStyle: QrDataModuleStyle(
-              dataModuleShape: QrDataModuleShape.square,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            eyeStyle: QrEyeStyle(
-              eyeShape: QrEyeShape.square,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-        ],
-      );
+    padding: const EdgeInsets.all(16.0),
+    controller: scrollController,
+    children: [
+      const Gap(16.0),
+      Text(
+        title,
+        style: Theme.of(context).textTheme.headlineSmall,
+        textAlign: TextAlign.center,
+      ),
+      const Gap(16.0),
+      QrImageView(
+        data: qrData,
+        version: QrVersions.auto,
+        dataModuleStyle: QrDataModuleStyle(
+          dataModuleShape: QrDataModuleShape.square,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        eyeStyle: QrEyeStyle(
+          eyeShape: QrEyeShape.square,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    ],
+  );
 }

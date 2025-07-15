@@ -26,8 +26,9 @@ class DnsDetailsPage extends StatefulWidget {
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
     final String domain =
         getIt<ResourcesModel>().serverDomain?.domainName ?? '';
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
@@ -55,27 +56,21 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       final String title,
       final String subtitle,
       final DnsRecordsCategory category,
-    ) =>
-        [
-          SectionHeadline(
-            title: title,
-            subtitle: subtitle,
-          ),
-          ...recordsToShow
-              .where(
-                (final dnsRecord) => dnsRecord.category == category,
-              )
-              .map(
-                (final dnsRecord) => Skeletonizer(
-                  enabled: refreshing,
-                  enableSwitchAnimation: true,
-                  child: DnsRecordItem(
-                    dnsRecord: dnsRecord,
-                    refreshing: refreshing,
-                  ),
-                ),
+    ) => [
+      SectionHeadline(title: title, subtitle: subtitle),
+      ...recordsToShow
+          .where((final dnsRecord) => dnsRecord.category == category)
+          .map(
+            (final dnsRecord) => Skeletonizer(
+              enabled: refreshing,
+              enableSwitchAnimation: true,
+              child: DnsRecordItem(
+                dnsRecord: dnsRecord,
+                refreshing: refreshing,
               ),
-        ];
+            ),
+          ),
+    ];
 
     return BrandHeroScreen(
       hasBackButton: true,

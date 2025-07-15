@@ -10,16 +10,10 @@ class ApiAdapter {
     final String? token,
     this.cachedDomain = '',
     this.cachedZoneId = '',
-  }) : _api = CloudflareApi(
-          isWithToken: isWithToken,
-          token: token ?? '',
-        );
+  }) : _api = CloudflareApi(isWithToken: isWithToken, token: token ?? '');
 
-  CloudflareApi api({final bool getInitialized = true}) => getInitialized
-      ? _api
-      : CloudflareApi(
-          isWithToken: false,
-        );
+  CloudflareApi api({final bool getInitialized = true}) =>
+      getInitialized ? _api : CloudflareApi(isWithToken: false);
 
   final CloudflareApi _api;
   final String cachedZoneId;
@@ -28,13 +22,8 @@ class ApiAdapter {
 
 class CloudflareDnsProvider extends DnsProvider {
   CloudflareDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  CloudflareDnsProvider.load(
-    final bool isAuthorized,
-    final String? token,
-  ) : _adapter = ApiAdapter(
-          isWithToken: isAuthorized,
-          token: token,
-        );
+  CloudflareDnsProvider.load(final bool isAuthorized, final String? token)
+    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   ApiAdapter _adapter;
 
@@ -70,16 +59,12 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    domains = result.data
-        .map<ServerDomain>(
-          (final el) => el.toServerDomain(),
-        )
-        .toList();
+    domains =
+        result.data
+            .map<ServerDomain>((final el) => el.toServerDomain())
+            .toList();
 
-    return GenericResult(
-      success: true,
-      data: domains,
-    );
+    return GenericResult(success: true, data: domains);
   }
 
   @override
@@ -93,14 +78,15 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     return _adapter.api().createMultipleDnsRecords(
-          zoneId: _adapter.cachedZoneId,
-          records: records
+      zoneId: _adapter.cachedZoneId,
+      records:
+          records
               .map<CloudflareDnsRecord>(
                 (final rec) =>
                     CloudflareDnsRecord.fromDnsRecord(rec, domain.domainName),
               )
               .toList(),
-        );
+    );
   }
 
   @override
@@ -114,8 +100,8 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     final result = await _adapter.api().getDnsRecords(
-          zoneId: _adapter.cachedZoneId,
-        );
+      zoneId: _adapter.cachedZoneId,
+    );
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -125,30 +111,30 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    final List<CloudflareDnsRecord> selfprivacyRecords = records
-        .map(
-          (final record) => CloudflareDnsRecord.fromDnsRecord(
-            record,
-            domain.domainName,
-          ),
-        )
-        .toList();
+    final List<CloudflareDnsRecord> selfprivacyRecords =
+        records
+            .map(
+              (final record) =>
+                  CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
+            )
+            .toList();
 
     final List<CloudflareDnsRecord> cloudflareRecords = result.data;
 
     /// Remove all records that do not match with SelfPrivacy
     cloudflareRecords.removeWhere(
-      (final cloudflareRecord) => !selfprivacyRecords.any(
-        (final selfprivacyRecord) =>
-            selfprivacyRecord.type == cloudflareRecord.type &&
-            selfprivacyRecord.name == cloudflareRecord.name,
-      ),
+      (final cloudflareRecord) =>
+          !selfprivacyRecords.any(
+            (final selfprivacyRecord) =>
+                selfprivacyRecord.type == cloudflareRecord.type &&
+                selfprivacyRecord.name == cloudflareRecord.name,
+          ),
     );
 
     return _adapter.api().removeSimilarRecords(
-          zoneId: _adapter.cachedZoneId,
-          records: cloudflareRecords,
-        );
+      zoneId: _adapter.cachedZoneId,
+      records: cloudflareRecords,
+    );
   }
 
   @override
@@ -166,8 +152,9 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     final List<DnsRecord> records = [];
-    final result =
-        await _adapter.api().getDnsRecords(zoneId: _adapter.cachedZoneId);
+    final result = await _adapter.api().getDnsRecords(
+      zoneId: _adapter.cachedZoneId,
+    );
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -181,10 +168,7 @@ class CloudflareDnsProvider extends DnsProvider {
       records.add(rawRecord.toDnsRecord(domain.domainName));
     }
 
-    return GenericResult(
-      success: result.success,
-      data: records,
-    );
+    return GenericResult(success: result.success, data: records);
   }
 
   @override
@@ -215,8 +199,8 @@ class CloudflareDnsProvider extends DnsProvider {
     }
 
     final result = await _adapter.api().getDnsRecords(
-          zoneId: _adapter.cachedZoneId,
-        );
+      zoneId: _adapter.cachedZoneId,
+    );
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: false,
@@ -226,45 +210,45 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    final List<CloudflareDnsRecord> newSelfprivacyRecords = newRecords
-        .map(
-          (final record) => CloudflareDnsRecord.fromDnsRecord(
-            record,
-            domain.domainName,
-          ),
-        )
-        .toList();
+    final List<CloudflareDnsRecord> newSelfprivacyRecords =
+        newRecords
+            .map(
+              (final record) =>
+                  CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
+            )
+            .toList();
 
-    final List<CloudflareDnsRecord>? oldSelfprivacyRecords = oldRecords
-        ?.map(
-          (final record) => CloudflareDnsRecord.fromDnsRecord(
-            record,
-            domain.domainName,
-          ),
-        )
-        .toList();
+    final List<CloudflareDnsRecord>? oldSelfprivacyRecords =
+        oldRecords
+            ?.map(
+              (final record) =>
+                  CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
+            )
+            .toList();
 
     final List<CloudflareDnsRecord> cloudflareRecords = result.data;
 
-    final List<CloudflareDnsRecord> recordsToDelete = newSelfprivacyRecords
-        .where(
-          (final newRecord) => cloudflareRecords.any(
-            (final oldRecord) =>
-                newRecord.type == oldRecord.type &&
-                newRecord.name == oldRecord.name,
-          ),
-        )
-        .toList();
+    final List<CloudflareDnsRecord> recordsToDelete =
+        newSelfprivacyRecords
+            .where(
+              (final newRecord) => cloudflareRecords.any(
+                (final oldRecord) =>
+                    newRecord.type == oldRecord.type &&
+                    newRecord.name == oldRecord.name,
+              ),
+            )
+            .toList();
 
     if (oldSelfprivacyRecords != null) {
       recordsToDelete.addAll(
         oldSelfprivacyRecords
             .where(
-              (final oldRecord) => !newSelfprivacyRecords.any(
-                (final newRecord) =>
-                    newRecord.type == oldRecord.type &&
-                    newRecord.name == oldRecord.name,
-              ),
+              (final oldRecord) =>
+                  !newSelfprivacyRecords.any(
+                    (final newRecord) =>
+                        newRecord.type == oldRecord.type &&
+                        newRecord.name == oldRecord.name,
+                  ),
             )
             .toList(),
       );
@@ -272,7 +256,8 @@ class CloudflareDnsProvider extends DnsProvider {
 
     if (recordsToDelete.isNotEmpty) {
       await _adapter.api().removeSimilarRecords(
-            records: cloudflareRecords
+        records:
+            cloudflareRecords
                 .where(
                   (final record) => recordsToDelete.any(
                     (final recordToDelete) =>
@@ -281,22 +266,19 @@ class CloudflareDnsProvider extends DnsProvider {
                   ),
                 )
                 .toList(),
-            zoneId: _adapter.cachedZoneId,
-          );
+        zoneId: _adapter.cachedZoneId,
+      );
     }
 
     return _adapter.api().createMultipleDnsRecords(
-          zoneId: _adapter.cachedZoneId,
-          records: newSelfprivacyRecords,
-        );
+      zoneId: _adapter.cachedZoneId,
+      records: newSelfprivacyRecords,
+    );
   }
 
   Future<GenericResult<void>> syncZoneId(final String domain) async {
     if (domain == _adapter.cachedDomain && _adapter.cachedZoneId.isNotEmpty) {
-      return GenericResult(
-        success: true,
-        data: null,
-      );
+      return GenericResult(success: true, data: null);
     }
 
     final getZoneIdResult = await getZoneId(domain);
@@ -316,10 +298,7 @@ class CloudflareDnsProvider extends DnsProvider {
       cachedZoneId: getZoneIdResult.data!,
     );
 
-    return GenericResult(
-      success: true,
-      data: null,
-    );
+    return GenericResult(success: true, data: null);
   }
 
   Future<GenericResult<String?>> getZoneId(final String domain) async {

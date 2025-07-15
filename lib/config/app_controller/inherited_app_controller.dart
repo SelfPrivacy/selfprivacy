@@ -8,26 +8,21 @@ import 'package:selfprivacy/config/preferences_repository/preferences_repository
 import 'package:selfprivacy/theming/app_theme_factory.dart';
 
 class _AppControllerInjector extends InheritedNotifier<AppController> {
-  const _AppControllerInjector({
-    required super.child,
-    required super.notifier,
-  });
+  const _AppControllerInjector({required super.child, required super.notifier});
 }
 
 class InheritedAppController extends StatefulWidget {
-  const InheritedAppController({
-    required this.child,
-    super.key,
-  });
+  const InheritedAppController({required this.child, super.key});
 
   final Widget child;
 
   @override
   State<InheritedAppController> createState() => _InheritedAppControllerState();
 
-  static AppController of(final BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<_AppControllerInjector>()!
-      .notifier!;
+  static AppController of(final BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<_AppControllerInjector>()!
+          .notifier!;
 }
 
 class _InheritedAppControllerState extends State<InheritedAppController> {
@@ -58,26 +53,25 @@ class _InheritedAppControllerState extends State<InheritedAppController> {
     late final ThemeData darkThemeData;
     late final color_utils.CorePalette colorPalette;
 
-    await Future.wait(
-      <Future<void>>[
-        () async {
-          lightThemeData = await AppThemeFactory.create(
-            isDark: false,
-            fallbackColor: BrandColors.primary,
-          );
-        }(),
-        () async {
-          darkThemeData = await AppThemeFactory.create(
-            isDark: true,
-            fallbackColor: BrandColors.primary,
-          );
-        }(),
-        () async {
-          colorPalette = (await AppThemeFactory.getCorePalette()) ??
-              color_utils.CorePalette.of(BrandColors.primary.value);
-        }(),
-      ],
-    );
+    await Future.wait(<Future<void>>[
+      () async {
+        lightThemeData = await AppThemeFactory.create(
+          isDark: false,
+          fallbackColor: BrandColors.primary,
+        );
+      }(),
+      () async {
+        darkThemeData = await AppThemeFactory.create(
+          isDark: true,
+          fallbackColor: BrandColors.primary,
+        );
+      }(),
+      () async {
+        colorPalette =
+            (await AppThemeFactory.getCorePalette()) ??
+            color_utils.CorePalette.of(BrandColors.primary.value);
+      }(),
+    ]);
 
     await controller.init(
       colorPalette: colorPalette,
@@ -99,8 +93,6 @@ class _InheritedAppControllerState extends State<InheritedAppController> {
   }
 
   @override
-  Widget build(final BuildContext context) => _AppControllerInjector(
-        notifier: controller,
-        child: widget.child,
-      );
+  Widget build(final BuildContext context) =>
+      _AppControllerInjector(notifier: controller, child: widget.child);
 }

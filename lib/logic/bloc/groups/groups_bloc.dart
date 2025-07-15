@@ -11,14 +11,8 @@ part 'groups_state.dart';
 
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   GroupsBloc() : super(GroupsInitial()) {
-    on<GroupsListChanged>(
-      _updateList,
-      transformer: sequential(),
-    );
-    on<GroupsListRefresh>(
-      _reload,
-      transformer: droppable(),
-    );
+    on<GroupsListChanged>(_updateList, transformer: sequential());
+    on<GroupsListRefresh>(_reload, transformer: droppable());
     on<GroupsConnectionStatusChanged>(
       _mapConnectionStatusChangedToState,
       transformer: sequential(),
@@ -28,15 +22,12 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     _apiConnectionStatusSubscription = apiConnectionRepository
         .connectionStatusStream
         .listen((final ConnectionStatus connectionStatus) {
-      add(
-        GroupsConnectionStatusChanged(connectionStatus),
-      );
-    });
-    _apiDataSubscription =
-        apiConnectionRepository.dataStream.listen((final ApiData apiData) {
-      add(
-        GroupsListChanged(apiData.groups.data ?? []),
-      );
+          add(GroupsConnectionStatusChanged(connectionStatus));
+        });
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(GroupsListChanged(apiData.groups.data ?? []));
     });
   }
 

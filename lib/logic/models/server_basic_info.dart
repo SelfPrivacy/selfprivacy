@@ -21,15 +21,15 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
     required final isIpValid,
     required final isReverseDnsValid,
   }) : this(
-          id: serverBasicInfo.id,
-          name: serverBasicInfo.name,
-          reverseDns: serverBasicInfo.reverseDns,
-          ip: serverBasicInfo.ip,
-          created: serverBasicInfo.created,
-          location: serverBasicInfo.location,
-          isIpValid: isIpValid,
-          isReverseDnsValid: isReverseDnsValid,
-        );
+         id: serverBasicInfo.id,
+         name: serverBasicInfo.name,
+         reverseDns: serverBasicInfo.reverseDns,
+         ip: serverBasicInfo.ip,
+         created: serverBasicInfo.created,
+         location: serverBasicInfo.location,
+         isIpValid: isIpValid,
+         isReverseDnsValid: isReverseDnsValid,
+       );
 
   ServerBasicInfoWithValidators({
     required super.id,

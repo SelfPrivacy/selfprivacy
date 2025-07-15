@@ -11,10 +11,7 @@ import 'package:selfprivacy/utils/fake_data.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class StorageCard extends StatelessWidget {
-  const StorageCard({
-    required this.diskStatus,
-    super.key,
-  });
+  const StorageCard({required this.diskStatus, super.key});
 
   final DiskStatus diskStatus;
 
@@ -22,15 +19,9 @@ class StorageCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final List<Widget> sections = [];
     for (final DiskVolume volume in diskStatus.diskVolumes) {
+      sections.add(const SizedBox(height: 16));
       sections.add(
-        const SizedBox(height: 16),
-      );
-      sections.add(
-        ServerStorageListItem(
-          volume: volume,
-          dense: true,
-          showIcon: false,
-        ),
+        ServerStorageListItem(volume: volume, dense: true, showIcon: false),
       );
     }
 
@@ -49,10 +40,11 @@ class StorageCard extends StatelessWidget {
       ),
     ];
 
-    StateType state = context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished
-        ? StateType.stable
-        : StateType.uninitialized;
+    StateType state =
+        context.watch<ServerInstallationCubit>().state
+                is ServerInstallationFinished
+            ? StateType.stable
+            : StateType.uninitialized;
 
     if (state == StateType.stable && !diskStatus.isDiskOkay) {
       state = StateType.error;
@@ -65,9 +57,11 @@ class StorageCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkResponse(
           highlightShape: BoxShape.rectangle,
-          onTap: () => diskStatus.diskVolumes.isEmpty
-              ? null
-              : context.pushRoute(const ServerStorageRoute()),
+          onTap:
+              () =>
+                  diskStatus.diskVolumes.isEmpty
+                      ? null
+                      : context.pushRoute(const ServerStorageRoute()),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

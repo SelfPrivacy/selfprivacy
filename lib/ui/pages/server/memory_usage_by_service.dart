@@ -21,9 +21,9 @@ class MemoryUsageByServicePage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-        create: (final context) => MetricsCubit()..restart(),
-        child: const _MemoryUsageByServiceContents(),
-      );
+    create: (final context) => MetricsCubit()..restart(),
+    child: const _MemoryUsageByServiceContents(),
+  );
 }
 
 class _MemoryUsageByServiceContents extends StatelessWidget {
@@ -86,10 +86,12 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
 
       // For each service, gather average and max usages
       for (final slice in averageUsageByServices.keys.sorted()) {
-        final DiskSize averageUsage =
-            DiskSize(byte: averageUsageByServices[slice]?.toInt() ?? 0);
-        final DiskSize maxUsage =
-            DiskSize(byte: maxUsageByServices[slice]?.toInt() ?? 0);
+        final DiskSize averageUsage = DiskSize(
+          byte: averageUsageByServices[slice]?.toInt() ?? 0,
+        );
+        final DiskSize maxUsage = DiskSize(
+          byte: maxUsageByServices[slice]?.toInt() ?? 0,
+        );
 
         children.add(
           ServiceMemoryConsumptionTile(
@@ -104,10 +106,7 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
     return BrandHeroScreen(
       heroTitle: 'resource_chart.memory'.tr(),
       children: [
-        PeriodSelector(
-          period: period,
-          onChange: cubit.changePeriod,
-        ),
+        PeriodSelector(period: period, onChange: cubit.changePeriod),
         ...children,
       ],
     );
@@ -146,27 +145,27 @@ class ServiceMemoryConsumptionTile extends StatelessWidget {
       serviceName = 'resource_chart.ssh_users'.tr();
       icon = const Icon(BrandIcons.terminal);
     } else {
-      final service = context
-          .read<ServicesBloc>()
-          .state
-          .getServiceById(slice.replaceAll('_', '-'));
+      final service = context.read<ServicesBloc>().state.getServiceById(
+        slice.replaceAll('_', '-'),
+      );
       serviceName = service?.displayName ?? slice;
       if (service != null) {
         onTap = () {
           context.pushRoute(ServiceRoute(serviceId: service.id));
         };
       }
-      icon = service?.svgIcon != null
-          ? SvgPicture.string(
-              service!.svgIcon,
-              width: 22.0,
-              height: 24.0,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onSurface,
-                BlendMode.srcIn,
-              ),
-            )
-          : const Icon(BrandIcons.box);
+      icon =
+          service?.svgIcon != null
+              ? SvgPicture.string(
+                service!.svgIcon,
+                width: 22.0,
+                height: 24.0,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.onSurface,
+                  BlendMode.srcIn,
+                ),
+              )
+              : const Icon(BrandIcons.box);
     }
 
     if (serviceName == slice && averageUsage.byte == 0 && maxUsage.byte == 0) {

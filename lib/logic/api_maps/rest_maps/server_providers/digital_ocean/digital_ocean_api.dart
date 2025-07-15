@@ -89,7 +89,8 @@ class DigitalOceanApi extends RestApiMap {
         'name': hostName,
         'size': serverType,
         'image': 'ubuntu-20-04-x64',
-        'user_data': '#cloud-config\n'
+        'user_data':
+            '#cloud-config\n'
             'runcmd:\n'
             '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
             "API_TOKEN=$serverApiToken ENCODED_PASSWORD='$base64Password' "
@@ -101,18 +102,11 @@ class DigitalOceanApi extends RestApiMap {
       };
       print('Decoded data: $data');
 
-      serverCreateResponse = await client.post(
-        '/droplets',
-        data: data,
-      );
+      serverCreateResponse = await client.post('/droplets', data: data);
       dropletId = serverCreateResponse.data['droplet']['id'];
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -131,11 +125,7 @@ class DigitalOceanApi extends RestApiMap {
       await client.delete('/droplets/$serverId');
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -153,8 +143,9 @@ class DigitalOceanApi extends RestApiMap {
         '/account',
         options: Options(
           followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+          validateStatus:
+              (final status) =>
+                  status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
@@ -167,11 +158,7 @@ class DigitalOceanApi extends RestApiMap {
     }
 
     if (response == null) {
-      return GenericResult(
-        data: isValid,
-        success: false,
-        message: message,
-      );
+      return GenericResult(data: isValid, success: false, message: message);
     }
 
     message = response.statusMessage;
@@ -185,33 +172,23 @@ class DigitalOceanApi extends RestApiMap {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return GenericResult(
-      data: isValid,
-      success: true,
-      message: message,
-    );
+    return GenericResult(data: isValid, success: true, message: message);
   }
 
   Future<GenericResult<List<DigitalOceanLocation>>>
-      getAvailableLocations() async {
+  getAvailableLocations() async {
     final List<DigitalOceanLocation> locations = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
-        '/regions',
-      );
+      final Response response = await client.get('/regions');
 
       for (final region in response.data!['regions']) {
         locations.add(DigitalOceanLocation.fromJson(region));
       }
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
     }
@@ -220,24 +197,18 @@ class DigitalOceanApi extends RestApiMap {
   }
 
   Future<GenericResult<List<DigitalOceanServerType>>>
-      getAvailableServerTypes() async {
+  getAvailableServerTypes() async {
     final List<DigitalOceanServerType> types = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
-        '/sizes',
-      );
+      final Response response = await client.get('/sizes');
       for (final size in response.data!['sizes']) {
         types.add(DigitalOceanServerType.fromJson(size));
       }
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
     }
@@ -250,17 +221,11 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.post(
         '/droplets/$serverId/actions',
-        data: {
-          'type': 'power_on',
-        },
+        data: {'type': 'power_on'},
       );
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -273,17 +238,11 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.post(
         '/droplets/$serverId/actions',
-        data: {
-          'type': 'reboot',
-        },
+        data: {'type': 'reboot'},
       );
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -301,28 +260,19 @@ class DigitalOceanApi extends RestApiMap {
     try {
       getVolumesResponse = await client.get(
         '/volumes',
-        queryParameters: {
-          'status': status,
-        },
+        queryParameters: {'status': status},
       );
       for (final volume in getVolumesResponse.data['volumes']) {
         volumes.add(DigitalOceanVolume.fromJson(volume));
       }
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      data: volumes,
-      success: true,
-    );
+    return GenericResult(data: volumes, success: true);
   }
 
   Future<GenericResult<DigitalOceanVolume?>> createVolume({
@@ -348,11 +298,7 @@ class DigitalOceanApi extends RestApiMap {
       volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: null,
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
     }
@@ -388,11 +334,7 @@ class DigitalOceanApi extends RestApiMap {
           attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       close(client);
     }
@@ -428,19 +370,12 @@ class DigitalOceanApi extends RestApiMap {
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      data: success,
-      success: true,
-    );
+    return GenericResult(data: success, success: true);
   }
 
   Future<GenericResult<void>> deleteVolume(final String uuid) async {
@@ -449,19 +384,12 @@ class DigitalOceanApi extends RestApiMap {
       await client.delete('/volumes/$uuid');
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: null,
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      data: null,
-      success: true,
-    );
+    return GenericResult(data: null, success: true);
   }
 
   Future<GenericResult<bool>> resizeVolume({
@@ -476,29 +404,18 @@ class DigitalOceanApi extends RestApiMap {
     try {
       resizeVolumeResponse = await client.post(
         '/volumes/$uuid/actions',
-        data: {
-          'type': 'resize',
-          'size_gigabytes': gb,
-          'region': region,
-        },
+        data: {'type': 'resize', 'size_gigabytes': gb, 'region': region},
       );
       success =
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      data: success,
-      success: true,
-    );
+    return GenericResult(data: success, success: true);
   }
 
   Future<GenericResult<List>> getMetricsCpu(
@@ -521,11 +438,7 @@ class DigitalOceanApi extends RestApiMap {
       metrics = response.data['data']['result'];
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
     }
@@ -556,11 +469,7 @@ class DigitalOceanApi extends RestApiMap {
       metrics = response.data['data']['result'][0]['values'];
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
     }

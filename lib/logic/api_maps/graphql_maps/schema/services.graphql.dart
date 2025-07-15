@@ -93,8 +93,7 @@ class Fragment$BoolConfigItem {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$BoolConfigItem) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Fragment$BoolConfigItem || runtimeType != other.runtimeType) {
       return false;
     }
     final l$fieldId = fieldId;
@@ -138,10 +137,7 @@ class Fragment$BoolConfigItem {
 
 extension UtilityExtension$Fragment$BoolConfigItem on Fragment$BoolConfigItem {
   CopyWith$Fragment$BoolConfigItem<Fragment$BoolConfigItem> get copyWith =>
-      CopyWith$Fragment$BoolConfigItem(
-        this,
-        (i) => i,
-      );
+      CopyWith$Fragment$BoolConfigItem(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$BoolConfigItem<TRes> {
@@ -166,10 +162,7 @@ abstract class CopyWith$Fragment$BoolConfigItem<TRes> {
 
 class _CopyWithImpl$Fragment$BoolConfigItem<TRes>
     implements CopyWith$Fragment$BoolConfigItem<TRes> {
-  _CopyWithImpl$Fragment$BoolConfigItem(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$BoolConfigItem(this._instance, this._then);
 
   final Fragment$BoolConfigItem _instance;
 
@@ -185,31 +178,38 @@ class _CopyWithImpl$Fragment$BoolConfigItem<TRes>
     Object? defaultBoolValue = _undefined,
     Object? widget = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$BoolConfigItem(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        boolValue: boolValue == _undefined || boolValue == null
-            ? _instance.boolValue
-            : (boolValue as bool),
-        defaultBoolValue:
-            defaultBoolValue == _undefined || defaultBoolValue == null
-                ? _instance.defaultBoolValue
-                : (defaultBoolValue as bool),
-        widget: widget == _undefined || widget == null
-            ? _instance.widget
-            : (widget as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Fragment$BoolConfigItem(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      boolValue:
+          boolValue == _undefined || boolValue == null
+              ? _instance.boolValue
+              : (boolValue as bool),
+      defaultBoolValue:
+          defaultBoolValue == _undefined || defaultBoolValue == null
+              ? _instance.defaultBoolValue
+              : (defaultBoolValue as bool),
+      widget:
+          widget == _undefined || widget == null
+              ? _instance.widget
+              : (widget as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$BoolConfigItem<TRes>
@@ -226,91 +226,92 @@ class _CopyWithStubImpl$Fragment$BoolConfigItem<TRes>
     bool? defaultBoolValue,
     String? widget,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 const fragmentDefinitionBoolConfigItem = FragmentDefinitionNode(
   name: NameNode(value: 'BoolConfigItem'),
   typeCondition: TypeConditionNode(
-      on: NamedTypeNode(
-    name: NameNode(value: 'BoolConfigItem'),
-    isNonNull: false,
-  )),
+    on: NamedTypeNode(
+      name: NameNode(value: 'BoolConfigItem'),
+      isNonNull: false,
+    ),
+  ),
   directives: [],
-  selectionSet: SelectionSetNode(selections: [
-    FieldNode(
-      name: NameNode(value: 'fieldId'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'description'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'type'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'value'),
-      alias: NameNode(value: 'boolValue'),
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'defaultValue'),
-      alias: NameNode(value: 'defaultBoolValue'),
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'widget'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: '__typename'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-  ]),
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'fieldId'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'description'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'type'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'value'),
+        alias: NameNode(value: 'boolValue'),
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'defaultValue'),
+        alias: NameNode(value: 'defaultBoolValue'),
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'widget'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
 );
-const documentNodeFragmentBoolConfigItem = DocumentNode(definitions: [
-  fragmentDefinitionBoolConfigItem,
-]);
+const documentNodeFragmentBoolConfigItem = DocumentNode(
+  definitions: [fragmentDefinitionBoolConfigItem],
+);
 
 extension ClientExtension$Fragment$BoolConfigItem on graphql.GraphQLClient {
   void writeFragment$BoolConfigItem({
     required Fragment$BoolConfigItem data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
-  }) =>
-      this.writeFragment(
-        graphql.FragmentRequest(
-          idFields: idFields,
-          fragment: const graphql.Fragment(
-            fragmentName: 'BoolConfigItem',
-            document: documentNodeFragmentBoolConfigItem,
-          ),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'BoolConfigItem',
+        document: documentNodeFragmentBoolConfigItem,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Fragment$BoolConfigItem? readFragment$BoolConfigItem({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -426,8 +427,7 @@ class Fragment$EnumConfigItem {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$EnumConfigItem) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Fragment$EnumConfigItem || runtimeType != other.runtimeType) {
       return false;
     }
     final l$fieldId = fieldId;
@@ -483,10 +483,7 @@ class Fragment$EnumConfigItem {
 
 extension UtilityExtension$Fragment$EnumConfigItem on Fragment$EnumConfigItem {
   CopyWith$Fragment$EnumConfigItem<Fragment$EnumConfigItem> get copyWith =>
-      CopyWith$Fragment$EnumConfigItem(
-        this,
-        (i) => i,
-      );
+      CopyWith$Fragment$EnumConfigItem(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$EnumConfigItem<TRes> {
@@ -512,10 +509,7 @@ abstract class CopyWith$Fragment$EnumConfigItem<TRes> {
 
 class _CopyWithImpl$Fragment$EnumConfigItem<TRes>
     implements CopyWith$Fragment$EnumConfigItem<TRes> {
-  _CopyWithImpl$Fragment$EnumConfigItem(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$EnumConfigItem(this._instance, this._then);
 
   final Fragment$EnumConfigItem _instance;
 
@@ -532,34 +526,42 @@ class _CopyWithImpl$Fragment$EnumConfigItem<TRes>
     Object? options = _undefined,
     Object? widget = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$EnumConfigItem(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        stringValue: stringValue == _undefined || stringValue == null
-            ? _instance.stringValue
-            : (stringValue as String),
-        defaultStringValue:
-            defaultStringValue == _undefined || defaultStringValue == null
-                ? _instance.defaultStringValue
-                : (defaultStringValue as String),
-        options: options == _undefined || options == null
-            ? _instance.options
-            : (options as List<String>),
-        widget: widget == _undefined || widget == null
-            ? _instance.widget
-            : (widget as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Fragment$EnumConfigItem(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      stringValue:
+          stringValue == _undefined || stringValue == null
+              ? _instance.stringValue
+              : (stringValue as String),
+      defaultStringValue:
+          defaultStringValue == _undefined || defaultStringValue == null
+              ? _instance.defaultStringValue
+              : (defaultStringValue as String),
+      options:
+          options == _undefined || options == null
+              ? _instance.options
+              : (options as List<String>),
+      widget:
+          widget == _undefined || widget == null
+              ? _instance.widget
+              : (widget as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$EnumConfigItem<TRes>
@@ -577,98 +579,99 @@ class _CopyWithStubImpl$Fragment$EnumConfigItem<TRes>
     List<String>? options,
     String? widget,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 const fragmentDefinitionEnumConfigItem = FragmentDefinitionNode(
   name: NameNode(value: 'EnumConfigItem'),
   typeCondition: TypeConditionNode(
-      on: NamedTypeNode(
-    name: NameNode(value: 'EnumConfigItem'),
-    isNonNull: false,
-  )),
+    on: NamedTypeNode(
+      name: NameNode(value: 'EnumConfigItem'),
+      isNonNull: false,
+    ),
+  ),
   directives: [],
-  selectionSet: SelectionSetNode(selections: [
-    FieldNode(
-      name: NameNode(value: 'fieldId'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'description'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'type'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'value'),
-      alias: NameNode(value: 'stringValue'),
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'defaultValue'),
-      alias: NameNode(value: 'defaultStringValue'),
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'options'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'widget'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: '__typename'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-  ]),
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'fieldId'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'description'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'type'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'value'),
+        alias: NameNode(value: 'stringValue'),
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'defaultValue'),
+        alias: NameNode(value: 'defaultStringValue'),
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'options'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'widget'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
 );
-const documentNodeFragmentEnumConfigItem = DocumentNode(definitions: [
-  fragmentDefinitionEnumConfigItem,
-]);
+const documentNodeFragmentEnumConfigItem = DocumentNode(
+  definitions: [fragmentDefinitionEnumConfigItem],
+);
 
 extension ClientExtension$Fragment$EnumConfigItem on graphql.GraphQLClient {
   void writeFragment$EnumConfigItem({
     required Fragment$EnumConfigItem data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
-  }) =>
-      this.writeFragment(
-        graphql.FragmentRequest(
-          idFields: idFields,
-          fragment: const graphql.Fragment(
-            fragmentName: 'EnumConfigItem',
-            document: documentNodeFragmentEnumConfigItem,
-          ),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'EnumConfigItem',
+        document: documentNodeFragmentEnumConfigItem,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Fragment$EnumConfigItem? readFragment$EnumConfigItem({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -784,7 +787,7 @@ class Fragment$StringConfigItem {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$StringConfigItem) ||
+    if (other is! Fragment$StringConfigItem ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -835,10 +838,7 @@ class Fragment$StringConfigItem {
 extension UtilityExtension$Fragment$StringConfigItem
     on Fragment$StringConfigItem {
   CopyWith$Fragment$StringConfigItem<Fragment$StringConfigItem> get copyWith =>
-      CopyWith$Fragment$StringConfigItem(
-        this,
-        (i) => i,
-      );
+      CopyWith$Fragment$StringConfigItem(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$StringConfigItem<TRes> {
@@ -864,10 +864,7 @@ abstract class CopyWith$Fragment$StringConfigItem<TRes> {
 
 class _CopyWithImpl$Fragment$StringConfigItem<TRes>
     implements CopyWith$Fragment$StringConfigItem<TRes> {
-  _CopyWithImpl$Fragment$StringConfigItem(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$StringConfigItem(this._instance, this._then);
 
   final Fragment$StringConfigItem _instance;
 
@@ -884,32 +881,39 @@ class _CopyWithImpl$Fragment$StringConfigItem<TRes>
     Object? regex = _undefined,
     Object? widget = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$StringConfigItem(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        stringValue: stringValue == _undefined || stringValue == null
-            ? _instance.stringValue
-            : (stringValue as String),
-        defaultStringValue:
-            defaultStringValue == _undefined || defaultStringValue == null
-                ? _instance.defaultStringValue
-                : (defaultStringValue as String),
-        regex: regex == _undefined ? _instance.regex : (regex as String?),
-        widget: widget == _undefined || widget == null
-            ? _instance.widget
-            : (widget as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Fragment$StringConfigItem(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      stringValue:
+          stringValue == _undefined || stringValue == null
+              ? _instance.stringValue
+              : (stringValue as String),
+      defaultStringValue:
+          defaultStringValue == _undefined || defaultStringValue == null
+              ? _instance.defaultStringValue
+              : (defaultStringValue as String),
+      regex: regex == _undefined ? _instance.regex : (regex as String?),
+      widget:
+          widget == _undefined || widget == null
+              ? _instance.widget
+              : (widget as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$StringConfigItem<TRes>
@@ -927,98 +931,99 @@ class _CopyWithStubImpl$Fragment$StringConfigItem<TRes>
     String? regex,
     String? widget,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 const fragmentDefinitionStringConfigItem = FragmentDefinitionNode(
   name: NameNode(value: 'StringConfigItem'),
   typeCondition: TypeConditionNode(
-      on: NamedTypeNode(
-    name: NameNode(value: 'StringConfigItem'),
-    isNonNull: false,
-  )),
+    on: NamedTypeNode(
+      name: NameNode(value: 'StringConfigItem'),
+      isNonNull: false,
+    ),
+  ),
   directives: [],
-  selectionSet: SelectionSetNode(selections: [
-    FieldNode(
-      name: NameNode(value: 'fieldId'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'description'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'type'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'value'),
-      alias: NameNode(value: 'stringValue'),
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'defaultValue'),
-      alias: NameNode(value: 'defaultStringValue'),
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'regex'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: 'widget'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: '__typename'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-  ]),
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'fieldId'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'description'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'type'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'value'),
+        alias: NameNode(value: 'stringValue'),
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'defaultValue'),
+        alias: NameNode(value: 'defaultStringValue'),
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'regex'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'widget'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
 );
-const documentNodeFragmentStringConfigItem = DocumentNode(definitions: [
-  fragmentDefinitionStringConfigItem,
-]);
+const documentNodeFragmentStringConfigItem = DocumentNode(
+  definitions: [fragmentDefinitionStringConfigItem],
+);
 
 extension ClientExtension$Fragment$StringConfigItem on graphql.GraphQLClient {
   void writeFragment$StringConfigItem({
     required Fragment$StringConfigItem data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
-  }) =>
-      this.writeFragment(
-        graphql.FragmentRequest(
-          idFields: idFields,
-          fragment: const graphql.Fragment(
-            fragmentName: 'StringConfigItem',
-            document: documentNodeFragmentStringConfigItem,
-          ),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'StringConfigItem',
+        document: documentNodeFragmentStringConfigItem,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Fragment$StringConfigItem? readFragment$StringConfigItem({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -1038,17 +1043,15 @@ extension ClientExtension$Fragment$StringConfigItem on graphql.GraphQLClient {
 }
 
 class Query$AllServices {
-  Query$AllServices({
-    required this.services,
-    this.$__typename = 'Query',
-  });
+  Query$AllServices({required this.services, this.$__typename = 'Query'});
 
   factory Query$AllServices.fromJson(Map<String, dynamic> json) {
     final l$services = json['services'];
     final l$$__typename = json['__typename'];
     return Query$AllServices(
       services: Query$AllServices$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1070,10 +1073,7 @@ class Query$AllServices {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -1081,7 +1081,7 @@ class Query$AllServices {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$AllServices) || runtimeType != other.runtimeType) {
+    if (other is! Query$AllServices || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -1100,10 +1100,7 @@ class Query$AllServices {
 
 extension UtilityExtension$Query$AllServices on Query$AllServices {
   CopyWith$Query$AllServices<Query$AllServices> get copyWith =>
-      CopyWith$Query$AllServices(
-        this,
-        (i) => i,
-      );
+      CopyWith$Query$AllServices(this, (i) => i);
 }
 
 abstract class CopyWith$Query$AllServices<TRes> {
@@ -1115,19 +1112,13 @@ abstract class CopyWith$Query$AllServices<TRes> {
   factory CopyWith$Query$AllServices.stub(TRes res) =
       _CopyWithStubImpl$Query$AllServices;
 
-  TRes call({
-    Query$AllServices$services? services,
-    String? $__typename,
-  });
+  TRes call({Query$AllServices$services? services, String? $__typename});
   CopyWith$Query$AllServices$services<TRes> get services;
 }
 
 class _CopyWithImpl$Query$AllServices<TRes>
     implements CopyWith$Query$AllServices<TRes> {
-  _CopyWithImpl$Query$AllServices(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Query$AllServices(this._instance, this._then);
 
   final Query$AllServices _instance;
 
@@ -1138,20 +1129,25 @@ class _CopyWithImpl$Query$AllServices<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Query$AllServices$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Query$AllServices$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$AllServices$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Query$AllServices$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -1161,163 +1157,324 @@ class _CopyWithStubImpl$Query$AllServices<TRes>
 
   TRes _res;
 
-  call({
-    Query$AllServices$services? services,
-    String? $__typename,
-  }) =>
-      _res;
+  call({Query$AllServices$services? services, String? $__typename}) => _res;
 
   CopyWith$Query$AllServices$services<TRes> get services =>
       CopyWith$Query$AllServices$services.stub(_res);
 }
 
-const documentNodeQueryAllServices = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.query,
-    name: NameNode(value: 'AllServices'),
-    variableDefinitions: [],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+const documentNodeQueryAllServices = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'AllServices'),
+      variableDefinitions: [],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'allServices'),
+            name: NameNode(value: 'services'),
             alias: null,
             arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'description'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'displayName'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'dnsRecords'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'fragmentDnsRecords'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: 'id'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'isEnabled'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'isInstalled'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'isMovable'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'isRequired'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'isSystemService'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'canBeBackedUp'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'backupDescription'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'status'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'storageUsage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FieldNode(
-                    name: NameNode(value: 'title'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'usedSpace'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'volume'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: SelectionSetNode(selections: [
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'allServices'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
                       FieldNode(
-                        name: NameNode(value: 'name'),
+                        name: NameNode(value: 'description'),
                         alias: null,
                         arguments: [],
                         directives: [],
                         selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'displayName'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'dnsRecords'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'fragmentDnsRecords'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'id'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'isEnabled'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'isInstalled'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'isMovable'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'isRequired'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'isSystemService'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'canBeBackedUp'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'backupDescription'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'status'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'storageUsage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FieldNode(
+                              name: NameNode(value: 'title'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'usedSpace'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'volume'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: SelectionSetNode(
+                                selections: [
+                                  FieldNode(
+                                    name: NameNode(value: 'name'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: null,
+                                  ),
+                                  FieldNode(
+                                    name: NameNode(value: '__typename'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'svgIcon'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'url'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'homepage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'sourcePage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'license'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FieldNode(
+                              name: NameNode(value: 'free'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'fullName'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'redistributable'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'shortName'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'url'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'supportLevel'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'configuration'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FieldNode(
+                              name: NameNode(value: 'fieldId'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'description'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FieldNode(
+                              name: NameNode(value: 'type'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'BoolConfigItem'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'EnumConfigItem'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'StringConfigItem'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
                       ),
                       FieldNode(
                         name: NameNode(value: '__typename'),
@@ -1326,158 +1483,18 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
                         directives: [],
                         selectionSet: null,
                       ),
-                    ]),
+                    ],
                   ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: 'svgIcon'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'url'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'homepage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'sourcePage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'license'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FieldNode(
-                    name: NameNode(value: 'free'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'fullName'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'redistributable'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'shortName'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'url'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: 'supportLevel'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'configuration'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FieldNode(
-                    name: NameNode(value: 'fieldId'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'description'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'type'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'BoolConfigItem'),
-                    directives: [],
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'EnumConfigItem'),
-                    directives: [],
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'StringConfigItem'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -1486,28 +1503,19 @@ const documentNodeQueryAllServices = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionfragmentDnsRecords,
-  fragmentDefinitionBoolConfigItem,
-  fragmentDefinitionEnumConfigItem,
-  fragmentDefinitionStringConfigItem,
-]);
+    ),
+    fragmentDefinitionfragmentDnsRecords,
+    fragmentDefinitionBoolConfigItem,
+    fragmentDefinitionEnumConfigItem,
+    fragmentDefinitionStringConfigItem,
+  ],
+);
 Query$AllServices _parserFn$Query$AllServices(Map<String, dynamic> data) =>
     Query$AllServices.fromJson(data);
-typedef OnQueryComplete$Query$AllServices = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Query$AllServices?,
-);
+typedef OnQueryComplete$Query$AllServices =
+    FutureOr<void> Function(Map<String, dynamic>?, Query$AllServices?);
 
 class Options$Query$AllServices
     extends graphql.QueryOptions<Query$AllServices> {
@@ -1522,35 +1530,36 @@ class Options$Query$AllServices
     graphql.Context? context,
     OnQueryComplete$Query$AllServices? onComplete,
     graphql.OnQueryError? onError,
-  })  : onCompleteWithParsed = onComplete,
-        super(
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          pollInterval: pollInterval,
-          context: context,
-          onComplete: onComplete == null
-              ? null
-              : (data) => onComplete(
-                    data,
-                    data == null ? null : _parserFn$Query$AllServices(data),
-                  ),
-          onError: onError,
-          document: documentNodeQueryAllServices,
-          parserFn: _parserFn$Query$AllServices,
-        );
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete:
+             onComplete == null
+                 ? null
+                 : (data) => onComplete(
+                   data,
+                   data == null ? null : _parserFn$Query$AllServices(data),
+                 ),
+         onError: onError,
+         document: documentNodeQueryAllServices,
+         parserFn: _parserFn$Query$AllServices,
+       );
 
   final OnQueryComplete$Query$AllServices? onCompleteWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onComplete == null
-            ? super.properties
-            : super.properties.where((property) => property != onComplete),
-        onCompleteWithParsed,
-      ];
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
 }
 
 class WatchOptions$Query$AllServices
@@ -1568,51 +1577,48 @@ class WatchOptions$Query$AllServices
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeQueryAllServices,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Query$AllServices,
-        );
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryAllServices,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$AllServices,
+       );
 }
 
 class FetchMoreOptions$Query$AllServices extends graphql.FetchMoreOptions {
   FetchMoreOptions$Query$AllServices({required graphql.UpdateQuery updateQuery})
-      : super(
-          updateQuery: updateQuery,
-          document: documentNodeQueryAllServices,
-        );
+    : super(updateQuery: updateQuery, document: documentNodeQueryAllServices);
 }
 
 extension ClientExtension$Query$AllServices on graphql.GraphQLClient {
-  Future<graphql.QueryResult<Query$AllServices>> query$AllServices(
-          [Options$Query$AllServices? options]) async =>
-      await this.query(options ?? Options$Query$AllServices());
-  graphql.ObservableQuery<Query$AllServices> watchQuery$AllServices(
-          [WatchOptions$Query$AllServices? options]) =>
-      this.watchQuery(options ?? WatchOptions$Query$AllServices());
+  Future<graphql.QueryResult<Query$AllServices>> query$AllServices([
+    Options$Query$AllServices? options,
+  ]) async => await this.query(options ?? Options$Query$AllServices());
+  graphql.ObservableQuery<Query$AllServices> watchQuery$AllServices([
+    WatchOptions$Query$AllServices? options,
+  ]) => this.watchQuery(options ?? WatchOptions$Query$AllServices());
   void writeQuery$AllServices({
     required Query$AllServices data,
     bool broadcast = true,
-  }) =>
-      this.writeQuery(
-        graphql.Request(
-            operation:
-                graphql.Operation(document: documentNodeQueryAllServices)),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(document: documentNodeQueryAllServices),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Query$AllServices? readQuery$AllServices({bool optimistic = true}) {
     final result = this.readQuery(
       graphql.Request(
-          operation: graphql.Operation(document: documentNodeQueryAllServices)),
+        operation: graphql.Operation(document: documentNodeQueryAllServices),
+      ),
       optimistic: optimistic,
     );
     return result == null ? null : Query$AllServices.fromJson(result);
@@ -1629,10 +1635,14 @@ class Query$AllServices$services {
     final l$allServices = json['allServices'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services(
-      allServices: (l$allServices as List<dynamic>)
-          .map((e) => Query$AllServices$services$allServices.fromJson(
-              (e as Map<String, dynamic>)))
-          .toList(),
+      allServices:
+          (l$allServices as List<dynamic>)
+              .map(
+                (e) => Query$AllServices$services$allServices.fromJson(
+                  (e as Map<String, dynamic>),
+                ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1665,7 +1675,7 @@ class Query$AllServices$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$AllServices$services) ||
+    if (other is! Query$AllServices$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1693,10 +1703,7 @@ class Query$AllServices$services {
 extension UtilityExtension$Query$AllServices$services
     on Query$AllServices$services {
   CopyWith$Query$AllServices$services<Query$AllServices$services>
-      get copyWith => CopyWith$Query$AllServices$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Query$AllServices$services(this, (i) => i);
 }
 
 abstract class CopyWith$Query$AllServices$services<TRes> {
@@ -1713,19 +1720,20 @@ abstract class CopyWith$Query$AllServices$services<TRes> {
     String? $__typename,
   });
   TRes allServices(
-      Iterable<Query$AllServices$services$allServices> Function(
-              Iterable<
-                  CopyWith$Query$AllServices$services$allServices<
-                      Query$AllServices$services$allServices>>)
-          _fn);
+    Iterable<Query$AllServices$services$allServices> Function(
+      Iterable<
+        CopyWith$Query$AllServices$services$allServices<
+          Query$AllServices$services$allServices
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$AllServices$services<TRes>
     implements CopyWith$Query$AllServices$services<TRes> {
-  _CopyWithImpl$Query$AllServices$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Query$AllServices$services(this._instance, this._then);
 
   final Query$AllServices$services _instance;
 
@@ -1736,28 +1744,36 @@ class _CopyWithImpl$Query$AllServices$services<TRes>
   TRes call({
     Object? allServices = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices$services(
-        allServices: allServices == _undefined || allServices == null
-            ? _instance.allServices
-            : (allServices as List<Query$AllServices$services$allServices>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services(
+      allServices:
+          allServices == _undefined || allServices == null
+              ? _instance.allServices
+              : (allServices as List<Query$AllServices$services$allServices>),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes allServices(
-          Iterable<Query$AllServices$services$allServices> Function(
-                  Iterable<
-                      CopyWith$Query$AllServices$services$allServices<
-                          Query$AllServices$services$allServices>>)
-              _fn) =>
-      call(
-          allServices: _fn(_instance.allServices
-              .map((e) => CopyWith$Query$AllServices$services$allServices(
-                    e,
-                    (i) => i,
-                  ))).toList());
+    Iterable<Query$AllServices$services$allServices> Function(
+      Iterable<
+        CopyWith$Query$AllServices$services$allServices<
+          Query$AllServices$services$allServices
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    allServices:
+        _fn(
+          _instance.allServices.map(
+            (e) => CopyWith$Query$AllServices$services$allServices(e, (i) => i),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services<TRes>
@@ -1769,8 +1785,7 @@ class _CopyWithStubImpl$Query$AllServices$services<TRes>
   call({
     List<Query$AllServices$services$allServices>? allServices,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   allServices(_fn) => _res;
 }
@@ -1801,7 +1816,8 @@ class Query$AllServices$services$allServices {
   });
 
   factory Query$AllServices$services$allServices.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$description = json['description'];
     final l$displayName = json['displayName'];
     final l$dnsRecords = json['dnsRecords'];
@@ -1826,10 +1842,14 @@ class Query$AllServices$services$allServices {
     return Query$AllServices$services$allServices(
       description: (l$description as String),
       displayName: (l$displayName as String),
-      dnsRecords: (l$dnsRecords as List<dynamic>?)
-          ?.map((e) =>
-              Fragment$fragmentDnsRecords.fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      dnsRecords:
+          (l$dnsRecords as List<dynamic>?)
+              ?.map(
+                (e) => Fragment$fragmentDnsRecords.fromJson(
+                  (e as Map<String, dynamic>),
+                ),
+              )
+              .toList(),
       id: (l$id as String),
       isEnabled: (l$isEnabled as bool),
       isInstalled: (l$isInstalled as bool),
@@ -1841,21 +1861,30 @@ class Query$AllServices$services$allServices {
       status: fromJson$Enum$ServiceStatusEnum((l$status as String)),
       storageUsage:
           Query$AllServices$services$allServices$storageUsage.fromJson(
-              (l$storageUsage as Map<String, dynamic>)),
+            (l$storageUsage as Map<String, dynamic>),
+          ),
       svgIcon: (l$svgIcon as String),
       url: (l$url as String?),
       homepage: (l$homepage as String?),
       sourcePage: (l$sourcePage as String?),
-      license: (l$license as List<dynamic>)
-          .map((e) => Query$AllServices$services$allServices$license.fromJson(
-              (e as Map<String, dynamic>)))
-          .toList(),
+      license:
+          (l$license as List<dynamic>)
+              .map(
+                (e) => Query$AllServices$services$allServices$license.fromJson(
+                  (e as Map<String, dynamic>),
+                ),
+              )
+              .toList(),
       supportLevel: fromJson$Enum$SupportLevelEnum((l$supportLevel as String)),
-      configuration: (l$configuration as List<dynamic>?)
-          ?.map((e) =>
-              Query$AllServices$services$allServices$configuration.fromJson(
-                  (e as Map<String, dynamic>)))
-          .toList(),
+      configuration:
+          (l$configuration as List<dynamic>?)
+              ?.map(
+                (e) =>
+                    Query$AllServices$services$allServices$configuration.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1899,7 +1928,7 @@ class Query$AllServices$services$allServices {
   final Enum$SupportLevelEnum supportLevel;
 
   final List<Query$AllServices$services$allServices$configuration>?
-      configuration;
+  configuration;
 
   final String $__typename;
 
@@ -2006,7 +2035,7 @@ class Query$AllServices$services$allServices {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$AllServices$services$allServices) ||
+    if (other is! Query$AllServices$services$allServices ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2151,11 +2180,10 @@ class Query$AllServices$services$allServices {
 extension UtilityExtension$Query$AllServices$services$allServices
     on Query$AllServices$services$allServices {
   CopyWith$Query$AllServices$services$allServices<
-          Query$AllServices$services$allServices>
-      get copyWith => CopyWith$Query$AllServices$services$allServices(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices
+  >
+  get copyWith =>
+      CopyWith$Query$AllServices$services$allServices(this, (i) => i);
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
@@ -2191,25 +2219,35 @@ abstract class CopyWith$Query$AllServices$services$allServices<TRes> {
     String? $__typename,
   });
   TRes dnsRecords(
-      Iterable<Fragment$fragmentDnsRecords>? Function(
-              Iterable<
-                  CopyWith$Fragment$fragmentDnsRecords<
-                      Fragment$fragmentDnsRecords>>?)
-          _fn);
+    Iterable<Fragment$fragmentDnsRecords>? Function(
+      Iterable<
+        CopyWith$Fragment$fragmentDnsRecords<Fragment$fragmentDnsRecords>
+      >?,
+    )
+    _fn,
+  );
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
-      get storageUsage;
+  get storageUsage;
   TRes license(
-      Iterable<Query$AllServices$services$allServices$license> Function(
-              Iterable<
-                  CopyWith$Query$AllServices$services$allServices$license<
-                      Query$AllServices$services$allServices$license>>)
-          _fn);
+    Iterable<Query$AllServices$services$allServices$license> Function(
+      Iterable<
+        CopyWith$Query$AllServices$services$allServices$license<
+          Query$AllServices$services$allServices$license
+        >
+      >,
+    )
+    _fn,
+  );
   TRes configuration(
-      Iterable<Query$AllServices$services$allServices$configuration>? Function(
-              Iterable<
-                  CopyWith$Query$AllServices$services$allServices$configuration<
-                      Query$AllServices$services$allServices$configuration>>?)
-          _fn);
+    Iterable<Query$AllServices$services$allServices$configuration>? Function(
+      Iterable<
+        CopyWith$Query$AllServices$services$allServices$configuration<
+          Query$AllServices$services$allServices$configuration
+        >
+      >?,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
@@ -2247,117 +2285,159 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     Object? supportLevel = _undefined,
     Object? configuration = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices$services$allServices(
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        displayName: displayName == _undefined || displayName == null
-            ? _instance.displayName
-            : (displayName as String),
-        dnsRecords: dnsRecords == _undefined
-            ? _instance.dnsRecords
-            : (dnsRecords as List<Fragment$fragmentDnsRecords>?),
-        id: id == _undefined || id == null ? _instance.id : (id as String),
-        isEnabled: isEnabled == _undefined || isEnabled == null
-            ? _instance.isEnabled
-            : (isEnabled as bool),
-        isInstalled: isInstalled == _undefined || isInstalled == null
-            ? _instance.isInstalled
-            : (isInstalled as bool),
-        isMovable: isMovable == _undefined || isMovable == null
-            ? _instance.isMovable
-            : (isMovable as bool),
-        isRequired: isRequired == _undefined || isRequired == null
-            ? _instance.isRequired
-            : (isRequired as bool),
-        isSystemService:
-            isSystemService == _undefined || isSystemService == null
-                ? _instance.isSystemService
-                : (isSystemService as bool),
-        canBeBackedUp: canBeBackedUp == _undefined || canBeBackedUp == null
-            ? _instance.canBeBackedUp
-            : (canBeBackedUp as bool),
-        backupDescription:
-            backupDescription == _undefined || backupDescription == null
-                ? _instance.backupDescription
-                : (backupDescription as String),
-        status: status == _undefined || status == null
-            ? _instance.status
-            : (status as Enum$ServiceStatusEnum),
-        storageUsage: storageUsage == _undefined || storageUsage == null
-            ? _instance.storageUsage
-            : (storageUsage
-                as Query$AllServices$services$allServices$storageUsage),
-        svgIcon: svgIcon == _undefined || svgIcon == null
-            ? _instance.svgIcon
-            : (svgIcon as String),
-        url: url == _undefined ? _instance.url : (url as String?),
-        homepage:
-            homepage == _undefined ? _instance.homepage : (homepage as String?),
-        sourcePage: sourcePage == _undefined
-            ? _instance.sourcePage
-            : (sourcePage as String?),
-        license: license == _undefined || license == null
-            ? _instance.license
-            : (license as List<Query$AllServices$services$allServices$license>),
-        supportLevel: supportLevel == _undefined || supportLevel == null
-            ? _instance.supportLevel
-            : (supportLevel as Enum$SupportLevelEnum),
-        configuration: configuration == _undefined
-            ? _instance.configuration
-            : (configuration
-                as List<Query$AllServices$services$allServices$configuration>?),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices(
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      displayName:
+          displayName == _undefined || displayName == null
+              ? _instance.displayName
+              : (displayName as String),
+      dnsRecords:
+          dnsRecords == _undefined
+              ? _instance.dnsRecords
+              : (dnsRecords as List<Fragment$fragmentDnsRecords>?),
+      id: id == _undefined || id == null ? _instance.id : (id as String),
+      isEnabled:
+          isEnabled == _undefined || isEnabled == null
+              ? _instance.isEnabled
+              : (isEnabled as bool),
+      isInstalled:
+          isInstalled == _undefined || isInstalled == null
+              ? _instance.isInstalled
+              : (isInstalled as bool),
+      isMovable:
+          isMovable == _undefined || isMovable == null
+              ? _instance.isMovable
+              : (isMovable as bool),
+      isRequired:
+          isRequired == _undefined || isRequired == null
+              ? _instance.isRequired
+              : (isRequired as bool),
+      isSystemService:
+          isSystemService == _undefined || isSystemService == null
+              ? _instance.isSystemService
+              : (isSystemService as bool),
+      canBeBackedUp:
+          canBeBackedUp == _undefined || canBeBackedUp == null
+              ? _instance.canBeBackedUp
+              : (canBeBackedUp as bool),
+      backupDescription:
+          backupDescription == _undefined || backupDescription == null
+              ? _instance.backupDescription
+              : (backupDescription as String),
+      status:
+          status == _undefined || status == null
+              ? _instance.status
+              : (status as Enum$ServiceStatusEnum),
+      storageUsage:
+          storageUsage == _undefined || storageUsage == null
+              ? _instance.storageUsage
+              : (storageUsage
+                  as Query$AllServices$services$allServices$storageUsage),
+      svgIcon:
+          svgIcon == _undefined || svgIcon == null
+              ? _instance.svgIcon
+              : (svgIcon as String),
+      url: url == _undefined ? _instance.url : (url as String?),
+      homepage:
+          homepage == _undefined ? _instance.homepage : (homepage as String?),
+      sourcePage:
+          sourcePage == _undefined
+              ? _instance.sourcePage
+              : (sourcePage as String?),
+      license:
+          license == _undefined || license == null
+              ? _instance.license
+              : (license
+                  as List<Query$AllServices$services$allServices$license>),
+      supportLevel:
+          supportLevel == _undefined || supportLevel == null
+              ? _instance.supportLevel
+              : (supportLevel as Enum$SupportLevelEnum),
+      configuration:
+          configuration == _undefined
+              ? _instance.configuration
+              : (configuration
+                  as List<
+                    Query$AllServices$services$allServices$configuration
+                  >?),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes dnsRecords(
-          Iterable<Fragment$fragmentDnsRecords>? Function(
-                  Iterable<
-                      CopyWith$Fragment$fragmentDnsRecords<
-                          Fragment$fragmentDnsRecords>>?)
-              _fn) =>
-      call(
-          dnsRecords: _fn(_instance.dnsRecords
-              ?.map((e) => CopyWith$Fragment$fragmentDnsRecords(
-                    e,
-                    (i) => i,
-                  )))?.toList());
+    Iterable<Fragment$fragmentDnsRecords>? Function(
+      Iterable<
+        CopyWith$Fragment$fragmentDnsRecords<Fragment$fragmentDnsRecords>
+      >?,
+    )
+    _fn,
+  ) => call(
+    dnsRecords:
+        _fn(
+          _instance.dnsRecords?.map(
+            (e) => CopyWith$Fragment$fragmentDnsRecords(e, (i) => i),
+          ),
+        )?.toList(),
+  );
 
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
-      get storageUsage {
+  get storageUsage {
     final local$storageUsage = _instance.storageUsage;
     return CopyWith$Query$AllServices$services$allServices$storageUsage(
-        local$storageUsage, (e) => call(storageUsage: e));
+      local$storageUsage,
+      (e) => call(storageUsage: e),
+    );
   }
 
   TRes license(
-          Iterable<Query$AllServices$services$allServices$license> Function(
-                  Iterable<
-                      CopyWith$Query$AllServices$services$allServices$license<
-                          Query$AllServices$services$allServices$license>>)
-              _fn) =>
-      call(
-          license: _fn(_instance.license.map(
-              (e) => CopyWith$Query$AllServices$services$allServices$license(
-                    e,
-                    (i) => i,
-                  ))).toList());
+    Iterable<Query$AllServices$services$allServices$license> Function(
+      Iterable<
+        CopyWith$Query$AllServices$services$allServices$license<
+          Query$AllServices$services$allServices$license
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    license:
+        _fn(
+          _instance.license.map(
+            (e) => CopyWith$Query$AllServices$services$allServices$license(
+              e,
+              (i) => i,
+            ),
+          ),
+        ).toList(),
+  );
 
   TRes configuration(
-          Iterable<Query$AllServices$services$allServices$configuration>? Function(
-                  Iterable<
-                      CopyWith$Query$AllServices$services$allServices$configuration<
-                          Query$AllServices$services$allServices$configuration>>?)
-              _fn) =>
-      call(
-          configuration: _fn(_instance.configuration?.map((e) =>
-              CopyWith$Query$AllServices$services$allServices$configuration(
-                e,
-                (i) => i,
-              )))?.toList());
+    Iterable<Query$AllServices$services$allServices$configuration>? Function(
+      Iterable<
+        CopyWith$Query$AllServices$services$allServices$configuration<
+          Query$AllServices$services$allServices$configuration
+        >
+      >?,
+    )
+    _fn,
+  ) => call(
+    configuration:
+        _fn(
+          _instance.configuration?.map(
+            (e) =>
+                CopyWith$Query$AllServices$services$allServices$configuration(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        )?.toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
@@ -2388,15 +2468,13 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices<TRes>
     Enum$SupportLevelEnum? supportLevel,
     List<Query$AllServices$services$allServices$configuration>? configuration,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   dnsRecords(_fn) => _res;
 
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
-      get storageUsage =>
-          CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
-              _res);
+  get storageUsage =>
+      CopyWith$Query$AllServices$services$allServices$storageUsage.stub(_res);
 
   license(_fn) => _res;
 
@@ -2412,7 +2490,8 @@ class Query$AllServices$services$allServices$storageUsage {
   });
 
   factory Query$AllServices$services$allServices$storageUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$title = json['title'];
     final l$usedSpace = json['usedSpace'];
     final l$volume = json['volume'];
@@ -2420,10 +2499,12 @@ class Query$AllServices$services$allServices$storageUsage {
     return Query$AllServices$services$allServices$storageUsage(
       title: (l$title as String),
       usedSpace: (l$usedSpace as String),
-      volume: l$volume == null
-          ? null
-          : Query$AllServices$services$allServices$storageUsage$volume.fromJson(
-              (l$volume as Map<String, dynamic>)),
+      volume:
+          l$volume == null
+              ? null
+              : Query$AllServices$services$allServices$storageUsage$volume.fromJson(
+                (l$volume as Map<String, dynamic>),
+              ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -2455,12 +2536,7 @@ class Query$AllServices$services$allServices$storageUsage {
     final l$usedSpace = usedSpace;
     final l$volume = volume;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$title,
-      l$usedSpace,
-      l$volume,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$title, l$usedSpace, l$volume, l$$__typename]);
   }
 
   @override
@@ -2468,7 +2544,7 @@ class Query$AllServices$services$allServices$storageUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$AllServices$services$allServices$storageUsage) ||
+    if (other is! Query$AllServices$services$allServices$storageUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2499,24 +2575,25 @@ class Query$AllServices$services$allServices$storageUsage {
 extension UtilityExtension$Query$AllServices$services$allServices$storageUsage
     on Query$AllServices$services$allServices$storageUsage {
   CopyWith$Query$AllServices$services$allServices$storageUsage<
-          Query$AllServices$services$allServices$storageUsage>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$storageUsage(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$storageUsage
+  >
+  get copyWith => CopyWith$Query$AllServices$services$allServices$storageUsage(
+    this,
+    (i) => i,
+  );
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$storageUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$AllServices$services$allServices$storageUsage(
     Query$AllServices$services$allServices$storageUsage instance,
     TRes Function(Query$AllServices$services$allServices$storageUsage) then,
   ) = _CopyWithImpl$Query$AllServices$services$allServices$storageUsage;
 
   factory CopyWith$Query$AllServices$services$allServices$storageUsage.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage;
 
   TRes call({
     String? title,
@@ -2525,7 +2602,7 @@ abstract class CopyWith$Query$AllServices$services$allServices$storageUsage<
     String? $__typename,
   });
   CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
-      get volume;
+  get volume;
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
@@ -2539,7 +2616,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
   final Query$AllServices$services$allServices$storageUsage _instance;
 
   final TRes Function(Query$AllServices$services$allServices$storageUsage)
-      _then;
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2548,40 +2625,50 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
     Object? usedSpace = _undefined,
     Object? volume = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices$services$allServices$storageUsage(
-        title: title == _undefined || title == null
-            ? _instance.title
-            : (title as String),
-        usedSpace: usedSpace == _undefined || usedSpace == null
-            ? _instance.usedSpace
-            : (usedSpace as String),
-        volume: volume == _undefined
-            ? _instance.volume
-            : (volume
-                as Query$AllServices$services$allServices$storageUsage$volume?),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices$storageUsage(
+      title:
+          title == _undefined || title == null
+              ? _instance.title
+              : (title as String),
+      usedSpace:
+          usedSpace == _undefined || usedSpace == null
+              ? _instance.usedSpace
+              : (usedSpace as String),
+      volume:
+          volume == _undefined
+              ? _instance.volume
+              : (volume
+                  as Query$AllServices$services$allServices$storageUsage$volume?),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
-      get volume {
+  get volume {
     final local$volume = _instance.volume;
     return local$volume == null
-        ? CopyWith$Query$AllServices$services$allServices$storageUsage$volume
-            .stub(_then(_instance))
+        ? CopyWith$Query$AllServices$services$allServices$storageUsage$volume.stub(
+          _then(_instance),
+        )
         : CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
-            local$volume, (e) => call(volume: e));
+          local$volume,
+          (e) => call(volume: e),
+        );
   }
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$storageUsage<TRes> {
   _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -2590,13 +2677,13 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage<
     String? usedSpace,
     Query$AllServices$services$allServices$storageUsage$volume? volume,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$AllServices$services$allServices$storageUsage$volume<TRes>
-      get volume =>
-          CopyWith$Query$AllServices$services$allServices$storageUsage$volume
-              .stub(_res);
+  get volume =>
+      CopyWith$Query$AllServices$services$allServices$storageUsage$volume.stub(
+        _res,
+      );
 }
 
 class Query$AllServices$services$allServices$storageUsage$volume {
@@ -2606,7 +2693,8 @@ class Query$AllServices$services$allServices$storageUsage$volume {
   });
 
   factory Query$AllServices$services$allServices$storageUsage$volume.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$name = json['name'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services$allServices$storageUsage$volume(
@@ -2632,10 +2720,7 @@ class Query$AllServices$services$allServices$storageUsage$volume {
   int get hashCode {
     final l$name = name;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$name,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$name, l$$__typename]);
   }
 
   @override
@@ -2643,8 +2728,7 @@ class Query$AllServices$services$allServices$storageUsage$volume {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$AllServices$services$allServices$storageUsage$volume) ||
+    if (other is! Query$AllServices$services$allServices$storageUsage$volume ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2665,37 +2749,38 @@ class Query$AllServices$services$allServices$storageUsage$volume {
 extension UtilityExtension$Query$AllServices$services$allServices$storageUsage$volume
     on Query$AllServices$services$allServices$storageUsage$volume {
   CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
-          Query$AllServices$services$allServices$storageUsage$volume>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$storageUsage$volume
+  >
+  get copyWith =>
+      CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
     Query$AllServices$services$allServices$storageUsage$volume instance,
     TRes Function(Query$AllServices$services$allServices$storageUsage$volume)
-        then,
+    then,
   ) = _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume;
 
   factory CopyWith$Query$AllServices$services$allServices$storageUsage$volume.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume;
 
-  TRes call({
-    String? name,
-    String? $__typename,
-  });
+  TRes call({String? name, String? $__typename});
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume(
     this._instance,
     this._then,
@@ -2704,39 +2789,41 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume<
   final Query$AllServices$services$allServices$storageUsage$volume _instance;
 
   final TRes Function(
-      Query$AllServices$services$allServices$storageUsage$volume) _then;
+    Query$AllServices$services$allServices$storageUsage$volume,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? name = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices$services$allServices$storageUsage$volume(
-        name: name == _undefined || name == null
-            ? _instance.name
-            : (name as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  TRes call({Object? name = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Query$AllServices$services$allServices$storageUsage$volume(
+          name:
+              name == _undefined || name == null
+                  ? _instance.name
+                  : (name as String),
+          $__typename:
+              $__typename == _undefined || $__typename == null
+                  ? _instance.$__typename
+                  : ($__typename as String),
+        ),
+      );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$storageUsage$volume<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$AllServices$services$allServices$storageUsage$volume(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? name,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? name, String? $__typename}) => _res;
 }
 
 class Query$AllServices$services$allServices$license {
@@ -2750,7 +2837,8 @@ class Query$AllServices$services$allServices$license {
   });
 
   factory Query$AllServices$services$allServices$license.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$free = json['free'];
     final l$fullName = json['fullName'];
     final l$redistributable = json['redistributable'];
@@ -2819,7 +2907,7 @@ class Query$AllServices$services$allServices$license {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$AllServices$services$allServices$license) ||
+    if (other is! Query$AllServices$services$allServices$license ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2860,11 +2948,10 @@ class Query$AllServices$services$allServices$license {
 extension UtilityExtension$Query$AllServices$services$allServices$license
     on Query$AllServices$services$allServices$license {
   CopyWith$Query$AllServices$services$allServices$license<
-          Query$AllServices$services$allServices$license>
-      get copyWith => CopyWith$Query$AllServices$services$allServices$license(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$license
+  >
+  get copyWith =>
+      CopyWith$Query$AllServices$services$allServices$license(this, (i) => i);
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$license<TRes> {
@@ -2874,8 +2961,8 @@ abstract class CopyWith$Query$AllServices$services$allServices$license<TRes> {
   ) = _CopyWithImpl$Query$AllServices$services$allServices$license;
 
   factory CopyWith$Query$AllServices$services$allServices$license.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$license;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$license;
 
   TRes call({
     bool? free,
@@ -2907,26 +2994,29 @@ class _CopyWithImpl$Query$AllServices$services$allServices$license<TRes>
     Object? shortName = _undefined,
     Object? url = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices$services$allServices$license(
-        free: free == _undefined || free == null
-            ? _instance.free
-            : (free as bool),
-        fullName: fullName == _undefined || fullName == null
-            ? _instance.fullName
-            : (fullName as String),
-        redistributable:
-            redistributable == _undefined || redistributable == null
-                ? _instance.redistributable
-                : (redistributable as bool),
-        shortName: shortName == _undefined || shortName == null
-            ? _instance.shortName
-            : (shortName as String),
-        url: url == _undefined ? _instance.url : (url as String?),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices$license(
+      free:
+          free == _undefined || free == null ? _instance.free : (free as bool),
+      fullName:
+          fullName == _undefined || fullName == null
+              ? _instance.fullName
+              : (fullName as String),
+      redistributable:
+          redistributable == _undefined || redistributable == null
+              ? _instance.redistributable
+              : (redistributable as bool),
+      shortName:
+          shortName == _undefined || shortName == null
+              ? _instance.shortName
+              : (shortName as String),
+      url: url == _undefined ? _instance.url : (url as String?),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$license<TRes>
@@ -2942,8 +3032,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$license<TRes>
     String? shortName,
     String? url,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Query$AllServices$services$allServices$configuration {
@@ -2955,19 +3044,23 @@ class Query$AllServices$services$allServices$configuration {
   });
 
   factory Query$AllServices$services$allServices$configuration.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "BoolConfigItem":
-        return Query$AllServices$services$allServices$configuration$$BoolConfigItem
-            .fromJson(json);
+        return Query$AllServices$services$allServices$configuration$$BoolConfigItem.fromJson(
+          json,
+        );
 
       case "EnumConfigItem":
-        return Query$AllServices$services$allServices$configuration$$EnumConfigItem
-            .fromJson(json);
+        return Query$AllServices$services$allServices$configuration$$EnumConfigItem.fromJson(
+          json,
+        );
 
       case "StringConfigItem":
-        return Query$AllServices$services$allServices$configuration$$StringConfigItem
-            .fromJson(json);
+        return Query$AllServices$services$allServices$configuration$$StringConfigItem.fromJson(
+          json,
+        );
 
       default:
         final l$fieldId = json['fieldId'];
@@ -3010,12 +3103,7 @@ class Query$AllServices$services$allServices$configuration {
     final l$description = description;
     final l$type = type;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$fieldId,
-      l$description,
-      l$type,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$fieldId, l$description, l$type, l$$__typename]);
   }
 
   @override
@@ -3023,7 +3111,7 @@ class Query$AllServices$services$allServices$configuration {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$AllServices$services$allServices$configuration) ||
+    if (other is! Query$AllServices$services$allServices$configuration ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3054,36 +3142,45 @@ class Query$AllServices$services$allServices$configuration {
 extension UtilityExtension$Query$AllServices$services$allServices$configuration
     on Query$AllServices$services$allServices$configuration {
   CopyWith$Query$AllServices$services$allServices$configuration<
-          Query$AllServices$services$allServices$configuration>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$configuration(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$configuration
+  >
+  get copyWith => CopyWith$Query$AllServices$services$allServices$configuration(
+    this,
+    (i) => i,
+  );
   _T when<_T>({
     required _T Function(
-            Query$AllServices$services$allServices$configuration$$BoolConfigItem)
-        boolConfigItem,
+      Query$AllServices$services$allServices$configuration$$BoolConfigItem,
+    )
+    boolConfigItem,
     required _T Function(
-            Query$AllServices$services$allServices$configuration$$EnumConfigItem)
-        enumConfigItem,
+      Query$AllServices$services$allServices$configuration$$EnumConfigItem,
+    )
+    enumConfigItem,
     required _T Function(
-            Query$AllServices$services$allServices$configuration$$StringConfigItem)
-        stringConfigItem,
+      Query$AllServices$services$allServices$configuration$$StringConfigItem,
+    )
+    stringConfigItem,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "BoolConfigItem":
-        return boolConfigItem(this
-            as Query$AllServices$services$allServices$configuration$$BoolConfigItem);
+        return boolConfigItem(
+          this
+              as Query$AllServices$services$allServices$configuration$$BoolConfigItem,
+        );
 
       case "EnumConfigItem":
-        return enumConfigItem(this
-            as Query$AllServices$services$allServices$configuration$$EnumConfigItem);
+        return enumConfigItem(
+          this
+              as Query$AllServices$services$allServices$configuration$$EnumConfigItem,
+        );
 
       case "StringConfigItem":
-        return stringConfigItem(this
-            as Query$AllServices$services$allServices$configuration$$StringConfigItem);
+        return stringConfigItem(
+          this
+              as Query$AllServices$services$allServices$configuration$$StringConfigItem,
+        );
 
       default:
         return orElse();
@@ -3092,37 +3189,46 @@ extension UtilityExtension$Query$AllServices$services$allServices$configuration
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$AllServices$services$allServices$configuration$$BoolConfigItem)?
-        boolConfigItem,
+      Query$AllServices$services$allServices$configuration$$BoolConfigItem,
+    )?
+    boolConfigItem,
     _T Function(
-            Query$AllServices$services$allServices$configuration$$EnumConfigItem)?
-        enumConfigItem,
+      Query$AllServices$services$allServices$configuration$$EnumConfigItem,
+    )?
+    enumConfigItem,
     _T Function(
-            Query$AllServices$services$allServices$configuration$$StringConfigItem)?
-        stringConfigItem,
+      Query$AllServices$services$allServices$configuration$$StringConfigItem,
+    )?
+    stringConfigItem,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "BoolConfigItem":
         if (boolConfigItem != null) {
-          return boolConfigItem(this
-              as Query$AllServices$services$allServices$configuration$$BoolConfigItem);
+          return boolConfigItem(
+            this
+                as Query$AllServices$services$allServices$configuration$$BoolConfigItem,
+          );
         } else {
           return orElse();
         }
 
       case "EnumConfigItem":
         if (enumConfigItem != null) {
-          return enumConfigItem(this
-              as Query$AllServices$services$allServices$configuration$$EnumConfigItem);
+          return enumConfigItem(
+            this
+                as Query$AllServices$services$allServices$configuration$$EnumConfigItem,
+          );
         } else {
           return orElse();
         }
 
       case "StringConfigItem":
         if (stringConfigItem != null) {
-          return stringConfigItem(this
-              as Query$AllServices$services$allServices$configuration$$StringConfigItem);
+          return stringConfigItem(
+            this
+                as Query$AllServices$services$allServices$configuration$$StringConfigItem,
+          );
         } else {
           return orElse();
         }
@@ -3134,15 +3240,16 @@ extension UtilityExtension$Query$AllServices$services$allServices$configuration
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$configuration<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$AllServices$services$allServices$configuration(
     Query$AllServices$services$allServices$configuration instance,
     TRes Function(Query$AllServices$services$allServices$configuration) then,
   ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$configuration;
 
   TRes call({
     String? fieldId,
@@ -3163,7 +3270,7 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration<TRes>
   final Query$AllServices$services$allServices$configuration _instance;
 
   final TRes Function(Query$AllServices$services$allServices$configuration)
-      _then;
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3172,29 +3279,36 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration<TRes>
     Object? description = _undefined,
     Object? type = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$AllServices$services$allServices$configuration(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices$configuration(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration<TRes> {
   _CopyWithStubImpl$Query$AllServices$services$allServices$configuration(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -3203,8 +3317,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration<
     String? description,
     String? type,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Query$AllServices$services$allServices$configuration$$BoolConfigItem
@@ -3222,7 +3335,8 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
   });
 
   factory Query$AllServices$services$allServices$configuration$$BoolConfigItem.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
@@ -3299,8 +3413,8 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$AllServices$services$allServices$configuration$$BoolConfigItem) ||
+    if (other
+            is! Query$AllServices$services$allServices$configuration$$BoolConfigItem ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3346,26 +3460,31 @@ class Query$AllServices$services$allServices$configuration$$BoolConfigItem
 extension UtilityExtension$Query$AllServices$services$allServices$configuration$$BoolConfigItem
     on Query$AllServices$services$allServices$configuration$$BoolConfigItem {
   CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
-          Query$AllServices$services$allServices$configuration$$BoolConfigItem>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$configuration$$BoolConfigItem
+  >
+  get copyWith =>
+      CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
     Query$AllServices$services$allServices$configuration$$BoolConfigItem
-        instance,
+    instance,
     TRes Function(
-            Query$AllServices$services$allServices$configuration$$BoolConfigItem)
-        then,
-  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
+      Query$AllServices$services$allServices$configuration$$BoolConfigItem,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
 
   TRes call({
@@ -3380,21 +3499,24 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$Bo
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
     this._instance,
     this._then,
   );
 
   final Query$AllServices$services$allServices$configuration$$BoolConfigItem
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$AllServices$services$allServices$configuration$$BoolConfigItem)
-      _then;
+    Query$AllServices$services$allServices$configuration$$BoolConfigItem,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3406,41 +3528,50 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolCo
     Object? defaultBoolValue = _undefined,
     Object? widget = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$AllServices$services$allServices$configuration$$BoolConfigItem(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        boolValue: boolValue == _undefined || boolValue == null
-            ? _instance.boolValue
-            : (boolValue as bool),
-        defaultBoolValue:
-            defaultBoolValue == _undefined || defaultBoolValue == null
-                ? _instance.defaultBoolValue
-                : (defaultBoolValue as bool),
-        widget: widget == _undefined || widget == null
-            ? _instance.widget
-            : (widget as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices$configuration$$BoolConfigItem(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      boolValue:
+          boolValue == _undefined || boolValue == null
+              ? _instance.boolValue
+              : (boolValue as bool),
+      defaultBoolValue:
+          defaultBoolValue == _undefined || defaultBoolValue == null
+              ? _instance.defaultBoolValue
+              : (defaultBoolValue as bool),
+      widget:
+          widget == _undefined || widget == null
+              ? _instance.widget
+              : (widget as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -3452,8 +3583,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$Bo
     bool? defaultBoolValue,
     String? widget,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Query$AllServices$services$allServices$configuration$$EnumConfigItem
@@ -3472,7 +3602,8 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
   });
 
   factory Query$AllServices$services$allServices$configuration$$EnumConfigItem.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
@@ -3557,8 +3688,8 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$AllServices$services$allServices$configuration$$EnumConfigItem) ||
+    if (other
+            is! Query$AllServices$services$allServices$configuration$$EnumConfigItem ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3616,26 +3747,31 @@ class Query$AllServices$services$allServices$configuration$$EnumConfigItem
 extension UtilityExtension$Query$AllServices$services$allServices$configuration$$EnumConfigItem
     on Query$AllServices$services$allServices$configuration$$EnumConfigItem {
   CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
-          Query$AllServices$services$allServices$configuration$$EnumConfigItem>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$configuration$$EnumConfigItem
+  >
+  get copyWith =>
+      CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
     Query$AllServices$services$allServices$configuration$$EnumConfigItem
-        instance,
+    instance,
     TRes Function(
-            Query$AllServices$services$allServices$configuration$$EnumConfigItem)
-        then,
-  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
+      Query$AllServices$services$allServices$configuration$$EnumConfigItem,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
 
   TRes call({
@@ -3651,21 +3787,24 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$En
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
     this._instance,
     this._then,
   );
 
   final Query$AllServices$services$allServices$configuration$$EnumConfigItem
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$AllServices$services$allServices$configuration$$EnumConfigItem)
-      _then;
+    Query$AllServices$services$allServices$configuration$$EnumConfigItem,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3678,44 +3817,54 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumCo
     Object? options = _undefined,
     Object? widget = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$AllServices$services$allServices$configuration$$EnumConfigItem(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        stringValue: stringValue == _undefined || stringValue == null
-            ? _instance.stringValue
-            : (stringValue as String),
-        defaultStringValue:
-            defaultStringValue == _undefined || defaultStringValue == null
-                ? _instance.defaultStringValue
-                : (defaultStringValue as String),
-        options: options == _undefined || options == null
-            ? _instance.options
-            : (options as List<String>),
-        widget: widget == _undefined || widget == null
-            ? _instance.widget
-            : (widget as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices$configuration$$EnumConfigItem(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      stringValue:
+          stringValue == _undefined || stringValue == null
+              ? _instance.stringValue
+              : (stringValue as String),
+      defaultStringValue:
+          defaultStringValue == _undefined || defaultStringValue == null
+              ? _instance.defaultStringValue
+              : (defaultStringValue as String),
+      options:
+          options == _undefined || options == null
+              ? _instance.options
+              : (options as List<String>),
+      widget:
+          widget == _undefined || widget == null
+              ? _instance.widget
+              : (widget as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -3728,8 +3877,7 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$En
     List<String>? options,
     String? widget,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Query$AllServices$services$allServices$configuration$$StringConfigItem
@@ -3748,7 +3896,8 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
   });
 
   factory Query$AllServices$services$allServices$configuration$$StringConfigItem.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$fieldId = json['fieldId'];
     final l$description = json['description'];
     final l$type = json['type'];
@@ -3833,8 +3982,8 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$AllServices$services$allServices$configuration$$StringConfigItem) ||
+    if (other
+            is! Query$AllServices$services$allServices$configuration$$StringConfigItem ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3885,26 +4034,31 @@ class Query$AllServices$services$allServices$configuration$$StringConfigItem
 extension UtilityExtension$Query$AllServices$services$allServices$configuration$$StringConfigItem
     on Query$AllServices$services$allServices$configuration$$StringConfigItem {
   CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
-          Query$AllServices$services$allServices$configuration$$StringConfigItem>
-      get copyWith =>
-          CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem(
-            this,
-            (i) => i,
-          );
+    Query$AllServices$services$allServices$configuration$$StringConfigItem
+  >
+  get copyWith =>
+      CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem(
     Query$AllServices$services$allServices$configuration$$StringConfigItem
-        instance,
+    instance,
     TRes Function(
-            Query$AllServices$services$allServices$configuration$$StringConfigItem)
-        then,
-  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
+      Query$AllServices$services$allServices$configuration$$StringConfigItem,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
 
   TRes call({
@@ -3920,21 +4074,24 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$St
 }
 
 class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem(
     this._instance,
     this._then,
   );
 
   final Query$AllServices$services$allServices$configuration$$StringConfigItem
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$AllServices$services$allServices$configuration$$StringConfigItem)
-      _then;
+    Query$AllServices$services$allServices$configuration$$StringConfigItem,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3947,42 +4104,51 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$String
     Object? regex = _undefined,
     Object? widget = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$AllServices$services$allServices$configuration$$StringConfigItem(
-        fieldId: fieldId == _undefined || fieldId == null
-            ? _instance.fieldId
-            : (fieldId as String),
-        description: description == _undefined || description == null
-            ? _instance.description
-            : (description as String),
-        type: type == _undefined || type == null
-            ? _instance.type
-            : (type as String),
-        stringValue: stringValue == _undefined || stringValue == null
-            ? _instance.stringValue
-            : (stringValue as String),
-        defaultStringValue:
-            defaultStringValue == _undefined || defaultStringValue == null
-                ? _instance.defaultStringValue
-                : (defaultStringValue as String),
-        regex: regex == _undefined ? _instance.regex : (regex as String?),
-        widget: widget == _undefined || widget == null
-            ? _instance.widget
-            : (widget as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$AllServices$services$allServices$configuration$$StringConfigItem(
+      fieldId:
+          fieldId == _undefined || fieldId == null
+              ? _instance.fieldId
+              : (fieldId as String),
+      description:
+          description == _undefined || description == null
+              ? _instance.description
+              : (description as String),
+      type:
+          type == _undefined || type == null
+              ? _instance.type
+              : (type as String),
+      stringValue:
+          stringValue == _undefined || stringValue == null
+              ? _instance.stringValue
+              : (stringValue as String),
+      defaultStringValue:
+          defaultStringValue == _undefined || defaultStringValue == null
+              ? _instance.defaultStringValue
+              : (defaultStringValue as String),
+      regex: regex == _undefined ? _instance.regex : (regex as String?),
+      widget:
+          widget == _undefined || widget == null
+              ? _instance.widget
+              : (widget as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -3995,15 +4161,12 @@ class _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$St
     String? regex,
     String? widget,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Variables$Mutation$EnableService {
   factory Variables$Mutation$EnableService({required String serviceId}) =>
-      Variables$Mutation$EnableService._({
-        r'serviceId': serviceId,
-      });
+      Variables$Mutation$EnableService._({r'serviceId': serviceId});
 
   Variables$Mutation$EnableService._(this._$data);
 
@@ -4026,17 +4189,14 @@ class Variables$Mutation$EnableService {
   }
 
   CopyWith$Variables$Mutation$EnableService<Variables$Mutation$EnableService>
-      get copyWith => CopyWith$Variables$Mutation$EnableService(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Mutation$EnableService(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$EnableService) ||
+    if (other is! Variables$Mutation$EnableService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4069,10 +4229,7 @@ abstract class CopyWith$Variables$Mutation$EnableService<TRes> {
 
 class _CopyWithImpl$Variables$Mutation$EnableService<TRes>
     implements CopyWith$Variables$Mutation$EnableService<TRes> {
-  _CopyWithImpl$Variables$Mutation$EnableService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Mutation$EnableService(this._instance, this._then);
 
   final Variables$Mutation$EnableService _instance;
 
@@ -4080,12 +4237,13 @@ class _CopyWithImpl$Variables$Mutation$EnableService<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? serviceId = _undefined}) =>
-      _then(Variables$Mutation$EnableService._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-      }));
+  TRes call({Object? serviceId = _undefined}) => _then(
+    Variables$Mutation$EnableService._({
+      ..._instance._$data,
+      if (serviceId != _undefined && serviceId != null)
+        'serviceId': (serviceId as String),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$EnableService<TRes>
@@ -4108,7 +4266,8 @@ class Mutation$EnableService {
     final l$$__typename = json['__typename'];
     return Mutation$EnableService(
       services: Mutation$EnableService$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -4130,10 +4289,7 @@ class Mutation$EnableService {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -4141,8 +4297,7 @@ class Mutation$EnableService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$EnableService) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Mutation$EnableService || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -4161,10 +4316,7 @@ class Mutation$EnableService {
 
 extension UtilityExtension$Mutation$EnableService on Mutation$EnableService {
   CopyWith$Mutation$EnableService<Mutation$EnableService> get copyWith =>
-      CopyWith$Mutation$EnableService(
-        this,
-        (i) => i,
-      );
+      CopyWith$Mutation$EnableService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$EnableService<TRes> {
@@ -4176,19 +4328,13 @@ abstract class CopyWith$Mutation$EnableService<TRes> {
   factory CopyWith$Mutation$EnableService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$EnableService;
 
-  TRes call({
-    Mutation$EnableService$services? services,
-    String? $__typename,
-  });
+  TRes call({Mutation$EnableService$services? services, String? $__typename});
   CopyWith$Mutation$EnableService$services<TRes> get services;
 }
 
 class _CopyWithImpl$Mutation$EnableService<TRes>
     implements CopyWith$Mutation$EnableService<TRes> {
-  _CopyWithImpl$Mutation$EnableService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$EnableService(this._instance, this._then);
 
   final Mutation$EnableService _instance;
 
@@ -4199,20 +4345,25 @@ class _CopyWithImpl$Mutation$EnableService<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$EnableService(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$EnableService$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$EnableService(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$EnableService$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$EnableService$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$EnableService$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -4222,62 +4373,71 @@ class _CopyWithStubImpl$Mutation$EnableService<TRes>
 
   TRes _res;
 
-  call({
-    Mutation$EnableService$services? services,
-    String? $__typename,
-  }) =>
+  call({Mutation$EnableService$services? services, String? $__typename}) =>
       _res;
 
   CopyWith$Mutation$EnableService$services<TRes> get services =>
       CopyWith$Mutation$EnableService$services.stub(_res);
 }
 
-const documentNodeMutationEnableService = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'EnableService'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'serviceId')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'String'),
-          isNonNull: true,
+const documentNodeMutationEnableService = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'EnableService'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'serviceId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'enableService'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'serviceId'),
-                value: VariableNode(name: NameNode(value: 'serviceId')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'enableService'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'serviceId'),
+                      value: VariableNode(name: NameNode(value: 'serviceId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4286,26 +4446,17 @@ const documentNodeMutationEnableService = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-]);
-Mutation$EnableService _parserFn$Mutation$EnableService(
-        Map<String, dynamic> data) =>
-    Mutation$EnableService.fromJson(data);
-typedef OnMutationCompleted$Mutation$EnableService = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Mutation$EnableService?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
 );
+Mutation$EnableService _parserFn$Mutation$EnableService(
+  Map<String, dynamic> data,
+) => Mutation$EnableService.fromJson(data);
+typedef OnMutationCompleted$Mutation$EnableService =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$EnableService?);
 
 class Options$Mutation$EnableService
     extends graphql.MutationOptions<Mutation$EnableService> {
@@ -4321,38 +4472,37 @@ class Options$Mutation$EnableService
     OnMutationCompleted$Mutation$EnableService? onCompleted,
     graphql.OnMutationUpdate<Mutation$EnableService>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Mutation$EnableService(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationEnableService,
-          parserFn: _parserFn$Mutation$EnableService,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null ? null : _parserFn$Mutation$EnableService(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationEnableService,
+         parserFn: _parserFn$Mutation$EnableService,
+       );
 
   final OnMutationCompleted$Mutation$EnableService? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$EnableService
@@ -4371,29 +4521,29 @@ class WatchOptions$Mutation$EnableService
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationEnableService,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$EnableService,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationEnableService,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$EnableService,
+       );
 }
 
 extension ClientExtension$Mutation$EnableService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$EnableService>> mutate$EnableService(
-          Options$Mutation$EnableService options) async =>
-      await this.mutate(options);
+    Options$Mutation$EnableService options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$EnableService> watchMutation$EnableService(
-          WatchOptions$Mutation$EnableService options) =>
-      this.watchMutation(options);
+    WatchOptions$Mutation$EnableService options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$EnableService$services {
@@ -4407,7 +4557,8 @@ class Mutation$EnableService$services {
     final l$$__typename = json['__typename'];
     return Mutation$EnableService$services(
       enableService: Mutation$EnableService$services$enableService.fromJson(
-          (l$enableService as Map<String, dynamic>)),
+        (l$enableService as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -4429,10 +4580,7 @@ class Mutation$EnableService$services {
   int get hashCode {
     final l$enableService = enableService;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$enableService,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$enableService, l$$__typename]);
   }
 
   @override
@@ -4440,7 +4588,7 @@ class Mutation$EnableService$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$EnableService$services) ||
+    if (other is! Mutation$EnableService$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4461,10 +4609,7 @@ class Mutation$EnableService$services {
 extension UtilityExtension$Mutation$EnableService$services
     on Mutation$EnableService$services {
   CopyWith$Mutation$EnableService$services<Mutation$EnableService$services>
-      get copyWith => CopyWith$Mutation$EnableService$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$EnableService$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$EnableService$services<TRes> {
@@ -4481,15 +4626,12 @@ abstract class CopyWith$Mutation$EnableService$services<TRes> {
     String? $__typename,
   });
   CopyWith$Mutation$EnableService$services$enableService<TRes>
-      get enableService;
+  get enableService;
 }
 
 class _CopyWithImpl$Mutation$EnableService$services<TRes>
     implements CopyWith$Mutation$EnableService$services<TRes> {
-  _CopyWithImpl$Mutation$EnableService$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$EnableService$services(this._instance, this._then);
 
   final Mutation$EnableService$services _instance;
 
@@ -4500,21 +4642,27 @@ class _CopyWithImpl$Mutation$EnableService$services<TRes>
   TRes call({
     Object? enableService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$EnableService$services(
-        enableService: enableService == _undefined || enableService == null
-            ? _instance.enableService
-            : (enableService as Mutation$EnableService$services$enableService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$EnableService$services(
+      enableService:
+          enableService == _undefined || enableService == null
+              ? _instance.enableService
+              : (enableService
+                  as Mutation$EnableService$services$enableService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$EnableService$services$enableService<TRes>
-      get enableService {
+  get enableService {
     final local$enableService = _instance.enableService;
     return CopyWith$Mutation$EnableService$services$enableService(
-        local$enableService, (e) => call(enableService: e));
+      local$enableService,
+      (e) => call(enableService: e),
+    );
   }
 }
 
@@ -4527,12 +4675,11 @@ class _CopyWithStubImpl$Mutation$EnableService$services<TRes>
   call({
     Mutation$EnableService$services$enableService? enableService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$EnableService$services$enableService<TRes>
-      get enableService =>
-          CopyWith$Mutation$EnableService$services$enableService.stub(_res);
+  get enableService =>
+      CopyWith$Mutation$EnableService$services$enableService.stub(_res);
 }
 
 class Mutation$EnableService$services$enableService
@@ -4545,7 +4692,8 @@ class Mutation$EnableService$services$enableService
   });
 
   factory Mutation$EnableService$services$enableService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -4585,12 +4733,7 @@ class Mutation$EnableService$services$enableService
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
   }
 
   @override
@@ -4598,7 +4741,7 @@ class Mutation$EnableService$services$enableService
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$EnableService$services$enableService) ||
+    if (other is! Mutation$EnableService$services$enableService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4629,11 +4772,10 @@ class Mutation$EnableService$services$enableService
 extension UtilityExtension$Mutation$EnableService$services$enableService
     on Mutation$EnableService$services$enableService {
   CopyWith$Mutation$EnableService$services$enableService<
-          Mutation$EnableService$services$enableService>
-      get copyWith => CopyWith$Mutation$EnableService$services$enableService(
-            this,
-            (i) => i,
-          );
+    Mutation$EnableService$services$enableService
+  >
+  get copyWith =>
+      CopyWith$Mutation$EnableService$services$enableService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$EnableService$services$enableService<TRes> {
@@ -4643,15 +4785,10 @@ abstract class CopyWith$Mutation$EnableService$services$enableService<TRes> {
   ) = _CopyWithImpl$Mutation$EnableService$services$enableService;
 
   factory CopyWith$Mutation$EnableService$services$enableService.stub(
-          TRes res) =
-      _CopyWithStubImpl$Mutation$EnableService$services$enableService;
+    TRes res,
+  ) = _CopyWithStubImpl$Mutation$EnableService$services$enableService;
 
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
+  TRes call({int? code, String? message, bool? success, String? $__typename});
 }
 
 class _CopyWithImpl$Mutation$EnableService$services$enableService<TRes>
@@ -4672,20 +4809,23 @@ class _CopyWithImpl$Mutation$EnableService$services$enableService<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$EnableService$services$enableService(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$EnableService$services$enableService(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Mutation$EnableService$services$enableService<TRes>
@@ -4694,25 +4834,19 @@ class _CopyWithStubImpl$Mutation$EnableService$services$enableService<TRes>
 
   TRes _res;
 
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
+  call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }
 
 class Variables$Mutation$DisableService {
   factory Variables$Mutation$DisableService({required String serviceId}) =>
-      Variables$Mutation$DisableService._({
-        r'serviceId': serviceId,
-      });
+      Variables$Mutation$DisableService._({r'serviceId': serviceId});
 
   Variables$Mutation$DisableService._(this._$data);
 
   factory Variables$Mutation$DisableService.fromJson(
-      Map<String, dynamic> data) {
+    Map<String, dynamic> data,
+  ) {
     final result$data = <String, dynamic>{};
     final l$serviceId = data['serviceId'];
     result$data['serviceId'] = (l$serviceId as String);
@@ -4731,17 +4865,14 @@ class Variables$Mutation$DisableService {
   }
 
   CopyWith$Variables$Mutation$DisableService<Variables$Mutation$DisableService>
-      get copyWith => CopyWith$Variables$Mutation$DisableService(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Mutation$DisableService(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$DisableService) ||
+    if (other is! Variables$Mutation$DisableService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4774,10 +4905,7 @@ abstract class CopyWith$Variables$Mutation$DisableService<TRes> {
 
 class _CopyWithImpl$Variables$Mutation$DisableService<TRes>
     implements CopyWith$Variables$Mutation$DisableService<TRes> {
-  _CopyWithImpl$Variables$Mutation$DisableService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Mutation$DisableService(this._instance, this._then);
 
   final Variables$Mutation$DisableService _instance;
 
@@ -4785,12 +4913,13 @@ class _CopyWithImpl$Variables$Mutation$DisableService<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? serviceId = _undefined}) =>
-      _then(Variables$Mutation$DisableService._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-      }));
+  TRes call({Object? serviceId = _undefined}) => _then(
+    Variables$Mutation$DisableService._({
+      ..._instance._$data,
+      if (serviceId != _undefined && serviceId != null)
+        'serviceId': (serviceId as String),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$DisableService<TRes>
@@ -4813,7 +4942,8 @@ class Mutation$DisableService {
     final l$$__typename = json['__typename'];
     return Mutation$DisableService(
       services: Mutation$DisableService$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -4835,10 +4965,7 @@ class Mutation$DisableService {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -4846,8 +4973,7 @@ class Mutation$DisableService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$DisableService) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Mutation$DisableService || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -4866,10 +4992,7 @@ class Mutation$DisableService {
 
 extension UtilityExtension$Mutation$DisableService on Mutation$DisableService {
   CopyWith$Mutation$DisableService<Mutation$DisableService> get copyWith =>
-      CopyWith$Mutation$DisableService(
-        this,
-        (i) => i,
-      );
+      CopyWith$Mutation$DisableService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$DisableService<TRes> {
@@ -4881,19 +5004,13 @@ abstract class CopyWith$Mutation$DisableService<TRes> {
   factory CopyWith$Mutation$DisableService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$DisableService;
 
-  TRes call({
-    Mutation$DisableService$services? services,
-    String? $__typename,
-  });
+  TRes call({Mutation$DisableService$services? services, String? $__typename});
   CopyWith$Mutation$DisableService$services<TRes> get services;
 }
 
 class _CopyWithImpl$Mutation$DisableService<TRes>
     implements CopyWith$Mutation$DisableService<TRes> {
-  _CopyWithImpl$Mutation$DisableService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$DisableService(this._instance, this._then);
 
   final Mutation$DisableService _instance;
 
@@ -4904,20 +5021,25 @@ class _CopyWithImpl$Mutation$DisableService<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$DisableService(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$DisableService$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$DisableService(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$DisableService$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$DisableService$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$DisableService$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -4927,62 +5049,71 @@ class _CopyWithStubImpl$Mutation$DisableService<TRes>
 
   TRes _res;
 
-  call({
-    Mutation$DisableService$services? services,
-    String? $__typename,
-  }) =>
+  call({Mutation$DisableService$services? services, String? $__typename}) =>
       _res;
 
   CopyWith$Mutation$DisableService$services<TRes> get services =>
       CopyWith$Mutation$DisableService$services.stub(_res);
 }
 
-const documentNodeMutationDisableService = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'DisableService'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'serviceId')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'String'),
-          isNonNull: true,
+const documentNodeMutationDisableService = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'DisableService'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'serviceId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'disableService'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'serviceId'),
-                value: VariableNode(name: NameNode(value: 'serviceId')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'disableService'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'serviceId'),
+                      value: VariableNode(name: NameNode(value: 'serviceId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4991,26 +5122,17 @@ const documentNodeMutationDisableService = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-]);
-Mutation$DisableService _parserFn$Mutation$DisableService(
-        Map<String, dynamic> data) =>
-    Mutation$DisableService.fromJson(data);
-typedef OnMutationCompleted$Mutation$DisableService = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Mutation$DisableService?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
 );
+Mutation$DisableService _parserFn$Mutation$DisableService(
+  Map<String, dynamic> data,
+) => Mutation$DisableService.fromJson(data);
+typedef OnMutationCompleted$Mutation$DisableService =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$DisableService?);
 
 class Options$Mutation$DisableService
     extends graphql.MutationOptions<Mutation$DisableService> {
@@ -5026,38 +5148,39 @@ class Options$Mutation$DisableService
     OnMutationCompleted$Mutation$DisableService? onCompleted,
     graphql.OnMutationUpdate<Mutation$DisableService>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Mutation$DisableService(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationDisableService,
-          parserFn: _parserFn$Mutation$DisableService,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null
+                       ? null
+                       : _parserFn$Mutation$DisableService(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationDisableService,
+         parserFn: _parserFn$Mutation$DisableService,
+       );
 
   final OnMutationCompleted$Mutation$DisableService? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$DisableService
@@ -5076,29 +5199,29 @@ class WatchOptions$Mutation$DisableService
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationDisableService,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$DisableService,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationDisableService,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$DisableService,
+       );
 }
 
 extension ClientExtension$Mutation$DisableService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$DisableService>> mutate$DisableService(
-          Options$Mutation$DisableService options) async =>
-      await this.mutate(options);
+    Options$Mutation$DisableService options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$DisableService> watchMutation$DisableService(
-          WatchOptions$Mutation$DisableService options) =>
-      this.watchMutation(options);
+    WatchOptions$Mutation$DisableService options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$DisableService$services {
@@ -5112,7 +5235,8 @@ class Mutation$DisableService$services {
     final l$$__typename = json['__typename'];
     return Mutation$DisableService$services(
       disableService: Mutation$DisableService$services$disableService.fromJson(
-          (l$disableService as Map<String, dynamic>)),
+        (l$disableService as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -5134,10 +5258,7 @@ class Mutation$DisableService$services {
   int get hashCode {
     final l$disableService = disableService;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$disableService,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$disableService, l$$__typename]);
   }
 
   @override
@@ -5145,7 +5266,7 @@ class Mutation$DisableService$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$DisableService$services) ||
+    if (other is! Mutation$DisableService$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5166,10 +5287,7 @@ class Mutation$DisableService$services {
 extension UtilityExtension$Mutation$DisableService$services
     on Mutation$DisableService$services {
   CopyWith$Mutation$DisableService$services<Mutation$DisableService$services>
-      get copyWith => CopyWith$Mutation$DisableService$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$DisableService$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$DisableService$services<TRes> {
@@ -5186,15 +5304,12 @@ abstract class CopyWith$Mutation$DisableService$services<TRes> {
     String? $__typename,
   });
   CopyWith$Mutation$DisableService$services$disableService<TRes>
-      get disableService;
+  get disableService;
 }
 
 class _CopyWithImpl$Mutation$DisableService$services<TRes>
     implements CopyWith$Mutation$DisableService$services<TRes> {
-  _CopyWithImpl$Mutation$DisableService$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$DisableService$services(this._instance, this._then);
 
   final Mutation$DisableService$services _instance;
 
@@ -5205,22 +5320,27 @@ class _CopyWithImpl$Mutation$DisableService$services<TRes>
   TRes call({
     Object? disableService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$DisableService$services(
-        disableService: disableService == _undefined || disableService == null
-            ? _instance.disableService
-            : (disableService
-                as Mutation$DisableService$services$disableService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$DisableService$services(
+      disableService:
+          disableService == _undefined || disableService == null
+              ? _instance.disableService
+              : (disableService
+                  as Mutation$DisableService$services$disableService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$DisableService$services$disableService<TRes>
-      get disableService {
+  get disableService {
     final local$disableService = _instance.disableService;
     return CopyWith$Mutation$DisableService$services$disableService(
-        local$disableService, (e) => call(disableService: e));
+      local$disableService,
+      (e) => call(disableService: e),
+    );
   }
 }
 
@@ -5233,12 +5353,11 @@ class _CopyWithStubImpl$Mutation$DisableService$services<TRes>
   call({
     Mutation$DisableService$services$disableService? disableService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$DisableService$services$disableService<TRes>
-      get disableService =>
-          CopyWith$Mutation$DisableService$services$disableService.stub(_res);
+  get disableService =>
+      CopyWith$Mutation$DisableService$services$disableService.stub(_res);
 }
 
 class Mutation$DisableService$services$disableService
@@ -5251,7 +5370,8 @@ class Mutation$DisableService$services$disableService
   });
 
   factory Mutation$DisableService$services$disableService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -5291,12 +5411,7 @@ class Mutation$DisableService$services$disableService
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
   }
 
   @override
@@ -5304,7 +5419,7 @@ class Mutation$DisableService$services$disableService
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$DisableService$services$disableService) ||
+    if (other is! Mutation$DisableService$services$disableService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5335,11 +5450,10 @@ class Mutation$DisableService$services$disableService
 extension UtilityExtension$Mutation$DisableService$services$disableService
     on Mutation$DisableService$services$disableService {
   CopyWith$Mutation$DisableService$services$disableService<
-          Mutation$DisableService$services$disableService>
-      get copyWith => CopyWith$Mutation$DisableService$services$disableService(
-            this,
-            (i) => i,
-          );
+    Mutation$DisableService$services$disableService
+  >
+  get copyWith =>
+      CopyWith$Mutation$DisableService$services$disableService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$DisableService$services$disableService<TRes> {
@@ -5349,15 +5463,10 @@ abstract class CopyWith$Mutation$DisableService$services$disableService<TRes> {
   ) = _CopyWithImpl$Mutation$DisableService$services$disableService;
 
   factory CopyWith$Mutation$DisableService$services$disableService.stub(
-          TRes res) =
-      _CopyWithStubImpl$Mutation$DisableService$services$disableService;
+    TRes res,
+  ) = _CopyWithStubImpl$Mutation$DisableService$services$disableService;
 
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
+  TRes call({int? code, String? message, bool? success, String? $__typename});
 }
 
 class _CopyWithImpl$Mutation$DisableService$services$disableService<TRes>
@@ -5378,20 +5487,23 @@ class _CopyWithImpl$Mutation$DisableService$services$disableService<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$DisableService$services$disableService(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$DisableService$services$disableService(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Mutation$DisableService$services$disableService<TRes>
@@ -5400,20 +5512,13 @@ class _CopyWithStubImpl$Mutation$DisableService$services$disableService<TRes>
 
   TRes _res;
 
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
+  call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }
 
 class Variables$Mutation$StopService {
   factory Variables$Mutation$StopService({required String serviceId}) =>
-      Variables$Mutation$StopService._({
-        r'serviceId': serviceId,
-      });
+      Variables$Mutation$StopService._({r'serviceId': serviceId});
 
   Variables$Mutation$StopService._(this._$data);
 
@@ -5436,17 +5541,14 @@ class Variables$Mutation$StopService {
   }
 
   CopyWith$Variables$Mutation$StopService<Variables$Mutation$StopService>
-      get copyWith => CopyWith$Variables$Mutation$StopService(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Mutation$StopService(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$StopService) ||
+    if (other is! Variables$Mutation$StopService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5479,10 +5581,7 @@ abstract class CopyWith$Variables$Mutation$StopService<TRes> {
 
 class _CopyWithImpl$Variables$Mutation$StopService<TRes>
     implements CopyWith$Variables$Mutation$StopService<TRes> {
-  _CopyWithImpl$Variables$Mutation$StopService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Mutation$StopService(this._instance, this._then);
 
   final Variables$Mutation$StopService _instance;
 
@@ -5490,12 +5589,13 @@ class _CopyWithImpl$Variables$Mutation$StopService<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? serviceId = _undefined}) =>
-      _then(Variables$Mutation$StopService._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-      }));
+  TRes call({Object? serviceId = _undefined}) => _then(
+    Variables$Mutation$StopService._({
+      ..._instance._$data,
+      if (serviceId != _undefined && serviceId != null)
+        'serviceId': (serviceId as String),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$StopService<TRes>
@@ -5508,17 +5608,15 @@ class _CopyWithStubImpl$Variables$Mutation$StopService<TRes>
 }
 
 class Mutation$StopService {
-  Mutation$StopService({
-    required this.services,
-    this.$__typename = 'Mutation',
-  });
+  Mutation$StopService({required this.services, this.$__typename = 'Mutation'});
 
   factory Mutation$StopService.fromJson(Map<String, dynamic> json) {
     final l$services = json['services'];
     final l$$__typename = json['__typename'];
     return Mutation$StopService(
       services: Mutation$StopService$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -5540,10 +5638,7 @@ class Mutation$StopService {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -5551,7 +5646,7 @@ class Mutation$StopService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StopService) || runtimeType != other.runtimeType) {
+    if (other is! Mutation$StopService || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -5570,10 +5665,7 @@ class Mutation$StopService {
 
 extension UtilityExtension$Mutation$StopService on Mutation$StopService {
   CopyWith$Mutation$StopService<Mutation$StopService> get copyWith =>
-      CopyWith$Mutation$StopService(
-        this,
-        (i) => i,
-      );
+      CopyWith$Mutation$StopService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$StopService<TRes> {
@@ -5585,19 +5677,13 @@ abstract class CopyWith$Mutation$StopService<TRes> {
   factory CopyWith$Mutation$StopService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$StopService;
 
-  TRes call({
-    Mutation$StopService$services? services,
-    String? $__typename,
-  });
+  TRes call({Mutation$StopService$services? services, String? $__typename});
   CopyWith$Mutation$StopService$services<TRes> get services;
 }
 
 class _CopyWithImpl$Mutation$StopService<TRes>
     implements CopyWith$Mutation$StopService<TRes> {
-  _CopyWithImpl$Mutation$StopService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$StopService(this._instance, this._then);
 
   final Mutation$StopService _instance;
 
@@ -5608,20 +5694,25 @@ class _CopyWithImpl$Mutation$StopService<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$StopService(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$StopService$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$StopService(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$StopService$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$StopService$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$StopService$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -5631,62 +5722,70 @@ class _CopyWithStubImpl$Mutation$StopService<TRes>
 
   TRes _res;
 
-  call({
-    Mutation$StopService$services? services,
-    String? $__typename,
-  }) =>
-      _res;
+  call({Mutation$StopService$services? services, String? $__typename}) => _res;
 
   CopyWith$Mutation$StopService$services<TRes> get services =>
       CopyWith$Mutation$StopService$services.stub(_res);
 }
 
-const documentNodeMutationStopService = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'StopService'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'serviceId')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'String'),
-          isNonNull: true,
+const documentNodeMutationStopService = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'StopService'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'serviceId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'stopService'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'serviceId'),
-                value: VariableNode(name: NameNode(value: 'serviceId')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'stopService'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'serviceId'),
+                      value: VariableNode(name: NameNode(value: 'serviceId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -5695,26 +5794,17 @@ const documentNodeMutationStopService = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-]);
-Mutation$StopService _parserFn$Mutation$StopService(
-        Map<String, dynamic> data) =>
-    Mutation$StopService.fromJson(data);
-typedef OnMutationCompleted$Mutation$StopService = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Mutation$StopService?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
 );
+Mutation$StopService _parserFn$Mutation$StopService(
+  Map<String, dynamic> data,
+) => Mutation$StopService.fromJson(data);
+typedef OnMutationCompleted$Mutation$StopService =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$StopService?);
 
 class Options$Mutation$StopService
     extends graphql.MutationOptions<Mutation$StopService> {
@@ -5730,36 +5820,37 @@ class Options$Mutation$StopService
     OnMutationCompleted$Mutation$StopService? onCompleted,
     graphql.OnMutationUpdate<Mutation$StopService>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null ? null : _parserFn$Mutation$StopService(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationStopService,
-          parserFn: _parserFn$Mutation$StopService,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null ? null : _parserFn$Mutation$StopService(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationStopService,
+         parserFn: _parserFn$Mutation$StopService,
+       );
 
   final OnMutationCompleted$Mutation$StopService? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$StopService
@@ -5778,29 +5869,29 @@ class WatchOptions$Mutation$StopService
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationStopService,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$StopService,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationStopService,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$StopService,
+       );
 }
 
 extension ClientExtension$Mutation$StopService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$StopService>> mutate$StopService(
-          Options$Mutation$StopService options) async =>
-      await this.mutate(options);
+    Options$Mutation$StopService options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$StopService> watchMutation$StopService(
-          WatchOptions$Mutation$StopService options) =>
-      this.watchMutation(options);
+    WatchOptions$Mutation$StopService options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$StopService$services {
@@ -5814,7 +5905,8 @@ class Mutation$StopService$services {
     final l$$__typename = json['__typename'];
     return Mutation$StopService$services(
       stopService: Mutation$StopService$services$stopService.fromJson(
-          (l$stopService as Map<String, dynamic>)),
+        (l$stopService as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -5836,10 +5928,7 @@ class Mutation$StopService$services {
   int get hashCode {
     final l$stopService = stopService;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$stopService,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$stopService, l$$__typename]);
   }
 
   @override
@@ -5847,7 +5936,7 @@ class Mutation$StopService$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StopService$services) ||
+    if (other is! Mutation$StopService$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5868,10 +5957,7 @@ class Mutation$StopService$services {
 extension UtilityExtension$Mutation$StopService$services
     on Mutation$StopService$services {
   CopyWith$Mutation$StopService$services<Mutation$StopService$services>
-      get copyWith => CopyWith$Mutation$StopService$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$StopService$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$StopService$services<TRes> {
@@ -5892,10 +5978,7 @@ abstract class CopyWith$Mutation$StopService$services<TRes> {
 
 class _CopyWithImpl$Mutation$StopService$services<TRes>
     implements CopyWith$Mutation$StopService$services<TRes> {
-  _CopyWithImpl$Mutation$StopService$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$StopService$services(this._instance, this._then);
 
   final Mutation$StopService$services _instance;
 
@@ -5906,20 +5989,25 @@ class _CopyWithImpl$Mutation$StopService$services<TRes>
   TRes call({
     Object? stopService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$StopService$services(
-        stopService: stopService == _undefined || stopService == null
-            ? _instance.stopService
-            : (stopService as Mutation$StopService$services$stopService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$StopService$services(
+      stopService:
+          stopService == _undefined || stopService == null
+              ? _instance.stopService
+              : (stopService as Mutation$StopService$services$stopService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$StopService$services$stopService<TRes> get stopService {
     final local$stopService = _instance.stopService;
     return CopyWith$Mutation$StopService$services$stopService(
-        local$stopService, (e) => call(stopService: e));
+      local$stopService,
+      (e) => call(stopService: e),
+    );
   }
 }
 
@@ -5932,8 +6020,7 @@ class _CopyWithStubImpl$Mutation$StopService$services<TRes>
   call({
     Mutation$StopService$services$stopService? stopService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$StopService$services$stopService<TRes> get stopService =>
       CopyWith$Mutation$StopService$services$stopService.stub(_res);
@@ -5949,7 +6036,8 @@ class Mutation$StopService$services$stopService
   });
 
   factory Mutation$StopService$services$stopService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -5989,12 +6077,7 @@ class Mutation$StopService$services$stopService
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
   }
 
   @override
@@ -6002,7 +6085,7 @@ class Mutation$StopService$services$stopService
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StopService$services$stopService) ||
+    if (other is! Mutation$StopService$services$stopService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6033,11 +6116,10 @@ class Mutation$StopService$services$stopService
 extension UtilityExtension$Mutation$StopService$services$stopService
     on Mutation$StopService$services$stopService {
   CopyWith$Mutation$StopService$services$stopService<
-          Mutation$StopService$services$stopService>
-      get copyWith => CopyWith$Mutation$StopService$services$stopService(
-            this,
-            (i) => i,
-          );
+    Mutation$StopService$services$stopService
+  >
+  get copyWith =>
+      CopyWith$Mutation$StopService$services$stopService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$StopService$services$stopService<TRes> {
@@ -6049,12 +6131,7 @@ abstract class CopyWith$Mutation$StopService$services$stopService<TRes> {
   factory CopyWith$Mutation$StopService$services$stopService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$StopService$services$stopService;
 
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
+  TRes call({int? code, String? message, bool? success, String? $__typename});
 }
 
 class _CopyWithImpl$Mutation$StopService$services$stopService<TRes>
@@ -6075,20 +6152,23 @@ class _CopyWithImpl$Mutation$StopService$services$stopService<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$StopService$services$stopService(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$StopService$services$stopService(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Mutation$StopService$services$stopService<TRes>
@@ -6097,20 +6177,13 @@ class _CopyWithStubImpl$Mutation$StopService$services$stopService<TRes>
 
   TRes _res;
 
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
+  call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }
 
 class Variables$Mutation$StartService {
   factory Variables$Mutation$StartService({required String serviceId}) =>
-      Variables$Mutation$StartService._({
-        r'serviceId': serviceId,
-      });
+      Variables$Mutation$StartService._({r'serviceId': serviceId});
 
   Variables$Mutation$StartService._(this._$data);
 
@@ -6133,17 +6206,14 @@ class Variables$Mutation$StartService {
   }
 
   CopyWith$Variables$Mutation$StartService<Variables$Mutation$StartService>
-      get copyWith => CopyWith$Variables$Mutation$StartService(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Mutation$StartService(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$StartService) ||
+    if (other is! Variables$Mutation$StartService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6176,10 +6246,7 @@ abstract class CopyWith$Variables$Mutation$StartService<TRes> {
 
 class _CopyWithImpl$Variables$Mutation$StartService<TRes>
     implements CopyWith$Variables$Mutation$StartService<TRes> {
-  _CopyWithImpl$Variables$Mutation$StartService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Mutation$StartService(this._instance, this._then);
 
   final Variables$Mutation$StartService _instance;
 
@@ -6187,12 +6254,13 @@ class _CopyWithImpl$Variables$Mutation$StartService<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? serviceId = _undefined}) =>
-      _then(Variables$Mutation$StartService._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-      }));
+  TRes call({Object? serviceId = _undefined}) => _then(
+    Variables$Mutation$StartService._({
+      ..._instance._$data,
+      if (serviceId != _undefined && serviceId != null)
+        'serviceId': (serviceId as String),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$StartService<TRes>
@@ -6215,7 +6283,8 @@ class Mutation$StartService {
     final l$$__typename = json['__typename'];
     return Mutation$StartService(
       services: Mutation$StartService$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -6237,10 +6306,7 @@ class Mutation$StartService {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -6248,7 +6314,7 @@ class Mutation$StartService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StartService) || runtimeType != other.runtimeType) {
+    if (other is! Mutation$StartService || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -6267,10 +6333,7 @@ class Mutation$StartService {
 
 extension UtilityExtension$Mutation$StartService on Mutation$StartService {
   CopyWith$Mutation$StartService<Mutation$StartService> get copyWith =>
-      CopyWith$Mutation$StartService(
-        this,
-        (i) => i,
-      );
+      CopyWith$Mutation$StartService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$StartService<TRes> {
@@ -6282,19 +6345,13 @@ abstract class CopyWith$Mutation$StartService<TRes> {
   factory CopyWith$Mutation$StartService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$StartService;
 
-  TRes call({
-    Mutation$StartService$services? services,
-    String? $__typename,
-  });
+  TRes call({Mutation$StartService$services? services, String? $__typename});
   CopyWith$Mutation$StartService$services<TRes> get services;
 }
 
 class _CopyWithImpl$Mutation$StartService<TRes>
     implements CopyWith$Mutation$StartService<TRes> {
-  _CopyWithImpl$Mutation$StartService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$StartService(this._instance, this._then);
 
   final Mutation$StartService _instance;
 
@@ -6305,20 +6362,25 @@ class _CopyWithImpl$Mutation$StartService<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$StartService(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$StartService$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$StartService(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$StartService$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$StartService$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$StartService$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -6328,62 +6390,70 @@ class _CopyWithStubImpl$Mutation$StartService<TRes>
 
   TRes _res;
 
-  call({
-    Mutation$StartService$services? services,
-    String? $__typename,
-  }) =>
-      _res;
+  call({Mutation$StartService$services? services, String? $__typename}) => _res;
 
   CopyWith$Mutation$StartService$services<TRes> get services =>
       CopyWith$Mutation$StartService$services.stub(_res);
 }
 
-const documentNodeMutationStartService = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'StartService'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'serviceId')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'String'),
-          isNonNull: true,
+const documentNodeMutationStartService = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'StartService'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'serviceId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'startService'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'serviceId'),
-                value: VariableNode(name: NameNode(value: 'serviceId')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'startService'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'serviceId'),
+                      value: VariableNode(name: NameNode(value: 'serviceId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -6392,26 +6462,17 @@ const documentNodeMutationStartService = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-]);
-Mutation$StartService _parserFn$Mutation$StartService(
-        Map<String, dynamic> data) =>
-    Mutation$StartService.fromJson(data);
-typedef OnMutationCompleted$Mutation$StartService = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Mutation$StartService?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
 );
+Mutation$StartService _parserFn$Mutation$StartService(
+  Map<String, dynamic> data,
+) => Mutation$StartService.fromJson(data);
+typedef OnMutationCompleted$Mutation$StartService =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$StartService?);
 
 class Options$Mutation$StartService
     extends graphql.MutationOptions<Mutation$StartService> {
@@ -6427,36 +6488,37 @@ class Options$Mutation$StartService
     OnMutationCompleted$Mutation$StartService? onCompleted,
     graphql.OnMutationUpdate<Mutation$StartService>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null ? null : _parserFn$Mutation$StartService(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationStartService,
-          parserFn: _parserFn$Mutation$StartService,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null ? null : _parserFn$Mutation$StartService(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationStartService,
+         parserFn: _parserFn$Mutation$StartService,
+       );
 
   final OnMutationCompleted$Mutation$StartService? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$StartService
@@ -6475,29 +6537,29 @@ class WatchOptions$Mutation$StartService
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationStartService,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$StartService,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationStartService,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$StartService,
+       );
 }
 
 extension ClientExtension$Mutation$StartService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$StartService>> mutate$StartService(
-          Options$Mutation$StartService options) async =>
-      await this.mutate(options);
+    Options$Mutation$StartService options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$StartService> watchMutation$StartService(
-          WatchOptions$Mutation$StartService options) =>
-      this.watchMutation(options);
+    WatchOptions$Mutation$StartService options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$StartService$services {
@@ -6511,7 +6573,8 @@ class Mutation$StartService$services {
     final l$$__typename = json['__typename'];
     return Mutation$StartService$services(
       startService: Mutation$StartService$services$startService.fromJson(
-          (l$startService as Map<String, dynamic>)),
+        (l$startService as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -6533,10 +6596,7 @@ class Mutation$StartService$services {
   int get hashCode {
     final l$startService = startService;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$startService,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$startService, l$$__typename]);
   }
 
   @override
@@ -6544,7 +6604,7 @@ class Mutation$StartService$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StartService$services) ||
+    if (other is! Mutation$StartService$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6565,10 +6625,7 @@ class Mutation$StartService$services {
 extension UtilityExtension$Mutation$StartService$services
     on Mutation$StartService$services {
   CopyWith$Mutation$StartService$services<Mutation$StartService$services>
-      get copyWith => CopyWith$Mutation$StartService$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$StartService$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$StartService$services<TRes> {
@@ -6589,10 +6646,7 @@ abstract class CopyWith$Mutation$StartService$services<TRes> {
 
 class _CopyWithImpl$Mutation$StartService$services<TRes>
     implements CopyWith$Mutation$StartService$services<TRes> {
-  _CopyWithImpl$Mutation$StartService$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$StartService$services(this._instance, this._then);
 
   final Mutation$StartService$services _instance;
 
@@ -6603,20 +6657,25 @@ class _CopyWithImpl$Mutation$StartService$services<TRes>
   TRes call({
     Object? startService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$StartService$services(
-        startService: startService == _undefined || startService == null
-            ? _instance.startService
-            : (startService as Mutation$StartService$services$startService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$StartService$services(
+      startService:
+          startService == _undefined || startService == null
+              ? _instance.startService
+              : (startService as Mutation$StartService$services$startService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$StartService$services$startService<TRes> get startService {
     final local$startService = _instance.startService;
     return CopyWith$Mutation$StartService$services$startService(
-        local$startService, (e) => call(startService: e));
+      local$startService,
+      (e) => call(startService: e),
+    );
   }
 }
 
@@ -6629,8 +6688,7 @@ class _CopyWithStubImpl$Mutation$StartService$services<TRes>
   call({
     Mutation$StartService$services$startService? startService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$StartService$services$startService<TRes> get startService =>
       CopyWith$Mutation$StartService$services$startService.stub(_res);
@@ -6646,7 +6704,8 @@ class Mutation$StartService$services$startService
   });
 
   factory Mutation$StartService$services$startService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -6686,12 +6745,7 @@ class Mutation$StartService$services$startService
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
   }
 
   @override
@@ -6699,7 +6753,7 @@ class Mutation$StartService$services$startService
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$StartService$services$startService) ||
+    if (other is! Mutation$StartService$services$startService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6730,11 +6784,10 @@ class Mutation$StartService$services$startService
 extension UtilityExtension$Mutation$StartService$services$startService
     on Mutation$StartService$services$startService {
   CopyWith$Mutation$StartService$services$startService<
-          Mutation$StartService$services$startService>
-      get copyWith => CopyWith$Mutation$StartService$services$startService(
-            this,
-            (i) => i,
-          );
+    Mutation$StartService$services$startService
+  >
+  get copyWith =>
+      CopyWith$Mutation$StartService$services$startService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$StartService$services$startService<TRes> {
@@ -6746,12 +6799,7 @@ abstract class CopyWith$Mutation$StartService$services$startService<TRes> {
   factory CopyWith$Mutation$StartService$services$startService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$StartService$services$startService;
 
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
+  TRes call({int? code, String? message, bool? success, String? $__typename});
 }
 
 class _CopyWithImpl$Mutation$StartService$services$startService<TRes>
@@ -6772,20 +6820,23 @@ class _CopyWithImpl$Mutation$StartService$services$startService<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$StartService$services$startService(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$StartService$services$startService(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Mutation$StartService$services$startService<TRes>
@@ -6794,25 +6845,19 @@ class _CopyWithStubImpl$Mutation$StartService$services$startService<TRes>
 
   TRes _res;
 
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
+  call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }
 
 class Variables$Mutation$RestartService {
   factory Variables$Mutation$RestartService({required String serviceId}) =>
-      Variables$Mutation$RestartService._({
-        r'serviceId': serviceId,
-      });
+      Variables$Mutation$RestartService._({r'serviceId': serviceId});
 
   Variables$Mutation$RestartService._(this._$data);
 
   factory Variables$Mutation$RestartService.fromJson(
-      Map<String, dynamic> data) {
+    Map<String, dynamic> data,
+  ) {
     final result$data = <String, dynamic>{};
     final l$serviceId = data['serviceId'];
     result$data['serviceId'] = (l$serviceId as String);
@@ -6831,17 +6876,14 @@ class Variables$Mutation$RestartService {
   }
 
   CopyWith$Variables$Mutation$RestartService<Variables$Mutation$RestartService>
-      get copyWith => CopyWith$Variables$Mutation$RestartService(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Mutation$RestartService(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$RestartService) ||
+    if (other is! Variables$Mutation$RestartService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6874,10 +6916,7 @@ abstract class CopyWith$Variables$Mutation$RestartService<TRes> {
 
 class _CopyWithImpl$Variables$Mutation$RestartService<TRes>
     implements CopyWith$Variables$Mutation$RestartService<TRes> {
-  _CopyWithImpl$Variables$Mutation$RestartService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Mutation$RestartService(this._instance, this._then);
 
   final Variables$Mutation$RestartService _instance;
 
@@ -6885,12 +6924,13 @@ class _CopyWithImpl$Variables$Mutation$RestartService<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? serviceId = _undefined}) =>
-      _then(Variables$Mutation$RestartService._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-      }));
+  TRes call({Object? serviceId = _undefined}) => _then(
+    Variables$Mutation$RestartService._({
+      ..._instance._$data,
+      if (serviceId != _undefined && serviceId != null)
+        'serviceId': (serviceId as String),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$RestartService<TRes>
@@ -6913,7 +6953,8 @@ class Mutation$RestartService {
     final l$$__typename = json['__typename'];
     return Mutation$RestartService(
       services: Mutation$RestartService$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -6935,10 +6976,7 @@ class Mutation$RestartService {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -6946,8 +6984,7 @@ class Mutation$RestartService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RestartService) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Mutation$RestartService || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -6966,10 +7003,7 @@ class Mutation$RestartService {
 
 extension UtilityExtension$Mutation$RestartService on Mutation$RestartService {
   CopyWith$Mutation$RestartService<Mutation$RestartService> get copyWith =>
-      CopyWith$Mutation$RestartService(
-        this,
-        (i) => i,
-      );
+      CopyWith$Mutation$RestartService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$RestartService<TRes> {
@@ -6981,19 +7015,13 @@ abstract class CopyWith$Mutation$RestartService<TRes> {
   factory CopyWith$Mutation$RestartService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$RestartService;
 
-  TRes call({
-    Mutation$RestartService$services? services,
-    String? $__typename,
-  });
+  TRes call({Mutation$RestartService$services? services, String? $__typename});
   CopyWith$Mutation$RestartService$services<TRes> get services;
 }
 
 class _CopyWithImpl$Mutation$RestartService<TRes>
     implements CopyWith$Mutation$RestartService<TRes> {
-  _CopyWithImpl$Mutation$RestartService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$RestartService(this._instance, this._then);
 
   final Mutation$RestartService _instance;
 
@@ -7004,20 +7032,25 @@ class _CopyWithImpl$Mutation$RestartService<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$RestartService(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$RestartService$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$RestartService(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$RestartService$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$RestartService$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$RestartService$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -7027,62 +7060,71 @@ class _CopyWithStubImpl$Mutation$RestartService<TRes>
 
   TRes _res;
 
-  call({
-    Mutation$RestartService$services? services,
-    String? $__typename,
-  }) =>
+  call({Mutation$RestartService$services? services, String? $__typename}) =>
       _res;
 
   CopyWith$Mutation$RestartService$services<TRes> get services =>
       CopyWith$Mutation$RestartService$services.stub(_res);
 }
 
-const documentNodeMutationRestartService = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'RestartService'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'serviceId')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'String'),
-          isNonNull: true,
+const documentNodeMutationRestartService = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'RestartService'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'serviceId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'restartService'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'serviceId'),
-                value: VariableNode(name: NameNode(value: 'serviceId')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'restartService'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'serviceId'),
+                      value: VariableNode(name: NameNode(value: 'serviceId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -7091,26 +7133,17 @@ const documentNodeMutationRestartService = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-]);
-Mutation$RestartService _parserFn$Mutation$RestartService(
-        Map<String, dynamic> data) =>
-    Mutation$RestartService.fromJson(data);
-typedef OnMutationCompleted$Mutation$RestartService = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Mutation$RestartService?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
 );
+Mutation$RestartService _parserFn$Mutation$RestartService(
+  Map<String, dynamic> data,
+) => Mutation$RestartService.fromJson(data);
+typedef OnMutationCompleted$Mutation$RestartService =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$RestartService?);
 
 class Options$Mutation$RestartService
     extends graphql.MutationOptions<Mutation$RestartService> {
@@ -7126,38 +7159,39 @@ class Options$Mutation$RestartService
     OnMutationCompleted$Mutation$RestartService? onCompleted,
     graphql.OnMutationUpdate<Mutation$RestartService>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Mutation$RestartService(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationRestartService,
-          parserFn: _parserFn$Mutation$RestartService,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null
+                       ? null
+                       : _parserFn$Mutation$RestartService(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationRestartService,
+         parserFn: _parserFn$Mutation$RestartService,
+       );
 
   final OnMutationCompleted$Mutation$RestartService? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$RestartService
@@ -7176,29 +7210,29 @@ class WatchOptions$Mutation$RestartService
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationRestartService,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$RestartService,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationRestartService,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$RestartService,
+       );
 }
 
 extension ClientExtension$Mutation$RestartService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$RestartService>> mutate$RestartService(
-          Options$Mutation$RestartService options) async =>
-      await this.mutate(options);
+    Options$Mutation$RestartService options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$RestartService> watchMutation$RestartService(
-          WatchOptions$Mutation$RestartService options) =>
-      this.watchMutation(options);
+    WatchOptions$Mutation$RestartService options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$RestartService$services {
@@ -7212,7 +7246,8 @@ class Mutation$RestartService$services {
     final l$$__typename = json['__typename'];
     return Mutation$RestartService$services(
       restartService: Mutation$RestartService$services$restartService.fromJson(
-          (l$restartService as Map<String, dynamic>)),
+        (l$restartService as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -7234,10 +7269,7 @@ class Mutation$RestartService$services {
   int get hashCode {
     final l$restartService = restartService;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$restartService,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$restartService, l$$__typename]);
   }
 
   @override
@@ -7245,7 +7277,7 @@ class Mutation$RestartService$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RestartService$services) ||
+    if (other is! Mutation$RestartService$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7266,10 +7298,7 @@ class Mutation$RestartService$services {
 extension UtilityExtension$Mutation$RestartService$services
     on Mutation$RestartService$services {
   CopyWith$Mutation$RestartService$services<Mutation$RestartService$services>
-      get copyWith => CopyWith$Mutation$RestartService$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$RestartService$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$RestartService$services<TRes> {
@@ -7286,15 +7315,12 @@ abstract class CopyWith$Mutation$RestartService$services<TRes> {
     String? $__typename,
   });
   CopyWith$Mutation$RestartService$services$restartService<TRes>
-      get restartService;
+  get restartService;
 }
 
 class _CopyWithImpl$Mutation$RestartService$services<TRes>
     implements CopyWith$Mutation$RestartService$services<TRes> {
-  _CopyWithImpl$Mutation$RestartService$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$RestartService$services(this._instance, this._then);
 
   final Mutation$RestartService$services _instance;
 
@@ -7305,22 +7331,27 @@ class _CopyWithImpl$Mutation$RestartService$services<TRes>
   TRes call({
     Object? restartService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$RestartService$services(
-        restartService: restartService == _undefined || restartService == null
-            ? _instance.restartService
-            : (restartService
-                as Mutation$RestartService$services$restartService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$RestartService$services(
+      restartService:
+          restartService == _undefined || restartService == null
+              ? _instance.restartService
+              : (restartService
+                  as Mutation$RestartService$services$restartService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$RestartService$services$restartService<TRes>
-      get restartService {
+  get restartService {
     final local$restartService = _instance.restartService;
     return CopyWith$Mutation$RestartService$services$restartService(
-        local$restartService, (e) => call(restartService: e));
+      local$restartService,
+      (e) => call(restartService: e),
+    );
   }
 }
 
@@ -7333,12 +7364,11 @@ class _CopyWithStubImpl$Mutation$RestartService$services<TRes>
   call({
     Mutation$RestartService$services$restartService? restartService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$RestartService$services$restartService<TRes>
-      get restartService =>
-          CopyWith$Mutation$RestartService$services$restartService.stub(_res);
+  get restartService =>
+      CopyWith$Mutation$RestartService$services$restartService.stub(_res);
 }
 
 class Mutation$RestartService$services$restartService
@@ -7351,7 +7381,8 @@ class Mutation$RestartService$services$restartService
   });
 
   factory Mutation$RestartService$services$restartService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -7391,12 +7422,7 @@ class Mutation$RestartService$services$restartService
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
   }
 
   @override
@@ -7404,7 +7430,7 @@ class Mutation$RestartService$services$restartService
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$RestartService$services$restartService) ||
+    if (other is! Mutation$RestartService$services$restartService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7435,11 +7461,10 @@ class Mutation$RestartService$services$restartService
 extension UtilityExtension$Mutation$RestartService$services$restartService
     on Mutation$RestartService$services$restartService {
   CopyWith$Mutation$RestartService$services$restartService<
-          Mutation$RestartService$services$restartService>
-      get copyWith => CopyWith$Mutation$RestartService$services$restartService(
-            this,
-            (i) => i,
-          );
+    Mutation$RestartService$services$restartService
+  >
+  get copyWith =>
+      CopyWith$Mutation$RestartService$services$restartService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$RestartService$services$restartService<TRes> {
@@ -7449,15 +7474,10 @@ abstract class CopyWith$Mutation$RestartService$services$restartService<TRes> {
   ) = _CopyWithImpl$Mutation$RestartService$services$restartService;
 
   factory CopyWith$Mutation$RestartService$services$restartService.stub(
-          TRes res) =
-      _CopyWithStubImpl$Mutation$RestartService$services$restartService;
+    TRes res,
+  ) = _CopyWithStubImpl$Mutation$RestartService$services$restartService;
 
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
+  TRes call({int? code, String? message, bool? success, String? $__typename});
 }
 
 class _CopyWithImpl$Mutation$RestartService$services$restartService<TRes>
@@ -7478,20 +7498,23 @@ class _CopyWithImpl$Mutation$RestartService$services$restartService<TRes>
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$RestartService$services$restartService(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$RestartService$services$restartService(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Mutation$RestartService$services$restartService<TRes>
@@ -7500,29 +7523,23 @@ class _CopyWithStubImpl$Mutation$RestartService$services$restartService<TRes>
 
   TRes _res;
 
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
+  call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }
 
 class Variables$Mutation$MoveService {
-  factory Variables$Mutation$MoveService(
-          {required Input$MoveServiceInput input}) =>
-      Variables$Mutation$MoveService._({
-        r'input': input,
-      });
+  factory Variables$Mutation$MoveService({
+    required Input$MoveServiceInput input,
+  }) => Variables$Mutation$MoveService._({r'input': input});
 
   Variables$Mutation$MoveService._(this._$data);
 
   factory Variables$Mutation$MoveService.fromJson(Map<String, dynamic> data) {
     final result$data = <String, dynamic>{};
     final l$input = data['input'];
-    result$data['input'] =
-        Input$MoveServiceInput.fromJson((l$input as Map<String, dynamic>));
+    result$data['input'] = Input$MoveServiceInput.fromJson(
+      (l$input as Map<String, dynamic>),
+    );
     return Variables$Mutation$MoveService._(result$data);
   }
 
@@ -7539,17 +7556,14 @@ class Variables$Mutation$MoveService {
   }
 
   CopyWith$Variables$Mutation$MoveService<Variables$Mutation$MoveService>
-      get copyWith => CopyWith$Variables$Mutation$MoveService(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Mutation$MoveService(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$MoveService) ||
+    if (other is! Variables$Mutation$MoveService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7582,10 +7596,7 @@ abstract class CopyWith$Variables$Mutation$MoveService<TRes> {
 
 class _CopyWithImpl$Variables$Mutation$MoveService<TRes>
     implements CopyWith$Variables$Mutation$MoveService<TRes> {
-  _CopyWithImpl$Variables$Mutation$MoveService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Mutation$MoveService(this._instance, this._then);
 
   final Variables$Mutation$MoveService _instance;
 
@@ -7593,12 +7604,13 @@ class _CopyWithImpl$Variables$Mutation$MoveService<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? input = _undefined}) =>
-      _then(Variables$Mutation$MoveService._({
-        ..._instance._$data,
-        if (input != _undefined && input != null)
-          'input': (input as Input$MoveServiceInput),
-      }));
+  TRes call({Object? input = _undefined}) => _then(
+    Variables$Mutation$MoveService._({
+      ..._instance._$data,
+      if (input != _undefined && input != null)
+        'input': (input as Input$MoveServiceInput),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$MoveService<TRes>
@@ -7611,17 +7623,15 @@ class _CopyWithStubImpl$Variables$Mutation$MoveService<TRes>
 }
 
 class Mutation$MoveService {
-  Mutation$MoveService({
-    required this.services,
-    this.$__typename = 'Mutation',
-  });
+  Mutation$MoveService({required this.services, this.$__typename = 'Mutation'});
 
   factory Mutation$MoveService.fromJson(Map<String, dynamic> json) {
     final l$services = json['services'];
     final l$$__typename = json['__typename'];
     return Mutation$MoveService(
       services: Mutation$MoveService$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -7643,10 +7653,7 @@ class Mutation$MoveService {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -7654,7 +7661,7 @@ class Mutation$MoveService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$MoveService) || runtimeType != other.runtimeType) {
+    if (other is! Mutation$MoveService || runtimeType != other.runtimeType) {
       return false;
     }
     final l$services = services;
@@ -7673,10 +7680,7 @@ class Mutation$MoveService {
 
 extension UtilityExtension$Mutation$MoveService on Mutation$MoveService {
   CopyWith$Mutation$MoveService<Mutation$MoveService> get copyWith =>
-      CopyWith$Mutation$MoveService(
-        this,
-        (i) => i,
-      );
+      CopyWith$Mutation$MoveService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$MoveService<TRes> {
@@ -7688,19 +7692,13 @@ abstract class CopyWith$Mutation$MoveService<TRes> {
   factory CopyWith$Mutation$MoveService.stub(TRes res) =
       _CopyWithStubImpl$Mutation$MoveService;
 
-  TRes call({
-    Mutation$MoveService$services? services,
-    String? $__typename,
-  });
+  TRes call({Mutation$MoveService$services? services, String? $__typename});
   CopyWith$Mutation$MoveService$services<TRes> get services;
 }
 
 class _CopyWithImpl$Mutation$MoveService<TRes>
     implements CopyWith$Mutation$MoveService<TRes> {
-  _CopyWithImpl$Mutation$MoveService(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$MoveService(this._instance, this._then);
 
   final Mutation$MoveService _instance;
 
@@ -7711,20 +7709,25 @@ class _CopyWithImpl$Mutation$MoveService<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$MoveService(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$MoveService$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$MoveService(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$MoveService$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$MoveService$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$MoveService$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -7734,81 +7737,94 @@ class _CopyWithStubImpl$Mutation$MoveService<TRes>
 
   TRes _res;
 
-  call({
-    Mutation$MoveService$services? services,
-    String? $__typename,
-  }) =>
-      _res;
+  call({Mutation$MoveService$services? services, String? $__typename}) => _res;
 
   CopyWith$Mutation$MoveService$services<TRes> get services =>
       CopyWith$Mutation$MoveService$services.stub(_res);
 }
 
-const documentNodeMutationMoveService = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'MoveService'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'input')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'MoveServiceInput'),
-          isNonNull: true,
+const documentNodeMutationMoveService = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'MoveService'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'input')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'MoveServiceInput'),
+            isNonNull: true,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'moveService'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'input'),
-                value: VariableNode(name: NameNode(value: 'input')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: 'job'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'basicApiJobsFields'),
-                    directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'moveService'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'input'),
+                      value: VariableNode(name: NameNode(value: 'input')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'job'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'basicApiJobsFields'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
                   ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -7817,27 +7833,18 @@ const documentNodeMutationMoveService = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-  fragmentDefinitionbasicApiJobsFields,
-]);
-Mutation$MoveService _parserFn$Mutation$MoveService(
-        Map<String, dynamic> data) =>
-    Mutation$MoveService.fromJson(data);
-typedef OnMutationCompleted$Mutation$MoveService = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Mutation$MoveService?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+    fragmentDefinitionbasicApiJobsFields,
+  ],
 );
+Mutation$MoveService _parserFn$Mutation$MoveService(
+  Map<String, dynamic> data,
+) => Mutation$MoveService.fromJson(data);
+typedef OnMutationCompleted$Mutation$MoveService =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$MoveService?);
 
 class Options$Mutation$MoveService
     extends graphql.MutationOptions<Mutation$MoveService> {
@@ -7853,36 +7860,37 @@ class Options$Mutation$MoveService
     OnMutationCompleted$Mutation$MoveService? onCompleted,
     graphql.OnMutationUpdate<Mutation$MoveService>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null ? null : _parserFn$Mutation$MoveService(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationMoveService,
-          parserFn: _parserFn$Mutation$MoveService,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null ? null : _parserFn$Mutation$MoveService(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationMoveService,
+         parserFn: _parserFn$Mutation$MoveService,
+       );
 
   final OnMutationCompleted$Mutation$MoveService? onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$MoveService
@@ -7901,29 +7909,29 @@ class WatchOptions$Mutation$MoveService
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationMoveService,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$MoveService,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationMoveService,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$MoveService,
+       );
 }
 
 extension ClientExtension$Mutation$MoveService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$MoveService>> mutate$MoveService(
-          Options$Mutation$MoveService options) async =>
-      await this.mutate(options);
+    Options$Mutation$MoveService options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$MoveService> watchMutation$MoveService(
-          WatchOptions$Mutation$MoveService options) =>
-      this.watchMutation(options);
+    WatchOptions$Mutation$MoveService options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$MoveService$services {
@@ -7937,7 +7945,8 @@ class Mutation$MoveService$services {
     final l$$__typename = json['__typename'];
     return Mutation$MoveService$services(
       moveService: Mutation$MoveService$services$moveService.fromJson(
-          (l$moveService as Map<String, dynamic>)),
+        (l$moveService as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -7959,10 +7968,7 @@ class Mutation$MoveService$services {
   int get hashCode {
     final l$moveService = moveService;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$moveService,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$moveService, l$$__typename]);
   }
 
   @override
@@ -7970,7 +7976,7 @@ class Mutation$MoveService$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$MoveService$services) ||
+    if (other is! Mutation$MoveService$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7991,10 +7997,7 @@ class Mutation$MoveService$services {
 extension UtilityExtension$Mutation$MoveService$services
     on Mutation$MoveService$services {
   CopyWith$Mutation$MoveService$services<Mutation$MoveService$services>
-      get copyWith => CopyWith$Mutation$MoveService$services(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$MoveService$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$MoveService$services<TRes> {
@@ -8015,10 +8018,7 @@ abstract class CopyWith$Mutation$MoveService$services<TRes> {
 
 class _CopyWithImpl$Mutation$MoveService$services<TRes>
     implements CopyWith$Mutation$MoveService$services<TRes> {
-  _CopyWithImpl$Mutation$MoveService$services(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$MoveService$services(this._instance, this._then);
 
   final Mutation$MoveService$services _instance;
 
@@ -8029,20 +8029,25 @@ class _CopyWithImpl$Mutation$MoveService$services<TRes>
   TRes call({
     Object? moveService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$MoveService$services(
-        moveService: moveService == _undefined || moveService == null
-            ? _instance.moveService
-            : (moveService as Mutation$MoveService$services$moveService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$MoveService$services(
+      moveService:
+          moveService == _undefined || moveService == null
+              ? _instance.moveService
+              : (moveService as Mutation$MoveService$services$moveService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$MoveService$services$moveService<TRes> get moveService {
     final local$moveService = _instance.moveService;
     return CopyWith$Mutation$MoveService$services$moveService(
-        local$moveService, (e) => call(moveService: e));
+      local$moveService,
+      (e) => call(moveService: e),
+    );
   }
 }
 
@@ -8055,8 +8060,7 @@ class _CopyWithStubImpl$Mutation$MoveService$services<TRes>
   call({
     Mutation$MoveService$services$moveService? moveService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$MoveService$services$moveService<TRes> get moveService =>
       CopyWith$Mutation$MoveService$services$moveService.stub(_res);
@@ -8073,7 +8077,8 @@ class Mutation$MoveService$services$moveService
   });
 
   factory Mutation$MoveService$services$moveService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -8084,10 +8089,12 @@ class Mutation$MoveService$services$moveService
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      job: l$job == null
-          ? null
-          : Fragment$basicApiJobsFields.fromJson(
-              (l$job as Map<String, dynamic>)),
+      job:
+          l$job == null
+              ? null
+              : Fragment$basicApiJobsFields.fromJson(
+                (l$job as Map<String, dynamic>),
+              ),
     );
   }
 
@@ -8123,13 +8130,7 @@ class Mutation$MoveService$services$moveService
     final l$success = success;
     final l$$__typename = $__typename;
     final l$job = job;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-      l$job,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename, l$job]);
   }
 
   @override
@@ -8137,7 +8138,7 @@ class Mutation$MoveService$services$moveService
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$MoveService$services$moveService) ||
+    if (other is! Mutation$MoveService$services$moveService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8173,11 +8174,10 @@ class Mutation$MoveService$services$moveService
 extension UtilityExtension$Mutation$MoveService$services$moveService
     on Mutation$MoveService$services$moveService {
   CopyWith$Mutation$MoveService$services$moveService<
-          Mutation$MoveService$services$moveService>
-      get copyWith => CopyWith$Mutation$MoveService$services$moveService(
-            this,
-            (i) => i,
-          );
+    Mutation$MoveService$services$moveService
+  >
+  get copyWith =>
+      CopyWith$Mutation$MoveService$services$moveService(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$MoveService$services$moveService<TRes> {
@@ -8218,23 +8218,27 @@ class _CopyWithImpl$Mutation$MoveService$services$moveService<TRes>
     Object? success = _undefined,
     Object? $__typename = _undefined,
     Object? job = _undefined,
-  }) =>
-      _then(Mutation$MoveService$services$moveService(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-        job: job == _undefined
-            ? _instance.job
-            : (job as Fragment$basicApiJobsFields?),
-      ));
+  }) => _then(
+    Mutation$MoveService$services$moveService(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+      job:
+          job == _undefined
+              ? _instance.job
+              : (job as Fragment$basicApiJobsFields?),
+    ),
+  );
 
   CopyWith$Fragment$basicApiJobsFields<TRes> get job {
     final local$job = _instance.job;
@@ -8256,28 +8260,27 @@ class _CopyWithStubImpl$Mutation$MoveService$services$moveService<TRes>
     bool? success,
     String? $__typename,
     Fragment$basicApiJobsFields? job,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Fragment$basicApiJobsFields<TRes> get job =>
       CopyWith$Fragment$basicApiJobsFields.stub(_res);
 }
 
 class Variables$Mutation$SetServiceConfiguration {
-  factory Variables$Mutation$SetServiceConfiguration(
-          {required Input$SetServiceConfigurationInput input}) =>
-      Variables$Mutation$SetServiceConfiguration._({
-        r'input': input,
-      });
+  factory Variables$Mutation$SetServiceConfiguration({
+    required Input$SetServiceConfigurationInput input,
+  }) => Variables$Mutation$SetServiceConfiguration._({r'input': input});
 
   Variables$Mutation$SetServiceConfiguration._(this._$data);
 
   factory Variables$Mutation$SetServiceConfiguration.fromJson(
-      Map<String, dynamic> data) {
+    Map<String, dynamic> data,
+  ) {
     final result$data = <String, dynamic>{};
     final l$input = data['input'];
     result$data['input'] = Input$SetServiceConfigurationInput.fromJson(
-        (l$input as Map<String, dynamic>));
+      (l$input as Map<String, dynamic>),
+    );
     return Variables$Mutation$SetServiceConfiguration._(result$data);
   }
 
@@ -8294,18 +8297,17 @@ class Variables$Mutation$SetServiceConfiguration {
   }
 
   CopyWith$Variables$Mutation$SetServiceConfiguration<
-          Variables$Mutation$SetServiceConfiguration>
-      get copyWith => CopyWith$Variables$Mutation$SetServiceConfiguration(
-            this,
-            (i) => i,
-          );
+    Variables$Mutation$SetServiceConfiguration
+  >
+  get copyWith =>
+      CopyWith$Variables$Mutation$SetServiceConfiguration(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$SetServiceConfiguration) ||
+    if (other is! Variables$Mutation$SetServiceConfiguration ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8349,12 +8351,13 @@ class _CopyWithImpl$Variables$Mutation$SetServiceConfiguration<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? input = _undefined}) =>
-      _then(Variables$Mutation$SetServiceConfiguration._({
-        ..._instance._$data,
-        if (input != _undefined && input != null)
-          'input': (input as Input$SetServiceConfigurationInput),
-      }));
+  TRes call({Object? input = _undefined}) => _then(
+    Variables$Mutation$SetServiceConfiguration._({
+      ..._instance._$data,
+      if (input != _undefined && input != null)
+        'input': (input as Input$SetServiceConfigurationInput),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Mutation$SetServiceConfiguration<TRes>
@@ -8377,7 +8380,8 @@ class Mutation$SetServiceConfiguration {
     final l$$__typename = json['__typename'];
     return Mutation$SetServiceConfiguration(
       services: Mutation$SetServiceConfiguration$services.fromJson(
-          (l$services as Map<String, dynamic>)),
+        (l$services as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -8399,10 +8403,7 @@ class Mutation$SetServiceConfiguration {
   int get hashCode {
     final l$services = services;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$services,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$services, l$$__typename]);
   }
 
   @override
@@ -8410,7 +8411,7 @@ class Mutation$SetServiceConfiguration {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$SetServiceConfiguration) ||
+    if (other is! Mutation$SetServiceConfiguration ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8431,10 +8432,7 @@ class Mutation$SetServiceConfiguration {
 extension UtilityExtension$Mutation$SetServiceConfiguration
     on Mutation$SetServiceConfiguration {
   CopyWith$Mutation$SetServiceConfiguration<Mutation$SetServiceConfiguration>
-      get copyWith => CopyWith$Mutation$SetServiceConfiguration(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Mutation$SetServiceConfiguration(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$SetServiceConfiguration<TRes> {
@@ -8455,10 +8453,7 @@ abstract class CopyWith$Mutation$SetServiceConfiguration<TRes> {
 
 class _CopyWithImpl$Mutation$SetServiceConfiguration<TRes>
     implements CopyWith$Mutation$SetServiceConfiguration<TRes> {
-  _CopyWithImpl$Mutation$SetServiceConfiguration(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Mutation$SetServiceConfiguration(this._instance, this._then);
 
   final Mutation$SetServiceConfiguration _instance;
 
@@ -8469,20 +8464,25 @@ class _CopyWithImpl$Mutation$SetServiceConfiguration<TRes>
   TRes call({
     Object? services = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$SetServiceConfiguration(
-        services: services == _undefined || services == null
-            ? _instance.services
-            : (services as Mutation$SetServiceConfiguration$services),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$SetServiceConfiguration(
+      services:
+          services == _undefined || services == null
+              ? _instance.services
+              : (services as Mutation$SetServiceConfiguration$services),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$SetServiceConfiguration$services<TRes> get services {
     final local$services = _instance.services;
     return CopyWith$Mutation$SetServiceConfiguration$services(
-        local$services, (e) => call(services: e));
+      local$services,
+      (e) => call(services: e),
+    );
   }
 }
 
@@ -8495,59 +8495,73 @@ class _CopyWithStubImpl$Mutation$SetServiceConfiguration<TRes>
   call({
     Mutation$SetServiceConfiguration$services? services,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$SetServiceConfiguration$services<TRes> get services =>
       CopyWith$Mutation$SetServiceConfiguration$services.stub(_res);
 }
 
-const documentNodeMutationSetServiceConfiguration = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.mutation,
-    name: NameNode(value: 'SetServiceConfiguration'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'input')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'SetServiceConfigurationInput'),
-          isNonNull: true,
+const documentNodeMutationSetServiceConfiguration = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'SetServiceConfiguration'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'input')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'SetServiceConfigurationInput'),
+            isNonNull: true,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      )
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'services'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'setServiceConfiguration'),
+            name: NameNode(value: 'services'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'input'),
-                value: VariableNode(name: NameNode(value: 'input')),
-              )
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FragmentSpreadNode(
-                name: NameNode(value: 'basicMutationReturnFields'),
-                directives: [],
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'setServiceConfiguration'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'input'),
+                      value: VariableNode(name: NameNode(value: 'input')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -8556,27 +8570,20 @@ const documentNodeMutationSetServiceConfiguration = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionbasicMutationReturnFields,
-]);
-Mutation$SetServiceConfiguration _parserFn$Mutation$SetServiceConfiguration(
-        Map<String, dynamic> data) =>
-    Mutation$SetServiceConfiguration.fromJson(data);
-typedef OnMutationCompleted$Mutation$SetServiceConfiguration = FutureOr<void>
-    Function(
-  Map<String, dynamic>?,
-  Mutation$SetServiceConfiguration?,
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
 );
+Mutation$SetServiceConfiguration _parserFn$Mutation$SetServiceConfiguration(
+  Map<String, dynamic> data,
+) => Mutation$SetServiceConfiguration.fromJson(data);
+typedef OnMutationCompleted$Mutation$SetServiceConfiguration =
+    FutureOr<void> Function(
+      Map<String, dynamic>?,
+      Mutation$SetServiceConfiguration?,
+    );
 
 class Options$Mutation$SetServiceConfiguration
     extends graphql.MutationOptions<Mutation$SetServiceConfiguration> {
@@ -8592,39 +8599,40 @@ class Options$Mutation$SetServiceConfiguration
     OnMutationCompleted$Mutation$SetServiceConfiguration? onCompleted,
     graphql.OnMutationUpdate<Mutation$SetServiceConfiguration>? update,
     graphql.OnError? onError,
-  })  : onCompletedWithParsed = onCompleted,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          onCompleted: onCompleted == null
-              ? null
-              : (data) => onCompleted(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Mutation$SetServiceConfiguration(data),
-                  ),
-          update: update,
-          onError: onError,
-          document: documentNodeMutationSetServiceConfiguration,
-          parserFn: _parserFn$Mutation$SetServiceConfiguration,
-        );
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted:
+             onCompleted == null
+                 ? null
+                 : (data) => onCompleted(
+                   data,
+                   data == null
+                       ? null
+                       : _parserFn$Mutation$SetServiceConfiguration(data),
+                 ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationSetServiceConfiguration,
+         parserFn: _parserFn$Mutation$SetServiceConfiguration,
+       );
 
   final OnMutationCompleted$Mutation$SetServiceConfiguration?
-      onCompletedWithParsed;
+  onCompletedWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onCompleted == null
-            ? super.properties
-            : super.properties.where((property) => property != onCompleted),
-        onCompletedWithParsed,
-      ];
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
 }
 
 class WatchOptions$Mutation$SetServiceConfiguration
@@ -8643,32 +8651,32 @@ class WatchOptions$Mutation$SetServiceConfiguration
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeMutationSetServiceConfiguration,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Mutation$SetServiceConfiguration,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationSetServiceConfiguration,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$SetServiceConfiguration,
+       );
 }
 
 extension ClientExtension$Mutation$SetServiceConfiguration
     on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$SetServiceConfiguration>>
-      mutate$SetServiceConfiguration(
-              Options$Mutation$SetServiceConfiguration options) async =>
-          await this.mutate(options);
+  mutate$SetServiceConfiguration(
+    Options$Mutation$SetServiceConfiguration options,
+  ) async => await this.mutate(options);
   graphql.ObservableQuery<Mutation$SetServiceConfiguration>
-      watchMutation$SetServiceConfiguration(
-              WatchOptions$Mutation$SetServiceConfiguration options) =>
-          this.watchMutation(options);
+  watchMutation$SetServiceConfiguration(
+    WatchOptions$Mutation$SetServiceConfiguration options,
+  ) => this.watchMutation(options);
 }
 
 class Mutation$SetServiceConfiguration$services {
@@ -8678,19 +8686,21 @@ class Mutation$SetServiceConfiguration$services {
   });
 
   factory Mutation$SetServiceConfiguration$services.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$setServiceConfiguration = json['setServiceConfiguration'];
     final l$$__typename = json['__typename'];
     return Mutation$SetServiceConfiguration$services(
       setServiceConfiguration:
-          Mutation$SetServiceConfiguration$services$setServiceConfiguration
-              .fromJson((l$setServiceConfiguration as Map<String, dynamic>)),
+          Mutation$SetServiceConfiguration$services$setServiceConfiguration.fromJson(
+            (l$setServiceConfiguration as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
 
   final Mutation$SetServiceConfiguration$services$setServiceConfiguration
-      setServiceConfiguration;
+  setServiceConfiguration;
 
   final String $__typename;
 
@@ -8707,10 +8717,7 @@ class Mutation$SetServiceConfiguration$services {
   int get hashCode {
     final l$setServiceConfiguration = setServiceConfiguration;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$setServiceConfiguration,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$setServiceConfiguration, l$$__typename]);
   }
 
   @override
@@ -8718,7 +8725,7 @@ class Mutation$SetServiceConfiguration$services {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$SetServiceConfiguration$services) ||
+    if (other is! Mutation$SetServiceConfiguration$services ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8739,11 +8746,10 @@ class Mutation$SetServiceConfiguration$services {
 extension UtilityExtension$Mutation$SetServiceConfiguration$services
     on Mutation$SetServiceConfiguration$services {
   CopyWith$Mutation$SetServiceConfiguration$services<
-          Mutation$SetServiceConfiguration$services>
-      get copyWith => CopyWith$Mutation$SetServiceConfiguration$services(
-            this,
-            (i) => i,
-          );
+    Mutation$SetServiceConfiguration$services
+  >
+  get copyWith =>
+      CopyWith$Mutation$SetServiceConfiguration$services(this, (i) => i);
 }
 
 abstract class CopyWith$Mutation$SetServiceConfiguration$services<TRes> {
@@ -8757,11 +8763,13 @@ abstract class CopyWith$Mutation$SetServiceConfiguration$services<TRes> {
 
   TRes call({
     Mutation$SetServiceConfiguration$services$setServiceConfiguration?
-        setServiceConfiguration,
+    setServiceConfiguration,
     String? $__typename,
   });
   CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-      TRes> get setServiceConfiguration;
+    TRes
+  >
+  get setServiceConfiguration;
 }
 
 class _CopyWithImpl$Mutation$SetServiceConfiguration$services<TRes>
@@ -8780,23 +8788,30 @@ class _CopyWithImpl$Mutation$SetServiceConfiguration$services<TRes>
   TRes call({
     Object? setServiceConfiguration = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$SetServiceConfiguration$services(
-        setServiceConfiguration: setServiceConfiguration == _undefined ||
-                setServiceConfiguration == null
-            ? _instance.setServiceConfiguration
-            : (setServiceConfiguration
-                as Mutation$SetServiceConfiguration$services$setServiceConfiguration),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$SetServiceConfiguration$services(
+      setServiceConfiguration:
+          setServiceConfiguration == _undefined ||
+                  setServiceConfiguration == null
+              ? _instance.setServiceConfiguration
+              : (setServiceConfiguration
+                  as Mutation$SetServiceConfiguration$services$setServiceConfiguration),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-      TRes> get setServiceConfiguration {
+    TRes
+  >
+  get setServiceConfiguration {
     final local$setServiceConfiguration = _instance.setServiceConfiguration;
     return CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
-        local$setServiceConfiguration, (e) => call(setServiceConfiguration: e));
+      local$setServiceConfiguration,
+      (e) => call(setServiceConfiguration: e),
+    );
   }
 }
 
@@ -8808,16 +8823,17 @@ class _CopyWithStubImpl$Mutation$SetServiceConfiguration$services<TRes>
 
   call({
     Mutation$SetServiceConfiguration$services$setServiceConfiguration?
-        setServiceConfiguration,
+    setServiceConfiguration,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-          TRes>
-      get setServiceConfiguration =>
-          CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration
-              .stub(_res);
+    TRes
+  >
+  get setServiceConfiguration =>
+      CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration.stub(
+        _res,
+      );
 }
 
 class Mutation$SetServiceConfiguration$services$setServiceConfiguration
@@ -8830,7 +8846,8 @@ class Mutation$SetServiceConfiguration$services$setServiceConfiguration
   });
 
   factory Mutation$SetServiceConfiguration$services$setServiceConfiguration.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$code = json['code'];
     final l$message = json['message'];
     final l$success = json['success'];
@@ -8870,12 +8887,7 @@ class Mutation$SetServiceConfiguration$services$setServiceConfiguration
     final l$message = message;
     final l$success = success;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
   }
 
   @override
@@ -8883,8 +8895,8 @@ class Mutation$SetServiceConfiguration$services$setServiceConfiguration
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Mutation$SetServiceConfiguration$services$setServiceConfiguration) ||
+    if (other
+            is! Mutation$SetServiceConfiguration$services$setServiceConfiguration ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8915,50 +8927,54 @@ class Mutation$SetServiceConfiguration$services$setServiceConfiguration
 extension UtilityExtension$Mutation$SetServiceConfiguration$services$setServiceConfiguration
     on Mutation$SetServiceConfiguration$services$setServiceConfiguration {
   CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-          Mutation$SetServiceConfiguration$services$setServiceConfiguration>
-      get copyWith =>
-          CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
-            this,
-            (i) => i,
-          );
+    Mutation$SetServiceConfiguration$services$setServiceConfiguration
+  >
+  get copyWith =>
+      CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
     Mutation$SetServiceConfiguration$services$setServiceConfiguration instance,
     TRes Function(
-            Mutation$SetServiceConfiguration$services$setServiceConfiguration)
-        then,
-  ) = _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
+      Mutation$SetServiceConfiguration$services$setServiceConfiguration,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
 
   factory CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
 
-  TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  });
+  TRes call({int? code, String? message, bool? success, String? $__typename});
 }
 
 class _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
     this._instance,
     this._then,
   );
 
   final Mutation$SetServiceConfiguration$services$setServiceConfiguration
-      _instance;
+  _instance;
 
   final TRes Function(
-      Mutation$SetServiceConfiguration$services$setServiceConfiguration) _then;
+    Mutation$SetServiceConfiguration$services$setServiceConfiguration,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -8967,37 +8983,38 @@ class _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfigur
     Object? message = _undefined,
     Object? success = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Mutation$SetServiceConfiguration$services$setServiceConfiguration(
-        code:
-            code == _undefined || code == null ? _instance.code : (code as int),
-        message: message == _undefined || message == null
-            ? _instance.message
-            : (message as String),
-        success: success == _undefined || success == null
-            ? _instance.success
-            : (success as bool),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Mutation$SetServiceConfiguration$services$setServiceConfiguration(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message:
+          message == _undefined || message == null
+              ? _instance.message
+              : (message as String),
+      success:
+          success == _undefined || success == null
+              ? _instance.success
+              : (success as bool),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    int? code,
-    String? message,
-    bool? success,
-    String? $__typename,
-  }) =>
+  call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }

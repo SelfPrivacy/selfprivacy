@@ -62,12 +62,8 @@ abstract class GraphQLApiMap {
     IOClient? ioClient;
     if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {
       final HttpClient httpClient = HttpClient();
-      httpClient.badCertificateCallback = (
-        final cert,
-        final host,
-        final port,
-      ) =>
-          true;
+      httpClient.badCertificateCallback =
+          (final cert, final host, final port) => true;
       ioClient = IOClient(httpClient);
     }
 
@@ -81,9 +77,9 @@ abstract class GraphQLApiMap {
     final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
           ? AuthLink(
-              getToken: () async =>
-                  customToken == '' ? 'Bearer $_token' : customToken,
-            ).concat(httpLink)
+            getToken:
+                () async => customToken == '' ? 'Bearer $_token' : customToken,
+          ).concat(httpLink)
           : httpLink,
     );
 
@@ -91,10 +87,7 @@ abstract class GraphQLApiMap {
     // 1. RequestLoggingLink -> AuthLink -> HttpLink
     // 2. RequestLoggingLink -> HttpLink
 
-    return GraphQLClient(
-      cache: GraphQLCache(),
-      link: graphQLLink,
-    );
+    return GraphQLClient(cache: GraphQLCache(), link: graphQLLink);
   }
 
   Future<GraphQLClient> getSubscriptionClient({
@@ -107,24 +100,19 @@ abstract class GraphQLApiMap {
       config: SocketClientConfig(
         onConnectionLost: onConnectionLost,
         autoReconnect: true,
-        initialPayload: _token.isEmpty
-            ? null
-            : {
-                'Authorization': 'Bearer $_token',
-              },
-        headers: _token.isEmpty
-            ? null
-            : {
-                'Authorization': 'Bearer $_token',
-                'Accept-Language': _locale,
-              },
+        initialPayload:
+            _token.isEmpty ? null : {'Authorization': 'Bearer $_token'},
+        headers:
+            _token.isEmpty
+                ? null
+                : {
+                  'Authorization': 'Bearer $_token',
+                  'Accept-Language': _locale,
+                },
       ),
     );
 
-    return GraphQLClient(
-      cache: GraphQLCache(),
-      link: webSocketLink,
-    );
+    return GraphQLClient(cache: GraphQLCache(), link: webSocketLink);
   }
 
   String get _locale => getIt.get<ApiConfigModel>().localeCode;

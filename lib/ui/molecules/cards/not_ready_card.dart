@@ -9,22 +9,21 @@ class NotReadyCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => FilledCard(
-        tertiary: true,
-        child: ListTile(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          onTap: () => context.pushRoute(const InitializingRoute()),
-          title: Text(
-            'not_ready_card.in_menu'.tr(),
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onTertiaryContainer,
-                ),
-          ),
-          trailing: Icon(
-            Icons.arrow_forward_ios_outlined,
-            size: 24,
-            color: Theme.of(context).colorScheme.onTertiaryContainer,
-          ),
+    tertiary: true,
+    child: ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      onTap: () => context.pushRoute(const InitializingRoute()),
+      title: Text(
+        'not_ready_card.in_menu'.tr(),
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: Theme.of(context).colorScheme.onTertiaryContainer,
         ),
-      );
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios_outlined,
+        size: 24,
+        color: Theme.of(context).colorScheme.onTertiaryContainer,
+      ),
+    ),
+  );
 }

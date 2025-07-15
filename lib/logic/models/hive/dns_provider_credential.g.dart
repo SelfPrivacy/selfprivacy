@@ -8,7 +8,7 @@ part of 'dns_provider_credential.dart';
 
 class DnsProviderCredentialAdapter extends TypeAdapter<DnsProviderCredential> {
   @override
-  final int typeId = 8;
+  final typeId = 8;
 
   @override
   DnsProviderCredential read(BinaryReader reader) {

@@ -41,17 +41,14 @@ class MetricsCubit extends Cubit<MetricsState> {
 
   void load(final Period period) async {
     try {
-      final MetricsStateUpdate newStateUpdate =
-          await repository.getRelevantServerMetrics(period);
+      final MetricsStateUpdate newStateUpdate = await repository
+          .getRelevantServerMetrics(period);
 
       int duration = newStateUpdate.nextCheckInSeconds;
       if (duration <= 0) {
         duration = state.period.stepPeriodInSeconds;
       }
-      timer = Timer(
-        Duration(seconds: duration),
-        () => load(period),
-      );
+      timer = Timer(Duration(seconds: duration), () => load(period));
 
       emit(newStateUpdate.newState);
     } on StateError {

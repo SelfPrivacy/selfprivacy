@@ -58,14 +58,13 @@ abstract class GenericLineChart extends StatelessWidget {
     required final double value,
     required final LineBarSpot spot,
     required final BuildContext context,
-  }) =>
-      LineTooltipItem(
-        '${value.toStringAsFixed(2)}% at ${DateFormat('HH:mm dd.MM.yyyy').format(date)}',
-        TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.bold,
-        ),
-      );
+  }) => LineTooltipItem(
+    '${value.toStringAsFixed(2)}% at ${DateFormat('HH:mm dd.MM.yyyy').format(date)}',
+    TextStyle(
+      color: Theme.of(context).colorScheme.onSurface,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 
   double getMaxY() => 100;
 
@@ -107,8 +106,9 @@ abstract class GenericLineChart extends StatelessWidget {
           lineTouchData: LineTouchData(
             enabled: true,
             touchTooltipData: LineTouchTooltipData(
-              getTooltipColor: (final LineBarSpot _) =>
-                  Theme.of(context).colorScheme.surface,
+              getTooltipColor:
+                  (final LineBarSpot _) =>
+                      Theme.of(context).colorScheme.surface,
               tooltipPadding: const EdgeInsets.all(8),
               getTooltipItems: (final List<LineBarSpot> touchedBarSpots) {
                 final List<LineTooltipItem> tooltipItems = [];
@@ -135,30 +135,29 @@ abstract class GenericLineChart extends StatelessWidget {
               },
             ),
           ),
-          lineBarsData: data
-              .map<LineChartBarData>(
-                (final List<TimeSeriesData> dataSeries) => LineChartBarData(
-                  spots: getSpots(dataSeries),
-                  isCurved: false,
-                  barWidth: 2,
-                  color: colors[data.indexOf(dataSeries)],
-                  dotData: const FlDotData(
-                    show: false,
-                  ),
-                  belowBarData: BarAreaData(
-                    show: true,
-                    gradient: LinearGradient(
-                      colors: [
-                        colors[data.indexOf(dataSeries)].withOpacity(0.5),
-                        colors[data.indexOf(dataSeries)].withOpacity(0.0),
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
+          lineBarsData:
+              data
+                  .map<LineChartBarData>(
+                    (final List<TimeSeriesData> dataSeries) => LineChartBarData(
+                      spots: getSpots(dataSeries),
+                      isCurved: false,
+                      barWidth: 2,
+                      color: colors[data.indexOf(dataSeries)],
+                      dotData: const FlDotData(show: false),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        gradient: LinearGradient(
+                          colors: [
+                            colors[data.indexOf(dataSeries)].withOpacity(0.5),
+                            colors[data.indexOf(dataSeries)].withOpacity(0.0),
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              )
-              .toList(),
+                  )
+                  .toList(),
           minY: 0,
           maxY: getMaxY(),
           minX: 0,
@@ -170,68 +169,72 @@ abstract class GenericLineChart extends StatelessWidget {
               sideTitles: SideTitles(
                 interval: 40,
                 reservedSize: 30,
-                getTitlesWidget: (final value, final titleMeta) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ExcludeSemantics(
-                    child: Text(
-                      bottomTitle(value.toInt(), data.first, period),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                getTitlesWidget:
+                    (final value, final titleMeta) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ExcludeSemantics(
+                        child: Text(
+                          bottomTitle(value.toInt(), data.first, period),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelSmall?.copyWith(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
                 showTitles: true,
               ),
             ),
             leftTitles: const AxisTitles(
               sideTitles: SideTitles(showTitles: false),
             ),
-            rightTitles: showRightTitle
-                ? AxisTitles(
-                    sideTitles: SideTitles(
-                      reservedSize: 50,
-                      getTitlesWidget: (final value, final titleMeta) =>
-                          Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: ExcludeSemantics(
-                          child: Text(
-                            getRightTitle(value),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+            rightTitles:
+                showRightTitle
+                    ? AxisTitles(
+                      sideTitles: SideTitles(
+                        reservedSize: 50,
+                        getTitlesWidget:
+                            (final value, final titleMeta) => Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: ExcludeSemantics(
+                                child: Text(
+                                  getRightTitle(value),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelSmall?.copyWith(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
-                          ),
-                        ),
+                              ),
+                            ),
+                        interval: getMaxY() * 2 / 6.5,
+                        showTitles: true,
                       ),
-                      interval: getMaxY() * 2 / 6.5,
-                      showTitles: true,
+                    )
+                    : const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
                     ),
-                  )
-                : const AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false,
-                    ),
-                  ),
           ),
           gridData: FlGridData(
             show: true,
             drawVerticalLine: true,
             verticalInterval: 40,
             horizontalInterval: getMaxY() == 100 ? 25 : getMaxY() * 2 / 6.5,
-            getDrawingHorizontalLine: (final value) => FlLine(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              strokeWidth: 1,
-            ),
-            getDrawingVerticalLine: (final value) => FlLine(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-              strokeWidth: 1,
-            ),
+            getDrawingHorizontalLine:
+                (final value) => FlLine(
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  strokeWidth: 1,
+                ),
+            getDrawingVerticalLine:
+                (final value) => FlLine(
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  strokeWidth: 1,
+                ),
           ),
           borderData: FlBorderData(
             show: true,

@@ -10,9 +10,10 @@ class UserFormCubit extends FormCubit {
     required final FieldCubitFactory fieldFactory,
     required this.initialUser,
   }) : userCreated = initialUser != null {
-    login = initialUser == null
-        ? fieldFactory.createUserLoginField()
-        : fieldFactory.createRequiredStringField();
+    login =
+        initialUser == null
+            ? fieldFactory.createUserLoginField()
+            : fieldFactory.createRequiredStringField();
     login.setValue(initialUser?.login ?? '');
 
     displayName = fieldFactory.createUserDisplayNameField();
@@ -34,8 +35,8 @@ class UserFormCubit extends FormCubit {
       directmemberof: groups.state.value,
     );
     if (!userCreated) {
-      final (result, message) =
-          await getIt<ApiConnectionRepository>().createUser(user);
+      final (result, message) = await getIt<ApiConnectionRepository>()
+          .createUser(user);
       if (result) {
         userCreated = true;
         userCreationMessage = message;
@@ -44,8 +45,8 @@ class UserFormCubit extends FormCubit {
         errorMessage = message;
       }
     } else {
-      final (result, message) =
-          await getIt<ApiConnectionRepository>().updateUser(user);
+      final (result, message) = await getIt<ApiConnectionRepository>()
+          .updateUser(user);
       if (result) {
         userCreated = true;
         userCreationMessage = message;

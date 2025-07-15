@@ -17,185 +17,173 @@ import 'package:share_plus/share_plus.dart';
 
 @RoutePage()
 class ResetPasswordPage extends StatelessWidget {
-  const ResetPasswordPage({
-    required this.user,
-    super.key,
-  });
+  const ResetPasswordPage({required this.user, super.key});
 
   final User user;
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-        create: (final BuildContext context) {
-          final bloc = ResetPasswordBloc(user: user);
-          bloc.add(const RequestNewPassword());
-          return bloc;
-        },
-        child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
-          listener:
-              (final BuildContext context, final ResetPasswordState state) {},
-          builder:
-              (final BuildContext context, final ResetPasswordState state) {
-            late final Widget content;
-            if (state is ResetPasswordUnsupported) {
-              content = Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32.0),
-                  child: EmptyPagePlaceholder(
-                    title: 'basis.error'.tr(),
-                    description: state.errorMessage,
-                    iconData: Icons.error_outline_outlined,
+    create: (final BuildContext context) {
+      final bloc = ResetPasswordBloc(user: user);
+      bloc.add(const RequestNewPassword());
+      return bloc;
+    },
+    child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
+      listener: (final BuildContext context, final ResetPasswordState state) {},
+      builder: (final BuildContext context, final ResetPasswordState state) {
+        late final Widget content;
+        if (state is ResetPasswordUnsupported) {
+          content = Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: EmptyPagePlaceholder(
+                title: 'basis.error'.tr(),
+                description: state.errorMessage,
+                iconData: Icons.error_outline_outlined,
+              ),
+            ),
+          );
+        } else {
+          if (state.passwordResetMessage.isNotEmpty) {
+            content = Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ),
-              );
-            } else {
-              if (state.passwordResetMessage.isNotEmpty) {
-                content = Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).colorScheme.surfaceContainerHigh,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              state.passwordResetLink!.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          ),
-                          const Gap(8.0),
-                          IconButton(
-                            icon: const Icon(Icons.copy),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          state.passwordResetLink!.toString(),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
-                            onPressed: () {
-                              PlatformAdapter.setClipboard(
-                                state.passwordResetLink.toString(),
-                              );
-                              getIt<NavigationService>().showSnackBar(
-                                'basis.copied_to_clipboard'.tr(),
-                              );
-                            },
                           ),
-                        ],
-                      ),
-                    ),
-                    const Gap(16.0),
-                    BrandOutlinedButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          useRootNavigator: true,
-                          builder: (final BuildContext context) =>
-                              DraggableScrollableSheet(
-                            expand: false,
-                            initialChildSize: 0.8,
-                            maxChildSize: 0.9,
-                            minChildSize: 0.4,
-                            builder: (
-                              final BuildContext context,
-                              final ScrollController scrollController,
-                            ) =>
-                                QrModal(
-                              title: 'users.password_reset_link'.tr(),
-                              qrData: state.passwordResetLink.toString(),
-                              scrollController: scrollController,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.qr_code_outlined,
-                            size: 18.0,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const Gap(8.0),
-                          Text('basis.show_qr_code'.tr()),
-                        ],
-                      ),
-                    ),
-                    const Gap(8.0),
-                    BrandButton.filled(
-                      onPressed: () {
-                        Share.share(state.passwordResetLink.toString());
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.share_outlined,
-                            size: 18.0,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                          const Gap(8.0),
-                          Text(
-                            'basis.share_link'.tr(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Gap(16.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: InfoBox(
-                        text: 'users.password_reset_link_description'.tr(
-                          namedArgs: {
-                            'username': user.login,
-                          },
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
                       ),
-                    ),
-                  ],
-                );
-              } else if (state.errorMessage.isNotEmpty) {
-                content = Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: EmptyPagePlaceholder(
-                      title: 'basis.error'.tr(),
-                      description: state.errorMessage,
-                      iconData: Icons.error_outline_outlined,
-                    ),
-                  ),
-                );
-              } else {
-                // loading state
-                content = Center(
-                  child: Column(
-                    children: [
-                      const CircularProgressIndicator(),
                       const Gap(8.0),
-                      Text('users.creating_password_reset_link'.tr()),
+                      IconButton(
+                        icon: const Icon(Icons.copy),
+                        color: Theme.of(context).colorScheme.onSurface,
+                        onPressed: () {
+                          PlatformAdapter.setClipboard(
+                            state.passwordResetLink.toString(),
+                          );
+                          getIt<NavigationService>().showSnackBar(
+                            'basis.copied_to_clipboard'.tr(),
+                          );
+                        },
+                      ),
                     ],
                   ),
-                );
-              }
-            }
-
-            return BrandHeroScreen(
-              hasBackButton: true,
-              hasFlashButton: true,
-              heroTitle: 'users.password_reset_link'.tr(),
-              children: [
-                content,
+                ),
+                const Gap(16.0),
+                BrandOutlinedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      useRootNavigator: true,
+                      builder:
+                          (final BuildContext context) =>
+                              DraggableScrollableSheet(
+                                expand: false,
+                                initialChildSize: 0.8,
+                                maxChildSize: 0.9,
+                                minChildSize: 0.4,
+                                builder:
+                                    (
+                                      final BuildContext context,
+                                      final ScrollController scrollController,
+                                    ) => QrModal(
+                                      title: 'users.password_reset_link'.tr(),
+                                      qrData:
+                                          state.passwordResetLink.toString(),
+                                      scrollController: scrollController,
+                                    ),
+                              ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.qr_code_outlined,
+                        size: 18.0,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const Gap(8.0),
+                      Text('basis.show_qr_code'.tr()),
+                    ],
+                  ),
+                ),
+                const Gap(8.0),
+                BrandButton.filled(
+                  onPressed: () {
+                    Share.share(state.passwordResetLink.toString());
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.share_outlined,
+                        size: 18.0,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      const Gap(8.0),
+                      Text('basis.share_link'.tr()),
+                    ],
+                  ),
+                ),
+                const Gap(16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: InfoBox(
+                    text: 'users.password_reset_link_description'.tr(
+                      namedArgs: {'username': user.login},
+                    ),
+                  ),
+                ),
               ],
             );
-          },
-        ),
-      );
+          } else if (state.errorMessage.isNotEmpty) {
+            content = Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                child: EmptyPagePlaceholder(
+                  title: 'basis.error'.tr(),
+                  description: state.errorMessage,
+                  iconData: Icons.error_outline_outlined,
+                ),
+              ),
+            );
+          } else {
+            // loading state
+            content = Center(
+              child: Column(
+                children: [
+                  const CircularProgressIndicator(),
+                  const Gap(8.0),
+                  Text('users.creating_password_reset_link'.tr()),
+                ],
+              ),
+            );
+          }
+        }
+
+        return BrandHeroScreen(
+          hasBackButton: true,
+          hasFlashButton: true,
+          heroTitle: 'users.password_reset_link'.tr(),
+          children: [content],
+        );
+      },
+    ),
+  );
 }

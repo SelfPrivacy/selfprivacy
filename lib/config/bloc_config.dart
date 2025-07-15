@@ -68,57 +68,25 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
 
   @override
   Widget build(final BuildContext context) => MultiProvider(
-        providers: [
-          BlocProvider(
-            create: (final _) => supportSystemCubit,
-          ),
-          BlocProvider(
-            create: (final _) => serverInstallationCubit,
-            lazy: false,
-          ),
-          BlocProvider(
-            create: (final _) => usersBloc,
-            lazy: false,
-          ),
-          BlocProvider(
-            create: (final _) => groupsBloc,
-          ),
-          BlocProvider(
-            create: (final _) => servicesBloc,
-          ),
-          BlocProvider(
-            create: (final _) => backupsBloc,
-          ),
-          BlocProvider(
-            create: (final _) => dnsRecordsCubit,
-          ),
-          BlocProvider(
-            create: (final _) => recoveryKeyBloc,
-          ),
-          BlocProvider(
-            create: (final _) => devicesBloc,
-          ),
-          BlocProvider(
-            create: (final _) => serverJobsBloc,
-          ),
-          BlocProvider(create: (final _) => connectionStatusBloc),
-          BlocProvider(
-            create: (final _) => serverDetailsCubit,
-          ),
-          BlocProvider(create: (final _) => volumesBloc),
-          BlocProvider(
-            create: (final _) => JobsCubit(),
-          ),
-          BlocProvider(
-            create: (final _) => serverLogsBloc,
-          ),
-          BlocProvider(
-            create: (final _) => outdatedServerCheckerBloc,
-          ),
-          BlocProvider(
-            create: (final _) => tokensBloc,
-          ),
-        ],
-        child: widget.child,
-      );
+    providers: [
+      BlocProvider(create: (final _) => supportSystemCubit),
+      BlocProvider(create: (final _) => serverInstallationCubit, lazy: false),
+      BlocProvider(create: (final _) => usersBloc, lazy: false),
+      BlocProvider(create: (final _) => groupsBloc),
+      BlocProvider(create: (final _) => servicesBloc),
+      BlocProvider(create: (final _) => backupsBloc),
+      BlocProvider(create: (final _) => dnsRecordsCubit),
+      BlocProvider(create: (final _) => recoveryKeyBloc),
+      BlocProvider(create: (final _) => devicesBloc),
+      BlocProvider(create: (final _) => serverJobsBloc),
+      BlocProvider(create: (final _) => connectionStatusBloc),
+      BlocProvider(create: (final _) => serverDetailsCubit),
+      BlocProvider(create: (final _) => volumesBloc),
+      BlocProvider(create: (final _) => JobsCubit()),
+      BlocProvider(create: (final _) => serverLogsBloc),
+      BlocProvider(create: (final _) => outdatedServerCheckerBloc),
+      BlocProvider(create: (final _) => tokensBloc),
+    ],
+    child: widget.child,
+  );
 }

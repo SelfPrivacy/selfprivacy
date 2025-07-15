@@ -5,9 +5,7 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/ui/atoms/markdown/brand_md.dart';
 
 class SupportDrawer extends StatelessWidget {
-  const SupportDrawer({
-    super.key,
-  });
+  const SupportDrawer({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -39,9 +37,7 @@ class SupportDrawer extends StatelessWidget {
               const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: BrandMarkdown(
-                  fileName: currentArticle,
-                ),
+                child: BrandMarkdown(fileName: currentArticle),
               ),
             ],
           ),

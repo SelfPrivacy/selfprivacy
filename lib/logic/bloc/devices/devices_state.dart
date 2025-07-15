@@ -1,9 +1,8 @@
 part of 'devices_bloc.dart';
 
 sealed class DevicesState extends Equatable {
-  DevicesState({
-    required final List<ApiToken> devices,
-  }) : _hashCode = Object.hashAll(devices);
+  DevicesState({required final List<ApiToken> devices})
+    : _hashCode = Object.hashAll(devices);
 
   final int _hashCode;
 
@@ -14,9 +13,9 @@ sealed class DevicesState extends Equatable {
 
   List<ApiToken> get devices => _devices;
   ApiToken get thisDevice => _devices.firstWhere(
-        (final device) => device.isCaller,
-        orElse: () => FakeSelfPrivacyData.thisDeviceToken,
-      );
+    (final device) => device.isCaller,
+    orElse: () => FakeSelfPrivacyData.thisDeviceToken,
+  );
 
   List<ApiToken> get otherDevices =>
       _devices.where((final device) => !device.isCaller).toList();

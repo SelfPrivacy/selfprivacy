@@ -19,9 +19,7 @@ class BackupsServerReset extends BackupsEvent {
 }
 
 class InitializeBackupsRepository extends BackupsEvent {
-  const InitializeBackupsRepository(
-    this.credential,
-  );
+  const InitializeBackupsRepository(this.credential);
 
   final BackupsCredential credential;
 

@@ -13,15 +13,15 @@ class OutlinedCard extends StatelessWidget {
   final double? borderWidth;
   @override
   Widget build(final BuildContext context) => Card.outlined(
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          side: BorderSide(
-            color: borderColor ?? Theme.of(context).colorScheme.outline,
-            width: borderWidth ?? 1.0,
-          ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: child,
-      );
+    elevation: 0.0,
+    shape: RoundedRectangleBorder(
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      side: BorderSide(
+        color: borderColor ?? Theme.of(context).colorScheme.outline,
+        width: borderWidth ?? 1.0,
+      ),
+    ),
+    clipBehavior: Clip.antiAlias,
+    child: child,
+  );
 }

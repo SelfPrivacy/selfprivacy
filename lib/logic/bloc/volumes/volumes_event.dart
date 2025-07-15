@@ -19,9 +19,7 @@ class VolumesServerReset extends VolumesEvent {
 }
 
 class VolumesServerStateChanged extends VolumesEvent {
-  const VolumesServerStateChanged(
-    this.volumes,
-  );
+  const VolumesServerStateChanged(this.volumes);
 
   final List<ServerDiskVolume> volumes;
 
@@ -30,10 +28,7 @@ class VolumesServerStateChanged extends VolumesEvent {
 }
 
 class VolumeResize extends VolumesEvent {
-  const VolumeResize(
-    this.volume,
-    this.newSize,
-  );
+  const VolumeResize(this.volume, this.newSize);
 
   final DiskVolume volume;
   final DiskSize newSize;

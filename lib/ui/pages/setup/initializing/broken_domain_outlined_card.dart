@@ -17,45 +17,46 @@ class BrokenDomainOutlinedCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => SizedBox(
-        width: double.infinity,
-        child: FilledCard(
-          error: true,
-          child: InkResponse(
-            highlightShape: BoxShape.rectangle,
-            onTap: () => context.read<SupportSystemCubit>().showArticle(
-                  article: dnsProvider.howToRegister,
-                  context: context,
-                ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error,
-                    color: Theme.of(context).colorScheme.error,
-                    size: 24.0,
-                  ),
-                  const SizedBox(width: 12.0),
-                  Flexible(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          domain,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        Text('initializing.domain_critical_error'.tr()),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+    width: double.infinity,
+    child: FilledCard(
+      error: true,
+      child: InkResponse(
+        highlightShape: BoxShape.rectangle,
+        onTap:
+            () => context.read<SupportSystemCubit>().showArticle(
+              article: dnsProvider.howToRegister,
+              context: context,
             ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error,
+                color: Theme.of(context).colorScheme.error,
+                size: 24.0,
+              ),
+              const SizedBox(width: 12.0),
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      domain,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text('initializing.domain_critical_error'.tr()),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

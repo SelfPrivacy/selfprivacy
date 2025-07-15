@@ -33,7 +33,8 @@ class SegmentedButtons extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
-        builder: (final context, final constraints) => ToggleButtons(
+    builder:
+        (final context, final constraints) => ToggleButtons(
           constraints: BoxConstraints(
             minWidth: (constraints.maxWidth - 8) / titles.length,
             minHeight: 40 + Theme.of(context).visualDensity.vertical * 4,
@@ -55,7 +56,7 @@ class SegmentedButtons extends StatelessWidget {
               ),
           ],
         ),
-      );
+  );
 }
 
 class _ButtonSegment extends StatelessWidget {
@@ -70,33 +71,29 @@ class _ButtonSegment extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 200),
-            opacity: isSelected ? 1 : 0,
-            child: AnimatedScale(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOutCubicEmphasized,
-              alignment: Alignment.centerLeft,
-              scale: isSelected ? 1 : 0,
-              child: Icon(
-                Icons.check,
-                size: 18,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
-            ),
+    alignment: Alignment.centerLeft,
+    children: [
+      AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isSelected ? 1 : 0,
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOutCubicEmphasized,
+          alignment: Alignment.centerLeft,
+          scale: isSelected ? 1 : 0,
+          child: Icon(
+            Icons.check,
+            size: 18,
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
-          AnimatedPadding(
-            padding:
-                isSelected ? const EdgeInsets.only(left: 24) : EdgeInsets.zero,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOutCubicEmphasized,
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ),
-        ],
-      );
+        ),
+      ),
+      AnimatedPadding(
+        padding: isSelected ? const EdgeInsets.only(left: 24) : EdgeInsets.zero,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOutCubicEmphasized,
+        child: Text(title, style: Theme.of(context).textTheme.labelLarge),
+      ),
+    ],
+  );
 }

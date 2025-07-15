@@ -9,7 +9,7 @@ part of 'server_installation_wizard_data.dart';
 class ServerInstallationWizardDataAdapter
     extends TypeAdapter<ServerInstallationWizardData> {
   @override
-  final int typeId = 60;
+  final typeId = 60;
 
   @override
   ServerInstallationWizardData read(BinaryReader reader) {

@@ -22,60 +22,51 @@ class _AnimatedHiddenContentCardState extends State<AnimatedHiddenContentCard> {
 
   @override
   Widget build(final BuildContext context) => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+    ),
+    padding: const EdgeInsets.all(16),
+    child: Stack(
+      children: [
+        SelectableText(
+          widget.hiddenText,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontFamily: 'RobotoMono',
+          ),
         ),
-        padding: const EdgeInsets.all(16),
-        child: Stack(
-          children: [
-            SelectableText(
-              widget.hiddenText,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontFamily: 'RobotoMono',
-                  ),
-            ),
-            Positioned.fill(
-              child: InkWell(
-                onTap: () {
-                  setState(
-                    () {
-                      isKeyVisible = !isKeyVisible;
-                    },
-                  );
-                },
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: isKeyVisible ? 0 : 1,
-                  child: Container(
-                    color:
-                        Theme.of(context).colorScheme.surfaceContainerHighest,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          widget.buttonIcon,
-                          size: 18.0,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          widget.buttonText,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                        ),
-                      ],
+        Positioned.fill(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                isKeyVisible = !isKeyVisible;
+              });
+            },
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              opacity: isKeyVisible ? 0 : 1,
+              child: Container(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(widget.buttonIcon, size: 18.0),
+                    const SizedBox(width: 8),
+                    Text(
+                      widget.buttonText,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 }

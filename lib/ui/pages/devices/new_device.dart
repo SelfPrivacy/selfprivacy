@@ -13,30 +13,28 @@ class NewDevicePage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        heroTitle: 'devices.add_new_device_screen.header'.tr(),
-        heroSubtitle: 'devices.add_new_device_screen.description'.tr(),
-        hasBackButton: true,
-        hasFlashButton: false,
-        children: [
-          FutureBuilder(
-            future: context.read<DevicesBloc>().getNewDeviceKey(),
-            builder: (
-              final BuildContext context,
-              final AsyncSnapshot<Object?> snapshot,
-            ) {
-              if (snapshot.hasData) {
-                return KeyDisplay(
-                  keyToDisplay: snapshot.data.toString(),
-                  canCopy: true,
-                  infoboxText: 'devices.add_new_device_screen.tip'.tr(),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
-            },
-          ),
-        ],
-      );
+    heroTitle: 'devices.add_new_device_screen.header'.tr(),
+    heroSubtitle: 'devices.add_new_device_screen.description'.tr(),
+    hasBackButton: true,
+    hasFlashButton: false,
+    children: [
+      FutureBuilder(
+        future: context.read<DevicesBloc>().getNewDeviceKey(),
+        builder: (
+          final BuildContext context,
+          final AsyncSnapshot<Object?> snapshot,
+        ) {
+          if (snapshot.hasData) {
+            return KeyDisplay(
+              keyToDisplay: snapshot.data.toString(),
+              canCopy: true,
+              infoboxText: 'devices.add_new_device_screen.tip'.tr(),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+        },
+      ),
+    ],
+  );
 }

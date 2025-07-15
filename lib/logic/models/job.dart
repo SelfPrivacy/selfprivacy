@@ -39,11 +39,8 @@ abstract class ClientJob extends Equatable {
 }
 
 class UpgradeServerJob extends ClientJob {
-  UpgradeServerJob({
-    super.status,
-    super.message,
-    super.id,
-  }) : super(title: 'jobs.start_server_upgrade'.tr());
+  UpgradeServerJob({super.status, super.message, super.id})
+    : super(title: 'jobs.start_server_upgrade'.tr());
 
   @override
   bool canAddTo(final List<ClientJob> jobs) =>
@@ -56,19 +53,12 @@ class UpgradeServerJob extends ClientJob {
   UpgradeServerJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      UpgradeServerJob(
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => UpgradeServerJob(status: status, message: message, id: id);
 }
 
 class UpdateDnsRecordsJob extends ClientJob {
-  UpdateDnsRecordsJob({
-    super.status,
-    super.message,
-  }) : super(title: 'jobs.update_dns_records'.tr(), id: jobId);
+  UpdateDnsRecordsJob({super.status, super.message})
+    : super(title: 'jobs.update_dns_records'.tr(), id: jobId);
 
   static String jobId = 'dns_update';
 
@@ -83,19 +73,12 @@ class UpdateDnsRecordsJob extends ClientJob {
   UpdateDnsRecordsJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      UpdateDnsRecordsJob(
-        status: status,
-        message: message,
-      );
+  }) => UpdateDnsRecordsJob(status: status, message: message);
 }
 
 class CollectNixGarbageJob extends ClientJob {
-  CollectNixGarbageJob({
-    super.status,
-    super.message,
-    super.id,
-  }) : super(title: 'jobs.collect_nix_garbage'.tr());
+  CollectNixGarbageJob({super.status, super.message, super.id})
+    : super(title: 'jobs.collect_nix_garbage'.tr());
 
   @override
   bool canAddTo(final List<ClientJob> jobs) =>
@@ -112,20 +95,12 @@ class CollectNixGarbageJob extends ClientJob {
   CollectNixGarbageJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      CollectNixGarbageJob(
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => CollectNixGarbageJob(status: status, message: message, id: id);
 }
 
 class RebootServerJob extends ClientJob {
-  RebootServerJob({
-    super.status,
-    super.message,
-    super.id,
-  }) : super(title: 'jobs.reboot_server'.tr(), requiresRebuild: false);
+  RebootServerJob({super.status, super.message, super.id})
+    : super(title: 'jobs.reboot_server'.tr(), requiresRebuild: false);
 
   @override
   bool canAddTo(final List<ClientJob> jobs) =>
@@ -138,26 +113,18 @@ class RebootServerJob extends ClientJob {
   RebootServerJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      RebootServerJob(
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => RebootServerJob(status: status, message: message, id: id);
 }
 
 class DeleteUserJob extends ClientJob {
-  DeleteUserJob({
-    required this.user,
-    super.status,
-    super.message,
-    super.id,
-  }) : super(title: '${"jobs.delete_user".tr()} ${user.login}');
+  DeleteUserJob({required this.user, super.status, super.message, super.id})
+    : super(title: '${"jobs.delete_user".tr()} ${user.login}');
 
   final User user;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+  bool canAddTo(final List<ClientJob> jobs) =>
+      !jobs.any(
         (final job) => job is DeleteUserJob && job.user.login == user.login,
       );
 
@@ -172,13 +139,7 @@ class DeleteUserJob extends ClientJob {
   DeleteUserJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      DeleteUserJob(
-        user: user,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => DeleteUserJob(user: user, status: status, message: message, id: id);
 }
 
 class ServiceToggleJob extends ClientJob {
@@ -189,24 +150,26 @@ class ServiceToggleJob extends ClientJob {
     super.message,
     super.id,
   }) : super(
-          title:
-              '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${service.displayName}',
-          requiresDnsUpdate: true,
-        );
+         title:
+             '${needToTurnOn ? "jobs.service_turn_on".tr() : "jobs.service_turn_off".tr()} ${service.displayName}',
+         requiresDnsUpdate: true,
+       );
 
   final bool needToTurnOn;
   final Service service;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+  bool canAddTo(final List<ClientJob> jobs) =>
+      !jobs.any(
         (final job) => job is ServiceToggleJob && job.service.id == service.id,
       );
 
   @override
   Future<(bool, String)> execute() async {
-    final result = await getIt<ApiConnectionRepository>()
-        .api
-        .switchService(service.id, needToTurnOn);
+    final result = await getIt<ApiConnectionRepository>().api.switchService(
+      service.id,
+      needToTurnOn,
+    );
     return (result.success, result.message ?? 'jobs.generic_error'.tr());
   }
 
@@ -217,14 +180,13 @@ class ServiceToggleJob extends ClientJob {
   ServiceToggleJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      ServiceToggleJob(
-        service: service,
-        needToTurnOn: needToTurnOn,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => ServiceToggleJob(
+    service: service,
+    needToTurnOn: needToTurnOn,
+    status: status,
+    message: message,
+    id: id,
+  );
 }
 
 class CreateSSHKeyJob extends ClientJob {
@@ -250,14 +212,13 @@ class CreateSSHKeyJob extends ClientJob {
   CreateSSHKeyJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      CreateSSHKeyJob(
-        user: user,
-        publicKey: publicKey,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => CreateSSHKeyJob(
+    user: user,
+    publicKey: publicKey,
+    status: status,
+    message: message,
+    id: id,
+  );
 }
 
 class DeleteSSHKeyJob extends ClientJob {
@@ -273,7 +234,8 @@ class DeleteSSHKeyJob extends ClientJob {
   final String publicKey;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+  bool canAddTo(final List<ClientJob> jobs) =>
+      !jobs.any(
         (final job) =>
             job is DeleteSSHKeyJob &&
             job.publicKey == publicKey &&
@@ -291,14 +253,13 @@ class DeleteSSHKeyJob extends ClientJob {
   DeleteSSHKeyJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      DeleteSSHKeyJob(
-        user: user,
-        publicKey: publicKey,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => DeleteSSHKeyJob(
+    user: user,
+    publicKey: publicKey,
+    status: status,
+    message: message,
+    id: id,
+  );
 }
 
 abstract class ReplaceableJob extends ClientJob {
@@ -333,11 +294,12 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    final currentSettings = getIt<ApiConnectionRepository>()
-        .apiData
-        .settings
-        .data
-        ?.autoUpgradeSettings;
+    final currentSettings =
+        getIt<ApiConnectionRepository>()
+            .apiData
+            .settings
+            .data
+            ?.autoUpgradeSettings;
     if (currentSettings == null) {
       return false;
     }
@@ -352,14 +314,13 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
   ChangeAutoUpgradeSettingsJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      ChangeAutoUpgradeSettingsJob(
-        enable: enable,
-        allowReboot: allowReboot,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => ChangeAutoUpgradeSettingsJob(
+    enable: enable,
+    allowReboot: allowReboot,
+    status: status,
+    message: message,
+    id: id,
+  );
 }
 
 class ChangeServerTimezoneJob extends ReplaceableJob {
@@ -393,13 +354,12 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
   ChangeServerTimezoneJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      ChangeServerTimezoneJob(
-        timezone: timezone,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => ChangeServerTimezoneJob(
+    timezone: timezone,
+    status: status,
+    message: message,
+    id: id,
+  );
 }
 
 class ChangeSshSettingsJob extends ReplaceableJob {
@@ -433,13 +393,12 @@ class ChangeSshSettingsJob extends ReplaceableJob {
   ChangeSshSettingsJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      ChangeSshSettingsJob(
-        enable: enable,
-        status: status,
-        message: message,
-        id: id,
-      );
+  }) => ChangeSshSettingsJob(
+    enable: enable,
+    status: status,
+    message: message,
+    id: id,
+  );
 }
 
 class ChangeServiceConfiguration extends ReplaceableJob {
@@ -450,11 +409,11 @@ class ChangeServiceConfiguration extends ReplaceableJob {
     super.status,
     super.message,
   }) : super(
-          title: 'jobs.change_service_settings'.tr(args: [serviceDisplayName]),
-          id: 'change_settings_$serviceId',
-          requiresDnsUpdate: true,
-          requiresRebuild: true,
-        );
+         title: 'jobs.change_service_settings'.tr(args: [serviceDisplayName]),
+         id: 'change_settings_$serviceId',
+         requiresDnsUpdate: true,
+         requiresRebuild: true,
+       );
 
   final String serviceId;
   final String serviceDisplayName;
@@ -474,12 +433,11 @@ class ChangeServiceConfiguration extends ReplaceableJob {
   ChangeServiceConfiguration copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
-  }) =>
-      ChangeServiceConfiguration(
-        serviceId: serviceId,
-        serviceDisplayName: serviceDisplayName,
-        settings: settings,
-        status: status,
-        message: message,
-      );
+  }) => ChangeServiceConfiguration(
+    serviceId: serviceId,
+    serviceDisplayName: serviceDisplayName,
+    settings: settings,
+    status: status,
+    message: message,
+  );
 }

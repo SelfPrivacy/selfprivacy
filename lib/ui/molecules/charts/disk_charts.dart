@@ -10,9 +10,7 @@ class DiskChart extends GenericLineChart {
     required super.period,
     required super.start,
     super.key,
-  }) : super(
-          data: diskData.map((final e) => e.diskData).toList(),
-        );
+  }) : super(data: diskData.map((final e) => e.diskData).toList());
 
   final List<DiskGraphData> diskData;
 
@@ -21,9 +19,7 @@ class DiskChart extends GenericLineChart {
     final buffer = StringBuffer();
     buffer.write(
       'resource_chart.disk_chart_screen_reader_explanation.beginning'.tr(
-        namedArgs: {
-          'period': 'resource_chart.${period.name}'.tr(),
-        },
+        namedArgs: {'period': 'resource_chart.${period.name}'.tr()},
       ),
     );
 
@@ -54,12 +50,11 @@ class DiskChart extends GenericLineChart {
     required final double value,
     required final LineBarSpot spot,
     required final BuildContext context,
-  }) =>
-      LineTooltipItem(
-        '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${diskData[spot.barIndex].volume.displayName} ${value.toInt()}%',
-        TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.bold,
-        ),
-      );
+  }) => LineTooltipItem(
+    '${timeShown ? '' : DateFormat('HH:mm dd.MM.yyyy').format(date)} ${diskData[spot.barIndex].volume.displayName} ${value.toInt()}%',
+    TextStyle(
+      color: Theme.of(context).colorScheme.onSurface,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 }

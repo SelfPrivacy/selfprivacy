@@ -4,14 +4,14 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/logs.graphql.dart
 
 class ServerLogEntry extends Equatable {
   ServerLogEntry.fromGraphQL(final Fragment$LogEntry log)
-      : this(
-          message: log.message,
-          cursor: log.cursor,
-          priority: log.priority,
-          systemdSlice: log.systemdSlice,
-          systemdUnit: log.systemdUnit,
-          timestamp: log.timestamp,
-        );
+    : this(
+        message: log.message,
+        cursor: log.cursor,
+        priority: log.priority,
+        systemdSlice: log.systemdSlice,
+        systemdUnit: log.systemdUnit,
+        timestamp: log.timestamp,
+      );
 
   const ServerLogEntry({
     required this.message,
@@ -38,33 +38,24 @@ class ServerLogEntry extends Equatable {
 
   @override
   List<Object?> get props => [
-        message,
-        cursor,
-        priority,
-        systemdSlice,
-        systemdUnit,
-        timestamp,
-      ];
+    message,
+    cursor,
+    priority,
+    systemdSlice,
+    systemdUnit,
+    timestamp,
+  ];
 }
 
 class ServerLogsPageMeta extends Equatable {
   ServerLogsPageMeta.fromGraphQL(final Query$Logs$logs$paginated$pageMeta meta)
-      : this(
-          downCursor: meta.downCursor,
-          upCursor: meta.upCursor,
-        );
+    : this(downCursor: meta.downCursor, upCursor: meta.upCursor);
 
-  const ServerLogsPageMeta({
-    required this.downCursor,
-    required this.upCursor,
-  });
+  const ServerLogsPageMeta({required this.downCursor, required this.upCursor});
 
   final String? downCursor;
   final String? upCursor;
 
   @override
-  List<Object?> get props => [
-        downCursor,
-        upCursor,
-      ];
+  List<Object?> get props => [downCursor, upCursor];
 }

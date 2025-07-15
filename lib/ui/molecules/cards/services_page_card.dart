@@ -18,8 +18,9 @@ class ServicesPageCard extends StatelessWidget {
   final Service service;
   @override
   Widget build(final BuildContext context) {
-    final isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
 
     final config = context.watch<ServerInstallationCubit>().state;
     final domainName = UiHelpers.getDomainName(config);
@@ -47,11 +48,10 @@ class ServicesPageCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
-        onTap: isReady
-            ? () => context.pushRoute(
-                  ServiceRoute(serviceId: service.id),
-                )
-            : null,
+        onTap:
+            isReady
+                ? () => context.pushRoute(ServiceRoute(serviceId: service.id))
+                : null,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -60,23 +60,24 @@ class ServicesPageCard extends StatelessWidget {
               Row(
                 children: [
                   Skeleton.leaf(
-                    child: service.svgIcon == ''
-                        ? const Icon(
-                            Icons.question_mark_outlined,
-                            size: 32.0,
-                          )
-                        : IconStatusMask(
-                            status: getStatus(service.status),
-                            icon: SvgPicture.string(
-                              service.svgIcon,
-                              width: 32.0,
-                              height: 32.0,
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
+                    child:
+                        service.svgIcon == ''
+                            ? const Icon(
+                              Icons.question_mark_outlined,
+                              size: 32.0,
+                            )
+                            : IconStatusMask(
+                              status: getStatus(service.status),
+                              icon: SvgPicture.string(
+                                service.svgIcon,
+                                width: 32.0,
+                                height: 32.0,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
-                          ),
                   ),
                   const Gap(8),
                   Expanded(
@@ -96,18 +97,14 @@ class ServicesPageCard extends StatelessWidget {
                       service.isEnabled)
                     Column(
                       children: [
-                        _ServiceLink(
-                          url: service.url ?? '',
-                        ),
+                        _ServiceLink(url: service.url ?? ''),
                         const SizedBox(height: 8),
                       ],
                     ),
                   if (service.id == 'simple-nixos-mailserver')
                     Column(
                       children: [
-                        _ServiceLink(
-                          url: 'https://api.$domainName/user',
-                        ),
+                        _ServiceLink(url: 'https://api.$domainName/user'),
                         const SizedBox(height: 8),
                       ],
                     ),
@@ -120,8 +117,8 @@ class ServicesPageCard extends StatelessWidget {
                     Text(
                       service.loginInfo,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ],
                   const SizedBox(height: 8),
@@ -148,22 +145,18 @@ class ServicesPageCard extends StatelessWidget {
 }
 
 class _ServiceLink extends StatelessWidget {
-  const _ServiceLink({
-    required this.url,
-  });
+  const _ServiceLink({required this.url});
 
   final String url;
   @override
   Widget build(final BuildContext context) => GestureDetector(
-        onTap: () => launchURL(
-          url,
-        ),
-        child: Text(
-          url,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                decoration: TextDecoration.underline,
-              ),
-        ),
-      );
+    onTap: () => launchURL(url),
+    child: Text(
+      url,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        color: Theme.of(context).colorScheme.primary,
+        decoration: TextDecoration.underline,
+      ),
+    ),
+  );
 }

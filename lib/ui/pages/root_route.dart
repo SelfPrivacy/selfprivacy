@@ -29,8 +29,9 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
 
     return AutoRouter(
       builder: (final context, final child) {

@@ -22,8 +22,9 @@ class UsersPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
     Widget child;
 
     if (!isReady) {
@@ -40,10 +41,13 @@ class UsersPage extends StatelessWidget {
               context.watch<OutdatedServerCheckerBloc>().state;
 
           final users = state.orderedUsers;
-          final isLoading = users.isEmpty &&
+          final isLoading =
+              users.isEmpty &&
               (state is UsersRefreshing || state is UsersInitial);
-          final fakeUsers =
-              List.generate(7, (final int index) => const User.fake());
+          final fakeUsers = List.generate(
+            7,
+            (final int index) => const User.fake(),
+          );
           if (users.isEmpty && !isLoading) {
             return const _UsersNotLoaded();
           }
@@ -78,10 +82,7 @@ class UsersPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            Icons.person_add_outlined,
-                            size: 18.0,
-                          ),
+                          const Icon(Icons.person_add_outlined, size: 18.0),
                           const SizedBox(width: 8),
                           Text('users.new_user'.tr()),
                         ],
@@ -99,15 +100,17 @@ class UsersPage extends StatelessWidget {
                     itemBuilder:
                         (final BuildContext context, final int index) =>
                             Skeletonizer(
-                      enabled: isLoading,
-                      enableSwitchAnimation: true,
-                      child: UserListItem(
-                        user: isLoading ? fakeUsers[index] : users[index],
-                        isPrimaryUser: isLoading
-                            ? index == 0
-                            : users[index].type == UserType.primary,
-                      ),
-                    ),
+                              enabled: isLoading,
+                              enableSwitchAnimation: true,
+                              child: UserListItem(
+                                user:
+                                    isLoading ? fakeUsers[index] : users[index],
+                                isPrimaryUser:
+                                    isLoading
+                                        ? index == 0
+                                        : users[index].type == UserType.primary,
+                              ),
+                            ),
                   ),
                 ),
               ],
@@ -118,11 +121,10 @@ class UsersPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: Breakpoints.small.isActive(context)
-          ? BrandHeader(
-              title: 'basis.users'.tr(),
-            )
-          : null,
+      appBar:
+          Breakpoints.small.isActive(context)
+              ? BrandHeader(title: 'basis.users'.tr())
+              : null,
       body: child,
     );
   }
@@ -133,30 +135,30 @@ class _UsersNotLoaded extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => RefreshIndicator(
-        onRefresh: () async {
-          await context.read<UsersBloc>().refresh();
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                EmptyPagePlaceholder(
-                  title: 'users.could_not_fetch_users'.tr(),
-                  description: 'users.could_not_fetch_description'.tr(),
-                  iconData: BrandIcons.users,
-                ),
-                const SizedBox(height: 16),
-                BrandOutlinedButton(
-                  onPressed: () {
-                    context.read<UsersBloc>().refresh();
-                  },
-                  title: 'users.refresh_users'.tr(),
-                ),
-              ],
+    onRefresh: () async {
+      await context.read<UsersBloc>().refresh();
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            EmptyPagePlaceholder(
+              title: 'users.could_not_fetch_users'.tr(),
+              description: 'users.could_not_fetch_description'.tr(),
+              iconData: BrandIcons.users,
             ),
-          ),
+            const SizedBox(height: 16),
+            BrandOutlinedButton(
+              onPressed: () {
+                context.read<UsersBloc>().refresh();
+              },
+              title: 'users.refresh_users'.tr(),
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

@@ -6,11 +6,7 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 class BrandFab extends StatefulWidget {
-  const BrandFab({
-    this.extended = false,
-    this.elevation,
-    super.key,
-  });
+  const BrandFab({this.extended = false, this.elevation, super.key});
 
   final bool extended;
   final double? elevation;
@@ -79,21 +75,12 @@ class _BrandFabState extends State<BrandFab>
                     v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
                 return Transform.scale(
                   scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
-                  child: Icon(
-                    icon,
-                    color: _colorTween.value,
-                  ),
+                  child: Icon(icon, color: _colorTween.value),
                 );
               },
             ),
-            if (widget.extended)
-              const SizedBox(
-                width: 8,
-              ),
-            if (widget.extended)
-              Text(
-                'jobs.title'.tr(),
-              ),
+            if (widget.extended) const SizedBox(width: 8),
+            if (widget.extended) Text('jobs.title'.tr()),
           ],
         ),
       ),

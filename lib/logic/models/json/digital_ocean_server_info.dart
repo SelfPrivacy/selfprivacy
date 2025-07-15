@@ -29,10 +29,7 @@ class DigitalOceanVolume {
 
 @JsonSerializable()
 class DigitalOceanLocation {
-  DigitalOceanLocation(
-    this.slug,
-    this.name,
-  );
+  DigitalOceanLocation(this.slug, this.name);
 
   final String slug;
   final String name;

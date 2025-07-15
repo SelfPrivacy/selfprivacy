@@ -8,7 +8,7 @@ part of 'user.dart';
 
 class UserAdapter extends TypeAdapter<User> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   User read(BinaryReader reader) {
@@ -73,7 +73,7 @@ class UserAdapter extends TypeAdapter<User> {
 
 class UserTypeAdapter extends TypeAdapter<UserType> {
   @override
-  final int typeId = 102;
+  final typeId = 102;
 
   @override
   UserType read(BinaryReader reader) {
@@ -94,13 +94,10 @@ class UserTypeAdapter extends TypeAdapter<UserType> {
     switch (obj) {
       case UserType.root:
         writer.writeByte(0);
-        break;
       case UserType.primary:
         writer.writeByte(1);
-        break;
       case UserType.normal:
         writer.writeByte(2);
-        break;
     }
   }
 

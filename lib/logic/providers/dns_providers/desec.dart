@@ -6,29 +6,18 @@ import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 class ApiAdapter {
   ApiAdapter({final bool isWithToken = true, final String? token})
-      : _api = DesecApi(
-          isWithToken: isWithToken,
-          token: token ?? '',
-        );
+    : _api = DesecApi(isWithToken: isWithToken, token: token ?? '');
 
-  DesecApi api({final bool getInitialized = true}) => getInitialized
-      ? _api
-      : DesecApi(
-          isWithToken: false,
-        );
+  DesecApi api({final bool getInitialized = true}) =>
+      getInitialized ? _api : DesecApi(isWithToken: false);
 
   final DesecApi _api;
 }
 
 class DesecDnsProvider extends DnsProvider {
   DesecDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DesecDnsProvider.load(
-    final bool isAuthorized,
-    final String? token,
-  ) : _adapter = ApiAdapter(
-          isWithToken: isAuthorized,
-          token: token,
-        );
+  DesecDnsProvider.load(final bool isAuthorized, final String? token)
+    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
 
@@ -64,16 +53,12 @@ class DesecDnsProvider extends DnsProvider {
       );
     }
 
-    domains = result.data
-        .map<ServerDomain>(
-          (final el) => el.toServerDomain(),
-        )
-        .toList();
+    domains =
+        result.data
+            .map<ServerDomain>((final el) => el.toServerDomain())
+            .toList();
 
-    return GenericResult(
-      success: true,
-      data: domains,
-    );
+    return GenericResult(success: true, data: domains);
   }
 
   @override
@@ -87,9 +72,9 @@ class DesecDnsProvider extends DnsProvider {
     }
 
     return _adapter.api().createMultipleDnsRecords(
-          domainName: domain.domainName,
-          records: bulkRecords,
-        );
+      domainName: domain.domainName,
+      records: bulkRecords,
+    );
   }
 
   @override
@@ -117,9 +102,9 @@ class DesecDnsProvider extends DnsProvider {
     }
 
     return _adapter.api().putRecords(
-          domainName: domain.domainName,
-          records: bulkRecords,
-        );
+      domainName: domain.domainName,
+      records: bulkRecords,
+    );
   }
 
   @override
@@ -138,9 +123,9 @@ class DesecDnsProvider extends DnsProvider {
     }
 
     return _adapter.api().putRecords(
-          domainName: domain.domainName,
-          records: bulkRecords,
-        );
+      domainName: domain.domainName,
+      records: bulkRecords,
+    );
   }
 
   @override
@@ -184,9 +169,6 @@ class DesecDnsProvider extends DnsProvider {
       records: [DesecDnsRecord.fromDnsRecord(record, domain.domainName)],
     );
 
-    return GenericResult(
-      success: result.success,
-      data: null,
-    );
+    return GenericResult(success: result.success, data: null);
   }
 }

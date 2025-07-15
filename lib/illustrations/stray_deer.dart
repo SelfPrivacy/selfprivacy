@@ -14,8 +14,9 @@ class StrayDeerPainter extends CustomPainter {
     final Color deerTracks = Color(colorPalette.tertiary.get(70));
     final Color mailBag = Color(colorPalette.tertiary.get(80));
     final Color contourColor = Color(colorPalette.tertiary.get(10));
-    final Color deerSkin =
-        const Color(0xffe0ac9c).harmonizeWith(colorScheme.primary);
+    final Color deerSkin = const Color(
+      0xffe0ac9c,
+    ).harmonizeWith(colorScheme.primary);
 
     final Path path0 = Path();
     path0.moveTo(size.width * 0.6099773, size.height * 0.6719577);
@@ -1667,9 +1668,10 @@ class StrayDeerPainter extends CustomPainter {
     path0.lineTo(size.width * 0.6749811, size.height * 0.8866213);
     path0.close();
 
-    final Paint paint0Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint0Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint0Stroke.color = deerTracks.withOpacity(1);
     paint0Stroke.strokeCap = StrokeCap.round;
     paint0Stroke.strokeJoin = StrokeJoin.round;
@@ -2055,9 +2057,10 @@ class StrayDeerPainter extends CustomPainter {
     );
     path3.lineTo(size.width * 0.3813303, size.height * 0.8136810);
 
-    final Paint paint3Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint3Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint3Stroke.color = deerTracks.withOpacity(1);
     paint3Stroke.strokeCap = StrokeCap.round;
     paint3Stroke.strokeJoin = StrokeJoin.round;
@@ -2076,9 +2079,10 @@ class StrayDeerPainter extends CustomPainter {
       clockwise: false,
     );
 
-    final Paint paint4Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint4Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint4Stroke.color = contourColor.withOpacity(1);
     paint4Stroke.strokeCap = StrokeCap.round;
     paint4Stroke.strokeJoin = StrokeJoin.round;
@@ -2151,9 +2155,10 @@ class StrayDeerPainter extends CustomPainter {
     );
     path5.lineTo(size.width * 0.3321995, size.height * 0.7014361);
 
-    final Paint paint5Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint5Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint5Stroke.color = contourColor.withOpacity(1);
     paint5Stroke.strokeCap = StrokeCap.round;
     paint5Stroke.strokeJoin = StrokeJoin.miter;
@@ -2226,9 +2231,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5521542,
     );
 
-    final Paint paint6Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint6Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint6Stroke.color = contourColor.withOpacity(1);
     paint6Stroke.strokeCap = StrokeCap.round;
     paint6Stroke.strokeJoin = StrokeJoin.miter;
@@ -2245,9 +2251,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5124717,
     );
 
-    final Paint paint7Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint7Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint7Stroke.color = contourColor.withOpacity(1);
     paint7Stroke.strokeCap = StrokeCap.round;
     paint7Stroke.strokeJoin = StrokeJoin.miter;
@@ -2307,9 +2314,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.4580499,
     );
 
-    final Paint paint8Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint8Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint8Stroke.color = contourColor.withOpacity(1);
     paint8Stroke.strokeCap = StrokeCap.round;
     paint8Stroke.strokeJoin = StrokeJoin.miter;
@@ -2350,9 +2358,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.4905518,
     );
 
-    final Paint paint9Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint9Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint9Stroke.color = contourColor.withOpacity(1);
     paint9Stroke.strokeCap = StrokeCap.round;
     paint9Stroke.strokeJoin = StrokeJoin.round;
@@ -2462,9 +2471,10 @@ class StrayDeerPainter extends CustomPainter {
     path10.moveTo(size.width * 0.4656085, size.height * 0.6855631);
     path10.lineTo(size.width * 0.4693878, size.height * 0.6817838);
 
-    final Paint paint10Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint10Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint10Stroke.color = contourColor.withOpacity(1);
     paint10Stroke.strokeCap = StrokeCap.round;
     paint10Stroke.strokeJoin = StrokeJoin.miter;
@@ -2494,8 +2504,10 @@ class StrayDeerPainter extends CustomPainter {
     path11.moveTo(size.width * 0.4882842, size.height * 0.6746032);
     path11.arcToPoint(
       Offset(size.width * 0.4606954, size.height * 0.5362812),
-      radius:
-          Radius.elliptical(size.width * 0.8752834, size.height * 0.8752834),
+      radius: Radius.elliptical(
+        size.width * 0.8752834,
+        size.height * 0.8752834,
+      ),
       rotation: 0,
       largeArc: false,
       clockwise: false,
@@ -2510,9 +2522,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.4686319,
     );
 
-    final Paint paint11Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint11Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint11Stroke.color = contourColor.withOpacity(1);
     paint11Stroke.strokeCap = StrokeCap.round;
     paint11Stroke.strokeJoin = StrokeJoin.miter;
@@ -2547,9 +2560,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5083144,
     );
 
-    final Paint paint12Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint12Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint12Stroke.color = contourColor.withOpacity(1);
     paint12Stroke.strokeCap = StrokeCap.round;
     paint12Stroke.strokeJoin = StrokeJoin.miter;
@@ -2609,9 +2623,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5884354,
     );
 
-    final Paint paint13Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint13Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint13Stroke.color = contourColor.withOpacity(1);
     paint13Stroke.strokeCap = StrokeCap.round;
     paint13Stroke.strokeJoin = StrokeJoin.round;
@@ -2654,9 +2669,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5687831,
     );
 
-    final Paint paint14Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint14Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint14Stroke.color = contourColor.withOpacity(1);
     paint14Stroke.strokeCap = StrokeCap.round;
     paint14Stroke.strokeJoin = StrokeJoin.round;
@@ -2708,9 +2724,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5170068,
     );
 
-    final Paint paint15Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint15Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint15Stroke.color = contourColor.withOpacity(1);
     paint15Stroke.strokeCap = StrokeCap.round;
     paint15Stroke.strokeJoin = StrokeJoin.round;
@@ -2747,9 +2764,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5102041,
     );
 
-    final Paint paint16Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint16Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint16Stroke.color = contourColor.withOpacity(1);
     paint16Stroke.strokeCap = StrokeCap.round;
     paint16Stroke.strokeJoin = StrokeJoin.round;
@@ -2766,9 +2784,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.5782313,
     );
 
-    final Paint paint17Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint17Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint17Stroke.color = contourColor.withOpacity(1);
     paint17Stroke.strokeCap = StrokeCap.round;
     paint17Stroke.strokeJoin = StrokeJoin.round;
@@ -2797,9 +2816,10 @@ class StrayDeerPainter extends CustomPainter {
       size.height * 0.4402872,
     );
 
-    final Paint paint18Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint18Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint18Stroke.color = contourColor.withOpacity(1);
     paint18Stroke.strokeCap = StrokeCap.round;
     paint18Stroke.strokeJoin = StrokeJoin.miter;
@@ -2876,9 +2896,10 @@ class StrayDeerPainter extends CustomPainter {
     );
     path19.lineTo(size.width * 0.1761149, size.height * 0.4387755);
 
-    final Paint paint19Stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.007558579;
+    final Paint paint19Stroke =
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.width * 0.007558579;
     paint19Stroke.color = contourColor.withOpacity(1);
     paint19Stroke.strokeCap = StrokeCap.round;
     paint19Stroke.strokeJoin = StrokeJoin.round;

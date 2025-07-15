@@ -17,9 +17,7 @@ import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 @RoutePage()
 class ServerStoragePage extends StatefulWidget {
-  const ServerStoragePage({
-    super.key,
-  });
+  const ServerStoragePage({super.key});
 
   @override
   State<ServerStoragePage> createState() => _ServerStoragePageState();
@@ -28,8 +26,9 @@ class ServerStoragePage extends StatefulWidget {
 class _ServerStoragePageState extends State<ServerStoragePage> {
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
 
     final DiskStatus diskStatus = context.watch<VolumesBloc>().state.diskStatus;
 
@@ -48,10 +47,8 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       hasFlashButton: true,
       children: [
         ...diskStatus.diskVolumes.map(
-          (final volume) => DiskConsumptionOverview(
-            volume: volume,
-            diskStatus: diskStatus,
-          ),
+          (final volume) =>
+              DiskConsumptionOverview(volume: volume, diskStatus: diskStatus),
         ),
         const Gap(8),
         Padding(
@@ -88,11 +85,13 @@ class DiskConsumptionOverview extends StatelessWidget {
         ServerStorageSection(
           volume: volume,
           diskStatus: diskStatus,
-          services: services
-              .where(
-                (final service) => service.storageUsage.volume == volume.name,
-              )
-              .toList(),
+          services:
+              services
+                  .where(
+                    (final service) =>
+                        service.storageUsage.volume == volume.name,
+                  )
+                  .toList(),
         ),
         const Gap(16),
         const Divider(),
@@ -116,43 +115,40 @@ class ServerStorageSection extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ServerStorageListItem(
-              volume: volume,
-            ),
-          ),
-          const Gap(16),
-          ...services.map(
-            (final service) => ServerConsumptionListTile(
-              service: service,
-              volume: volume,
-              onTap: () {
-                context.pushRoute(
-                  ServiceRoute(serviceId: service.id),
-                );
-              },
-            ),
-          ),
-          if (volume.isResizable) ...[
-            const Gap(16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: BrandOutlinedButton(
-                title: 'storage.extend_volume_button.title'.tr(),
-                onPressed: () => context.pushRoute(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ServerStorageListItem(volume: volume),
+      ),
+      const Gap(16),
+      ...services.map(
+        (final service) => ServerConsumptionListTile(
+          service: service,
+          volume: volume,
+          onTap: () {
+            context.pushRoute(ServiceRoute(serviceId: service.id));
+          },
+        ),
+      ),
+      if (volume.isResizable) ...[
+        const Gap(16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: BrandOutlinedButton(
+            title: 'storage.extend_volume_button.title'.tr(),
+            onPressed:
+                () => context.pushRoute(
                   ExtendingVolumeRoute(
                     diskVolumeToResize: volume,
                     diskStatus: diskStatus,
                   ),
                 ),
-              ),
-            ),
-          ],
-        ],
-      );
+          ),
+        ),
+      ],
+    ],
+  );
 }
 
 class ServerConsumptionListTile extends StatelessWidget {
@@ -169,29 +165,29 @@ class ServerConsumptionListTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: ConsumptionListItem(
-            title: service.displayName,
-            icon: SvgPicture.string(
-              service.svgIcon,
-              width: 22.0,
-              height: 24.0,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onSurface,
-                BlendMode.srcIn,
-              ),
-            ),
-            rightSideText: service.storageUsage.used.toString(),
-            percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
-            color: volume.root
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary,
-            backgroundColor:
-                Theme.of(context).colorScheme.surfaceContainerHighest,
-            dense: true,
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: ConsumptionListItem(
+        title: service.displayName,
+        icon: SvgPicture.string(
+          service.svgIcon,
+          width: 22.0,
+          height: 24.0,
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).colorScheme.onSurface,
+            BlendMode.srcIn,
           ),
         ),
-      );
+        rightSideText: service.storageUsage.used.toString(),
+        percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
+        color:
+            volume.root
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        dense: true,
+      ),
+    ),
+  );
 }

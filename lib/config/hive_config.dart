@@ -1,4 +1,4 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -47,11 +47,7 @@ class HiveConfig {
       Hive.registerAdapter(ServerInstallationWizardDataAdapter());
       log('successfully registered every adapter');
     } catch (error, stackTrace) {
-      log(
-        'error registering adapters',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      log('error registering adapters', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -74,14 +70,8 @@ class HiveConfig {
         BNames.serverInstallationBox,
         encryptionCipher: cipher,
       );
-      await Hive.openBox(
-        BNames.resourcesBox,
-        encryptionCipher: cipher,
-      );
-      await Hive.openBox(
-        BNames.wizardDataBox,
-        encryptionCipher: cipher,
-      );
+      await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
+      await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
       log('successfully decrypted boxes');
     } catch (error, stackTrace) {
       log(
@@ -101,11 +91,15 @@ class HiveConfig {
       final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
 
       // if it is an initial app launch, we do not need to perform any migrations
-      final savedVersion = localSettingsBox.isEmpty
-          ? version
-          // if box was initialized, but database version was not introduced in
-          // it yet, it means that we have initial value
-          : await localSettingsBox.get(BNames.databaseVersion, defaultValue: 1);
+      final savedVersion =
+          localSettingsBox.isEmpty
+              ? version
+              // if box was initialized, but database version was not introduced in
+              // it yet, it means that we have initial value
+              : await localSettingsBox.get(
+                BNames.databaseVersion,
+                defaultValue: 1,
+              );
 
       /// launch migrations based on version
       if (savedVersion < version) {
@@ -120,11 +114,7 @@ class HiveConfig {
       /// update saved version after successfull migrations
       await localSettingsBox.put(BNames.databaseVersion, version);
     } catch (error, stackTrace) {
-      log(
-        'error running db migrations',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      log('error running db migrations', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -135,85 +125,93 @@ class HiveConfig {
     if (resourcesBox.isEmpty) {
       final Box serverInstallationBox = Hive.box(BNames.serverInstallationBox);
 
-      final ServerHostingDetails? serverDetails =
-          serverInstallationBox.get(BNames.serverDetails);
+      final ServerHostingDetails? serverDetails = serverInstallationBox.get(
+        BNames.serverDetails,
+      );
 
       // move server provider config
 
       final ServerProviderType? serverProvider =
           serverInstallationBox.get(BNames.serverProvider) ??
-              serverDetails?.provider;
-      final String? serverProviderKey =
-          serverInstallationBox.get(BNames.hetznerKey);
+          serverDetails?.provider;
+      final String? serverProviderKey = serverInstallationBox.get(
+        BNames.hetznerKey,
+      );
 
       if (serverProviderKey != null && serverProvider.isSpecified) {
         final ServerProviderCredential serverProviderCredential =
             ServerProviderCredential(
-          tokenId: null,
-          token: serverProviderKey,
-          provider: serverProvider!,
-          associatedServerIds: [if (serverDetails != null) serverDetails.id],
-        );
+              tokenId: null,
+              token: serverProviderKey,
+              provider: serverProvider!,
+              associatedServerIds: [
+                if (serverDetails != null) serverDetails.id,
+              ],
+            );
 
-        await resourcesBox.put(
-          BNames.serverProviderTokens,
-          [serverProviderCredential],
-        );
+        await resourcesBox.put(BNames.serverProviderTokens, [
+          serverProviderCredential,
+        ]);
       }
 
-      final String? serverLocation =
-          serverInstallationBox.get(BNames.serverLocation);
-      final String? serverType =
-          serverInstallationBox.get(BNames.serverTypeIdentifier);
-      final ServerDomain? serverDomain =
-          serverInstallationBox.get(BNames.serverDomain);
+      final String? serverLocation = serverInstallationBox.get(
+        BNames.serverLocation,
+      );
+      final String? serverType = serverInstallationBox.get(
+        BNames.serverTypeIdentifier,
+      );
+      final ServerDomain? serverDomain = serverInstallationBox.get(
+        BNames.serverDomain,
+      );
 
       if (serverDetails != null && serverDomain != null) {
-        await resourcesBox.put(
-          BNames.servers,
-          [
-            Server(
-              domain: serverDomain,
-              hostingDetails: serverDetails.copyWith(
-                serverLocation: serverLocation,
-                serverType: serverType,
-              ),
+        await resourcesBox.put(BNames.servers, [
+          Server(
+            domain: serverDomain,
+            hostingDetails: serverDetails.copyWith(
+              serverLocation: serverLocation,
+              serverType: serverType,
             ),
-          ],
-        );
+          ),
+        ]);
       }
 
       // move dns config
-      final String? dnsProviderKey =
-          serverInstallationBox.get(BNames.cloudFlareKey);
+      final String? dnsProviderKey = serverInstallationBox.get(
+        BNames.cloudFlareKey,
+      );
       final DnsProviderType? dnsProvider =
           serverInstallationBox.get(BNames.dnsProvider) ??
-              serverDomain?.provider;
+          serverDomain?.provider;
 
       if (dnsProviderKey != null && dnsProvider.isSpecified) {
         final DnsProviderCredential dnsProviderCredential =
             DnsProviderCredential(
-          tokenId: null,
-          token: dnsProviderKey,
-          provider: dnsProvider!,
-          associatedDomainNames: [
-            if (serverDomain != null) serverDomain.domainName,
-          ],
-        );
+              tokenId: null,
+              token: dnsProviderKey,
+              provider: dnsProvider!,
+              associatedDomainNames: [
+                if (serverDomain != null) serverDomain.domainName,
+              ],
+            );
 
-        await resourcesBox
-            .put(BNames.dnsProviderTokens, [dnsProviderCredential]);
+        await resourcesBox.put(BNames.dnsProviderTokens, [
+          dnsProviderCredential,
+        ]);
       }
 
       // move backblaze (backups) config
-      final BackupsCredential? backblazeCredential =
-          serverInstallationBox.get(BNames.backblazeCredential);
-      final BackblazeBucket? backblazeBucket =
-          serverInstallationBox.get(BNames.backblazeBucket);
+      final BackupsCredential? backblazeCredential = serverInstallationBox.get(
+        BNames.backblazeCredential,
+      );
+      final BackblazeBucket? backblazeBucket = serverInstallationBox.get(
+        BNames.backblazeBucket,
+      );
 
       if (backblazeCredential != null) {
-        await resourcesBox
-            .put(BNames.backupsProviderTokens, [backblazeCredential]);
+        await resourcesBox.put(BNames.backupsProviderTokens, [
+          backblazeCredential,
+        ]);
       }
 
       if (backblazeBucket != null) {

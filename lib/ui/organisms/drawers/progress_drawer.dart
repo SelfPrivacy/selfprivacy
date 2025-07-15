@@ -22,50 +22,50 @@ class ProgressDrawer extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => SizedBox(
-        width: 300,
-        height: constraints.maxHeight,
-        child: Drawer(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ...steps.map((final step) {
-                            final index = steps.indexOf(step);
-                            return _StepIndicator(
-                              title: step.tr(),
-                              isCurrent: index == currentStep,
-                              isCompleted: index < currentStep,
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: trailing,
-                  ),
-                ],
+    width: 300,
+    height: constraints.maxHeight,
+    child: Drawer(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8.0, 8.0),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
               ),
-            ),
+              Flexible(
+                fit: FlexFit.tight,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...steps.map((final step) {
+                        final index = steps.indexOf(step);
+                        return _StepIndicator(
+                          title: step.tr(),
+                          isCurrent: index == currentStep,
+                          isCompleted: index < currentStep,
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+              // const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: trailing,
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _StepIndicator extends StatelessWidget {
@@ -81,18 +81,17 @@ class _StepIndicator extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-        selected: isCurrent,
-        leading: isCurrent
+    selected: isCurrent,
+    leading:
+        isCurrent
             ? const _StepCurrentIcon()
             : isCompleted
-                ? const _StepCompletedIcon()
-                : const _StepPendingIcon(),
-        title: Text(
-          title,
-        ),
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
-      );
+            ? const _StepCompletedIcon()
+            : const _StepPendingIcon(),
+    title: Text(title),
+    textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+    iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+  );
 }
 
 class _StepCompletedIcon extends StatelessWidget {

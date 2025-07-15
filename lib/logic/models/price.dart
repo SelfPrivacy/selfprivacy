@@ -1,18 +1,11 @@
 class Price {
-  Price({
-    required this.value,
-    required this.currency,
-  });
+  Price({required this.value, required this.currency});
 
   final double value;
   final Currency currency;
 }
 
-enum CurrencyType {
-  eur,
-  usd,
-  unknown,
-}
+enum CurrencyType { eur, usd, unknown }
 
 class Currency {
   Currency({
@@ -55,10 +48,7 @@ class Currency {
 }
 
 class AdditionalPricing {
-  AdditionalPricing({
-    required this.perVolumeGb,
-    required this.perPublicIpv4,
-  });
+  AdditionalPricing({required this.perVolumeGb, required this.perPublicIpv4});
   final Price perVolumeGb;
   final Price perPublicIpv4;
 }

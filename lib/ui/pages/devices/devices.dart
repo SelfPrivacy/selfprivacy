@@ -43,9 +43,7 @@ class _DevicesPageState extends State<DevicesPage> {
             ),
           ],
           if (devicesStatus is! DevicesInitial) ...[
-            _DevicesInfo(
-              devicesStatus: devicesStatus,
-            ),
+            _DevicesInfo(devicesStatus: devicesStatus),
             const SizedBox(height: 16),
             OutlinedButton(
               onPressed: () => context.pushRoute(const NewDeviceRoute()),
@@ -54,9 +52,7 @@ class _DevicesPageState extends State<DevicesPage> {
             const SizedBox(height: 16),
             const Divider(height: 1),
             const SizedBox(height: 16),
-            InfoBox(
-              text: 'devices.main_screen.tip'.tr(),
-            ),
+            InfoBox(text: 'devices.main_screen.tip'.tr()),
           ],
           const SizedBox(height: 24),
         ],
@@ -66,56 +62,44 @@ class _DevicesPageState extends State<DevicesPage> {
 }
 
 class _DevicesInfo extends StatelessWidget {
-  const _DevicesInfo({
-    required this.devicesStatus,
-  });
+  const _DevicesInfo({required this.devicesStatus});
 
   final DevicesState devicesStatus;
 
   @override
   Widget build(final BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionTitle(
-            title: 'devices.main_screen.this_device'.tr(),
-          ),
-          Skeletonizer(
-            enabled:
-                devicesStatus.thisDevice == FakeSelfPrivacyData.thisDeviceToken,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SectionTitle(title: 'devices.main_screen.this_device'.tr()),
+      Skeletonizer(
+        enabled:
+            devicesStatus.thisDevice == FakeSelfPrivacyData.thisDeviceToken,
+        enableSwitchAnimation: true,
+        child: DeviceItem(device: devicesStatus.thisDevice),
+      ),
+      const SizedBox(height: 8),
+      const Divider(height: 1),
+      const SizedBox(height: 8),
+      SectionTitle(title: 'devices.main_screen.other_devices'.tr()),
+      if (devicesStatus is DevicesDeleting) ...[
+        const Center(
+          heightFactor: 4,
+          child: CircularProgressIndicator.adaptive(),
+        ),
+      ],
+      if (!devicesStatus.isLoaded)
+        ...List.generate(
+          3,
+          (final index) => Skeletonizer(
+            enabled: true,
             enableSwitchAnimation: true,
-            child: DeviceItem(
-              device: devicesStatus.thisDevice,
-            ),
+            child: DeviceItem(device: FakeSelfPrivacyData.otherDeviceToken),
           ),
-          const SizedBox(height: 8),
-          const Divider(height: 1),
-          const SizedBox(height: 8),
-          SectionTitle(
-            title: 'devices.main_screen.other_devices'.tr(),
-          ),
-          if (devicesStatus is DevicesDeleting) ...[
-            const Center(
-              heightFactor: 4,
-              child: CircularProgressIndicator.adaptive(),
-            ),
-          ],
-          if (!devicesStatus.isLoaded)
-            ...List.generate(
-              3,
-              (final index) => Skeletonizer(
-                enabled: true,
-                enableSwitchAnimation: true,
-                child: DeviceItem(
-                  device: FakeSelfPrivacyData.otherDeviceToken,
-                ),
-              ),
-            ),
-          if (devicesStatus is! DevicesDeleting && devicesStatus.isLoaded)
-            ...devicesStatus.otherDevices.map(
-              (final device) => DeviceItem(
-                device: device,
-              ),
-            ),
-        ],
-      );
+        ),
+      if (devicesStatus is! DevicesDeleting && devicesStatus.isLoaded)
+        ...devicesStatus.otherDevices.map(
+          (final device) => DeviceItem(device: device),
+        ),
+    ],
+  );
 }

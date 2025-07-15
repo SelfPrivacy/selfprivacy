@@ -16,18 +16,17 @@ class DiskVolume {
     final ServerDiskVolume volume,
     final ServerProviderVolume? providerVolume,
   ) : this(
-          name: volume.name,
-          sizeTotal: DiskSize(
-            byte:
-                volume.totalSpace == 'None' ? 0 : int.parse(volume.totalSpace),
-          ),
-          sizeUsed: DiskSize(
-            byte: volume.usedSpace == 'None' ? 0 : int.parse(volume.usedSpace),
-          ),
-          root: volume.root,
-          isResizable: providerVolume != null,
-          providerVolume: providerVolume,
-        );
+        name: volume.name,
+        sizeTotal: DiskSize(
+          byte: volume.totalSpace == 'None' ? 0 : int.parse(volume.totalSpace),
+        ),
+        sizeUsed: DiskSize(
+          byte: volume.usedSpace == 'None' ? 0 : int.parse(volume.usedSpace),
+        ),
+        root: volume.root,
+        isResizable: providerVolume != null,
+        providerVolume: providerVolume,
+      );
 
   /// Get the display name of the volume
   ///
@@ -65,15 +64,14 @@ class DiskVolume {
     final bool? isResizable,
     final ServerDiskVolume? serverDiskVolume,
     final ServerProviderVolume? providerVolume,
-  }) =>
-      DiskVolume(
-        sizeUsed: sizeUsed ?? this.sizeUsed,
-        sizeTotal: sizeTotal ?? this.sizeTotal,
-        name: name ?? this.name,
-        root: root ?? this.root,
-        isResizable: isResizable ?? this.isResizable,
-        providerVolume: providerVolume ?? this.providerVolume,
-      );
+  }) => DiskVolume(
+    sizeUsed: sizeUsed ?? this.sizeUsed,
+    sizeTotal: sizeTotal ?? this.sizeTotal,
+    name: name ?? this.name,
+    root: root ?? this.root,
+    isResizable: isResizable ?? this.isResizable,
+    providerVolume: providerVolume ?? this.providerVolume,
+  );
 }
 
 class DiskStatus {
@@ -81,33 +79,34 @@ class DiskStatus {
     final List<ServerDiskVolume> serverVolumes,
     final List<ServerProviderVolume> providerVolumes,
   ) {
-    diskVolumes = serverVolumes.map((
-      final ServerDiskVolume volume,
-    ) {
-      ServerProviderVolume? providerVolume;
+    diskVolumes =
+        serverVolumes.map((final ServerDiskVolume volume) {
+          ServerProviderVolume? providerVolume;
 
-      for (final ServerProviderVolume iterableProviderVolume
-          in providerVolumes) {
-        if (iterableProviderVolume.linuxDevice == null ||
-            volume.model == null ||
-            volume.serial == null) {
-          continue;
-        }
+          for (final ServerProviderVolume iterableProviderVolume
+              in providerVolumes) {
+            if (iterableProviderVolume.linuxDevice == null ||
+                volume.model == null ||
+                volume.serial == null) {
+              continue;
+            }
 
-        final String deviceId =
-            iterableProviderVolume.linuxDevice!.split('/').last;
-        if (deviceId.contains(volume.model!) &&
-            deviceId.contains(volume.serial!)) {
-          providerVolume = iterableProviderVolume;
-          break;
-        }
-      }
+            final String deviceId =
+                iterableProviderVolume.linuxDevice!.split('/').last;
+            if (deviceId.contains(volume.model!) &&
+                deviceId.contains(volume.serial!)) {
+              providerVolume = iterableProviderVolume;
+              break;
+            }
+          }
 
-      final DiskVolume diskVolume =
-          DiskVolume.fromServerAndDiskVolume(volume, providerVolume);
+          final DiskVolume diskVolume = DiskVolume.fromServerAndDiskVolume(
+            volume,
+            providerVolume,
+          );
 
-      return diskVolume;
-    }).toList();
+          return diskVolume;
+        }).toList();
   }
   DiskStatus() {
     diskVolumes = [];

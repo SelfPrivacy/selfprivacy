@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 
 part 'email_password_metadata.g.dart';
@@ -17,12 +17,12 @@ class EmailPasswordMetadata extends Equatable {
   EmailPasswordMetadata.fromGraphQL(
     final Fragment$userFields$emailPasswordMetadata metadata,
   ) : this(
-          uuid: metadata.uuid,
-          displayName: metadata.displayName,
-          createdAt: metadata.createdAt,
-          expiresAt: metadata.expiresAt,
-          lastUsed: metadata.lastUsed,
-        );
+        uuid: metadata.uuid,
+        displayName: metadata.displayName,
+        createdAt: metadata.createdAt,
+        expiresAt: metadata.expiresAt,
+        lastUsed: metadata.lastUsed,
+      );
 
   @HiveField(0)
   final String uuid;
@@ -40,6 +40,11 @@ class EmailPasswordMetadata extends Equatable {
   final DateTime? lastUsed;
 
   @override
-  List<Object?> get props =>
-      [uuid, displayName, createdAt, expiresAt, lastUsed];
+  List<Object?> get props => [
+    uuid,
+    displayName,
+    createdAt,
+    expiresAt,
+    lastUsed,
+  ];
 }

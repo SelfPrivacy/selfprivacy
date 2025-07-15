@@ -11,25 +11,17 @@ class ProvidersController {
   static DnsProvider? get currentDnsProvider => _dnsProvider;
   static BackupsProvider? get currentBackupsProvider => _backupsProvider;
 
-  static void initServerProvider(
-    final ServerProviderSettings settings,
-  ) {
+  static void initServerProvider(final ServerProviderSettings settings) {
     _serverProvider = ServerProviderFactory.createServerProviderInterface(
       settings,
     );
   }
 
-  static void initDnsProvider(
-    final DnsProviderSettings settings,
-  ) {
-    _dnsProvider = DnsProviderFactory.createDnsProviderInterface(
-      settings,
-    );
+  static void initDnsProvider(final DnsProviderSettings settings) {
+    _dnsProvider = DnsProviderFactory.createDnsProviderInterface(settings);
   }
 
-  static void initBackupsProvider(
-    final BackupsProviderSettings settings,
-  ) {
+  static void initBackupsProvider(final BackupsProviderSettings settings) {
     _backupsProvider = BackupsProviderFactory.createBackupsProviderInterface(
       settings,
     );

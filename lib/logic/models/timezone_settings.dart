@@ -9,9 +9,7 @@ class TimeZoneSettings {
   TimeZoneSettings({this.timezone});
   final Location? timezone;
 
-  Map<String, dynamic> toJson() => {
-        'timezone': timezone?.name ?? 'Unknown',
-      };
+  Map<String, dynamic> toJson() => {'timezone': timezone?.name ?? 'Unknown'};
 
   @override
   String toString() => timezone?.name ?? 'Unknown';

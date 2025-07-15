@@ -14,13 +14,12 @@ class ApiToken extends Equatable {
     required this.isCaller,
   });
 
-  ApiToken.fromGraphQL(
-    final Query$GetApiTokens$api$devices device,
-  ) : this(
-          name: device.name,
-          date: device.creationDate,
-          isCaller: device.isCaller,
-        );
+  ApiToken.fromGraphQL(final Query$GetApiTokens$api$devices device)
+    : this(
+        name: device.name,
+        date: device.creationDate,
+        isCaller: device.isCaller,
+      );
 
   final String name;
   final DateTime date;

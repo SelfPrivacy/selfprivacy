@@ -90,11 +90,7 @@ mixin ServerActionsApi on GraphQLApiMap {
         );
       }
     } catch (e) {
-      return GenericResult(
-        success: false,
-        message: e.toString(),
-        data: null,
-      );
+      return GenericResult(success: false, message: e.toString(), data: null);
     }
   }
 
@@ -137,11 +133,7 @@ mixin ServerActionsApi on GraphQLApiMap {
       }
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        message: e.toString(),
-        data: null,
-      );
+      return GenericResult(success: false, message: e.toString(), data: null);
     }
   }
 
@@ -150,10 +142,7 @@ mixin ServerActionsApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       final result = await client.mutate$NixCollectGarbage();
       if (result.hasException) {
-        return GenericResult(
-          success: false,
-          data: null,
-        );
+        return GenericResult(success: false, data: null);
       } else if (result.parsedData!.system.nixCollectGarbage.success &&
           result.parsedData!.system.nixCollectGarbage.job != null) {
         return GenericResult(
@@ -171,11 +160,7 @@ mixin ServerActionsApi on GraphQLApiMap {
         );
       }
     } catch (e) {
-      return GenericResult(
-        success: false,
-        message: e.toString(),
-        data: null,
-      );
+      return GenericResult(success: false, message: e.toString(), data: null);
     }
   }
 }

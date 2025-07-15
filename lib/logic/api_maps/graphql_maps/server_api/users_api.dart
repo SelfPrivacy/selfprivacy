@@ -10,7 +10,8 @@ mixin UsersApi on GraphQLApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      users = response.parsedData?.users.allUsers
+      users =
+          response.parsedData?.users.allUsers
               .map<User>((final user) => User.fromGraphQL(user))
               .toList() ??
           [];
@@ -33,7 +34,8 @@ mixin UsersApi on GraphQLApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      groups = response.parsedData?.groups.allGroups
+      groups =
+          response.parsedData?.groups.allGroups
               .map<String>((final group) => group.name)
               .toList() ??
           [];
@@ -49,8 +51,9 @@ mixin UsersApi on GraphQLApiMap {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Query$GetUser(username: login);
-      response = await client
-          .query$GetUser(Options$Query$GetUser(variables: variables));
+      response = await client.query$GetUser(
+        Options$Query$GetUser(variables: variables),
+      );
       if (response.hasException) {
         print(response.exception.toString());
       }
@@ -84,9 +87,10 @@ mixin UsersApi on GraphQLApiMap {
         success: true,
         code: response.parsedData?.users.createUser.code ?? 500,
         message: response.parsedData?.users.createUser.message,
-        data: response.parsedData?.users.createUser.user != null
-            ? User.fromGraphQL(response.parsedData!.users.createUser.user!)
-            : null,
+        data:
+            response.parsedData?.users.createUser.user != null
+                ? User.fromGraphQL(response.parsedData!.users.createUser.user!)
+                : null,
       );
     } catch (e) {
       print(e);
@@ -119,9 +123,10 @@ mixin UsersApi on GraphQLApiMap {
         success: true,
         code: response.parsedData?.users.updateUser.code ?? 500,
         message: response.parsedData?.users.updateUser.message,
-        data: response.parsedData?.users.updateUser.user != null
-            ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
-            : null,
+        data:
+            response.parsedData?.users.updateUser.user != null
+                ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
+                : null,
       );
     } catch (e) {
       print(e);
@@ -134,9 +139,7 @@ mixin UsersApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<bool>> deleteUser(
-    final String username,
-  ) async {
+  Future<GenericResult<bool>> deleteUser(final String username) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$DeleteUser(username: username);
@@ -166,10 +169,7 @@ mixin UsersApi on GraphQLApiMap {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$AddSshKey(
-        sshInput: Input$SshMutationInput(
-          username: username,
-          sshKey: sshKey,
-        ),
+        sshInput: Input$SshMutationInput(username: username, sshKey: sshKey),
       );
       final mutation = Options$Mutation$AddSshKey(variables: variables);
       final response = await client.mutate$AddSshKey(mutation);
@@ -177,9 +177,10 @@ mixin UsersApi on GraphQLApiMap {
         success: true,
         code: response.parsedData?.users.addSshKey.code ?? 500,
         message: response.parsedData?.users.addSshKey.message,
-        data: response.parsedData?.users.addSshKey.user != null
-            ? User.fromGraphQL(response.parsedData!.users.addSshKey.user!)
-            : null,
+        data:
+            response.parsedData?.users.addSshKey.user != null
+                ? User.fromGraphQL(response.parsedData!.users.addSshKey.user!)
+                : null,
       );
     } catch (e) {
       print(e);
@@ -199,10 +200,7 @@ mixin UsersApi on GraphQLApiMap {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$RemoveSshKey(
-        sshInput: Input$SshMutationInput(
-          username: username,
-          sshKey: sshKey,
-        ),
+        sshInput: Input$SshMutationInput(username: username, sshKey: sshKey),
       );
       final mutation = Options$Mutation$RemoveSshKey(variables: variables);
       final response = await client.mutate$RemoveSshKey(mutation);
@@ -210,9 +208,12 @@ mixin UsersApi on GraphQLApiMap {
         success: response.parsedData?.users.removeSshKey.success ?? false,
         code: response.parsedData?.users.removeSshKey.code ?? 500,
         message: response.parsedData?.users.removeSshKey.message,
-        data: response.parsedData?.users.removeSshKey.user != null
-            ? User.fromGraphQL(response.parsedData!.users.removeSshKey.user!)
-            : null,
+        data:
+            response.parsedData?.users.removeSshKey.user != null
+                ? User.fromGraphQL(
+                  response.parsedData!.users.removeSshKey.user!,
+                )
+                : null,
       );
     } catch (e) {
       print(e);
@@ -236,9 +237,7 @@ mixin UsersApi on GraphQLApiMap {
       final mutation = Options$Mutation$GeneratePasswordResetLink(
         variables: variables,
       );
-      final response = await client.mutate$GeneratePasswordResetLink(
-        mutation,
-      );
+      final response = await client.mutate$GeneratePasswordResetLink(mutation);
       final parsed = response.parsedData?.users.generatePasswordResetLink;
       return GenericResult(
         success: parsed?.success ?? false,
@@ -270,11 +269,12 @@ mixin UsersApi on GraphQLApiMap {
       final mutation = Options$Mutation$DeleteEmailPassword(
         variables: variables,
       );
-      final response = await client.mutate$DeleteEmailPassword(
-        mutation,
-      );
-      final parsed = response
-          .parsedData?.emailPasswordMetadataMutations.deleteEmailPassword;
+      final response = await client.mutate$DeleteEmailPassword(mutation);
+      final parsed =
+          response
+              .parsedData
+              ?.emailPasswordMetadataMutations
+              .deleteEmailPassword;
       return GenericResult(
         success: parsed?.success ?? false,
         code: parsed?.code ?? 500,

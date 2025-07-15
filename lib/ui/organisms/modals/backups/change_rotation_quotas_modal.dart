@@ -7,10 +7,7 @@ import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/quota_selection_tile.dart';
 
 class ChangeRotationQuotasModal extends StatefulWidget {
-  const ChangeRotationQuotasModal({
-    required this.scrollController,
-    super.key,
-  });
+  const ChangeRotationQuotasModal({required this.scrollController, super.key});
 
   final ScrollController scrollController;
 
@@ -19,13 +16,7 @@ class ChangeRotationQuotasModal extends StatefulWidget {
       _ChangeRotationQuotasModalState();
 }
 
-enum QuotaUnits {
-  last,
-  daily,
-  weekly,
-  monthly,
-  yearly,
-}
+enum QuotaUnits { last, daily, weekly, monthly, yearly }
 
 class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
   AutobackupQuotas selectedQuotas = const AutobackupQuotas(
@@ -154,8 +145,10 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
         ),
         QuotaSelectionTile(
           title: 'backup.quota_titles.monthly'.tr(),
-          subtitle:
-              generateSubtitle(selectedQuotas.monthly, QuotaUnits.monthly),
+          subtitle: generateSubtitle(
+            selectedQuotas.monthly,
+            QuotaUnits.monthly,
+          ),
           value: selectedQuotas.monthly,
           min: 0,
           max: 24,
@@ -187,17 +180,16 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
         ),
         const SizedBox(height: 16),
         FilledButton(
-          onPressed: selectedQuotas == initialAutobackupQuotas
-              ? null
-              : () {
-                  context
-                      .read<BackupsBloc>()
-                      .add(SetAutobackupQuotas(selectedQuotas));
-                  Navigator.of(context).pop();
-                },
-          child: Text(
-            'backup.set_rotation_quotas'.tr(),
-          ),
+          onPressed:
+              selectedQuotas == initialAutobackupQuotas
+                  ? null
+                  : () {
+                    context.read<BackupsBloc>().add(
+                      SetAutobackupQuotas(selectedQuotas),
+                    );
+                    Navigator.of(context).pop();
+                  },
+          child: Text('backup.set_rotation_quotas'.tr()),
         ),
       ],
     );

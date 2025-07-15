@@ -35,16 +35,14 @@ class ServerTextDetailsCard extends StatelessWidget {
                   child: Text(
                     'server.general_information'.tr(),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
               if (!isLoading)
                 ...details.metadata.map(
-                  (final metadata) => _ServerTextDetailTile(
-                    metadata: metadata,
-                  ),
+                  (final metadata) => _ServerTextDetailTile(metadata: metadata),
                 ),
               if (isLoading || details.metadata.isEmpty)
                 ...List.generate(
@@ -62,34 +60,27 @@ class ServerTextDetailsCard extends StatelessWidget {
 }
 
 class _ServerTextDetailTile extends StatelessWidget {
-  const _ServerTextDetailTile({
-    required this.metadata,
-  });
+  const _ServerTextDetailTile({required this.metadata});
 
   final ServerMetadataEntity metadata;
 
   @override
   Widget build(final BuildContext context) => ListTileOnSurfaceVariant(
-        leadingIcon: metadata.type.icon,
-        title: metadata.trId.tr(),
-        subtitle: metadata.value,
-      );
+    leadingIcon: metadata.type.icon,
+    title: metadata.trId.tr(),
+    subtitle: metadata.value,
+  );
 }
 
 class _TempMessage extends StatelessWidget {
-  const _TempMessage({
-    required this.message,
-  });
+  const _TempMessage({required this.message});
 
   final String message;
   @override
   Widget build(final BuildContext context) => SizedBox(
-        height: 200,
-        child: Center(
-          child: Text(
-            message,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ),
-      );
+    height: 200,
+    child: Center(
+      child: Text(message, style: Theme.of(context).textTheme.bodyMedium),
+    ),
+  );
 }

@@ -8,7 +8,7 @@ part of 'server_domain.dart';
 
 class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
   @override
-  final int typeId = 3;
+  final typeId = 3;
 
   @override
   ServerDomain read(BinaryReader reader) {
@@ -18,9 +18,10 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
     };
     return ServerDomain(
       domainName: fields[0] as String,
-      provider: fields[2] == null
-          ? DnsProviderType.cloudflare
-          : fields[2] as DnsProviderType,
+      provider:
+          fields[2] == null
+              ? DnsProviderType.cloudflare
+              : fields[2] as DnsProviderType,
     );
   }
 
@@ -47,7 +48,7 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
 
 class DnsProviderTypeAdapter extends TypeAdapter<DnsProviderType> {
   @override
-  final int typeId = 100;
+  final typeId = 100;
 
   @override
   DnsProviderType read(BinaryReader reader) {
@@ -70,16 +71,12 @@ class DnsProviderTypeAdapter extends TypeAdapter<DnsProviderType> {
     switch (obj) {
       case DnsProviderType.unknown:
         writer.writeByte(0);
-        break;
       case DnsProviderType.cloudflare:
         writer.writeByte(1);
-        break;
       case DnsProviderType.desec:
         writer.writeByte(2);
-        break;
       case DnsProviderType.digitalOcean:
         writer.writeByte(3);
-        break;
     }
   }
 

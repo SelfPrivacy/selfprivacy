@@ -7,10 +7,7 @@ part 'desec_dns_info.g.dart';
 /// https://desec.readthedocs.io/en/latest/dns/domains.html#domain-management
 @JsonSerializable()
 class DesecDomain {
-  DesecDomain({
-    required this.name,
-    this.minimumTtl,
-  });
+  DesecDomain({required this.name, this.minimumTtl});
 
   factory DesecDomain.fromServerDomain(final ServerDomain serverDomain) =>
       _fromServerDomain(serverDomain);
@@ -44,8 +41,7 @@ class DesecDnsRecord {
   factory DesecDnsRecord.fromDnsRecord(
     final DnsRecord dnsRecord,
     final String domainName,
-  ) =>
-      _fromDnsRecord(dnsRecord, domainName);
+  ) => _fromDnsRecord(dnsRecord, domainName);
 
   /// Subdomain string which, together with domain, defines the RRset name.
   /// Typical examples are www or _443._tcp.

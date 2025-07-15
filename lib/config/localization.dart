@@ -2,10 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class Localization extends StatelessWidget {
-  const Localization({
-    required this.child,
-    super.key,
-  });
+  const Localization({required this.child, super.key});
 
   /// value for resetting locale in settings to system default
   static const systemLocale = Locale('system');
@@ -72,12 +69,12 @@ class Localization extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => EasyLocalization(
-        supportedLocales: supportedLocales,
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en'),
-        useFallbackTranslations: true,
-        saveLocale: false,
-        useOnlyLangCode: false,
-        child: child,
-      );
+    supportedLocales: supportedLocales,
+    path: 'assets/translations',
+    fallbackLocale: const Locale('en'),
+    useFallbackTranslations: true,
+    saveLocale: false,
+    useOnlyLangCode: false,
+    child: child,
+  );
 }

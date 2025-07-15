@@ -11,10 +11,12 @@ mixin JobsApi on GraphQLApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      jobsList = jobsList = response.parsedData?.jobs.getJobs
-              .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
-              .toList() ??
-          [];
+      jobsList =
+          jobsList =
+              response.parsedData?.jobs.getJobs
+                  .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
+                  .toList() ??
+              [];
     } catch (e) {
       print(e);
     }
@@ -30,7 +32,8 @@ mixin JobsApi on GraphQLApiMap {
     );
     final subscription = client.subscribe$JobUpdates();
     await for (final response in subscription) {
-      final jobsList = response.parsedData?.jobUpdates
+      final jobsList =
+          response.parsedData?.jobUpdates
               .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
               .toList() ??
           [];

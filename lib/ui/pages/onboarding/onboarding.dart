@@ -22,30 +22,27 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Future<void> scrollTo(final int targetView) => pageController.animateToPage(
-        targetView,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOutCubicEmphasized,
-      );
+    targetView,
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeInOutCubicEmphasized,
+  );
 
   @override
   Widget build(final BuildContext context) => Material(
-        child: PageView(
-          controller: pageController,
-          children: [
-            OnboardingFirstView(
-              onProceed: () => scrollTo(1),
-            ),
-            OnboardingSecondView(
-              onProceed: () {
-                InheritedAppController.of(context)
-                    .setShouldShowOnboarding(false);
-                context.router.replaceAll([
-                  const RootRoute(),
-                  const InitializingRoute(),
-                ]);
-              },
-            ),
-          ],
+    child: PageView(
+      controller: pageController,
+      children: [
+        OnboardingFirstView(onProceed: () => scrollTo(1)),
+        OnboardingSecondView(
+          onProceed: () {
+            InheritedAppController.of(context).setShouldShowOnboarding(false);
+            context.router.replaceAll([
+              const RootRoute(),
+              const InitializingRoute(),
+            ]);
+          },
         ),
-      );
+      ],
+    ),
+  );
 }

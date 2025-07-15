@@ -30,10 +30,11 @@ final class ServerLogsLoaded extends ServerLogsState {
   final String _lastCursor;
   final String? slice;
 
-  List<String> get systemdUnits => oldEntries
-      .map((final entry) => entry.systemdUnit ?? 'kernel')
-      .toSet()
-      .toList();
+  List<String> get systemdUnits =>
+      oldEntries
+          .map((final entry) => entry.systemdUnit ?? 'kernel')
+          .toSet()
+          .toList();
 
   List<ServerLogEntry> oldEntriesForUnit(final String unit) {
     if (unit == 'kernel') {

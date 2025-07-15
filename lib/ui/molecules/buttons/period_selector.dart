@@ -15,28 +15,28 @@ class PeriodSelector extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => SegmentedButtons(
-        isSelected: [
-          period == Period.month,
-          period == Period.day,
-          period == Period.hour,
-        ],
-        onPressed: (final index) {
-          switch (index) {
-            case 0:
-              onChange(Period.month);
-              break;
-            case 1:
-              onChange(Period.day);
-              break;
-            case 2:
-              onChange(Period.hour);
-              break;
-          }
-        },
-        titles: [
-          'resource_chart.month'.tr(),
-          'resource_chart.day'.tr(),
-          'resource_chart.hour'.tr(),
-        ],
-      );
+    isSelected: [
+      period == Period.month,
+      period == Period.day,
+      period == Period.hour,
+    ],
+    onPressed: (final index) {
+      switch (index) {
+        case 0:
+          onChange(Period.month);
+          break;
+        case 1:
+          onChange(Period.day);
+          break;
+        case 2:
+          onChange(Period.hour);
+          break;
+      }
+    },
+    titles: [
+      'resource_chart.month'.tr(),
+      'resource_chart.day'.tr(),
+      'resource_chart.hour'.tr(),
+    ],
+  );
 }

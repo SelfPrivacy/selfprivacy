@@ -27,11 +27,11 @@ class OutdatedServerCheckerBloc
       }
     });
 
-    _apiDataSubscription = getIt<ApiConnectionRepository>().dataStream.listen(
-      (final ApiData apiData) {
-        add(ServerApiVersionChanged(apiData.apiVersion.data));
-      },
-    );
+    _apiDataSubscription = getIt<ApiConnectionRepository>().dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(ServerApiVersionChanged(apiData.apiVersion.data));
+    });
   }
 
   @override

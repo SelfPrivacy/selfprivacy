@@ -38,8 +38,9 @@ class _ServicesPageState extends State<ServicesPage> {
 
   @override
   Widget build(final BuildContext context) {
-    final isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
 
     final OutdatedServerCheckerState outdatedServerCheckerState =
         context.watch<OutdatedServerCheckerBloc>().state;
@@ -74,147 +75,144 @@ class _ServicesPageState extends State<ServicesPage> {
     }
 
     return Scaffold(
-      appBar: Breakpoints.small.isActive(context)
-          ? BrandHeader(
-              title: 'basis.services'.tr(),
-            )
-          : null,
-      body: !isReady
-          ? EmptyPagePlaceholder(
-              showReadyCard: true,
-              title: 'service_page.nothing_here'.tr(),
-              description: 'basis.please_connect'.tr(),
-              iconData: BrandIcons.box,
-            )
-          : RefreshIndicator(
-              onRefresh: context.read<ServicesBloc>().awaitReload,
-              child: ListView(
-                padding: paddingH16V0,
-                controller: _scrollController,
-                children: [
-                  if (outdatedServerCheckerState
-                      is OutdatedServerCheckerOutdated) ...[
-                    ServerOutdatedCard(
-                      requiredVersion:
-                          outdatedServerCheckerState.requiredVersion.toString(),
-                      currentVersion:
-                          outdatedServerCheckerState.currentVersion.toString(),
+      appBar:
+          Breakpoints.small.isActive(context)
+              ? BrandHeader(title: 'basis.services'.tr())
+              : null,
+      body:
+          !isReady
+              ? EmptyPagePlaceholder(
+                showReadyCard: true,
+                title: 'service_page.nothing_here'.tr(),
+                description: 'basis.please_connect'.tr(),
+                iconData: BrandIcons.box,
+              )
+              : RefreshIndicator(
+                onRefresh: context.read<ServicesBloc>().awaitReload,
+                child: ListView(
+                  padding: paddingH16V0,
+                  controller: _scrollController,
+                  children: [
+                    if (outdatedServerCheckerState
+                        is OutdatedServerCheckerOutdated) ...[
+                      ServerOutdatedCard(
+                        requiredVersion:
+                            outdatedServerCheckerState.requiredVersion
+                                .toString(),
+                        currentVersion:
+                            outdatedServerCheckerState.currentVersion
+                                .toString(),
+                      ),
+                      const Gap(16),
+                    ],
+                    Text(
+                      'basis.services_title'.tr(),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const Gap(16),
-                  ],
-                  Text(
-                    'basis.services_title'.tr(),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const Gap(16),
-                  Skeletonizer(
-                    enabled: isLoading,
-                    enableSwitchAnimation: true,
-                    child: FilledButton.tonal(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.add_box_outlined,
-                            size: 18.0,
-                          ),
-                          const Gap(8),
-                          Text('services_catalog.title'.tr()),
-                        ],
+                    Skeletonizer(
+                      enabled: isLoading,
+                      enableSwitchAnimation: true,
+                      child: FilledButton.tonal(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.add_box_outlined, size: 18.0),
+                            const Gap(8),
+                            Text('services_catalog.title'.tr()),
+                          ],
+                        ),
+                        onPressed: () {
+                          context.pushRoute(const ServicesCatalogRoute());
+                        },
                       ),
-                      onPressed: () {
-                        context.pushRoute(const ServicesCatalogRoute());
-                      },
                     ),
-                  ),
-                  const Gap(16),
-                  if (isLoading)
-                    ...fakeServices.map(
+                    const Gap(16),
+                    if (isLoading)
+                      ...fakeServices.map(
+                        (final service) => Skeletonizer(
+                          enabled: isLoading,
+                          enableSwitchAnimation: true,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: ServicesPageCard(service: service),
+                          ),
+                        ),
+                      ),
+                    ...services.map(
                       (final service) => Skeletonizer(
                         enabled: isLoading,
                         enableSwitchAnimation: true,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 16,
-                          ),
+                          padding: const EdgeInsets.only(bottom: 16),
                           child: ServicesPageCard(service: service),
                         ),
                       ),
                     ),
-                  ...services.map(
-                    (final service) => Skeletonizer(
-                      enabled: isLoading,
-                      enableSwitchAnimation: true,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 16,
-                        ),
-                        child: ServicesPageCard(service: service),
-                      ),
-                    ),
-                  ),
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      reverseDuration: const Duration(milliseconds: 300),
-                      transitionBuilder: (
-                        final Widget child,
-                        final Animation<double> animation,
-                      ) =>
-                          FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      ),
-                      child: _showSystemServices
-                          ? Column(
-                              key: const ValueKey('systemServicesVisible'),
-                              children: systemServices
-                                  .map(
-                                    (final service) => Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 16,
-                                      ),
-                                      child: ServicesPageCard(service: service),
-                                    ),
-                                  )
-                                  .toList(),
-                            )
-                          : const SizedBox.shrink(
-                              key: ValueKey(
-                                'systemServicesHidden',
-                              ),
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 400),
+                        reverseDuration: const Duration(milliseconds: 300),
+                        transitionBuilder:
+                            (
+                              final Widget child,
+                              final Animation<double> animation,
+                            ) => FadeTransition(
+                              opacity: animation,
+                              child: child,
                             ),
-                    ),
-                  ),
-                  if (systemServices.isNotEmpty)
-                    BrandOutlinedButton(
-                      onPressed: toggleSystemServices,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
+                        child:
                             _showSystemServices
-                                ? Icons.unfold_less_outlined
-                                : Icons.unfold_more_outlined,
-                            size: 18.0,
-                          ),
-                          const Gap(8.0),
-                          Text(
-                            _showSystemServices
-                                ? 'service_page.hide_system_services'.tr()
-                                : 'service_page.show_system_services'.tr(),
-                          ),
-                        ],
+                                ? Column(
+                                  key: const ValueKey('systemServicesVisible'),
+                                  children:
+                                      systemServices
+                                          .map(
+                                            (final service) => Padding(
+                                              padding: const EdgeInsets.only(
+                                                bottom: 16,
+                                              ),
+                                              child: ServicesPageCard(
+                                                service: service,
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                )
+                                : const SizedBox.shrink(
+                                  key: ValueKey('systemServicesHidden'),
+                                ),
                       ),
                     ),
-                  const Gap(16),
-                ],
+                    if (systemServices.isNotEmpty)
+                      BrandOutlinedButton(
+                        onPressed: toggleSystemServices,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              _showSystemServices
+                                  ? Icons.unfold_less_outlined
+                                  : Icons.unfold_more_outlined,
+                              size: 18.0,
+                            ),
+                            const Gap(8.0),
+                            Text(
+                              _showSystemServices
+                                  ? 'service_page.hide_system_services'.tr()
+                                  : 'service_page.show_system_services'.tr(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    const Gap(16),
+                  ],
+                ),
               ),
-            ),
     );
   }
 }

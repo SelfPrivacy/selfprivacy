@@ -56,8 +56,9 @@ class CloudflareApi extends RestApiMap {
         '/user/tokens/verify',
         options: Options(
           followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+          validateStatus:
+              (final status) =>
+                  status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
@@ -70,11 +71,7 @@ class CloudflareApi extends RestApiMap {
     }
 
     if (response == null) {
-      return GenericResult(
-        data: isValid,
-        success: false,
-        message: message,
-      );
+      return GenericResult(data: isValid, success: false, message: message);
     }
 
     message = response.statusMessage;
@@ -88,11 +85,7 @@ class CloudflareApi extends RestApiMap {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return GenericResult(
-      data: isValid,
-      success: true,
-      message: message,
-    );
+    return GenericResult(data: isValid, success: true, message: message);
   }
 
   Future<GenericResult<List<CloudflareZone>>> getZones() async {
@@ -102,15 +95,13 @@ class CloudflareApi extends RestApiMap {
     late final Response? response;
     final Dio client = await getClient();
     try {
-      response = await client.get(
-        url,
-        queryParameters: {'per_page': 50},
-      );
-      domains = response.data['result']!
-          .map<CloudflareZone>(
-            (final json) => CloudflareZone.fromJson(json),
-          )
-          .toList();
+      response = await client.get(url, queryParameters: {'per_page': 50});
+      domains =
+          response.data['result']!
+              .map<CloudflareZone>(
+                (final json) => CloudflareZone.fromJson(json),
+              )
+              .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -141,10 +132,7 @@ class CloudflareApi extends RestApiMap {
     try {
       for (final CloudflareDnsRecord record in records) {
         allCreateFutures.add(
-          client.post(
-            '/zones/$zoneId/dns_records',
-            data: record.toJson(),
-          ),
+          client.post('/zones/$zoneId/dns_records', data: record.toJson()),
         );
       }
       await Future.wait(allCreateFutures);
@@ -153,11 +141,7 @@ class CloudflareApi extends RestApiMap {
       rethrow;
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -176,18 +160,12 @@ class CloudflareApi extends RestApiMap {
       final List<Future> allDeleteFutures = <Future>[];
 
       for (final record in records) {
-        allDeleteFutures.add(
-          client.delete('$url/${record.id}'),
-        );
+        allDeleteFutures.add(client.delete('$url/${record.id}'));
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -205,18 +183,15 @@ class CloudflareApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      allRecords = response.data['result']!
-          .map<CloudflareDnsRecord>(
-            (final json) => CloudflareDnsRecord.fromJson(json),
-          )
-          .toList();
+      allRecords =
+          response.data['result']!
+              .map<CloudflareDnsRecord>(
+                (final json) => CloudflareDnsRecord.fromJson(json),
+              )
+              .toList();
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
     }

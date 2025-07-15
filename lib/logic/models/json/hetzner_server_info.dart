@@ -97,11 +97,7 @@ class HetznerServerTypeInfo {
 
 @JsonSerializable()
 class HetznerPriceInfo {
-  HetznerPriceInfo(
-    this.hourly,
-    this.monthly,
-    this.location,
-  );
+  HetznerPriceInfo(this.hourly, this.monthly, this.location);
 
   @JsonKey(name: 'price_hourly', fromJson: HetznerPriceInfo.getPrice)
   final double hourly;
@@ -223,11 +219,7 @@ class HetznerVolume {
 /// Prices for Hetzner resources in Euro (monthly).
 /// https://docs.hetzner.cloud/#pricing
 class HetznerPricing {
-  HetznerPricing(
-    this.region,
-    this.perVolumeGb,
-    this.perPublicIpv4,
-  );
+  HetznerPricing(this.region, this.perVolumeGb, this.perPublicIpv4);
 
   /// Region name to which current price listing applies
   final String region;

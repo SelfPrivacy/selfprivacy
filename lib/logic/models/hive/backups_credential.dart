@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 
 part 'backups_credential.g.dart';
@@ -52,13 +52,13 @@ enum BackupsProviderType {
         Enum$BackupProvider.MEMORY => memory,
         Enum$BackupProvider.FILE => file,
         Enum$BackupProvider.BACKBLAZE => backblaze,
-        Enum$BackupProvider.$unknown => none
+        Enum$BackupProvider.$unknown => none,
       };
 
   Enum$BackupProvider toGraphQL() => switch (this) {
-        none => Enum$BackupProvider.NONE,
-        memory => Enum$BackupProvider.MEMORY,
-        file => Enum$BackupProvider.FILE,
-        backblaze => Enum$BackupProvider.BACKBLAZE,
-      };
+    none => Enum$BackupProvider.NONE,
+    memory => Enum$BackupProvider.MEMORY,
+    file => Enum$BackupProvider.FILE,
+    backblaze => Enum$BackupProvider.BACKBLAZE,
+  };
 }

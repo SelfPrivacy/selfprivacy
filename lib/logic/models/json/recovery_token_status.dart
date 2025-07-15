@@ -19,12 +19,12 @@ class RecoveryKeyStatus extends Equatable {
   RecoveryKeyStatus.fromGraphQL(
     final Query$RecoveryKey$api$recoveryKey recoveryKey,
   ) : this(
-          exists: recoveryKey.exists,
-          date: recoveryKey.creationDate,
-          expiration: recoveryKey.expirationDate,
-          usesLeft: recoveryKey.usesLeft,
-          valid: recoveryKey.valid,
-        );
+        exists: recoveryKey.exists,
+        date: recoveryKey.creationDate,
+        expiration: recoveryKey.expirationDate,
+        usesLeft: recoveryKey.usesLeft,
+        valid: recoveryKey.valid,
+      );
 
   final bool exists;
   final DateTime? date;
@@ -34,11 +34,5 @@ class RecoveryKeyStatus extends Equatable {
   final bool valid;
 
   @override
-  List<Object?> get props => [
-        exists,
-        date,
-        expiration,
-        usesLeft,
-        valid,
-      ];
+  List<Object?> get props => [exists, date, expiration, usesLeft, valid];
 }

@@ -11,9 +11,7 @@ class AddServerProviderToExistingServerFormCubit extends FormCubit {
   ) {
     apiKey = FieldCubit(
       initalValue: '',
-      validations: [
-        RequiredStringValidation('validations.required'.tr()),
-      ],
+      validations: [RequiredStringValidation('validations.required'.tr())],
     );
 
     super.addFields([apiKey]);
@@ -33,8 +31,9 @@ class AddServerProviderToExistingServerFormCubit extends FormCubit {
     bool? isKeyValid;
 
     try {
-      isKeyValid = await serverInstallationCubit
-          .isServerProviderApiTokenValid(apiKey.state.value);
+      isKeyValid = await serverInstallationCubit.isServerProviderApiTokenValid(
+        apiKey.state.value,
+      );
     } catch (e) {
       addError(e);
     }

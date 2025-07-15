@@ -5,13 +5,14 @@ class _ResetAppTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-        title: Text('application_settings.reset_config_title'.tr()),
-        subtitle: Text('application_settings.reset_config_description'.tr()),
-        onTap: () => showDialog(
+    title: Text('application_settings.reset_config_title'.tr()),
+    subtitle: Text('application_settings.reset_config_description'.tr()),
+    onTap:
+        () => showDialog(
           context: context,
           builder: (final context) => const _ResetAppDialog(),
         ),
-      );
+  );
 }
 
 class _ResetAppDialog extends StatelessWidget {
@@ -19,24 +20,20 @@ class _ResetAppDialog extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => AlertDialog(
-        title: Text('modals.are_you_sure'.tr()),
-        content: Text('modals.purge_all_keys'.tr()),
-        actions: [
-          DialogActionButton(
-            text: 'modals.purge_all_keys_confirm'.tr(),
-            isRed: true,
-            onPressed: () {
-              context.read<ServerInstallationCubit>().clearAppConfig();
+    title: Text('modals.are_you_sure'.tr()),
+    content: Text('modals.purge_all_keys'.tr()),
+    actions: [
+      DialogActionButton(
+        text: 'modals.purge_all_keys_confirm'.tr(),
+        isRed: true,
+        onPressed: () {
+          context.read<ServerInstallationCubit>().clearAppConfig();
 
-              context.router.maybePop([
-                const RootRoute(),
-              ]);
-              context.resetLocale();
-            },
-          ),
-          DialogActionButton(
-            text: 'basis.cancel'.tr(),
-          ),
-        ],
-      );
+          context.router.maybePop([const RootRoute()]);
+          context.resetLocale();
+        },
+      ),
+      DialogActionButton(text: 'basis.cancel'.tr()),
+    ],
+  );
 }

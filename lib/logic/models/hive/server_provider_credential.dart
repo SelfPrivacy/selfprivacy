@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 
 part 'server_provider_credential.g.dart';

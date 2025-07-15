@@ -12,10 +12,7 @@ class CallbackDialogueBranching {
 }
 
 class CallbackDialogueChoice {
-  CallbackDialogueChoice({
-    required this.title,
-    required this.callback,
-  });
+  CallbackDialogueChoice({required this.title, required this.callback});
   final String title;
   final Future<GenericResult<CallbackDialogueBranching?>> Function()? callback;
 }

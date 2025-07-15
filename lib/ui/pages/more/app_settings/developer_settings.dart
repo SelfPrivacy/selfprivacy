@@ -23,107 +23,106 @@ class DeveloperSettingsPage extends StatefulWidget {
 class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        hasBackButton: true,
-        hasFlashButton: false,
-        heroTitle: 'developer_settings.title'.tr(),
-        heroSubtitle: 'developer_settings.subtitle'.tr(),
-        heroIcon: Icons.developer_mode_outlined,
-        children: [
-          SectionTitle(title: 'developer_settings.server_setup'.tr()),
-          SwitchListTile.adaptive(
-            title: Text('developer_settings.use_staging_acme'.tr()),
-            subtitle:
-                Text('developer_settings.use_staging_acme_description'.tr()),
-            value: TlsOptions.stagingAcme,
-            onChanged: (final bool value) => setState(
-              () => TlsOptions.stagingAcme = value,
-            ),
-          ),
-          SwitchListTile.adaptive(
-            title: Text('developer_settings.ignore_tls'.tr()),
-            subtitle: Text('developer_settings.ignore_tls_description'.tr()),
-            value: !TlsOptions.verifyCertificate,
-            onChanged: (final bool value) => setState(
-              () => TlsOptions.verifyCertificate = !value,
-            ),
-          ),
-          SwitchListTile.adaptive(
-            title: Text('developer_settings.allow_ssh_key_at_setup'.tr()),
-            subtitle: Text(
-              'developer_settings.allow_ssh_key_at_setup_description'.tr(),
-            ),
-            value: TlsOptions.allowCustomSshKeyDuringSetup,
-            onChanged: (final bool value) => setState(
-              () => TlsOptions.allowCustomSshKeyDuringSetup = value,
-            ),
-          ),
-          SectionTitle(title: 'developer_settings.routing'.tr()),
-          ListTile(
-            title: Text('developer_settings.reset_onboarding'.tr()),
-            subtitle:
-                Text('developer_settings.reset_onboarding_description'.tr()),
-            enabled: !InheritedAppController.of(context).shouldShowOnboarding,
-            onTap: () => InheritedAppController.of(context)
-                .setShouldShowOnboarding(true),
-          ),
-          ListTile(
-            title: Text('storage.start_migration_button'.tr()),
-            subtitle: Text('storage.data_migration_notice'.tr()),
-            onTap: () => context.pushRoute(
+    hasBackButton: true,
+    hasFlashButton: false,
+    heroTitle: 'developer_settings.title'.tr(),
+    heroSubtitle: 'developer_settings.subtitle'.tr(),
+    heroIcon: Icons.developer_mode_outlined,
+    children: [
+      SectionTitle(title: 'developer_settings.server_setup'.tr()),
+      SwitchListTile.adaptive(
+        title: Text('developer_settings.use_staging_acme'.tr()),
+        subtitle: Text('developer_settings.use_staging_acme_description'.tr()),
+        value: TlsOptions.stagingAcme,
+        onChanged:
+            (final bool value) =>
+                setState(() => TlsOptions.stagingAcme = value),
+      ),
+      SwitchListTile.adaptive(
+        title: Text('developer_settings.ignore_tls'.tr()),
+        subtitle: Text('developer_settings.ignore_tls_description'.tr()),
+        value: !TlsOptions.verifyCertificate,
+        onChanged:
+            (final bool value) =>
+                setState(() => TlsOptions.verifyCertificate = !value),
+      ),
+      SwitchListTile.adaptive(
+        title: Text('developer_settings.allow_ssh_key_at_setup'.tr()),
+        subtitle: Text(
+          'developer_settings.allow_ssh_key_at_setup_description'.tr(),
+        ),
+        value: TlsOptions.allowCustomSshKeyDuringSetup,
+        onChanged:
+            (final bool value) =>
+                setState(() => TlsOptions.allowCustomSshKeyDuringSetup = value),
+      ),
+      SectionTitle(title: 'developer_settings.routing'.tr()),
+      ListTile(
+        title: Text('developer_settings.reset_onboarding'.tr()),
+        subtitle: Text('developer_settings.reset_onboarding_description'.tr()),
+        enabled: !InheritedAppController.of(context).shouldShowOnboarding,
+        onTap:
+            () => InheritedAppController.of(
+              context,
+            ).setShouldShowOnboarding(true),
+      ),
+      ListTile(
+        title: Text('storage.start_migration_button'.tr()),
+        subtitle: Text('storage.data_migration_notice'.tr()),
+        onTap:
+            () => context.pushRoute(
               ServicesMigrationRoute(
                 diskStatus: context.read<VolumesBloc>().state.diskStatus,
-                services: context
-                    .read<ServicesBloc>()
-                    .state
-                    .services
-                    .where(
-                      (final service) =>
-                          service.id == 'bitwarden' ||
-                          service.id == 'gitea' ||
-                          service.id == 'pleroma' ||
-                          service.id == 'email' ||
-                          service.id == 'nextcloud',
-                    )
-                    .toList(),
+                services:
+                    context
+                        .read<ServicesBloc>()
+                        .state
+                        .services
+                        .where(
+                          (final service) =>
+                              service.id == 'bitwarden' ||
+                              service.id == 'gitea' ||
+                              service.id == 'pleroma' ||
+                              service.id == 'email' ||
+                              service.id == 'nextcloud',
+                        )
+                        .toList(),
                 isMigration: true,
               ),
             ),
-          ),
-          SectionTitle(title: 'developer_settings.cubit_statuses'.tr()),
-          ListTile(
-            title: const Text('ApiConnectionRepository status'),
-            subtitle: Text(
-              getIt<ApiConnectionRepository>()
-                  .currentConnectionStatus
-                  .toString(),
-            ),
-          ),
-          SectionTitle(title: 'developer_settings.servers'.tr()),
-          ...getIt<ResourcesModel>().servers.map(
-                (final server) => ListTile(
-                  title: Text(server.domain.domainName),
-                  subtitle: Text(
-                    'developer_settings.tap_for_more_info'.tr(),
-                  ),
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      builder: (final BuildContext context) =>
-                          DraggableScrollableSheet(
-                        expand: false,
-                        maxChildSize: 0.9,
-                        minChildSize: 0.4,
-                        initialChildSize: 0.6,
-                        builder: (final context, final scrollController) =>
-                            ListView(
+      ),
+      SectionTitle(title: 'developer_settings.cubit_statuses'.tr()),
+      ListTile(
+        title: const Text('ApiConnectionRepository status'),
+        subtitle: Text(
+          getIt<ApiConnectionRepository>().currentConnectionStatus.toString(),
+        ),
+      ),
+      SectionTitle(title: 'developer_settings.servers'.tr()),
+      ...getIt<ResourcesModel>().servers.map(
+        (final server) => ListTile(
+          title: Text(server.domain.domainName),
+          subtitle: Text('developer_settings.tap_for_more_info'.tr()),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              useRootNavigator: true,
+              isScrollControlled: true,
+              builder:
+                  (final BuildContext context) => DraggableScrollableSheet(
+                    expand: false,
+                    maxChildSize: 0.9,
+                    minChildSize: 0.4,
+                    initialChildSize: 0.6,
+                    builder:
+                        (final context, final scrollController) => ListView(
                           controller: scrollController,
                           children: [
                             ListTile(
                               title: Text('server.server_id'.tr()),
-                              subtitle:
-                                  Text(server.hostingDetails.id.toString()),
+                              subtitle: Text(
+                                server.hostingDetails.id.toString(),
+                              ),
                             ),
                             ListTile(
                               title: Text('server.location'.tr()),
@@ -139,8 +138,9 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
                               ),
                             ),
                             ListTile(
-                              title:
-                                  Text('developer_settings.server_type'.tr()),
+                              title: Text(
+                                'developer_settings.server_type'.tr(),
+                              ),
                               subtitle: Text(
                                 server.hostingDetails.serverType ??
                                     'developer_settings.unknown'.tr(),
@@ -183,16 +183,17 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
                             ),
                             ListTile(
                               title: Text('server.dns_provider'.tr()),
-                              subtitle:
-                                  Text(server.domain.provider.displayName),
+                              subtitle: Text(
+                                server.domain.provider.displayName,
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-        ],
-      );
+                  ),
+            );
+          },
+        ),
+      ),
+    ],
+  );
 }

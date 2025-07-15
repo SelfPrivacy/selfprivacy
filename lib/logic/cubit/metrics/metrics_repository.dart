@@ -66,8 +66,9 @@ class MetricsRepository {
     if (apiVersion == null) {
       throw Exception('basis.network_error'.tr());
     }
-    if (!VersionConstraint.parse(metricsSupportedVersion)
-        .allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(
+      metricsSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
       throw Exception(
         'basis.feature_unsupported_on_api_version'.tr(
           namedArgs: {
@@ -94,28 +95,28 @@ class MetricsRepository {
     }
 
     final result = await getIt<ApiConnectionRepository>().api.getServerMetrics(
-          start: start,
-          end: end,
-          step: end.difference(start).inSeconds ~/ 120,
-        );
+      start: start,
+      end: end,
+      step: end.difference(start).inSeconds ~/ 120,
+    );
 
     if (result.data == null || !result.success) {
       throw MetricsLoadException('Metrics data is null');
     }
 
-    final memoryResult =
-        await getIt<ApiConnectionRepository>().api.getMemoryMetrics(
-              start: start,
-              end: end,
-              step: end.difference(start).inSeconds ~/ 120,
-            );
+    final memoryResult = await getIt<ApiConnectionRepository>().api
+        .getMemoryMetrics(
+          start: start,
+          end: end,
+          step: end.difference(start).inSeconds ~/ 120,
+        );
 
-    final diskResult =
-        await getIt<ApiConnectionRepository>().api.getDiskMetrics(
-              start: start,
-              end: end,
-              step: end.difference(start).inSeconds ~/ 120,
-            );
+    final diskResult = await getIt<ApiConnectionRepository>().api
+        .getDiskMetrics(
+          start: start,
+          end: end,
+          step: end.difference(start).inSeconds ~/ 120,
+        );
 
     return MetricsLoaded(
       period: period,

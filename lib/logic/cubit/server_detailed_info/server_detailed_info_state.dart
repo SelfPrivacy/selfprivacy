@@ -1,18 +1,14 @@
 part of 'server_detailed_info_cubit.dart';
 
 abstract class ServerDetailsState extends ServerInstallationDependendState {
-  const ServerDetailsState({
-    required this.metadata,
-  });
+  const ServerDetailsState({required this.metadata});
 
   final List<ServerMetadataEntity> metadata;
 
   @override
   List<Object> get props => [metadata];
 
-  ServerDetailsState copyWith({
-    final List<ServerMetadataEntity>? metadata,
-  });
+  ServerDetailsState copyWith({final List<ServerMetadataEntity>? metadata});
 }
 
 class ServerDetailsInitial extends ServerDetailsState {
@@ -20,9 +16,7 @@ class ServerDetailsInitial extends ServerDetailsState {
 
   @override
   ServerDetailsInitial copyWith({final List<ServerMetadataEntity>? metadata}) =>
-      ServerDetailsInitial(
-        metadata: metadata ?? this.metadata,
-      );
+      ServerDetailsInitial(metadata: metadata ?? this.metadata);
 }
 
 class ServerDetailsLoading extends ServerDetailsState {
@@ -30,9 +24,7 @@ class ServerDetailsLoading extends ServerDetailsState {
 
   @override
   ServerDetailsLoading copyWith({final List<ServerMetadataEntity>? metadata}) =>
-      ServerDetailsLoading(
-        metadata: metadata ?? this.metadata,
-      );
+      ServerDetailsLoading(metadata: metadata ?? this.metadata);
 }
 
 class ServerDetailsNotReady extends ServerDetailsState {
@@ -41,10 +33,7 @@ class ServerDetailsNotReady extends ServerDetailsState {
   @override
   ServerDetailsNotReady copyWith({
     final List<ServerMetadataEntity>? metadata,
-  }) =>
-      ServerDetailsNotReady(
-        metadata: metadata ?? this.metadata,
-      );
+  }) => ServerDetailsNotReady(metadata: metadata ?? this.metadata);
 }
 
 class Loaded extends ServerDetailsState {
@@ -60,11 +49,11 @@ class Loaded extends ServerDetailsState {
 
   @override
   List<Object> get props => [
-        metadata,
-        serverTimezone,
-        autoUpgradeSettings,
-        sshSettings,
-      ];
+    metadata,
+    serverTimezone,
+    autoUpgradeSettings,
+    sshSettings,
+  ];
 
   @override
   Loaded copyWith({
@@ -72,11 +61,10 @@ class Loaded extends ServerDetailsState {
     final TimeZoneSettings? serverTimezone,
     final AutoUpgradeSettings? autoUpgradeSettings,
     final SshSettings? sshSettings,
-  }) =>
-      Loaded(
-        metadata: metadata ?? this.metadata,
-        serverTimezone: serverTimezone ?? this.serverTimezone,
-        autoUpgradeSettings: autoUpgradeSettings ?? this.autoUpgradeSettings,
-        sshSettings: sshSettings ?? this.sshSettings,
-      );
+  }) => Loaded(
+    metadata: metadata ?? this.metadata,
+    serverTimezone: serverTimezone ?? this.serverTimezone,
+    autoUpgradeSettings: autoUpgradeSettings ?? this.autoUpgradeSettings,
+    sshSettings: sshSettings ?? this.sshSettings,
+  );
 }

@@ -18,14 +18,14 @@ part 'client_jobs_state.dart';
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit() : super(JobsStateEmpty()) {
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        if (apiData.serverJobs.data != null &&
-            apiData.serverJobs.data!.isNotEmpty) {
-          _handleServerJobs(apiData.serverJobs.data!);
-        }
-      },
-    );
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      if (apiData.serverJobs.data != null &&
+          apiData.serverJobs.data!.isNotEmpty) {
+        _handleServerJobs(apiData.serverJobs.data!);
+      }
+    });
   }
 
   StreamSubscription? _apiDataSubscription;
@@ -154,8 +154,10 @@ class JobsCubit extends Cubit<JobsState> {
         }
 
         emit(
-          (state as JobsStateLoading)
-              .updateJobStatus(job.id, JobStatusEnum.running),
+          (state as JobsStateLoading).updateJobStatus(
+            job.id,
+            JobStatusEnum.running,
+          ),
         );
         final (result, message) = await job.execute();
         if (result) {
@@ -168,8 +170,11 @@ class JobsCubit extends Cubit<JobsState> {
           );
         } else {
           emit(
-            (state as JobsStateLoading)
-                .updateJobStatus(job.id, JobStatusEnum.error, message: message),
+            (state as JobsStateLoading).updateJobStatus(
+              job.id,
+              JobStatusEnum.error,
+              message: message,
+            ),
           );
         }
       }
@@ -178,10 +183,9 @@ class JobsCubit extends Cubit<JobsState> {
 
       // If all jobs failed, do not try to change DNS records or rebuild the server
       if ((state as JobsStateLoading).clientJobList.every(
-            (final job) =>
-                (job.status == JobStatusEnum.error) ||
-                (job is UpdateDnsRecordsJob),
-          )) {
+        (final job) =>
+            (job.status == JobStatusEnum.error) || (job is UpdateDnsRecordsJob),
+      )) {
         if (dnsUpdateRequired) {
           emit(
             (state as JobsStateLoading).updateJobStatus(
@@ -208,8 +212,9 @@ class JobsCubit extends Cubit<JobsState> {
       if (rebuildResult.success) {
         if (rebuildResult.data != null) {
           emit(
-            (state as JobsStateLoading)
-                .copyWith(rebuildJobUid: rebuildResult.data!.uid),
+            (state as JobsStateLoading).copyWith(
+              rebuildJobUid: rebuildResult.data!.uid,
+            ),
           );
         } else {
           emit((state as JobsStateLoading).finished());
@@ -243,8 +248,10 @@ class JobsCubit extends Cubit<JobsState> {
       return;
     }
 
-    if (const UnorderedIterableEquality()
-        .equals(oldDnsRecords, newDnsRecords)) {
+    if (const UnorderedIterableEquality().equals(
+      oldDnsRecords,
+      newDnsRecords,
+    )) {
       emit(
         (state as JobsStateLoading).updateJobStatus(
           UpdateDnsRecordsJob.jobId,
@@ -256,13 +263,13 @@ class JobsCubit extends Cubit<JobsState> {
       final ServerDomain? domain =
           getIt<ApiConnectionRepository>().serverDomain;
 
-      final dnsCreateResult =
-          await ProvidersController.currentDnsProvider!.updateDnsRecords(
-        newRecords:
-            newDnsRecords.where((final r) => r.content != null).toList(),
-        oldRecords: oldDnsRecords,
-        domain: domain!,
-      );
+      final dnsCreateResult = await ProvidersController.currentDnsProvider!
+          .updateDnsRecords(
+            newRecords:
+                newDnsRecords.where((final r) => r.content != null).toList(),
+            oldRecords: oldDnsRecords,
+            domain: domain!,
+          );
 
       emit(
         (state as JobsStateLoading).updateJobStatus(

@@ -41,9 +41,10 @@ class AppController with ChangeNotifier {
   late bool _darkThemeModeActive;
   bool get darkThemeModeActive => _darkThemeModeActive;
 
-  ThemeMode get themeMode => systemThemeModeActive
-      ? ThemeMode.system
-      : darkThemeModeActive
+  ThemeMode get themeMode =>
+      systemThemeModeActive
+          ? ThemeMode.system
+          : darkThemeModeActive
           ? ThemeMode.dark
           : ThemeMode.light;
 

@@ -126,10 +126,11 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
     if (state is JobsStateWithJobs) {
       final ChangeServiceConfiguration? existingJob =
           state.clientJobList.firstWhereOrNull(
-        (final ClientJob job) =>
-            job is ChangeServiceConfiguration &&
-            job.serviceId == widget.serviceId,
-      ) as ChangeServiceConfiguration?;
+                (final ClientJob job) =>
+                    job is ChangeServiceConfiguration &&
+                    job.serviceId == widget.serviceId,
+              )
+              as ChangeServiceConfiguration?;
       if (existingJob != null) {
         setState(() {
           settings = existingJob.settings;
@@ -141,17 +142,14 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
 
   @override
   Widget build(final BuildContext context) {
-    final Service? service =
-        context.watch<ServicesBloc>().state.getServiceById(widget.serviceId);
+    final Service? service = context.watch<ServicesBloc>().state.getServiceById(
+      widget.serviceId,
+    );
 
     if (service == null) {
       return const BrandHeroScreen(
         hasBackButton: true,
-        children: [
-          Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        ],
+        children: [Center(child: CircularProgressIndicator.adaptive())],
       );
     }
 
@@ -215,30 +213,31 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: FilledButton(
-            onPressed: ((widget.isInstalling || isModified) && isFormValid)
-                ? () {
-                    if (widget.isInstalling) {
-                      context.read<JobsCubit>().addJob(
-                            ServiceToggleJob(
-                              service: service,
-                              needToTurnOn: true,
-                            ),
-                          );
-                    }
-                    context.read<JobsCubit>().addJob(
-                          ChangeServiceConfiguration(
-                            serviceId: service.id,
-                            serviceDisplayName: service.displayName,
-                            settings: settings,
+            onPressed:
+                ((widget.isInstalling || isModified) && isFormValid)
+                    ? () {
+                      if (widget.isInstalling) {
+                        context.read<JobsCubit>().addJob(
+                          ServiceToggleJob(
+                            service: service,
+                            needToTurnOn: true,
                           ),
                         );
-                    if (widget.isInstalling) {
-                      context.router.popUntilRoot();
-                    } else {
-                      context.router.maybePop();
+                      }
+                      context.read<JobsCubit>().addJob(
+                        ChangeServiceConfiguration(
+                          serviceId: service.id,
+                          serviceDisplayName: service.displayName,
+                          settings: settings,
+                        ),
+                      );
+                      if (widget.isInstalling) {
+                        context.router.popUntilRoot();
+                      } else {
+                        context.router.maybePop();
+                      }
                     }
-                  }
-                : null,
+                    : null,
             child: Text(
               isJobAlreadyExists
                   ? 'service_page.update_job'.tr()

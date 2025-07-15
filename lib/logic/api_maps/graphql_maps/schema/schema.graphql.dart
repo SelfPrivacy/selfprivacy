@@ -4,11 +4,10 @@ class Input$AutoUpgradeSettingsInput {
   factory Input$AutoUpgradeSettingsInput({
     bool? enableAutoUpgrade,
     bool? allowReboot,
-  }) =>
-      Input$AutoUpgradeSettingsInput._({
-        if (enableAutoUpgrade != null) r'enableAutoUpgrade': enableAutoUpgrade,
-        if (allowReboot != null) r'allowReboot': allowReboot,
-      });
+  }) => Input$AutoUpgradeSettingsInput._({
+    if (enableAutoUpgrade != null) r'enableAutoUpgrade': enableAutoUpgrade,
+    if (allowReboot != null) r'allowReboot': allowReboot,
+  });
 
   Input$AutoUpgradeSettingsInput._(this._$data);
 
@@ -45,17 +44,14 @@ class Input$AutoUpgradeSettingsInput {
   }
 
   CopyWith$Input$AutoUpgradeSettingsInput<Input$AutoUpgradeSettingsInput>
-      get copyWith => CopyWith$Input$AutoUpgradeSettingsInput(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Input$AutoUpgradeSettingsInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$AutoUpgradeSettingsInput) ||
+    if (other is! Input$AutoUpgradeSettingsInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -100,18 +96,12 @@ abstract class CopyWith$Input$AutoUpgradeSettingsInput<TRes> {
   factory CopyWith$Input$AutoUpgradeSettingsInput.stub(TRes res) =
       _CopyWithStubImpl$Input$AutoUpgradeSettingsInput;
 
-  TRes call({
-    bool? enableAutoUpgrade,
-    bool? allowReboot,
-  });
+  TRes call({bool? enableAutoUpgrade, bool? allowReboot});
 }
 
 class _CopyWithImpl$Input$AutoUpgradeSettingsInput<TRes>
     implements CopyWith$Input$AutoUpgradeSettingsInput<TRes> {
-  _CopyWithImpl$Input$AutoUpgradeSettingsInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$AutoUpgradeSettingsInput(this._instance, this._then);
 
   final Input$AutoUpgradeSettingsInput _instance;
 
@@ -122,13 +112,14 @@ class _CopyWithImpl$Input$AutoUpgradeSettingsInput<TRes>
   TRes call({
     Object? enableAutoUpgrade = _undefined,
     Object? allowReboot = _undefined,
-  }) =>
-      _then(Input$AutoUpgradeSettingsInput._({
-        ..._instance._$data,
-        if (enableAutoUpgrade != _undefined)
-          'enableAutoUpgrade': (enableAutoUpgrade as bool?),
-        if (allowReboot != _undefined) 'allowReboot': (allowReboot as bool?),
-      }));
+  }) => _then(
+    Input$AutoUpgradeSettingsInput._({
+      ..._instance._$data,
+      if (enableAutoUpgrade != _undefined)
+        'enableAutoUpgrade': (enableAutoUpgrade as bool?),
+      if (allowReboot != _undefined) 'allowReboot': (allowReboot as bool?),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$AutoUpgradeSettingsInput<TRes>
@@ -137,11 +128,7 @@ class _CopyWithStubImpl$Input$AutoUpgradeSettingsInput<TRes>
 
   TRes _res;
 
-  call({
-    bool? enableAutoUpgrade,
-    bool? allowReboot,
-  }) =>
-      _res;
+  call({bool? enableAutoUpgrade, bool? allowReboot}) => _res;
 }
 
 class Input$AutobackupQuotasInput {
@@ -151,14 +138,13 @@ class Input$AutobackupQuotasInput {
     required int weekly,
     required int monthly,
     required int yearly,
-  }) =>
-      Input$AutobackupQuotasInput._({
-        r'last': last,
-        r'daily': daily,
-        r'weekly': weekly,
-        r'monthly': monthly,
-        r'yearly': yearly,
-      });
+  }) => Input$AutobackupQuotasInput._({
+    r'last': last,
+    r'daily': daily,
+    r'weekly': weekly,
+    r'monthly': monthly,
+    r'yearly': yearly,
+  });
 
   Input$AutobackupQuotasInput._(this._$data);
 
@@ -205,17 +191,14 @@ class Input$AutobackupQuotasInput {
   }
 
   CopyWith$Input$AutobackupQuotasInput<Input$AutobackupQuotasInput>
-      get copyWith => CopyWith$Input$AutobackupQuotasInput(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Input$AutobackupQuotasInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$AutobackupQuotasInput) ||
+    if (other is! Input$AutobackupQuotasInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -254,13 +237,7 @@ class Input$AutobackupQuotasInput {
     final l$weekly = weekly;
     final l$monthly = monthly;
     final l$yearly = yearly;
-    return Object.hashAll([
-      l$last,
-      l$daily,
-      l$weekly,
-      l$monthly,
-      l$yearly,
-    ]);
+    return Object.hashAll([l$last, l$daily, l$weekly, l$monthly, l$yearly]);
   }
 }
 
@@ -273,21 +250,12 @@ abstract class CopyWith$Input$AutobackupQuotasInput<TRes> {
   factory CopyWith$Input$AutobackupQuotasInput.stub(TRes res) =
       _CopyWithStubImpl$Input$AutobackupQuotasInput;
 
-  TRes call({
-    int? last,
-    int? daily,
-    int? weekly,
-    int? monthly,
-    int? yearly,
-  });
+  TRes call({int? last, int? daily, int? weekly, int? monthly, int? yearly});
 }
 
 class _CopyWithImpl$Input$AutobackupQuotasInput<TRes>
     implements CopyWith$Input$AutobackupQuotasInput<TRes> {
-  _CopyWithImpl$Input$AutobackupQuotasInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$AutobackupQuotasInput(this._instance, this._then);
 
   final Input$AutobackupQuotasInput _instance;
 
@@ -301,16 +269,16 @@ class _CopyWithImpl$Input$AutobackupQuotasInput<TRes>
     Object? weekly = _undefined,
     Object? monthly = _undefined,
     Object? yearly = _undefined,
-  }) =>
-      _then(Input$AutobackupQuotasInput._({
-        ..._instance._$data,
-        if (last != _undefined && last != null) 'last': (last as int),
-        if (daily != _undefined && daily != null) 'daily': (daily as int),
-        if (weekly != _undefined && weekly != null) 'weekly': (weekly as int),
-        if (monthly != _undefined && monthly != null)
-          'monthly': (monthly as int),
-        if (yearly != _undefined && yearly != null) 'yearly': (yearly as int),
-      }));
+  }) => _then(
+    Input$AutobackupQuotasInput._({
+      ..._instance._$data,
+      if (last != _undefined && last != null) 'last': (last as int),
+      if (daily != _undefined && daily != null) 'daily': (daily as int),
+      if (weekly != _undefined && weekly != null) 'weekly': (weekly as int),
+      if (monthly != _undefined && monthly != null) 'monthly': (monthly as int),
+      if (yearly != _undefined && yearly != null) 'yearly': (yearly as int),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$AutobackupQuotasInput<TRes>
@@ -319,14 +287,7 @@ class _CopyWithStubImpl$Input$AutobackupQuotasInput<TRes>
 
   TRes _res;
 
-  call({
-    int? last,
-    int? daily,
-    int? weekly,
-    int? monthly,
-    int? yearly,
-  }) =>
-      _res;
+  call({int? last, int? daily, int? weekly, int? monthly, int? yearly}) => _res;
 }
 
 class Input$InitializeRepositoryInput {
@@ -337,23 +298,23 @@ class Input$InitializeRepositoryInput {
     required String login,
     required String password,
     String? localSecret,
-  }) =>
-      Input$InitializeRepositoryInput._({
-        r'provider': provider,
-        r'locationId': locationId,
-        r'locationName': locationName,
-        r'login': login,
-        r'password': password,
-        if (localSecret != null) r'localSecret': localSecret,
-      });
+  }) => Input$InitializeRepositoryInput._({
+    r'provider': provider,
+    r'locationId': locationId,
+    r'locationName': locationName,
+    r'login': login,
+    r'password': password,
+    if (localSecret != null) r'localSecret': localSecret,
+  });
 
   Input$InitializeRepositoryInput._(this._$data);
 
   factory Input$InitializeRepositoryInput.fromJson(Map<String, dynamic> data) {
     final result$data = <String, dynamic>{};
     final l$provider = data['provider'];
-    result$data['provider'] =
-        fromJson$Enum$BackupProvider((l$provider as String));
+    result$data['provider'] = fromJson$Enum$BackupProvider(
+      (l$provider as String),
+    );
     final l$locationId = data['locationId'];
     result$data['locationId'] = (l$locationId as String);
     final l$locationName = data['locationName'];
@@ -404,17 +365,14 @@ class Input$InitializeRepositoryInput {
   }
 
   CopyWith$Input$InitializeRepositoryInput<Input$InitializeRepositoryInput>
-      get copyWith => CopyWith$Input$InitializeRepositoryInput(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Input$InitializeRepositoryInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$InitializeRepositoryInput) ||
+    if (other is! Input$InitializeRepositoryInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -495,10 +453,7 @@ abstract class CopyWith$Input$InitializeRepositoryInput<TRes> {
 
 class _CopyWithImpl$Input$InitializeRepositoryInput<TRes>
     implements CopyWith$Input$InitializeRepositoryInput<TRes> {
-  _CopyWithImpl$Input$InitializeRepositoryInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$InitializeRepositoryInput(this._instance, this._then);
 
   final Input$InitializeRepositoryInput _instance;
 
@@ -513,20 +468,21 @@ class _CopyWithImpl$Input$InitializeRepositoryInput<TRes>
     Object? login = _undefined,
     Object? password = _undefined,
     Object? localSecret = _undefined,
-  }) =>
-      _then(Input$InitializeRepositoryInput._({
-        ..._instance._$data,
-        if (provider != _undefined && provider != null)
-          'provider': (provider as Enum$BackupProvider),
-        if (locationId != _undefined && locationId != null)
-          'locationId': (locationId as String),
-        if (locationName != _undefined && locationName != null)
-          'locationName': (locationName as String),
-        if (login != _undefined && login != null) 'login': (login as String),
-        if (password != _undefined && password != null)
-          'password': (password as String),
-        if (localSecret != _undefined) 'localSecret': (localSecret as String?),
-      }));
+  }) => _then(
+    Input$InitializeRepositoryInput._({
+      ..._instance._$data,
+      if (provider != _undefined && provider != null)
+        'provider': (provider as Enum$BackupProvider),
+      if (locationId != _undefined && locationId != null)
+        'locationId': (locationId as String),
+      if (locationName != _undefined && locationName != null)
+        'locationName': (locationName as String),
+      if (login != _undefined && login != null) 'login': (login as String),
+      if (password != _undefined && password != null)
+        'password': (password as String),
+      if (localSecret != _undefined) 'localSecret': (localSecret as String?),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$InitializeRepositoryInput<TRes>
@@ -542,8 +498,7 @@ class _CopyWithStubImpl$Input$InitializeRepositoryInput<TRes>
     String? login,
     String? password,
     String? localSecret,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Input$MigrateToBindsInput {
@@ -553,14 +508,13 @@ class Input$MigrateToBindsInput {
     required String giteaBlockDevice,
     required String nextcloudBlockDevice,
     required String pleromaBlockDevice,
-  }) =>
-      Input$MigrateToBindsInput._({
-        r'emailBlockDevice': emailBlockDevice,
-        r'bitwardenBlockDevice': bitwardenBlockDevice,
-        r'giteaBlockDevice': giteaBlockDevice,
-        r'nextcloudBlockDevice': nextcloudBlockDevice,
-        r'pleromaBlockDevice': pleromaBlockDevice,
-      });
+  }) => Input$MigrateToBindsInput._({
+    r'emailBlockDevice': emailBlockDevice,
+    r'bitwardenBlockDevice': bitwardenBlockDevice,
+    r'giteaBlockDevice': giteaBlockDevice,
+    r'nextcloudBlockDevice': nextcloudBlockDevice,
+    r'pleromaBlockDevice': pleromaBlockDevice,
+  });
 
   Input$MigrateToBindsInput._(this._$data);
 
@@ -607,17 +561,14 @@ class Input$MigrateToBindsInput {
   }
 
   CopyWith$Input$MigrateToBindsInput<Input$MigrateToBindsInput> get copyWith =>
-      CopyWith$Input$MigrateToBindsInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$MigrateToBindsInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$MigrateToBindsInput) ||
+    if (other is! Input$MigrateToBindsInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -686,10 +637,7 @@ abstract class CopyWith$Input$MigrateToBindsInput<TRes> {
 
 class _CopyWithImpl$Input$MigrateToBindsInput<TRes>
     implements CopyWith$Input$MigrateToBindsInput<TRes> {
-  _CopyWithImpl$Input$MigrateToBindsInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$MigrateToBindsInput(this._instance, this._then);
 
   final Input$MigrateToBindsInput _instance;
 
@@ -703,20 +651,21 @@ class _CopyWithImpl$Input$MigrateToBindsInput<TRes>
     Object? giteaBlockDevice = _undefined,
     Object? nextcloudBlockDevice = _undefined,
     Object? pleromaBlockDevice = _undefined,
-  }) =>
-      _then(Input$MigrateToBindsInput._({
-        ..._instance._$data,
-        if (emailBlockDevice != _undefined && emailBlockDevice != null)
-          'emailBlockDevice': (emailBlockDevice as String),
-        if (bitwardenBlockDevice != _undefined && bitwardenBlockDevice != null)
-          'bitwardenBlockDevice': (bitwardenBlockDevice as String),
-        if (giteaBlockDevice != _undefined && giteaBlockDevice != null)
-          'giteaBlockDevice': (giteaBlockDevice as String),
-        if (nextcloudBlockDevice != _undefined && nextcloudBlockDevice != null)
-          'nextcloudBlockDevice': (nextcloudBlockDevice as String),
-        if (pleromaBlockDevice != _undefined && pleromaBlockDevice != null)
-          'pleromaBlockDevice': (pleromaBlockDevice as String),
-      }));
+  }) => _then(
+    Input$MigrateToBindsInput._({
+      ..._instance._$data,
+      if (emailBlockDevice != _undefined && emailBlockDevice != null)
+        'emailBlockDevice': (emailBlockDevice as String),
+      if (bitwardenBlockDevice != _undefined && bitwardenBlockDevice != null)
+        'bitwardenBlockDevice': (bitwardenBlockDevice as String),
+      if (giteaBlockDevice != _undefined && giteaBlockDevice != null)
+        'giteaBlockDevice': (giteaBlockDevice as String),
+      if (nextcloudBlockDevice != _undefined && nextcloudBlockDevice != null)
+        'nextcloudBlockDevice': (nextcloudBlockDevice as String),
+      if (pleromaBlockDevice != _undefined && pleromaBlockDevice != null)
+        'pleromaBlockDevice': (pleromaBlockDevice as String),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$MigrateToBindsInput<TRes>
@@ -731,19 +680,17 @@ class _CopyWithStubImpl$Input$MigrateToBindsInput<TRes>
     String? giteaBlockDevice,
     String? nextcloudBlockDevice,
     String? pleromaBlockDevice,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 class Input$MoveServiceInput {
   factory Input$MoveServiceInput({
     required String serviceId,
     required String location,
-  }) =>
-      Input$MoveServiceInput._({
-        r'serviceId': serviceId,
-        r'location': location,
-      });
+  }) => Input$MoveServiceInput._({
+    r'serviceId': serviceId,
+    r'location': location,
+  });
 
   Input$MoveServiceInput._(this._$data);
 
@@ -772,18 +719,14 @@ class Input$MoveServiceInput {
   }
 
   CopyWith$Input$MoveServiceInput<Input$MoveServiceInput> get copyWith =>
-      CopyWith$Input$MoveServiceInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$MoveServiceInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$MoveServiceInput) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Input$MoveServiceInput || runtimeType != other.runtimeType) {
       return false;
     }
     final l$serviceId = serviceId;
@@ -803,10 +746,7 @@ class Input$MoveServiceInput {
   int get hashCode {
     final l$serviceId = serviceId;
     final l$location = location;
-    return Object.hashAll([
-      l$serviceId,
-      l$location,
-    ]);
+    return Object.hashAll([l$serviceId, l$location]);
   }
 }
 
@@ -819,18 +759,12 @@ abstract class CopyWith$Input$MoveServiceInput<TRes> {
   factory CopyWith$Input$MoveServiceInput.stub(TRes res) =
       _CopyWithStubImpl$Input$MoveServiceInput;
 
-  TRes call({
-    String? serviceId,
-    String? location,
-  });
+  TRes call({String? serviceId, String? location});
 }
 
 class _CopyWithImpl$Input$MoveServiceInput<TRes>
     implements CopyWith$Input$MoveServiceInput<TRes> {
-  _CopyWithImpl$Input$MoveServiceInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$MoveServiceInput(this._instance, this._then);
 
   final Input$MoveServiceInput _instance;
 
@@ -838,17 +772,16 @@ class _CopyWithImpl$Input$MoveServiceInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? serviceId = _undefined,
-    Object? location = _undefined,
-  }) =>
-      _then(Input$MoveServiceInput._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-        if (location != _undefined && location != null)
-          'location': (location as String),
-      }));
+  TRes call({Object? serviceId = _undefined, Object? location = _undefined}) =>
+      _then(
+        Input$MoveServiceInput._({
+          ..._instance._$data,
+          if (serviceId != _undefined && serviceId != null)
+            'serviceId': (serviceId as String),
+          if (location != _undefined && location != null)
+            'location': (location as String),
+        }),
+      );
 }
 
 class _CopyWithStubImpl$Input$MoveServiceInput<TRes>
@@ -857,18 +790,11 @@ class _CopyWithStubImpl$Input$MoveServiceInput<TRes>
 
   TRes _res;
 
-  call({
-    String? serviceId,
-    String? location,
-  }) =>
-      _res;
+  call({String? serviceId, String? location}) => _res;
 }
 
 class Input$RecoveryKeyLimitsInput {
-  factory Input$RecoveryKeyLimitsInput({
-    DateTime? expirationDate,
-    int? uses,
-  }) =>
+  factory Input$RecoveryKeyLimitsInput({DateTime? expirationDate, int? uses}) =>
       Input$RecoveryKeyLimitsInput._({
         if (expirationDate != null) r'expirationDate': expirationDate,
         if (uses != null) r'uses': uses,
@@ -911,17 +837,14 @@ class Input$RecoveryKeyLimitsInput {
   }
 
   CopyWith$Input$RecoveryKeyLimitsInput<Input$RecoveryKeyLimitsInput>
-      get copyWith => CopyWith$Input$RecoveryKeyLimitsInput(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Input$RecoveryKeyLimitsInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$RecoveryKeyLimitsInput) ||
+    if (other is! Input$RecoveryKeyLimitsInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -965,18 +888,12 @@ abstract class CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
   factory CopyWith$Input$RecoveryKeyLimitsInput.stub(TRes res) =
       _CopyWithStubImpl$Input$RecoveryKeyLimitsInput;
 
-  TRes call({
-    DateTime? expirationDate,
-    int? uses,
-  });
+  TRes call({DateTime? expirationDate, int? uses});
 }
 
 class _CopyWithImpl$Input$RecoveryKeyLimitsInput<TRes>
     implements CopyWith$Input$RecoveryKeyLimitsInput<TRes> {
-  _CopyWithImpl$Input$RecoveryKeyLimitsInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$RecoveryKeyLimitsInput(this._instance, this._then);
 
   final Input$RecoveryKeyLimitsInput _instance;
 
@@ -984,16 +901,15 @@ class _CopyWithImpl$Input$RecoveryKeyLimitsInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? expirationDate = _undefined,
-    Object? uses = _undefined,
-  }) =>
-      _then(Input$RecoveryKeyLimitsInput._({
-        ..._instance._$data,
-        if (expirationDate != _undefined)
-          'expirationDate': (expirationDate as DateTime?),
-        if (uses != _undefined) 'uses': (uses as int?),
-      }));
+  TRes call({Object? expirationDate = _undefined, Object? uses = _undefined}) =>
+      _then(
+        Input$RecoveryKeyLimitsInput._({
+          ..._instance._$data,
+          if (expirationDate != _undefined)
+            'expirationDate': (expirationDate as DateTime?),
+          if (uses != _undefined) 'uses': (uses as int?),
+        }),
+      );
 }
 
 class _CopyWithStubImpl$Input$RecoveryKeyLimitsInput<TRes>
@@ -1002,23 +918,18 @@ class _CopyWithStubImpl$Input$RecoveryKeyLimitsInput<TRes>
 
   TRes _res;
 
-  call({
-    DateTime? expirationDate,
-    int? uses,
-  }) =>
-      _res;
+  call({DateTime? expirationDate, int? uses}) => _res;
 }
 
 class Input$SSHSettingsInput {
   factory Input$SSHSettingsInput({
     required bool enable,
     bool? passwordAuthentication,
-  }) =>
-      Input$SSHSettingsInput._({
-        r'enable': enable,
-        if (passwordAuthentication != null)
-          r'passwordAuthentication': passwordAuthentication,
-      });
+  }) => Input$SSHSettingsInput._({
+    r'enable': enable,
+    if (passwordAuthentication != null)
+      r'passwordAuthentication': passwordAuthentication,
+  });
 
   Input$SSHSettingsInput._(this._$data);
 
@@ -1053,18 +964,14 @@ class Input$SSHSettingsInput {
   }
 
   CopyWith$Input$SSHSettingsInput<Input$SSHSettingsInput> get copyWith =>
-      CopyWith$Input$SSHSettingsInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$SSHSettingsInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$SSHSettingsInput) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Input$SSHSettingsInput || runtimeType != other.runtimeType) {
       return false;
     }
     final l$enable = enable;
@@ -1106,18 +1013,12 @@ abstract class CopyWith$Input$SSHSettingsInput<TRes> {
   factory CopyWith$Input$SSHSettingsInput.stub(TRes res) =
       _CopyWithStubImpl$Input$SSHSettingsInput;
 
-  TRes call({
-    bool? enable,
-    bool? passwordAuthentication,
-  });
+  TRes call({bool? enable, bool? passwordAuthentication});
 }
 
 class _CopyWithImpl$Input$SSHSettingsInput<TRes>
     implements CopyWith$Input$SSHSettingsInput<TRes> {
-  _CopyWithImpl$Input$SSHSettingsInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$SSHSettingsInput(this._instance, this._then);
 
   final Input$SSHSettingsInput _instance;
 
@@ -1128,13 +1029,14 @@ class _CopyWithImpl$Input$SSHSettingsInput<TRes>
   TRes call({
     Object? enable = _undefined,
     Object? passwordAuthentication = _undefined,
-  }) =>
-      _then(Input$SSHSettingsInput._({
-        ..._instance._$data,
-        if (enable != _undefined && enable != null) 'enable': (enable as bool),
-        if (passwordAuthentication != _undefined)
-          'passwordAuthentication': (passwordAuthentication as bool?),
-      }));
+  }) => _then(
+    Input$SSHSettingsInput._({
+      ..._instance._$data,
+      if (enable != _undefined && enable != null) 'enable': (enable as bool),
+      if (passwordAuthentication != _undefined)
+        'passwordAuthentication': (passwordAuthentication as bool?),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$SSHSettingsInput<TRes>
@@ -1143,22 +1045,17 @@ class _CopyWithStubImpl$Input$SSHSettingsInput<TRes>
 
   TRes _res;
 
-  call({
-    bool? enable,
-    bool? passwordAuthentication,
-  }) =>
-      _res;
+  call({bool? enable, bool? passwordAuthentication}) => _res;
 }
 
 class Input$SetDnsProviderInput {
   factory Input$SetDnsProviderInput({
     required Enum$DnsProvider provider,
     required String apiToken,
-  }) =>
-      Input$SetDnsProviderInput._({
-        r'provider': provider,
-        r'apiToken': apiToken,
-      });
+  }) => Input$SetDnsProviderInput._({
+    r'provider': provider,
+    r'apiToken': apiToken,
+  });
 
   Input$SetDnsProviderInput._(this._$data);
 
@@ -1187,17 +1084,14 @@ class Input$SetDnsProviderInput {
   }
 
   CopyWith$Input$SetDnsProviderInput<Input$SetDnsProviderInput> get copyWith =>
-      CopyWith$Input$SetDnsProviderInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$SetDnsProviderInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$SetDnsProviderInput) ||
+    if (other is! Input$SetDnsProviderInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1218,10 +1112,7 @@ class Input$SetDnsProviderInput {
   int get hashCode {
     final l$provider = provider;
     final l$apiToken = apiToken;
-    return Object.hashAll([
-      l$provider,
-      l$apiToken,
-    ]);
+    return Object.hashAll([l$provider, l$apiToken]);
   }
 }
 
@@ -1234,18 +1125,12 @@ abstract class CopyWith$Input$SetDnsProviderInput<TRes> {
   factory CopyWith$Input$SetDnsProviderInput.stub(TRes res) =
       _CopyWithStubImpl$Input$SetDnsProviderInput;
 
-  TRes call({
-    Enum$DnsProvider? provider,
-    String? apiToken,
-  });
+  TRes call({Enum$DnsProvider? provider, String? apiToken});
 }
 
 class _CopyWithImpl$Input$SetDnsProviderInput<TRes>
     implements CopyWith$Input$SetDnsProviderInput<TRes> {
-  _CopyWithImpl$Input$SetDnsProviderInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$SetDnsProviderInput(this._instance, this._then);
 
   final Input$SetDnsProviderInput _instance;
 
@@ -1253,17 +1138,16 @@ class _CopyWithImpl$Input$SetDnsProviderInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? provider = _undefined,
-    Object? apiToken = _undefined,
-  }) =>
-      _then(Input$SetDnsProviderInput._({
-        ..._instance._$data,
-        if (provider != _undefined && provider != null)
-          'provider': (provider as Enum$DnsProvider),
-        if (apiToken != _undefined && apiToken != null)
-          'apiToken': (apiToken as String),
-      }));
+  TRes call({Object? provider = _undefined, Object? apiToken = _undefined}) =>
+      _then(
+        Input$SetDnsProviderInput._({
+          ..._instance._$data,
+          if (provider != _undefined && provider != null)
+            'provider': (provider as Enum$DnsProvider),
+          if (apiToken != _undefined && apiToken != null)
+            'apiToken': (apiToken as String),
+        }),
+      );
 }
 
 class _CopyWithStubImpl$Input$SetDnsProviderInput<TRes>
@@ -1272,27 +1156,23 @@ class _CopyWithStubImpl$Input$SetDnsProviderInput<TRes>
 
   TRes _res;
 
-  call({
-    Enum$DnsProvider? provider,
-    String? apiToken,
-  }) =>
-      _res;
+  call({Enum$DnsProvider? provider, String? apiToken}) => _res;
 }
 
 class Input$SetServiceConfigurationInput {
   factory Input$SetServiceConfigurationInput({
     required String serviceId,
     required Map<String, dynamic> configuration,
-  }) =>
-      Input$SetServiceConfigurationInput._({
-        r'serviceId': serviceId,
-        r'configuration': configuration,
-      });
+  }) => Input$SetServiceConfigurationInput._({
+    r'serviceId': serviceId,
+    r'configuration': configuration,
+  });
 
   Input$SetServiceConfigurationInput._(this._$data);
 
   factory Input$SetServiceConfigurationInput.fromJson(
-      Map<String, dynamic> data) {
+    Map<String, dynamic> data,
+  ) {
     final result$data = <String, dynamic>{};
     final l$serviceId = data['serviceId'];
     result$data['serviceId'] = (l$serviceId as String);
@@ -1318,18 +1198,16 @@ class Input$SetServiceConfigurationInput {
   }
 
   CopyWith$Input$SetServiceConfigurationInput<
-          Input$SetServiceConfigurationInput>
-      get copyWith => CopyWith$Input$SetServiceConfigurationInput(
-            this,
-            (i) => i,
-          );
+    Input$SetServiceConfigurationInput
+  >
+  get copyWith => CopyWith$Input$SetServiceConfigurationInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$SetServiceConfigurationInput) ||
+    if (other is! Input$SetServiceConfigurationInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1350,10 +1228,7 @@ class Input$SetServiceConfigurationInput {
   int get hashCode {
     final l$serviceId = serviceId;
     final l$configuration = configuration;
-    return Object.hashAll([
-      l$serviceId,
-      l$configuration,
-    ]);
+    return Object.hashAll([l$serviceId, l$configuration]);
   }
 }
 
@@ -1366,18 +1241,12 @@ abstract class CopyWith$Input$SetServiceConfigurationInput<TRes> {
   factory CopyWith$Input$SetServiceConfigurationInput.stub(TRes res) =
       _CopyWithStubImpl$Input$SetServiceConfigurationInput;
 
-  TRes call({
-    String? serviceId,
-    Map<String, dynamic>? configuration,
-  });
+  TRes call({String? serviceId, Map<String, dynamic>? configuration});
 }
 
 class _CopyWithImpl$Input$SetServiceConfigurationInput<TRes>
     implements CopyWith$Input$SetServiceConfigurationInput<TRes> {
-  _CopyWithImpl$Input$SetServiceConfigurationInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$SetServiceConfigurationInput(this._instance, this._then);
 
   final Input$SetServiceConfigurationInput _instance;
 
@@ -1388,14 +1257,15 @@ class _CopyWithImpl$Input$SetServiceConfigurationInput<TRes>
   TRes call({
     Object? serviceId = _undefined,
     Object? configuration = _undefined,
-  }) =>
-      _then(Input$SetServiceConfigurationInput._({
-        ..._instance._$data,
-        if (serviceId != _undefined && serviceId != null)
-          'serviceId': (serviceId as String),
-        if (configuration != _undefined && configuration != null)
-          'configuration': (configuration as Map<String, dynamic>),
-      }));
+  }) => _then(
+    Input$SetServiceConfigurationInput._({
+      ..._instance._$data,
+      if (serviceId != _undefined && serviceId != null)
+        'serviceId': (serviceId as String),
+      if (configuration != _undefined && configuration != null)
+        'configuration': (configuration as Map<String, dynamic>),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$SetServiceConfigurationInput<TRes>
@@ -1404,22 +1274,14 @@ class _CopyWithStubImpl$Input$SetServiceConfigurationInput<TRes>
 
   TRes _res;
 
-  call({
-    String? serviceId,
-    Map<String, dynamic>? configuration,
-  }) =>
-      _res;
+  call({String? serviceId, Map<String, dynamic>? configuration}) => _res;
 }
 
 class Input$SshMutationInput {
   factory Input$SshMutationInput({
     required String username,
     required String sshKey,
-  }) =>
-      Input$SshMutationInput._({
-        r'username': username,
-        r'sshKey': sshKey,
-      });
+  }) => Input$SshMutationInput._({r'username': username, r'sshKey': sshKey});
 
   Input$SshMutationInput._(this._$data);
 
@@ -1448,18 +1310,14 @@ class Input$SshMutationInput {
   }
 
   CopyWith$Input$SshMutationInput<Input$SshMutationInput> get copyWith =>
-      CopyWith$Input$SshMutationInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$SshMutationInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$SshMutationInput) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Input$SshMutationInput || runtimeType != other.runtimeType) {
       return false;
     }
     final l$username = username;
@@ -1479,10 +1337,7 @@ class Input$SshMutationInput {
   int get hashCode {
     final l$username = username;
     final l$sshKey = sshKey;
-    return Object.hashAll([
-      l$username,
-      l$sshKey,
-    ]);
+    return Object.hashAll([l$username, l$sshKey]);
   }
 }
 
@@ -1495,18 +1350,12 @@ abstract class CopyWith$Input$SshMutationInput<TRes> {
   factory CopyWith$Input$SshMutationInput.stub(TRes res) =
       _CopyWithStubImpl$Input$SshMutationInput;
 
-  TRes call({
-    String? username,
-    String? sshKey,
-  });
+  TRes call({String? username, String? sshKey});
 }
 
 class _CopyWithImpl$Input$SshMutationInput<TRes>
     implements CopyWith$Input$SshMutationInput<TRes> {
-  _CopyWithImpl$Input$SshMutationInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$SshMutationInput(this._instance, this._then);
 
   final Input$SshMutationInput _instance;
 
@@ -1514,17 +1363,16 @@ class _CopyWithImpl$Input$SshMutationInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? username = _undefined,
-    Object? sshKey = _undefined,
-  }) =>
-      _then(Input$SshMutationInput._({
-        ..._instance._$data,
-        if (username != _undefined && username != null)
-          'username': (username as String),
-        if (sshKey != _undefined && sshKey != null)
-          'sshKey': (sshKey as String),
-      }));
+  TRes call({Object? username = _undefined, Object? sshKey = _undefined}) =>
+      _then(
+        Input$SshMutationInput._({
+          ..._instance._$data,
+          if (username != _undefined && username != null)
+            'username': (username as String),
+          if (sshKey != _undefined && sshKey != null)
+            'sshKey': (sshKey as String),
+        }),
+      );
 }
 
 class _CopyWithStubImpl$Input$SshMutationInput<TRes>
@@ -1533,22 +1381,14 @@ class _CopyWithStubImpl$Input$SshMutationInput<TRes>
 
   TRes _res;
 
-  call({
-    String? username,
-    String? sshKey,
-  }) =>
-      _res;
+  call({String? username, String? sshKey}) => _res;
 }
 
 class Input$UseNewDeviceKeyInput {
   factory Input$UseNewDeviceKeyInput({
     required String key,
     required String deviceName,
-  }) =>
-      Input$UseNewDeviceKeyInput._({
-        r'key': key,
-        r'deviceName': deviceName,
-      });
+  }) => Input$UseNewDeviceKeyInput._({r'key': key, r'deviceName': deviceName});
 
   Input$UseNewDeviceKeyInput._(this._$data);
 
@@ -1577,17 +1417,14 @@ class Input$UseNewDeviceKeyInput {
   }
 
   CopyWith$Input$UseNewDeviceKeyInput<Input$UseNewDeviceKeyInput>
-      get copyWith => CopyWith$Input$UseNewDeviceKeyInput(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Input$UseNewDeviceKeyInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$UseNewDeviceKeyInput) ||
+    if (other is! Input$UseNewDeviceKeyInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1608,10 +1445,7 @@ class Input$UseNewDeviceKeyInput {
   int get hashCode {
     final l$key = key;
     final l$deviceName = deviceName;
-    return Object.hashAll([
-      l$key,
-      l$deviceName,
-    ]);
+    return Object.hashAll([l$key, l$deviceName]);
   }
 }
 
@@ -1624,18 +1458,12 @@ abstract class CopyWith$Input$UseNewDeviceKeyInput<TRes> {
   factory CopyWith$Input$UseNewDeviceKeyInput.stub(TRes res) =
       _CopyWithStubImpl$Input$UseNewDeviceKeyInput;
 
-  TRes call({
-    String? key,
-    String? deviceName,
-  });
+  TRes call({String? key, String? deviceName});
 }
 
 class _CopyWithImpl$Input$UseNewDeviceKeyInput<TRes>
     implements CopyWith$Input$UseNewDeviceKeyInput<TRes> {
-  _CopyWithImpl$Input$UseNewDeviceKeyInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$UseNewDeviceKeyInput(this._instance, this._then);
 
   final Input$UseNewDeviceKeyInput _instance;
 
@@ -1643,16 +1471,15 @@ class _CopyWithImpl$Input$UseNewDeviceKeyInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? key = _undefined,
-    Object? deviceName = _undefined,
-  }) =>
-      _then(Input$UseNewDeviceKeyInput._({
-        ..._instance._$data,
-        if (key != _undefined && key != null) 'key': (key as String),
-        if (deviceName != _undefined && deviceName != null)
-          'deviceName': (deviceName as String),
-      }));
+  TRes call({Object? key = _undefined, Object? deviceName = _undefined}) =>
+      _then(
+        Input$UseNewDeviceKeyInput._({
+          ..._instance._$data,
+          if (key != _undefined && key != null) 'key': (key as String),
+          if (deviceName != _undefined && deviceName != null)
+            'deviceName': (deviceName as String),
+        }),
+      );
 }
 
 class _CopyWithStubImpl$Input$UseNewDeviceKeyInput<TRes>
@@ -1661,22 +1488,14 @@ class _CopyWithStubImpl$Input$UseNewDeviceKeyInput<TRes>
 
   TRes _res;
 
-  call({
-    String? key,
-    String? deviceName,
-  }) =>
-      _res;
+  call({String? key, String? deviceName}) => _res;
 }
 
 class Input$UseRecoveryKeyInput {
   factory Input$UseRecoveryKeyInput({
     required String key,
     required String deviceName,
-  }) =>
-      Input$UseRecoveryKeyInput._({
-        r'key': key,
-        r'deviceName': deviceName,
-      });
+  }) => Input$UseRecoveryKeyInput._({r'key': key, r'deviceName': deviceName});
 
   Input$UseRecoveryKeyInput._(this._$data);
 
@@ -1705,17 +1524,14 @@ class Input$UseRecoveryKeyInput {
   }
 
   CopyWith$Input$UseRecoveryKeyInput<Input$UseRecoveryKeyInput> get copyWith =>
-      CopyWith$Input$UseRecoveryKeyInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$UseRecoveryKeyInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$UseRecoveryKeyInput) ||
+    if (other is! Input$UseRecoveryKeyInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1736,10 +1552,7 @@ class Input$UseRecoveryKeyInput {
   int get hashCode {
     final l$key = key;
     final l$deviceName = deviceName;
-    return Object.hashAll([
-      l$key,
-      l$deviceName,
-    ]);
+    return Object.hashAll([l$key, l$deviceName]);
   }
 }
 
@@ -1752,18 +1565,12 @@ abstract class CopyWith$Input$UseRecoveryKeyInput<TRes> {
   factory CopyWith$Input$UseRecoveryKeyInput.stub(TRes res) =
       _CopyWithStubImpl$Input$UseRecoveryKeyInput;
 
-  TRes call({
-    String? key,
-    String? deviceName,
-  });
+  TRes call({String? key, String? deviceName});
 }
 
 class _CopyWithImpl$Input$UseRecoveryKeyInput<TRes>
     implements CopyWith$Input$UseRecoveryKeyInput<TRes> {
-  _CopyWithImpl$Input$UseRecoveryKeyInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$UseRecoveryKeyInput(this._instance, this._then);
 
   final Input$UseRecoveryKeyInput _instance;
 
@@ -1771,16 +1578,15 @@ class _CopyWithImpl$Input$UseRecoveryKeyInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? key = _undefined,
-    Object? deviceName = _undefined,
-  }) =>
-      _then(Input$UseRecoveryKeyInput._({
-        ..._instance._$data,
-        if (key != _undefined && key != null) 'key': (key as String),
-        if (deviceName != _undefined && deviceName != null)
-          'deviceName': (deviceName as String),
-      }));
+  TRes call({Object? key = _undefined, Object? deviceName = _undefined}) =>
+      _then(
+        Input$UseRecoveryKeyInput._({
+          ..._instance._$data,
+          if (key != _undefined && key != null) 'key': (key as String),
+          if (deviceName != _undefined && deviceName != null)
+            'deviceName': (deviceName as String),
+        }),
+      );
 }
 
 class _CopyWithStubImpl$Input$UseRecoveryKeyInput<TRes>
@@ -1789,11 +1595,7 @@ class _CopyWithStubImpl$Input$UseRecoveryKeyInput<TRes>
 
   TRes _res;
 
-  call({
-    String? key,
-    String? deviceName,
-  }) =>
-      _res;
+  call({String? key, String? deviceName}) => _res;
 }
 
 class Input$UserMutationInput {
@@ -1802,13 +1604,12 @@ class Input$UserMutationInput {
     List<String>? directmemberof,
     String? password,
     String? displayName,
-  }) =>
-      Input$UserMutationInput._({
-        r'username': username,
-        if (directmemberof != null) r'directmemberof': directmemberof,
-        if (password != null) r'password': password,
-        if (displayName != null) r'displayName': displayName,
-      });
+  }) => Input$UserMutationInput._({
+    r'username': username,
+    if (directmemberof != null) r'directmemberof': directmemberof,
+    if (password != null) r'password': password,
+    if (displayName != null) r'displayName': displayName,
+  });
 
   Input$UserMutationInput._(this._$data);
 
@@ -1818,9 +1619,10 @@ class Input$UserMutationInput {
     result$data['username'] = (l$username as String);
     if (data.containsKey('directmemberof')) {
       final l$directmemberof = data['directmemberof'];
-      result$data['directmemberof'] = (l$directmemberof as List<dynamic>?)
-          ?.map((e) => (e as String))
-          .toList();
+      result$data['directmemberof'] =
+          (l$directmemberof as List<dynamic>?)
+              ?.map((e) => (e as String))
+              .toList();
     }
     if (data.containsKey('password')) {
       final l$password = data['password'];
@@ -1864,18 +1666,14 @@ class Input$UserMutationInput {
   }
 
   CopyWith$Input$UserMutationInput<Input$UserMutationInput> get copyWith =>
-      CopyWith$Input$UserMutationInput(
-        this,
-        (i) => i,
-      );
+      CopyWith$Input$UserMutationInput(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$UserMutationInput) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Input$UserMutationInput || runtimeType != other.runtimeType) {
       return false;
     }
     final l$username = username;
@@ -1962,10 +1760,7 @@ abstract class CopyWith$Input$UserMutationInput<TRes> {
 
 class _CopyWithImpl$Input$UserMutationInput<TRes>
     implements CopyWith$Input$UserMutationInput<TRes> {
-  _CopyWithImpl$Input$UserMutationInput(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Input$UserMutationInput(this._instance, this._then);
 
   final Input$UserMutationInput _instance;
 
@@ -1978,16 +1773,17 @@ class _CopyWithImpl$Input$UserMutationInput<TRes>
     Object? directmemberof = _undefined,
     Object? password = _undefined,
     Object? displayName = _undefined,
-  }) =>
-      _then(Input$UserMutationInput._({
-        ..._instance._$data,
-        if (username != _undefined && username != null)
-          'username': (username as String),
-        if (directmemberof != _undefined)
-          'directmemberof': (directmemberof as List<String>?),
-        if (password != _undefined) 'password': (password as String?),
-        if (displayName != _undefined) 'displayName': (displayName as String?),
-      }));
+  }) => _then(
+    Input$UserMutationInput._({
+      ..._instance._$data,
+      if (username != _undefined && username != null)
+        'username': (username as String),
+      if (directmemberof != _undefined)
+        'directmemberof': (directmemberof as List<String>?),
+      if (password != _undefined) 'password': (password as String?),
+      if (displayName != _undefined) 'displayName': (displayName as String?),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$UserMutationInput<TRes>
@@ -2001,8 +1797,7 @@ class _CopyWithStubImpl$Input$UserMutationInput<TRes>
     List<String>? directmemberof,
     String? password,
     String? displayName,
-  }) =>
-      _res;
+  }) => _res;
 }
 
 enum Enum$BackupProvider {
@@ -2581,18 +2376,8 @@ const possibleTypesMap = <String, Set<String>>{
     'TimezoneMutationReturn',
     'UserMutationReturn',
   },
-  'ConfigItem': {
-    'BoolConfigItem',
-    'EnumConfigItem',
-    'StringConfigItem',
-  },
-  'MonitoringMetricsResult': {
-    'MonitoringMetrics',
-    'MonitoringQueryError',
-  },
-  'MonitoringValuesResult': {
-    'MonitoringValues',
-    'MonitoringQueryError',
-  },
+  'ConfigItem': {'BoolConfigItem', 'EnumConfigItem', 'StringConfigItem'},
+  'MonitoringMetricsResult': {'MonitoringMetrics', 'MonitoringQueryError'},
+  'MonitoringValuesResult': {'MonitoringValues', 'MonitoringQueryError'},
   'StorageUsageInterface': {'ServiceStorageUsage'},
 };

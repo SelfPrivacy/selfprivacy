@@ -29,13 +29,13 @@ class ServerDiskVolume extends Equatable {
 
   @override
   List<Object?> get props => [
-        freeSpace,
-        model,
-        name,
-        root,
-        serial,
-        totalSpace,
-        type,
-        usedSpace,
-      ];
+    freeSpace,
+    model,
+    name,
+    root,
+    serial,
+    totalSpace,
+    type,
+    usedSpace,
+  ];
 }

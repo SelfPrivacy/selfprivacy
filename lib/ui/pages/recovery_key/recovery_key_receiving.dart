@@ -10,16 +10,16 @@ class NewRecoveryKeyPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        heroTitle: 'recovery_key.key_main_header'.tr(),
-        heroSubtitle: 'recovery_key.key_receiving_description'.tr(),
-        hasBackButton: false,
-        hasFlashButton: false,
-        children: [
-          KeyDisplay(
-            keyToDisplay: recoveryKey,
-            canCopy: false,
-            infoboxText: 'recovery_key.key_receiving_info'.tr(),
-          ),
-        ],
-      );
+    heroTitle: 'recovery_key.key_main_header'.tr(),
+    heroSubtitle: 'recovery_key.key_receiving_description'.tr(),
+    hasBackButton: false,
+    hasFlashButton: false,
+    children: [
+      KeyDisplay(
+        keyToDisplay: recoveryKey,
+        canCopy: false,
+        infoboxText: 'recovery_key.key_receiving_info'.tr(),
+      ),
+    ],
+  );
 }

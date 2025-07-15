@@ -32,15 +32,14 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
           onBackButtonPressed:
               context.read<ServerInstallationCubit>().revertRecoveryStep,
           children: [
-            BrandMarkdown(
-              fileName: instructionFilename,
-            ),
+            BrandMarkdown(fileName: instructionFilename),
             const SizedBox(height: 16),
             BrandButton.filled(
               child: Text('recovering.method_device_button'.tr()),
-              onPressed: () => context
-                  .read<ServerInstallationCubit>()
-                  .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
+              onPressed:
+                  () => context
+                      .read<ServerInstallationCubit>()
+                      .selectRecoveryMethod(ServerRecoveryMethods.oldToken),
             ),
           ],
         ),
@@ -58,11 +57,12 @@ class RecoverByOldToken extends StatelessWidget {
         context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final context) => RecoveryDeviceFormCubit(
-        appConfig,
-        FieldCubitFactory(context),
-        ServerRecoveryMethods.oldToken,
-      ),
+      create:
+          (final context) => RecoveryDeviceFormCubit(
+            appConfig,
+            FieldCubitFactory(context),
+            ServerRecoveryMethods.oldToken,
+          ),
       child: Builder(
         builder: (final context) {
           final FormCubitState formCubitState =
@@ -86,9 +86,11 @@ class RecoverByOldToken extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               BrandButton.filled(
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<RecoveryDeviceFormCubit>().trySubmit(),
+                onPressed:
+                    formCubitState.isSubmitting
+                        ? null
+                        : () =>
+                            context.read<RecoveryDeviceFormCubit>().trySubmit(),
                 child: Text('basis.continue'.tr()),
               ),
             ],

@@ -6,8 +6,9 @@ typedef StringGeneratorFunction = String Function();
 
 class StringGenerators {
   static final List<String> letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
-  static final List<String> upperCaseLetters =
-      'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
+  static final List<String> upperCaseLetters = 'abcdefghijklmnopqrstuvwxyz'
+      .toUpperCase()
+      .split('');
   static final List<String> numbers = '1234567890'.split('');
   static const List<String> symbols = ['_'];
 
@@ -32,7 +33,8 @@ class StringGenerators {
     if (!isStrict) {
       res = genString(length, chars);
     } else {
-      int sum = (hasLowercaseLetters ? 1 : 0) +
+      int sum =
+          (hasLowercaseLetters ? 1 : 0) +
           (hasUppercaseLetters ? 1 : 0) +
           (hasNumbers ? 1 : 0) +
           (hasSymbols ? 1 : 0);
@@ -76,10 +78,7 @@ class StringGenerators {
         if (hasUppercaseLetters) ...genString(1, upperCaseLetters),
         if (hasNumbers) ...genString(1, numbers),
         if (hasSymbols) ...genString(1, symbols),
-        ...genString(
-          length - sum,
-          chars,
-        ),
+        ...genString(length - sum, chars),
       ];
     }
     res.shuffle();
@@ -87,15 +86,14 @@ class StringGenerators {
   }
 
   static List<String> genString(final int length, final List<String> chars) => [
-        for (int i = 0; i < length; i++) chars[_rnd.nextInt(chars.length)],
-      ];
+    for (int i = 0; i < length; i++) chars[_rnd.nextInt(chars.length)],
+  ];
 
-  static StringGeneratorFunction simpleId = () => getRandomString(
-        5,
-        hasLowercaseLetters: true,
-      );
+  static StringGeneratorFunction simpleId =
+      () => getRandomString(5, hasLowercaseLetters: true);
 
-  static StringGeneratorFunction dbPassword = () => getRandomString(
+  static StringGeneratorFunction dbPassword =
+      () => getRandomString(
         40,
         hasLowercaseLetters: true,
         hasUppercaseLetters: true,
@@ -103,14 +101,16 @@ class StringGenerators {
         hasSymbols: true,
       );
 
-  static StringGeneratorFunction storageName = () => getRandomString(
+  static StringGeneratorFunction storageName =
+      () => getRandomString(
         6,
         hasLowercaseLetters: true,
         hasUppercaseLetters: false,
         hasNumbers: true,
       );
 
-  static StringGeneratorFunction apiToken = () => getRandomString(
+  static StringGeneratorFunction apiToken =
+      () => getRandomString(
         64,
         hasLowercaseLetters: true,
         hasUppercaseLetters: true,

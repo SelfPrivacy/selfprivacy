@@ -15,9 +15,10 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   ServerLogsBloc() : super(ServerLogsInitial()) {
     on<ServerLogsFetch>((final event, final emit) async {
       emit(ServerLogsLoading());
-      final String? slice = event.serviceId != null
-          ? '${event.serviceId?.replaceAll('-', '_')}.slice'
-          : null;
+      final String? slice =
+          event.serviceId != null
+              ? '${event.serviceId?.replaceAll('-', '_')}.slice'
+              : null;
       try {
         final (logsData, meta) = await _getLogs(limit: 50, slice: slice);
         emit(
@@ -34,14 +35,13 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         if (_apiLogsSubscription != null) {
           await _apiLogsSubscription?.cancel();
         }
-        _apiLogsSubscription =
-            getIt<ApiConnectionRepository>().api.getServerLogsStream().listen(
-          (final ServerLogEntry logEntry) {
-            print('Got new log entry');
-            print(logEntry);
-            add(ServerLogsGotNewEntry(logEntry));
-          },
-        );
+        _apiLogsSubscription = getIt<ApiConnectionRepository>().api
+            .getServerLogsStream()
+            .listen((final ServerLogEntry logEntry) {
+              print('Got new log entry');
+              print(logEntry);
+              add(ServerLogsGotNewEntry(logEntry));
+            });
       } catch (e) {
         emit(ServerLogsError(e.toString()));
       }
@@ -58,9 +58,12 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             downCursor: currentState.meta.upCursor,
             slice: currentState.slice,
           );
-          final allEntries = currentState.oldEntries
-            ..addAll(logsData)
-            ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
+          final allEntries =
+              currentState.oldEntries
+                ..addAll(logsData)
+                ..sort(
+                  (final a, final b) => b.timestamp.compareTo(a.timestamp),
+                );
           emit(
             ServerLogsLoaded(
               oldEntries: allEntries.toSet().toList(),
@@ -83,11 +86,10 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             event.entry.systemdSlice != currentState.slice) {
           return;
         }
-        final allEntries = currentState.newEntries
-          ..add(event.entry)
-          ..sort(
-            (final a, final b) => b.timestamp.compareTo(a.timestamp),
-          );
+        final allEntries =
+            currentState.newEntries
+              ..add(event.entry)
+              ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
         emit(
           ServerLogsLoaded(
             oldEntries: currentState.oldEntries,
@@ -123,8 +125,9 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     if (apiVersion == null) {
       throw Exception('basis.network_error'.tr());
     }
-    if (!VersionConstraint.parse(logsSupportedVersion)
-        .allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(
+      logsSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
       throw Exception(
         'basis.feature_unsupported_on_api_version'.tr(
           namedArgs: {
@@ -135,11 +138,11 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       );
     }
     return getIt<ApiConnectionRepository>().api.getServerLogs(
-          limit: limit,
-          upCursor: upCursor,
-          downCursor: downCursor,
-          slice: slice,
-        );
+      limit: limit,
+      upCursor: upCursor,
+      downCursor: downCursor,
+      slice: slice,
+    );
   }
 
   @override

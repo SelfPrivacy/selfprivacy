@@ -10,10 +10,7 @@ import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
 class CopyEncryptionKeyModal extends StatefulWidget {
-  const CopyEncryptionKeyModal({
-    required this.scrollController,
-    super.key,
-  });
+  const CopyEncryptionKeyModal({required this.scrollController, super.key});
 
   final ScrollController scrollController;
 
@@ -79,28 +76,20 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
         const SizedBox(height: 16),
         FilledButton.icon(
           onPressed: () {
-            setState(
-              () {
-                copiedToClipboard = true;
-              },
-            );
+            setState(() {
+              copiedToClipboard = true;
+            });
             setState(() {
               copyToClipboardTimer?.cancel();
-              copyToClipboardTimer = Timer(
-                const Duration(seconds: 5),
-                () {
-                  setState(() {
-                    copiedToClipboard = false;
-                  });
-                },
-              );
+              copyToClipboardTimer = Timer(const Duration(seconds: 5), () {
+                setState(() {
+                  copiedToClipboard = false;
+                });
+              });
             });
             PlatformAdapter.setClipboard(encryptionKey);
           },
-          icon: const Icon(
-            Icons.copy_all_outlined,
-            size: 18.0,
-          ),
+          icon: const Icon(Icons.copy_all_outlined, size: 18.0),
           label: Text(
             copiedToClipboard
                 ? 'basis.copied_to_clipboard'.tr()

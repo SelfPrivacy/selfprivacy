@@ -6,18 +6,17 @@ void main() {
   group('StringGenerators', () {
     group('Basic', () {
       test('assert chart empty', () {
-        expect(
-          () {
-            StringGenerators.getRandomString(8);
-          },
-          throwsAssertionError,
-        );
+        expect(() {
+          StringGenerators.getRandomString(8);
+        }, throwsAssertionError);
       });
 
       test('only lowercase string', () {
         const int length = 8;
-        final String generatedString =
-            StringGenerators.getRandomString(length, hasLowercaseLetters: true);
+        final String generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: true,
+        );
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));

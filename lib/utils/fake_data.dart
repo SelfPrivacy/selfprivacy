@@ -55,7 +55,7 @@ class FakeSelfPrivacyData {
 
   static final ServerMetadataEntity fakeServerMetadataEntity =
       ServerMetadataEntity(
-    trId: 'some_long_id',
-    value: 'some_interesting_value',
-  );
+        trId: 'some_long_id',
+        value: 'some_interesting_value',
+      );
 }

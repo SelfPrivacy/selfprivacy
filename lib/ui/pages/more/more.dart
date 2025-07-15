@@ -15,15 +15,15 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
 
     return Scaffold(
-      appBar: Breakpoints.small.isActive(context)
-          ? BrandHeader(
-              title: 'basis.more'.tr(),
-            )
-          : null,
+      appBar:
+          Breakpoints.small.isActive(context)
+              ? BrandHeader(title: 'basis.more'.tr())
+              : null,
       body: ListView(
         children: [
           Padding(
@@ -42,9 +42,7 @@ class MorePage extends StatelessWidget {
                   MoreMenuItem(
                     title: 'more_page.create_ssh_key'.tr(),
                     iconData: Icons.key_outlined,
-                    goTo: () => UserDetailsRoute(
-                      login: 'root',
-                    ),
+                    goTo: () => UserDetailsRoute(login: 'root'),
                   ),
                 if (isReady)
                   MoreMenuItem(

@@ -48,65 +48,53 @@ class AboutApplicationPage extends StatelessWidget {
         SectionTitle(title: 'about_application_page.versions'.tr()),
         FutureBuilder(
           future: _packageVersion(),
-          builder: (final context, final snapshot) => ListTile(
-            title: Text(
-              'about_application_page.application_version_text'.tr(),
-            ),
-            subtitle: Text(
-              snapshot.data.toString(),
-            ),
-            leading: Icon(
-              deviceIcon,
-            ),
-            onLongPress: () {
-              PlatformAdapter.setClipboard(
-                snapshot.data.toString(),
-              );
-              getIt<NavigationService>().showSnackBar(
-                'basis.copied_to_clipboard'.tr(),
-              );
-            },
-          ),
+          builder:
+              (final context, final snapshot) => ListTile(
+                title: Text(
+                  'about_application_page.application_version_text'.tr(),
+                ),
+                subtitle: Text(snapshot.data.toString()),
+                leading: Icon(deviceIcon),
+                onLongPress: () {
+                  PlatformAdapter.setClipboard(snapshot.data.toString());
+                  getIt<NavigationService>().showSnackBar(
+                    'basis.copied_to_clipboard'.tr(),
+                  );
+                },
+              ),
         ),
         if (getIt<ApiConnectionRepository>().apiData.apiVersion.data != null)
           FutureBuilder(
             future: _apiVersion(),
-            builder: (final context, final snapshot) => ListTile(
-              title: Text(
-                'about_application_page.api_version_text'.tr(),
-              ),
-              subtitle: Text(snapshot.data.toString()),
-              leading: const Icon(
-                Icons.api_outlined,
-              ),
-              onLongPress: () {
-                PlatformAdapter.setClipboard(
-                  snapshot.data.toString(),
-                );
-                getIt<NavigationService>().showSnackBar(
-                  'basis.copied_to_clipboard'.tr(),
-                );
-              },
-            ),
+            builder:
+                (final context, final snapshot) => ListTile(
+                  title: Text('about_application_page.api_version_text'.tr()),
+                  subtitle: Text(snapshot.data.toString()),
+                  leading: const Icon(Icons.api_outlined),
+                  onLongPress: () {
+                    PlatformAdapter.setClipboard(snapshot.data.toString());
+                    getIt<NavigationService>().showSnackBar(
+                      'basis.copied_to_clipboard'.tr(),
+                    );
+                  },
+                ),
           ),
         FutureBuilder(
           future: _packageVersion(),
-          builder: (final context, final snapshot) => ListTile(
-            title: Text('about_application_page.open_source_licenses'.tr()),
-            onTap: () => showLicensePage(
-              context: context,
-              applicationName: 'SelfPrivacy',
-              applicationVersion: snapshot.data.toString(),
-              applicationLegalese: '© 2024 SelfPrivacy',
-            ),
-            leading: const Icon(
-              Icons.copyright_outlined,
-            ),
-          ),
+          builder:
+              (final context, final snapshot) => ListTile(
+                title: Text('about_application_page.open_source_licenses'.tr()),
+                onTap:
+                    () => showLicensePage(
+                      context: context,
+                      applicationName: 'SelfPrivacy',
+                      applicationVersion: snapshot.data.toString(),
+                      applicationLegalese: '© 2024 SelfPrivacy',
+                    ),
+                leading: const Icon(Icons.copyright_outlined),
+              ),
         ),
-        SectionTitle(
-          title: 'about_application_page.links'.tr(),
-        ),
+        SectionTitle(title: 'about_application_page.links'.tr()),
         LinkListTile(
           title: 'about_application_page.website'.tr(),
           subtitle: 'selfprivacy.org',
@@ -161,9 +149,7 @@ class AboutApplicationPage extends StatelessWidget {
           icon: Icons.email_outlined,
           longPressText: 'support@selfprivacy.org',
         ),
-        SectionTitle(
-          title: 'about_application_page.contribute'.tr(),
-        ),
+        SectionTitle(title: 'about_application_page.contribute'.tr()),
         LinkListTile(
           title: 'about_application_page.source_code'.tr(),
           subtitle: 'git.selfprivacy.org',

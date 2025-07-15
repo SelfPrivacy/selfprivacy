@@ -1,14 +1,11 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 
 part 'server_domain.g.dart';
 
 @HiveType(typeId: 3)
 class ServerDomain {
-  ServerDomain({
-    required this.domainName,
-    required this.provider,
-  });
+  ServerDomain({required this.domainName, required this.provider});
 
   @HiveField(0)
   final String domainName;
@@ -44,25 +41,25 @@ enum DnsProviderType {
   }
 
   String toInfectName() => switch (this) {
-        digitalOcean => 'DIGITALOCEAN',
-        cloudflare => 'CLOUDFLARE',
-        desec => 'DESEC',
-        unknown => 'UNKNOWN',
-      };
+    digitalOcean => 'DIGITALOCEAN',
+    cloudflare => 'CLOUDFLARE',
+    desec => 'DESEC',
+    unknown => 'UNKNOWN',
+  };
 
   String get displayName => switch (this) {
-        digitalOcean => 'Digital Ocean DNS',
-        cloudflare => 'Cloudflare',
-        desec => 'deSEC',
-        unknown => 'Unknown',
-      };
+    digitalOcean => 'Digital Ocean DNS',
+    cloudflare => 'Cloudflare',
+    desec => 'deSEC',
+    unknown => 'Unknown',
+  };
 
   String get supportArticle => switch (this) {
-        digitalOcean => 'how_digital_ocean',
-        cloudflare => 'how_cloudflare',
-        desec => 'how_desec',
-        unknown => '',
-      };
+    digitalOcean => 'how_digital_ocean',
+    cloudflare => 'how_cloudflare',
+    desec => 'how_desec',
+    unknown => '',
+  };
 }
 
 extension DnsProviderTypeIsSpecified on DnsProviderType? {

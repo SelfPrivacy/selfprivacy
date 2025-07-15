@@ -17,7 +17,8 @@ class BrandLinearIndicator extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
-        builder: (final context, final constraints) => Skeleton.leaf(
+    builder:
+        (final context, final constraints) => Skeleton.leaf(
           child: Container(
             height: height,
             width: constraints.maxWidth,
@@ -30,10 +31,7 @@ class BrandLinearIndicator extends StatelessWidget {
             child: AnimatedSlide(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOutCubicEmphasized,
-              offset: Offset(
-                -(1 - value),
-                0,
-              ),
+              offset: Offset(-(1 - value), 0),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOutCubicEmphasized,
@@ -46,5 +44,5 @@ class BrandLinearIndicator extends StatelessWidget {
             ),
           ),
         ),
-      );
+  );
 }

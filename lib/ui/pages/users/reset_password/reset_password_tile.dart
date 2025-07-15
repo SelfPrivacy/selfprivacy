@@ -11,11 +11,9 @@ class ResetPasswordTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-        iconColor: Theme.of(context).colorScheme.onSurface,
-        onTap: () => context.pushRoute(ResetPasswordRoute(user: user)),
-        leading: const Icon(Icons.lock_reset_outlined),
-        title: Text(
-          'users.request_password_reset_link'.tr(),
-        ),
-      );
+    iconColor: Theme.of(context).colorScheme.onSurface,
+    onTap: () => context.pushRoute(ResetPasswordRoute(user: user)),
+    leading: const Icon(Icons.lock_reset_outlined),
+    title: Text('users.request_password_reset_link'.tr()),
+  );
 }

@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
@@ -7,10 +7,7 @@ part 'server.g.dart';
 // TODO: Make a constant type.
 @HiveType(typeId: 9)
 class Server {
-  Server({
-    required this.hostingDetails,
-    required this.domain,
-  });
+  Server({required this.hostingDetails, required this.domain});
 
   @HiveField(0)
   final ServerHostingDetails hostingDetails;

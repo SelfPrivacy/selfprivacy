@@ -22,13 +22,11 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     );
 
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        add(
-          RecoveryKeyStatusChanged(apiData.recoveryKeyStatus.data),
-        );
-      },
-    );
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(RecoveryKeyStatusChanged(apiData.recoveryKeyStatus.data));
+    });
   }
 
   StreamSubscription? _apiDataSubscription;
@@ -49,9 +47,10 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     final int? numberOfUses,
   }) async {
     final GenericResult<String> response =
-        await getIt<ApiConnectionRepository>()
-            .api
-            .generateRecoveryToken(expirationDate, numberOfUses);
+        await getIt<ApiConnectionRepository>().api.generateRecoveryToken(
+          expirationDate,
+          numberOfUses,
+        );
     if (response.success) {
       getIt<ApiConnectionRepository>().apiData.recoveryKeyStatus.invalidate();
       unawaited(getIt<ApiConnectionRepository>().reload(null));

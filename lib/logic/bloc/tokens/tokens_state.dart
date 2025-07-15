@@ -1,17 +1,9 @@
 part of 'tokens_bloc.dart';
 
-enum TokenStatus {
-  loading,
-  valid,
-  invalid,
-  noAccess,
-}
+enum TokenStatus { loading, valid, invalid, noAccess }
 
 class TokenStatusWrapper<T> {
-  TokenStatusWrapper({
-    required this.data,
-    required this.status,
-  });
+  TokenStatusWrapper({required this.data, required this.status});
 
   final T data;
   final TokenStatus status;
@@ -21,29 +13,30 @@ sealed class TokensState extends Equatable {
   const TokensState();
 
   List<TokenStatusWrapper<ServerProviderCredential>>
-      get serverProviderCredentials;
+  get serverProviderCredentials;
   List<TokenStatusWrapper<DnsProviderCredential>> get dnsProviderCredentials;
   List<TokenStatusWrapper<BackupsCredential>> get backupsCredentials;
   List<Server> get servers => _servers;
 
-  List<Server> get serversWithoutProviderCredentials => servers
-      .where(
-        (final Server server) =>
-            server.hostingDetails.provider != ServerProviderType.unknown &&
-            serverProviderCredentials.every(
-              (
-                final TokenStatusWrapper<ServerProviderCredential>
+  List<Server> get serversWithoutProviderCredentials =>
+      servers
+          .where(
+            (final Server server) =>
+                server.hostingDetails.provider != ServerProviderType.unknown &&
+                serverProviderCredentials.every(
+                  (
+                    final TokenStatusWrapper<ServerProviderCredential>
                     serverProviderCredential,
-              ) =>
-                  !serverProviderCredential.data.associatedServerIds
-                      .contains(server.hostingDetails.id),
-            ),
-      )
-      .toList();
+                  ) =>
+                      !serverProviderCredential.data.associatedServerIds
+                          .contains(server.hostingDetails.id),
+                ),
+          )
+          .toList();
 
   Server getServerById(final int serverId) => servers.firstWhere(
-        (final Server server) => server.hostingDetails.id == serverId,
-      );
+    (final Server server) => server.hostingDetails.id == serverId,
+  );
 
   List<ServerProviderCredential> get _serverProviderCredentials =>
       getIt<ResourcesModel>().serverProviderCredentials;
@@ -59,13 +52,14 @@ final class TokensInitial extends TokensState {
 
   @override
   List<TokenStatusWrapper<ServerProviderCredential>>
-      get serverProviderCredentials => _serverProviderCredentials
+  get serverProviderCredentials =>
+      _serverProviderCredentials
           .map(
             (final ServerProviderCredential serverProviderCredential) =>
                 TokenStatusWrapper<ServerProviderCredential>(
-              data: serverProviderCredential,
-              status: TokenStatus.loading,
-            ),
+                  data: serverProviderCredential,
+                  status: TokenStatus.loading,
+                ),
           )
           .toList();
 
@@ -75,9 +69,9 @@ final class TokensInitial extends TokensState {
           .map(
             (final DnsProviderCredential dnsProviderCredential) =>
                 TokenStatusWrapper<DnsProviderCredential>(
-              data: dnsProviderCredential,
-              status: TokenStatus.loading,
-            ),
+                  data: dnsProviderCredential,
+                  status: TokenStatus.loading,
+                ),
           )
           .toList();
 
@@ -87,9 +81,9 @@ final class TokensInitial extends TokensState {
           .map(
             (final BackupsCredential backupsCredential) =>
                 TokenStatusWrapper<BackupsCredential>(
-              data: backupsCredential,
-              status: TokenStatus.loading,
-            ),
+                  data: backupsCredential,
+                  status: TokenStatus.loading,
+                ),
           )
           .toList();
 
@@ -109,7 +103,7 @@ final class TokensChecked extends TokensState {
 
   @override
   final List<TokenStatusWrapper<ServerProviderCredential>>
-      serverProviderCredentials;
+  serverProviderCredentials;
   @override
   final List<TokenStatusWrapper<DnsProviderCredential>> dnsProviderCredentials;
   @override
@@ -117,9 +111,9 @@ final class TokensChecked extends TokensState {
 
   @override
   List<Object> get props => [
-        serverProviderCredentials,
-        dnsProviderCredentials,
-        backupsCredentials,
-        servers,
-      ];
+    serverProviderCredentials,
+    dnsProviderCredentials,
+    backupsCredentials,
+    servers,
+  ];
 }

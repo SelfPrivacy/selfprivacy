@@ -13,14 +13,15 @@ sealed class VolumesState extends Equatable {
   final int? _serverVolumesHashCode;
 
   DiskVolume getVolume(final String volumeName) => volumes.firstWhere(
-        (final volume) => volume.name == volumeName,
-        orElse: () => DiskVolume(),
-      );
+    (final volume) => volume.name == volumeName,
+    orElse: () => DiskVolume(),
+  );
 
-  String? get location => volumes
-      .firstWhereOrNull((final volume) => volume.isResizable)
-      ?.providerVolume
-      ?.location;
+  String? get location =>
+      volumes
+          .firstWhereOrNull((final volume) => volume.isResizable)
+          ?.providerVolume
+          ?.location;
 
   bool get isProviderVolumesLoaded => providerVolumes.isNotEmpty;
 
@@ -33,10 +34,7 @@ sealed class VolumesState extends Equatable {
 
 class VolumesInitial extends VolumesState {
   VolumesInitial()
-      : super(
-          diskStatus: DiskStatus(),
-          serverVolumesHashCode: null,
-        );
+    : super(diskStatus: DiskStatus(), serverVolumesHashCode: null);
 
   @override
   List<Object?> get props => [providerVolumes, _serverVolumesHashCode];
@@ -46,8 +44,7 @@ class VolumesInitial extends VolumesState {
     required final int? serverVolumesHashCode,
     final DiskStatus? diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
-  }) =>
-      VolumesInitial();
+  }) => VolumesInitial();
 }
 
 class VolumesLoading extends VolumesState {
@@ -56,9 +53,9 @@ class VolumesLoading extends VolumesState {
     final DiskStatus? diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
   }) : super(
-          diskStatus: diskStatus ?? DiskStatus(),
-          providerVolumes: providerVolumes ?? const [],
-        );
+         diskStatus: diskStatus ?? DiskStatus(),
+         providerVolumes: providerVolumes ?? const [],
+       );
 
   @override
   List<Object?> get props => [providerVolumes, _serverVolumesHashCode];
@@ -68,12 +65,11 @@ class VolumesLoading extends VolumesState {
     required final int? serverVolumesHashCode,
     final DiskStatus? diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
-  }) =>
-      VolumesLoading(
-        diskStatus: diskStatus ?? this.diskStatus,
-        providerVolumes: providerVolumes ?? this.providerVolumes,
-        serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
-      );
+  }) => VolumesLoading(
+    diskStatus: diskStatus ?? this.diskStatus,
+    providerVolumes: providerVolumes ?? this.providerVolumes,
+    serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
+  );
 }
 
 class VolumesLoaded extends VolumesState {
@@ -81,9 +77,7 @@ class VolumesLoaded extends VolumesState {
     required super.serverVolumesHashCode,
     required super.diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
-  }) : super(
-          providerVolumes: providerVolumes ?? const [],
-        );
+  }) : super(providerVolumes: providerVolumes ?? const []);
 
   @override
   List<Object?> get props => [providerVolumes, _serverVolumesHashCode];
@@ -93,12 +87,11 @@ class VolumesLoaded extends VolumesState {
     final DiskStatus? diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
     final int? serverVolumesHashCode,
-  }) =>
-      VolumesLoaded(
-        diskStatus: diskStatus ?? this.diskStatus,
-        providerVolumes: providerVolumes ?? this.providerVolumes,
-        serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
-      );
+  }) => VolumesLoaded(
+    diskStatus: diskStatus ?? this.diskStatus,
+    providerVolumes: providerVolumes ?? this.providerVolumes,
+    serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
+  );
 }
 
 class VolumesResizing extends VolumesState {
@@ -106,9 +99,7 @@ class VolumesResizing extends VolumesState {
     required super.serverVolumesHashCode,
     required super.diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
-  }) : super(
-          providerVolumes: providerVolumes ?? const [],
-        );
+  }) : super(providerVolumes: providerVolumes ?? const []);
 
   @override
   List<Object?> get props => [providerVolumes, _serverVolumesHashCode];
@@ -118,10 +109,9 @@ class VolumesResizing extends VolumesState {
     final DiskStatus? diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
     final int? serverVolumesHashCode,
-  }) =>
-      VolumesResizing(
-        diskStatus: diskStatus ?? this.diskStatus,
-        providerVolumes: providerVolumes ?? this.providerVolumes,
-        serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
-      );
+  }) => VolumesResizing(
+    diskStatus: diskStatus ?? this.diskStatus,
+    providerVolumes: providerVolumes ?? this.providerVolumes,
+    serverVolumesHashCode: serverVolumesHashCode ?? _serverVolumesHashCode!,
+  );
 }

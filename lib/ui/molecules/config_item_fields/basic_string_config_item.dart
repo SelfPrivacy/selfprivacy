@@ -64,48 +64,45 @@ class _BasicStringConfigItemState extends State<BasicStringConfigItem> {
 
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              labelText: widget.configItem.description,
-              hintText: widget.configItem.value,
-              counter: _controller.text != widget.configItem.value
+    children: [
+      TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          labelText: widget.configItem.description,
+          hintText: widget.configItem.value,
+          counter:
+              _controller.text != widget.configItem.value
                   ? InkWell(
-                      onTap: () {
-                        _controller.text = widget.configItem.value;
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'service_page.modified'.tr(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                          const Gap(8.0),
-                          Icon(
-                            Icons.undo_outlined,
-                            size: 16.0,
+                    onTap: () {
+                      _controller.text = widget.configItem.value;
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'service_page.modified'.tr(),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelSmall?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                        ],
-                      ),
-                    )
-                  : Text(
-                      ' ',
-                      style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                        const Gap(8.0),
+                        Icon(
+                          Icons.undo_outlined,
+                          size: 16.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
                     ),
-              border: const OutlineInputBorder(),
-              errorText: _isValid ? null : 'service_page.invalid_input'.tr(),
-            ),
-          ),
-        ],
-      );
+                  )
+                  : Text(' ', style: Theme.of(context).textTheme.labelSmall),
+          border: const OutlineInputBorder(),
+          errorText: _isValid ? null : 'service_page.invalid_input'.tr(),
+        ),
+      ),
+    ],
+  );
 }

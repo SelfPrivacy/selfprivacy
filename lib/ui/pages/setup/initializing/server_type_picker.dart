@@ -12,10 +12,7 @@ import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 class ServerTypePicker extends StatefulWidget {
-  const ServerTypePicker({
-    required this.serverInstallationCubit,
-    super.key,
-  });
+  const ServerTypePicker({required this.serverInstallationCubit, super.key});
 
   final ServerInstallationCubit serverInstallationCubit;
 
@@ -69,90 +66,86 @@ class SelectLocationPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => FutureBuilder(
-        future: serverInstallationCubit.fetchAvailableLocations(),
-        builder: (
-          final BuildContext context,
-          final AsyncSnapshot<Object?> snapshot,
-        ) {
-          if (snapshot.hasData) {
-            if ((snapshot.data as List<ServerProviderLocation>).isEmpty) {
-              return Text('initializing.no_locations_found'.tr());
-            }
-            return ResponsiveLayoutWithInfobox(
-              topChild: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'initializing.choose_location_type'.tr(),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'initializing.choose_location_type_text'.tr(),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
+    future: serverInstallationCubit.fetchAvailableLocations(),
+    builder: (
+      final BuildContext context,
+      final AsyncSnapshot<Object?> snapshot,
+    ) {
+      if (snapshot.hasData) {
+        if ((snapshot.data as List<ServerProviderLocation>).isEmpty) {
+          return Text('initializing.no_locations_found'.tr());
+        }
+        return ResponsiveLayoutWithInfobox(
+          topChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'initializing.choose_location_type'.tr(),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-              primaryColumn: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...(snapshot.data! as List<ServerProviderLocation>).map(
-                    (final location) => Column(
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: InkResponse(
-                              highlightShape: BoxShape.rectangle,
-                              onTap: () {
-                                callback(location);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${location.flag} ${location.title}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      location.countryDisplayKey.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                    if (location.description != null)
-                                      const SizedBox(height: 4),
-                                    if (location.description != null)
-                                      Text(
-                                        location.description!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                  ],
+              const SizedBox(height: 16),
+              Text(
+                'initializing.choose_location_type_text'.tr(),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+          primaryColumn: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...(snapshot.data! as List<ServerProviderLocation>).map(
+                (final location) => Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        clipBehavior: Clip.antiAlias,
+                        child: InkResponse(
+                          highlightShape: BoxShape.rectangle,
+                          onTap: () {
+                            callback(location);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${location.flag} ${location.title}',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
-                              ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  location.countryDisplayKey.tr(),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                if (location.description != null)
+                                  const SizedBox(height: 4),
+                                if (location.description != null)
+                                  Text(
+                                    location.description!,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                              ],
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                  ],
+                ),
               ),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-        },
-      );
+            ],
+          ),
+        );
+      } else {
+        return const Center(child: CircularProgressIndicator.adaptive());
+      }
+    },
+  );
 }
 
 class SelectTypePage extends StatelessWidget {
@@ -169,15 +162,12 @@ class SelectTypePage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final Future<List<ServerType>> serverTypes =
-        serverInstallationCubit.fetchAvailableTypesByLocation(location);
-    final Future<AdditionalPricing?> prices =
-        serverInstallationCubit.fetchAvailableAdditionalPricing(location);
+    final Future<List<ServerType>> serverTypes = serverInstallationCubit
+        .fetchAvailableTypesByLocation(location);
+    final Future<AdditionalPricing?> prices = serverInstallationCubit
+        .fetchAvailableAdditionalPricing(location);
     return FutureBuilder(
-      future: Future.wait([
-        serverTypes,
-        prices,
-      ]),
+      future: Future.wait([serverTypes, prices]),
       builder: (
         final BuildContext context,
         final AsyncSnapshot<List<dynamic>> snapshot,
@@ -198,17 +188,18 @@ class SelectTypePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 LayoutBuilder(
-                  builder: (final context, final constraints) => CustomPaint(
-                    size: Size(
-                      constraints.maxWidth,
-                      (constraints.maxWidth * 1).toDouble(),
-                    ),
-                    painter: StrayDeerPainter(
-                      colorScheme: Theme.of(context).colorScheme,
-                      colorPalette:
-                          InheritedAppController.of(context).corePalette,
-                    ),
-                  ),
+                  builder:
+                      (final context, final constraints) => CustomPaint(
+                        size: Size(
+                          constraints.maxWidth,
+                          (constraints.maxWidth * 1).toDouble(),
+                        ),
+                        painter: StrayDeerPainter(
+                          colorScheme: Theme.of(context).colorScheme,
+                          colorPalette:
+                              InheritedAppController.of(context).corePalette,
+                        ),
+                      ),
                 ),
                 const SizedBox(height: 16),
                 BrandButton.filled(
@@ -221,7 +212,8 @@ class SelectTypePage extends StatelessWidget {
             );
           }
           final prices = snapshot.data![1] as AdditionalPricing;
-          final storagePrice = serverInstallationCubit.initialStorage.gibibyte *
+          final storagePrice =
+              serverInstallationCubit.initialStorage.gibibyte *
               prices.perVolumeGb.value;
           final publicIpPrice = prices.perPublicIpv4.value;
           return ResponsiveLayoutWithInfobox(
@@ -268,16 +260,18 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.memory_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
                                         'server.core_count'.plural(type.cores),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -286,17 +280,19 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.memory_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
                                         'initializing.choose_server_type_ram'
                                             .tr(args: [type.ram.toString()]),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -305,19 +301,23 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.sd_card_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
                                         'initializing.choose_server_type_storage'
                                             .tr(
-                                          args: [type.disk.gibibyte.toString()],
-                                        ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                                              args: [
+                                                type.disk.gibibyte.toString(),
+                                              ],
+                                            ),
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -328,21 +328,22 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.payments_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
-                                        'initializing.choose_server_type_payment_per_month'
-                                            .tr(
+                                        'initializing.choose_server_type_payment_per_month'.tr(
                                           args: [
                                             '${UiHelpers.formatWithPrecision(type.price.value + storagePrice + publicIpPrice)} ${type.price.currency.shortcode}',
                                           ],
                                         ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyLarge,
                                       ),
                                     ],
                                   ),
@@ -375,11 +376,9 @@ class SelectTypePage extends StatelessWidget {
                                                 ),
                                                 const SizedBox(width: 8),
                                                 Text(
-                                                  'initializing.choose_server_type_payment_server'
-                                                      .tr(
+                                                  'initializing.choose_server_type_payment_server'.tr(
                                                     args: [
-                                                      UiHelpers
-                                                          .formatWithPrecision(
+                                                      UiHelpers.formatWithPrecision(
                                                         type.price.value,
                                                       ),
                                                     ],
@@ -408,11 +407,9 @@ class SelectTypePage extends StatelessWidget {
                                                 ),
                                                 const SizedBox(width: 8),
                                                 Text(
-                                                  'initializing.choose_server_type_payment_storage'
-                                                      .tr(
+                                                  'initializing.choose_server_type_payment_storage'.tr(
                                                     args: [
-                                                      UiHelpers
-                                                          .formatWithPrecision(
+                                                      UiHelpers.formatWithPrecision(
                                                         storagePrice,
                                                       ),
                                                     ],
@@ -442,11 +439,9 @@ class SelectTypePage extends StatelessWidget {
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text(
-                                                    'initializing.choose_server_type_payment_ip'
-                                                        .tr(
+                                                    'initializing.choose_server_type_payment_ip'.tr(
                                                       args: [
-                                                        UiHelpers
-                                                            .formatWithPrecision(
+                                                        UiHelpers.formatWithPrecision(
                                                           publicIpPrice,
                                                         ),
                                                       ],
@@ -456,8 +451,8 @@ class SelectTypePage extends StatelessWidget {
                                                         .bodyMedium
                                                         ?.copyWith(
                                                           color: Theme.of(
-                                                            context,
-                                                          )
+                                                                context,
+                                                              )
                                                               .colorScheme
                                                               .onSurface
                                                               .withAlpha(128),
@@ -482,8 +477,9 @@ class SelectTypePage extends StatelessWidget {
                 ),
               ],
             ),
-            secondaryColumn:
-                InfoBox(text: 'initializing.choose_server_type_notice'.tr()),
+            secondaryColumn: InfoBox(
+              text: 'initializing.choose_server_type_notice'.tr(),
+            ),
           );
         } else {
           return const Center(child: CircularProgressIndicator.adaptive());

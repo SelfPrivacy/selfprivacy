@@ -20,40 +20,42 @@ class ResponsiveLayoutWithInfobox extends StatelessWidget {
 
     if (Breakpoints.large.isActive(context)) {
       return LayoutBuilder(
-        builder: (final context, final constraints) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (hasTopChild)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: constraints.maxWidth * 0.9,
-                    child: topChild,
-                  ),
-                ],
-              ),
-            if (hasTopChild) const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        builder:
+            (final context, final constraints) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: hasSecondaryColumn
-                      ? constraints.maxWidth * 0.7
-                      : constraints.maxWidth * 0.9,
-                  child: primaryColumn,
-                ),
-                if (hasSecondaryColumn) const SizedBox(width: 16),
-                if (hasSecondaryColumn)
-                  SizedBox(
-                    width: constraints.maxWidth * 0.2,
-                    child: secondaryColumn,
+                if (hasTopChild)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: constraints.maxWidth * 0.9,
+                        child: topChild,
+                      ),
+                    ],
                   ),
+                if (hasTopChild) const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width:
+                          hasSecondaryColumn
+                              ? constraints.maxWidth * 0.7
+                              : constraints.maxWidth * 0.9,
+                      child: primaryColumn,
+                    ),
+                    if (hasSecondaryColumn) const SizedBox(width: 16),
+                    if (hasSecondaryColumn)
+                      SizedBox(
+                        width: constraints.maxWidth * 0.2,
+                        child: secondaryColumn,
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
       );
     }
     return Column(

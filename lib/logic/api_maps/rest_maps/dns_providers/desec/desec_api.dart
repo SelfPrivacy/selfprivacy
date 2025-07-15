@@ -56,8 +56,9 @@ class DesecApi extends RestApiMap {
         '',
         options: Options(
           followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+          validateStatus:
+              (final status) =>
+                  status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Token $token'},
         ),
       );
@@ -71,11 +72,7 @@ class DesecApi extends RestApiMap {
     }
 
     if (response == null) {
-      return GenericResult(
-        data: isValid,
-        success: false,
-        message: message,
-      );
+      return GenericResult(data: isValid, success: false, message: message);
     }
 
     message = response.statusMessage;
@@ -89,11 +86,7 @@ class DesecApi extends RestApiMap {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return GenericResult(
-      data: isValid,
-      success: true,
-      message: message,
-    );
+    return GenericResult(data: isValid, success: true, message: message);
   }
 
   Future<GenericResult<List<DesecDomain>>> getDomains() async {
@@ -102,15 +95,12 @@ class DesecApi extends RestApiMap {
     late final Response? response;
     final Dio client = await getClient();
     try {
-      response = await client.get(
-        '',
-      );
+      response = await client.get('');
       await Future.delayed(const Duration(seconds: 1));
-      domains = response.data!
-          .map<DesecDomain>(
-            (final e) => DesecDomain.fromJson(e),
-          )
-          .toList();
+      domains =
+          response.data!
+              .map<DesecDomain>((final e) => DesecDomain.fromJson(e))
+              .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -146,11 +136,7 @@ class DesecApi extends RestApiMap {
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -173,11 +159,7 @@ class DesecApi extends RestApiMap {
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -197,11 +179,10 @@ class DesecApi extends RestApiMap {
     try {
       response = await client.get(url);
       await Future.delayed(const Duration(seconds: 1));
-      allRecords = response.data!
-          .map<DesecDnsRecord>(
-            (final e) => DesecDnsRecord.fromJson(e),
-          )
-          .toList();
+      allRecords =
+          response.data!
+              .map<DesecDnsRecord>((final e) => DesecDnsRecord.fromJson(e))
+              .toList();
     } catch (e) {
       print(e);
       return GenericResult(

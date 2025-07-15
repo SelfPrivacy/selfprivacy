@@ -47,9 +47,7 @@ class FieldCubitFactory {
     const int displayNameMaxLength = 255;
     return FieldCubit(
       initalValue: '',
-      validations: [
-        LengthStringLongerValidation(displayNameMaxLength),
-      ],
+      validations: [LengthStringLongerValidation(displayNameMaxLength)],
     );
   }
 
@@ -72,15 +70,12 @@ class FieldCubitFactory {
   }
 
   FieldCubit<String> createRequiredStringField() => FieldCubit(
-        initalValue: '',
-        validations: [
-          RequiredStringValidation('validations.required'.tr()),
-        ],
-      );
+    initalValue: '',
+    validations: [RequiredStringValidation('validations.required'.tr())],
+  );
 
-  FieldCubit<List<String>> createGroupsField() => FieldCubit(
-        initalValue: const [],
-      );
+  FieldCubit<List<String>> createGroupsField() =>
+      FieldCubit(initalValue: const []);
 
   final BuildContext context;
 }

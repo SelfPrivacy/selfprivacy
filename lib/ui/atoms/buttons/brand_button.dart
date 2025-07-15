@@ -11,9 +11,7 @@ class BrandButton {
     assert(title != null || child != null, 'title or child must be provided');
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-        minWidth: double.infinity,
-      ),
+      constraints: const BoxConstraints(minWidth: double.infinity),
       child: FilledButton(
         key: key,
         onPressed: onPressed,
@@ -21,7 +19,8 @@ class BrandButton {
           tapTargetSize: MaterialTapTargetSize.padded,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
         ),
-        child: child ??
+        child:
+            child ??
             Text(
               title ?? '',
               textAlign: TextAlign.center,
@@ -35,12 +34,8 @@ class BrandButton {
     required final VoidCallback onPressed,
     required final String title,
     final Key? key,
-  }) =>
-      ConstrainedBox(
-        constraints: const BoxConstraints(
-          minHeight: 40,
-          minWidth: double.infinity,
-        ),
-        child: TextButton(onPressed: onPressed, child: Text(title)),
-      );
+  }) => ConstrainedBox(
+    constraints: const BoxConstraints(minHeight: 40, minWidth: double.infinity),
+    child: TextButton(onPressed: onPressed, child: Text(title)),
+  );
 }

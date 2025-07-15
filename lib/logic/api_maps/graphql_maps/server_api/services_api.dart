@@ -10,7 +10,8 @@ mixin ServicesApi on GraphQLApiMap {
       if (response.hasException) {
         print(response.exception.toString());
       }
-      services = response.parsedData?.services.allServices
+      services =
+          response.parsedData?.services.allServices
               .map<Service>((final service) => Service.fromGraphQL(service))
               .toList() ??
           [];
@@ -20,9 +21,7 @@ mixin ServicesApi on GraphQLApiMap {
     return services;
   }
 
-  Future<GenericResult<bool>> enableService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<bool>> enableService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$EnableService(serviceId: serviceId);
@@ -45,9 +44,7 @@ mixin ServicesApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<void>> disableService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<void>> disableService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$DisableService(serviceId: serviceId);
@@ -70,9 +67,7 @@ mixin ServicesApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<bool>> stopService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<bool>> stopService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$StopService(serviceId: serviceId);
@@ -118,9 +113,7 @@ mixin ServicesApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<bool>> restartService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<bool>> restartService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$RestartService(serviceId: serviceId);
@@ -187,14 +180,15 @@ mixin ServicesApi on GraphQLApiMap {
           configuration: settings,
         ),
       );
-      final mutation =
-          Options$Mutation$SetServiceConfiguration(variables: variables);
+      final mutation = Options$Mutation$SetServiceConfiguration(
+        variables: variables,
+      );
       final response = await client.mutate$SetServiceConfiguration(mutation);
       return GenericResult(
         data: null,
         success:
             response.parsedData?.services.setServiceConfiguration.success ??
-                false,
+            false,
         code: response.parsedData?.services.setServiceConfiguration.code ?? 0,
         message: response.parsedData?.services.setServiceConfiguration.message,
       );

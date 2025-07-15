@@ -9,8 +9,10 @@ mixin LogsApi on GraphQLApiMap {
   }) async {
     QueryResult<Query$Logs> response;
     List<ServerLogEntry> logsList = [];
-    ServerLogsPageMeta pageMeta =
-        const ServerLogsPageMeta(downCursor: null, upCursor: null);
+    ServerLogsPageMeta pageMeta = const ServerLogsPageMeta(
+      downCursor: null,
+      upCursor: null,
+    );
 
     try {
       final GraphQLClient client = await getClient();
@@ -28,7 +30,8 @@ mixin LogsApi on GraphQLApiMap {
       if (response.parsedData == null) {
         return (logsList, pageMeta);
       }
-      logsList = response.parsedData?.logs.paginated.entries
+      logsList =
+          response.parsedData?.logs.paginated.entries
               .map<ServerLogEntry>(
                 (final log) => ServerLogEntry.fromGraphQL(log),
               )

@@ -29,25 +29,24 @@ class _ProgressBarState extends State<ProgressBar> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: LayoutBuilder(
-            builder: (final _, final constraints) => AnimatedContainer(
-              width: constraints.maxWidth * progress,
-              height: 5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.secondary,
-                  ],
+            builder:
+                (final _, final constraints) => AnimatedContainer(
+                  width: constraints.maxWidth * progress,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                      ],
+                    ),
+                  ),
+                  duration: const Duration(milliseconds: 300),
                 ),
-              ),
-              duration: const Duration(
-                milliseconds: 300,
-              ),
-            ),
           ),
         ),
       ],

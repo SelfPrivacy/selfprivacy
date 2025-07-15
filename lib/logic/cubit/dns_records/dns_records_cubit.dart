@@ -12,9 +12,7 @@ part 'dns_records_state.dart';
 
 class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
   DnsRecordsCubit()
-      : super(
-          const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing),
-        );
+    : super(const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
 
   final ServerApi api = ServerApi();
 
@@ -61,9 +59,10 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     emit(
       DnsRecordsState(
         dnsRecords: foundRecords.data,
-        dnsState: foundRecords.data.any((final r) => r.isSatisfied == false)
-            ? DnsRecordsStatus.error
-            : DnsRecordsStatus.good,
+        dnsState:
+            foundRecords.data.any((final r) => r.isSatisfied == false)
+                ? DnsRecordsStatus.error
+                : DnsRecordsStatus.good,
       ),
     );
   }
@@ -78,8 +77,9 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     final String dkimPublicKey,
     final List<DnsRecord> pendingDnsRecords,
   ) async {
-    final result = await ProvidersController.currentDnsProvider!
-        .getDnsRecords(domain: domain);
+    final result = await ProvidersController.currentDnsProvider!.getDnsRecords(
+      domain: domain,
+    );
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
         success: result.success,
@@ -102,13 +102,14 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
             (final r) =>
                 (r.name == pendingDnsRecord.name) &&
                 r.type == pendingDnsRecord.type,
-            orElse: () => DnsRecord(
-              displayName: pendingDnsRecord.displayName,
-              name: pendingDnsRecord.name,
-              type: pendingDnsRecord.type,
-              content: pendingDnsRecord.content,
-              ttl: pendingDnsRecord.ttl,
-            ),
+            orElse:
+                () => DnsRecord(
+                  displayName: pendingDnsRecord.displayName,
+                  name: pendingDnsRecord.name,
+                  type: pendingDnsRecord.type,
+                  content: pendingDnsRecord.content,
+                  ttl: pendingDnsRecord.ttl,
+                ),
           );
           final String foundContent =
               foundRecord.content!.replaceAll(RegExp(r'\s+'), '').trim();
@@ -144,11 +145,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
       }
     } catch (e) {
       print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: [], success: false, message: e.toString());
     }
     // If providerDnsRecords contains a link-local ipv6 record, return an error
     if (providerDnsRecords.any(
@@ -161,10 +158,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
         message: 'link-local',
       );
     }
-    return GenericResult(
-      data: foundRecords,
-      success: true,
-    );
+    return GenericResult(data: foundRecords, success: true);
   }
 
   @override
@@ -195,16 +189,14 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
 
     // If there are no AAAA records, make empty copies of A records
     if (!records.any((final r) => r.type == 'AAAA')) {
-      final recordsToAdd = records
-          .where((final r) => r.type == 'A')
-          .map(
-            (final r) => DnsRecord(
-              name: r.name,
-              type: 'AAAA',
-              content: null,
-            ),
-          )
-          .toList();
+      final recordsToAdd =
+          records
+              .where((final r) => r.type == 'A')
+              .map(
+                (final r) =>
+                    DnsRecord(name: r.name, type: 'AAAA', content: null),
+              )
+              .toList();
       records.addAll(recordsToAdd);
     }
 

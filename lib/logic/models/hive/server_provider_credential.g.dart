@@ -9,7 +9,7 @@ part of 'server_provider_credential.dart';
 class ServerProviderCredentialAdapter
     extends TypeAdapter<ServerProviderCredential> {
   @override
-  final int typeId = 7;
+  final typeId = 7;
 
   @override
   ServerProviderCredential read(BinaryReader reader) {

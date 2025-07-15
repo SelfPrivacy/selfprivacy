@@ -39,10 +39,9 @@ class _SnapshotModalState extends State<SnapshotModal> {
 
     final bool isServiceBusy = busyServices.contains(widget.snapshot.serviceId);
 
-    final Service? service = context
-        .read<ServicesBloc>()
-        .state
-        .getServiceById(widget.snapshot.serviceId);
+    final Service? service = context.read<ServicesBloc>().state.getServiceById(
+      widget.snapshot.serviceId,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -76,7 +75,8 @@ class _SnapshotModalState extends State<SnapshotModal> {
                 ),
                 const SizedBox(height: 16),
                 RadioSelectionCard(
-                  isSelected: selectedStrategy ==
+                  isSelected:
+                      selectedStrategy ==
                       BackupRestoreStrategy.downloadVerifyOverwrite,
                   onTap: () {
                     setState(() {
@@ -105,19 +105,21 @@ class _SnapshotModalState extends State<SnapshotModal> {
                 const SizedBox(height: 16),
                 // Restore backup button
                 BrandButton.filled(
-                  onPressed: isServiceBusy
-                      ? null
-                      : () {
-                          context.read<BackupsBloc>().add(
-                                RestoreBackup(
-                                  widget.snapshot.id,
-                                  selectedStrategy,
-                                ),
-                              );
-                          Navigator.of(context).pop();
-                          getIt<NavigationService>()
-                              .showSnackBar('backup.restore_started'.tr());
-                        },
+                  onPressed:
+                      isServiceBusy
+                          ? null
+                          : () {
+                            context.read<BackupsBloc>().add(
+                              RestoreBackup(
+                                widget.snapshot.id,
+                                selectedStrategy,
+                              ),
+                            );
+                            Navigator.of(context).pop();
+                            getIt<NavigationService>().showSnackBar(
+                              'backup.restore_started'.tr(),
+                            );
+                          },
                   title: 'backup.restore'.tr(),
                 ),
               ],

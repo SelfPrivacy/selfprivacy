@@ -10,62 +10,49 @@ import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 class PermissionsCard extends StatelessWidget {
-  const PermissionsCard({
-    required this.user,
-    super.key,
-  });
+  const PermissionsCard({required this.user, super.key});
 
   final User user;
 
   @override
   Widget build(final BuildContext context) => FilledCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'users.permissions'.tr(),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-              ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'users.permissions'.tr(),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            const Divider(height: 0),
-            InkResponse(
-              highlightShape: BoxShape.rectangle,
-              onTap: () => context.pushRoute(
-                NewUserRoute(user: user),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...user.directmemberof?.map(
-                        (final String group) => ExplicitPermissionTile(
-                          group: group,
-                        ),
-                      ) ??
-                      [],
-                  ...user.directmemberof?.isEmpty ?? false
-                      ? [
-                          const ExplicitPermissionTile(
-                            group: 'sp.only_email',
-                          ),
-                        ]
-                      : [],
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-      );
+        const Divider(height: 0),
+        InkResponse(
+          highlightShape: BoxShape.rectangle,
+          onTap: () => context.pushRoute(NewUserRoute(user: user)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...user.directmemberof?.map(
+                    (final String group) =>
+                        ExplicitPermissionTile(group: group),
+                  ) ??
+                  [],
+              ...user.directmemberof?.isEmpty ?? false
+                  ? [const ExplicitPermissionTile(group: 'sp.only_email')]
+                  : [],
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class ExplicitPermissionTile extends StatelessWidget {
-  const ExplicitPermissionTile({
-    required this.group,
-    super.key,
-  });
+  const ExplicitPermissionTile({required this.group, super.key});
 
   final String group;
 
@@ -107,30 +94,29 @@ class ExplicitPermissionTile extends StatelessWidget {
 
     if (group.split('.').length == 3) {
       final parts = group.split('.');
-      final service =
-          context.watch<ServicesBloc>().state.getServiceById(parts[1]);
+      final service = context.watch<ServicesBloc>().state.getServiceById(
+        parts[1],
+      );
       return ListTile(
-        leading: service != null
-            ? SvgPicture.string(
-                service.svgIcon,
-                width: 24.0,
-                height: 24.0,
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.onSurfaceVariant,
-                  BlendMode.srcIn,
+        leading:
+            service != null
+                ? SvgPicture.string(
+                  service.svgIcon,
+                  width: 24.0,
+                  height: 24.0,
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.onSurfaceVariant,
+                    BlendMode.srcIn,
+                  ),
+                )
+                : Icon(
+                  Icons.question_mark_outlined,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-              )
-            : Icon(
-                Icons.question_mark_outlined,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
         textColor: Theme.of(context).colorScheme.onSurfaceVariant,
         title: Text(
           service != null
-              ? UiHelpers.permissionTitle(
-                  parts[2],
-                  service.displayName,
-                )
+              ? UiHelpers.permissionTitle(parts[2], service.displayName)
               : group,
         ),
       );

@@ -175,18 +175,13 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               child: Text('storage.start_migration_button'.tr()),
               onPressed: () {
                 if (widget.isMigration) {
-                  context.read<ServerJobsBloc>().migrateToBinds(
-                        serviceToDisk,
-                      );
+                  context.read<ServerJobsBloc>().migrateToBinds(serviceToDisk);
                 } else {
                   for (final service in widget.services) {
                     if (serviceToDisk[service.id] != null) {
                       context.read<ServicesBloc>().add(
-                            ServiceMove(
-                              service,
-                              serviceToDisk[service.id]!,
-                            ),
-                          );
+                        ServiceMove(service, serviceToDisk[service.id]!),
+                      );
                     }
                   }
                 }

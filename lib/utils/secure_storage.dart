@@ -12,8 +12,9 @@ class SecureStorage {
 
   static Future<Uint8List?> getKey() async {
     try {
-      final bool hasEncryptionKey =
-          await secureStorage.containsKey(key: keyName);
+      final bool hasEncryptionKey = await secureStorage.containsKey(
+        key: keyName,
+      );
       if (!hasEncryptionKey) {
         return null;
       }
@@ -22,11 +23,7 @@ class SecureStorage {
 
       return base64Url.decode(string!);
     } catch (error, stackTrace) {
-      log(
-        'error reading encryption key',
-        error: error,
-        stackTrace: stackTrace,
-      );
+      log('error reading encryption key', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }

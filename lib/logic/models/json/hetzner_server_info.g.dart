@@ -6,20 +6,18 @@ part of 'hetzner_server_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-HetznerServerInfo _$HetznerServerInfoFromJson(Map<String, dynamic> json) =>
-    HetznerServerInfo(
-      (json['id'] as num).toInt(),
-      json['name'] as String,
-      $enumDecode(_$ServerStatusEnumMap, json['status']),
-      DateTime.parse(json['created'] as String),
-      HetznerServerTypeInfo.fromJson(
-          json['server_type'] as Map<String, dynamic>),
-      HetznerServerInfo.locationFromJson(json['datacenter'] as Map),
-      HetznerPublicNetInfo.fromJson(json['public_net'] as Map<String, dynamic>),
-      (json['volumes'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
-          .toList(),
-    );
+HetznerServerInfo _$HetznerServerInfoFromJson(
+  Map<String, dynamic> json,
+) => HetznerServerInfo(
+  (json['id'] as num).toInt(),
+  json['name'] as String,
+  $enumDecode(_$ServerStatusEnumMap, json['status']),
+  DateTime.parse(json['created'] as String),
+  HetznerServerTypeInfo.fromJson(json['server_type'] as Map<String, dynamic>),
+  HetznerServerInfo.locationFromJson(json['datacenter'] as Map),
+  HetznerPublicNetInfo.fromJson(json['public_net'] as Map<String, dynamic>),
+  (json['volumes'] as List<dynamic>).map((e) => (e as num).toInt()).toList(),
+);
 
 Map<String, dynamic> _$HetznerServerInfoToJson(HetznerServerInfo instance) =>
     <String, dynamic>{
@@ -46,25 +44,23 @@ const _$ServerStatusEnumMap = {
 };
 
 HetznerPublicNetInfo _$HetznerPublicNetInfoFromJson(
-        Map<String, dynamic> json) =>
-    HetznerPublicNetInfo(
-      json['ipv4'] == null
-          ? null
-          : HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => HetznerPublicNetInfo(
+  json['ipv4'] == null
+      ? null
+      : HetznerIp4.fromJson(json['ipv4'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$HetznerPublicNetInfoToJson(
-        HetznerPublicNetInfo instance) =>
-    <String, dynamic>{
-      'ipv4': instance.ipv4,
-    };
+  HetznerPublicNetInfo instance,
+) => <String, dynamic>{'ipv4': instance.ipv4};
 
 HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(
-      (json['id'] as num).toInt(),
-      json['ip'] as String,
-      json['blocked'] as bool,
-      json['dns_ptr'] as String,
-    );
+  (json['id'] as num).toInt(),
+  json['ip'] as String,
+  json['blocked'] as bool,
+  json['dns_ptr'] as String,
+);
 
 Map<String, dynamic> _$HetznerIp4ToJson(HetznerIp4 instance) =>
     <String, dynamic>{
@@ -75,30 +71,30 @@ Map<String, dynamic> _$HetznerIp4ToJson(HetznerIp4 instance) =>
     };
 
 HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
-        Map<String, dynamic> json) =>
-    HetznerServerTypeInfo(
-      (json['cores'] as num).toInt(),
-      json['memory'] as num,
-      (json['disk'] as num).toInt(),
-      (json['prices'] as List<dynamic>)
-          .map((e) => HetznerPriceInfo.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      json['name'] as String,
-      json['description'] as String,
-      json['architecture'] as String,
-    );
+  Map<String, dynamic> json,
+) => HetznerServerTypeInfo(
+  (json['cores'] as num).toInt(),
+  json['memory'] as num,
+  (json['disk'] as num).toInt(),
+  (json['prices'] as List<dynamic>)
+      .map((e) => HetznerPriceInfo.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  json['name'] as String,
+  json['description'] as String,
+  json['architecture'] as String,
+);
 
 Map<String, dynamic> _$HetznerServerTypeInfoToJson(
-        HetznerServerTypeInfo instance) =>
-    <String, dynamic>{
-      'cores': instance.cores,
-      'memory': instance.memory,
-      'disk': instance.disk,
-      'name': instance.name,
-      'description': instance.description,
-      'architecture': instance.architecture,
-      'prices': instance.prices,
-    };
+  HetznerServerTypeInfo instance,
+) => <String, dynamic>{
+  'cores': instance.cores,
+  'memory': instance.memory,
+  'disk': instance.disk,
+  'name': instance.name,
+  'description': instance.description,
+  'architecture': instance.architecture,
+  'prices': instance.prices,
+};
 
 HetznerPriceInfo _$HetznerPriceInfoFromJson(Map<String, dynamic> json) =>
     HetznerPriceInfo(

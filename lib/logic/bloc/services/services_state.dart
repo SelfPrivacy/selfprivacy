@@ -2,42 +2,35 @@ part of 'services_bloc.dart';
 
 sealed class ServicesState extends Equatable {
   ServicesState({final List<ServiceLock> lockedServices = const []})
-      : _lockedServices =
-            lockedServices.where((final lock) => lock.isLocked).toList();
+    : _lockedServices =
+          lockedServices.where((final lock) => lock.isLocked).toList();
   final List<ServiceLock> _lockedServices;
   List<Service> get services;
-  List<String> get lockedServices => _lockedServices
-      .where((final lock) => lock.isLocked)
-      .map((final lock) => lock.serviceId)
-      .toList();
+  List<String> get lockedServices =>
+      _lockedServices
+          .where((final lock) => lock.isLocked)
+          .map((final lock) => lock.serviceId)
+          .toList();
 
-  List<Service> get installedServices => services
-      .where(
-        (final service) =>
-            service.isInstalled &&
-            (!service.isSystemService ||
-                (service.isSystemService &&
-                    service.status != ServiceStatus.active)),
-      )
-      .toList();
+  List<Service> get installedServices =>
+      services
+          .where(
+            (final service) =>
+                service.isInstalled &&
+                (!service.isSystemService ||
+                    (service.isSystemService &&
+                        service.status != ServiceStatus.active)),
+          )
+          .toList();
 
-  List<Service> get systemServices => services
-      .where(
-        (final service) => service.isSystemService,
-      )
-      .toList();
+  List<Service> get systemServices =>
+      services.where((final service) => service.isSystemService).toList();
 
-  List<Service> get availableServices => services
-      .where(
-        (final service) => !service.isInstalled,
-      )
-      .toList();
+  List<Service> get availableServices =>
+      services.where((final service) => !service.isInstalled).toList();
 
-  List<Service> get servicesThatCanBeBackedUp => services
-      .where(
-        (final service) => service.canBeBackedUp,
-      )
-      .toList();
+  List<Service> get servicesThatCanBeBackedUp =>
+      services.where((final service) => service.canBeBackedUp).toList();
 
   bool isServiceLocked(final String serviceId) =>
       lockedServices.contains(serviceId);
@@ -60,10 +53,8 @@ sealed class ServicesState extends Equatable {
 }
 
 class ServiceLock extends Equatable {
-  ServiceLock({
-    required this.serviceId,
-    required this.lockDuration,
-  }) : lockTime = DateTime.now();
+  ServiceLock({required this.serviceId, required this.lockDuration})
+    : lockTime = DateTime.now();
 
   final String serviceId;
   final Duration lockDuration;
@@ -86,8 +77,7 @@ class ServicesInitial extends ServicesState {
   ServicesState copyWith({
     final List<Service>? services,
     final List<ServiceLock>? lockedServices,
-  }) =>
-      ServicesInitial();
+  }) => ServicesInitial();
 }
 
 class ServicesLoaded extends ServicesState {
@@ -113,24 +103,17 @@ class ServicesLoaded extends ServicesState {
   ServicesLoaded copyWith({
     final List<Service>? services,
     final List<ServiceLock>? lockedServices,
-  }) =>
-      ServicesLoaded(
-        services: services ?? this.services,
-        lockedServices: lockedServices ?? _lockedServices,
-      );
+  }) => ServicesLoaded(
+    services: services ?? this.services,
+    lockedServices: lockedServices ?? _lockedServices,
+  );
 }
 
 class ServicesReloading extends ServicesLoaded {
-  ServicesReloading({
-    required super.services,
-    required super.lockedServices,
-  });
+  ServicesReloading({required super.services, required super.lockedServices});
 
   ServicesReloading.fromState(final ServicesLoaded state)
-      : super(
-          services: state.services,
-          lockedServices: state._lockedServices,
-        );
+    : super(services: state.services, lockedServices: state._lockedServices);
 
   @override
   List<Object?> get props => [services, lockedServices];

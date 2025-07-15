@@ -15,10 +15,7 @@ class NavigationService {
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (final _) => dialog,
-    );
+    showDialog(context: context, builder: (final _) => dialog);
   }
 
   void showSnackBar(final String text, {final SnackBarBehavior? behavior}) {

@@ -44,9 +44,7 @@ class ServicesCatalogPage extends StatelessWidget {
       children: [
         ...availableServices.map(
           (final service) => Padding(
-            padding: const EdgeInsets.only(
-              bottom: 16,
-            ),
+            padding: const EdgeInsets.only(bottom: 16),
             child: _ServicesCatalogPageCard(service: service),
           ),
         ),
@@ -56,61 +54,57 @@ class ServicesCatalogPage extends StatelessWidget {
 }
 
 class _ServicesCatalogPageCard extends StatelessWidget {
-  const _ServicesCatalogPageCard({
-    required this.service,
-  });
+  const _ServicesCatalogPageCard({required this.service});
 
   final Service service;
 
   @override
   Widget build(final BuildContext context) => Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkResponse(
-          highlightShape: BoxShape.rectangle,
-          onTap: () => context.pushRoute(
-            ServiceRoute(serviceId: service.id),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    clipBehavior: Clip.antiAlias,
+    child: InkResponse(
+      highlightShape: BoxShape.rectangle,
+      onTap: () => context.pushRoute(ServiceRoute(serviceId: service.id)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    IconStatusMask(
-                      status: StateType.stable,
-                      icon: SvgPicture.string(
-                        service.svgIcon,
-                        width: 32.0,
-                        height: 32.0,
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
+                IconStatusMask(
+                  status: StateType.stable,
+                  icon: SvgPicture.string(
+                    service.svgIcon,
+                    width: 32.0,
+                    height: 32.0,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
                     ),
-                    const Gap(8),
-                    Expanded(
-                      child: Text(
-                        service.displayName,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    Text(
-                      service.description,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
+                const Gap(8),
+                Expanded(
+                  child: Text(
+                    service.displayName,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ),
               ],
             ),
-          ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                Text(
+                  service.description,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

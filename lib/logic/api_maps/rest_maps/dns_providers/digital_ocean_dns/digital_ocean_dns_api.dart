@@ -56,8 +56,9 @@ class DigitalOceanDnsApi extends RestApiMap {
         '/account',
         options: Options(
           followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+          validateStatus:
+              (final status) =>
+                  status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
@@ -70,11 +71,7 @@ class DigitalOceanDnsApi extends RestApiMap {
     }
 
     if (response == null) {
-      return GenericResult(
-        data: isValid,
-        success: false,
-        message: message,
-      );
+      return GenericResult(data: isValid, success: false, message: message);
     }
 
     message = response.statusMessage;
@@ -88,11 +85,7 @@ class DigitalOceanDnsApi extends RestApiMap {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return GenericResult(
-      data: isValid,
-      success: true,
-      message: message,
-    );
+    return GenericResult(data: isValid, success: true, message: message);
   }
 
   Future<GenericResult<List<DigitalOceanDomain>>> getDomains() async {
@@ -101,11 +94,12 @@ class DigitalOceanDnsApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/domains');
-      domains = response.data['domains']!
-          .map<DigitalOceanDomain>(
-            (final e) => DigitalOceanDomain.fromJson(e),
-          )
-          .toList();
+      domains =
+          response.data['domains']!
+              .map<DigitalOceanDomain>(
+                (final e) => DigitalOceanDomain.fromJson(e),
+              )
+              .toList();
     } catch (e) {
       print(e);
       return GenericResult(
@@ -130,10 +124,7 @@ class DigitalOceanDnsApi extends RestApiMap {
     try {
       for (final DigitalOceanDnsRecord record in records) {
         allCreateFutures.add(
-          client.post(
-            '/domains/$domainName/records',
-            data: record.toJson(),
-          ),
+          client.post('/domains/$domainName/records', data: record.toJson()),
         );
       }
       await Future.wait(allCreateFutures);
@@ -142,11 +133,7 @@ class DigitalOceanDnsApi extends RestApiMap {
       rethrow;
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -169,11 +156,7 @@ class DigitalOceanDnsApi extends RestApiMap {
       await Future.wait(allDeleteFutures);
     } catch (e) {
       print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -197,7 +180,8 @@ class DigitalOceanDnsApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      allRecords = response.data['domain_records']
+      allRecords =
+          response.data['domain_records']
               .map<DigitalOceanDnsRecord>(
                 (final e) => DigitalOceanDnsRecord.fromJson(e),
               )
@@ -205,11 +189,7 @@ class DigitalOceanDnsApi extends RestApiMap {
           [];
     } catch (e) {
       print(e);
-      GenericResult(
-        data: allRecords,
-        success: false,
-        message: e.toString(),
-      );
+      GenericResult(data: allRecords, success: false, message: e.toString());
     } finally {
       close(client);
     }

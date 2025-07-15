@@ -11,16 +11,12 @@ class BackblazeFormCubit extends FormCubit {
   BackblazeFormCubit(this.serverInstallationCubit) {
     keyId = FieldCubit(
       initalValue: '',
-      validations: [
-        RequiredStringValidation('validations.required'.tr()),
-      ],
+      validations: [RequiredStringValidation('validations.required'.tr())],
     );
 
     applicationKey = FieldCubit(
       initalValue: '',
-      validations: [
-        RequiredStringValidation('required'),
-      ],
+      validations: [RequiredStringValidation('required')],
     );
 
     super.addFields([keyId, applicationKey]);

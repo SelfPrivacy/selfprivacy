@@ -16,16 +16,15 @@ class DnsRecord extends Equatable {
     this.proxied = false,
   });
 
-  DnsRecord.fromGraphQL(
-    final Fragment$fragmentDnsRecords record,
-  ) : this(
-          type: record.recordType,
-          name: record.name,
-          displayName: record.displayName,
-          content: record.content,
-          ttl: record.ttl,
-          priority: record.priority ?? 10,
-        );
+  DnsRecord.fromGraphQL(final Fragment$fragmentDnsRecords record)
+    : this(
+        type: record.recordType,
+        name: record.name,
+        displayName: record.displayName,
+        content: record.content,
+        ttl: record.ttl,
+        priority: record.priority ?? 10,
+      );
 
   final String type;
   final String? displayName;
@@ -39,11 +38,5 @@ class DnsRecord extends Equatable {
 
   @override
   @JsonKey(includeToJson: false)
-  List<Object?> get props => [
-        type,
-        name,
-        content,
-        ttl,
-        priority,
-      ];
+  List<Object?> get props => [type, name, content, ttl, priority];
 }

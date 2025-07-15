@@ -5,10 +5,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class BrandMarkdown extends StatefulWidget {
-  const BrandMarkdown({
-    required this.fileName,
-    super.key,
-  });
+  const BrandMarkdown({required this.fileName, super.key});
 
   final String fileName;
 
@@ -26,8 +23,9 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   }
 
   void _loadMdFile() async {
-    final String mdFromFile = await rootBundle
-        .loadString('assets/markdown/${widget.fileName}-${'locale'.tr()}.md');
+    final String mdFromFile = await rootBundle.loadString(
+      'assets/markdown/${widget.fileName}-${'locale'.tr()}.md',
+    );
     setState(() {
       _mdContent = mdFromFile;
     });

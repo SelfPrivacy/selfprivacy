@@ -4,10 +4,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 
 class ServiceStatusCard extends StatelessWidget {
-  const ServiceStatusCard({
-    required this.status,
-    super.key,
-  });
+  const ServiceStatusCard({required this.status, super.key});
   final ServiceStatus status;
 
   @override
@@ -54,10 +51,7 @@ class ServiceStatusCard extends StatelessWidget {
     return FilledCard(
       tertiary: true,
       child: ListTile(
-        leading: Icon(
-          icon,
-          size: 24,
-        ),
+        leading: Icon(icon, size: 24),
         title: Text(buttonTitle.tr()),
       ),
     );

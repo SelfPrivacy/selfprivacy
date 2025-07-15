@@ -8,7 +8,7 @@ part of 'backups_credential.dart';
 
 class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   BackupsCredential read(BinaryReader reader) {
@@ -19,9 +19,10 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
     return BackupsCredential(
       keyId: fields[0] as String,
       applicationKey: fields[1] as String,
-      provider: fields[2] == null
-          ? BackupsProviderType.backblaze
-          : fields[2] as BackupsProviderType,
+      provider:
+          fields[2] == null
+              ? BackupsProviderType.backblaze
+              : fields[2] as BackupsProviderType,
     );
   }
 
@@ -50,7 +51,7 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
 
 class BackupsProviderTypeAdapter extends TypeAdapter<BackupsProviderType> {
   @override
-  final int typeId = 103;
+  final typeId = 103;
 
   @override
   BackupsProviderType read(BinaryReader reader) {
@@ -73,16 +74,12 @@ class BackupsProviderTypeAdapter extends TypeAdapter<BackupsProviderType> {
     switch (obj) {
       case BackupsProviderType.none:
         writer.writeByte(0);
-        break;
       case BackupsProviderType.memory:
         writer.writeByte(1);
-        break;
       case BackupsProviderType.file:
         writer.writeByte(2);
-        break;
       case BackupsProviderType.backblaze:
         writer.writeByte(3);
-        break;
     }
   }
 

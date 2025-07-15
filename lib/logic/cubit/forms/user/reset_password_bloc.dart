@@ -10,11 +10,7 @@ import 'package:selfprivacy/utils/app_logger.dart';
 final _log = const AppLogger(name: 'ResetPasswordBloc').log;
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
-  ResetPasswordBloc({
-    required this.user,
-  }) : super(
-          const ResetPasswordState(),
-        ) {
+  ResetPasswordBloc({required this.user}) : super(const ResetPasswordState()) {
     _log('ResetPasswordBloc created for user: ${user.login}');
 
     on<RequestNewPassword>(
@@ -40,20 +36,16 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       return;
     }
 
-    emit(
-      const ResetPasswordState(
-        passwordResetLink: null,
-        isLoading: true,
-      ),
-    );
+    emit(const ResetPasswordState(passwordResetLink: null, isLoading: true));
 
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
     if (apiVersion == null) {
       throw Exception('basis.network_error'.tr());
     }
-    if (!VersionConstraint.parse(ssoSupportedVersion)
-        .allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(
+      ssoSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
       emit(
         ResetPasswordUnsupported(
           errorMessage: 'basis.feature_unsupported_on_api_version'.tr(
@@ -68,20 +60,18 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     }
 
     _log('Load start');
-    final (link, message) =
-        await getIt<ApiConnectionRepository>().generatePasswordResetLink(user);
+    final (link, message) = await getIt<ApiConnectionRepository>()
+        .generatePasswordResetLink(user);
 
     _log('Got link: $link, message: $message');
     if (state.isLoading) {
       emit(
         link != null
             ? ResetPasswordState(
-                passwordResetLink: link,
-                passwordResetMessage: message,
-              )
-            : ResetPasswordState(
-                errorMessage: message,
-              ),
+              passwordResetLink: link,
+              passwordResetMessage: message,
+            )
+            : ResetPasswordState(errorMessage: message),
       );
     }
   }
@@ -92,12 +82,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   ) async {
     _log('Reset password request cancelled');
     if (state.isLoading) {
-      emit(
-        const ResetPasswordState(
-          passwordResetLink: null,
-          isLoading: false,
-        ),
-      );
+      emit(const ResetPasswordState(passwordResetLink: null, isLoading: false));
     }
   }
 }
@@ -132,12 +117,14 @@ class ResetPasswordState extends Equatable {
   final String errorMessage;
 
   @override
-  List<Object?> get props =>
-      [passwordResetMessage, isLoading, passwordResetLink, errorMessage];
+  List<Object?> get props => [
+    passwordResetMessage,
+    isLoading,
+    passwordResetLink,
+    errorMessage,
+  ];
 }
 
 class ResetPasswordUnsupported extends ResetPasswordState {
-  const ResetPasswordUnsupported({
-    super.errorMessage,
-  }) : super();
+  const ResetPasswordUnsupported({super.errorMessage}) : super();
 }

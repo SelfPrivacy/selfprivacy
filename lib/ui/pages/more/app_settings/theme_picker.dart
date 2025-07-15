@@ -12,8 +12,9 @@ class _ThemePicker extends StatelessWidget {
       children: [
         SwitchListTile.adaptive(
           title: Text('application_settings.system_theme_mode_title'.tr()),
-          subtitle:
-              Text('application_settings.system_theme_mode_description'.tr()),
+          subtitle: Text(
+            'application_settings.system_theme_mode_description'.tr(),
+          ),
           value: appController.systemThemeModeActive,
           onChanged: appController.setSystemThemeModeFlag,
         ),
@@ -21,9 +22,10 @@ class _ThemePicker extends StatelessWidget {
           title: Text('application_settings.dark_theme_title'.tr()),
           subtitle: Text('application_settings.change_application_theme'.tr()),
           value: appController.darkThemeModeActive,
-          onChanged: appController.systemThemeModeActive
-              ? null
-              : appController.setDarkThemeModeFlag,
+          onChanged:
+              appController.systemThemeModeActive
+                  ? null
+                  : appController.setDarkThemeModeFlag,
         ),
       ],
     );

@@ -1,9 +1,8 @@
 part of 'groups_bloc.dart';
 
 sealed class GroupsState extends Equatable {
-  GroupsState({
-    required final List<String> groups,
-  }) : _hashCode = Object.hashAll(groups);
+  GroupsState({required final List<String> groups})
+    : _hashCode = Object.hashAll(groups);
 
   final int _hashCode;
 
@@ -33,7 +32,8 @@ sealed class GroupsState extends Equatable {
     return serviceGroups;
   }
 
-  List<String> get unrecognizedGroups => groups.where((final String group) {
+  List<String> get unrecognizedGroups =>
+      groups.where((final String group) {
         final parts = group.split('.');
         return parts.length != 3 &&
             group != fullUsersGroup &&
@@ -49,18 +49,14 @@ class GroupsInitial extends GroupsState {
 }
 
 class GroupsRefreshing extends GroupsState {
-  GroupsRefreshing({
-    required super.groups,
-  });
+  GroupsRefreshing({required super.groups});
 
   @override
   List<Object> get props => [_hashCode];
 }
 
 class GroupsLoaded extends GroupsState {
-  GroupsLoaded({
-    required super.groups,
-  });
+  GroupsLoaded({required super.groups});
 
   @override
   List<Object> get props => [_hashCode];

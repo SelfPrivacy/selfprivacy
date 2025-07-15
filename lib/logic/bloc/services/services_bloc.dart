@@ -13,38 +13,24 @@ part 'services_state.dart';
 
 class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   ServicesBloc() : super(ServicesInitial()) {
-    on<ServicesListUpdate>(
-      _updateList,
-      transformer: sequential(),
-    );
-    on<ServicesReload>(
-      _reload,
-      transformer: droppable(),
-    );
-    on<ServiceRestart>(
-      _restart,
-      transformer: sequential(),
-    );
-    on<ServiceMove>(
-      _move,
-      transformer: sequential(),
-    );
+    on<ServicesListUpdate>(_updateList, transformer: sequential());
+    on<ServicesReload>(_reload, transformer: droppable());
+    on<ServiceRestart>(_restart, transformer: sequential());
+    on<ServiceMove>(_move, transformer: sequential());
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
-    _apiDataSubscription = connectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        add(
-          ServicesListUpdate([...apiData.services.data ?? []]),
-        );
-      },
-    );
+    _apiDataSubscription = connectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(ServicesListUpdate([...apiData.services.data ?? []]));
+    });
 
     if (connectionRepository.connectionStatus == ConnectionStatus.connected) {
       add(
-        ServicesListUpdate(
-          [...connectionRepository.apiData.services.data ?? []],
-        ),
+        ServicesListUpdate([
+          ...connectionRepository.apiData.services.data ?? [],
+        ]),
       );
     }
   }
@@ -99,16 +85,17 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
         ],
       ),
     );
-    final result = await getIt<ApiConnectionRepository>()
-        .api
-        .restartService(event.service.id);
+    final result = await getIt<ApiConnectionRepository>().api.restartService(
+      event.service.id,
+    );
     if (!result.success) {
       getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
       return;
     }
     if (!result.data) {
-      getIt<NavigationService>()
-          .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+      getIt<NavigationService>().showSnackBar(
+        result.message ?? 'jobs.generic_error'.tr(),
+      );
       return;
     }
   }
@@ -117,19 +104,19 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     final ServiceMove event,
     final Emitter<ServicesState> emit,
   ) async {
-    final migrationJob = await getIt<ApiConnectionRepository>()
-        .api
-        .moveService(event.service.id, event.destination);
+    final migrationJob = await getIt<ApiConnectionRepository>().api.moveService(
+      event.service.id,
+      event.destination,
+    );
     if (!migrationJob.success) {
-      getIt<NavigationService>()
-          .showSnackBar(migrationJob.message ?? 'jobs.generic_error'.tr());
+      getIt<NavigationService>().showSnackBar(
+        migrationJob.message ?? 'jobs.generic_error'.tr(),
+      );
     }
     if (migrationJob.data != null) {
-      getIt<ApiConnectionRepository>()
-          .apiData
-          .serverJobs
-          .data
-          ?.add(migrationJob.data!);
+      getIt<ApiConnectionRepository>().apiData.serverJobs.data?.add(
+        migrationJob.data!,
+      );
       getIt<ApiConnectionRepository>().emitData();
     }
   }

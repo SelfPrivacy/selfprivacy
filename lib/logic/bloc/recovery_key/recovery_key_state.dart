@@ -1,9 +1,8 @@
 part of 'recovery_key_bloc.dart';
 
 sealed class RecoveryKeyState extends Equatable {
-  RecoveryKeyState({
-    required final RecoveryKeyStatus? keyStatus,
-  }) : _hashCode = keyStatus.hashCode;
+  RecoveryKeyState({required final RecoveryKeyStatus? keyStatus})
+    : _hashCode = keyStatus.hashCode;
 
   final int _hashCode;
 
@@ -27,7 +26,7 @@ sealed class RecoveryKeyState extends Equatable {
 
 class RecoveryKeyInitial extends RecoveryKeyState {
   RecoveryKeyInitial()
-      : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
+    : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
 
   @override
   List<Object> get props => [_hashCode];
@@ -49,7 +48,7 @@ class RecoveryKeyLoaded extends RecoveryKeyState {
 
 class RecoveryKeyError extends RecoveryKeyState {
   RecoveryKeyError()
-      : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
+    : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
 
   @override
   List<Object> get props => [_hashCode];

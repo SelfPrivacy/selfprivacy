@@ -17,13 +17,13 @@ class ServerDetailsCubit
     extends ServerConnectionDependentCubit<ServerDetailsState> {
   ServerDetailsCubit() : super(const ServerDetailsInitial()) {
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        if (apiData.settings.data != null) {
-          _handleServerSettings(apiData.settings.data!);
-        }
-      },
-    );
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      if (apiData.settings.data != null) {
+        _handleServerSettings(apiData.settings.data!);
+      }
+    });
   }
 
   StreamSubscription? _apiDataSubscription;
@@ -97,11 +97,7 @@ class ServerDetailsCubit
 
   void check() async {
     final List<ServerMetadataEntity> metadata = await _metadata;
-    emit(
-      state.copyWith(
-        metadata: metadata,
-      ),
-    );
+    emit(state.copyWith(metadata: metadata));
   }
 
   @override

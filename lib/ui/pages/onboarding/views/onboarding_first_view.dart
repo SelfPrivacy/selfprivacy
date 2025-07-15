@@ -4,10 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/ui/pages/onboarding/views/onboarding_view.dart';
 
 class OnboardingFirstView extends StatelessWidget {
-  const OnboardingFirstView({
-    required this.onProceed,
-    super.key,
-  });
+  const OnboardingFirstView({required this.onProceed, super.key});
 
   final VoidCallback onProceed;
 
@@ -24,27 +21,27 @@ class OnboardingFirstView extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => OnboardingView(
-        onProceed: onProceed,
-        children: [
-          Text(
-            'onboarding.page1_title'.tr(),
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const Gap(15),
-          Text(
-            'onboarding.page1_text'.tr(),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const Gap(30),
-          Image.asset(
-            assetName(
-              context: context,
-              path: 'assets/images/onboarding',
-              fileName: 'onboarding1',
-              fileExtension: 'png',
-            ),
-            fit: BoxFit.fitWidth,
-          ),
-        ],
-      );
+    onProceed: onProceed,
+    children: [
+      Text(
+        'onboarding.page1_title'.tr(),
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      const Gap(15),
+      Text(
+        'onboarding.page1_text'.tr(),
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      const Gap(30),
+      Image.asset(
+        assetName(
+          context: context,
+          path: 'assets/images/onboarding',
+          fileName: 'onboarding1',
+          fileExtension: 'png',
+        ),
+        fit: BoxFit.fitWidth,
+      ),
+    ],
+  );
 }

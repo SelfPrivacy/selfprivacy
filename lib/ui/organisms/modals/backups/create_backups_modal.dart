@@ -58,13 +58,12 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
             setState(() {
               if (value ?? true) {
                 setState(() {
-                  selectedServices
-                    ..clear()
-                    ..addAll(
-                      widget.services.where(
-                        (final service) => !busyServices.contains(service.id),
-                      ),
-                    );
+                  selectedServices.clear();
+                  selectedServices.addAll(
+                    widget.services.where(
+                      (final service) => !busyServices.contains(service.id),
+                    ),
+                  );
                 });
               } else {
                 selectedServices.clear();
@@ -77,7 +76,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
               selectedServices.length >=
               widget.services.length - busyServices.length,
         ),
-        const Divider(height: 1),
+        const Divider(height: 1.0),
         ...widget.services.map(
           (final Service service) => CreateBackupCheckboxItem(
             service: service,

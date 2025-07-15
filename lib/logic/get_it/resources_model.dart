@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:async';
 
 import 'package:hive_ce/hive.dart';
@@ -62,7 +60,7 @@ class ResourcesModel {
   List<DnsProviderCredential> _dnsProviderTokens = [];
   List<BackupsCredential> _backupsCredentials = [];
   List<Server> _servers = [];
-  // TODO(inex): As we will add support for other backup storages, we should
+  // TODO: As we will add support for other backup storages, we should
   // refactor this.
   BackblazeBucket? _backblazeBucket;
 
@@ -206,21 +204,21 @@ class ResourcesModel {
     await _box.flush();
   }
 
-  Future<void> clear() async {
+  void clear() {
     _servers.clear();
     _serverProviderTokens.clear();
     _dnsProviderTokens.clear();
     _backupsCredentials.clear();
     _backblazeBucket = null;
 
-    await _box.clear();
-    await _box.compact();
+    _box.clear();
+    _box.compact();
 
     _statusStreamController.add(const ClearedModel());
   }
 
-  Future<void> dispose() async {
-    await _statusStreamController.close();
+  void dispose() {
+    _statusStreamController.close();
   }
 
   void init() {
@@ -369,25 +367,21 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerStarted({required final bool isStarted}) async {
+  Future<void> setIsServerStarted(final bool isStarted) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isServerStarted: isStarted);
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerRebootedFirstTime({
-    required final bool isRebooted,
-  }) async {
+  Future<void> setIsServerRebootedFirstTime(final bool isRebooted) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isServerResetedFirstTime: isRebooted);
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerRebootedSecondTime({
-    required final bool isRebooted,
-  }) async {
+  Future<void> setIsServerRebootedSecondTime(final bool isRebooted) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isServerResetedSecondTime: isRebooted);
@@ -401,7 +395,7 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsRecoveringServer({required final bool isRecovering}) async {
+  Future<void> setIsRecoveringServer(final bool isRecovering) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isRecoveringServer: isRecovering);

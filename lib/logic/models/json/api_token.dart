@@ -6,14 +6,13 @@ part 'api_token.g.dart';
 
 @JsonSerializable()
 class ApiToken extends Equatable {
+  factory ApiToken.fromJson(final Map<String, dynamic> json) =>
+      _$ApiTokenFromJson(json);
   const ApiToken({
     required this.name,
     required this.date,
     required this.isCaller,
   });
-
-  factory ApiToken.fromJson(final Map<String, dynamic> json) =>
-      _$ApiTokenFromJson(json);
 
   ApiToken.fromGraphQL(final Query$GetApiTokens$api$devices device)
     : this(

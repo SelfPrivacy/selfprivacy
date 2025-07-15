@@ -115,7 +115,7 @@ class ProviderInputDataPage extends StatelessWidget {
       const SizedBox(height: 32),
       BrandButton.filled(
         title: 'basis.connect'.tr(),
-        onPressed: providerCubit.trySubmit,
+        onPressed: () => providerCubit.trySubmit(),
       ),
       const SizedBox(height: 10),
       BrandOutlinedButton(
@@ -137,7 +137,7 @@ class ProviderSelectionPage extends StatelessWidget {
     super.key,
   });
 
-  final Function(DnsProviderType) callback;
+  final Function callback;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
@@ -146,7 +146,7 @@ class ProviderSelectionPage extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 
-      // TODO(NaiJi): Remove obvious repetition
+      /// TODO: Remove obvious repetition
       children: [
         Text(
           'initializing.select_dns'.tr(),
@@ -160,7 +160,7 @@ class ProviderSelectionPage extends StatelessWidget {
         const SizedBox(height: 10),
         OutlinedCard(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -195,8 +195,8 @@ class ProviderSelectionPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 BrandButton.filled(
                   title: 'basis.select'.tr(),
-                  onPressed: () async {
-                    await serverInstallationCubit.setDnsProviderType(
+                  onPressed: () {
+                    serverInstallationCubit.setDnsProviderType(
                       DnsProviderType.desec,
                     );
                     callback(DnsProviderType.desec);
@@ -214,7 +214,7 @@ class ProviderSelectionPage extends StatelessWidget {
         const SizedBox(height: 16),
         OutlinedCard(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -251,8 +251,8 @@ class ProviderSelectionPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 BrandButton.filled(
                   title: 'basis.select'.tr(),
-                  onPressed: () async {
-                    await serverInstallationCubit.setDnsProviderType(
+                  onPressed: () {
+                    serverInstallationCubit.setDnsProviderType(
                       DnsProviderType.cloudflare,
                     );
                     callback(DnsProviderType.cloudflare);
@@ -271,7 +271,7 @@ class ProviderSelectionPage extends StatelessWidget {
         const SizedBox(height: 16),
         OutlinedCard(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -308,8 +308,8 @@ class ProviderSelectionPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 BrandButton.filled(
                   title: 'basis.select'.tr(),
-                  onPressed: () async {
-                    await serverInstallationCubit.setDnsProviderType(
+                  onPressed: () {
+                    serverInstallationCubit.setDnsProviderType(
                       DnsProviderType.digitalOcean,
                     );
                     callback(DnsProviderType.digitalOcean);

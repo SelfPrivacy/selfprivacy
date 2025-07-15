@@ -12,7 +12,7 @@ abstract class ServerConnectionDependentCubit<
   T extends ServerInstallationDependendState
 >
     extends Cubit<T> {
-  ServerConnectionDependentCubit(super.initialState) {
+  ServerConnectionDependentCubit(super.initState) {
     final connectionRepository = getIt<ApiConnectionRepository>();
 
     apiStatusSubscription = connectionRepository.connectionStatusStream.listen(
@@ -26,14 +26,14 @@ abstract class ServerConnectionDependentCubit<
       case ConnectionStatus.nonexistent:
         clear();
         isLoaded = false;
+        break;
       case ConnectionStatus.connected:
         if (!isLoaded) {
           load();
           isLoaded = true;
         }
-      case ConnectionStatus.reconnecting:
-      case ConnectionStatus.offline:
-      case ConnectionStatus.unauthorized:
+        break;
+      default:
         break;
     }
   }
@@ -45,8 +45,8 @@ abstract class ServerConnectionDependentCubit<
   void clear();
 
   @override
-  Future<void> close() async {
-    await apiStatusSubscription.cancel();
+  Future<void> close() {
+    apiStatusSubscription.cancel();
     return super.close();
   }
 }

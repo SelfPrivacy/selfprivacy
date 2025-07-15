@@ -33,12 +33,15 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
       case RecoveryKeyRefreshing():
         subtitle = 'recovery_key.key_synchronizing'.tr();
         widgets = [const Center(child: CircularProgressIndicator.adaptive())];
+        break;
       case RecoveryKeyLoaded():
         widgets = [const RecoveryKeyContent()];
+        break;
       case RecoveryKeyInitial():
       case RecoveryKeyError():
         subtitle = 'recovery_key.key_connection_error'.tr();
         widgets = [const Icon(Icons.sentiment_dissatisfied_outlined)];
+        break;
     }
 
     return RefreshIndicator(
@@ -254,6 +257,10 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
     final String amount = _amountController.text;
     final String expiration = _expirationController.text;
 
+    print('amount: $amount');
+    print('_isAmountToggled: $_isAmountToggled');
+    print('_isExpirationToggled: $_isExpirationToggled');
+
     setState(() {
       if (!_isAmountToggled) {
         _isAmountError = false;
@@ -272,6 +279,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         _isExpirationError = _selectedDate.isBefore(DateTime.now());
       }
     });
+
+    print('_isAmountError: $_isAmountError');
+    print('_isExpirationError: $_isExpirationError');
   }
 
   @override
@@ -348,8 +358,8 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                 textInputAction: TextInputAction.next,
                 enabled: _isExpirationToggled,
                 controller: _expirationController,
-                onTap: () async {
-                  await _selectDate(context);
+                onTap: () {
+                  _selectDate(context);
                 },
                 readOnly: true,
                 decoration: InputDecoration(

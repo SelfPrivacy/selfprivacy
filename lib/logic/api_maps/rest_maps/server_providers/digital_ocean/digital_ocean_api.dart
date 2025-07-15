@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -8,7 +6,6 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class DigitalOceanApi extends RestApiMap {
@@ -16,10 +13,7 @@ class DigitalOceanApi extends RestApiMap {
     this.token = '',
     this.hasLogger = true,
     this.isWithToken = true,
-  }) : assert(
-         !isWithToken || token.isNotEmpty,
-         'DigitalOcean API requires a token to be set when isWithToken is true.',
-       );
+  }) : assert(isWithToken ? token.isNotEmpty : true);
 
   @override
   bool hasLogger;
@@ -27,8 +21,6 @@ class DigitalOceanApi extends RestApiMap {
   bool isWithToken;
 
   final String token;
-
-  static final logger = const AppLogger(name: 'digital_ocean_api_map').log;
 
   @override
   BaseOptions get options {
@@ -38,10 +30,7 @@ class DigitalOceanApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(
-        token.isNotEmpty,
-        'DigitalOcean API requires a token to be set when isWithToken is true.',
-      );
+      assert(token.isNotEmpty);
       options.headers = {'Authorization': 'Bearer $token'};
     }
 
@@ -64,7 +53,7 @@ class DigitalOceanApi extends RestApiMap {
       final Response response = await client.get('/droplets');
       servers = response.data['droplets'];
     } catch (e) {
-      logger('Error while fetching droplets: $e', error: e);
+      print(e);
       return GenericResult(
         success: false,
         data: servers,
@@ -99,7 +88,7 @@ class DigitalOceanApi extends RestApiMap {
       final Map<String, Object> data = {
         'name': hostName,
         'size': serverType,
-        'image': 'ubuntu-24-04-x64',
+        'image': 'ubuntu-20-04-x64',
         'user_data':
             '#cloud-config\n'
             'runcmd:\n'
@@ -111,11 +100,12 @@ class DigitalOceanApi extends RestApiMap {
             'bash 2>&1 | tee /root/nixos-infect.log',
         'region': region,
       };
-      logger('Decoded data: $data');
+      print('Decoded data: $data');
+
       serverCreateResponse = await client.post('/droplets', data: data);
       dropletId = serverCreateResponse.data['droplet']['id'];
     } catch (e) {
-      logger('Error while creating droplet: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -134,7 +124,7 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.delete('/droplets/$serverId');
     } catch (e) {
-      logger('Error while deleting droplet: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -160,7 +150,7 @@ class DigitalOceanApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      logger('Error while validating API token: $e', error: e);
+      print(e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -197,7 +187,7 @@ class DigitalOceanApi extends RestApiMap {
         locations.add(DigitalOceanLocation.fromJson(region));
       }
     } catch (e) {
-      logger('Error while fetching regions: $e', error: e);
+      print(e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
@@ -217,7 +207,7 @@ class DigitalOceanApi extends RestApiMap {
         types.add(DigitalOceanServerType.fromJson(size));
       }
     } catch (e) {
-      logger('Error while fetching sizes: $e', error: e);
+      print(e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
@@ -234,7 +224,7 @@ class DigitalOceanApi extends RestApiMap {
         data: {'type': 'power_on'},
       );
     } catch (e) {
-      logger('Error while powering on droplet: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -251,7 +241,7 @@ class DigitalOceanApi extends RestApiMap {
         data: {'type': 'reboot'},
       );
     } catch (e) {
-      logger('Error while rebooting droplet: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -276,7 +266,7 @@ class DigitalOceanApi extends RestApiMap {
         volumes.add(DigitalOceanVolume.fromJson(volume));
       }
     } catch (e) {
-      logger('Error while fetching volumes: $e', error: e);
+      print(e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       client.close();
@@ -307,7 +297,7 @@ class DigitalOceanApi extends RestApiMap {
       );
       volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
-      logger('Error while creating volume: $e', error: e);
+      print(e);
       return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
@@ -343,7 +333,7 @@ class DigitalOceanApi extends RestApiMap {
       success =
           attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while attaching volume: $e', error: e);
+      print(e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       close(client);
@@ -379,7 +369,7 @@ class DigitalOceanApi extends RestApiMap {
       success =
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while detaching volume: $e', error: e);
+      print(e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
@@ -393,7 +383,7 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.delete('/volumes/$uuid');
     } catch (e) {
-      logger('Error while deleting volume: $e', error: e);
+      print(e);
       return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
@@ -419,7 +409,7 @@ class DigitalOceanApi extends RestApiMap {
       success =
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while resizing volume: $e', error: e);
+      print(e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
@@ -447,7 +437,7 @@ class DigitalOceanApi extends RestApiMap {
       );
       metrics = response.data['data']['result'];
     } catch (e) {
-      logger('Error while fetching CPU metrics: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
@@ -456,12 +446,12 @@ class DigitalOceanApi extends RestApiMap {
     return GenericResult(success: true, data: metrics);
   }
 
-  Future<GenericResult<List>> getMetricsBandwidth({
-    required final int serverId,
-    required final DateTime start,
-    required final DateTime end,
-    required final bool isInbound,
-  }) async {
+  Future<GenericResult<List>> getMetricsBandwidth(
+    final int serverId,
+    final DateTime start,
+    final DateTime end,
+    final bool isInbound,
+  ) async {
     List metrics = [];
 
     final Dio client = await getClient();
@@ -478,7 +468,7 @@ class DigitalOceanApi extends RestApiMap {
       );
       metrics = response.data['data']['result'][0]['values'];
     } catch (e) {
-      logger('Error while fetching bandwidth metrics: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);

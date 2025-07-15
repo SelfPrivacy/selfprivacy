@@ -19,7 +19,10 @@ class BrandHeroScreen extends StatelessWidget {
     this.heroTitle = '',
     this.heroSubtitle,
     this.onBackButtonPressed,
-    this.bodyPadding = const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+    this.bodyPadding = const EdgeInsets.symmetric(
+      vertical: 16.0,
+      horizontal: 8.0,
+    ),
     this.ignoreBreakpoints = false,
     this.hasSupportDrawer = false,
   });
@@ -49,7 +52,7 @@ class BrandHeroScreen extends StatelessWidget {
         this.heroIconWidget ??
         Icon(
           heroIcon ?? Icons.help,
-          size: 48,
+          size: 48.0,
           color: Theme.of(context).colorScheme.onSurface,
         );
     final bool hasHeroIcon = heroIcon != null || this.heroIconWidget != null;
@@ -70,7 +73,10 @@ class BrandHeroScreen extends StatelessWidget {
           ),
           if (heroSubtitle != null)
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 4.0,
+              ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   Text(
@@ -122,10 +128,11 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
   @override
   Widget build(final BuildContext context) {
     final isMobile =
-        widget.ignoreBreakpoints || Breakpoints.small.isActive(context);
+        widget.ignoreBreakpoints ? true : Breakpoints.small.isActive(context);
     final isJobsListEmpty =
-        !widget.hasFlashButton ||
-        context.watch<JobsCubit>().state is JobsStateEmpty;
+        widget.hasFlashButton
+            ? context.watch<JobsCubit>().state is JobsStateEmpty
+            : true;
     return SliverAppBar(
       expandedHeight:
           widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,
@@ -142,8 +149,8 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: IconButton(
-              onPressed: () async {
-                await showModalJobsSheet(context: context);
+              onPressed: () {
+                showModalJobsSheet(context: context);
               },
               icon: Icon(
                 isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
@@ -178,12 +185,12 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
         expandedTitleScale: 1.2,
         centerTitle: true,
         collapseMode: CollapseMode.pin,
-        titlePadding: const EdgeInsets.only(bottom: 12, top: 16),
+        titlePadding: const EdgeInsets.only(bottom: 12.0, top: 16.0),
         background: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 72),
+              const SizedBox(height: 72.0),
               if (widget.hasHeroIcon) widget.heroIconWidget,
             ],
           ),

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +31,8 @@ class DeleteUserTile extends StatelessWidget {
                 actions: <Widget>[
                   TextButton(
                     child: Text('basis.cancel'.tr()),
-                    onPressed: () async {
-                      await context.router.maybePop();
+                    onPressed: () {
+                      context.router.maybePop();
                     },
                   ),
                   TextButton(
@@ -48,10 +46,8 @@ class DeleteUserTile extends StatelessWidget {
                       context.read<JobsCubit>().addJob(
                         DeleteUserJob(user: user),
                       );
-                      unawaited(
-                        context.router.childControllers.first.maybePop(),
-                      );
-                      unawaited(context.router.maybePop());
+                      context.router.childControllers.first.maybePop();
+                      context.router.maybePop();
                     },
                   ),
                 ],

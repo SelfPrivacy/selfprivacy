@@ -10,16 +10,19 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.query$AllBackupSnapshots();
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         backups = [];
       }
       final List<Backup> parsed =
           response.parsedData!.backup.allSnapshots
-              .map(Backup.fromGraphQL)
+              .map(
+                (final Query$AllBackupSnapshots$backup$allSnapshots snapshot) =>
+                    Backup.fromGraphQL(snapshot),
+              )
               .toList();
       backups = parsed;
     } catch (e) {
-      logger("Couldn't get backups", error: e);
+      print(e);
       backups = [];
     }
 
@@ -34,7 +37,7 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.query$BackupConfiguration();
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         backupConfiguration = null;
       }
       final BackupConfiguration parsed = BackupConfiguration.fromGraphQL(
@@ -42,7 +45,7 @@ mixin BackupsApi on GraphQLApiMap {
       );
       backupConfiguration = parsed;
     } catch (e) {
-      logger("Couldn't get backups configuration", error: e);
+      print(e);
       backupConfiguration = null;
     }
 
@@ -54,7 +57,7 @@ mixin BackupsApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       await client.mutate$ForceSnapshotsReload();
     } catch (e) {
-      logger("Couldn't force reload the backups list", error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -72,7 +75,7 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.mutate$StartBackup(options);
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         result = GenericResult(success: false, data: null, message: message);
       }
       result = GenericResult(
@@ -82,7 +85,7 @@ mixin BackupsApi on GraphQLApiMap {
         ),
       );
     } catch (e) {
-      logger("Couldn't start backup", error: e);
+      print(e);
       result = GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -102,12 +105,12 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.mutate$SetAutobackupPeriod(options);
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         result = GenericResult(success: false, data: null, message: message);
       }
       result = GenericResult(success: true, data: null);
     } catch (e) {
-      logger("Couldn't set autobackup period", error: e);
+      print(e);
       result = GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -137,12 +140,12 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.mutate$setAutobackupQuotas(options);
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         result = GenericResult(success: false, data: null, message: message);
       }
       result = GenericResult(success: true, data: null);
     } catch (e) {
-      logger("Couldn't set autobackup quotas", error: e);
+      print(e);
       result = GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -154,7 +157,7 @@ mixin BackupsApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       await client.mutate$RemoveRepository();
     } catch (e) {
-      logger("Couldn't remove repository", error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -184,12 +187,12 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.mutate$InitializeRepository(options);
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         result = GenericResult(success: false, data: null, message: message);
       }
       result = GenericResult(success: true, data: null);
     } catch (e) {
-      logger("Couldn't initialize repository", error: e);
+      print(e);
       result = GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -213,7 +216,7 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.mutate$RestoreBackup(options);
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         result = GenericResult(success: false, data: null, message: message);
       }
       result = GenericResult(
@@ -223,7 +226,7 @@ mixin BackupsApi on GraphQLApiMap {
         ),
       );
     } catch (e) {
-      logger("Couldn't restore backup", error: e);
+      print(e);
       result = GenericResult(success: false, data: null, message: e.toString());
     }
 
@@ -243,7 +246,7 @@ mixin BackupsApi on GraphQLApiMap {
       response = await client.mutate$ForgetSnapshot(options);
       if (response.hasException) {
         final message = response.exception.toString();
-        logger(message);
+        print(message);
         result = GenericResult(success: false, data: null, message: message);
       }
       result = GenericResult(
@@ -251,7 +254,7 @@ mixin BackupsApi on GraphQLApiMap {
         data: response.parsedData!.backup.forgetSnapshot.success,
       );
     } catch (e) {
-      logger("Couldn't forget the snapshot", error: e);
+      print(e);
       result = GenericResult(success: false, data: null, message: e.toString());
     }
 

@@ -1,12 +1,9 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare_dns_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 class CloudflareApi extends RestApiMap {
   CloudflareApi({
@@ -14,10 +11,7 @@ class CloudflareApi extends RestApiMap {
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
-  }) : assert(
-         !isWithToken || token.isNotEmpty,
-         'Cloudflare API requires a token to be set when isWithToken is true.',
-       );
+  }) : assert(isWithToken ? token.isNotEmpty : true);
 
   @override
   final bool hasLogger;
@@ -27,8 +21,6 @@ class CloudflareApi extends RestApiMap {
   final String token;
   final String? customToken;
 
-  static final logger = const AppLogger(name: 'cloudflare_api_map').log;
-
   @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(
@@ -37,10 +29,7 @@ class CloudflareApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(
-        token.isNotEmpty,
-        'Cloudflare API requires a token to be set when isWithToken is true.',
-      );
+      assert(token.isNotEmpty);
       options.headers = {'Authorization': 'Bearer $token'};
     }
 
@@ -74,7 +63,7 @@ class CloudflareApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      logger('Error in Cloudflare isApiTokenValid request: $e', error: e);
+      print(e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -110,12 +99,11 @@ class CloudflareApi extends RestApiMap {
       domains =
           response.data['result']!
               .map<CloudflareZone>(
-                // ignore: unnecessary_lambdas
                 (final json) => CloudflareZone.fromJson(json),
               )
               .toList();
     } catch (e) {
-      logger('Error in Cloudflare getZones request: $e', error: e);
+      print(e);
       return GenericResult(
         success: false,
         data: domains,
@@ -149,16 +137,10 @@ class CloudflareApi extends RestApiMap {
       }
       await Future.wait(allCreateFutures);
     } on DioException catch (e) {
-      logger(
-        'Error in Cloudflare createMultipleDnsRecords request: ${e.message}',
-        error: e,
-      );
+      print(e.message);
       rethrow;
     } catch (e) {
-      logger(
-        'Error in Cloudflare createMultipleDnsRecords request: $e',
-        error: e,
-      );
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -182,7 +164,7 @@ class CloudflareApi extends RestApiMap {
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
-      logger('Error in Cloudflare removeSimilarRecords request: $e', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -204,12 +186,11 @@ class CloudflareApi extends RestApiMap {
       allRecords =
           response.data['result']!
               .map<CloudflareDnsRecord>(
-                // ignore: unnecessary_lambdas
                 (final json) => CloudflareDnsRecord.fromJson(json),
               )
               .toList();
     } catch (e) {
-      logger('Error in Cloudflare getDnsRecords request: $e', error: e);
+      print(e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);

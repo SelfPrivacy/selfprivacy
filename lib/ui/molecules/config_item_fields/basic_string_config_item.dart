@@ -12,7 +12,6 @@ class BasicStringConfigItem extends StatefulWidget {
   });
 
   final StringServiceConfigItem configItem;
-  // ignore: avoid_positional_boolean_parameters
   final Function(String, bool) onChanged;
   final String? newValue;
 
@@ -90,10 +89,10 @@ class _BasicStringConfigItemState extends State<BasicStringConfigItem> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        const Gap(8),
+                        const Gap(8.0),
                         Icon(
                           Icons.undo_outlined,
-                          size: 16,
+                          size: 16.0,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ],

@@ -44,7 +44,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   bool _isError = false;
 
   late double _currentSliderGbValue;
-  double _pricePerGb = 1;
+  double _pricePerGb = 1.0;
 
   final DiskSize maxSize = const DiskSize(byte: 500000000000);
   late DiskSize minSize;
@@ -59,10 +59,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   @override
   Widget build(final BuildContext context) => FutureBuilder(
     future: context.read<VolumesBloc>().getPricePerGb(),
-    builder: (
-      final BuildContext context,
-      final AsyncSnapshot<Price?> snapshot,
-    ) {
+    builder: (final BuildContext context, final AsyncSnapshot<void> snapshot) {
       if (!snapshot.hasData) {
         return BrandHeroScreen(
           hasBackButton: true,
@@ -74,7 +71,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           ],
         );
       }
-      final price = snapshot.data!;
+      final price = snapshot.data as Price;
       _pricePerGb = price.value;
       final currentSizeValue = _currentSliderGbValue.truncate().toString();
       _sizeController.text = 'storage.gb'.tr(args: [currentSizeValue]);
@@ -178,7 +175,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
             child: Text('storage.extend_volume_button.title'.tr()),
           ),
           const SizedBox(height: 16),
-          const Divider(height: 1),
+          const Divider(height: 1.0),
           const SizedBox(height: 16),
           InfoBox(
             text: 'storage.extending_volume_price_info'.tr(),

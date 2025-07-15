@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -10,7 +8,6 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
@@ -37,10 +34,7 @@ class BackblazeApi extends RestApiMap {
     this.tokenId = '',
     this.hasLogger = false,
     this.isWithToken = true,
-  }) : assert(
-         !isWithToken || token.isNotEmpty && tokenId.isNotEmpty,
-         'Backblaze API requires token and tokenId to be set when isWithToken is true.',
-       );
+  }) : assert(isWithToken ? token.isNotEmpty && tokenId.isNotEmpty : true);
 
   @override
   bool hasLogger;
@@ -49,8 +43,6 @@ class BackblazeApi extends RestApiMap {
 
   final String token;
   final String tokenId;
-
-  static final logger = const AppLogger(name: 'backblaze_api_map').log;
 
   @override
   BaseOptions get options {
@@ -121,7 +113,7 @@ class BackblazeApi extends RestApiMap {
         throw Exception('code: ${response.statusCode}');
       }
     } on DioException catch (e) {
-      logger('Error in Backblaze API token validation: ${e.message}', error: e);
+      print(e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       close(client);

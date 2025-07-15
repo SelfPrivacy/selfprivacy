@@ -22,10 +22,11 @@ class SshFormCubit extends FormCubit {
           'validations.already_exist'.tr(),
         ),
         RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>(
-          (final String s) => !keyRegExp.hasMatch(s),
-          'validations.invalid_format_ssh'.tr(),
-        ),
+        ValidationModel<String>((final String s) {
+          print(s);
+          print(keyRegExp.hasMatch(s));
+          return !keyRegExp.hasMatch(s);
+        }, 'validations.invalid_format_ssh'.tr()),
       ],
     );
 
@@ -33,7 +34,8 @@ class SshFormCubit extends FormCubit {
   }
 
   @override
-  void onSubmit() {
+  FutureOr<void> onSubmit() {
+    print(key.state.isValid);
     jobsCubit.addJob(
       CreateSSHKeyJob(user: user, publicKey: key.state.value.trim()),
     );
@@ -55,10 +57,11 @@ class JoblessSshFormCubit extends FormCubit {
       initalValue: '',
       validations: [
         RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>(
-          (final String s) => !keyRegExp.hasMatch(s),
-          'validations.invalid_format_ssh'.tr(),
-        ),
+        ValidationModel<String>((final String s) {
+          print(s);
+          print(keyRegExp.hasMatch(s));
+          return !keyRegExp.hasMatch(s);
+        }, 'validations.invalid_format_ssh'.tr()),
       ],
     );
 
@@ -66,8 +69,8 @@ class JoblessSshFormCubit extends FormCubit {
   }
 
   @override
-  Future<void> onSubmit() async {
-    await serverInstallationCubit.setCustomSshKey(key.state.value);
+  FutureOr<void> onSubmit() {
+    serverInstallationCubit.setCustomSshKey(key.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;

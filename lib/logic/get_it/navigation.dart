@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class NavigationService {
@@ -17,7 +15,7 @@ class NavigationService {
       return;
     }
 
-    unawaited(showDialog(context: context, builder: (final _) => dialog));
+    showDialog(context: context, builder: (final _) => dialog);
   }
 
   void showSnackBar(final String text, {final SnackBarBehavior? behavior}) {

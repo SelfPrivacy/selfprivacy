@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -135,8 +133,8 @@ class _ServerSettingsState extends State<_ServerSettings> {
         ListTile(
           title: Text('server.server_timezone'.tr()),
           subtitle: Text(serverDetailsState.serverTimezone.toString()),
-          onTap: () async {
-            await context.pushRoute(const SelectTimezoneRoute());
+          onTap: () {
+            context.pushRoute(const SelectTimezoneRoute());
           },
         ),
         SwitchListTile.adaptive(

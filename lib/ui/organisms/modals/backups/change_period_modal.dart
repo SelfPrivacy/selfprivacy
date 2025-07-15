@@ -63,7 +63,7 @@ class _ChangeAutobackupsPeriodModalState
           value: null,
           groupValue: selectedPeriod,
         ),
-        const Divider(height: 1),
+        const Divider(height: 1.0),
         ...autobackupPeriods.map(
           (final Duration period) => RadioListTile<Duration?>.adaptive(
             onChanged: (final Duration? value) {

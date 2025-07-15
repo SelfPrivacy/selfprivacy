@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +43,7 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     return BrandHeroScreen(
       hasBackButton: true,
       heroTitle: 'storage.card_title'.tr(),
-      bodyPadding: const EdgeInsets.symmetric(vertical: 16),
+      bodyPadding: const EdgeInsets.symmetric(vertical: 16.0),
       hasFlashButton: true,
       children: [
         ...diskStatus.diskVolumes.map(
@@ -54,12 +52,12 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
         ),
         const Gap(8),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: BrandOutlinedButton(
             title: 'jobs.collect_nix_garbage'.tr(),
-            onPressed: () async {
-              unawaited(context.read<JobsCubit>().collectNixGarbage());
-              await showModalJobsSheet(context: context);
+            onPressed: () {
+              context.read<JobsCubit>().collectNixGarbage();
+              showModalJobsSheet(context: context);
             },
           ),
         ),
@@ -120,7 +118,7 @@ class ServerStorageSection extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ServerStorageListItem(volume: volume),
       ),
       const Gap(16),
@@ -128,15 +126,15 @@ class ServerStorageSection extends StatelessWidget {
         (final service) => ServerConsumptionListTile(
           service: service,
           volume: volume,
-          onTap: () async {
-            await context.pushRoute(ServiceRoute(serviceId: service.id));
+          onTap: () {
+            context.pushRoute(ServiceRoute(serviceId: service.id));
           },
         ),
       ),
       if (volume.isResizable) ...[
         const Gap(16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: BrandOutlinedButton(
             title: 'storage.extend_volume_button.title'.tr(),
             onPressed:
@@ -169,13 +167,13 @@ class ServerConsumptionListTile extends StatelessWidget {
   Widget build(final BuildContext context) => InkWell(
     onTap: onTap,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ConsumptionListItem(
         title: service.displayName,
         icon: SvgPicture.string(
           service.svgIcon,
-          width: 22,
-          height: 24,
+          width: 22.0,
+          height: 24.0,
           colorFilter: ColorFilter.mode(
             Theme.of(context).colorScheme.onSurface,
             BlendMode.srcIn,

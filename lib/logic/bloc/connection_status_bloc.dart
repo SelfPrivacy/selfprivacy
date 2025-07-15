@@ -11,14 +11,14 @@ class ConnectionStatusBloc extends Bloc<ConnectionStatus, ConnectionStatus> {
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
     _apiConnectionStatusSubscription = apiConnectionRepository
         .connectionStatusStream
-        .listen(add);
+        .listen((final ConnectionStatus newStatus) => add(newStatus));
   }
 
   StreamSubscription? _apiConnectionStatusSubscription;
 
   @override
-  Future<void> close() async {
-    await _apiConnectionStatusSubscription?.cancel();
+  Future<void> close() {
+    _apiConnectionStatusSubscription?.cancel();
     return super.close();
   }
 }

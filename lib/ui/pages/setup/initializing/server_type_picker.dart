@@ -24,9 +24,7 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
   ServerProviderLocation? serverProviderLocation;
   ServerType? serverType;
 
-  Future<void> setServerProviderLocation(
-    final ServerProviderLocation? location,
-  ) async {
+  void setServerProviderLocation(final ServerProviderLocation? location) async {
     if (location != null) {
       await widget.serverInstallationCubit.setLocationIdentifier(
         location.identifier,
@@ -49,8 +47,8 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
     return SelectTypePage(
       location: serverProviderLocation!,
       serverInstallationCubit: widget.serverInstallationCubit,
-      backToLocationPickingCallback: () async {
-        await setServerProviderLocation(null);
+      backToLocationPickingCallback: () {
+        setServerProviderLocation(null);
       },
     );
   }
@@ -63,7 +61,7 @@ class SelectLocationPage extends StatelessWidget {
     super.key,
   });
 
-  final Function(ServerProviderLocation) callback;
+  final Function callback;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
@@ -74,7 +72,7 @@ class SelectLocationPage extends StatelessWidget {
       final AsyncSnapshot<Object?> snapshot,
     ) {
       if (snapshot.hasData) {
-        if ((snapshot.data! as List<ServerProviderLocation>).isEmpty) {
+        if ((snapshot.data as List<ServerProviderLocation>).isEmpty) {
           return Text('initializing.no_locations_found'.tr());
         }
         return ResponsiveLayoutWithInfobox(
@@ -108,7 +106,7 @@ class SelectLocationPage extends StatelessWidget {
                             callback(location);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -160,7 +158,7 @@ class SelectTypePage extends StatelessWidget {
 
   final ServerProviderLocation location;
   final ServerInstallationCubit serverInstallationCubit;
-  final VoidCallback backToLocationPickingCallback;
+  final Function backToLocationPickingCallback;
 
   @override
   Widget build(final BuildContext context) {
@@ -194,7 +192,7 @@ class SelectTypePage extends StatelessWidget {
                       (final context, final constraints) => CustomPaint(
                         size: Size(
                           constraints.maxWidth,
-                          constraints.maxWidth * 1,
+                          (constraints.maxWidth * 1).toDouble(),
                         ),
                         painter: StrayDeerPainter(
                           colorScheme: Theme.of(context).colorScheme,
@@ -205,7 +203,9 @@ class SelectTypePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 BrandButton.filled(
-                  onPressed: backToLocationPickingCallback,
+                  onPressed: () {
+                    backToLocationPickingCallback();
+                  },
                   title: 'initializing.back_to_locations'.tr(),
                 ),
               ],
@@ -242,11 +242,11 @@ class SelectTypePage extends StatelessWidget {
                         child: Card(
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
-                            onTap: () async {
-                              await serverInstallationCubit.setServerType(type);
+                            onTap: () {
+                              serverInstallationCubit.setServerType(type);
                             },
                             child: Padding(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -351,9 +351,9 @@ class SelectTypePage extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         VerticalDivider(
-                                          width: 24,
-                                          indent: 4,
-                                          endIndent: 4,
+                                          width: 24.0,
+                                          indent: 4.0,
+                                          endIndent: 4.0,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface

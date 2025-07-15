@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -15,7 +13,6 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -32,15 +29,11 @@ class ApiAdapter {
 
 class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DigitalOceanServerProvider.load({
-    required final bool isAuthorized,
-    final String? token,
-  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  DigitalOceanServerProvider.load(final bool isAuthorized, final String? token)
+    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);
-
-  static final logger = const AppLogger(name: 'digital_ocean').log;
 
   @override
   bool get isAuthorized => _adapter.api().isWithToken;
@@ -113,7 +106,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     if (server == null) {
       const String msg = 'getServerType: no server!';
-      logger(msg);
+      print(msg);
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -136,7 +129,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     if (location == null) {
       const String msg = 'getServerType: no location!';
-      logger(msg);
+      print(msg);
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -226,7 +219,7 @@ class DigitalOceanServerProvider extends ServerProvider {
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () => launchInstallation(installationData),
+              callback: () async => launchInstallation(installationData),
             ),
           ],
           description: serverResult.message ?? 'recovering.generic_error'.tr(),
@@ -337,14 +330,13 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
 
       await Future.delayed(const Duration(seconds: 10));
-      final List<Future> laterFutures = <Future>[
-        _adapter.api().deleteVolume(volumeToRemove.uuid!),
-        _adapter.api().deleteServer(foundServer!.id),
-      ];
+      final List<Future> laterFutures = <Future>[];
+      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove.uuid!));
+      laterFutures.add(_adapter.api().deleteServer(foundServer!.id));
 
       await Future.wait(laterFutures);
     } catch (e) {
-      logger("Couldn't delete the server", error: e);
+      print(e);
       return GenericResult(
         success: false,
         data: CallbackDialogueBranching(
@@ -537,7 +529,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         volumes.add(volume);
       }
     } catch (e) {
-      logger("Couldn't parse volumes", error: e);
+      print(e);
       return GenericResult(data: [], success: false, message: e.toString());
     }
 
@@ -615,29 +607,31 @@ class DigitalOceanServerProvider extends ServerProvider {
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final int serverId,
-  ) => _adapter.api().attachVolume(
+  ) async => _adapter.api().attachVolume(
     name: volume.name,
     serverId: serverId,
     region: volume.location!,
   );
 
   @override
-  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
-      _adapter.api().detachVolume(
-        name: volume.name,
-        serverId: volume.serverId!,
-        region: volume.location!,
-      );
+  Future<GenericResult<bool>> detachVolume(
+    final ServerProviderVolume volume,
+  ) async => _adapter.api().detachVolume(
+    name: volume.name,
+    serverId: volume.serverId!,
+    region: volume.location!,
+  );
 
   @override
-  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
-      _adapter.api().deleteVolume(volume.uuid!);
+  Future<GenericResult<void>> deleteVolume(
+    final ServerProviderVolume volume,
+  ) async => _adapter.api().deleteVolume(volume.uuid!);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) => _adapter.api().resizeVolume(
+  ) async => _adapter.api().resizeVolume(
     uuid: volume.uuid!,
     gb: size.gibibyte.toInt(),
     region: volume.location!,
@@ -708,7 +702,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.ram,
           trId: 'server.ram',
-          value: "${droplet['memory']} MB",
+          value: "${droplet['memory'].toString()} MB",
         ),
         ServerMetadataEntity(
           type: MetadataType.cost,
@@ -749,7 +743,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final int pointsInTime = (rawProcStatMetrics[0]['values'] as List).length;
     for (int i = 0; i < pointsInTime; ++i) {
-      double currentMetricLoad = 0;
+      double currentMetricLoad = 0.0;
       double? currentMetricIdle;
       for (final rawProcStat in rawProcStatMetrics) {
         final String rawProcValue = rawProcStat['values'][i][1];
@@ -784,10 +778,10 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     const int step = 15;
     final inboundResult = await _adapter.api().getMetricsBandwidth(
-      serverId: serverId,
-      start: start,
-      end: end,
-      isInbound: true,
+      serverId,
+      start,
+      end,
+      true,
     );
 
     if (inboundResult.data.isEmpty || !inboundResult.success) {
@@ -800,10 +794,10 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final outboundResult = await _adapter.api().getMetricsBandwidth(
-      serverId: serverId,
-      start: start,
-      end: end,
-      isInbound: false,
+      serverId,
+      start,
+      end,
+      false,
     );
 
     if (outboundResult.data.isEmpty || !outboundResult.success) {

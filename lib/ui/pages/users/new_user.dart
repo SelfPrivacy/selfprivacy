@@ -37,7 +37,7 @@ class NewUserPage extends StatelessWidget {
           initialUser: user,
         ),
     child: BlocConsumer<UserFormCubit, FormCubitState>(
-      listener: (final BuildContext context, final FormCubitState state) async {
+      listener: (final BuildContext context, final FormCubitState state) {
         final formCubit = context.read<UserFormCubit>();
         if (state.isSubmitted) {
           if (formCubit.userCreationMessage?.isNotEmpty ?? false) {
@@ -45,7 +45,7 @@ class NewUserPage extends StatelessWidget {
               formCubit.userCreationMessage!.tr(),
             );
           }
-          await context.router.replace(
+          context.router.replace(
             UserDetailsRoute(login: formCubit.login.state.value),
           );
         }
@@ -98,14 +98,16 @@ class NewUserScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color:
                   user != null
-                      ? Theme.of(context).colorScheme.onSurface.withAlpha(97)
+                      ? Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.38)
                       : Theme.of(context).colorScheme.onSurface,
             ),
             decoration: InputDecoration(
               labelText: 'users.login'.tr(),
               suffixText: '@$domainName',
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
             isDisabled: user != null,
@@ -118,7 +120,7 @@ class NewUserScreen extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'users.display_name'.tr(),
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),
           ),
@@ -127,7 +129,7 @@ class NewUserScreen extends StatelessWidget {
         GroupsSelector(formFieldCubit: formCubit.groups),
         const Gap(24),
         BrandButton.filled(
-          onPressed: state.isSubmitting ? null : formCubit.trySubmit,
+          onPressed: state.isSubmitting ? null : () => formCubit.trySubmit(),
           title: user != null ? 'basis.apply'.tr() : 'basis.create'.tr(),
         ),
         const SizedBox(height: 24),
@@ -209,7 +211,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
 
   @override
   void dispose() {
-    unawaited(subscription.cancel());
+    subscription.cancel();
     super.dispose();
   }
 
@@ -276,7 +278,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                 if (isGroupsEmpty)
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
                       child: EmptyPagePlaceholder(
                         title: 'basis.network_error'.tr(),
                         iconData: Icons.error_outline_outlined,
@@ -287,7 +289,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                     (serviceGroups.isEmpty && unrecognizedGroups.isEmpty))
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
                       child: EmptyPagePlaceholder(
                         title: 'users.no_groups'.tr(),
                         description: 'users.no_groups_subtitle'.tr(),
@@ -307,8 +309,8 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                             service != null
                                 ? SvgPicture.string(
                                   service.svgIcon,
-                                  width: 24,
-                                  height: 24,
+                                  width: 24.0,
+                                  height: 24.0,
                                   colorFilter: ColorFilter.mode(
                                     Theme.of(
                                       context,

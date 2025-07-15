@@ -39,14 +39,13 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
       (final element) =>
           Duration(milliseconds: element.currentTimeZone.offset) == t,
     );
+    print(t);
 
     if (index >= 0) {
-      unawaited(
-        scrollController.animateTo(
-          60.0 * index,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-        ),
+      scrollController.animateTo(
+        60.0 * index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
       );
     }
   }
@@ -78,7 +77,7 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
                   ),
                 )
                 : Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: 4.0),
                   child: Text('server.select_timezone'.tr()),
                 ),
         leading:
@@ -106,17 +105,22 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
               locations
                   .where(
                     (final Location location) =>
-                        timezoneFilterValue == null ||
-                        location.name.toLowerCase().contains(
-                          timezoneFilterValue!,
-                        ) ||
-                        Duration(milliseconds: location.currentTimeZone.offset)
-                            .toTimezoneOffsetFormat()
-                            .contains(timezoneFilterValue!),
+                        timezoneFilterValue == null
+                            ? true
+                            : location.name.toLowerCase().contains(
+                                  timezoneFilterValue!,
+                                ) ||
+                                Duration(
+                                  milliseconds: location.currentTimeZone.offset,
+                                ).toTimezoneOffsetFormat().contains(
+                                  timezoneFilterValue!,
+                                ),
                   )
                   .toList()
                   .asMap()
-                  .map(locationToListTile)
+                  .map(
+                    (final key, final value) => locationToListTile(key, value),
+                  )
                   .values
                   .toList(),
         ),

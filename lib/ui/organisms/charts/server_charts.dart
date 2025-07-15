@@ -51,8 +51,8 @@ class ServerCharts extends StatelessWidget {
                   Icons.area_chart_outlined,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                onTap: () async {
-                  await context.pushRoute(const MemoryUsageByServiceRoute());
+                onTap: () {
+                  context.pushRoute(const MemoryUsageByServiceRoute());
                 },
                 enabled: metricsLoaded,
               ),
@@ -141,7 +141,7 @@ class ServerCharts extends StatelessWidget {
         FilledCard(
           clipped: false,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -157,7 +157,7 @@ class ServerCharts extends StatelessWidget {
         ),
       ];
     } else {
-      throw StateError('Wrong state');
+      throw 'wrong state';
     }
 
     return Column(

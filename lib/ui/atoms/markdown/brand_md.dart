@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -21,10 +19,10 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
   @override
   void initState() {
     super.initState();
-    unawaited(_loadMdFile());
+    _loadMdFile();
   }
 
-  Future<void> _loadMdFile() async {
+  void _loadMdFile() async {
     final String mdFromFile = await rootBundle.loadString(
       'assets/markdown/${widget.fileName}-${'locale'.tr()}.md',
     );
@@ -40,15 +38,11 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
       shrinkWrap: true,
       styleSheet: markdown,
       selectable: true,
-      onTapLink: (
-        final String text,
-        final String? href,
-        final String title,
-      ) async {
+      onTapLink: (final String text, final String? href, final String title) {
         if (href != null) {
-          await canLaunchUrlString(href).then((final bool canLaunchURL) async {
+          canLaunchUrlString(href).then((final bool canLaunchURL) {
             if (canLaunchURL) {
-              await launchUrlString(href);
+              launchUrlString(href);
             }
           });
         }

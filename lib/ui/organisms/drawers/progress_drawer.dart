@@ -27,12 +27,12 @@ class ProgressDrawer extends StatelessWidget {
     child: Drawer(
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+                padding: const EdgeInsets.fromLTRB(16.0, 8.0, 8.0, 8.0),
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.titleLarge,
@@ -56,7 +56,10 @@ class ProgressDrawer extends StatelessWidget {
                 ),
               ),
               // const Spacer(),
-              Padding(padding: const EdgeInsets.only(top: 8), child: trailing),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: trailing,
+              ),
             ],
           ),
         ),

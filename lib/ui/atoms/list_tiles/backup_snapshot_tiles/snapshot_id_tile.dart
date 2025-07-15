@@ -10,8 +10,8 @@ class SnapshotIdTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-    onLongPress: () async {
-      await PlatformAdapter.setClipboard(snapshotId);
+    onLongPress: () {
+      PlatformAdapter.setClipboard(snapshotId);
       getIt<NavigationService>().showSnackBar('basis.copied_to_clipboard'.tr());
     },
     leading: Icon(

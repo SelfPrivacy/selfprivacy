@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum DnsRecordStatus { ok, waiting, nonexistent }
 
@@ -37,9 +37,7 @@ Future<Map<String, DnsRecordStatus>> validateDnsMatch(
       await lookup('$subdomain.$domain');
     }
   } catch (e) {
-    if (kDebugMode) {
-      print(e);
-    }
+    print(e);
   }
 
   if (matches.isEmpty) {
@@ -65,7 +63,7 @@ String getHostnameFromDomain(final String domain) {
   // Replace all non-alphanumeric characters with an underscore
   String hostname = domain
       .split('.')[0]
-      .replaceAll(RegExp('[^a-zA-Z0-9]'), '-');
+      .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
   if (hostname.endsWith('-')) {
     hostname = hostname.substring(0, hostname.length - 1);
   }
@@ -79,11 +77,20 @@ String getHostnameFromDomain(final String domain) {
   return hostname;
 }
 
-List<DnsRecord> getProjectDnsRecords({
-  required final bool isCreating,
+void launchURL(final url) async {
+  try {
+    final Uri uri = Uri.parse(url);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } catch (e) {
+    print(e);
+  }
+}
+
+List<DnsRecord> getProjectDnsRecords(
   final String? domainName,
   final String? ip4,
-}) {
+  final bool isCreating,
+) {
   final DnsRecord domainA = DnsRecord(
     type: 'A',
     name: domainName,

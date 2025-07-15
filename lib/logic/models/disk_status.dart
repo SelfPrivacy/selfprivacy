@@ -75,10 +75,6 @@ class DiskVolume {
 }
 
 class DiskStatus {
-  DiskStatus() {
-    diskVolumes = [];
-  }
-
   DiskStatus.fromVolumes(
     final List<ServerDiskVolume> serverVolumes,
     final List<ServerProviderVolume> providerVolumes,
@@ -111,6 +107,9 @@ class DiskStatus {
 
           return diskVolume;
         }).toList();
+  }
+  DiskStatus() {
+    diskVolumes = [];
   }
 
   bool get isDiskOkay => diskVolumes.every((final volume) => volume.isDiskOkay);

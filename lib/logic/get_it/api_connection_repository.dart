@@ -76,7 +76,7 @@ class ApiConnectionRepository {
 
     await Future.forEach<ServerJob>(
       finishedJobs,
-      (final ServerJob job) => removeServerJob(job.uid),
+      (final ServerJob job) async => removeServerJob(job.uid),
     );
   }
 
@@ -150,7 +150,7 @@ class ApiConnectionRepository {
       _apiData.users.invalidate();
     }
 
-    if (!result.success || result.data == false) {
+    if (!result.success || !result.data) {
       return (false, result.message ?? 'jobs.generic_error'.tr());
     }
 
@@ -264,10 +264,10 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<(bool, String)> setAutoUpgradeSettings({
-    required final bool enable,
-    required final bool allowReboot,
-  }) async {
+  Future<(bool, String)> setAutoUpgradeSettings(
+    final bool enable,
+    final bool allowReboot,
+  ) async {
     final GenericResult<AutoUpgradeSettings?> result = await api
         .setAutoUpgradeSettings(
           AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
@@ -290,7 +290,7 @@ class ApiConnectionRepository {
     }
   }
 
-  Future<(bool, String)> setSshSettings({required final bool enable}) async {
+  Future<(bool, String)> setSshSettings(final bool enable) async {
     final GenericResult<SshSettings?> result = await api.setSshSettings(
       SshSettings(enable: enable),
     );
@@ -329,8 +329,8 @@ class ApiConnectionRepository {
   }
 
   void dispose() {
-    unawaited(_dataStream.close());
-    unawaited(_connectionStatusStream.close());
+    _dataStream.close();
+    _connectionStatusStream.close();
     _timer?.cancel();
   }
 
@@ -338,7 +338,7 @@ class ApiConnectionRepository {
       getIt<ResourcesModel>().serverDetails;
   ServerDomain? get serverDomain => getIt<ResourcesModel>().serverDomain;
 
-  Future<void> init() async {
+  void init() async {
     final serverDetails = getIt<ResourcesModel>().serverDetails;
     if (serverDetails == null) {
       return;
@@ -377,7 +377,7 @@ class ApiConnectionRepository {
     _timer = Timer.periodic(const Duration(seconds: 10), reload);
   }
 
-  Future<void> clear() async {
+  void clear() async {
     connectionStatus = ConnectionStatus.nonexistent;
     _connectionStatusStream.add(connectionStatus);
     _timer?.cancel();
@@ -456,27 +456,29 @@ class ApiConnectionRepository {
 
 class ApiData {
   ApiData(final ServerApi api)
-    : apiVersion = ApiDataElement<String>(fetchData: api.getApiVersion),
+    : apiVersion = ApiDataElement<String>(
+        fetchData: () async => api.getApiVersion(),
+      ),
       serverJobs = ApiDataElement<List<ServerJob>>(
-        fetchData: api.getServerJobs,
+        fetchData: () async => api.getServerJobs(),
         ttl: 10,
       ),
       backupConfig = ApiDataElement<BackupConfiguration>(
-        fetchData: api.getBackupsConfiguration,
+        fetchData: () async => api.getBackupsConfiguration(),
         requiredApiVersion: '>=2.4.2',
         ttl: 120,
       ),
       backups = ApiDataElement<List<Backup>>(
-        fetchData: api.getBackups,
+        fetchData: () async => api.getBackups(),
         requiredApiVersion: '>=2.4.2',
         ttl: 120,
       ),
       services = ApiDataElement<List<Service>>(
-        fetchData: api.getAllServices,
+        fetchData: () async => api.getAllServices(),
         requiredApiVersion: '>=2.4.3',
       ),
       volumes = ApiDataElement<List<ServerDiskVolume>>(
-        fetchData: api.getServerDiskVolumes,
+        fetchData: () async => api.getServerDiskVolumes(),
       ),
       recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
         fetchData: () async => (await api.getRecoveryTokenStatus()).data,
@@ -485,13 +487,15 @@ class ApiData {
       devices = ApiDataElement<List<ApiToken>>(
         fetchData: () async => (await api.getApiTokens()).data,
       ),
-      users = ApiDataElement<List<User>>(fetchData: api.getAllUsers),
+      users = ApiDataElement<List<User>>(
+        fetchData: () async => api.getAllUsers(),
+      ),
       groups = ApiDataElement<List<String>>(
-        fetchData: api.getAllGroups,
+        fetchData: () async => api.getAllGroups(),
         requiredApiVersion: '>=3.6.0',
       ),
       settings = ApiDataElement<SystemSettings>(
-        fetchData: api.getSystemSettings,
+        fetchData: () async => api.getSystemSettings(),
         ttl: 600,
       );
 
@@ -532,15 +536,15 @@ class ApiDataElement<T> {
 
   Future<void> refetchData(
     final Version version,
-    final Function() callback,
+    final Function callback,
   ) async {
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
       if (isExpired || _data == null) {
         final newData = await fetchData();
         if (T is List) {
-          if (Object.hashAll(newData! as Iterable<Object?>) !=
-              Object.hashAll(_data! as Iterable<Object?>)) {
-            _data = [...newData as Iterable] as T?;
+          if (Object.hashAll(newData as Iterable<Object?>) !=
+              Object.hashAll(_data as Iterable<Object?>)) {
+            _data = [...newData] as T?;
           }
         } else {
           if (newData.hashCode != _data.hashCode) {

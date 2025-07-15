@@ -8,18 +8,15 @@ mixin ServicesApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       response = await client.query$AllServices();
       if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetAllServices request: ${response.exception}',
-          error: response.exception,
-        );
+        print(response.exception.toString());
       }
       services =
           response.parsedData?.services.allServices
-              .map<Service>(Service.fromGraphQL)
+              .map<Service>((final service) => Service.fromGraphQL(service))
               .toList() ??
           [];
     } catch (e) {
-      logger('Error in GraphQL GetAllServices request: $e', error: e);
+      print(e);
     }
     return services;
   }
@@ -37,7 +34,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.enableService.message,
       );
     } catch (e) {
-      logger('Error in GraphQL EnableService request: $e', error: e);
+      print(e);
       return GenericResult(
         data: false,
         success: false,
@@ -60,7 +57,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.disableService.message,
       );
     } catch (e) {
-      logger('Error in GraphQL DisableService request: $e', error: e);
+      print(e);
       return GenericResult(
         data: null,
         success: false,
@@ -83,7 +80,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.stopService.message,
       );
     } catch (e) {
-      logger('Error in GraphQL StopService request: $e', error: e);
+      print(e);
       return GenericResult(
         data: false,
         success: false,
@@ -106,7 +103,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.startService.message,
       );
     } catch (e) {
-      logger('Error in GraphQL StartService request: $e', error: e);
+      print(e);
       return GenericResult(
         data: null,
         success: false,
@@ -129,7 +126,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.restartService.message,
       );
     } catch (e) {
-      logger('Error in GraphQL RestartService request: $e', error: e);
+      print(e);
       return GenericResult(
         data: false,
         success: false,
@@ -161,7 +158,7 @@ mixin ServicesApi on GraphQLApiMap {
         data: jobJson != null ? ServerJob.fromJson(jobJson) : null,
       );
     } catch (e) {
-      logger('Error in GraphQL MoveService request: $e', error: e);
+      print(e);
       return GenericResult(
         success: false,
         code: 0,
@@ -196,7 +193,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.setServiceConfiguration.message,
       );
     } catch (e) {
-      logger('Error in GraphQL SetServiceConfiguration request: $e', error: e);
+      print(e);
       return GenericResult(
         data: null,
         success: false,

@@ -15,7 +15,7 @@ class ServiceMigrationListItem extends StatelessWidget {
   final Service service;
   final DiskStatus diskStatus;
   final String selectedVolume;
-  final Function(String, String) onChange;
+  final Function onChange;
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -38,10 +38,7 @@ class ServiceMigrationListItem extends StatelessWidget {
           dense: true,
           value: volume.name,
           groupValue: selectedVolume,
-          onChanged: (final String? value) {
-            if (value == null) {
-              return;
-            }
+          onChanged: (final value) {
             onChange(value, service.id);
           },
         ),
@@ -68,8 +65,8 @@ class ServiceConsumptionTitle extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: SvgPicture.string(
               service.svgIcon,
-              width: 24,
-              height: 24,
+              width: 24.0,
+              height: 24.0,
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.onSurface,
                 BlendMode.srcIn,

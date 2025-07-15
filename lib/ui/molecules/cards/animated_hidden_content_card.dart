@@ -46,13 +46,13 @@ class _AnimatedHiddenContentCardState extends State<AnimatedHiddenContentCard> {
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 200),
               opacity: isKeyVisible ? 0 : 1,
-              child: ColoredBox(
+              child: Container(
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(widget.buttonIcon, size: 18),
+                    Icon(widget.buttonIcon, size: 18.0),
                     const SizedBox(width: 8),
                     Text(
                       widget.buttonText,

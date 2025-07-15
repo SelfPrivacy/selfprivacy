@@ -16,7 +16,7 @@ class ApiAdapter {
 
 class DesecDnsProvider extends DnsProvider {
   DesecDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DesecDnsProvider.load({required final bool isAuthorized, final String? token})
+  DesecDnsProvider.load(final bool isAuthorized, final String? token)
     : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
@@ -65,7 +65,7 @@ class DesecDnsProvider extends DnsProvider {
   Future<GenericResult<void>> createDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) {
+  }) async {
     final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in records) {
       bulkRecords.add(DesecDnsRecord.fromDnsRecord(record, domain.domainName));
@@ -81,7 +81,7 @@ class DesecDnsProvider extends DnsProvider {
   Future<GenericResult<void>> removeDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) {
+  }) async {
     final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in records) {
       final desecRecord = DesecDnsRecord.fromDnsRecord(
@@ -148,6 +148,7 @@ class DesecDnsProvider extends DnsProvider {
         records.add(record.toDnsRecord(domain.domainName));
       }
     } catch (e) {
+      print(e);
       return GenericResult(
         success: false,
         data: records,

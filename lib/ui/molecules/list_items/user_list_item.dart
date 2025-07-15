@@ -14,11 +14,11 @@ class UserListItem extends StatelessWidget {
   final User user;
   final bool isPrimaryUser;
 
-  // TODO(inex): Show user's display name and avatar when supported by backend
+  // TODO: Show user's display name and avatar when supported by backend
   @override
   Widget build(final BuildContext context) => ListTile(
-    onTap: () async {
-      await context.pushRoute(UserDetailsRoute(login: user.login));
+    onTap: () {
+      context.pushRoute(UserDetailsRoute(login: user.login));
     },
     leading: Skeleton.leaf(
       child: CircleAvatar(child: Text(user.login[0].toUpperCase())),

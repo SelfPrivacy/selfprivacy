@@ -75,7 +75,7 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
         ),
         const SizedBox(height: 16),
         FilledButton.icon(
-          onPressed: () async {
+          onPressed: () {
             setState(() {
               copiedToClipboard = true;
             });
@@ -87,9 +87,9 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
                 });
               });
             });
-            await PlatformAdapter.setClipboard(encryptionKey);
+            PlatformAdapter.setClipboard(encryptionKey);
           },
-          icon: const Icon(Icons.copy_all_outlined, size: 18),
+          icon: const Icon(Icons.copy_all_outlined, size: 18.0),
           label: Text(
             copiedToClipboard
                 ? 'basis.copied_to_clipboard'.tr()

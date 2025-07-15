@@ -16,16 +16,13 @@ class ServerProviderFactory {
     switch (settings.provider) {
       case ServerProviderType.hetzner:
         return settings.isAuthorized
-            ? HetznerServerProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
-            )
+            ? HetznerServerProvider.load(settings.isAuthorized, settings.token)
             : HetznerServerProvider();
       case ServerProviderType.digitalOcean:
         return settings.isAuthorized
             ? DigitalOceanServerProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
+              settings.isAuthorized,
+              settings.token,
             )
             : DigitalOceanServerProvider();
       case ServerProviderType.unknown:

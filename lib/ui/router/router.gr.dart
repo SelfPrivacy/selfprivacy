@@ -441,17 +441,17 @@ class RecoveryKeyRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RecoveryRoutingPage]
-class RecoveryRoutingRoute extends PageRouteInfo<void> {
-  const RecoveryRoutingRoute({List<PageRouteInfo>? children})
-    : super(RecoveryRoutingRoute.name, initialChildren: children);
+/// [RecoveryRouting]
+class RecoveryRoute extends PageRouteInfo<void> {
+  const RecoveryRoute({List<PageRouteInfo>? children})
+    : super(RecoveryRoute.name, initialChildren: children);
 
-  static const String name = 'RecoveryRoutingRoute';
+  static const String name = 'RecoveryRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const RecoveryRoutingPage();
+      return const RecoveryRouting();
     },
   );
 }

@@ -67,8 +67,8 @@ class _ServicePageState extends State<ServicePage> {
       hasFlashButton: true,
       heroIconWidget: SvgPicture.string(
         service.svgIcon,
-        width: 48,
-        height: 48,
+        width: 48.0,
+        height: 48.0,
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
@@ -87,7 +87,7 @@ class _ServicePageState extends State<ServicePage> {
         ),
         if (service.supportLevel != SupportLevel.normal ||
             service.isSystemService)
-          const Gap(8),
+          const Gap(8.0),
         if (!service.isInstalled) ...[
           BrandButton.filled(
             title: 'services_catalog.install'.tr(),
@@ -106,9 +106,9 @@ class _ServicePageState extends State<ServicePage> {
           if (service.url != null && !serviceDisabled) ...[
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
-              onTap: () => launchURL(service.url!),
-              onLongPress: () async {
-                await PlatformAdapter.setClipboard(service.url!);
+              onTap: () => launchURL(service.url),
+              onLongPress: () {
+                PlatformAdapter.setClipboard(service.url!);
                 getIt<NavigationService>().showSnackBar(
                   'basis.copied_to_clipboard'.tr(),
                 );

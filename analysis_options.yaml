@@ -47,9 +47,15 @@ linter:
     annotate_redeclares: true
     avoid_annotating_with_dynamic: true
     avoid_bool_literals_in_conditional_expressions: true
+<<<<<<< HEAD
     avoid_catches_without_on_clauses: false
     avoid_catching_errors: false
     avoid_classes_with_only_static_members: false
+=======
+    avoid_catches_without_on_clauses: true
+    avoid_catching_errors: true
+    avoid_classes_with_only_static_members: true
+>>>>>>> de5fc68d (chore: Upgrade Flutter to 3.32, reformat code)
     avoid_double_and_int_checks: true
     avoid_dynamic_calls: true
     avoid_empty_else: true
@@ -84,7 +90,11 @@ linter:
     cast_nullable_to_non_nullable: true
     collection_methods_unrelated_type: true
     combinators_ordering: true
+<<<<<<< HEAD
     comment_references: false
+=======
+    comment_references: true
+>>>>>>> de5fc68d (chore: Upgrade Flutter to 3.32, reformat code)
     conditional_uri_does_not_exist: true
     constant_identifier_names: true
     control_flow_in_finally: true
@@ -96,7 +106,11 @@ linter:
     directives_ordering: true
     discarded_futures: true
     do_not_use_environment: true
+<<<<<<< HEAD
     document_ignores: false
+=======
+    document_ignores: true
+>>>>>>> de5fc68d (chore: Upgrade Flutter to 3.32, reformat code)
     empty_catches: true
     empty_constructor_bodies: true
     empty_statements: true

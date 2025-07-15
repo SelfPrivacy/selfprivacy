@@ -53,7 +53,7 @@ class ServicesPageCard extends StatelessWidget {
                 ? () => context.pushRoute(ServiceRoute(serviceId: service.id))
                 : null,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -62,13 +62,16 @@ class ServicesPageCard extends StatelessWidget {
                   Skeleton.leaf(
                     child:
                         service.svgIcon == ''
-                            ? const Icon(Icons.question_mark_outlined, size: 32)
+                            ? const Icon(
+                              Icons.question_mark_outlined,
+                              size: 32.0,
+                            )
                             : IconStatusMask(
                               status: getStatus(service.status),
                               icon: SvgPicture.string(
                                 service.svgIcon,
-                                width: 32,
-                                height: 32,
+                                width: 32.0,
+                                height: 32.0,
                                 colorFilter: const ColorFilter.mode(
                                   Colors.white,
                                   BlendMode.srcIn,

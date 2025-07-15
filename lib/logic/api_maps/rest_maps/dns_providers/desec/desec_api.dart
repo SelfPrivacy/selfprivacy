@@ -1,12 +1,9 @@
-// ignore_for_file: unnecessary_lambdas
-
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 class DesecApi extends RestApiMap {
   DesecApi({
@@ -14,10 +11,7 @@ class DesecApi extends RestApiMap {
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
-  }) : assert(
-         !isWithToken || token.isNotEmpty,
-         'Desec API requires a token to be set when isWithToken is true.',
-       );
+  }) : assert(isWithToken ? token.isNotEmpty : true);
 
   @override
   final bool hasLogger;
@@ -27,8 +21,6 @@ class DesecApi extends RestApiMap {
   final String token;
   final String? customToken;
 
-  static final logger = const AppLogger(name: 'desec_api_map').log;
-
   @override
   BaseOptions get options {
     final BaseOptions options = BaseOptions(
@@ -37,10 +29,7 @@ class DesecApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(
-        token.isNotEmpty,
-        'Desec API requires a token to be set when isWithToken is true.',
-      );
+      assert(token.isNotEmpty);
       options.headers = {'Authorization': 'Token $token'};
     }
 
@@ -75,7 +64,7 @@ class DesecApi extends RestApiMap {
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
-      logger('Error validating Desec API token', error: e);
+      print(e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -109,12 +98,11 @@ class DesecApi extends RestApiMap {
       response = await client.get('');
       await Future.delayed(const Duration(seconds: 1));
       domains =
-          // ignore: avoid_dynamic_calls
           response.data!
               .map<DesecDomain>((final e) => DesecDomain.fromJson(e))
               .toList();
     } catch (e) {
-      logger('Error fetching Desec domains', error: e);
+      print(e);
       return GenericResult(
         success: false,
         data: domains,
@@ -147,7 +135,7 @@ class DesecApi extends RestApiMap {
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
-      logger('Error creating multiple Desec DNS records', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -170,7 +158,7 @@ class DesecApi extends RestApiMap {
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
-      logger('Error updating Desec DNS records', error: e);
+      print(e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -192,12 +180,11 @@ class DesecApi extends RestApiMap {
       response = await client.get(url);
       await Future.delayed(const Duration(seconds: 1));
       allRecords =
-          // ignore: avoid_dynamic_calls
           response.data!
               .map<DesecDnsRecord>((final e) => DesecDnsRecord.fromJson(e))
               .toList();
     } catch (e) {
-      logger('Error fetching Desec DNS records for $domainName', error: e);
+      print(e);
       return GenericResult(
         data: allRecords,
         success: false,

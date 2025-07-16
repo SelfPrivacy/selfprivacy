@@ -13,17 +13,18 @@ export 'package:selfprivacy/logic/get_it/navigation.dart';
 final GetIt getIt = GetIt.instance;
 
 Future<void> getItSetup() async {
-  getIt.registerSingleton<NavigationService>(NavigationService());
-  getIt.registerSingleton<ConsoleModel>(ConsoleModel());
-  getIt.registerSingleton<ResourcesModel>(ResourcesModel()..init());
-  getIt.registerSingleton<WizardDataModel>(WizardDataModel()..init());
+  getIt
+    ..registerSingleton<NavigationService>(NavigationService())
+    ..registerSingleton<ConsoleModel>(ConsoleModel())
+    ..registerSingleton<ResourcesModel>(ResourcesModel()..init())
+    ..registerSingleton<WizardDataModel>(WizardDataModel()..init());
 
   final apiConfigModel = ApiConfigModel();
-  getIt.registerSingleton<ApiConfigModel>(apiConfigModel);
-
-  getIt.registerSingleton<ApiConnectionRepository>(
-    ApiConnectionRepository()..init(),
-  );
+  getIt
+    ..registerSingleton<ApiConfigModel>(apiConfigModel)
+    ..registerSingleton<ApiConnectionRepository>(
+      ApiConnectionRepository()..init(),
+    );
 
   await getIt.allReady();
 }

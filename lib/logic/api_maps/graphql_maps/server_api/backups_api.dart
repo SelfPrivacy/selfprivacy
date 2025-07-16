@@ -15,10 +15,7 @@ mixin BackupsApi on GraphQLApiMap {
       }
       final List<Backup> parsed =
           response.parsedData!.backup.allSnapshots
-              .map(
-                (final Query$AllBackupSnapshots$backup$allSnapshots snapshot) =>
-                    Backup.fromGraphQL(snapshot),
-              )
+              .map(Backup.fromGraphQL)
               .toList();
       backups = parsed;
     } catch (e) {

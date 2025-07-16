@@ -61,9 +61,10 @@ abstract class GraphQLApiMap {
   Future<GraphQLClient> getClient() async {
     IOClient? ioClient;
     if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {
-      final HttpClient httpClient = HttpClient();
-      httpClient.badCertificateCallback =
-          (final cert, final host, final port) => true;
+      final HttpClient httpClient =
+          HttpClient()
+            ..badCertificateCallback =
+                (final cert, final host, final port) => true;
       ioClient = IOClient(httpClient);
     }
 
@@ -77,8 +78,7 @@ abstract class GraphQLApiMap {
     final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
           ? AuthLink(
-            getToken:
-                () async => customToken == '' ? 'Bearer $_token' : customToken,
+            getToken: () => customToken == '' ? 'Bearer $_token' : customToken,
           ).concat(httpLink)
           : httpLink,
     );

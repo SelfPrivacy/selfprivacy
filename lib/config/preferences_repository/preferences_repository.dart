@@ -19,25 +19,22 @@ class PreferencesRepository {
   /// so it needs to be this crutchy (I could've created one more class-wrapper,
   /// containing needed functions, but perceive it as boilerplate, because we
   /// don't need additional encapsulation level here)
-  final FutureOr<void> Function(Locale) setDelegateLocale;
-  final FutureOr<void> Function() resetDelegateLocale;
-  final FutureOr<List<Locale>> Function() getSupportedLocales;
-  final FutureOr<Locale> Function() getDelegateLocale;
+  final Future<void> Function(Locale) setDelegateLocale;
+  final Future<void> Function() resetDelegateLocale;
+  final List<Locale> Function() getSupportedLocales;
+  final Locale Function() getDelegateLocale;
 
   Future<bool> getSystemThemeModeFlag() async =>
       (await dataSource.getSystemThemeModeFlag()) ?? true;
 
-  Future<void> setSystemThemeModeFlag(final bool newValue) async =>
-      dataSource.setSystemThemeModeFlag(newValue);
-
   Future<bool> getDarkThemeModeFlag() async =>
       (await dataSource.getDarkThemeModeFlag()) ?? false;
 
-  Future<void> setDarkThemeModeFlag(final bool newValue) async =>
-      dataSource.setDarkThemeModeFlag(newValue);
+  Future<void> setDarkThemeModeFlag({required final bool useDark}) =>
+      dataSource.setDarkThemeModeFlag(useDark: useDark);
 
-  Future<void> setSystemModeFlag(final bool newValue) async =>
-      dataSource.setSystemThemeModeFlag(newValue);
+  Future<void> setSystemThemeModeFlag({required final bool useSystem}) =>
+      dataSource.setSystemThemeModeFlag(useSystem: useSystem);
 
   Future<List<Locale>> supportedLocales() async => getSupportedLocales();
 
@@ -49,10 +46,7 @@ class PreferencesRepository {
       chosenLocale = Locale(storedLocaleCode);
     }
 
-    // when it's null fallback on delegate locale
-    chosenLocale ??= Localization.systemLocale;
-
-    return chosenLocale;
+    return chosenLocale ?? Localization.systemLocale;
   }
 
   Future<void> setActiveLocale(final Locale newLocale) async {
@@ -64,10 +58,9 @@ class PreferencesRepository {
   }
 
   /// true when we need to show onboarding
-  Future<bool> getShouldShowOnboarding() async =>
-      dataSource.getOnboardingFlag();
+  Future<bool> getShouldShowOnboarding() => dataSource.getOnboardingFlag();
 
   /// true when we need to show onboarding
-  Future<void> setShouldShowOnboarding(final bool newValue) =>
-      dataSource.setOnboardingFlag(newValue);
+  Future<void> setShouldShowOnboarding({required final bool shouldOnboard}) =>
+      dataSource.setOnboardingFlag(shouldOnboard: shouldOnboard);
 }

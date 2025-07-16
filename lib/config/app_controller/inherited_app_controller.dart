@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart'
     as color_utils;
@@ -41,7 +43,7 @@ class _InheritedAppControllerState extends State<InheritedAppController> {
     if (!initTriggerred) {
       /// hook controller repo to local reference
       controller = AppController(_repo);
-      initialize();
+      unawaited(initialize());
       initTriggerred = true;
     }
 
@@ -69,7 +71,7 @@ class _InheritedAppControllerState extends State<InheritedAppController> {
       () async {
         colorPalette =
             (await AppThemeFactory.getCorePalette()) ??
-            color_utils.CorePalette.of(BrandColors.primary.value);
+            color_utils.CorePalette.of(BrandColors.primary.toARGB32());
       }(),
     ]);
 

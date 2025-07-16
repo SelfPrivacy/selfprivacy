@@ -35,7 +35,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
         OnboardingFirstView(onProceed: () => scrollTo(1)),
         OnboardingSecondView(
           onProceed: () {
-            InheritedAppController.of(context).setShouldShowOnboarding(false);
+            InheritedAppController.of(
+              context,
+            ).setShouldShowOnboarding(shouldOnboard: false);
             context.router.replaceAll([
               const RootRoute(),
               const InitializingRoute(),

@@ -15,7 +15,7 @@ class AppController with ChangeNotifier {
   /// repo encapsulates retrieval and storage of preferences
   final PreferencesRepository _repo;
 
-  /// TODO: to be removed or changed
+  // TODO(Aliaksei): to be removed or changed
   late final ApiConfigModel _apiConfigModel = getIt.get<ApiConfigModel>();
 
   bool _loaded = false;
@@ -64,7 +64,7 @@ class AppController with ChangeNotifier {
       () async {
         _supportedLocales = [
           Localization.systemLocale,
-          ...await _repo.getSupportedLocales(),
+          ..._repo.getSupportedLocales(),
         ];
 
         _locale = await _repo.getActiveLocale();
@@ -96,50 +96,52 @@ class AppController with ChangeNotifier {
   }
 
   // updateRepoReference
-  Future<void> setShouldShowOnboarding(final bool newValue) async {
+  Future<void> setShouldShowOnboarding({
+    required final bool shouldOnboard,
+  }) async {
     // Do not perform any work if new and old flag values are identical
-    if (newValue == shouldShowOnboarding) {
+    if (shouldOnboard == shouldShowOnboarding) {
       return;
     }
 
     // Store the flag in memory
-    _shouldShowOnboarding = newValue;
+    _shouldShowOnboarding = shouldOnboard;
     notifyListeners();
 
     // Persist the change
-    await _repo.setShouldShowOnboarding(newValue);
+    await _repo.setShouldShowOnboarding(shouldOnboard: shouldOnboard);
   }
 
-  Future<void> setSystemThemeModeFlag(final bool newValue) async {
+  Future<void> setSystemThemeModeFlag({required final bool useSystem}) async {
     // Do not perform any work if new and old ThemeMode are identical
-    if (systemThemeModeActive == newValue) {
+    if (systemThemeModeActive == useSystem) {
       return;
     }
 
     // Store the new ThemeMode in memory
-    _systemThemeModeActive = newValue;
+    _systemThemeModeActive = useSystem;
 
     // Inform listeners a change has occurred.
     notifyListeners();
 
     // Persist the change
-    await _repo.setSystemModeFlag(newValue);
+    await _repo.setSystemThemeModeFlag(useSystem: useSystem);
   }
 
-  Future<void> setDarkThemeModeFlag(final bool newValue) async {
+  Future<void> setDarkThemeModeFlag({required final bool useDark}) async {
     // Do not perform any work if new and old ThemeMode are identical
-    if (darkThemeModeActive == newValue) {
+    if (darkThemeModeActive == useDark) {
       return;
     }
 
     // Store the new ThemeMode in memory
-    _darkThemeModeActive = newValue;
+    _darkThemeModeActive = useDark;
 
     // Inform listeners a change has occurred.
     notifyListeners();
 
     // Persist the change
-    await _repo.setDarkThemeModeFlag(newValue);
+    await _repo.setDarkThemeModeFlag(useDark: useDark);
   }
 
   Future<void> setLocale(final Locale newLocale) async {

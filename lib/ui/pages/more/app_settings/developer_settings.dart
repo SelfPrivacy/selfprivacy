@@ -64,7 +64,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         onTap:
             () => InheritedAppController.of(
               context,
-            ).setShouldShowOnboarding(true),
+            ).setShouldShowOnboarding(shouldOnboard: true),
       ),
       ListTile(
         title: Text('storage.start_migration_button'.tr()),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
@@ -48,7 +50,8 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   @override
   void initState() {
     super.initState();
-    serverInstallationCubit = ServerInstallationCubit()..load();
+    serverInstallationCubit = ServerInstallationCubit();
+    unawaited(serverInstallationCubit.load());
     supportSystemCubit = SupportSystemCubit();
     usersBloc = UsersBloc();
     groupsBloc = GroupsBloc();

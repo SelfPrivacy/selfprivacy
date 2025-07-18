@@ -25,23 +25,21 @@ mixin LogsApi on GraphQLApiMap {
       final query = Options$Query$Logs(variables: variables);
       response = await client.query$Logs(query);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(response.exception.toString());
       }
       if (response.parsedData == null) {
         return (logsList, pageMeta);
       }
       logsList =
           response.parsedData?.logs.paginated.entries
-              .map<ServerLogEntry>(
-                (final log) => ServerLogEntry.fromGraphQL(log),
-              )
+              .map<ServerLogEntry>(ServerLogEntry.fromGraphQL)
               .toList() ??
           [];
       pageMeta = ServerLogsPageMeta.fromGraphQL(
         response.parsedData!.logs.paginated.pageMeta,
       );
     } catch (e) {
-      print(e);
+      logger("Couldn't load server logs", error: e);
     }
 
     return (logsList, pageMeta);

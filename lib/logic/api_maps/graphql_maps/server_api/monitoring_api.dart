@@ -20,7 +20,7 @@ mixin MonitoringApi on GraphQLApiMap {
       );
       response = await client.query$GetOverallCpuAndNetworkMetrics(query);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(response.exception.toString());
         return GenericResult<ServerMetrics?>(success: false, data: null);
       }
       if (response.parsedData == null) {
@@ -40,7 +40,7 @@ mixin MonitoringApi on GraphQLApiMap {
       );
       return GenericResult<ServerMetrics?>(success: true, data: metrics);
     } catch (e) {
-      print(e);
+      logger("Couldn't load sever metrics", error: e);
       return GenericResult<ServerMetrics?>(
         success: false,
         data: null,
@@ -66,7 +66,7 @@ mixin MonitoringApi on GraphQLApiMap {
       final query = Options$Query$GetMemoryMetrics(variables: variables);
       response = await client.query$GetMemoryMetrics(query);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(response.exception.toString());
         return GenericResult<MemoryMetrics?>(success: false, data: null);
       }
       if (response.parsedData == null) {
@@ -88,7 +88,7 @@ mixin MonitoringApi on GraphQLApiMap {
       );
       return GenericResult<MemoryMetrics?>(success: true, data: metrics);
     } catch (e) {
-      print(e);
+      logger("Couldn't get memory metrics", error: e);
       return GenericResult<MemoryMetrics?>(
         success: false,
         data: null,
@@ -114,7 +114,7 @@ mixin MonitoringApi on GraphQLApiMap {
       final query = Options$Query$GetDiskMetrics(variables: variables);
       response = await client.query$GetDiskMetrics(query);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(response.exception.toString());
         return GenericResult<DiskMetrics?>(success: false, data: null);
       }
       if (response.parsedData == null) {
@@ -132,7 +132,7 @@ mixin MonitoringApi on GraphQLApiMap {
       );
       return GenericResult<DiskMetrics?>(success: true, data: metrics);
     } catch (e) {
-      print(e);
+      logger("Couldn't get disk metrics", error: e);
       return GenericResult<DiskMetrics?>(
         success: false,
         data: null,

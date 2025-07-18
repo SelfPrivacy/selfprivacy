@@ -31,20 +31,21 @@ class HiveConfig {
 
   static void registerAdapters() {
     try {
-      Hive.registerAdapter(UserAdapter());
-      Hive.registerAdapter(ServerHostingDetailsAdapter());
-      Hive.registerAdapter(ServerDomainAdapter());
-      Hive.registerAdapter(BackupsCredentialAdapter());
-      Hive.registerAdapter(ServerProviderVolumeAdapter());
-      Hive.registerAdapter(BackblazeBucketAdapter());
-      Hive.registerAdapter(ServerProviderCredentialAdapter());
-      Hive.registerAdapter(DnsProviderCredentialAdapter());
-      Hive.registerAdapter(ServerAdapter());
-      Hive.registerAdapter(DnsProviderTypeAdapter());
-      Hive.registerAdapter(ServerProviderTypeAdapter());
-      Hive.registerAdapter(UserTypeAdapter());
-      Hive.registerAdapter(BackupsProviderTypeAdapter());
-      Hive.registerAdapter(ServerInstallationWizardDataAdapter());
+      Hive
+        ..registerAdapter(UserAdapter())
+        ..registerAdapter(ServerHostingDetailsAdapter())
+        ..registerAdapter(ServerDomainAdapter())
+        ..registerAdapter(BackupsCredentialAdapter())
+        ..registerAdapter(ServerProviderVolumeAdapter())
+        ..registerAdapter(BackblazeBucketAdapter())
+        ..registerAdapter(ServerProviderCredentialAdapter())
+        ..registerAdapter(DnsProviderCredentialAdapter())
+        ..registerAdapter(ServerAdapter())
+        ..registerAdapter(DnsProviderTypeAdapter())
+        ..registerAdapter(ServerProviderTypeAdapter())
+        ..registerAdapter(UserTypeAdapter())
+        ..registerAdapter(BackupsProviderTypeAdapter())
+        ..registerAdapter(ServerInstallationWizardDataAdapter());
       log('successfully registered every adapter');
     } catch (error, stackTrace) {
       log('error registering adapters', error: error, stackTrace: stackTrace);
@@ -91,7 +92,8 @@ class HiveConfig {
       final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
 
       // if it is an initial app launch, we do not need to perform any migrations
-      final savedVersion =
+      final int
+      savedVersion =
           localSettingsBox.isEmpty
               ? version
               // if box was initialized, but database version was not introduced in
@@ -245,7 +247,7 @@ class BNames {
   /// Server installation box. Contains server details and provider tokens.
   static String serverInstallationBox = 'appConfig';
 
-  /// A List<String> field of [serverInstallationBox] box.
+  /// A `List<String>` field of [serverInstallationBox] box.
   static String rootKeys = 'rootKeys';
 
   /// A boolean field of [serverInstallationBox] box.

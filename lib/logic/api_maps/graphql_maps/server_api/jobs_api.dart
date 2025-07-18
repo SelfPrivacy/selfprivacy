@@ -9,16 +9,16 @@ mixin JobsApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       response = await client.query$GetApiJobs();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(response.exception.toString());
       }
       jobsList =
           jobsList =
               response.parsedData?.jobs.getJobs
-                  .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
+                  .map<ServerJob>(ServerJob.fromGraphQL)
                   .toList() ??
               [];
     } catch (e) {
-      print(e);
+      logger("Couldn't get server jobs", error: e);
     }
 
     return jobsList;
@@ -34,7 +34,7 @@ mixin JobsApi on GraphQLApiMap {
     await for (final response in subscription) {
       final jobsList =
           response.parsedData?.jobUpdates
-              .map<ServerJob>((final job) => ServerJob.fromGraphQL(job))
+              .map<ServerJob>(ServerJob.fromGraphQL)
               .toList() ??
           [];
       yield jobsList;
@@ -54,7 +54,7 @@ mixin JobsApi on GraphQLApiMap {
         message: response.parsedData?.jobs.removeJob.message,
       );
     } catch (e) {
-      print(e);
+      logger("Couldn't remove the API job", error: e);
       return GenericResult(
         data: false,
         success: false,

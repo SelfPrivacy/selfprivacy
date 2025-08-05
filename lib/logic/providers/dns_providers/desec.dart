@@ -65,7 +65,7 @@ class DesecDnsProvider extends DnsProvider {
   Future<GenericResult<void>> createDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) async {
+  }) {
     final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in records) {
       bulkRecords.add(DesecDnsRecord.fromDnsRecord(record, domain.domainName));
@@ -81,7 +81,7 @@ class DesecDnsProvider extends DnsProvider {
   Future<GenericResult<void>> removeDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) async {
+  }) {
     final List<DesecDnsRecord> bulkRecords = [];
     for (final DnsRecord record in records) {
       final desecRecord = DesecDnsRecord.fromDnsRecord(

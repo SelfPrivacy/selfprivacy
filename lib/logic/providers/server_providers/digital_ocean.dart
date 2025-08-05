@@ -222,7 +222,7 @@ class DigitalOceanServerProvider extends ServerProvider {
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async => launchInstallation(installationData),
+              callback: () => launchInstallation(installationData),
             ),
           ],
           description: serverResult.message ?? 'recovering.generic_error'.tr(),
@@ -610,31 +610,29 @@ class DigitalOceanServerProvider extends ServerProvider {
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final int serverId,
-  ) async => _adapter.api().attachVolume(
+  ) => _adapter.api().attachVolume(
     name: volume.name,
     serverId: serverId,
     region: volume.location!,
   );
 
   @override
-  Future<GenericResult<bool>> detachVolume(
-    final ServerProviderVolume volume,
-  ) async => _adapter.api().detachVolume(
-    name: volume.name,
-    serverId: volume.serverId!,
-    region: volume.location!,
-  );
+  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
+      _adapter.api().detachVolume(
+        name: volume.name,
+        serverId: volume.serverId!,
+        region: volume.location!,
+      );
 
   @override
-  Future<GenericResult<void>> deleteVolume(
-    final ServerProviderVolume volume,
-  ) async => _adapter.api().deleteVolume(volume.uuid!);
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
+      _adapter.api().deleteVolume(volume.uuid!);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) async => _adapter.api().resizeVolume(
+  ) => _adapter.api().resizeVolume(
     uuid: volume.uuid!,
     gb: size.gibibyte.toInt(),
     region: volume.location!,
@@ -705,7 +703,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.ram,
           trId: 'server.ram',
-          value: "${droplet['memory'].toString()} MB",
+          value: "${droplet['memory']} MB",
         ),
         ServerMetadataEntity(
           type: MetadataType.cost,

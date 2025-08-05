@@ -204,21 +204,21 @@ class ResourcesModel {
     await _box.flush();
   }
 
-  void clear() {
+  Future<void> clear() async {
     _servers.clear();
     _serverProviderTokens.clear();
     _dnsProviderTokens.clear();
     _backupsCredentials.clear();
     _backblazeBucket = null;
 
-    _box.clear();
-    _box.compact();
+    await _box.clear();
+    await _box.compact();
 
     _statusStreamController.add(const ClearedModel());
   }
 
-  void dispose() {
-    _statusStreamController.close();
+  Future<void> dispose() async {
+    await _statusStreamController.close();
   }
 
   void init() {

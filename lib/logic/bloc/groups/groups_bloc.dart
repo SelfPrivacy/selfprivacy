@@ -83,9 +83,9 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   @override
-  Future<void> close() {
-    _apiDataSubscription?.cancel();
-    _apiConnectionStatusSubscription?.cancel();
+  Future<void> close() async {
+    await _apiDataSubscription?.cancel();
+    await _apiConnectionStatusSubscription?.cancel();
     return super.close();
   }
 }

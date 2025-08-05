@@ -107,8 +107,8 @@ class _ServicePageState extends State<ServicePage> {
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
               onTap: () => launchURL(service.url!),
-              onLongPress: () {
-                PlatformAdapter.setClipboard(service.url!);
+              onLongPress: () async {
+                await PlatformAdapter.setClipboard(service.url!);
                 getIt<NavigationService>().showSnackBar(
                   'basis.copied_to_clipboard'.tr(),
                 );

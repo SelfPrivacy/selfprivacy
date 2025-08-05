@@ -71,8 +71,8 @@ class ResetPasswordPage extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.copy),
                         color: Theme.of(context).colorScheme.onSurface,
-                        onPressed: () {
-                          PlatformAdapter.setClipboard(
+                        onPressed: () async {
+                          await PlatformAdapter.setClipboard(
                             state.passwordResetLink.toString(),
                           );
                           getIt<NavigationService>().showSnackBar(
@@ -85,8 +85,8 @@ class ResetPasswordPage extends StatelessWidget {
                 ),
                 const Gap(16.0),
                 BrandOutlinedButton(
-                  onPressed: () {
-                    showModalBottomSheet(
+                  onPressed: () async {
+                    await showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       useRootNavigator: true,
@@ -125,8 +125,10 @@ class ResetPasswordPage extends StatelessWidget {
                 ),
                 const Gap(8.0),
                 BrandButton.filled(
-                  onPressed: () {
-                    Share.share(state.passwordResetLink.toString());
+                  onPressed: () async {
+                    await SharePlus.instance.share(
+                      ShareParams(uri: state.passwordResetLink),
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -56,8 +56,8 @@ class AboutApplicationPage extends StatelessWidget {
                 ),
                 subtitle: Text(snapshot.data.toString()),
                 leading: Icon(deviceIcon),
-                onLongPress: () {
-                  PlatformAdapter.setClipboard(snapshot.data.toString());
+                onLongPress: () async {
+                  await PlatformAdapter.setClipboard(snapshot.data.toString());
                   getIt<NavigationService>().showSnackBar(
                     'basis.copied_to_clipboard'.tr(),
                   );
@@ -72,8 +72,10 @@ class AboutApplicationPage extends StatelessWidget {
                   title: Text('about_application_page.api_version_text'.tr()),
                   subtitle: Text(snapshot.data.toString()),
                   leading: const Icon(Icons.api_outlined),
-                  onLongPress: () {
-                    PlatformAdapter.setClipboard(snapshot.data.toString());
+                  onLongPress: () async {
+                    await PlatformAdapter.setClipboard(
+                      snapshot.data.toString(),
+                    );
                     getIt<NavigationService>().showSnackBar(
                       'basis.copied_to_clipboard'.tr(),
                     );

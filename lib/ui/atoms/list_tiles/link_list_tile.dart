@@ -32,8 +32,8 @@ class LinkListTile extends StatelessWidget {
     leading: Icon(icon),
     onLongPress:
         uri != null
-            ? () {
-              PlatformAdapter.setClipboard(longPressText ?? uri!);
+            ? () async {
+              await PlatformAdapter.setClipboard(longPressText ?? uri!);
               getIt<NavigationService>().showSnackBar(
                 'basis.copied_to_clipboard'.tr(),
               );

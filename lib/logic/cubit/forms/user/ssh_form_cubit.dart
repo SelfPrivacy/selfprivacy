@@ -33,7 +33,7 @@ class SshFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() {
+  void onSubmit() {
     jobsCubit.addJob(
       CreateSSHKeyJob(user: user, publicKey: key.state.value.trim()),
     );
@@ -66,8 +66,8 @@ class JoblessSshFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() {
-    serverInstallationCubit.setCustomSshKey(key.state.value);
+  Future<void> onSubmit() async {
+    await serverInstallationCubit.setCustomSshKey(key.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;

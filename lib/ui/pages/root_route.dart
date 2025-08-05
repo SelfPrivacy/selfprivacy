@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
@@ -21,7 +23,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     if (InheritedAppController.of(context).shouldShowOnboarding) {
-      context.router.replace(const OnboardingRoute());
+      unawaited(context.router.replace(const OnboardingRoute()));
     }
 
     super.didChangeDependencies();

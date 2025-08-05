@@ -65,7 +65,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
   Future<GenericResult<void>> createDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) async => _adapter.api().createMultipleDnsRecords(
+  }) => _adapter.api().createMultipleDnsRecords(
     domainName: domain.domainName,
     records:
         records
@@ -222,7 +222,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,
-  ) async => _adapter.api().createMultipleDnsRecords(
+  ) => _adapter.api().createMultipleDnsRecords(
     domainName: domain.domainName,
     records: [DigitalOceanDnsRecord.fromDnsRecord(record, domain.domainName)],
   );

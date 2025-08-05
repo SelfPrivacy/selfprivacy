@@ -180,11 +180,11 @@ class ServerInstallationRepository {
     return RecoveryStep.backblazeToken;
   }
 
-  void clearAppConfig() {
-    box.clear();
-    getIt<ResourcesModel>().clear();
-    getIt<WizardDataModel>().clear();
-    getIt<ApiConnectionRepository>().clear();
+  Future<void> clearAppConfig() async {
+    await box.clear();
+    await getIt<ResourcesModel>().clear();
+    await getIt<WizardDataModel>().clear();
+    await getIt<ApiConnectionRepository>().clear();
   }
 
   Future<ServerHostingDetails> startServer(
@@ -251,7 +251,7 @@ class ServerInstallationRepository {
     await ProvidersController.currentDnsProvider!.setDnsRecord(record, domain);
   }
 
-  Future<bool> isHttpServerWorking() async {
+  Future<bool> isHttpServerWorking() {
     final ServerApi api = ServerApi(
       overrideDomain:
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
@@ -289,7 +289,7 @@ class ServerInstallationRepository {
     return server;
   }
 
-  Future<ServerHostingDetails> powerOn() async {
+  Future<ServerHostingDetails> powerOn() {
     final server = getIt<ResourcesModel>().serverDetails!;
     return startServer(server);
   }

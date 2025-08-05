@@ -17,8 +17,8 @@ class ConnectionStatusBloc extends Bloc<ConnectionStatus, ConnectionStatus> {
   StreamSubscription? _apiConnectionStatusSubscription;
 
   @override
-  Future<void> close() {
-    _apiConnectionStatusSubscription?.cancel();
+  Future<void> close() async {
+    await _apiConnectionStatusSubscription?.cancel();
     return super.close();
   }
 }

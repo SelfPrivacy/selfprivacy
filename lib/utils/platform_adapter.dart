@@ -60,7 +60,7 @@ class PlatformAdapter {
     return 'Unidentified';
   }
 
-  static void setClipboard(final String clipboardData) {
-    Clipboard.setData(ClipboardData(text: clipboardData));
+  static Future<void> setClipboard(final String clipboardData) async {
+    await Clipboard.setData(ClipboardData(text: clipboardData));
   }
 }

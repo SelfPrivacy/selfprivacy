@@ -26,7 +26,7 @@ class UserFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
+  Future<void>? onSubmit() async {
     final User user = User(
       login: initialUser?.login ?? login.state.value,
       type: UserType.normal,

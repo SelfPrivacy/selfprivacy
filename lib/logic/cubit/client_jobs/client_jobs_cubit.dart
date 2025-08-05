@@ -48,7 +48,7 @@ class JobsCubit extends Cubit<JobsState> {
     }
   }
 
-  void addJob(final ClientJob job) async {
+  void addJob(final ClientJob job) {
     emit(state.addJob(job));
   }
 
@@ -343,8 +343,8 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   @override
-  Future<void> close() {
-    _apiDataSubscription?.cancel();
+  Future<void> close() async {
+    await _apiDataSubscription?.cancel();
     return super.close();
   }
 }

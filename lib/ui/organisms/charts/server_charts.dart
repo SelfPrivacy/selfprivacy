@@ -51,8 +51,8 @@ class ServerCharts extends StatelessWidget {
                   Icons.area_chart_outlined,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                onTap: () {
-                  context.pushRoute(const MemoryUsageByServiceRoute());
+                onTap: () async {
+                  await context.pushRoute(const MemoryUsageByServiceRoute());
                 },
                 enabled: metricsLoaded,
               ),

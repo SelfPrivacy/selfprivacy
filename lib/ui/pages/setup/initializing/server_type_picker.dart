@@ -24,7 +24,9 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
   ServerProviderLocation? serverProviderLocation;
   ServerType? serverType;
 
-  void setServerProviderLocation(final ServerProviderLocation? location) async {
+  Future<void> setServerProviderLocation(
+    final ServerProviderLocation? location,
+  ) async {
     if (location != null) {
       await widget.serverInstallationCubit.setLocationIdentifier(
         location.identifier,
@@ -47,8 +49,8 @@ class _ServerTypePickerState extends State<ServerTypePicker> {
     return SelectTypePage(
       location: serverProviderLocation!,
       serverInstallationCubit: widget.serverInstallationCubit,
-      backToLocationPickingCallback: () {
-        setServerProviderLocation(null);
+      backToLocationPickingCallback: () async {
+        await setServerProviderLocation(null);
       },
     );
   }
@@ -242,8 +244,8 @@ class SelectTypePage extends StatelessWidget {
                         child: Card(
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
-                            onTap: () {
-                              serverInstallationCubit.setServerType(type);
+                            onTap: () async {
+                              await serverInstallationCubit.setServerType(type);
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),

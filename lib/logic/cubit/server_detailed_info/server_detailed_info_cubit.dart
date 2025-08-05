@@ -38,7 +38,7 @@ class ServerDetailsCubit
       ),
     );
     if (state.metadata.isEmpty) {
-      check();
+      unawaited(check());
     }
   }
 
@@ -95,7 +95,7 @@ class ServerDetailsCubit
     return data;
   }
 
-  void check() async {
+  Future<void> check() async {
     final List<ServerMetadataEntity> metadata = await _metadata;
     emit(state.copyWith(metadata: metadata));
   }
@@ -106,11 +106,11 @@ class ServerDetailsCubit
   }
 
   @override
-  void load() async {}
+  void load() {}
 
   @override
-  Future<void> close() {
-    _apiDataSubscription?.cancel();
+  Future<void> close() async {
+    await _apiDataSubscription?.cancel();
     return super.close();
   }
 }

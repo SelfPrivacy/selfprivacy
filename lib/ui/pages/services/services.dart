@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -64,10 +66,12 @@ class _ServicesPageState extends State<ServicesPage> {
       if (_showSystemServices) {
         WidgetsBinding.instance.addPostFrameCallback((final _) {
           Future.delayed(const Duration(milliseconds: 300), () {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+            unawaited(
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              ),
             );
           });
         });
@@ -123,8 +127,8 @@ class _ServicesPageState extends State<ServicesPage> {
                             Text('services_catalog.title'.tr()),
                           ],
                         ),
-                        onPressed: () {
-                          context.pushRoute(const ServicesCatalogRoute());
+                        onPressed: () async {
+                          await context.pushRoute(const ServicesCatalogRoute());
                         },
                       ),
                     ),

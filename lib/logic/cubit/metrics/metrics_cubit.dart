@@ -30,19 +30,19 @@ class MetricsCubit extends Cubit<MetricsState> {
     }
   }
 
-  void changePeriod(final Period period) async {
+  Future<void> changePeriod(final Period period) async {
     if (state is! MetricsLoading) {
       closeTimer();
       emit(MetricsLoading(period));
-      load(period);
+      await load(period);
     }
   }
 
-  void restart() async {
-    load(state.period);
+  void restart() {
+    unawaited(load(state.period));
   }
 
-  void load(final Period period) async {
+  Future<void> load(final Period period) async {
     try {
       final MetricsStateUpdate newStateUpdate = await repository
           .getRelevantServerMetrics(period);

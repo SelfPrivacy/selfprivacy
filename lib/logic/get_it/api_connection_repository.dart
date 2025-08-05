@@ -76,7 +76,7 @@ class ApiConnectionRepository {
 
     await Future.forEach<ServerJob>(
       finishedJobs,
-      (final ServerJob job) async => removeServerJob(job.uid),
+      (final ServerJob job) => removeServerJob(job.uid),
     );
   }
 
@@ -329,8 +329,8 @@ class ApiConnectionRepository {
   }
 
   void dispose() {
-    _dataStream.close();
-    _connectionStatusStream.close();
+    unawaited(_dataStream.close());
+    unawaited(_connectionStatusStream.close());
     _timer?.cancel();
   }
 
@@ -338,7 +338,7 @@ class ApiConnectionRepository {
       getIt<ResourcesModel>().serverDetails;
   ServerDomain? get serverDomain => getIt<ResourcesModel>().serverDomain;
 
-  void init() async {
+  Future<void> init() async {
     final serverDetails = getIt<ResourcesModel>().serverDetails;
     if (serverDetails == null) {
       return;
@@ -377,7 +377,7 @@ class ApiConnectionRepository {
     _timer = Timer.periodic(const Duration(seconds: 10), reload);
   }
 
-  void clear() async {
+  Future<void> clear() async {
     connectionStatus = ConnectionStatus.nonexistent;
     _connectionStatusStream.add(connectionStatus);
     _timer?.cancel();
@@ -456,29 +456,27 @@ class ApiConnectionRepository {
 
 class ApiData {
   ApiData(final ServerApi api)
-    : apiVersion = ApiDataElement<String>(
-        fetchData: () async => api.getApiVersion(),
-      ),
+    : apiVersion = ApiDataElement<String>(fetchData: api.getApiVersion),
       serverJobs = ApiDataElement<List<ServerJob>>(
-        fetchData: () async => api.getServerJobs(),
+        fetchData: api.getServerJobs,
         ttl: 10,
       ),
       backupConfig = ApiDataElement<BackupConfiguration>(
-        fetchData: () async => api.getBackupsConfiguration(),
+        fetchData: api.getBackupsConfiguration,
         requiredApiVersion: '>=2.4.2',
         ttl: 120,
       ),
       backups = ApiDataElement<List<Backup>>(
-        fetchData: () async => api.getBackups(),
+        fetchData: api.getBackups,
         requiredApiVersion: '>=2.4.2',
         ttl: 120,
       ),
       services = ApiDataElement<List<Service>>(
-        fetchData: () async => api.getAllServices(),
+        fetchData: api.getAllServices,
         requiredApiVersion: '>=2.4.3',
       ),
       volumes = ApiDataElement<List<ServerDiskVolume>>(
-        fetchData: () async => api.getServerDiskVolumes(),
+        fetchData: api.getServerDiskVolumes,
       ),
       recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
         fetchData: () async => (await api.getRecoveryTokenStatus()).data,
@@ -487,15 +485,13 @@ class ApiData {
       devices = ApiDataElement<List<ApiToken>>(
         fetchData: () async => (await api.getApiTokens()).data,
       ),
-      users = ApiDataElement<List<User>>(
-        fetchData: () async => api.getAllUsers(),
-      ),
+      users = ApiDataElement<List<User>>(fetchData: api.getAllUsers),
       groups = ApiDataElement<List<String>>(
-        fetchData: () async => api.getAllGroups(),
+        fetchData: api.getAllGroups,
         requiredApiVersion: '>=3.6.0',
       ),
       settings = ApiDataElement<SystemSettings>(
-        fetchData: () async => api.getSystemSettings(),
+        fetchData: api.getSystemSettings,
         ttl: 600,
       );
 

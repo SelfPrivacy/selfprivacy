@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
@@ -266,7 +268,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                   Navigator.of(context).pop();
                   widget.submitCallback?.call();
                 } else {
-                  context.read<ServerInstallationCubit>().setServerId(server);
+                  unawaited(
+                    context.read<ServerInstallationCubit>().setServerId(server),
+                  );
                   Navigator.of(context).pop();
                 }
               },

@@ -56,9 +56,8 @@ class _BrandFabState extends State<BrandFab>
         }
       },
       child: FloatingActionButton(
-        onPressed: () {
-          // TODO: Make a hero animation to the screen
-          showModalJobsSheet(context: context);
+        onPressed: () async {
+          await showModalJobsSheet(context: context);
         },
         isExtended: widget.extended,
         tooltip: 'jobs.title'.tr(),

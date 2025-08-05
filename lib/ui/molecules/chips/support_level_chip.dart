@@ -26,8 +26,8 @@ class SupportLevelChip extends StatelessWidget {
             'service_page.support_levels.normal'.tr(),
             style: baseTextTheme,
           ),
-          onPressed: () {
-            showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder:
                   (final BuildContext context) => _SupportLevelDialog(
@@ -54,8 +54,8 @@ class SupportLevelChip extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSecondaryContainer,
             ),
           ),
-          onPressed: () {
-            showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder:
                   (final BuildContext context) => _SupportLevelDialog(
@@ -83,8 +83,8 @@ class SupportLevelChip extends StatelessWidget {
               color: Theme.of(context).colorScheme.onErrorContainer,
             ),
           ),
-          onPressed: () {
-            showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder:
                   (final BuildContext context) => _SupportLevelDialog(
@@ -112,8 +112,8 @@ class SupportLevelChip extends StatelessWidget {
               color: Theme.of(context).colorScheme.onTertiaryContainer,
             ),
           ),
-          onPressed: () {
-            showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder:
                   (final BuildContext context) => _SupportLevelDialog(
@@ -141,8 +141,8 @@ class SupportLevelChip extends StatelessWidget {
               color: Theme.of(context).colorScheme.onErrorContainer,
             ),
           ),
-          onPressed: () {
-            showDialog(
+          onPressed: () async {
+            await showDialog(
               context: context,
               builder:
                   (final BuildContext context) => _SupportLevelDialog(
@@ -178,8 +178,8 @@ class SystemServiceChip extends StatelessWidget {
         'service_page.support_levels.system'.tr(),
         style: baseTextTheme,
       ),
-      onPressed: () {
-        showDialog(
+      onPressed: () async {
+        await showDialog(
           context: context,
           builder:
               (final BuildContext context) => _SupportLevelDialog(

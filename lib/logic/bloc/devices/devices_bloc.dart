@@ -102,8 +102,8 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   }
 
   @override
-  Future<void> close() {
-    _apiDataSubscription?.cancel();
+  Future<void> close() async {
+    await _apiDataSubscription?.cancel();
     return super.close();
   }
 }

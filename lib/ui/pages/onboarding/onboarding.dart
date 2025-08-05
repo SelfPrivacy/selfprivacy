@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
@@ -34,11 +36,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
       children: [
         OnboardingFirstView(onProceed: () => scrollTo(1)),
         OnboardingSecondView(
-          onProceed: () {
-            InheritedAppController.of(
-              context,
-            ).setShouldShowOnboarding(shouldOnboard: false);
-            context.router.replaceAll([
+          onProceed: () async {
+            unawaited(
+              InheritedAppController.of(
+                context,
+              ).setShouldShowOnboarding(shouldOnboard: false),
+            );
+            await context.router.replaceAll([
               const RootRoute(),
               const InitializingRoute(),
             ]);

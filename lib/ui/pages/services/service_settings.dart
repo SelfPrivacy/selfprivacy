@@ -215,7 +215,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
           child: FilledButton(
             onPressed:
                 ((widget.isInstalling || isModified) && isFormValid)
-                    ? () {
+                    ? () async {
                       if (widget.isInstalling) {
                         context.read<JobsCubit>().addJob(
                           ServiceToggleJob(
@@ -234,7 +234,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
                       if (widget.isInstalling) {
                         context.router.popUntilRoot();
                       } else {
-                        context.router.maybePop();
+                        await context.router.maybePop();
                       }
                     }
                     : null,

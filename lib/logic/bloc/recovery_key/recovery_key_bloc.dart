@@ -75,8 +75,8 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
   }
 
   @override
-  Future<void> close() {
-    _apiDataSubscription?.cancel();
+  Future<void> close() async {
+    await _apiDataSubscription?.cancel();
     return super.close();
   }
 }

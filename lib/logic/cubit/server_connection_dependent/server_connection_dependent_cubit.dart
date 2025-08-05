@@ -45,8 +45,8 @@ abstract class ServerConnectionDependentCubit<
   void clear();
 
   @override
-  Future<void> close() {
-    apiStatusSubscription.cancel();
+  Future<void> close() async {
+    await apiStatusSubscription.cancel();
     return super.close();
   }
 }

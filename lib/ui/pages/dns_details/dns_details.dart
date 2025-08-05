@@ -78,8 +78,8 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       children: <Widget>[
         DnsStateCard(
           dnsState: dnsCubit.dnsState,
-          fixCallback: () {
-            context.read<DnsRecordsCubit>().fix();
+          fixCallback: () async {
+            await context.read<DnsRecordsCubit>().fix();
           },
         ),
         const Gap(8.0),

@@ -37,7 +37,7 @@ class NewUserPage extends StatelessWidget {
           initialUser: user,
         ),
     child: BlocConsumer<UserFormCubit, FormCubitState>(
-      listener: (final BuildContext context, final FormCubitState state) {
+      listener: (final BuildContext context, final FormCubitState state) async {
         final formCubit = context.read<UserFormCubit>();
         if (state.isSubmitted) {
           if (formCubit.userCreationMessage?.isNotEmpty ?? false) {
@@ -45,7 +45,7 @@ class NewUserPage extends StatelessWidget {
               formCubit.userCreationMessage!.tr(),
             );
           }
-          context.router.replace(
+          await context.router.replace(
             UserDetailsRoute(login: formCubit.login.state.value),
           );
         }
@@ -211,7 +211,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
 
   @override
   void dispose() {
-    subscription.cancel();
+    unawaited(subscription.cancel());
     super.dispose();
   }
 

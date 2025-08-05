@@ -53,7 +53,7 @@ mixin ServerActionsApi on GraphQLApiMap {
     try {
       final GraphQLClient client = await getClient();
       return await _commonBoolRequest(
-        () async => client.mutate$PullRepositoryChanges(),
+        () => client.mutate$PullRepositoryChanges(),
       );
     } catch (e) {
       return false;

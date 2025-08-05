@@ -15,8 +15,8 @@ class ServerProviderFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
-    serverInstallationCubit.setServerProviderKey(apiKey.state.value);
+  Future<void>? onSubmit() async {
+    await serverInstallationCubit.setServerProviderKey(apiKey.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;

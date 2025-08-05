@@ -96,7 +96,7 @@ linter:
     directives_ordering: true
     discarded_futures: true
     do_not_use_environment: true
-    document_ignores: true
+    document_ignores: false
     empty_catches: true
     empty_constructor_bodies: true
     empty_statements: true

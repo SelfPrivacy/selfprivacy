@@ -41,10 +41,12 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
     );
 
     if (index >= 0) {
-      scrollController.animateTo(
-        60.0 * index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeIn,
+      unawaited(
+        scrollController.animateTo(
+          60.0 * index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        ),
       );
     }
   }

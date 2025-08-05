@@ -150,8 +150,8 @@ class ServiceMemoryConsumptionTile extends StatelessWidget {
       );
       serviceName = service?.displayName ?? slice;
       if (service != null) {
-        onTap = () {
-          context.pushRoute(ServiceRoute(serviceId: service.id));
+        onTap = () async {
+          await context.pushRoute(ServiceRoute(serviceId: service.id));
         };
       }
       icon =

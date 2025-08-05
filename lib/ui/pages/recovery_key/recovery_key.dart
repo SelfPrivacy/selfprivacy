@@ -348,8 +348,8 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
                 textInputAction: TextInputAction.next,
                 enabled: _isExpirationToggled,
                 controller: _expirationController,
-                onTap: () {
-                  _selectDate(context);
+                onTap: () async {
+                  await _selectDate(context);
                 },
                 readOnly: true,
                 decoration: InputDecoration(

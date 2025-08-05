@@ -87,8 +87,8 @@ class UsersPage extends StatelessWidget {
                           Text('users.new_user'.tr()),
                         ],
                       ),
-                      onPressed: () {
-                        context.pushRoute(NewUserRoute());
+                      onPressed: () async {
+                        await context.pushRoute(NewUserRoute());
                       },
                     ),
                   ),
@@ -151,8 +151,8 @@ class _UsersNotLoaded extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             BrandOutlinedButton(
-              onPressed: () {
-                context.read<UsersBloc>().refresh();
+              onPressed: () async {
+                await context.read<UsersBloc>().refresh();
               },
               title: 'users.refresh_users'.tr(),
             ),

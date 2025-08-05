@@ -88,7 +88,7 @@ class SelectDomainToRecover extends StatelessWidget {
           final formCubitState = context.watch<RecoveryDomainFormCubit>().state;
 
           return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-            listener: (final context, final state) {
+            listener: (final context, final state) async {
               if (state is ServerInstallationRecovery) {
                 if (state.currentStep == RecoveryStep.selecting) {
                   if (state.recoveryCapabilities ==
@@ -106,8 +106,8 @@ class SelectDomainToRecover extends StatelessWidget {
               hasBackButton: true,
               hasFlashButton: false,
               ignoreBreakpoints: true,
-              onBackButtonPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
+              onBackButtonPressed: () async {
+                await Navigator.of(context).pushAndRemoveUntil(
                   materialRoute(const RootPage()),
                   (final predicate) => false,
                 );

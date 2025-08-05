@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +57,9 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: BrandOutlinedButton(
             title: 'jobs.collect_nix_garbage'.tr(),
-            onPressed: () {
-              context.read<JobsCubit>().collectNixGarbage();
-              showModalJobsSheet(context: context);
+            onPressed: () async {
+              unawaited(context.read<JobsCubit>().collectNixGarbage());
+              await showModalJobsSheet(context: context);
             },
           ),
         ),
@@ -126,8 +128,8 @@ class ServerStorageSection extends StatelessWidget {
         (final service) => ServerConsumptionListTile(
           service: service,
           volume: volume,
-          onTap: () {
-            context.pushRoute(ServiceRoute(serviceId: service.id));
+          onTap: () async {
+            await context.pushRoute(ServiceRoute(serviceId: service.id));
           },
         ),
       ),

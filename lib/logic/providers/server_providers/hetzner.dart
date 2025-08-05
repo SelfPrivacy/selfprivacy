@@ -165,7 +165,7 @@ class HetznerServerProvider extends ServerProvider {
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async => launchInstallation(installationData),
+              callback: () => launchInstallation(installationData),
             ),
           ],
           description:
@@ -249,7 +249,7 @@ class HetznerServerProvider extends ServerProvider {
               ),
               CallbackDialogueChoice(
                 title: 'modals.try_again'.tr(),
-                callback: () async => launchInstallation(installationData),
+                callback: () => launchInstallation(installationData),
               ),
             ],
             description:
@@ -617,15 +617,14 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<void>> deleteVolume(
-    final ServerProviderVolume volume,
-  ) async => _adapter.api().deleteVolume(volume.id);
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
+      _adapter.api().deleteVolume(volume.id);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) async => _adapter.api().resizeVolume(
+  ) => _adapter.api().resizeVolume(
     HetznerVolume(
       volume.id,
       volume.sizeByte,
@@ -641,7 +640,7 @@ class HetznerServerProvider extends ServerProvider {
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final int serverId,
-  ) async => _adapter.api().attachVolume(
+  ) => _adapter.api().attachVolume(
     HetznerVolume(
       volume.id,
       volume.sizeByte,
@@ -654,9 +653,8 @@ class HetznerServerProvider extends ServerProvider {
   );
 
   @override
-  Future<GenericResult<bool>> detachVolume(
-    final ServerProviderVolume volume,
-  ) async => _adapter.api().detachVolume(volume.id);
+  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
+      _adapter.api().detachVolume(volume.id);
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(

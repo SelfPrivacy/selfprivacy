@@ -380,9 +380,9 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   }
 
   @override
-  Future<void> close() {
-    _apiStatusSubscription.cancel();
-    _apiDataSubscription.cancel();
+  Future<void> close() async {
+    await _apiStatusSubscription.cancel();
+    await _apiDataSubscription.cancel();
     return super.close();
   }
 

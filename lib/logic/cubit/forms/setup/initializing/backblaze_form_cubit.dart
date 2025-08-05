@@ -23,8 +23,8 @@ class BackblazeFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
-    serverInstallationCubit.setBackblazeKey(
+  Future<void>? onSubmit() async {
+    await serverInstallationCubit.setBackblazeKey(
       keyId.state.value,
       applicationKey.state.value,
     );

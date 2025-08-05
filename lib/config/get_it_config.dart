@@ -23,6 +23,7 @@ Future<void> getItSetup() async {
   getIt
     ..registerSingleton<ApiConfigModel>(apiConfigModel)
     ..registerSingleton<ApiConnectionRepository>(
+      // ignore: unawaited_futures
       ApiConnectionRepository()..init(),
     );
 

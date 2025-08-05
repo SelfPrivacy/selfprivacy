@@ -36,7 +36,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
       provider: dnsProvider.type,
     );
 
-    serverInstallationCubit.setDomain(domain);
+    await serverInstallationCubit.setDomain(domain);
     emit(DomainSet());
   }
 }

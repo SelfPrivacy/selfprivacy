@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -129,8 +131,8 @@ class InitializingPage extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: BrandButton.filled(
                                   title: 'basis.connect_to_existing'.tr(),
-                                  onPressed: () {
-                                    context.router.replace(
+                                  onPressed: () async {
+                                    await context.router.replace(
                                       const RecoveryRoute(),
                                     );
                                   },
@@ -198,8 +200,8 @@ class InitializingPage extends StatelessWidget {
                                       alignment: Alignment.center,
                                       child: BrandButton.text(
                                         title: 'basis.connect_to_existing'.tr(),
-                                        onPressed: () {
-                                          context.router.replace(
+                                        onPressed: () async {
+                                          await context.router.replace(
                                             const RecoveryRoute(),
                                           );
                                         },
@@ -328,7 +330,11 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepDomain(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(
-        create: (final context) => DomainSetupCubit(initializingCubit)..load(),
+        create: (final context) {
+          final cubit = DomainSetupCubit(initializingCubit);
+          unawaited(cubit.load());
+          return cubit;
+        },
         child: const DomainPicker(),
       );
 
@@ -463,8 +469,8 @@ class InitializingPage extends StatelessWidget {
                             hasSshKey
                                 ? 'developer_settings.root_ssh_key_added'.tr()
                                 : 'developer_settings.add_root_ssh_key'.tr(),
-                        onPressed: () {
-                          showModalBottomSheet<String?>(
+                        onPressed: () async {
+                          await showModalBottomSheet<String?>(
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,

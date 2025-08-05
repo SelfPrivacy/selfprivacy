@@ -15,8 +15,8 @@ class DnsProviderFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
-    initializingCubit.setDnsApiToken(apiKey.state.value);
+  Future<void>? onSubmit() async {
+    await initializingCubit.setDnsApiToken(apiKey.state.value);
   }
 
   final ServerInstallationCubit initializingCubit;

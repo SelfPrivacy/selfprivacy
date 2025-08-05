@@ -236,8 +236,8 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
   }
 
   @override
-  Future<void> close() {
-    _resourcesModelSubscription.cancel();
+  Future<void> close() async {
+    await _resourcesModelSubscription.cancel();
     return super.close();
   }
 

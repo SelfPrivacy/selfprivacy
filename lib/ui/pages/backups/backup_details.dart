@@ -110,8 +110,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -141,8 +141,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -181,8 +181,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,
@@ -211,8 +211,8 @@ class BackupDetailsPage extends StatelessWidget {
           onTap:
               preventActions
                   ? null
-                  : () {
-                    showModalBottomSheet(
+                  : () async {
+                    await showModalBottomSheet(
                       useRootNavigator: true,
                       context: context,
                       isScrollControlled: true,

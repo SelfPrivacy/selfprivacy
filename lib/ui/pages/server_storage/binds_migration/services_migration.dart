@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +177,11 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               child: Text('storage.start_migration_button'.tr()),
               onPressed: () {
                 if (widget.isMigration) {
-                  context.read<ServerJobsBloc>().migrateToBinds(serviceToDisk);
+                  unawaited(
+                    context.read<ServerJobsBloc>().migrateToBinds(
+                      serviceToDisk,
+                    ),
+                  );
                 } else {
                   for (final service in widget.services) {
                     if (serviceToDisk[service.id] != null) {
@@ -186,7 +192,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                   }
                 }
                 context.router.popUntilRoot();
-                showModalJobsSheet(context: context);
+                unawaited(showModalJobsSheet(context: context));
               },
             ),
           const SizedBox(height: 32),

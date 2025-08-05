@@ -234,8 +234,8 @@ class ProviderSelectionPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   BrandButton.filled(
                     child: Text('basis.select'.tr()),
-                    onPressed: () {
-                      serverInstallationCubit.setServerProviderType(
+                    onPressed: () async {
+                      await serverInstallationCubit.setServerProviderType(
                         ServerProviderType.hetzner,
                       );
                       callback(ServerProviderType.hetzner);
@@ -313,8 +313,8 @@ class ProviderSelectionPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   BrandButton.filled(
                     child: Text('basis.select'.tr()),
-                    onPressed: () {
-                      serverInstallationCubit.setServerProviderType(
+                    onPressed: () async {
+                      await serverInstallationCubit.setServerProviderType(
                         ServerProviderType.digitalOcean,
                       );
                       callback(ServerProviderType.digitalOcean);

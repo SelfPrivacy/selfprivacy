@@ -149,8 +149,8 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: IconButton(
-              onPressed: () {
-                showModalJobsSheet(context: context);
+              onPressed: () async {
+                await showModalJobsSheet(context: context);
               },
               icon: Icon(
                 isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,

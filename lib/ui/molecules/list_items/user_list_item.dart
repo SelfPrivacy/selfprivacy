@@ -17,8 +17,8 @@ class UserListItem extends StatelessWidget {
   // TODO: Show user's display name and avatar when supported by backend
   @override
   Widget build(final BuildContext context) => ListTile(
-    onTap: () {
-      context.pushRoute(UserDetailsRoute(login: user.login));
+    onTap: () async {
+      await context.pushRoute(UserDetailsRoute(login: user.login));
     },
     leading: Skeleton.leaf(
       child: CircleAvatar(child: Text(user.login[0].toUpperCase())),

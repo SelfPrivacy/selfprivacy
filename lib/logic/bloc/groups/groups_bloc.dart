@@ -63,7 +63,6 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
     switch (event.connectionStatus) {
       case ConnectionStatus.nonexistent:
         emit(GroupsInitial());
-        break;
       case ConnectionStatus.reconnecting:
       case ConnectionStatus.connected:
         if (state is! GroupsLoaded) {

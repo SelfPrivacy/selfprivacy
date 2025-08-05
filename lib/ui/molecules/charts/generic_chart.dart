@@ -88,7 +88,6 @@ abstract class GenericLineChart extends StatelessWidget {
       case Period.hour:
       case Period.day:
         res = hhmm.format(time);
-        break;
       case Period.month:
         res = day.format(time);
     }

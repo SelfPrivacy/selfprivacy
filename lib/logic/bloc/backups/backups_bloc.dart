@@ -46,14 +46,14 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
           case ConnectionStatus.nonexistent:
             add(const BackupsServerReset());
             isLoaded = false;
-            break;
           case ConnectionStatus.connected:
             if (!isLoaded) {
               add(const BackupsServerLoaded());
               isLoaded = true;
             }
-            break;
-          default:
+          case ConnectionStatus.reconnecting:
+          case ConnectionStatus.offline:
+          case ConnectionStatus.unauthorized:
             break;
         }
       },

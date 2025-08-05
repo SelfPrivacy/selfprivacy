@@ -142,15 +142,12 @@ class HetznerLocation {
     switch (country.substring(0, 2)) {
       case 'DE':
         emoji = '🇩🇪';
-        break;
 
       case 'FI':
         emoji = '🇫🇮';
-        break;
 
       case 'US':
         emoji = '🇺🇸';
-        break;
     }
     return emoji;
   }
@@ -160,15 +157,12 @@ class HetznerLocation {
     switch (country.substring(0, 2)) {
       case 'DE':
         displayKey += 'germany';
-        break;
 
       case 'FI':
         displayKey += 'finland';
-        break;
 
       case 'US':
         displayKey += 'united_states';
-        break;
 
       default:
         displayKey = country;

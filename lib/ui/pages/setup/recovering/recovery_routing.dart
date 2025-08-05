@@ -39,28 +39,20 @@ class RecoveryRouting extends StatelessWidget {
               ServerRecoveryCapabilities.legacy) {
             currentPage = const RecoveryFallbackMethodSelect();
           }
-          break;
         case RecoveryStep.recoveryKey:
           currentPage = const RecoverByRecoveryKey();
-          break;
         case RecoveryStep.newDeviceKey:
           currentPage = const RecoverByNewDeviceKeyInstruction();
-          break;
         case RecoveryStep.oldToken:
           currentPage = const RecoverByOldToken();
-          break;
         case RecoveryStep.serverProviderToken:
           currentPage = const RecoveryServerProviderConnected();
-          break;
         case RecoveryStep.serverSelection:
           currentPage = const RecoveryConfirmServer();
-          break;
         case RecoveryStep.dnsProviderToken:
           currentPage = const RecoveryConfirmDns();
-          break;
         case RecoveryStep.backblazeToken:
           currentPage = const RecoveryConfirmBackblaze();
-          break;
       }
     }
 

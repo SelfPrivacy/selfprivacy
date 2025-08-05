@@ -575,13 +575,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     switch (method) {
       case ServerRecoveryMethods.newDeviceKey:
         emit(dataState.copyWith(currentStep: RecoveryStep.newDeviceKey));
-        break;
       case ServerRecoveryMethods.recoveryKey:
         emit(dataState.copyWith(currentStep: RecoveryStep.recoveryKey));
-        break;
       case ServerRecoveryMethods.oldToken:
         emit(dataState.copyWith(currentStep: RecoveryStep.oldToken));
-        break;
     }
   }
 
@@ -605,13 +602,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       switch (method) {
         case ServerRecoveryMethods.newDeviceKey:
           recoveryFunction = repository.authorizeByNewDeviceKey;
-          break;
         case ServerRecoveryMethods.recoveryKey:
           recoveryFunction = repository.authorizeByRecoveryKey;
-          break;
         case ServerRecoveryMethods.oldToken:
           recoveryFunction = repository.authorizeByApiToken;
-          break;
       }
       final ServerHostingDetails serverDetails = await recoveryFunction(
         serverDomain,
@@ -684,18 +678,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       case RecoveryStep.selecting:
         repository.deleteDomain();
         emit(const ServerInstallationEmpty());
-        break;
       case RecoveryStep.recoveryKey:
       case RecoveryStep.newDeviceKey:
       case RecoveryStep.oldToken:
         emit(dataState.copyWith(currentStep: RecoveryStep.selecting));
-        break;
       case RecoveryStep.dnsProviderToken:
         repository.deleteServerDetails();
         emit(dataState.copyWith(currentStep: RecoveryStep.serverSelection));
-        break;
       // We won't revert steps after client is authorized
-      default:
+      case RecoveryStep.serverProviderToken:
+      case RecoveryStep.serverSelection:
+      case RecoveryStep.backblazeToken:
         break;
     }
   }

@@ -26,14 +26,14 @@ abstract class ServerConnectionDependentCubit<
       case ConnectionStatus.nonexistent:
         clear();
         isLoaded = false;
-        break;
       case ConnectionStatus.connected:
         if (!isLoaded) {
           load();
           isLoaded = true;
         }
-        break;
-      default:
+      case ConnectionStatus.reconnecting:
+      case ConnectionStatus.offline:
+      case ConnectionStatus.unauthorized:
         break;
     }
   }

@@ -85,13 +85,10 @@ class MetricsRepository {
     switch (period) {
       case Period.hour:
         start = end.subtract(const Duration(hours: 1));
-        break;
       case Period.day:
         start = end.subtract(const Duration(days: 1));
-        break;
       case Period.month:
         start = end.subtract(const Duration(days: 15));
-        break;
     }
 
     final result = await getIt<ApiConnectionRepository>().api.getServerMetrics(
@@ -138,13 +135,10 @@ class MetricsRepository {
     switch (period) {
       case Period.hour:
         start = end.subtract(const Duration(hours: 1));
-        break;
       case Period.day:
         start = end.subtract(const Duration(days: 1));
-        break;
       case Period.month:
         start = end.subtract(const Duration(days: 15));
-        break;
     }
 
     final serverId = getIt<ResourcesModel>().serverDetails!.id;

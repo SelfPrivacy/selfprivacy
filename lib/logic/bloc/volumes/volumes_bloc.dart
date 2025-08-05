@@ -33,14 +33,14 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
           case ConnectionStatus.nonexistent:
             add(const VolumesServerReset());
             isLoaded = false;
-            break;
           case ConnectionStatus.connected:
             if (!isLoaded) {
               add(const VolumesServerLoaded());
               isLoaded = true;
             }
-            break;
-          default:
+          case ConnectionStatus.reconnecting:
+          case ConnectionStatus.offline:
+          case ConnectionStatus.unauthorized:
             break;
         }
       },

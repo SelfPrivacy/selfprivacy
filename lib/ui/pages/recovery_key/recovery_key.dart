@@ -33,15 +33,12 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
       case RecoveryKeyRefreshing():
         subtitle = 'recovery_key.key_synchronizing'.tr();
         widgets = [const Center(child: CircularProgressIndicator.adaptive())];
-        break;
       case RecoveryKeyLoaded():
         widgets = [const RecoveryKeyContent()];
-        break;
       case RecoveryKeyInitial():
       case RecoveryKeyError():
         subtitle = 'recovery_key.key_connection_error'.tr();
         widgets = [const Icon(Icons.sentiment_dissatisfied_outlined)];
-        break;
     }
 
     return RefreshIndicator(

@@ -24,13 +24,10 @@ class PeriodSelector extends StatelessWidget {
       switch (index) {
         case 0:
           onChange(Period.month);
-          break;
         case 1:
           onChange(Period.day);
-          break;
         case 2:
           onChange(Period.hour);
-          break;
       }
     },
     titles: [

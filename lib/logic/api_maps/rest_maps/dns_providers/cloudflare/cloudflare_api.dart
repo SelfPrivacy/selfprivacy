@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare_dns_info.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 class CloudflareApi extends RestApiMap {
   CloudflareApi({
@@ -20,6 +21,8 @@ class CloudflareApi extends RestApiMap {
 
   final String token;
   final String? customToken;
+
+  static final logger = const AppLogger(name: 'cloudflare_api_map').log;
 
   @override
   BaseOptions get options {
@@ -63,7 +66,7 @@ class CloudflareApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      print(e);
+      logger('Error in Cloudflare isApiTokenValid request: $e', error: e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -103,7 +106,7 @@ class CloudflareApi extends RestApiMap {
               )
               .toList();
     } catch (e) {
-      print(e);
+      logger('Error in Cloudflare getZones request: $e', error: e);
       return GenericResult(
         success: false,
         data: domains,
@@ -137,10 +140,16 @@ class CloudflareApi extends RestApiMap {
       }
       await Future.wait(allCreateFutures);
     } on DioException catch (e) {
-      print(e.message);
+      logger(
+        'Error in Cloudflare createMultipleDnsRecords request: ${e.message}',
+        error: e,
+      );
       rethrow;
     } catch (e) {
-      print(e);
+      logger(
+        'Error in Cloudflare createMultipleDnsRecords request: $e',
+        error: e,
+      );
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -164,7 +173,7 @@ class CloudflareApi extends RestApiMap {
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
-      print(e);
+      logger('Error in Cloudflare removeSimilarRecords request: $e', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -190,7 +199,7 @@ class CloudflareApi extends RestApiMap {
               )
               .toList();
     } catch (e) {
-      print(e);
+      logger('Error in Cloudflare getDnsRecords request: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);

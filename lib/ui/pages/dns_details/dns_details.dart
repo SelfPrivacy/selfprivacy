@@ -35,8 +35,6 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     final List<DesiredDnsRecord> dnsRecords =
         context.watch<DnsRecordsCubit>().state.dnsRecords;
 
-    print(dnsCubit.dnsState);
-
     if (!isReady) {
       return BrandHeroScreen(
         hasBackButton: true,

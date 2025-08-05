@@ -38,8 +38,6 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         _apiLogsSubscription = getIt<ApiConnectionRepository>().api
             .getServerLogsStream()
             .listen((final ServerLogEntry logEntry) {
-              print('Got new log entry');
-              print(logEntry);
               add(ServerLogsGotNewEntry(logEntry));
             });
       } catch (e) {

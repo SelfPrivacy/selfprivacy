@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum DnsRecordStatus { ok, waiting, nonexistent }
 
@@ -37,7 +37,9 @@ Future<Map<String, DnsRecordStatus>> validateDnsMatch(
       await lookup('$subdomain.$domain');
     }
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 
   if (matches.isEmpty) {
@@ -75,15 +77,6 @@ String getHostnameFromDomain(final String domain) {
   }
 
   return hostname;
-}
-
-void launchURL(final url) async {
-  try {
-    final Uri uri = Uri.parse(url);
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  } catch (e) {
-    print(e);
-  }
 }
 
 List<DnsRecord> getProjectDnsRecords(

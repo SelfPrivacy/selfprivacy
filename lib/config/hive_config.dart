@@ -13,14 +13,14 @@ import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/secure_storage.dart';
 
 class HiveConfig {
-  static final log = const AppLogger(name: 'hive_config').log;
+  static final logger = const AppLogger(name: 'hive_config').log;
 
   /// bump on schema changes
   static const version = 2;
 
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
-    log('set custom storage path to: "$storagePath"');
+    logger('set custom storage path to: "$storagePath"');
 
     await Hive.initFlutter(storagePath);
 
@@ -46,9 +46,13 @@ class HiveConfig {
         ..registerAdapter(UserTypeAdapter())
         ..registerAdapter(BackupsProviderTypeAdapter())
         ..registerAdapter(ServerInstallationWizardDataAdapter());
-      log('successfully registered every adapter');
+      logger('successfully registered every adapter');
     } catch (error, stackTrace) {
-      log('error registering adapters', error: error, stackTrace: stackTrace);
+      logger(
+        'error registering adapters',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -73,9 +77,9 @@ class HiveConfig {
       );
       await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
       await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
-      log('successfully decrypted boxes');
+      logger('successfully decrypted boxes');
     } catch (error, stackTrace) {
-      log(
+      logger(
         'error initializing encrypted boxes',
         error: error,
         stackTrace: stackTrace,
@@ -116,7 +120,11 @@ class HiveConfig {
       /// update saved version after successfull migrations
       await localSettingsBox.put(BNames.databaseVersion, version);
     } catch (error, stackTrace) {
-      log('error running db migrations', error: error, stackTrace: stackTrace);
+      logger(
+        'error running db migrations',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -220,7 +228,7 @@ class HiveConfig {
         await resourcesBox.put(BNames.backblazeBucket, backblazeBucket);
       }
     }
-    log('successfully migrated db from 1 to 2 version');
+    logger('successfully migrated db from 1 to 2 version');
   }
 }
 

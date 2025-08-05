@@ -8,13 +8,16 @@ mixin ServerActionsApi on GraphQLApiMap {
     try {
       response = await graphQLMethod();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL request: ${response.exception}',
+          error: response.exception,
+        );
         result = false;
       } else {
         result = true;
       }
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL request: $e', error: e);
     }
 
     return result;
@@ -26,7 +29,10 @@ mixin ServerActionsApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       final response = await client.mutate$RebootSystem();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL Reboot request: ${response.exception}',
+          error: response.exception,
+        );
       }
       if (response.parsedData!.system.rebootSystem.success) {
         return GenericResult(
@@ -36,7 +42,7 @@ mixin ServerActionsApi on GraphQLApiMap {
         );
       }
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL Reboot request: $e', error: e);
       return GenericResult(data: time, success: false);
     }
 
@@ -132,7 +138,7 @@ mixin ServerActionsApi on GraphQLApiMap {
         }
       }
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL Apply request: $e', error: e);
       return GenericResult(success: false, message: e.toString(), data: null);
     }
   }

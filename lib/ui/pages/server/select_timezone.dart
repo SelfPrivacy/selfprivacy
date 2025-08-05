@@ -39,7 +39,6 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
       (final element) =>
           Duration(milliseconds: element.currentTimeZone.offset) == t,
     );
-    print(t);
 
     if (index >= 0) {
       scrollController.animateTo(

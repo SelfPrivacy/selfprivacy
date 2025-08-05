@@ -106,7 +106,7 @@ class _ServicePageState extends State<ServicePage> {
           if (service.url != null && !serviceDisabled) ...[
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
-              onTap: () => launchURL(service.url),
+              onTap: () => launchURL(service.url!),
               onLongPress: () {
                 PlatformAdapter.setClipboard(service.url!);
                 getIt<NavigationService>().showSnackBar(

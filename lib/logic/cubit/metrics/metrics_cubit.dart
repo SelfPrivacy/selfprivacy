@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 part 'metrics_state.dart';
 
@@ -14,6 +15,8 @@ class MetricsCubit extends Cubit<MetricsState> {
   final MetricsRepository repository = MetricsRepository();
 
   Timer? timer;
+
+  static final logger = const AppLogger(name: 'metrics_cubit').log;
 
   @override
   Future<void> close() {
@@ -52,7 +55,7 @@ class MetricsCubit extends Cubit<MetricsState> {
 
       emit(newStateUpdate.newState);
     } on StateError {
-      print('Tried to emit metrics when cubit is closed');
+      logger('Tried to emit metrics when cubit is closed');
     }
   }
 }

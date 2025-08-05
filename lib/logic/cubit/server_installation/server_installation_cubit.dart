@@ -25,6 +25,7 @@ import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_f
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 export 'package:provider/provider.dart';
@@ -40,6 +41,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Timer? timer;
 
   final DiskSize initialStorage = DiskSize.fromGibibyte(10);
+
+  static final logger = const AppLogger(name: 'server_installation_cubit').log;
 
   Future<void> load() async {
     final ServerInstallationState state = await repository.load();
@@ -264,7 +267,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
           bucket = result.data;
           await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
         } catch (e) {
-          print(e);
+          logger("Couldn't set backblaze key", error: e);
         }
       }
       finishRecoveryProcess(backblazeCredential);
@@ -727,7 +730,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
         validatedList = validated.toList();
       } catch (e) {
-        print(e);
+        logger('Error while validating servers', error: e);
         getIt<NavigationService>().showSnackBar(
           'modals.server_validators_error'.tr(),
         );
@@ -751,7 +754,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
         validatedList = validated.toList();
       } catch (e) {
-        print(e);
+        logger('Error while validating servers', error: e);
         getIt<NavigationService>().showSnackBar(
           'modals.server_validators_error'.tr(),
         );

@@ -9,7 +9,7 @@ import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
 abstract class RestApiMap {
-  static final log = const AppLogger(name: 'rest_api_map').log;
+  static final logger = const AppLogger(name: 'rest_api_map').log;
 
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
     final Dio dio = Dio(customOptions ?? (await options));
@@ -30,7 +30,7 @@ abstract class RestApiMap {
           final DioException exception,
           final ErrorInterceptorHandler handler,
         ) {
-          log('got dio exception:', error: exception);
+          logger('got dio exception:', error: exception);
 
           return handler.next(exception);
         },

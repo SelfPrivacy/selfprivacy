@@ -148,7 +148,6 @@ class DesecDnsProvider extends DnsProvider {
         records.add(record.toDnsRecord(domain.domainName));
       }
     } catch (e) {
-      print(e);
       return GenericResult(
         success: false,
         data: records,

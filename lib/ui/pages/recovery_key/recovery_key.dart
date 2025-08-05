@@ -257,10 +257,6 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
     final String amount = _amountController.text;
     final String expiration = _expirationController.text;
 
-    print('amount: $amount');
-    print('_isAmountToggled: $_isAmountToggled');
-    print('_isExpirationToggled: $_isExpirationToggled');
-
     setState(() {
       if (!_isAmountToggled) {
         _isAmountError = false;
@@ -279,9 +275,6 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         _isExpirationError = _selectedDate.isBefore(DateTime.now());
       }
     });
-
-    print('_isAmountError: $_isAmountError');
-    print('_isExpirationError: $_isExpirationError');
   }
 
   @override

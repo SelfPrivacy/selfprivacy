@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_conne
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 part 'dns_records_state.dart';
@@ -15,6 +16,8 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     : super(const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
 
   final ServerApi api = ServerApi();
+
+  static final logger = const AppLogger(name: 'dns_records_cubit').log;
 
   @override
   Future<void> load() async {
@@ -60,7 +63,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
       DnsRecordsState(
         dnsRecords: foundRecords.data,
         dnsState:
-            foundRecords.data.any((final r) => r.isSatisfied == false)
+            foundRecords.data.any((final r) => !r.isSatisfied)
                 ? DnsRecordsStatus.error
                 : DnsRecordsStatus.good,
       ),
@@ -144,7 +147,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
         }
       }
     } catch (e) {
-      print(e);
+      logger('Error while validating DNS records: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
     }
     // If providerDnsRecords contains a link-local ipv6 record, return an error

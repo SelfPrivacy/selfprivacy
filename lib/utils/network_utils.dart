@@ -65,7 +65,7 @@ String getHostnameFromDomain(final String domain) {
   // Replace all non-alphanumeric characters with an underscore
   String hostname = domain
       .split('.')[0]
-      .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+      .replaceAll(RegExp('[^a-zA-Z0-9]'), '-');
   if (hostname.endsWith('-')) {
     hostname = hostname.substring(0, hostname.length - 1);
   }

@@ -127,7 +127,7 @@ void main() {
 
 RegExp regExpNewLines = RegExp(r'[\n\r]+');
 RegExp regExpWhiteSpaces = RegExp(r'[\s]+');
-RegExp regExpUppercaseLetters = RegExp(r'[A-Z]');
-RegExp regExpLowercaseLetters = RegExp(r'[a-z]');
-RegExp regExpNumbers = RegExp(r'[0-9]');
+RegExp regExpUppercaseLetters = RegExp('[A-Z]');
+RegExp regExpLowercaseLetters = RegExp('[a-z]');
+RegExp regExpNumbers = RegExp('[0-9]');
 RegExp regExpSymbols = RegExp(r'(?:_|[^\w\s])+');

@@ -152,7 +152,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       final String domain = getIt<ApiConnectionRepository>()
           .serverDomain!
           .domainName
-          .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+          .replaceAll(RegExp('[^a-zA-Z0-9]'), '-');
       final int serverId = getIt<ApiConnectionRepository>().serverDetails!.id;
       String bucketName =
           '${DateTime.now().millisecondsSinceEpoch}-$serverId-$domain';

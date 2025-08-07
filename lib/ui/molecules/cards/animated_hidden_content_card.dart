@@ -46,7 +46,7 @@ class _AnimatedHiddenContentCardState extends State<AnimatedHiddenContentCard> {
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 200),
               opacity: isKeyVisible ? 0 : 1,
-              child: Container(
+              child: ColoredBox(
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

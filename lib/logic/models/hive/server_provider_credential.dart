@@ -3,7 +3,7 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 
 part 'server_provider_credential.g.dart';
 
-// TODO: Make a constant type.
+// TODO(inex): Make a constant type.
 @HiveType(typeId: 7)
 class ServerProviderCredential {
   ServerProviderCredential({

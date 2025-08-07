@@ -203,7 +203,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
       records.addAll(recordsToAdd);
     }
 
-    /// TODO: Error handling?
+    // TODO(NaiJi): Error handling?
     final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
       records: records,

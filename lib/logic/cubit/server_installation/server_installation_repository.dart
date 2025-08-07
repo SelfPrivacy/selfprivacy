@@ -60,7 +60,7 @@ class ServerInstallationRepository {
     final ServerHostingDetails? serverDetails =
         getIt<ResourcesModel>().serverDetails;
 
-    // TODO: Init server providers in another place
+    // TODO(inex): Init server providers in another place
     if (serverProvider != null ||
         (serverDetails != null &&
             serverDetails.provider != ServerProviderType.unknown)) {
@@ -586,8 +586,8 @@ class ServerInstallationRepository {
     required final bool finalCheckCompleted,
   }) async {
     // We are finished here. Time to save the state and finish the wizard
-    // TODO: A lot of null checks are skipped here. Implication that every value exists might become false in the future.
-    // TODO: We would actually want to handle token creation elsewhere.
+    // TODO(inex): A lot of null checks are skipped here. Implication that every value exists might become false in the future.
+    // TODO(inex): We would actually want to handle token creation elsewhere.
     await getIt<WizardDataModel>().moveServerTypeToServerDetails();
     final ServerInstallationWizardData wizardData =
         getIt<WizardDataModel>().serverInstallation!;

@@ -14,7 +14,7 @@ class UserListItem extends StatelessWidget {
   final User user;
   final bool isPrimaryUser;
 
-  // TODO: Show user's display name and avatar when supported by backend
+  // TODO(inex): Show user's display name and avatar when supported by backend
   @override
   Widget build(final BuildContext context) => ListTile(
     onTap: () async {

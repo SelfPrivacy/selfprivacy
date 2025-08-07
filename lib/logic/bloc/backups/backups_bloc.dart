@@ -161,8 +161,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       }
 
       final createStorageResult = await provider.createStorage(bucketName);
-      if (createStorageResult.success == false ||
-          createStorageResult.data.isEmpty) {
+      if (!createStorageResult.success || createStorageResult.data.isEmpty) {
         getIt<NavigationService>().showSnackBar(
           createStorageResult.message ??
               "Couldn't create storage on your server.",
@@ -207,7 +206,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
             password: bucket.applicationKey,
           ),
         );
-    if (result.success == false) {
+    if (!result.success) {
       getIt<NavigationService>().showSnackBar(
         result.message ?? "Couldn't initialize repository on your server.",
       );
@@ -228,7 +227,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final Emitter<BackupsState> emit,
   ) async {
     if (event.backupConfiguration == null ||
-        event.backupConfiguration!.isInitialized == false) {
+        !event.backupConfiguration!.isInitialized) {
       emit(BackupsUnititialized());
       return;
     }
@@ -266,7 +265,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       for (final service in event.services) {
         final GenericResult<ServerJob?> result =
             await getIt<ApiConnectionRepository>().api.startBackup(service.id);
-        if (result.success == false) {
+        if (!result.success) {
           getIt<NavigationService>().showSnackBar(
             result.message ?? 'Unknown error',
           );
@@ -291,7 +290,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsBusy.fromState(currentState));
       final GenericResult result = await getIt<ApiConnectionRepository>().api
           .restoreBackup(event.backupId, event.restoreStrategy);
-      if (result.success == false) {
+      if (!result.success) {
         getIt<NavigationService>().showSnackBar(
           result.message ?? 'Unknown error',
         );
@@ -309,12 +308,12 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsBusy.fromState(currentState));
       final GenericResult result = await getIt<ApiConnectionRepository>().api
           .setAutobackupPeriod(period: event.period?.inMinutes);
-      if (result.success == false) {
+      if (!result.success) {
         getIt<NavigationService>().showSnackBar(
           result.message ?? 'Unknown error',
         );
       }
-      if (result.success == true) {
+      if (result.success) {
         getIt<ApiConnectionRepository>()
             .apiData
             .backupConfig
@@ -335,12 +334,12 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsBusy.fromState(currentState));
       final GenericResult result = await getIt<ApiConnectionRepository>().api
           .setAutobackupQuotas(event.quotas);
-      if (result.success == false) {
+      if (!result.success) {
         getIt<NavigationService>().showSnackBar(
           result.message ?? 'Unknown error',
         );
       }
-      if (result.success == true) {
+      if (result.success) {
         getIt<ApiConnectionRepository>()
             .apiData
             .backupConfig
@@ -366,7 +365,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsBusy.fromState(currentState));
       final GenericResult result = await getIt<ApiConnectionRepository>().api
           .forgetSnapshot(event.backupId);
-      if (result.success == false) {
+      if (!result.success) {
         getIt<NavigationService>().showSnackBar(
           result.message ?? 'jobs.generic_error'.tr(),
         );

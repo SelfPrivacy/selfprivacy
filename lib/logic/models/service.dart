@@ -64,7 +64,7 @@ class Service extends Equatable {
             [],
       );
 
-  /// TODO Turn loginInfo into dynamic data, not static!
+  // TODO(NaiJi): Turn loginInfo into dynamic data, not static!
   String get loginInfo {
     switch (id) {
       case 'simple-nixos-mailserver':
@@ -398,7 +398,7 @@ class FallbackServiceConfigItem extends ServiceConfigItem {
   List<Object?> get props => [id, description, widget, type];
 }
 
-// TODO: Not used yet by the API
+// TODO(inex): Not used yet by the API
 class IntServiceConfigItem extends ServiceConfigItem {
   const IntServiceConfigItem({
     required super.id,

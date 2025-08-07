@@ -23,14 +23,14 @@ class ServerHostingDetails {
   @HiveField(1)
   final int id;
 
-  // TODO: Check if it is still needed
+  // TODO(inex): Check if it is still needed
   @HiveField(2)
   final DateTime? startTime;
 
   @HiveField(3)
   final DateTime? createTime;
 
-  // TODO: Check if it is still needed
+  // TODO(inex): Check if it is still needed
   @HiveField(4)
   final ServerProviderVolume volume;
 

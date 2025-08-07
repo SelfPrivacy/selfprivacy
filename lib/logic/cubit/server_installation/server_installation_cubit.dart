@@ -303,7 +303,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   ) async {
     await repository.saveServerDetails(serverDetails);
 
-    /// TODO: Error handling?
+    // TODO(NaiJi): Error handling?
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
       records: getProjectDnsRecords(
         domainName: state.serverDomain!.domainName,

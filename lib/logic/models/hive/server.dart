@@ -4,7 +4,7 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 part 'server.g.dart';
 
-// TODO: Make a constant type.
+// TODO(inex): Make a constant type.
 @HiveType(typeId: 9)
 class Server {
   Server({required this.hostingDetails, required this.domain});

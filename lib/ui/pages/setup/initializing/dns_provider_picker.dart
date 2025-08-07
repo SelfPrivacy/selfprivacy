@@ -146,7 +146,7 @@ class ProviderSelectionPage extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 
-      /// TODO: Remove obvious repetition
+      // TODO(NaiJi): Remove obvious repetition
       children: [
         Text(
           'initializing.select_dns'.tr(),

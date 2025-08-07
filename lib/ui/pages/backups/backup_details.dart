@@ -319,7 +319,6 @@ class BackupDetailsPage extends StatelessWidget {
                           const ForceSnapshotListUpdate(),
                         ),
               ),
-              // TODO: Return reupload key button in some form
             ],
           ),
       ],

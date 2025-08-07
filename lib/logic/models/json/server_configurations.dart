@@ -5,12 +5,13 @@ part 'server_configurations.g.dart';
 
 @JsonSerializable(createToJson: true)
 class AutoUpgradeConfigurations extends Equatable {
-  factory AutoUpgradeConfigurations.fromJson(final Map<String, dynamic> json) =>
-      _$AutoUpgradeConfigurationsFromJson(json);
   const AutoUpgradeConfigurations({
     required this.enable,
     required this.allowReboot,
   });
+
+  factory AutoUpgradeConfigurations.fromJson(final Map<String, dynamic> json) =>
+      _$AutoUpgradeConfigurationsFromJson(json);
 
   final bool enable;
   final bool allowReboot;

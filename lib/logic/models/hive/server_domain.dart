@@ -35,7 +35,7 @@ enum DnsProviderType {
         return desec;
       case Enum$DnsProvider.DIGITALOCEAN:
         return digitalOcean;
-      default:
+      case Enum$DnsProvider.$unknown:
         return unknown;
     }
   }

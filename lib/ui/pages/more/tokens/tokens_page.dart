@@ -234,8 +234,7 @@ class _BackupProviderListItem extends StatelessWidget {
 
   String getSubtitle(final BuildContext context) {
     String subtitle = '';
-    subtitle += backupProviderCredential.status.statusText;
-    return subtitle;
+    return subtitle += backupProviderCredential.status.statusText;
   }
 
   @override

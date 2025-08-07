@@ -6,8 +6,6 @@ part 'recovery_token_status.g.dart';
 
 @JsonSerializable()
 class RecoveryKeyStatus extends Equatable {
-  factory RecoveryKeyStatus.fromJson(final Map<String, dynamic> json) =>
-      _$RecoveryKeyStatusFromJson(json);
   const RecoveryKeyStatus({
     required this.exists,
     required this.valid,
@@ -15,6 +13,9 @@ class RecoveryKeyStatus extends Equatable {
     this.expiration,
     this.usesLeft,
   });
+
+  factory RecoveryKeyStatus.fromJson(final Map<String, dynamic> json) =>
+      _$RecoveryKeyStatusFromJson(json);
 
   RecoveryKeyStatus.fromGraphQL(
     final Query$RecoveryKey$api$recoveryKey recoveryKey,

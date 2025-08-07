@@ -160,7 +160,7 @@ class SelectTypePage extends StatelessWidget {
 
   final ServerProviderLocation location;
   final ServerInstallationCubit serverInstallationCubit;
-  final Function backToLocationPickingCallback;
+  final VoidCallback backToLocationPickingCallback;
 
   @override
   Widget build(final BuildContext context) {
@@ -205,9 +205,7 @@ class SelectTypePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 BrandButton.filled(
-                  onPressed: () {
-                    backToLocationPickingCallback();
-                  },
+                  onPressed: backToLocationPickingCallback,
                   title: 'initializing.back_to_locations'.tr(),
                 ),
               ],

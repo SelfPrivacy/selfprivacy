@@ -3,55 +3,11 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 class Service extends Equatable {
-  Service.fromGraphQL(final Query$AllServices$services$allServices service)
-    : this(
-        id: service.id,
-        displayName: service.displayName,
-        description: service.description,
-        isEnabled: service.isEnabled,
-        isInstalled: service.isInstalled,
-        isRequired: service.isRequired,
-        isSystemService: service.isSystemService,
-        isMovable: service.isMovable,
-        canBeBackedUp: service.canBeBackedUp,
-        backupDescription: service.backupDescription,
-        status: ServiceStatus.fromGraphQL(service.status),
-        storageUsage: ServiceStorageUsage(
-          used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
-          volume: service.storageUsage.volume?.name,
-        ),
-        // Decode the base64 encoded svg icon to text.
-        svgIcon: utf8.decode(base64.decode(service.svgIcon)),
-        license: service.license.map(LicenseType.fromGraphQL).toList(),
-        supportLevel: SupportLevel.fromGraphQL(service.supportLevel),
-        dnsRecords:
-            service.dnsRecords
-                ?.map(
-                  (final Fragment$fragmentDnsRecords record) =>
-                      DnsRecord.fromGraphQL(record),
-                )
-                .toList() ??
-            [],
-        url: service.url,
-        homepage: service.homepage,
-        sourcePage: service.sourcePage,
-        configuration:
-            service.configuration
-                ?.map(
-                  (
-                    final Query$AllServices$services$allServices$configuration
-                    configItem,
-                  ) => ServiceConfigItem.fromGraphQL(configItem),
-                )
-                .toList() ??
-            [],
-      );
   const Service({
     required this.id,
     required this.displayName,
@@ -75,6 +31,39 @@ class Service extends Equatable {
     this.sourcePage,
   });
 
+  Service.fromGraphQL(final Query$AllServices$services$allServices service)
+    : this(
+        id: service.id,
+        displayName: service.displayName,
+        description: service.description,
+        isEnabled: service.isEnabled,
+        isInstalled: service.isInstalled,
+        isRequired: service.isRequired,
+        isSystemService: service.isSystemService,
+        isMovable: service.isMovable,
+        canBeBackedUp: service.canBeBackedUp,
+        backupDescription: service.backupDescription,
+        status: ServiceStatus.fromGraphQL(service.status),
+        storageUsage: ServiceStorageUsage(
+          used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
+          volume: service.storageUsage.volume?.name,
+        ),
+        // Decode the base64 encoded svg icon to text.
+        svgIcon: utf8.decode(base64.decode(service.svgIcon)),
+        license: service.license.map(LicenseType.fromGraphQL).toList(),
+        supportLevel: SupportLevel.fromGraphQL(service.supportLevel),
+        dnsRecords:
+            service.dnsRecords?.map(DnsRecord.fromGraphQL).toList() ?? [],
+        url: service.url,
+        homepage: service.homepage,
+        sourcePage: service.sourcePage,
+        configuration:
+            service.configuration
+                ?.map(ServiceConfigItem.fromGraphQL)
+                .toList() ??
+            [],
+      );
+
   /// TODO Turn loginInfo into dynamic data, not static!
   String get loginInfo {
     switch (id) {
@@ -89,7 +78,7 @@ class Service extends Equatable {
           (final configItem) =>
               configItem is BoolServiceConfigItem &&
               configItem.id == 'enableSso' &&
-              configItem.value == true,
+              configItem.value,
         )) {
           return '';
         }
@@ -101,7 +90,7 @@ class Service extends Equatable {
           (final configItem) =>
               configItem is BoolServiceConfigItem &&
               configItem.id == 'enableSso' &&
-              configItem.value == true,
+              configItem.value,
         )) {
           return '';
         }

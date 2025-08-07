@@ -6,8 +6,6 @@ part 'server_job.g.dart';
 
 @JsonSerializable()
 class ServerJob extends Equatable {
-  factory ServerJob.fromJson(final Map<String, dynamic> json) =>
-      _$ServerJobFromJson(json);
   const ServerJob({
     required this.name,
     required this.description,
@@ -22,6 +20,9 @@ class ServerJob extends Equatable {
     this.statusText,
     this.finishedAt,
   });
+
+  factory ServerJob.fromJson(final Map<String, dynamic> json) =>
+      _$ServerJobFromJson(json);
 
   ServerJob.fromGraphQL(final Fragment$basicApiJobsFields serverJob)
     : this(

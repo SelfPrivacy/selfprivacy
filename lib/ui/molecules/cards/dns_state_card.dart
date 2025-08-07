@@ -11,7 +11,7 @@ class DnsStateCard extends StatelessWidget {
   });
 
   final DnsRecordsStatus dnsState;
-  final Function fixCallback;
+  final GestureTapCallback fixCallback;
 
   @override
   Widget build(final BuildContext context) {
@@ -41,7 +41,7 @@ class DnsStateCard extends StatelessWidget {
     return FilledCard(
       error: isError,
       child: ListTile(
-        onTap: dnsState == DnsRecordsStatus.error ? () => fixCallback() : null,
+        onTap: dnsState == DnsRecordsStatus.error ? fixCallback : null,
         leading: icon,
         title: Text(description),
         subtitle: subtitle != '' ? Text(subtitle) : null,

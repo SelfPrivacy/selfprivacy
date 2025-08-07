@@ -14,7 +14,7 @@ sealed class VolumesState extends Equatable {
 
   DiskVolume getVolume(final String volumeName) => volumes.firstWhere(
     (final volume) => volume.name == volumeName,
-    orElse: () => DiskVolume(),
+    orElse: DiskVolume.new,
   );
 
   String? get location =>

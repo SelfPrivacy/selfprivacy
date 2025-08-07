@@ -178,8 +178,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return prices;
     }
 
-    prices = pricingResult.data;
-    return prices;
+    return pricingResult.data;
   }
 
   Future<void> setServerProviderKey(final String serverProviderKey) async {

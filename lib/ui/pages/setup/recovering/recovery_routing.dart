@@ -88,7 +88,7 @@ class SelectDomainToRecover extends StatelessWidget {
           final formCubitState = context.watch<RecoveryDomainFormCubit>().state;
 
           return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-            listener: (final context, final state) async {
+            listener: (final context, final state) {
               if (state is ServerInstallationRecovery) {
                 if (state.currentStep == RecoveryStep.selecting) {
                   if (state.recoveryCapabilities ==

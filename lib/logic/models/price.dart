@@ -29,9 +29,9 @@ class Currency {
           type: type,
           shortcode: 'USD',
           fontcode: 'attach_money',
-          symbol: '\$',
+          symbol: r'$',
         );
-      default:
+      case CurrencyType.unknown:
         return Currency(
           type: type,
           shortcode: '?',

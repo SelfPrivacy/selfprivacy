@@ -5,8 +5,6 @@ part 'server_disk_volume.g.dart';
 
 @JsonSerializable()
 class ServerDiskVolume extends Equatable {
-  factory ServerDiskVolume.fromJson(final Map<String, dynamic> json) =>
-      _$ServerDiskVolumeFromJson(json);
   const ServerDiskVolume({
     required this.freeSpace,
     required this.model,
@@ -17,6 +15,9 @@ class ServerDiskVolume extends Equatable {
     required this.type,
     required this.usedSpace,
   });
+
+  factory ServerDiskVolume.fromJson(final Map<String, dynamic> json) =>
+      _$ServerDiskVolumeFromJson(json);
 
   final String freeSpace;
   final String? model;

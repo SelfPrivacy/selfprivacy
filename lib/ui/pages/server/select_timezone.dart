@@ -120,7 +120,7 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
                   .toList()
                   .asMap()
                   .map(
-                    (final key, final value) => locationToListTile(key, value),
+                    locationToListTile,
                   )
                   .values
                   .toList(),

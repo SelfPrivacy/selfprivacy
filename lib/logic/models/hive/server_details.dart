@@ -110,7 +110,8 @@ enum ServerProviderType {
         return hetzner;
       case Enum$ServerProvider.DIGITALOCEAN:
         return digitalOcean;
-      default:
+      case Enum$ServerProvider.OTHER:
+      case Enum$ServerProvider.$unknown:
         return unknown;
     }
   }

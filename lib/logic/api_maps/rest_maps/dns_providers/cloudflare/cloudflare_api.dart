@@ -102,7 +102,7 @@ class CloudflareApi extends RestApiMap {
       domains =
           response.data['result']!
               .map<CloudflareZone>(
-                (final json) => CloudflareZone.fromJson(json),
+                CloudflareZone.fromJson,
               )
               .toList();
     } catch (e) {
@@ -195,7 +195,7 @@ class CloudflareApi extends RestApiMap {
       allRecords =
           response.data['result']!
               .map<CloudflareDnsRecord>(
-                (final json) => CloudflareDnsRecord.fromJson(json),
+                CloudflareDnsRecord.fromJson,
               )
               .toList();
     } catch (e) {

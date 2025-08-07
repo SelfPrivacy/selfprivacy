@@ -129,7 +129,7 @@ class NewUserScreen extends StatelessWidget {
         GroupsSelector(formFieldCubit: formCubit.groups),
         const Gap(24),
         BrandButton.filled(
-          onPressed: state.isSubmitting ? null : () => formCubit.trySubmit(),
+          onPressed: state.isSubmitting ? null : formCubit.trySubmit,
           title: user != null ? 'basis.apply'.tr() : 'basis.create'.tr(),
         ),
         const SizedBox(height: 24),

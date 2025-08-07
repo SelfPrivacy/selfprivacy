@@ -5,6 +5,14 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.da
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 
 class Backup {
+  Backup({
+    required this.time,
+    required this.id,
+    required this.serviceId,
+    required this.fallbackServiceName,
+    required this.reason,
+  });
+
   Backup.fromGraphQL(
     final Query$AllBackupSnapshots$backup$allSnapshots snapshot,
   ) : this(
@@ -14,14 +22,6 @@ class Backup {
         fallbackServiceName: snapshot.service.displayName,
         reason: snapshot.reason,
       );
-
-  Backup({
-    required this.time,
-    required this.id,
-    required this.serviceId,
-    required this.fallbackServiceName,
-    required this.reason,
-  });
 
   // Time of the backup
   final DateTime time;
@@ -42,6 +42,16 @@ extension BackupReasonExtension on Enum$BackupReason {
 }
 
 class BackupConfiguration extends Equatable {
+  const BackupConfiguration({
+    required this.autobackupPeriod,
+    required this.encryptionKey,
+    required this.isInitialized,
+    required this.locationId,
+    required this.locationName,
+    required this.provider,
+    required this.autobackupQuotas,
+  });
+
   BackupConfiguration.fromGraphQL(
     final Query$BackupConfiguration$backup$configuration configuration,
   ) : this(
@@ -59,16 +69,6 @@ class BackupConfiguration extends Equatable {
           configuration.autobackupQuotas,
         ),
       );
-
-  const BackupConfiguration({
-    required this.autobackupPeriod,
-    required this.encryptionKey,
-    required this.isInitialized,
-    required this.locationId,
-    required this.locationName,
-    required this.provider,
-    required this.autobackupQuotas,
-  });
 
   final Duration? autobackupPeriod;
   final String encryptionKey;
@@ -109,6 +109,14 @@ class BackupConfiguration extends Equatable {
 }
 
 class AutobackupQuotas extends Equatable {
+
+  const AutobackupQuotas({
+    required this.last,
+    required this.daily,
+    required this.weekly,
+    required this.monthly,
+    required this.yearly,
+  });
   AutobackupQuotas.fromGraphQL(
     final Query$BackupConfiguration$backup$configuration$autobackupQuotas
     autobackupQuotas,
@@ -119,14 +127,6 @@ class AutobackupQuotas extends Equatable {
         monthly: autobackupQuotas.monthly,
         yearly: autobackupQuotas.yearly,
       );
-
-  const AutobackupQuotas({
-    required this.last,
-    required this.daily,
-    required this.weekly,
-    required this.monthly,
-    required this.yearly,
-  });
 
   final int last;
   final int daily;

@@ -84,7 +84,7 @@ linter:
     cast_nullable_to_non_nullable: true
     collection_methods_unrelated_type: true
     combinators_ordering: true
-    comment_references: true
+    comment_references: false
     conditional_uri_does_not_exist: true
     constant_identifier_names: true
     control_flow_in_finally: true

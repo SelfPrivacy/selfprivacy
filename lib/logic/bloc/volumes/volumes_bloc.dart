@@ -83,8 +83,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
         getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
         return price;
       }
-      price = pricingResult.data!.perVolumeGb;
-      return price;
+      return pricingResult.data!.perVolumeGb;
     } else {
       await Future.delayed(Duration.zero);
       getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());

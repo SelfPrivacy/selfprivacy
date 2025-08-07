@@ -11,7 +11,7 @@ class ConnectionStatusBloc extends Bloc<ConnectionStatus, ConnectionStatus> {
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
     _apiConnectionStatusSubscription = apiConnectionRepository
         .connectionStatusStream
-        .listen((final ConnectionStatus newStatus) => add(newStatus));
+        .listen(add);
   }
 
   StreamSubscription? _apiConnectionStatusSubscription;

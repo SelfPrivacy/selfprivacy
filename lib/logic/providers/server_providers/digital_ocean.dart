@@ -335,8 +335,10 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
 
       await Future.delayed(const Duration(seconds: 10));
-      final List<Future> laterFutures =
-          <Future>[_adapter.api().deleteVolume(volumeToRemove.uuid!), _adapter.api().deleteServer(foundServer!.id)];
+      final List<Future> laterFutures = <Future>[
+        _adapter.api().deleteVolume(volumeToRemove.uuid!),
+        _adapter.api().deleteServer(foundServer!.id),
+      ];
 
       await Future.wait(laterFutures);
     } catch (e) {

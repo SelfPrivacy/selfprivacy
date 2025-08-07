@@ -147,8 +147,8 @@ abstract class GenericLineChart extends StatelessWidget {
                         show: true,
                         gradient: LinearGradient(
                           colors: [
-                            colors[data.indexOf(dataSeries)].withOpacity(0.5),
-                            colors[data.indexOf(dataSeries)].withOpacity(0),
+                            colors[data.indexOf(dataSeries)].withAlpha(127),
+                            colors[data.indexOf(dataSeries)].withAlpha(0),
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
@@ -226,12 +226,12 @@ abstract class GenericLineChart extends StatelessWidget {
             horizontalInterval: getMaxY() == 100 ? 25 : getMaxY() * 2 / 6.5,
             getDrawingHorizontalLine:
                 (final value) => FlLine(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  color: Theme.of(context).colorScheme.outline.withAlpha(76),
                   strokeWidth: 1,
                 ),
             getDrawingVerticalLine:
                 (final value) => FlLine(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                  color: Theme.of(context).colorScheme.outline.withAlpha(76),
                   strokeWidth: 1,
                 ),
           ),
@@ -239,19 +239,19 @@ abstract class GenericLineChart extends StatelessWidget {
             show: true,
             border: Border(
               bottom: BorderSide(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.outline.withAlpha(76),
                 width: 1,
               ),
               left: BorderSide(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.outline.withAlpha(76),
                 width: 1,
               ),
               right: BorderSide(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.outline.withAlpha(76),
                 width: 1,
               ),
               top: BorderSide(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.outline.withAlpha(76),
                 width: 1,
               ),
             ),

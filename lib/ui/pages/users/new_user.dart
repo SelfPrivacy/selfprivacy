@@ -98,9 +98,7 @@ class NewUserScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color:
                   user != null
-                      ? Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withOpacity(0.38)
+                      ? Theme.of(context).colorScheme.onSurface.withAlpha(97)
                       : Theme.of(context).colorScheme.onSurface,
             ),
             decoration: InputDecoration(

@@ -16,7 +16,7 @@ class ApiAdapter {
 
 class DesecDnsProvider extends DnsProvider {
   DesecDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DesecDnsProvider.load(final bool isAuthorized, final String? token)
+  DesecDnsProvider.load({required final bool isAuthorized, final String? token})
     : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;

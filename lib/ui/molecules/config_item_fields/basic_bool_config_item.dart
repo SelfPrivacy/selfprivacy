@@ -11,6 +11,7 @@ class BasicBoolConfigItem extends StatefulWidget {
   });
 
   final BoolServiceConfigItem configItem;
+  // ignore: avoid_positional_boolean_parameters
   final Function(bool) onChanged;
   final bool? newValue;
 

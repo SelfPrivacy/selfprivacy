@@ -306,17 +306,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     /// TODO: Error handling?
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
       records: getProjectDnsRecords(
-        state.serverDomain!.domainName,
-        serverDetails.ip4,
-        false,
+        domainName: state.serverDomain!.domainName,
+        ip4: serverDetails.ip4,
+        isCreating: false,
       ),
       domain: state.serverDomain!,
     );
     await ProvidersController.currentDnsProvider!.createDomainRecords(
       records: getProjectDnsRecords(
-        state.serverDomain!.domainName,
-        serverDetails.ip4,
-        true,
+        domainName: state.serverDomain!.domainName,
+        ip4: serverDetails.ip4,
+        isCreating: true,
       ),
       domain: state.serverDomain!,
     );
@@ -391,7 +391,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
 
       await repository.saveServerDetails(server);
-      await repository.saveIsServerStarted(true);
+      await repository.saveIsServerStarted(serverStarted: true);
 
       final ServerInstallationNotFinished newState = dataState.copyWith(
         isServerStarted: true,
@@ -444,7 +444,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       timer = Timer(pauseDuration, () async {
         final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerRebootedFirstTime(true);
+        await repository.saveIsServerRebootedFirstTime(
+          serverRebootedFirstTime: true,
+        );
         await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -491,7 +493,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       timer = Timer(pauseDuration, () async {
         final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerRebootedSecondTime(true);
+        await repository.saveIsServerRebootedSecondTime(
+          serverRebootedSecondTime: true,
+        );
         await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -535,7 +539,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dkimCreated = false;
       }
       if (dkimCreated) {
-        await repository.saveHasFinalChecked(true);
+        await repository.saveHasFinalChecked(finalCheckCompleted: true);
         emit(dataState.finish());
         await getIt<ApiConnectionRepository>().init();
       } else {
@@ -586,7 +590,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         .getRecoveryCapabilities(serverDomain);
 
     await repository.saveDomain(serverDomain);
-    await repository.saveIsRecoveringServer(true);
+    await repository.saveIsRecoveringServer(isRecoveringServer: true);
 
     emit(
       ServerInstallationRecovery(
@@ -864,10 +868,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<void> finishRecoveryProcess(
     final BackupsCredential backblazeCredential,
   ) async {
-    await repository.saveIsServerStarted(true);
-    await repository.saveIsServerRebootedFirstTime(true);
-    await repository.saveIsServerRebootedSecondTime(true);
-    await repository.saveIsRecoveringServer(false);
+    await repository.saveIsServerStarted(serverStarted: true);
+    await repository.saveIsServerRebootedFirstTime(
+      serverRebootedFirstTime: true,
+    );
+    await repository.saveIsServerRebootedSecondTime(
+      serverRebootedSecondTime: true,
+    );
+    await repository.saveIsRecoveringServer(isRecoveringServer: false);
     late final GenericResult<ServerType?>? serverType;
     if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
       serverType = await ProvidersController.currentServerProvider
@@ -878,7 +886,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     } else {
       serverType = null;
     }
-    await repository.saveHasFinalChecked(true);
+    await repository.saveHasFinalChecked(finalCheckCompleted: true);
     final ServerInstallationRecovery updatedState =
         (state as ServerInstallationRecovery).copyWith(
           backblazeCredential: backblazeCredential,

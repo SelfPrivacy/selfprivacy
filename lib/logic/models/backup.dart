@@ -109,7 +109,6 @@ class BackupConfiguration extends Equatable {
 }
 
 class AutobackupQuotas extends Equatable {
-
   const AutobackupQuotas({
     required this.last,
     required this.daily,

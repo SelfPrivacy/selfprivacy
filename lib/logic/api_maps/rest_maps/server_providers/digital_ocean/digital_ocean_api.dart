@@ -56,7 +56,7 @@ class DigitalOceanApi extends RestApiMap {
       final Response response = await client.get('/droplets');
       servers = response.data['droplets'];
     } catch (e) {
-      logger('Error while fetching droplets: $e');
+      logger('Error while fetching droplets: $e', error: e);
       return GenericResult(
         success: false,
         data: servers,
@@ -107,7 +107,7 @@ class DigitalOceanApi extends RestApiMap {
       serverCreateResponse = await client.post('/droplets', data: data);
       dropletId = serverCreateResponse.data['droplet']['id'];
     } catch (e) {
-      logger('Error while creating droplet: $e');
+      logger('Error while creating droplet: $e', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -126,7 +126,7 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.delete('/droplets/$serverId');
     } catch (e) {
-      logger('Error while deleting droplet: $e');
+      logger('Error while deleting droplet: $e', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -152,7 +152,7 @@ class DigitalOceanApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      logger('Error while validating API token: $e');
+      logger('Error while validating API token: $e', error: e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -189,7 +189,7 @@ class DigitalOceanApi extends RestApiMap {
         locations.add(DigitalOceanLocation.fromJson(region));
       }
     } catch (e) {
-      logger('Error while fetching regions: $e');
+      logger('Error while fetching regions: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
@@ -209,7 +209,7 @@ class DigitalOceanApi extends RestApiMap {
         types.add(DigitalOceanServerType.fromJson(size));
       }
     } catch (e) {
-      logger('Error while fetching sizes: $e');
+      logger('Error while fetching sizes: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
@@ -226,7 +226,7 @@ class DigitalOceanApi extends RestApiMap {
         data: {'type': 'power_on'},
       );
     } catch (e) {
-      logger('Error while powering on droplet: $e');
+      logger('Error while powering on droplet: $e', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -243,7 +243,7 @@ class DigitalOceanApi extends RestApiMap {
         data: {'type': 'reboot'},
       );
     } catch (e) {
-      logger('Error while rebooting droplet: $e');
+      logger('Error while rebooting droplet: $e', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -268,7 +268,7 @@ class DigitalOceanApi extends RestApiMap {
         volumes.add(DigitalOceanVolume.fromJson(volume));
       }
     } catch (e) {
-      logger('Error while fetching volumes: $e');
+      logger('Error while fetching volumes: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       client.close();
@@ -299,7 +299,7 @@ class DigitalOceanApi extends RestApiMap {
       );
       volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
-      logger('Error while creating volume: $e');
+      logger('Error while creating volume: $e', error: e);
       return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
@@ -335,7 +335,7 @@ class DigitalOceanApi extends RestApiMap {
       success =
           attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while attaching volume: $e');
+      logger('Error while attaching volume: $e', error: e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       close(client);
@@ -371,7 +371,7 @@ class DigitalOceanApi extends RestApiMap {
       success =
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while detaching volume: $e');
+      logger('Error while detaching volume: $e', error: e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
@@ -385,7 +385,7 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.delete('/volumes/$uuid');
     } catch (e) {
-      logger('Error while deleting volume: $e');
+      logger('Error while deleting volume: $e', error: e);
       return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
@@ -411,7 +411,7 @@ class DigitalOceanApi extends RestApiMap {
       success =
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while resizing volume: $e');
+      logger('Error while resizing volume: $e', error: e);
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
@@ -439,7 +439,7 @@ class DigitalOceanApi extends RestApiMap {
       );
       metrics = response.data['data']['result'];
     } catch (e) {
-      logger('Error while fetching CPU metrics: $e');
+      logger('Error while fetching CPU metrics: $e', error: e);
       return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
@@ -448,12 +448,12 @@ class DigitalOceanApi extends RestApiMap {
     return GenericResult(success: true, data: metrics);
   }
 
-  Future<GenericResult<List>> getMetricsBandwidth(
-    final int serverId,
-    final DateTime start,
-    final DateTime end,
-    final bool isInbound,
-  ) async {
+  Future<GenericResult<List>> getMetricsBandwidth({
+    required final int serverId,
+    required final DateTime start,
+    required final DateTime end,
+    required final bool isInbound,
+  }) async {
     List metrics = [];
 
     final Dio client = await getClient();
@@ -470,7 +470,7 @@ class DigitalOceanApi extends RestApiMap {
       );
       metrics = response.data['data']['result'][0]['values'];
     } catch (e) {
-      logger('Error while fetching bandwidth metrics: $e');
+      logger('Error while fetching bandwidth metrics: $e', error: e);
       return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);

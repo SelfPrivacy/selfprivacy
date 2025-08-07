@@ -30,8 +30,10 @@ class ApiAdapter {
 
 class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter(isWithToken: false);
-  HetznerServerProvider.load(final bool isAuthorized, final String? token)
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  HetznerServerProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);

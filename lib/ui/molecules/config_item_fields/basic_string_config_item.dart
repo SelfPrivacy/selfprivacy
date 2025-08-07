@@ -12,6 +12,7 @@ class BasicStringConfigItem extends StatefulWidget {
   });
 
   final StringServiceConfigItem configItem;
+  // ignore: avoid_positional_boolean_parameters
   final Function(String, bool) onChanged;
   final String? newValue;
 

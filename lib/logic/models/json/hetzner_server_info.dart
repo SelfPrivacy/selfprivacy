@@ -47,7 +47,12 @@ class HetznerPublicNetInfo {
 
 @JsonSerializable()
 class HetznerIp4 {
-  HetznerIp4(this.id, this.ip, this.blocked, this.reverseDns);
+  HetznerIp4({
+    required this.id,
+    required this.ip,
+    required this.blocked,
+    required this.reverseDns,
+  });
   final bool blocked;
   @JsonKey(name: 'dns_ptr')
   final String reverseDns;

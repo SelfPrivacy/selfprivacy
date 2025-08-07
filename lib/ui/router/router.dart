@@ -57,7 +57,7 @@ Widget fadeThroughTransition(
 
 @AutoRouterConfig(
   // transitionsBuilder: fadeThroughTransition,
-  replaceInRouteName: 'Page|Screen|Routing,Route',
+  replaceInRouteName: 'Page|Screen,Route',
 )
 class RootRouter extends RootStackRouter {
   RootRouter(final GlobalKey<NavigatorState> navigatorKey)
@@ -70,7 +70,7 @@ class RootRouter extends RootStackRouter {
   final List<AutoRoute> routes = [
     AutoRoute(page: OnboardingRoute.page),
     AutoRoute(page: InitializingRoute.page),
-    AutoRoute(page: RecoveryRoute.page),
+    AutoRoute(page: RecoveryRoutingRoute.page),
     AutoRoute(
       page: RootRoute.page,
       path: '/',

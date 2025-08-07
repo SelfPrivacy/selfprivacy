@@ -167,8 +167,8 @@ class ServiceToggleJob extends ClientJob {
   @override
   Future<(bool, String)> execute() async {
     final result = await getIt<ApiConnectionRepository>().api.switchService(
-      service.id,
-      needToTurnOn,
+      serviceId: service.id,
+      needTurnOn: needToTurnOn,
     );
     return (result.success, result.message ?? 'jobs.generic_error'.tr());
   }
@@ -290,7 +290,7 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
 
   @override
   Future<(bool, String)> execute() => getIt<ApiConnectionRepository>()
-      .setAutoUpgradeSettings(enable, allowReboot);
+      .setAutoUpgradeSettings(enable: enable, allowReboot: allowReboot);
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
@@ -374,7 +374,7 @@ class ChangeSshSettingsJob extends ReplaceableJob {
 
   @override
   Future<(bool, String)> execute() =>
-      getIt<ApiConnectionRepository>().setSshSettings(enable);
+      getIt<ApiConnectionRepository>().setSshSettings(enable: enable);
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {

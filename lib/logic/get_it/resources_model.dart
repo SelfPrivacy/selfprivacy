@@ -367,21 +367,25 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerStarted(final bool isStarted) async {
+  Future<void> setIsServerStarted({required final bool isStarted}) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isServerStarted: isStarted);
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerRebootedFirstTime(final bool isRebooted) async {
+  Future<void> setIsServerRebootedFirstTime({
+    required final bool isRebooted,
+  }) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isServerResetedFirstTime: isRebooted);
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerRebootedSecondTime(final bool isRebooted) async {
+  Future<void> setIsServerRebootedSecondTime({
+    required final bool isRebooted,
+  }) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isServerResetedSecondTime: isRebooted);
@@ -395,7 +399,7 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsRecoveringServer(final bool isRecovering) async {
+  Future<void> setIsRecoveringServer({required final bool isRecovering}) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())
         .copyWith(isRecoveringServer: isRecovering);

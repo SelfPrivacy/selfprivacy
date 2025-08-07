@@ -19,8 +19,8 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_server_provider_c
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 @RoutePage()
-class RecoveryRouting extends StatelessWidget {
-  const RecoveryRouting({super.key});
+class RecoveryRoutingPage extends StatelessWidget {
+  const RecoveryRoutingPage({super.key});
 
   @override
   Widget build(final BuildContext context) {

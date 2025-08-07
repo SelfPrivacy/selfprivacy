@@ -79,11 +79,11 @@ String getHostnameFromDomain(final String domain) {
   return hostname;
 }
 
-List<DnsRecord> getProjectDnsRecords(
+List<DnsRecord> getProjectDnsRecords({
+  required final bool isCreating,
   final String? domainName,
   final String? ip4,
-  final bool isCreating,
-) {
+}) {
   final DnsRecord domainA = DnsRecord(
     type: 'A',
     name: domainName,

@@ -74,9 +74,9 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
                     children: [
                       if (!_isExtended && _isServerFound(servers))
                         confirmServer(
-                          context,
-                          _firstValidServer(servers),
-                          servers.length > 1,
+                          context: context,
+                          server: _firstValidServer(servers),
+                          showMoreServersButton: servers.length > 1,
                         ),
                       if (_isExtended || !_isServerFound(servers))
                         chooseServer(context, servers),
@@ -99,11 +99,11 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     ],
   );
 
-  Widget confirmServer(
-    final BuildContext context,
-    final ServerBasicInfoWithValidators server,
-    final bool showMoreServersButton,
-  ) => Column(
+  Widget confirmServer({
+    required final BuildContext context,
+    required final ServerBasicInfoWithValidators server,
+    required final bool showMoreServersButton,
+  }) => Column(
     children: [
       serverCard(context: context, server: server),
       const SizedBox(height: 16),

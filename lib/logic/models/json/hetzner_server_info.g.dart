@@ -56,10 +56,10 @@ Map<String, dynamic> _$HetznerPublicNetInfoToJson(
 ) => <String, dynamic>{'ipv4': instance.ipv4};
 
 HetznerIp4 _$HetznerIp4FromJson(Map<String, dynamic> json) => HetznerIp4(
-  (json['id'] as num).toInt(),
-  json['ip'] as String,
-  json['blocked'] as bool,
-  json['dns_ptr'] as String,
+  id: (json['id'] as num).toInt(),
+  ip: json['ip'] as String,
+  blocked: json['blocked'] as bool,
+  reverseDns: json['dns_ptr'] as String,
 );
 
 Map<String, dynamic> _$HetznerIp4ToJson(HetznerIp4 instance) =>

@@ -153,14 +153,16 @@ class ServerApi extends GraphQLApiMap
     return usesBinds;
   }
 
-  Future<GenericResult> switchService(
-    final String uid,
-    final bool needTurnOn,
-  ) async {
+  Future<GenericResult> switchService({
+    required final String serviceId,
+    required final bool needTurnOn,
+  }) async {
     try {
       final GraphQLClient client = await getClient();
       if (needTurnOn) {
-        final variables = Variables$Mutation$EnableService(serviceId: uid);
+        final variables = Variables$Mutation$EnableService(
+          serviceId: serviceId,
+        );
         final mutation = Options$Mutation$EnableService(variables: variables);
         final result = await client.mutate$EnableService(mutation);
         if (result.hasException) {
@@ -176,7 +178,9 @@ class ServerApi extends GraphQLApiMap
           data: null,
         );
       } else {
-        final variables = Variables$Mutation$DisableService(serviceId: uid);
+        final variables = Variables$Mutation$DisableService(
+          serviceId: serviceId,
+        );
         final mutation = Options$Mutation$DisableService(variables: variables);
         final result = await client.mutate$DisableService(mutation);
         if (result.hasException) {

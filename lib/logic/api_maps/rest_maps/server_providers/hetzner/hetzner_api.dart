@@ -12,8 +12,10 @@ import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends RestApiMap {
   HetznerApi({this.token = '', this.hasLogger = true, this.isWithToken = true})
-    : assert(!isWithToken || token.isNotEmpty,
-            'Token must not be empty if isWithToken is true');
+    : assert(
+        !isWithToken || token.isNotEmpty,
+        'Token must not be empty if isWithToken is true',
+      );
 
   @override
   bool hasLogger;

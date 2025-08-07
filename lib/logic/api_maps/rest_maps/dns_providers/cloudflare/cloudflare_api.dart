@@ -101,9 +101,7 @@ class CloudflareApi extends RestApiMap {
       response = await client.get(url, queryParameters: {'per_page': 50});
       domains =
           response.data['result']!
-              .map<CloudflareZone>(
-                CloudflareZone.fromJson,
-              )
+              .map<CloudflareZone>(CloudflareZone.fromJson)
               .toList();
     } catch (e) {
       logger('Error in Cloudflare getZones request: $e', error: e);
@@ -194,9 +192,7 @@ class CloudflareApi extends RestApiMap {
       response = await client.get(url);
       allRecords =
           response.data['result']!
-              .map<CloudflareDnsRecord>(
-                CloudflareDnsRecord.fromJson,
-              )
+              .map<CloudflareDnsRecord>(CloudflareDnsRecord.fromJson)
               .toList();
     } catch (e) {
       logger('Error in Cloudflare getDnsRecords request: $e', error: e);

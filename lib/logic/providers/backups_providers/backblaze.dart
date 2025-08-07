@@ -20,11 +20,8 @@ class ApiAdapter {
 
 class BackblazeBackupsProvider extends BackupsProvider {
   BackblazeBackupsProvider() : _adapter = ApiAdapter();
-  BackblazeBackupsProvider.load(
-    final bool isAuthorized,
-    final String? token,
-    final String? tokenId,
-  ) : _adapter = ApiAdapter(token: token, tokenId: tokenId);
+  BackblazeBackupsProvider.load({final String? token, final String? tokenId})
+    : _adapter = ApiAdapter(token: token, tokenId: tokenId);
 
   final ApiAdapter _adapter;
 

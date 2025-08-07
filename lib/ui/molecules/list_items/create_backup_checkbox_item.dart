@@ -17,6 +17,7 @@ class CreateBackupCheckboxItem extends StatelessWidget {
   final Service service;
   final bool busy;
   final bool selected;
+  // ignore: avoid_positional_boolean_parameters
   final void Function(bool?) onChanged;
 
   @override

@@ -30,8 +30,10 @@ class ApiAdapter {
 
 class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DigitalOceanServerProvider.load(final bool isAuthorized, final String? token)
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  DigitalOceanServerProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);
@@ -779,10 +781,10 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     const int step = 15;
     final inboundResult = await _adapter.api().getMetricsBandwidth(
-      serverId,
-      start,
-      end,
-      true,
+      serverId: serverId,
+      start: start,
+      end: end,
+      isInbound: true,
     );
 
     if (inboundResult.data.isEmpty || !inboundResult.success) {
@@ -795,10 +797,10 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final outboundResult = await _adapter.api().getMetricsBandwidth(
-      serverId,
-      start,
-      end,
-      false,
+      serverId: serverId,
+      start: start,
+      end: end,
+      isInbound: false,
     );
 
     if (outboundResult.data.isEmpty || !outboundResult.success) {

@@ -264,10 +264,10 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<(bool, String)> setAutoUpgradeSettings(
-    final bool enable,
-    final bool allowReboot,
-  ) async {
+  Future<(bool, String)> setAutoUpgradeSettings({
+    required final bool enable,
+    required final bool allowReboot,
+  }) async {
     final GenericResult<AutoUpgradeSettings?> result = await api
         .setAutoUpgradeSettings(
           AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
@@ -290,7 +290,7 @@ class ApiConnectionRepository {
     }
   }
 
-  Future<(bool, String)> setSshSettings(final bool enable) async {
+  Future<(bool, String)> setSshSettings({required final bool enable}) async {
     final GenericResult<SshSettings?> result = await api.setSshSettings(
       SshSettings(enable: enable),
     );

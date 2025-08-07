@@ -41,7 +41,7 @@ class InitializingPage extends StatelessWidget {
     final cubit = context.watch<ServerInstallationCubit>();
 
     if (cubit.state is ServerInstallationRecovery) {
-      return const RecoveryRouting();
+      return const RecoveryRoutingPage();
     } else {
       Widget? actualInitializingPage;
       if (cubit.state is! ServerInstallationFinished) {
@@ -133,7 +133,7 @@ class InitializingPage extends StatelessWidget {
                                   title: 'basis.connect_to_existing'.tr(),
                                   onPressed: () async {
                                     await context.router.replace(
-                                      const RecoveryRoute(),
+                                      const RecoveryRoutingRoute(),
                                     );
                                   },
                                 ),
@@ -202,7 +202,7 @@ class InitializingPage extends StatelessWidget {
                                         title: 'basis.connect_to_existing'.tr(),
                                         onPressed: () async {
                                           await context.router.replace(
-                                            const RecoveryRoute(),
+                                            const RecoveryRoutingRoute(),
                                           );
                                         },
                                       ),

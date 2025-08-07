@@ -16,8 +16,10 @@ class ApiAdapter {
 
 class DigitalOceanDnsProvider extends DnsProvider {
   DigitalOceanDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DigitalOceanDnsProvider.load(final bool isAuthorized, final String? token)
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  DigitalOceanDnsProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
 

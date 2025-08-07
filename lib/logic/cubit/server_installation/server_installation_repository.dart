@@ -550,27 +550,41 @@ class ServerInstallationRepository {
     await getIt<WizardDataModel>().deleteServerDomain();
   }
 
-  Future<void> saveIsServerStarted(final bool value) async {
-    await getIt<WizardDataModel>().setIsServerStarted(value);
+  Future<void> saveIsServerStarted({required final bool serverStarted}) async {
+    await getIt<WizardDataModel>().setIsServerStarted(isStarted: serverStarted);
   }
 
-  Future<void> saveIsServerRebootedFirstTime(final bool value) async {
-    await getIt<WizardDataModel>().setIsServerRebootedFirstTime(value);
+  Future<void> saveIsServerRebootedFirstTime({
+    required final bool serverRebootedFirstTime,
+  }) async {
+    await getIt<WizardDataModel>().setIsServerRebootedFirstTime(
+      isRebooted: serverRebootedFirstTime,
+    );
   }
 
-  Future<void> saveIsServerRebootedSecondTime(final bool value) async {
-    await getIt<WizardDataModel>().setIsServerRebootedSecondTime(value);
+  Future<void> saveIsServerRebootedSecondTime({
+    required final bool serverRebootedSecondTime,
+  }) async {
+    await getIt<WizardDataModel>().setIsServerRebootedSecondTime(
+      isRebooted: serverRebootedSecondTime,
+    );
   }
 
   Future<void> saveRootUser(final User rootUser) async {
     await getIt<WizardDataModel>().setRootUser(rootUser);
   }
 
-  Future<void> saveIsRecoveringServer(final bool value) async {
-    await getIt<WizardDataModel>().setIsRecoveringServer(value);
+  Future<void> saveIsRecoveringServer({
+    required final bool isRecoveringServer,
+  }) async {
+    await getIt<WizardDataModel>().setIsRecoveringServer(
+      isRecovering: isRecoveringServer,
+    );
   }
 
-  Future<void> saveHasFinalChecked(final bool value) async {
+  Future<void> saveHasFinalChecked({
+    required final bool finalCheckCompleted,
+  }) async {
     // We are finished here. Time to save the state and finish the wizard
     // TODO: A lot of null checks are skipped here. Implication that every value exists might become false in the future.
     // TODO: We would actually want to handle token creation elsewhere.

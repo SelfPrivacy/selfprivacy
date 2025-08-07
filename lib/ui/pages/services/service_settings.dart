@@ -41,6 +41,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
   ) {
     switch (configItem) {
       case StringServiceConfigItem():
+        // ignore: avoid_positional_boolean_parameters
         void onChanged(final String value, final bool isFieldValid) {
           if (isFieldValid) {
             setState(() {
@@ -70,6 +71,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
           onChanged: onChanged,
         );
       case BoolServiceConfigItem():
+        // ignore: avoid_positional_boolean_parameters
         void onChanged(final bool value) {
           setState(() {
             if (value == configItem.value) {

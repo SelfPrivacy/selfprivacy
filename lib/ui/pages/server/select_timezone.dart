@@ -106,16 +106,13 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
               locations
                   .where(
                     (final Location location) =>
-                        timezoneFilterValue == null
-                            ? true
-                            : location.name.toLowerCase().contains(
-                                  timezoneFilterValue!,
-                                ) ||
-                                Duration(
-                                  milliseconds: location.currentTimeZone.offset,
-                                ).toTimezoneOffsetFormat().contains(
-                                  timezoneFilterValue!,
-                                ),
+                        timezoneFilterValue == null ||
+                        location.name.toLowerCase().contains(
+                          timezoneFilterValue!,
+                        ) ||
+                        Duration(milliseconds: location.currentTimeZone.offset)
+                            .toTimezoneOffsetFormat()
+                            .contains(timezoneFilterValue!),
                   )
                   .toList()
                   .asMap()

@@ -194,7 +194,7 @@ class SelectTypePage extends StatelessWidget {
                       (final context, final constraints) => CustomPaint(
                         size: Size(
                           constraints.maxWidth,
-                          (constraints.maxWidth * 1).toDouble(),
+                          constraints.maxWidth * 1,
                         ),
                         painter: StrayDeerPainter(
                           colorScheme: Theme.of(context).colorScheme,

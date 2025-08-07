@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -106,8 +108,11 @@ class DesecApi extends RestApiMap {
     try {
       response = await client.get('');
       await Future.delayed(const Duration(seconds: 1));
-      // ignore: avoid_dynamic_calls
-      domains = response.data!.map<DesecDomain>(DesecDomain.fromJson).toList();
+      domains =
+          // ignore: avoid_dynamic_calls
+          response.data!
+              .map<DesecDomain>((final e) => DesecDomain.fromJson(e))
+              .toList();
     } catch (e) {
       logger('Error fetching Desec domains', error: e);
       return GenericResult(
@@ -188,7 +193,9 @@ class DesecApi extends RestApiMap {
       await Future.delayed(const Duration(seconds: 1));
       allRecords =
           // ignore: avoid_dynamic_calls
-          response.data!.map<DesecDnsRecord>(DesecDnsRecord.fromJson).toList();
+          response.data!
+              .map<DesecDnsRecord>((final e) => DesecDnsRecord.fromJson(e))
+              .toList();
     } catch (e) {
       logger('Error fetching Desec DNS records for $domainName', error: e);
       return GenericResult(

@@ -107,7 +107,10 @@ class DigitalOceanDnsApi extends RestApiMap {
       final Response response = await client.get('/domains');
       domains =
           response.data['domains']!
-              .map<DigitalOceanDomain>(DigitalOceanDomain.fromJson)
+              .map<DigitalOceanDomain>(
+                // ignore: unnecessary_lambdas
+                (final e) => DigitalOceanDomain.fromJson(e),
+              )
               .toList();
     } catch (e) {
       logger('Error fetching DigitalOcean domains', error: e);
@@ -191,7 +194,10 @@ class DigitalOceanDnsApi extends RestApiMap {
       response = await client.get(url);
       allRecords =
           response.data['domain_records']
-              .map<DigitalOceanDnsRecord>(DigitalOceanDnsRecord.fromJson)
+              .map<DigitalOceanDnsRecord>(
+                // ignore: unnecessary_lambdas
+                (final e) => DigitalOceanDnsRecord.fromJson(e),
+              )
               .toList() ??
           [];
     } catch (e) {

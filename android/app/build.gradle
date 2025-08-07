@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
 android {
     namespace 'org.selfprivacy.app'
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion = "25.1.8937393"
+    ndkVersion = flutter.ndkVersion
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -53,8 +53,8 @@ android {
     defaultConfig {
         applicationId "org.selfprivacy.app"
         minSdkVersion 21
-        targetSdkVersion 34
-        compileSdkVersion 34
+        targetSdkVersion 35
+        compileSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

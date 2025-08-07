@@ -36,7 +36,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.gnome.org/GNOME/libsecret.git
-        tag: 0.21.4
+        tag: 0.21.7
   - name: libjsoncpp
     buildsystem: meson
     config-opts:
@@ -45,4 +45,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/open-source-parsers/jsoncpp.git
-        tag: 1.9.5
+        tag: 1.9.6

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -799,7 +801,7 @@ class HetznerServerProvider extends ServerProvider {
       final Map<String, dynamic> json,
       final String type,
     ) {
-      final List list = json['time_series'][type]['values'];
+      final List<List<dynamic>> list = json['time_series'][type]['values'];
       return list
           .map(
             (final el) =>

@@ -21,7 +21,7 @@ class RecoveryConfirmServer extends StatefulWidget {
 
   final Server? server;
   final ServerProviderCredential? serverProviderCredential;
-  final Function? submitCallback;
+  final Function()? submitCallback;
 
   @override
   State<RecoveryConfirmServer> createState() => _RecoveryConfirmServerState();

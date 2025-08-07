@@ -157,7 +157,7 @@ class ServerCharts extends StatelessWidget {
         ),
       ];
     } else {
-      throw 'wrong state';
+      throw StateError('Wrong state');
     }
 
     return Column(

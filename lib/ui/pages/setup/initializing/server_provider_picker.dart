@@ -149,7 +149,7 @@ class ProviderSelectionPage extends StatelessWidget {
     super.key,
   });
 
-  final Function callback;
+  final Function(ServerProviderType) callback;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override

@@ -106,6 +106,7 @@ class DesecApi extends RestApiMap {
     try {
       response = await client.get('');
       await Future.delayed(const Duration(seconds: 1));
+      // ignore: avoid_dynamic_calls
       domains = response.data!.map<DesecDomain>(DesecDomain.fromJson).toList();
     } catch (e) {
       logger('Error fetching Desec domains', error: e);
@@ -186,6 +187,7 @@ class DesecApi extends RestApiMap {
       response = await client.get(url);
       await Future.delayed(const Duration(seconds: 1));
       allRecords =
+          // ignore: avoid_dynamic_calls
           response.data!.map<DesecDnsRecord>(DesecDnsRecord.fromJson).toList();
     } catch (e) {
       logger('Error fetching Desec DNS records for $domainName', error: e);

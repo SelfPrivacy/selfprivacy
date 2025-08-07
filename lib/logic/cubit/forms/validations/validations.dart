@@ -2,6 +2,8 @@ import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 abstract class LengthStringValidation extends ValidationModel<String> {
+  // We should get rid of cubit_form dependency in the future
+  // ignore: matching_super_parameters
   LengthStringValidation(super.predicate, super.errorMessage);
 
   @override

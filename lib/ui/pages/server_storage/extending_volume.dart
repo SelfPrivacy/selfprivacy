@@ -59,7 +59,10 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   @override
   Widget build(final BuildContext context) => FutureBuilder(
     future: context.read<VolumesBloc>().getPricePerGb(),
-    builder: (final BuildContext context, final AsyncSnapshot<void> snapshot) {
+    builder: (
+      final BuildContext context,
+      final AsyncSnapshot<Price?> snapshot,
+    ) {
       if (!snapshot.hasData) {
         return BrandHeroScreen(
           hasBackButton: true,
@@ -71,7 +74,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           ],
         );
       }
-      final price = snapshot.data as Price;
+      final price = snapshot.data!;
       _pricePerGb = price.value;
       final currentSizeValue = _currentSliderGbValue.truncate().toString();
       _sizeController.text = 'storage.gb'.tr(args: [currentSizeValue]);

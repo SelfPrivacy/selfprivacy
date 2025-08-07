@@ -63,7 +63,7 @@ class SelectLocationPage extends StatelessWidget {
     super.key,
   });
 
-  final Function callback;
+  final Function(ServerProviderLocation) callback;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
@@ -74,7 +74,7 @@ class SelectLocationPage extends StatelessWidget {
       final AsyncSnapshot<Object?> snapshot,
     ) {
       if (snapshot.hasData) {
-        if ((snapshot.data as List<ServerProviderLocation>).isEmpty) {
+        if ((snapshot.data! as List<ServerProviderLocation>).isEmpty) {
           return Text('initializing.no_locations_found'.tr());
         }
         return ResponsiveLayoutWithInfobox(

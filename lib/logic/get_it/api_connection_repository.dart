@@ -150,7 +150,7 @@ class ApiConnectionRepository {
       _apiData.users.invalidate();
     }
 
-    if (!result.success || !result.data) {
+    if (!result.success || result.data == false) {
       return (false, result.message ?? 'jobs.generic_error'.tr());
     }
 
@@ -532,15 +532,15 @@ class ApiDataElement<T> {
 
   Future<void> refetchData(
     final Version version,
-    final Function callback,
+    final Function() callback,
   ) async {
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
       if (isExpired || _data == null) {
         final newData = await fetchData();
         if (T is List) {
-          if (Object.hashAll(newData as Iterable<Object?>) !=
-              Object.hashAll(_data as Iterable<Object?>)) {
-            _data = [...newData] as T?;
+          if (Object.hashAll(newData! as Iterable<Object?>) !=
+              Object.hashAll(_data! as Iterable<Object?>)) {
+            _data = [...newData as Iterable] as T?;
           }
         } else {
           if (newData.hashCode != _data.hashCode) {

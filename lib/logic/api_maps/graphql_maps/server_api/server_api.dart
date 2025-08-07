@@ -70,7 +70,7 @@ class ServerApi extends GraphQLApiMap
   String? overrideDomain;
 
   Future<String?> getApiVersion() async {
-    QueryResult response;
+    QueryResult<Query$GetApiVersion> response;
     String? apiVersion;
 
     try {
@@ -82,7 +82,7 @@ class ServerApi extends GraphQLApiMap
           error: response.exception,
         );
       }
-      apiVersion = response.data!['api']['version'];
+      apiVersion = response.parsedData?.api.version;
     } catch (e) {
       logger('Error in GraphQL GetApiVersion request: $e', error: e);
     }
@@ -134,7 +134,7 @@ class ServerApi extends GraphQLApiMap
   }
 
   Future<bool> isUsingBinds() async {
-    QueryResult response;
+    QueryResult<Query$SystemIsUsingBinds> response;
     bool usesBinds = false;
 
     try {
@@ -146,7 +146,7 @@ class ServerApi extends GraphQLApiMap
           error: response.exception,
         );
       }
-      usesBinds = response.data!['system']['info']['usingBinds'];
+      usesBinds = response.parsedData!.system.info.usingBinds;
     } catch (e) {
       logger('Error in GraphQL SystemIsUsingBinds request: $e', error: e);
     }

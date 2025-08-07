@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -59,12 +61,13 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final List rawServers = result.data;
+    final List<Map<String, dynamic>> rawServers = result.data;
     servers =
         rawServers.map<ServerBasicInfo>((final server) {
           String ipv4 = '0.0.0.0';
           if (server['networks']['v4'].isNotEmpty) {
-            for (final v4 in server['networks']['v4']) {
+            for (final Map<String, String> v4
+                in server['networks']['v4'] as List<Map<String, String>>) {
               if (v4['type'].toString() == 'public') {
                 ipv4 = v4['ip_address'].toString();
               }

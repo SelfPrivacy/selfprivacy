@@ -65,7 +65,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     } else if (state is ServerInstallationRecovery) {
       emit(state);
     } else {
-      throw 'wrong state';
+      throw StateError('wrong state');
     }
   }
 

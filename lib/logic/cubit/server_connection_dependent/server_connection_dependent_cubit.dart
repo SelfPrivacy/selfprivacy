@@ -12,7 +12,7 @@ abstract class ServerConnectionDependentCubit<
   T extends ServerInstallationDependendState
 >
     extends Cubit<T> {
-  ServerConnectionDependentCubit(super.initState) {
+  ServerConnectionDependentCubit(super.initialState) {
     final connectionRepository = getIt<ApiConnectionRepository>();
 
     apiStatusSubscription = connectionRepository.connectionStatusStream.listen(

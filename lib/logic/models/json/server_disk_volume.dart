@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 
 part 'server_disk_volume.g.dart';
 
@@ -18,6 +19,19 @@ class ServerDiskVolume extends Equatable {
 
   factory ServerDiskVolume.fromJson(final Map<String, dynamic> json) =>
       _$ServerDiskVolumeFromJson(json);
+
+  factory ServerDiskVolume.fromGraphQL(
+    final Query$GetServerDiskVolumes$storage$volumes serverDiskVolume,
+  ) => ServerDiskVolume(
+    freeSpace: serverDiskVolume.freeSpace,
+    model: serverDiskVolume.model,
+    name: serverDiskVolume.name,
+    root: serverDiskVolume.root,
+    serial: serverDiskVolume.serial,
+    totalSpace: serverDiskVolume.totalSpace,
+    type: serverDiskVolume.type,
+    usedSpace: serverDiskVolume.usedSpace,
+  );
 
   final String freeSpace;
   final String? model;

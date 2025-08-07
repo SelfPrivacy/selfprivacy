@@ -45,7 +45,7 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     return BrandHeroScreen(
       hasBackButton: true,
       heroTitle: 'storage.card_title'.tr(),
-      bodyPadding: const EdgeInsets.symmetric(vertical: 16.0),
+      bodyPadding: const EdgeInsets.symmetric(vertical: 16),
       hasFlashButton: true,
       children: [
         ...diskStatus.diskVolumes.map(
@@ -54,7 +54,7 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
         ),
         const Gap(8),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BrandOutlinedButton(
             title: 'jobs.collect_nix_garbage'.tr(),
             onPressed: () async {
@@ -120,7 +120,7 @@ class ServerStorageSection extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ServerStorageListItem(volume: volume),
       ),
       const Gap(16),
@@ -136,7 +136,7 @@ class ServerStorageSection extends StatelessWidget {
       if (volume.isResizable) ...[
         const Gap(16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BrandOutlinedButton(
             title: 'storage.extend_volume_button.title'.tr(),
             onPressed:
@@ -169,13 +169,13 @@ class ServerConsumptionListTile extends StatelessWidget {
   Widget build(final BuildContext context) => InkWell(
     onTap: onTap,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ConsumptionListItem(
         title: service.displayName,
         icon: SvgPicture.string(
           service.svgIcon,
-          width: 22.0,
-          height: 24.0,
+          width: 22,
+          height: 24,
           colorFilter: ColorFilter.mode(
             Theme.of(context).colorScheme.onSurface,
             BlendMode.srcIn,

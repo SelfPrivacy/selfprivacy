@@ -44,7 +44,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   bool _isError = false;
 
   late double _currentSliderGbValue;
-  double _pricePerGb = 1.0;
+  double _pricePerGb = 1;
 
   final DiskSize maxSize = const DiskSize(byte: 500000000000);
   late DiskSize minSize;
@@ -175,7 +175,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
             child: Text('storage.extend_volume_button.title'.tr()),
           ),
           const SizedBox(height: 16),
-          const Divider(height: 1.0),
+          const Divider(height: 1),
           const SizedBox(height: 16),
           InfoBox(
             text: 'storage.extending_volume_price_info'.tr(),

@@ -55,7 +55,7 @@ class CreateBackupCheckboxItem extends StatelessWidget {
       ),
       isThreeLine: true,
       secondary: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
+        padding: const EdgeInsets.only(top: 4),
         child: SvgPicture.string(
           service.svgIcon,
           height: 24,

@@ -42,7 +42,7 @@ class UserDetailsPage extends StatelessWidget {
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              padding: const EdgeInsets.symmetric(vertical: 32),
               child: EmptyPagePlaceholder(
                 title: 'users.could_not_load_user'.tr(),
                 iconData: Icons.error_outline_outlined,

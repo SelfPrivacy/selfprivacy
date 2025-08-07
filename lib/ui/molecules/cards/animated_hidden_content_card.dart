@@ -52,7 +52,7 @@ class _AnimatedHiddenContentCardState extends State<AnimatedHiddenContentCard> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(widget.buttonIcon, size: 18.0),
+                    Icon(widget.buttonIcon, size: 18),
                     const SizedBox(width: 8),
                     Text(
                       widget.buttonText,

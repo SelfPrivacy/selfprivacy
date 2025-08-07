@@ -76,7 +76,7 @@ class BackupDetailsPage extends StatelessWidget {
           if (preventActions || tokensState.backupsCredentials.isEmpty)
             const Center(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(16),
                 child: CircularProgressIndicator.adaptive(),
               ),
             ),

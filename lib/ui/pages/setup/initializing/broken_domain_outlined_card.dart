@@ -28,7 +28,7 @@ class BrokenDomainOutlinedCard extends StatelessWidget {
               context: context,
             ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,9 +36,9 @@ class BrokenDomainOutlinedCard extends StatelessWidget {
               Icon(
                 Icons.error,
                 color: Theme.of(context).colorScheme.error,
-                size: 24.0,
+                size: 24,
               ),
-              const SizedBox(width: 12.0),
+              const SizedBox(width: 12),
               Flexible(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

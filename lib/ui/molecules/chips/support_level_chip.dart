@@ -39,7 +39,7 @@ class SupportLevelChip extends StatelessWidget {
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
-          padding: dense ? const EdgeInsets.all(4.0) : null,
+          padding: dense ? const EdgeInsets.all(4) : null,
         );
       case SupportLevel.experimental:
         return ActionChip(
@@ -68,7 +68,7 @@ class SupportLevelChip extends StatelessWidget {
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
-          padding: dense ? const EdgeInsets.all(4.0) : null,
+          padding: dense ? const EdgeInsets.all(4) : null,
         );
       case SupportLevel.deprecated:
         return ActionChip(
@@ -97,7 +97,7 @@ class SupportLevelChip extends StatelessWidget {
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
-          padding: dense ? const EdgeInsets.all(4.0) : null,
+          padding: dense ? const EdgeInsets.all(4) : null,
         );
       case SupportLevel.community:
         return ActionChip(
@@ -126,7 +126,7 @@ class SupportLevelChip extends StatelessWidget {
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
-          padding: dense ? const EdgeInsets.all(4.0) : null,
+          padding: dense ? const EdgeInsets.all(4) : null,
         );
       case SupportLevel.unknown:
         return ActionChip(
@@ -154,7 +154,7 @@ class SupportLevelChip extends StatelessWidget {
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
-          padding: dense ? const EdgeInsets.all(4.0) : null,
+          padding: dense ? const EdgeInsets.all(4) : null,
         );
     }
   }
@@ -191,7 +191,7 @@ class SystemServiceChip extends StatelessWidget {
         );
       },
       visualDensity: dense ? VisualDensity.compact : null,
-      padding: dense ? const EdgeInsets.all(4.0) : null,
+      padding: dense ? const EdgeInsets.all(4) : null,
     );
   }
 }

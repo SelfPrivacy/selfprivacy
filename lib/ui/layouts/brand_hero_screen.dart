@@ -19,10 +19,7 @@ class BrandHeroScreen extends StatelessWidget {
     this.heroTitle = '',
     this.heroSubtitle,
     this.onBackButtonPressed,
-    this.bodyPadding = const EdgeInsets.symmetric(
-      vertical: 16.0,
-      horizontal: 8.0,
-    ),
+    this.bodyPadding = const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
     this.ignoreBreakpoints = false,
     this.hasSupportDrawer = false,
   });
@@ -52,7 +49,7 @@ class BrandHeroScreen extends StatelessWidget {
         this.heroIconWidget ??
         Icon(
           heroIcon ?? Icons.help,
-          size: 48.0,
+          size: 48,
           color: Theme.of(context).colorScheme.onSurface,
         );
     final bool hasHeroIcon = heroIcon != null || this.heroIconWidget != null;
@@ -73,10 +70,7 @@ class BrandHeroScreen extends StatelessWidget {
           ),
           if (heroSubtitle != null)
             SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 4.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   Text(
@@ -185,12 +179,12 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
         expandedTitleScale: 1.2,
         centerTitle: true,
         collapseMode: CollapseMode.pin,
-        titlePadding: const EdgeInsets.only(bottom: 12.0, top: 16.0),
+        titlePadding: const EdgeInsets.only(bottom: 12, top: 16),
         background: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 72.0),
+              const SizedBox(height: 72),
               if (widget.hasHeroIcon) widget.heroIconWidget,
             ],
           ),

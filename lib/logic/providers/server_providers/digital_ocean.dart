@@ -746,7 +746,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final int pointsInTime = (rawProcStatMetrics[0]['values'] as List).length;
     for (int i = 0; i < pointsInTime; ++i) {
-      double currentMetricLoad = 0.0;
+      double currentMetricLoad = 0;
       double? currentMetricIdle;
       for (final rawProcStat in rawProcStatMetrics) {
         final String rawProcValue = rawProcStat['values'][i][1];

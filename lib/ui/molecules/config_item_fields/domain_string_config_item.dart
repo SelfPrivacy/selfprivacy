@@ -97,10 +97,10 @@ class _DomainStringConfigItemState extends State<DomainStringConfigItem> {
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                          const Gap(8.0),
+                          const Gap(8),
                           Icon(
                             Icons.undo_outlined,
-                            size: 16.0,
+                            size: 16,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ],

@@ -15,7 +15,7 @@ class SupportDrawer extends StatelessWidget {
       width: 440,
       child: SingleChildScrollView(
         child: SafeArea(
-          minimum: const EdgeInsets.all(8.0),
+          minimum: const EdgeInsets.all(8),
           child: Column(
             children: [
               Row(
@@ -36,7 +36,7 @@ class SupportDrawer extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: BrandMarkdown(fileName: currentArticle),
               ),
             ],

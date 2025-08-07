@@ -22,7 +22,7 @@ class ServerJobCard extends StatelessWidget {
     return GestureDetector(
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,7 +57,7 @@ class ServerJobCard extends StatelessWidget {
                 color: color,
                 backgroundColor:
                     Theme.of(context).colorScheme.surfaceContainerHighest,
-                height: 8.0,
+                height: 8,
               ),
               const SizedBox(height: 8),
               if (statusString != null)

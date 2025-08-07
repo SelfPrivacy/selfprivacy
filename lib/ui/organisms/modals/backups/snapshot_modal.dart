@@ -126,7 +126,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
             )
           else
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: InfoBox(
                 isWarning: true,
                 text: 'backup.snapshot_modal_service_not_found'.tr(),

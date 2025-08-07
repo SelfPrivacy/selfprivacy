@@ -174,7 +174,7 @@ class ProviderSelectionPage extends StatelessWidget {
         children: [
           OutlinedCard(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -253,7 +253,7 @@ class ProviderSelectionPage extends StatelessWidget {
           const SizedBox(height: 16),
           OutlinedCard(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

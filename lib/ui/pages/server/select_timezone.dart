@@ -78,7 +78,7 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
                   ),
                 )
                 : Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
+                  padding: const EdgeInsets.only(top: 4),
                   child: Text('server.select_timezone'.tr()),
                 ),
         leading:

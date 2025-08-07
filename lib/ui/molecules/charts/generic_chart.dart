@@ -148,7 +148,7 @@ abstract class GenericLineChart extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [
                             colors[data.indexOf(dataSeries)].withOpacity(0.5),
-                            colors[data.indexOf(dataSeries)].withOpacity(0.0),
+                            colors[data.indexOf(dataSeries)].withOpacity(0),
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
@@ -170,7 +170,7 @@ abstract class GenericLineChart extends StatelessWidget {
                 reservedSize: 30,
                 getTitlesWidget:
                     (final value, final titleMeta) => Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: ExcludeSemantics(
                         child: Text(
                           bottomTitle(value.toInt(), data.first, period),

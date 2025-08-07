@@ -200,7 +200,7 @@ class _ClientJobStatusCard extends StatelessWidget {
     children: [
       if (!showRemoveButton)
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Icon(
             getJobIcon(clientJob.status),
             color: getJobColor(clientJob.status, context),
@@ -257,7 +257,7 @@ class _ServerJobStatusCardInClientJobs extends StatelessWidget {
   Widget build(final BuildContext context) => Row(
     children: [
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Icon(
           getJobIcon(serverJob?.status ?? JobStatusEnum.created),
           color: getJobColor(
@@ -299,8 +299,8 @@ class _ServerJobStatusCardInClientJobs extends StatelessWidget {
                   ),
                   backgroundColor:
                       Theme.of(context).colorScheme.surfaceContainerHighest,
-                  minHeight: 8.0,
-                  borderRadius: BorderRadius.circular(8.0),
+                  minHeight: 8,
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 const Gap(8),
                 if (serverJob?.error != null ||
@@ -329,7 +329,7 @@ class _ServerJobsListTitle extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.all(8),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

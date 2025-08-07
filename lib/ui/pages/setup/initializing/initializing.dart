@@ -164,13 +164,8 @@ class InitializingPage extends StatelessWidget {
                             Padding(
                               padding:
                                   Breakpoints.large.isActive(context)
-                                      ? const EdgeInsets.all(16.0)
-                                      : const EdgeInsets.fromLTRB(
-                                        16.0,
-                                        0,
-                                        16.0,
-                                        0.0,
-                                      ),
+                                      ? const EdgeInsets.all(16)
+                                      : const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               child: AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 300),
                                 child: actualInitializingPage,

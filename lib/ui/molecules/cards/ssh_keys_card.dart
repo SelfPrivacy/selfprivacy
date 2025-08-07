@@ -27,7 +27,7 @@ class SshKeysCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Text(
               'ssh.title'.tr(),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -98,7 +98,7 @@ class SshKeysCard extends StatelessWidget {
               children: [
                 const Divider(height: 0),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: InfoBox(
                     text: 'ssh.ssh_disabled_warning'.tr(),
                     isWarning: true,
@@ -148,7 +148,7 @@ class _DeleteSshKeyConfirmationDialog extends StatelessWidget {
             'ssh.delete_confirm_question'.tr(),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          const Gap(8.0),
+          const Gap(8),
           Text('$keyName ($keyType)'),
           Text(
             publicKey,

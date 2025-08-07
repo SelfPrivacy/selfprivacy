@@ -141,7 +141,7 @@ class ServerCharts extends StatelessWidget {
         FilledCard(
           clipped: false,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

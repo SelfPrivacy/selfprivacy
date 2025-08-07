@@ -82,19 +82,19 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
             await context.read<DnsRecordsCubit>().fix();
           },
         ),
-        const Gap(8.0),
+        const Gap(8),
         ...recordsSection(
           'domain.services_title'.tr(),
           'domain.services_subtitle'.tr(),
           DnsRecordsCategory.services,
         ),
-        const Gap(8.0),
+        const Gap(8),
         ...recordsSection(
           'domain.email_title'.tr(),
           'domain.email_subtitle'.tr(),
           DnsRecordsCategory.email,
         ),
-        const Gap(8.0),
+        const Gap(8),
         ...recordsSection(
           'domain.other_title'.tr(),
           'domain.other_subtitle'.tr(),

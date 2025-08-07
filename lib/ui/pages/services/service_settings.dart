@@ -163,8 +163,8 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         hasFlashButton: true,
         heroIconWidget: SvgPicture.string(
           service.svgIcon,
-          width: 48.0,
-          height: 48.0,
+          width: 48,
+          height: 48,
           colorFilter: ColorFilter.mode(
             Theme.of(context).colorScheme.onSurface,
             BlendMode.srcIn,
@@ -180,7 +180,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
                   'service_page.wait_for_jobs'.tr(),
                   textAlign: TextAlign.center,
                 ),
-                const Gap(16.0),
+                const Gap(16),
                 const CircularProgressIndicator.adaptive(),
               ],
             ),
@@ -196,8 +196,8 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
       hasFlashButton: true,
       heroIconWidget: SvgPicture.string(
         service.svgIcon,
-        width: 48.0,
-        height: 48.0,
+        width: 48,
+        height: 48,
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
@@ -208,12 +208,12 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
       children: [
         ...service.configuration.map(
           (final ServiceConfigItem configItem) => Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: 16),
             child: configurationItemToWidget(context, configItem, settings),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.only(top: 16),
           child: FilledButton(
             onPressed:
                 ((widget.isInstalling || isModified) && isFormValid)

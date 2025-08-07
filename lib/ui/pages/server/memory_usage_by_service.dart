@@ -42,7 +42,7 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
       children.addAll([
         Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            padding: const EdgeInsets.symmetric(vertical: 32),
             child: EmptyPagePlaceholder(
               title: 'basis.error'.tr(),
               description: 'resource_chart.failed_to_load_memory_metrics'.tr(),
@@ -58,7 +58,7 @@ class _MemoryUsageByServiceContents extends StatelessWidget {
         children.addAll([
           const Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 32.0),
+              padding: EdgeInsets.symmetric(vertical: 32),
               child: CircularProgressIndicator(),
             ),
           ),
@@ -158,8 +158,8 @@ class ServiceMemoryConsumptionTile extends StatelessWidget {
           service?.svgIcon != null
               ? SvgPicture.string(
                 service!.svgIcon,
-                width: 22.0,
-                height: 24.0,
+                width: 22,
+                height: 24,
                 colorFilter: ColorFilter.mode(
                   Theme.of(context).colorScheme.onSurface,
                   BlendMode.srcIn,

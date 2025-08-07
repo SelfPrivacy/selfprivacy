@@ -17,25 +17,25 @@ class DnsStateCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     String description = '';
     String subtitle = '';
-    Icon icon = const Icon(Icons.check_circle_outline, size: 24.0);
+    Icon icon = const Icon(Icons.check_circle_outline, size: 24);
     bool isError = false;
     switch (dnsState) {
       case DnsRecordsStatus.uninitialized:
         description = 'domain.uninitialized'.tr();
-        icon = const Icon(Icons.refresh, size: 24.0);
+        icon = const Icon(Icons.refresh, size: 24);
         isError = false;
       case DnsRecordsStatus.refreshing:
         description = 'domain.refreshing'.tr();
-        icon = const Icon(Icons.refresh, size: 24.0);
+        icon = const Icon(Icons.refresh, size: 24);
         isError = false;
       case DnsRecordsStatus.good:
         description = 'domain.ok'.tr();
-        icon = const Icon(Icons.check_circle_outline, size: 24.0);
+        icon = const Icon(Icons.check_circle_outline, size: 24);
         isError = false;
       case DnsRecordsStatus.error:
         description = 'domain.error'.tr();
         subtitle = 'domain.error_subtitle'.tr();
-        icon = const Icon(Icons.error_outline, size: 24.0);
+        icon = const Icon(Icons.error_outline, size: 24);
         isError = true;
     }
     return FilledCard(

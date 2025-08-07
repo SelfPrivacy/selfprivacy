@@ -67,8 +67,8 @@ class _ServicePageState extends State<ServicePage> {
       hasFlashButton: true,
       heroIconWidget: SvgPicture.string(
         service.svgIcon,
-        width: 48.0,
-        height: 48.0,
+        width: 48,
+        height: 48,
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
@@ -87,7 +87,7 @@ class _ServicePageState extends State<ServicePage> {
         ),
         if (service.supportLevel != SupportLevel.normal ||
             service.isSystemService)
-          const Gap(8.0),
+          const Gap(8),
         if (!service.isInstalled) ...[
           BrandButton.filled(
             title: 'services_catalog.install'.tr(),

@@ -108,7 +108,7 @@ class SelectLocationPage extends StatelessWidget {
                             callback(location);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -246,7 +246,7 @@ class SelectTypePage extends StatelessWidget {
                               await serverInstallationCubit.setServerType(type);
                             },
                             child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -351,9 +351,9 @@ class SelectTypePage extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         VerticalDivider(
-                                          width: 24.0,
-                                          indent: 4.0,
-                                          endIndent: 4.0,
+                                          width: 24,
+                                          indent: 4,
+                                          endIndent: 4,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface

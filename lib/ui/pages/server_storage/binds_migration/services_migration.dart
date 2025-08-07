@@ -118,7 +118,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
+                horizontal: 16,
                 vertical: headerVerticalPadding,
               ),
               child: Column(
@@ -145,7 +145,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         children: <Widget>[
           if (widget.services.isEmpty)
             const Center(child: CircularProgressIndicator.adaptive()),
@@ -165,7 +165,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: InfoBox(
               text: 'storage.data_migration_notice'.tr(),
               isWarning: true,

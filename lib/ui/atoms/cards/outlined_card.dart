@@ -13,7 +13,7 @@ class OutlinedCard extends StatelessWidget {
   final double? borderWidth;
   @override
   Widget build(final BuildContext context) => Card.outlined(
-    elevation: 0.0,
+    elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       side: BorderSide(

@@ -16,16 +16,16 @@ class QrModal extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListView(
-    padding: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.all(16),
     controller: scrollController,
     children: [
-      const Gap(16.0),
+      const Gap(16),
       Text(
         title,
         style: Theme.of(context).textTheme.headlineSmall,
         textAlign: TextAlign.center,
       ),
-      const Gap(16.0),
+      const Gap(16),
       QrImageView(
         data: qrData,
         version: QrVersions.auto,

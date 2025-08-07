@@ -89,7 +89,7 @@ class _CopyEncryptionKeyModalState extends State<CopyEncryptionKeyModal> {
             });
             await PlatformAdapter.setClipboard(encryptionKey);
           },
-          icon: const Icon(Icons.copy_all_outlined, size: 18.0),
+          icon: const Icon(Icons.copy_all_outlined, size: 18),
           label: Text(
             copiedToClipboard
                 ? 'basis.copied_to_clipboard'.tr()

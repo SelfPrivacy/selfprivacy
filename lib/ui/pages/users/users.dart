@@ -60,7 +60,7 @@ class UsersPage extends StatelessWidget {
                 if (outdatedServerCheckerState
                     is OutdatedServerCheckerOutdated) ...[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ServerOutdatedCard(
                       requiredVersion:
                           outdatedServerCheckerState.requiredVersion.toString(),
@@ -71,8 +71,8 @@ class UsersPage extends StatelessWidget {
                 ],
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
+                    horizontal: 16,
+                    vertical: 8,
                   ),
                   child: Skeletonizer(
                     enabled: isLoading,
@@ -82,7 +82,7 @@ class UsersPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.person_add_outlined, size: 18.0),
+                          const Icon(Icons.person_add_outlined, size: 18),
                           const SizedBox(width: 8),
                           Text('users.new_user'.tr()),
                         ],

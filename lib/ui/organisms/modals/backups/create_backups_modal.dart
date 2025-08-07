@@ -76,7 +76,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
               selectedServices.length >=
               widget.services.length - busyServices.length,
         ),
-        const Divider(height: 1.0),
+        const Divider(height: 1),
         ...widget.services.map(
           (final Service service) => CreateBackupCheckboxItem(
             service: service,

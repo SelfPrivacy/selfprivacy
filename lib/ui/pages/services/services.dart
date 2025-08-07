@@ -122,7 +122,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.add_box_outlined, size: 18.0),
+                            const Icon(Icons.add_box_outlined, size: 18),
                             const Gap(8),
                             Text('services_catalog.title'.tr()),
                           ],
@@ -202,9 +202,9 @@ class _ServicesPageState extends State<ServicesPage> {
                               _showSystemServices
                                   ? Icons.unfold_less_outlined
                                   : Icons.unfold_more_outlined,
-                              size: 18.0,
+                              size: 18,
                             ),
-                            const Gap(8.0),
+                            const Gap(8),
                             Text(
                               _showSystemServices
                                   ? 'service_page.hide_system_services'.tr()

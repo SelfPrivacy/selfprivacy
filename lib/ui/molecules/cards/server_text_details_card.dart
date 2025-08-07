@@ -30,7 +30,7 @@ class ServerTextDetailsCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Skeleton.keep(
                   child: Text(
                     'server.general_information'.tr(),

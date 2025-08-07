@@ -63,7 +63,7 @@ class StorageCard extends StatelessWidget {
                       ? null
                       : context.pushRoute(const ServerStorageRoute()),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

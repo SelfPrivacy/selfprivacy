@@ -127,7 +127,7 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     children: [
       for (final server in servers)
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: serverCard(
             context: context,
             server: server,

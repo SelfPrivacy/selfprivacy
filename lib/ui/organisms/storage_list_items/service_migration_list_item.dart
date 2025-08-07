@@ -65,8 +65,8 @@ class ServiceConsumptionTitle extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: SvgPicture.string(
               service.svgIcon,
-              width: 24.0,
-              height: 24.0,
+              width: 24,
+              height: 24,
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.onSurface,
                 BlendMode.srcIn,

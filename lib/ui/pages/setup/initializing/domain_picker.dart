@@ -74,7 +74,7 @@ class _DomainPickerState extends State<DomainPicker> {
                               selectedDomain = domain;
                             }),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [

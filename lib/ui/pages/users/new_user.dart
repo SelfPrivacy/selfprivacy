@@ -107,7 +107,7 @@ class NewUserScreen extends StatelessWidget {
               labelText: 'users.login'.tr(),
               suffixText: '@$domainName',
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
             ),
             isDisabled: user != null,
@@ -120,7 +120,7 @@ class NewUserScreen extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'users.display_name'.tr(),
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
             ),
           ),
@@ -278,7 +278,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                 if (isGroupsEmpty)
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      padding: const EdgeInsets.symmetric(vertical: 24),
                       child: EmptyPagePlaceholder(
                         title: 'basis.network_error'.tr(),
                         iconData: Icons.error_outline_outlined,
@@ -289,7 +289,7 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                     (serviceGroups.isEmpty && unrecognizedGroups.isEmpty))
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      padding: const EdgeInsets.symmetric(vertical: 24),
                       child: EmptyPagePlaceholder(
                         title: 'users.no_groups'.tr(),
                         description: 'users.no_groups_subtitle'.tr(),
@@ -309,8 +309,8 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                             service != null
                                 ? SvgPicture.string(
                                   service.svgIcon,
-                                  width: 24.0,
-                                  height: 24.0,
+                                  width: 24,
+                                  height: 24,
                                   colorFilter: ColorFilter.mode(
                                     Theme.of(
                                       context,

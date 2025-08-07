@@ -24,8 +24,8 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => BlocProvider(
     create: (final BuildContext context) {
-      final bloc = ResetPasswordBloc(user: user);
-      bloc.add(const RequestNewPassword());
+      final bloc = ResetPasswordBloc(user: user)
+        ..add(const RequestNewPassword());
       return bloc;
     },
     child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(

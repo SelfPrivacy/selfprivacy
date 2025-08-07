@@ -131,8 +131,8 @@ class BackupsInitialized extends BackupsState {
   @override
   List<Backup> get backups {
     try {
-      final List<Backup> list = _backupList;
-      list.sort((final a, final b) => b.time.compareTo(a.time));
+      final List<Backup> list =
+          _backupList..sort((final a, final b) => b.time.compareTo(a.time));
       return list;
     } catch (_) {
       return _backupList;

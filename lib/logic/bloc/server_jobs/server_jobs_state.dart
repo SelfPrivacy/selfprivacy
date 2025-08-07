@@ -13,8 +13,9 @@ sealed class ServerJobsState extends Equatable {
 
   List<ServerJob> get serverJobList {
     try {
-      final List<ServerJob> list = _serverJobList;
-      list.sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
+      final List<ServerJob> list =
+          _serverJobList
+            ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
       return list;
     } on UnsupportedError {
       return _serverJobList;

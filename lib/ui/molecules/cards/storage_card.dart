@@ -19,10 +19,11 @@ class StorageCard extends StatelessWidget {
   Widget build(final BuildContext context) {
     final List<Widget> sections = [];
     for (final DiskVolume volume in diskStatus.diskVolumes) {
-      sections.add(const SizedBox(height: 16));
-      sections.add(
-        ServerStorageListItem(volume: volume, dense: true, showIcon: false),
-      );
+      sections
+        ..add(const SizedBox(height: 16))
+        ..add(
+          ServerStorageListItem(volume: volume, dense: true, showIcon: false),
+        );
     }
 
     final List<Widget> fakeSections = [

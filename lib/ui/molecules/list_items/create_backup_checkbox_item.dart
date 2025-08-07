@@ -26,25 +26,26 @@ class CreateBackupCheckboxItem extends StatelessWidget {
     if (busy) {
       descriptionWidgets.add(Text('backup.service_busy'.tr()));
     } else {
-      descriptionWidgets.add(
-        Text(
-          'service_page.uses'.tr(
-            namedArgs: {
-              'usage': service.storageUsage.used.toString(),
-              'volume':
-                  context
-                      .read<VolumesBloc>()
-                      .state
-                      .getVolume(service.storageUsage.volume ?? '')
-                      .displayName,
-            },
+      descriptionWidgets
+        ..add(
+          Text(
+            'service_page.uses'.tr(
+              namedArgs: {
+                'usage': service.storageUsage.used.toString(),
+                'volume':
+                    context
+                        .read<VolumesBloc>()
+                        .state
+                        .getVolume(service.storageUsage.volume ?? '')
+                        .displayName,
+              },
+            ),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-      );
-      descriptionWidgets.add(Text(service.backupDescription));
+        )
+        ..add(Text(service.backupDescription));
     }
     return CheckboxListTile.adaptive(
       onChanged: !busy ? onChanged : null,

@@ -103,17 +103,17 @@ class DigitalOceanDnsProvider extends DnsProvider {
             )
             .toList();
 
-    final List<DigitalOceanDnsRecord> oceanRecords = result.data;
-
-    /// Remove all records that do not match with SelfPrivacy
-    oceanRecords.removeWhere(
-      (final oceanRecord) =>
-          !selfprivacyRecords.any(
-            (final selfprivacyRecord) =>
-                selfprivacyRecord.type == oceanRecord.type &&
-                selfprivacyRecord.name == oceanRecord.name,
-          ),
-    );
+    final List<DigitalOceanDnsRecord> oceanRecords =
+        result.data
+          /// Remove all records that do not match with SelfPrivacy
+          ..removeWhere(
+            (final oceanRecord) =>
+                !selfprivacyRecords.any(
+                  (final selfprivacyRecord) =>
+                      selfprivacyRecord.type == oceanRecord.type &&
+                      selfprivacyRecord.name == oceanRecord.name,
+                ),
+          );
 
     return _adapter.api().removeSimilarRecords(
       domainName: domain.domainName,

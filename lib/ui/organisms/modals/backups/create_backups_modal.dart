@@ -58,12 +58,13 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
             setState(() {
               if (value ?? true) {
                 setState(() {
-                  selectedServices.clear();
-                  selectedServices.addAll(
-                    widget.services.where(
-                      (final service) => !busyServices.contains(service.id),
-                    ),
-                  );
+                  selectedServices
+                    ..clear()
+                    ..addAll(
+                      widget.services.where(
+                        (final service) => !busyServices.contains(service.id),
+                      ),
+                    );
                 });
               } else {
                 selectedServices.clear();

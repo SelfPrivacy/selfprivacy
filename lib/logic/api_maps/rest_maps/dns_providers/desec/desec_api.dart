@@ -12,7 +12,10 @@ class DesecApi extends RestApiMap {
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
-  }) : assert(isWithToken ? token.isNotEmpty : true);
+  }) : assert(
+         !isWithToken || token.isNotEmpty,
+         'Desec API requires a token to be set when isWithToken is true.',
+       );
 
   @override
   final bool hasLogger;
@@ -32,7 +35,10 @@ class DesecApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(token.isNotEmpty);
+      assert(
+        token.isNotEmpty,
+        'Desec API requires a token to be set when isWithToken is true.',
+      );
       options.headers = {'Authorization': 'Token $token'};
     }
 

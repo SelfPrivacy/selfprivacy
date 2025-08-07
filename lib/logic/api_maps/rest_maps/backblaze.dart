@@ -35,7 +35,10 @@ class BackblazeApi extends RestApiMap {
     this.tokenId = '',
     this.hasLogger = false,
     this.isWithToken = true,
-  }) : assert(isWithToken ? token.isNotEmpty && tokenId.isNotEmpty : true);
+  }) : assert(
+         !isWithToken || token.isNotEmpty && tokenId.isNotEmpty,
+         'Backblaze API requires token and tokenId to be set when isWithToken is true.',
+       );
 
   @override
   bool hasLogger;

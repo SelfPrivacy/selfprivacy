@@ -14,7 +14,10 @@ class DigitalOceanApi extends RestApiMap {
     this.token = '',
     this.hasLogger = true,
     this.isWithToken = true,
-  }) : assert(isWithToken ? token.isNotEmpty : true);
+  }) : assert(
+         !isWithToken || token.isNotEmpty,
+         'DigitalOcean API requires a token to be set when isWithToken is true.',
+       );
 
   @override
   bool hasLogger;
@@ -33,7 +36,10 @@ class DigitalOceanApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(token.isNotEmpty);
+      assert(
+        token.isNotEmpty,
+        'DigitalOcean API requires a token to be set when isWithToken is true.',
+      );
       options.headers = {'Authorization': 'Bearer $token'};
     }
 

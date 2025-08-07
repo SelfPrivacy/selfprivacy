@@ -34,7 +34,10 @@ class HetznerApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(token.isNotEmpty);
+      assert(
+        token.isNotEmpty,
+        'Hetzner API requires a token to be set when isWithToken is true.',
+      );
       options.headers = {'Authorization': 'Bearer $token'};
     }
 

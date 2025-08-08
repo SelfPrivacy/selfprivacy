@@ -19,13 +19,13 @@ modules:
       - cp -r * /app
       - mkdir /app/bin
       - ln -s /app/selfprivacy /app/bin/selfprivacy
-      - install -Dm644 logo.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
+      - install -Dm644 logo_android.png /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.png
       - install -Dm644 org.selfprivacy.app.desktop /app/share/applications/org.selfprivacy.app.desktop
     sources:
       - type: dir
         path: build/linux/x64/release/bundle
       - type: file
-        path: assets/images/icon/logo.svg
+        path: assets/images/icon/logo_android.png
       - type: file
         path: org.selfprivacy.app.desktop
   - name: libsecret

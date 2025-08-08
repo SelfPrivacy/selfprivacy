@@ -104,7 +104,7 @@ class HetznerApi extends RestApiMap {
         'name': hostName,
         'server_type': serverType,
         'start_after_create': false,
-        'image': 'ubuntu-20.04',
+        'image': 'ubuntu-24.04',
         'volumes': [volumeId],
         'networks': [],
         'user_data':

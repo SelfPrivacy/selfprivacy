@@ -99,7 +99,7 @@ class DigitalOceanApi extends RestApiMap {
       final Map<String, Object> data = {
         'name': hostName,
         'size': serverType,
-        'image': 'ubuntu-20-04-x64',
+        'image': 'ubuntu-24-04-x64',
         'user_data':
             '#cloud-config\n'
             'runcmd:\n'

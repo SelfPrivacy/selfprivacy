@@ -801,7 +801,7 @@ class HetznerServerProvider extends ServerProvider {
       final Map<String, dynamic> json,
       final String type,
     ) {
-      final List<List<dynamic>> list = json['time_series'][type]['values'];
+      final List list = json['time_series'][type]['values'];
       return list
           .map(
             (final el) =>

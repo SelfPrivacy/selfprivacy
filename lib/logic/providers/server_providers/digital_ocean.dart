@@ -61,13 +61,12 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final List<Map<String, dynamic>> rawServers = result.data;
+    final List rawServers = result.data;
     servers =
         rawServers.map<ServerBasicInfo>((final server) {
           String ipv4 = '0.0.0.0';
           if (server['networks']['v4'].isNotEmpty) {
-            for (final Map<String, String> v4
-                in server['networks']['v4'] as List<Map<String, String>>) {
+            for (final v4 in server['networks']['v4']) {
               if (v4['type'].toString() == 'public') {
                 ipv4 = v4['ip_address'].toString();
               }

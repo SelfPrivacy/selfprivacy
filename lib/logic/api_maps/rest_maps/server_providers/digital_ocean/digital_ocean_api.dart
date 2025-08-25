@@ -56,8 +56,8 @@ class DigitalOceanApi extends RestApiMap {
   String get rootAddress => 'https://api.digitalocean.com/v2';
   String get infectProviderName => 'DIGITALOCEAN';
 
-  Future<GenericResult<List<Map<String, dynamic>>>> getServers() async {
-    List<Map<String, dynamic>> servers = [];
+  Future<GenericResult<List>> getServers() async {
+    List servers = [];
 
     final Dio client = await getClient();
     try {

@@ -13,9 +13,11 @@ class _BottomTabBar extends SubrouteSelector {
   Widget build(final BuildContext context) {
     final int activeIndex = getActiveIndex(context);
 
+    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
-      height: hidden ? 0 : 80,
+      height: hidden ? 0 : 80 + bottomPadding,
       curve: Curves.easeInOutCubicEmphasized,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(

@@ -1,0 +1,8 @@
+# 0.13.2 Changelog
+
+## Changes
+
+### Bug fixes
+
+- Fixed installation on DigitalOcean
+- Fixed bottom navbar being invalid height on Android 16

@@ -8,7 +8,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         lib = nixpkgs.lib;
-        
+
         fromYAML = path: lib.importJSON (pkgs.runCommand "yml2json" { nativeBuildInputs = [pkgs.yq]; src = path; } ''cat $src | yq . > $out'');
 
         pubSpec = fromYAML ./pubspec.yaml;
@@ -76,6 +76,10 @@
             autoPubspecLock = ./pubspec.lock;
 
             src = ./.;
+
+            gitHashes = {
+              "sp_lints" = "sha256-henUl8JcN6YRSnymnVAiNjm8bmRJGPPjVhLP0EJcZk0=";
+            };
 
             desktopItem = pkgs.makeDesktopItem {
               name = "${pname}";

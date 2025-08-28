@@ -10,9 +10,10 @@ import 'package:selfprivacy/utils/platform_adapter.dart';
 
 @RoutePage()
 class ServerLogsPage extends StatefulWidget {
-  const ServerLogsPage({this.serviceId, super.key});
+  const ServerLogsPage({this.serviceId, this.unitId, super.key});
 
   final String? serviceId;
+  final String? unitId;
 
   @override
   State<ServerLogsPage> createState() => _ServerLogsPageState();
@@ -29,7 +30,9 @@ class _ServerLogsPageState extends State<ServerLogsPage> {
     super.initState();
     _serverLogsBloc = BlocProvider.of<ServerLogsBloc>(context);
     _scrollController.addListener(_onScroll);
-    _serverLogsBloc.add(ServerLogsFetch(serviceId: widget.serviceId));
+    _serverLogsBloc.add(
+      ServerLogsFetch(serviceId: widget.serviceId, unitId: widget.unitId),
+    );
   }
 
   @override

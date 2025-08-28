@@ -7,9 +7,9 @@ fragment LogEntry on LogEntry {
   cursor
 }
 
-query Logs($limit: Int!, $upCursor: String, $downCursor: String, $filterBySlice: String) {
+query Logs($limit: Int!, $upCursor: String, $downCursor: String, $filterBySlice: String, $filterByUnit: String) {
   logs {
-    paginated(limit: $limit, upCursor: $upCursor, downCursor: $downCursor, filterBySlice: $filterBySlice) {
+    paginated(limit: $limit, upCursor: $upCursor, downCursor: $downCursor, filterBySlice: $filterBySlice, filterByUnit: $filterByUnit) {
       pageMeta {
         upCursor
         downCursor

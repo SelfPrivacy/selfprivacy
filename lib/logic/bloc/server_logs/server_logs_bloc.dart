@@ -19,8 +19,13 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
           event.serviceId != null
               ? '${event.serviceId?.replaceAll('-', '_')}.slice'
               : null;
+      final String? unit = event.unitId;
       try {
-        final (logsData, meta) = await _getLogs(limit: 50, slice: slice);
+        final (logsData, meta) = await _getLogs(
+          limit: 50,
+          slice: slice,
+          unit: unit,
+        );
         emit(
           ServerLogsLoaded(
             oldEntries: logsData.sorted(
@@ -30,6 +35,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             meta: meta,
             loadingMore: false,
             slice: slice,
+            unit: unit,
           ),
         );
         if (_apiLogsSubscription != null) {
@@ -55,6 +61,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             limit: 50,
             downCursor: currentState.meta.upCursor,
             slice: currentState.slice,
+            unit: currentState.unit,
           );
           final allEntries =
               currentState.oldEntries
@@ -69,6 +76,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
               meta: meta,
               loadingMore: false,
               slice: currentState.slice,
+              unit: currentState.unit,
             ),
           );
         } catch (e) {
@@ -84,6 +92,10 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             event.entry.systemdSlice != currentState.slice) {
           return;
         }
+        if (currentState.unit != null &&
+            event.entry.systemdUnit != currentState.unit) {
+          return;
+        }
         final allEntries =
             currentState.newEntries
               ..add(event.entry)
@@ -95,6 +107,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             meta: currentState.meta,
             loadingMore: currentState.loadingMore,
             slice: currentState.slice,
+            unit: currentState.unit,
           ),
         );
       }
@@ -117,6 +130,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     final String? downCursor,
     // Only one cursor can be set at a time.
     final String? slice,
+    final String? unit,
   }) {
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
@@ -140,6 +154,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       upCursor: upCursor,
       downCursor: downCursor,
       slice: slice,
+      unit: unit,
     );
   }
 

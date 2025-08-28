@@ -6,6 +6,7 @@ mixin LogsApi on GraphQLApiMap {
     final String? upCursor,
     final String? downCursor,
     final String? slice,
+    final String? unit,
   }) async {
     QueryResult<Query$Logs> response;
     List<ServerLogEntry> logsList = [];
@@ -21,6 +22,7 @@ mixin LogsApi on GraphQLApiMap {
         downCursor: downCursor,
         limit: limit,
         filterBySlice: slice,
+        filterByUnit: unit,
       );
       final query = Options$Query$Logs(variables: variables);
       response = await client.query$Logs(query);

@@ -21,6 +21,7 @@ final class ServerLogsLoaded extends ServerLogsState {
     required this.meta,
     required this.loadingMore,
     this.slice,
+    this.unit,
   }) : _lastCursor = newEntries.isEmpty ? '' : newEntries.first.cursor;
 
   final List<ServerLogEntry> oldEntries;
@@ -29,6 +30,7 @@ final class ServerLogsLoaded extends ServerLogsState {
   final bool loadingMore;
   final String _lastCursor;
   final String? slice;
+  final String? unit;
 
   List<String> get systemdUnits =>
       oldEntries
@@ -59,7 +61,14 @@ final class ServerLogsLoaded extends ServerLogsState {
   }
 
   @override
-  List<Object?> get props => [oldEntries, newEntries, meta, _lastCursor, slice];
+  List<Object?> get props => [
+    oldEntries,
+    newEntries,
+    meta,
+    _lastCursor,
+    slice,
+    unit,
+  ];
 }
 
 final class ServerLogsError extends ServerLogsState {

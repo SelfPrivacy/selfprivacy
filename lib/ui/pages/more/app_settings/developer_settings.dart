@@ -56,6 +56,20 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
             (final bool value) =>
                 setState(() => TlsOptions.allowCustomSshKeyDuringSetup = value),
       ),
+      SectionTitle(title: 'troubleshooting.title'.tr()),
+      ListTile(
+        title: Text('troubleshooting.configuration_switch_logs'.tr()),
+        subtitle: Text(
+          'troubleshooting.configuration_switch_logs_description'.tr(),
+        ),
+        enabled: !InheritedAppController.of(context).shouldShowOnboarding,
+        onTap:
+            () => context.pushRoute(
+              ServerLogsRoute(
+                unitId: 'nixos-rebuild-switch-to-configuration.service',
+              ),
+            ),
+      ),
       SectionTitle(title: 'developer_settings.routing'.tr()),
       ListTile(
         title: Text('developer_settings.reset_onboarding'.tr()),

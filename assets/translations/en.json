@@ -788,7 +788,13 @@
         "server_without_token": "{server_domain} has no token for {provider}.",
         "tap_to_add_token": "Tap here to add a token",
         "add_server_provider_token": "Add server provider token",
+        "add_backups_token": "Add backups provider token",
         "server_provider_unknown": "Unknown server provider",
         "server_provider_unknown_description": "Your server provider is not supported by this app version."
+    },
+    "troubleshooting": {
+        "title": "Troubleshooting",
+        "configuration_switch_logs": "Configuration switch logs",
+        "configuration_switch_logs_description": "View errors occurred while switching to the new configuration."
     }
 }

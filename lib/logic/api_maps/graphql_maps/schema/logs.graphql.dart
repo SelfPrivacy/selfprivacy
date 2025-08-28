@@ -329,11 +329,13 @@ class Variables$Query$Logs {
     String? upCursor,
     String? downCursor,
     String? filterBySlice,
+    String? filterByUnit,
   }) => Variables$Query$Logs._({
     r'limit': limit,
     if (upCursor != null) r'upCursor': upCursor,
     if (downCursor != null) r'downCursor': downCursor,
     if (filterBySlice != null) r'filterBySlice': filterBySlice,
+    if (filterByUnit != null) r'filterByUnit': filterByUnit,
   });
 
   Variables$Query$Logs._(this._$data);
@@ -354,6 +356,10 @@ class Variables$Query$Logs {
       final l$filterBySlice = data['filterBySlice'];
       result$data['filterBySlice'] = (l$filterBySlice as String?);
     }
+    if (data.containsKey('filterByUnit')) {
+      final l$filterByUnit = data['filterByUnit'];
+      result$data['filterByUnit'] = (l$filterByUnit as String?);
+    }
     return Variables$Query$Logs._(result$data);
   }
 
@@ -366,6 +372,8 @@ class Variables$Query$Logs {
   String? get downCursor => (_$data['downCursor'] as String?);
 
   String? get filterBySlice => (_$data['filterBySlice'] as String?);
+
+  String? get filterByUnit => (_$data['filterByUnit'] as String?);
 
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
@@ -382,6 +390,10 @@ class Variables$Query$Logs {
     if (_$data.containsKey('filterBySlice')) {
       final l$filterBySlice = filterBySlice;
       result$data['filterBySlice'] = l$filterBySlice;
+    }
+    if (_$data.containsKey('filterByUnit')) {
+      final l$filterByUnit = filterByUnit;
+      result$data['filterByUnit'] = l$filterByUnit;
     }
     return result$data;
   }
@@ -429,6 +441,15 @@ class Variables$Query$Logs {
     if (l$filterBySlice != lOther$filterBySlice) {
       return false;
     }
+    final l$filterByUnit = filterByUnit;
+    final lOther$filterByUnit = other.filterByUnit;
+    if (_$data.containsKey('filterByUnit') !=
+        other._$data.containsKey('filterByUnit')) {
+      return false;
+    }
+    if (l$filterByUnit != lOther$filterByUnit) {
+      return false;
+    }
     return true;
   }
 
@@ -438,11 +459,13 @@ class Variables$Query$Logs {
     final l$upCursor = upCursor;
     final l$downCursor = downCursor;
     final l$filterBySlice = filterBySlice;
+    final l$filterByUnit = filterByUnit;
     return Object.hashAll([
       l$limit,
       _$data.containsKey('upCursor') ? l$upCursor : const {},
       _$data.containsKey('downCursor') ? l$downCursor : const {},
       _$data.containsKey('filterBySlice') ? l$filterBySlice : const {},
+      _$data.containsKey('filterByUnit') ? l$filterByUnit : const {},
     ]);
   }
 }
@@ -461,6 +484,7 @@ abstract class CopyWith$Variables$Query$Logs<TRes> {
     String? upCursor,
     String? downCursor,
     String? filterBySlice,
+    String? filterByUnit,
   });
 }
 
@@ -479,6 +503,7 @@ class _CopyWithImpl$Variables$Query$Logs<TRes>
     Object? upCursor = _undefined,
     Object? downCursor = _undefined,
     Object? filterBySlice = _undefined,
+    Object? filterByUnit = _undefined,
   }) => _then(
     Variables$Query$Logs._({
       ..._instance._$data,
@@ -487,6 +512,7 @@ class _CopyWithImpl$Variables$Query$Logs<TRes>
       if (downCursor != _undefined) 'downCursor': (downCursor as String?),
       if (filterBySlice != _undefined)
         'filterBySlice': (filterBySlice as String?),
+      if (filterByUnit != _undefined) 'filterByUnit': (filterByUnit as String?),
     }),
   );
 }
@@ -502,6 +528,7 @@ class _CopyWithStubImpl$Variables$Query$Logs<TRes>
     String? upCursor,
     String? downCursor,
     String? filterBySlice,
+    String? filterByUnit,
   }) => _res;
 }
 
@@ -655,6 +682,15 @@ const documentNodeQueryLogs = DocumentNode(
           defaultValue: DefaultValueNode(value: null),
           directives: [],
         ),
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'filterByUnit')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'String'),
+            isNonNull: false,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
       ],
       directives: [],
       selectionSet: SelectionSetNode(
@@ -686,6 +722,12 @@ const documentNodeQueryLogs = DocumentNode(
                       name: NameNode(value: 'filterBySlice'),
                       value: VariableNode(
                         name: NameNode(value: 'filterBySlice'),
+                      ),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'filterByUnit'),
+                      value: VariableNode(
+                        name: NameNode(value: 'filterByUnit'),
                       ),
                     ),
                   ],

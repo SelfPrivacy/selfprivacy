@@ -5,9 +5,10 @@ sealed class ServerLogsEvent extends Equatable {
 }
 
 final class ServerLogsFetch extends ServerLogsEvent {
-  const ServerLogsFetch({this.serviceId});
+  const ServerLogsFetch({this.serviceId, this.unitId});
 
   final String? serviceId;
+  final String? unitId;
 
   @override
   List<Object> get props => [];

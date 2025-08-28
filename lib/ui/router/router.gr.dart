@@ -554,12 +554,20 @@ class ServerDetailsRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [ServerLogsPage]
 class ServerLogsRoute extends PageRouteInfo<ServerLogsRouteArgs> {
-  ServerLogsRoute({String? serviceId, Key? key, List<PageRouteInfo>? children})
-    : super(
-        ServerLogsRoute.name,
-        args: ServerLogsRouteArgs(serviceId: serviceId, key: key),
-        initialChildren: children,
-      );
+  ServerLogsRoute({
+    String? serviceId,
+    String? unitId,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ServerLogsRoute.name,
+         args: ServerLogsRouteArgs(
+           serviceId: serviceId,
+           unitId: unitId,
+           key: key,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ServerLogsRoute';
 
@@ -569,32 +577,40 @@ class ServerLogsRoute extends PageRouteInfo<ServerLogsRouteArgs> {
       final args = data.argsAs<ServerLogsRouteArgs>(
         orElse: () => const ServerLogsRouteArgs(),
       );
-      return ServerLogsPage(serviceId: args.serviceId, key: args.key);
+      return ServerLogsPage(
+        serviceId: args.serviceId,
+        unitId: args.unitId,
+        key: args.key,
+      );
     },
   );
 }
 
 class ServerLogsRouteArgs {
-  const ServerLogsRouteArgs({this.serviceId, this.key});
+  const ServerLogsRouteArgs({this.serviceId, this.unitId, this.key});
 
   final String? serviceId;
+
+  final String? unitId;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'ServerLogsRouteArgs{serviceId: $serviceId, key: $key}';
+    return 'ServerLogsRouteArgs{serviceId: $serviceId, unitId: $unitId, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ServerLogsRouteArgs) return false;
-    return serviceId == other.serviceId && key == other.key;
+    return serviceId == other.serviceId &&
+        unitId == other.unitId &&
+        key == other.key;
   }
 
   @override
-  int get hashCode => serviceId.hashCode ^ key.hashCode;
+  int get hashCode => serviceId.hashCode ^ unitId.hashCode ^ key.hashCode;
 }
 
 /// generated route for

@@ -659,5 +659,9 @@
         "cubit_statuses": "Aktueller Status der Ladequbits",
         "ignore_tls": "Überprüfen Sie keine TLS-Zertifikate",
         "ignore_tls_description": "Die Anwendung validiert TLS-Zertifikate nicht, wenn sie eine Verbindung zum Server herstellt."
+    },
+    "tokens": {
+        "add_backups_token": "Token für Backup Anbieter hinzufügen",
+        "server_provider_unknown": "Unbekannter Server-Anbieter"
     }
 }

@@ -7,6 +7,8 @@ import 'package:selfprivacy/logic/cubit/forms/validations/validations.dart';
 class FieldCubitFactory {
   FieldCubitFactory(this.context);
 
+  static const reservedRootLogins = ['root', 'admin', 'idm_admin', 'anonymous'];
+
   /// A common user login field.
   ///
   /// - Available characters are lowercase a-z, digits and underscore _
@@ -22,7 +24,7 @@ class FieldCubitFactory {
       initalValue: '',
       validations: [
         ValidationModel<String>(
-          (final String s) => s.toLowerCase() == 'root',
+          (final String s) => reservedRootLogins.contains(s.toLowerCase()),
           'validations.root_name'.tr(),
         ),
         ValidationModel(

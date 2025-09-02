@@ -9,7 +9,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -55,8 +54,6 @@ class ServerInstallationRepository {
     final DnsProviderType? dnsProvider = getIt<ResourcesModel>().dnsProvider;
     final ServerProviderType? serverProvider =
         getIt<ResourcesModel>().serverProvider;
-    final BackupsCredential? backblazeCredential =
-        getIt<ResourcesModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ResourcesModel>().serverDetails;
 
@@ -101,7 +98,6 @@ class ServerInstallationRepository {
           serverTypeIdentificator: serverTypeIdentificator,
           dnsApiToken: dnsApiToken!,
           serverDomain: serverDomain!,
-          backblazeCredential: backblazeCredential!,
           serverDetails: serverDetails!,
           serverLocation: location,
         );
@@ -138,7 +134,6 @@ class ServerInstallationRepository {
         serverDomain: wizardData.serverDomain,
         serverTypeIdentificator: wizardData.serverTypeIdentifier,
         serverLocation: wizardData.serverLocation,
-        backblazeCredential: wizardData.backupsCredential,
         serverDetails: wizardData.serverDetails,
         currentStep: _getCurrentRecoveryStep(
           wizardData.serverProviderKey,
@@ -173,11 +168,7 @@ class ServerInstallationRepository {
       return RecoveryStep.serverSelection;
     }
 
-    if (dnsProviderToken == null) {
-      return RecoveryStep.dnsProviderToken;
-    }
-
-    return RecoveryStep.backblazeToken;
+    return RecoveryStep.dnsProviderToken;
   }
 
   Future<void> clearAppConfig() async {
@@ -517,12 +508,6 @@ class ServerInstallationRepository {
     );
   }
 
-  Future<void> saveBackupsCredential(
-    final BackupsCredential backupsCredential,
-  ) async {
-    await getIt<WizardDataModel>().setBackupsCredential(backupsCredential);
-  }
-
   Future<void> setDnsApiToken(final String key) async {
     await getIt<WizardDataModel>().setDnsProviderKey(key);
     await getIt<ResourcesModel>().addDnsProviderToken(
@@ -607,11 +592,6 @@ class ServerInstallationRepository {
       await getIt<ResourcesModel>().associateDomainWithToken(
         wizardData.serverDomain!.domainName,
         wizardData.dnsProviderKey!,
-      );
-    }
-    if (wizardData.backupsCredential != null) {
-      await getIt<ResourcesModel>().addBackupsCredential(
-        wizardData.backupsCredential!,
       );
     }
     await getIt<WizardDataModel>().clearServerInstallation();

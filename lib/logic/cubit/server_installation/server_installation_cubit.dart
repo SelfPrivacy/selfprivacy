@@ -9,8 +9,6 @@ import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -21,7 +19,6 @@ import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
@@ -230,56 +227,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(
       (state as ServerInstallationNotFinished).copyWith(
         dnsApiToken: dnsApiToken,
-      ),
-    );
-  }
-
-  Future<void> setBackblazeKey(
-    final String keyId,
-    final String applicationKey,
-  ) async {
-    final BackupsCredential backblazeCredential = BackupsCredential(
-      keyId: keyId,
-      applicationKey: applicationKey,
-      provider: BackupsProviderType.backblaze,
-    );
-    final BackblazeBucket? bucket;
-    await repository.saveBackupsCredential(backblazeCredential);
-    if (state is ServerInstallationRecovery) {
-      final configuration =
-          await ServerApi(
-            customToken:
-                (state as ServerInstallationRecovery).serverDetails!.apiToken,
-            isWithToken: true,
-            overrideDomain:
-                (state as ServerInstallationRecovery).serverDomain!.domainName,
-          ).getBackupsConfiguration();
-      if (configuration != null) {
-        try {
-          final settings = BackupsProviderSettings(
-            provider: BackupsProviderType.backblaze,
-            tokenId: keyId,
-            token: applicationKey,
-            isAuthorized: true,
-          );
-          final provider =
-              BackupsProviderFactory.createBackupsProviderInterface(settings);
-          final result = await provider.getStorage(
-            backblazeCredential,
-            configuration,
-          );
-          bucket = result.data;
-          await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
-        } catch (e) {
-          logger("Couldn't set backblaze key", error: e);
-        }
-      }
-      await finishRecoveryProcess(backblazeCredential);
-      return;
-    }
-    emit(
-      (state as ServerInstallationNotFinished).copyWith(
-        backblazeCredential: backblazeCredential,
       ),
     );
   }
@@ -720,7 +667,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       // We won't revert steps after client is authorized
       case RecoveryStep.serverProviderToken:
       case RecoveryStep.serverSelection:
-      case RecoveryStep.backblazeToken:
         break;
     }
   }
@@ -822,6 +768,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  // Merged with finish recovery process
   Future<void> setAndValidateDnsApiToken(final String token) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
@@ -853,21 +800,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ),
     );
     await repository.setDnsApiToken(token);
-    emit(
-      dataState.copyWith(
-        serverDomain: ServerDomain(
-          domainName: serverDomain.domainName,
-          provider: dnsProviderType,
-        ),
-        dnsApiToken: token,
-        currentStep: RecoveryStep.backblazeToken,
-      ),
-    );
-  }
 
-  Future<void> finishRecoveryProcess(
-    final BackupsCredential backblazeCredential,
-  ) async {
     await repository.saveIsServerStarted(serverStarted: true);
     await repository.saveIsServerRebootedFirstTime(
       serverRebootedFirstTime: true,
@@ -887,11 +820,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverType = null;
     }
     await repository.saveHasFinalChecked(finalCheckCompleted: true);
-    final ServerInstallationRecovery updatedState =
-        (state as ServerInstallationRecovery).copyWith(
-          backblazeCredential: backblazeCredential,
-          serverTypeIdentificator: serverType?.data?.identifier,
-        );
+    final ServerInstallationRecovery updatedState = dataState.copyWith(
+      serverDomain: ServerDomain(
+        domainName: serverDomain.domainName,
+        provider: dnsProviderType,
+      ),
+      dnsApiToken: token,
+      serverTypeIdentificator: serverType?.data?.identifier,
+    );
     emit(updatedState.finish());
     await getIt<ApiConnectionRepository>().init();
   }

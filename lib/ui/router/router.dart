@@ -16,6 +16,7 @@ import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
+import 'package:selfprivacy/ui/pages/more/tokens/add_backups_token.dart';
 import 'package:selfprivacy/ui/pages/more/tokens/add_server_provider_token.dart';
 import 'package:selfprivacy/ui/pages/more/tokens/tokens_page.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
@@ -124,6 +125,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: TokensRoute.page),
         AutoRoute(page: MemoryUsageByServiceRoute.page),
         AutoRoute(page: AddServerProviderTokenRoute.page),
+        AutoRoute(page: AddBackupsTokenRoute.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),
@@ -189,6 +191,8 @@ String getRouteTitle(final String routeName) {
       return 'resource_chart.memory';
     case 'AddServerProviderTokenPage':
       return 'tokens.add_server_provider_token';
+    case 'AddBackupsTokenPage':
+      return 'tokens.add_backups_token';
     default:
       return routeName;
   }

@@ -348,13 +348,6 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setBackupsCredential(final BackupsCredential credential) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(backupsCredential: credential);
-    await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
-  }
-
   Future<void> setServerDomain(final ServerDomain domain) async {
     _serverInstallation = (_serverInstallation ??
             ServerInstallationWizardData.empty())

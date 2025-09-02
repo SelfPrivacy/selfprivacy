@@ -6,14 +6,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
@@ -50,7 +48,6 @@ class InitializingPage extends StatelessWidget {
               () => _stepServerProviderToken(cubit),
               () => _stepServerType(cubit),
               () => _stepDnsProviderToken(cubit),
-              () => _stepBackblaze(cubit),
               () => _stepDomain(cubit),
               () => _stepUser(cubit),
               () => _stepServer(cubit),
@@ -65,7 +62,6 @@ class InitializingPage extends StatelessWidget {
         'initializing.steps.hosting',
         'initializing.steps.server_type',
         'initializing.steps.dns_provider',
-        'initializing.steps.backups_provider',
         'initializing.steps.domain',
         'initializing.steps.master_account',
         'initializing.steps.server',
@@ -257,71 +253,6 @@ class InitializingPage extends StatelessWidget {
       },
     ),
   );
-
-  Widget _stepBackblaze(final ServerInstallationCubit initializingCubit) =>
-      BlocProvider(
-        create: (final context) => BackblazeFormCubit(initializingCubit),
-        child: Builder(
-          builder: (final context) {
-            final formCubitState = context.watch<BackblazeFormCubit>().state;
-            return ResponsiveLayoutWithInfobox(
-              topChild: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'initializing.connect_to_server_provider'.tr(
-                      namedArgs: {'provider': 'Backblaze'},
-                    ),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
-              ),
-              primaryColumn: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CubitFormTextField(
-                    autofocus: true,
-                    formFieldCubit: context.read<BackblazeFormCubit>().keyId,
-                    textAlign: TextAlign.center,
-                    scrollPadding: const EdgeInsets.only(bottom: 70),
-                    decoration: const InputDecoration(hintText: 'KeyID'),
-                  ),
-                  const SizedBox(height: 16),
-                  CubitFormTextField(
-                    formFieldCubit:
-                        context.read<BackblazeFormCubit>().applicationKey,
-                    textAlign: TextAlign.center,
-                    scrollPadding: const EdgeInsets.only(bottom: 70),
-                    decoration: const InputDecoration(
-                      hintText: 'Master Application Key',
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  BrandButton.filled(
-                    onPressed:
-                        formCubitState.isSubmitting
-                            ? null
-                            : () =>
-                                context.read<BackblazeFormCubit>().trySubmit(),
-                    title: 'basis.connect'.tr(),
-                  ),
-                  const SizedBox(height: 10),
-                  BrandButton.text(
-                    onPressed: () {
-                      context.read<SupportSystemCubit>().showArticle(
-                        article: 'how_backblaze',
-                        context: context,
-                      );
-                      Scaffold.of(context).openEndDrawer();
-                    },
-                    title: 'initializing.how'.tr(),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
 
   Widget _stepDomain(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(

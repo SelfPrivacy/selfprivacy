@@ -5,7 +5,6 @@ abstract class ServerInstallationState extends Equatable {
     required this.providerApiToken,
     required this.serverTypeIdentificator,
     required this.dnsApiToken,
-    required this.backblazeCredential,
     required this.serverDomain,
     required this.rootUser,
     required this.serverDetails,
@@ -21,7 +20,6 @@ abstract class ServerInstallationState extends Equatable {
     providerApiToken,
     serverTypeIdentificator,
     dnsApiToken,
-    backblazeCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -35,7 +33,6 @@ abstract class ServerInstallationState extends Equatable {
   final String? dnsApiToken;
   final String? serverTypeIdentificator;
   final String? serverLocation;
-  final BackupsCredential? backblazeCredential;
   final ServerDomain? serverDomain;
   final User? rootUser;
   final ServerHostingDetails? serverDetails;
@@ -47,7 +44,6 @@ abstract class ServerInstallationState extends Equatable {
   bool get isServerProviderApiKeyFilled => providerApiToken != null;
   bool get isServerTypeFilled => serverTypeIdentificator != null;
   bool get isDnsProviderFilled => dnsApiToken != null;
-  bool get isBackupsProviderFilled => backblazeCredential != null;
   bool get isDomainSelected => serverDomain != null;
   bool get isPrimaryUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
@@ -60,12 +56,12 @@ abstract class ServerInstallationState extends Equatable {
           .length];
 
   int get progressBar {
-    if (progress.index < 6) {
+    if (progress.index < 5) {
       return progress.index;
-    } else if (progress.index < 10) {
-      return 6;
+    } else if (progress.index < 9) {
+      return 5;
     } else {
-      return 7;
+      return 6;
     }
   }
 
@@ -74,7 +70,6 @@ abstract class ServerInstallationState extends Equatable {
       isServerProviderApiKeyFilled,
       isServerTypeFilled,
       isDnsProviderFilled,
-      isBackupsProviderFilled,
       isDomainSelected,
       isPrimaryUserFilled,
       isServerCreated,
@@ -98,7 +93,6 @@ class TimerState extends ServerInstallationNotFinished {
          serverTypeIdentificator: dataState.serverTypeIdentificator,
          serverLocation: dataState.serverLocation,
          dnsApiToken: dataState.dnsApiToken,
-         backblazeCredential: dataState.backblazeCredential,
          serverDomain: dataState.serverDomain,
          rootUser: dataState.rootUser,
          serverDetails: dataState.serverDetails,
@@ -123,7 +117,6 @@ enum ServerSetupProgress {
   serverProviderFilled,
   serverTypeFilled,
   dnsProviderFilled,
-  backblazeFilled,
   domainFilled,
   userFilled,
   serverCreated,
@@ -144,7 +137,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     super.serverLocation,
     super.serverTypeIdentificator,
     super.dnsApiToken,
-    super.backblazeCredential,
     super.serverDomain,
     super.rootUser,
     super.serverDetails,
@@ -159,7 +151,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         serverDomain: data.serverDomain,
         serverTypeIdentificator: data.serverTypeIdentifier,
         serverLocation: data.serverLocation,
-        backblazeCredential: data.backupsCredential,
         serverDetails: data.serverDetails,
         rootUser: data.rootUser,
         isServerStarted: data.isServerStarted,
@@ -181,7 +172,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     serverTypeIdentificator,
     serverLocation,
     dnsApiToken,
-    backblazeCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -198,7 +188,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final String? serverLocation,
     final String? serverTypeIdentificator,
     final String? dnsApiToken,
-    final BackupsCredential? backblazeCredential,
     final ServerDomain? serverDomain,
     final User? rootUser,
     final ServerHostingDetails? serverDetails,
@@ -215,7 +204,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     serverTypeIdentificator:
         serverTypeIdentificator ?? this.serverTypeIdentificator,
     dnsApiToken: dnsApiToken ?? this.dnsApiToken,
-    backblazeCredential: backblazeCredential ?? this.backblazeCredential,
     serverDomain: serverDomain ?? this.serverDomain,
     rootUser: rootUser ?? this.rootUser,
     serverDetails: serverDetails ?? this.serverDetails,
@@ -236,7 +224,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     serverLocation: serverLocation,
     serverTypeIdentificator: serverTypeIdentificator,
     dnsApiToken: dnsApiToken!,
-    backblazeCredential: backblazeCredential!,
     serverDomain: serverDomain!,
     serverDetails: serverDetails!,
   );
@@ -249,7 +236,6 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
         serverLocation: null,
         serverTypeIdentificator: null,
         dnsApiToken: null,
-        backblazeCredential: null,
         serverDomain: null,
         rootUser: null,
         serverDetails: null,
@@ -266,7 +252,6 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
 class ServerInstallationFinished extends ServerInstallationState {
   const ServerInstallationFinished({
     required String super.dnsApiToken,
-    required BackupsCredential super.backblazeCredential,
     required ServerDomain super.serverDomain,
     required ServerHostingDetails super.serverDetails,
     super.providerApiToken,
@@ -286,7 +271,6 @@ class ServerInstallationFinished extends ServerInstallationState {
     serverTypeIdentificator,
     serverLocation,
     dnsApiToken,
-    backblazeCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -304,7 +288,6 @@ enum RecoveryStep {
   serverProviderToken,
   serverSelection,
   dnsProviderToken,
-  backblazeToken,
 }
 
 enum ServerRecoveryCapabilities { none, legacy, loginTokens }
@@ -319,7 +302,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     super.serverTypeIdentificator,
     super.serverLocation,
     super.dnsApiToken,
-    super.backblazeCredential,
     super.serverDomain,
     super.serverDetails,
   }) : super(
@@ -338,7 +320,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     serverTypeIdentificator,
     serverLocation,
     dnsApiToken,
-    backblazeCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -353,7 +334,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     final String? serverLocation,
     final String? serverTypeIdentificator,
     final String? dnsApiToken,
-    final BackupsCredential? backblazeCredential,
     final ServerDomain? serverDomain,
     final ServerHostingDetails? serverDetails,
     final RecoveryStep? currentStep,
@@ -364,7 +344,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     serverTypeIdentificator:
         serverTypeIdentificator ?? this.serverTypeIdentificator,
     dnsApiToken: dnsApiToken ?? this.dnsApiToken,
-    backblazeCredential: backblazeCredential ?? this.backblazeCredential,
     serverDomain: serverDomain ?? this.serverDomain,
     serverDetails: serverDetails ?? this.serverDetails,
     currentStep: currentStep ?? this.currentStep,
@@ -376,7 +355,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     serverLocation: serverLocation,
     serverTypeIdentificator: serverTypeIdentificator,
     dnsApiToken: dnsApiToken!,
-    backblazeCredential: backblazeCredential!,
     serverDomain: serverDomain!,
     serverDetails: serverDetails!,
   );

@@ -27,10 +27,22 @@ class ProvidersController {
     );
   }
 
-  static void clearProviders() {
+  static void clearServerProvider() {
     _serverProvider = null;
+  }
+
+  static void clearDnsProvider() {
     _dnsProvider = null;
+  }
+
+  static void clearBackupsProvider() {
     _backupsProvider = null;
+  }
+
+  static void clearProviders() {
+    clearServerProvider();
+    clearDnsProvider();
+    clearBackupsProvider();
   }
 
   static ServerProvider? _serverProvider;

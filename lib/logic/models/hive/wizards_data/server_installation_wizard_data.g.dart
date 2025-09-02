@@ -29,7 +29,6 @@ class ServerInstallationWizardDataAdapter
       serverProviderKey: fields[8] as String?,
       dnsProviderType: fields[9] as DnsProviderType?,
       dnsProviderKey: fields[10] as String?,
-      backupsCredential: fields[11] as BackupsCredential?,
       serverTypeIdentifier: fields[12] as String?,
       serverLocation: fields[13] as String?,
       serverDetails: fields[14] as ServerHostingDetails?,
@@ -40,7 +39,7 @@ class ServerInstallationWizardDataAdapter
   @override
   void write(BinaryWriter writer, ServerInstallationWizardData obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.hasFinalChecked)
       ..writeByte(1)
@@ -63,8 +62,6 @@ class ServerInstallationWizardDataAdapter
       ..write(obj.dnsProviderType)
       ..writeByte(10)
       ..write(obj.dnsProviderKey)
-      ..writeByte(11)
-      ..write(obj.backupsCredential)
       ..writeByte(12)
       ..write(obj.serverTypeIdentifier)
       ..writeByte(13)

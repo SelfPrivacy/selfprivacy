@@ -27,6 +27,22 @@ class AboutApplicationRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AddBackupsTokenPage]
+class AddBackupsTokenRoute extends PageRouteInfo<void> {
+  const AddBackupsTokenRoute({List<PageRouteInfo>? children})
+    : super(AddBackupsTokenRoute.name, initialChildren: children);
+
+  static const String name = 'AddBackupsTokenRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AddBackupsTokenPage();
+    },
+  );
+}
+
+/// generated route for
 /// [AddServerProviderTokenPage]
 class AddServerProviderTokenRoute
     extends PageRouteInfo<AddServerProviderTokenRouteArgs> {

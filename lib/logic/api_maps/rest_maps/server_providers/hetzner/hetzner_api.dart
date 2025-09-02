@@ -62,7 +62,6 @@ class HetznerApi extends RestApiMap {
       final Response response = await client.get('/servers');
       servers =
           response.data!['servers']
-              // ignore: unnecessary_lambdas
               .map<HetznerServerInfo>(
                 // ignore: unnecessary_lambdas
                 (final e) => HetznerServerInfo.fromJson(e),

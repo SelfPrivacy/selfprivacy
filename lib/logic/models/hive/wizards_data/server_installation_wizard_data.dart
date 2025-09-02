@@ -21,7 +21,6 @@ class ServerInstallationWizardData {
     required this.serverProviderKey,
     required this.dnsProviderType,
     required this.dnsProviderKey,
-    required this.backupsCredential,
     required this.serverTypeIdentifier,
     required this.serverLocation,
     required this.serverDetails,
@@ -41,7 +40,6 @@ class ServerInstallationWizardData {
         serverProviderKey: null,
         dnsProviderType: null,
         dnsProviderKey: null,
-        backupsCredential: null,
         serverTypeIdentifier: null,
         serverLocation: null,
         serverDetails: null,
@@ -76,8 +74,8 @@ class ServerInstallationWizardData {
   @HiveField(10)
   final String? dnsProviderKey;
 
-  @HiveField(11)
-  final BackupsCredential? backupsCredential;
+  // @HiveField(11)
+  // was backupsCredential
 
   @HiveField(12)
   final String? serverTypeIdentifier;
@@ -119,7 +117,6 @@ class ServerInstallationWizardData {
     serverProviderKey: serverProviderKey ?? this.serverProviderKey,
     dnsProviderType: dnsProviderType ?? this.dnsProviderType,
     dnsProviderKey: dnsProviderKey ?? this.dnsProviderKey,
-    backupsCredential: backupsCredential ?? this.backupsCredential,
     serverTypeIdentifier: serverTypeIdentifier ?? this.serverTypeIdentifier,
     serverLocation: serverLocation ?? this.serverLocation,
     serverDetails: serverDetails != null ? serverDetails() : this.serverDetails,

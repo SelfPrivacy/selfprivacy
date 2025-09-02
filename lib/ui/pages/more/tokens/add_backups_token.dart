@@ -1,43 +1,54 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 
-class RecoveryConfirmBackblaze extends StatelessWidget {
-  const RecoveryConfirmBackblaze({super.key});
+@RoutePage()
+class AddBackupsTokenPage extends StatelessWidget {
+  const AddBackupsTokenPage({super.key});
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationCubit appConfig =
-        context.watch<ServerInstallationCubit>();
+    void setBackupsProviderKey(
+      final String keyId,
+      final String applicationKey,
+    ) {
+      context.read<TokensBloc>().add(
+        AddBackupsProviderCredential(
+          BackupsCredential(
+            keyId: keyId,
+            applicationKey: applicationKey,
+            provider: BackupsProviderType.backblaze,
+          ),
+        ),
+      );
+      context.maybePop();
+    }
 
     return BlocProvider(
-      create: (final BuildContext context) => BackblazeFormCubit(appConfig),
+      create: (final context) => BackblazeFormCubit(setBackupsProviderKey),
       child: Builder(
-        builder: (final BuildContext context) {
-          final FormCubitState formCubitState =
-              context.watch<BackblazeFormCubit>().state;
-
+        builder: (final context) {
+          final formCubitState = context.watch<BackblazeFormCubit>().state;
           return BrandHeroScreen(
-            heroTitle: 'recovering.provider_connected'.tr(args: ['Backblaze']),
-            heroSubtitle: 'recovering.provider_connected_description'.tr(
-              args: ['Backblaze'],
+            heroTitle: 'initializing.connect_to_server_provider'.tr(
+              namedArgs: {'provider': 'Backblaze'},
             ),
             hasBackButton: true,
             ignoreBreakpoints: true,
             hasSupportDrawer: true,
-            onBackButtonPressed: () {
-              Navigator.of(context).popUntil((final route) => route.isFirst);
-            },
             hasFlashButton: false,
             children: [
               CubitFormTextField(
                 autofocus: true,
                 formFieldCubit: context.read<BackblazeFormCubit>().keyId,
+                scrollPadding: const EdgeInsets.only(bottom: 70),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'KeyID',
@@ -47,6 +58,7 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
               CubitFormTextField(
                 formFieldCubit:
                     context.read<BackblazeFormCubit>().applicationKey,
+                scrollPadding: const EdgeInsets.only(bottom: 70),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Master Application Key',
@@ -61,16 +73,15 @@ class RecoveryConfirmBackblaze extends StatelessWidget {
                 title: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),
-              Builder(
-                builder:
-                    (final context) => BrandButton.text(
-                      onPressed:
-                          () => context.read<SupportSystemCubit>().showArticle(
-                            article: 'how_backblaze',
-                            context: context,
-                          ),
-                      title: 'initializing.how'.tr(),
-                    ),
+              BrandButton.text(
+                onPressed: () {
+                  context.read<SupportSystemCubit>().showArticle(
+                    article: 'how_backblaze',
+                    context: context,
+                  );
+                  Scaffold.of(context).openEndDrawer();
+                },
+                title: 'initializing.how'.tr(),
               ),
             ],
           );

@@ -728,7 +728,7 @@
         "invalid_format": "Invalid format",
         "invalid_format_password": "Password must not contain spaces",
         "invalid_format_ssh": "Must follow the SSH key format",
-        "root_name": "Cannot be 'root'",
+        "root_name": "Cannot use the reserved username",
         "length_not_equal": "Length is [], should be {}",
         "length_longer": "Length is [], should be shorter than or equal to {}"
     },
@@ -790,7 +790,13 @@
         "add_server_provider_token": "Add server provider token",
         "add_backups_token": "Add backups provider token",
         "server_provider_unknown": "Unknown server provider",
-        "server_provider_unknown_description": "Your server provider is not supported by this app version."
+        "server_provider_unknown_description": "Your server provider is not supported by this app version.",
+        "remove_backup_token_alert": {
+            "title": "Remove backup storage token?",
+            "description": "This will only remove the access token from the app. If you already initialized backups, they will continue working.",
+            "yes": "Remove",
+            "no": "Cancel"
+        }
     },
     "troubleshooting": {
         "title": "Troubleshooting",

@@ -135,6 +135,13 @@ class TokensPage extends StatelessWidget {
                         )
                         .toList(),
               ),
+              if (state.backupsCredentials.isEmpty)
+                ListTileOnSurfaceVariant(
+                  title: 'tokens.tap_to_add_token'.tr(),
+                  leadingIcon: Icons.add_circle_outline,
+                  onTap:
+                      () => context.router.push(const AddBackupsTokenRoute()),
+                ),
             ],
           ),
         ),
@@ -237,6 +244,62 @@ class _BackupProviderListItem extends StatelessWidget {
     return subtitle += backupProviderCredential.status.statusText;
   }
 
+  Future _showConfirmationDialog(
+    final BuildContext context,
+    final BackupsCredential credential,
+  ) => showDialog(
+    context: context,
+    builder:
+        (final context) => AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.link_off_outlined),
+              const SizedBox(height: 16),
+              Text(
+                'tokens.remove_backup_token_alert.title'.tr(),
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'tokens.remove_backup_token_alert.description'.tr(
+                  args: [credential.provider.name],
+                ),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('tokens.remove_backup_token_alert.no'.tr()),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'tokens.remove_backup_token_alert.yes'.tr(),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              onPressed: () {
+                context.read<TokensBloc>().add(
+                  RemoveBackupsProviderCredential(credential),
+                );
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+  );
+
   @override
   Widget build(final BuildContext context) => Column(
     children: [
@@ -245,6 +308,9 @@ class _BackupProviderListItem extends StatelessWidget {
             '${backupProviderCredential.data.provider.name} (${backupProviderCredential.data.tokenPrefix})',
         subtitle: getSubtitle(context),
         leadingIcon: backupProviderCredential.status.icon,
+        onTap:
+            () =>
+                _showConfirmationDialog(context, backupProviderCredential.data),
       ),
     ],
   );

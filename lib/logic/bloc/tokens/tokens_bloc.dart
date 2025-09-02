@@ -25,6 +25,8 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
   TokensBloc() : super(const TokensInitial()) {
     on<RevalidateTokens>(validateTokens, transformer: droppable());
     on<AddServerProviderToken>(addServerProviderCredential);
+    on<AddBackupsProviderCredential>(addBackupsProviderCredential);
+    on<RemoveBackupsProviderCredential>(removeBackupsProviderCredential);
     on<ServerSelectedForProviderToken>(connectServerToProviderToken);
     on<RefreshServerApiTokenEvent>(
       refreshServerApiToken,
@@ -179,6 +181,31 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       isAuthorized: true,
     );
     ProvidersController.initServerProvider(settings);
+  }
+
+  Future<void> addBackupsProviderCredential(
+    final AddBackupsProviderCredential event,
+    final Emitter<TokensState> emit,
+  ) async {
+    // TODO(inex): Validate token
+    await getIt<ResourcesModel>().addBackupsCredential(event.credential);
+
+    final BackupsProviderSettings settings = BackupsProviderSettings(
+      provider: event.credential.provider,
+      token: event.credential.applicationKey,
+      tokenId: event.credential.keyId,
+      isAuthorized: true,
+    );
+
+    ProvidersController.initBackupsProvider(settings);
+  }
+
+  Future<void> removeBackupsProviderCredential(
+    final RemoveBackupsProviderCredential event,
+    final Emitter<TokensState> emit,
+  ) async {
+    await getIt<ResourcesModel>().removeBackupsCredential(event.credential);
+    ProvidersController.clearBackupsProvider();
   }
 
   Future<void> connectServerToProviderToken(

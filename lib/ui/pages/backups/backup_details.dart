@@ -73,7 +73,7 @@ class BackupDetailsPage extends StatelessWidget {
         heroTitle: 'backup.card_title'.tr(),
         heroSubtitle: 'backup.description'.tr(),
         children: [
-          if (preventActions || tokensState.backupsCredentials.isEmpty)
+          if (preventActions)
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(16),
@@ -85,14 +85,21 @@ class BackupDetailsPage extends StatelessWidget {
               onPressed:
                   preventActions
                       ? null
-                      : () {
+                      : () async {
+                        if (tokensState.backupsCredentials.isEmpty) {
+                          await context.pushRoute(const AddBackupsTokenRoute());
+                          return;
+                        }
                         context.read<BackupsBloc>().add(
                           InitializeBackupsRepository(
                             tokensState.backupsCredentials.first.data,
                           ),
                         );
                       },
-              title: 'backup.initialize'.tr(),
+              title:
+                  tokensState.backupsCredentials.isEmpty
+                      ? 'tokens.add_backups_token'.tr()
+                      : 'backup.initialize'.tr(),
             ),
         ],
       );

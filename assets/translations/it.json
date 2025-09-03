@@ -498,7 +498,8 @@
         "no_access": "Non ha accesso alle risorse associate",
         "tap_to_add_token": "Clicca qui per aggiungere un token",
         "add_server_provider_token": "Aggiungi un token del provider del server",
-        "server_provider_unknown": "Provider del server sconosciuto"
+        "server_provider_unknown": "Provider del server sconosciuto",
+        "add_backups_token": "Aggiungi token del provider di backup"
     },
     "ssh": {
         "no_key_name": "Chiave senza nome",
@@ -790,5 +791,10 @@
         "empty_title": "Nessun servizio da installare",
         "empty_subtitle": "Hai installato tutto. Riprova più tardi.",
         "install": "Installa"
+    },
+    "troubleshooting": {
+        "title": "Risoluzione dei problemi",
+        "configuration_switch_logs_description": "Si sono verificati degli errori durante il passaggio alla nuova configurazione.",
+        "configuration_switch_logs": "Registri di configurazione"
     }
 }

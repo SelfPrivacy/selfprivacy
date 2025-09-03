@@ -1,7 +1,7 @@
 {
   nixConfig.bash-prompt = "\[selfprivacy\]$ ";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/c1ce56e9c606b4cd31f0950768911b1171b8db51";
+  # inputs.nixpkgs.url = "github:NixOS/nixpkgs/c1ce56e9c606b4cd31f0950768911b1171b8db51";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils, ... }:
@@ -19,7 +19,7 @@
           config.android_sdk.accept_license = true;
         };
 
-        spFlutter = pkgs.flutter324;
+        spFlutter = pkgs.flutter332;
 
         androidComposition = pkgs.androidenv.composeAndroidPackages {
           platformToolsVersion = "34.0.4";

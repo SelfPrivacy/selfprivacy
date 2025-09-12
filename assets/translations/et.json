@@ -783,12 +783,18 @@
         "tap_to_add_token": "Koputage siia, et lisada token",
         "add_server_provider_token": "Lisa serveri pakkuja token",
         "server_provider_unknown": "Tundmatu serveri pakkuja",
-        "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis."
+        "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis.",
+        "add_backups_token": "Lisa varukoopiate pakkuja tunnus"
     },
     "services_catalog": {
         "title": "Teenuste kataloog",
         "empty_title": "Pole teenuseid, mida installida",
         "empty_subtitle": "Olete kõik installinud. Kontrollige hiljem.",
         "install": "Installi"
+    },
+    "troubleshooting": {
+        "title": "Veaotsing",
+        "configuration_switch_logs": "Konfiguratsiooni vahetamise logid",
+        "configuration_switch_logs_description": "Kuva vead, mis tekkisid uuele konfiguratsioonile üleminekul."
     }
 }

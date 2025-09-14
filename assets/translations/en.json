@@ -114,7 +114,7 @@
     },
     "ssh": {
         "title": "SSH keys",
-        "create": "Add SSH key",
+        "create": "Add an SSH key",
         "delete": "Delete SSH key?",
         "delete_confirm_question": "Are you sure you want to delete SSH key?",
         "no_key_name": "Unnamed key",

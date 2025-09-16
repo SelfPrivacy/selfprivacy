@@ -505,7 +505,7 @@
         "no_key_name": "Chiave senza nome",
         "root_title": "Queste sono le chiavi di amministrazione",
         "root_subtitle": "I proprietari di queste chiavi hanno pieno accesso al server e possono compiere qualsiasi azione. Aggiungere al server solo le proprie chiavi.",
-        "input_label": "Public ED25519, ECDSA o RSA key",
+        "input_label": "Chiave pubblica ED25519, ECDSA o Chiave RSA",
         "ssh_disabled_warning": "SSH è disabilitato. Puoi abilitarlo nelle impostazioni del server.",
         "create": "Crea una chiave SSH",
         "title": "Chiavi SSH",

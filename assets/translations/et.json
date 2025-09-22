@@ -59,7 +59,7 @@
     "ssh": {
         "root_subtitle": "Nende võtmete omanikud saavad serverisse täieliku juurdepääsu ja saavad sellega teha mida iganes. Lisage serverisse ainult omaenda võtmed.",
         "title": "SSH võtmed",
-        "create": "Lisage SSH võti",
+        "create": "Lisa SSH-võti",
         "delete": "Kas kustutada SSH võti?",
         "delete_confirm_question": "Kas olete kindel, et soovite SSH võtme kustutada?",
         "no_key_name": "Nimetu võti",

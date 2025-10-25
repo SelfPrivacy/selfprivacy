@@ -344,7 +344,12 @@
                 "other": "Last {} yearly backups will be kept"
             },
             "yearly_infinite": "All yearly backups will be kept"
-        }
+        },
+        "repository_removed": "Backup storage has been detached. You may want to delete the storage on the provider's website.",
+        "detach_repository": "Detach backup repository",
+        "detach_repository_subtitle": "Disconnect the backup storage from your server.",
+        "detach_repository_confirm": "Are you sure you want to detach the backup repository? Your existing backups will remain with the storage provider, but you need to write down the encryption key if you wish to use them in the future. You won't be able to create new backups or restore from existing ones until you initialize a new repository.",
+        "detach_repository_button": "Detach repository"
     },
     "storage": {
         "card_title": "Server Storage",

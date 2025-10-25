@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
+import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_job_card.dart';
 import 'package:selfprivacy/ui/molecules/list_items/snapshot_item.dart';
@@ -318,6 +319,46 @@ class BackupDetailsPage extends StatelessWidget {
                         : () => context.read<BackupsBloc>().add(
                           const ForceSnapshotListUpdate(),
                         ),
+              ),
+              ListTile(
+                title: Text(
+                  'backup.detach_repository'.tr(),
+                  style: TextStyle(
+                    color:
+                        preventActions
+                            ? Theme.of(context).colorScheme.secondary
+                            : Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                subtitle: Text(
+                  'backup.detach_repository_subtitle'.tr(),
+                  style: TextStyle(color: overrideColor),
+                ),
+                leading: Icon(
+                  Icons.link_off_outlined,
+                  color:
+                      preventActions
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).colorScheme.error,
+                ),
+                isThreeLine: true,
+                onTap:
+                    preventActions
+                        ? null
+                        : () {
+                          showPopUpAlert(
+                            alertTitle: 'backup.detach_repository'.tr(),
+                            description:
+                                'backup.detach_repository_confirm'.tr(),
+                            actionButtonTitle:
+                                'backup.detach_repository_button'.tr(),
+                            actionButtonOnPressed: () {
+                              context.read<BackupsBloc>().add(
+                                const RemoveBackupsRepository(),
+                              );
+                            },
+                          );
+                        },
               ),
             ],
           ),

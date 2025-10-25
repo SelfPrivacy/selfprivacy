@@ -89,3 +89,10 @@ class ForgetSnapshot extends BackupsEvent {
   @override
   List<Object?> get props => [backupId];
 }
+
+class RemoveBackupsRepository extends BackupsEvent {
+  const RemoveBackupsRepository();
+
+  @override
+  List<Object?> get props => [];
+}

@@ -262,5 +262,8 @@
     },
     "git": {
         "login_info": "Vous devrez créer un compte sur le site web. Le premier utilisateur deviendra admin."
+    },
+    "troubleshooting": {
+        "title": "Dépannage"
     }
 }

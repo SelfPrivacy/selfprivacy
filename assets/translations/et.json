@@ -344,7 +344,12 @@
             "minutes": "min",
             "hours": "t",
             "days": "p"
-        }
+        },
+        "repository_removed": "Varundussalvestus on lahti ühendatud. Võid soovida teenusepakkuja veebisaidil salvestusruumi kustutada.",
+        "detach_repository": "Varundushoidla lahti ühendamine",
+        "detach_repository_subtitle": "Ühenda varundussalvestus oma serverist lahti.",
+        "detach_repository_button": "Hoidla lahti ühendamine",
+        "detach_repository_confirm": "Kas oled kindel, et soovid varundushoidla lahti ühendada? Sinu olemasolevad varukoopiad jäävad teenusepakkuja juurde, kuid kui soovid neid tulevikus kasutada, pead salvestama krüptimisvõtme. Uusi varukoopiaid ei saa luua ega olemasolevatest taastada, kuni lood uue hoidla."
     },
     "initializing": {
         "connect_to_server_provider_text": "API võtme abil saab SelfPrivacy rentida masina ja seadistada sellele oma serveri",

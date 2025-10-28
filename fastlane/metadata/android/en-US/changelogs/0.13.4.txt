@@ -1,0 +1,24 @@
+# 0.13.4 Changelog
+
+## Features
+
+- Add a button to view server configuration switch logs
+- **backups**: Allow detaching backups repository
+
+## Bug Fixes
+
+- Reserve Kanidm usernames
+
+## Translation contributions
+
+* Estonian
+    * Dmitri B. (10)
+
+* French
+    * Chloe L. (4)
+
+* German
+    * Heiko Does (2)
+
+* Italian
+    * Genio (6)

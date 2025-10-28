@@ -59,7 +59,7 @@
     "ssh": {
         "root_subtitle": "Nende võtmete omanikud saavad serverisse täieliku juurdepääsu ja saavad sellega teha mida iganes. Lisage serverisse ainult omaenda võtmed.",
         "title": "SSH võtmed",
-        "create": "Lisage SSH võti",
+        "create": "Lisa SSH-võti",
         "delete": "Kas kustutada SSH võti?",
         "delete_confirm_question": "Kas olete kindel, et soovite SSH võtme kustutada?",
         "no_key_name": "Nimetu võti",
@@ -344,7 +344,12 @@
             "minutes": "min",
             "hours": "t",
             "days": "p"
-        }
+        },
+        "repository_removed": "Varundussalvestus on lahti ühendatud. Võid soovida teenusepakkuja veebisaidil salvestusruumi kustutada.",
+        "detach_repository": "Varundushoidla lahti ühendamine",
+        "detach_repository_subtitle": "Ühenda varundussalvestus oma serverist lahti.",
+        "detach_repository_button": "Hoidla lahti ühendamine",
+        "detach_repository_confirm": "Kas oled kindel, et soovid varundushoidla lahti ühendada? Sinu olemasolevad varukoopiad jäävad teenusepakkuja juurde, kuid kui soovid neid tulevikus kasutada, pead salvestama krüptimisvõtme. Uusi varukoopiaid ei saa luua ega olemasolevatest taastada, kuni lood uue hoidla."
     },
     "initializing": {
         "connect_to_server_provider_text": "API võtme abil saab SelfPrivacy rentida masina ja seadistada sellele oma serveri",
@@ -783,12 +788,18 @@
         "tap_to_add_token": "Koputage siia, et lisada token",
         "add_server_provider_token": "Lisa serveri pakkuja token",
         "server_provider_unknown": "Tundmatu serveri pakkuja",
-        "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis."
+        "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis.",
+        "add_backups_token": "Lisa varukoopiate pakkuja tunnus"
     },
     "services_catalog": {
         "title": "Teenuste kataloog",
         "empty_title": "Pole teenuseid, mida installida",
         "empty_subtitle": "Olete kõik installinud. Kontrollige hiljem.",
         "install": "Installi"
+    },
+    "troubleshooting": {
+        "title": "Veaotsing",
+        "configuration_switch_logs": "Konfiguratsiooni vahetamise logid",
+        "configuration_switch_logs_description": "Kuva vead, mis tekkisid uuele konfiguratsioonile üleminekul."
     }
 }

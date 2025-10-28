@@ -28,7 +28,7 @@
         "reset": "Réinitialiser",
         "details": "Détails",
         "no_data": "Pas de données",
-        "wait": "Attendez",
+        "wait": "Chargement",
         "remove": "Supprimer",
         "alert": "Alerte",
         "continue": "Continuer",
@@ -107,7 +107,8 @@
         "cpu_title": "Utilisation du CPU",
         "network_title": "Utilisation du réseau",
         "in": "Entré",
-        "out": "Sorti"
+        "out": "Sorti",
+        "memory": "Mémoire utilisée"
     },
     "server": {
         "card_title": "Serveur",
@@ -261,5 +262,8 @@
     },
     "git": {
         "login_info": "Vous devrez créer un compte sur le site web. Le premier utilisateur deviendra admin."
+    },
+    "troubleshooting": {
+        "title": "Dépannage"
     }
 }

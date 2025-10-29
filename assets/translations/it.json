@@ -251,7 +251,12 @@
             "minutes": "min",
             "hours": "ore",
             "days": "g"
-        }
+        },
+        "repository_removed": "L'archivio del backup è stato scollegato. È possibile eliminare l'archivio dal sito web del provider.",
+        "detach_repository": "Scollega il repository di backup",
+        "detach_repository_subtitle": "Scollegare l'archiviazione del backup dal server.",
+        "detach_repository_button": "Scollega il repository",
+        "detach_repository_confirm": "Sei sicuro di voler scollegare il repository di backup? I backup esistenti rimarranno presso il provider di archiviazione, ma dovrai ricordare la chiave di crittografia se desideri utilizzarli in futuro. Non potrai creare nuovi backup né ripristinare quelli esistenti finché non avrai inizializzato un nuovo repository."
     },
     "jobs": {
         "failed_to_load_dns_records": "Errore nel caricamento dei record DNS",

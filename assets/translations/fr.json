@@ -43,7 +43,8 @@
         "network_error": "Erreur du réseau",
         "feature_unsupported_on_api_version": "Cette fonctionnalité n'est disponible qu'avec la version du serveur {versionConstraint}. Votre serveur fonctionne avec la version {currentVersion}.",
         "error": "Erreur",
-        "server_is_outdated": "Cette version de l'appli utilise la version {versionConstraint} de l'API, mais votre serveur est en version {currentVersion}. Quelques fonctionnalités ne seraient pas disponibles et il pourrait y avoir des erreurs. Veuillez mettre à jour votre serveur."
+        "server_is_outdated": "Cette version de l'appli utilise la version {versionConstraint} de l'API, mais votre serveur est en version {currentVersion}. Quelques fonctionnalités ne seraient pas disponibles et il pourrait y avoir des erreurs. Veuillez mettre à jour votre serveur.",
+        "show_qr_code": "Montrer le QR code"
     },
     "more_page": {
         "create_ssh_key": "Clés SSH du super utilisateur",
@@ -54,19 +55,32 @@
         "title": "Console",
         "copy": "Copier",
         "copy_raw": "Réponse brut",
-        "history_empty": "Aucun des donnes",
+        "history_empty": "Pas encore de données disponibles",
         "rest_api_request": "Requête de l'API REST",
         "error": "Erreur",
         "rest_api_response": "Réponse de l'API REST",
         "graphql_request": "Requête GraphQL",
         "graphql_response": "Réponse GraphQL",
-        "errors": "Erreurs"
+        "errors": "Erreurs",
+        "data": "Donnée",
+        "error_path": "Chemin",
+        "error_locations": "Emplacements",
+        "headers": "En-têtes"
     },
     "about_application_page": {
-        "title": "À propos",
+        "title": "À propos & support",
         "privacy_policy": "Politique de confidentialité",
         "application_version_text": "Version de l'application",
-        "api_version_text": "Version de l'API du serveur {}"
+        "api_version_text": "Version de l'API du serveur {}",
+        "open_source_licenses": "Licences open source",
+        "telegram_channel": "Canal Telegram",
+        "get_support": "Obtenir de l'aide",
+        "source_code": "Code source",
+        "documentation": "Documentation",
+        "links": "Liens",
+        "matrix_channel": "Cannal matrix",
+        "help_translate": "Aidez-nous à traduire",
+        "bug_report": "Reporter un bug"
     },
     "application_settings": {
         "title": "Paramètres de l'application",
@@ -76,12 +90,13 @@
         "change_application_theme": "Changer le thème de l'application",
         "dangerous_settings": "Paramètres dangereux",
         "reset_config_title": "Réinitialiser la configuration de l'application",
-        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root."
+        "reset_config_description": "Réinitialiser les clés API et l'utilisateur root.",
+        "language": "Langage"
     },
     "ssh": {
         "title": "Clés SSH",
         "create": "Créer une clé SSH",
-        "delete": "Supprimer une clé SSH",
+        "delete": "Supprimer une clé SSH ?",
         "delete_confirm_question": "Êtes-vous sûr de vouloir supprimer la clé SSH ?",
         "no_key_name": "Clé sans nom",
         "input_label": "Clé RSA ou ED25519 publique",
@@ -108,7 +123,8 @@
         "network_title": "Utilisation du réseau",
         "in": "Entré",
         "out": "Sorti",
-        "memory": "Mémoire utilisée"
+        "memory": "Mémoire utilisée",
+        "system": "Système"
     },
     "server": {
         "card_title": "Serveur",
@@ -134,13 +150,16 @@
         },
         "server_timezone": "Fuseau horaire du serveur",
         "select_timezone": "Sélectionner le fuseau horaire",
-        "description": "Tous vos services en direct ici"
+        "description": "Tous vos services en direct ici",
+        "enable_ssh": "Activer SSH",
+        "enable_ssh_hint": "Autoriser l'accès SSH au serveur",
+        "settings": "Paramètres du serveur"
     },
     "domain": {
         "card_title": "Domaine",
         "screen_title": "Domaines et DNS",
         "error": "Problèmes détectés",
-        "error_subtitle": "Clique ici pour les fixer",
+        "error_subtitle": "Appuyez ici pour les corriger. Cela supprimera également les enregistrements personnalisés.",
         "refreshing": "Rafraîchissement du statut…",
         "services_title": "Services",
         "services_subtitle": "Enregistrement de type \"A\" requis pour chaque service.",
@@ -173,14 +192,16 @@
         "mb": "{} MB",
         "kb": "{} KB",
         "extending_volume_title": "Extension du volume",
-        "extending_volume_price_info": "Les prix incluent la TVA et sont estimés par les données commerciales fournies par Hetzner.\nLe serveur va redémarrer après redimensionnement.",
+        "extending_volume_price_info": "Les prix incluent la TVA et sont estimés par les données commerciales fournies par votre fournisseur de service.\nLe serveur va redémarrer après redimensionnement.",
         "extending_volume_error": "Pas possible d'initialiser l'extension du volume.",
         "size": "Taille",
         "data_migration_title": "Migration de données",
         "data_migration_notice": "Durant la migration, tous les services ne seront plus accessibles.",
         "start_migration_button": "Démarrer la migration",
         "extend_volume_button": "Étendre le volume",
-        "extending_volume_description": "Redimensionner le volume va vous permettre de stocker davantage de données sur votre serveur sans étendre le serveur lui-même. Les volumes ne peuvent être qu'étendus, le shrinking n'est pas possible."
+        "extending_volume_description": "Redimensionner le volume va vous permettre de stocker davantage de données sur votre serveur sans étendre le serveur lui-même. Les volumes ne peuvent être qu'étendus, le shrinking n'est pas possible.",
+        "extending_volume_rebooting": "Redémarrage du serveur…",
+        "bytes": "Octets"
     },
     "service_page": {
         "open_in_browser": "Ouvrir dans le navigateur",
@@ -197,7 +218,10 @@
         "disable": "Désactiver le service",
         "enable": "Activer le service",
         "move": "Déplacer sur un autre volume",
-        "uses": "Utilise {usage} du {volume}"
+        "uses": "Utilise {usage} du {volume}",
+        "support_levels": {
+            "system": "Système"
+        }
     },
     "mail": {
         "login_info": "Utiliser l'identifiant et le mot de passe de l'onglets utilisateurs. Le port IMAP est 143 avec STARTTLS, le port SMTP est 587 avec STARTTLS."
@@ -206,7 +230,7 @@
         "in_menu": "Le serveur n'est pas encore configuré. Veuillez finir le paramétrage en utilisant l'assistant d'installation pour aller plus loin."
     },
     "validations": {
-        "invalid_format_password": "Ne doit pas contenir d'espace",
+        "invalid_format_password": "Le mot de passe ne doit pas contenir d'espaces",
         "invalid_format": "Format invalide",
         "already_exist": "Existe déjà",
         "required": "Requis",
@@ -214,7 +238,7 @@
         "root_name": "Ne peut être 'root'"
     },
     "jobs": {
-        "create_ssh_key": "Créer une clé SSH pour {}",
+        "create_ssh_key": "Ajouter une clé SSH pour {}",
         "reboot_failed": "Impossible de redémarrer le serveur. Veuillez vérifier les logs applicatifs.",
         "delete_user": "Supprimer utilisateur",
         "generic_error": "Impossible de se connecter au serveur!",
@@ -265,5 +289,41 @@
     },
     "troubleshooting": {
         "title": "Dépannage"
+    },
+    "recovering": {
+        "method_device_input_placeholder": "Jeton"
+    },
+    "devices": {
+        "main_screen": {
+            "header": "Appareils"
+        },
+        "revoke_device_alert": {
+            "no": "Annuler",
+            "yes": "Révoquer"
+        }
+    },
+    "users": {
+        "account": "Compte"
+    },
+    "initializing": {
+        "select_provider_price_free": "Gratuit",
+        "locations_not_found": "Oups!",
+        "steps": {
+            "server": "Serveur",
+            "backups_provider": "Sauvegardes",
+            "domain": "Domaine",
+            "hosting": "Hébergement"
+        },
+        "check": "Vérifier"
+    },
+    "recovery_key": {
+        "key_synchronizing": "Synchronisation…"
+    },
+    "countries": {
+        "netherlands": "Pays-Bas",
+        "canada": "Canada",
+        "australia": "Australie",
+        "finland": "Finlande",
+        "singapore": "Singapour"
     }
 }

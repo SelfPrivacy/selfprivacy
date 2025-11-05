@@ -2,7 +2,9 @@
   nixConfig.bash-prompt = "\[selfprivacy\]$ ";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.systems.url = "github:nix-systems/default-linux";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flake-utils.inputs.systems.follows = "systems"; # only build for linux as `buildFlutterApplication` is broken on darwin
 
   outputs =
     {

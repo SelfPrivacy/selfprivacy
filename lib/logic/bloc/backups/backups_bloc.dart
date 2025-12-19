@@ -37,6 +37,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     on<SetAutobackupPeriod>(_setAutobackupPeriod, transformer: restartable());
     on<SetAutobackupQuotas>(_setAutobackupQuotas, transformer: restartable());
     on<ForgetSnapshot>(_forgetSnapshot, transformer: sequential());
+    on<RemoveBackupsRepository>(_removeRepository, transformer: droppable());
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
@@ -375,6 +376,30 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         );
       }
       emit(currentState);
+    }
+  }
+
+  Future<void> _removeRepository(
+    final RemoveBackupsRepository event,
+    final Emitter<BackupsState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is BackupsInitialized) {
+      emit(BackupsBusy.fromState(currentState));
+      final GenericResult result =
+          await getIt<ApiConnectionRepository>().api.removeRepository();
+      if (!result.success) {
+        getIt<NavigationService>().showSnackBar(
+          result.message ?? 'Unknown error',
+        );
+        return;
+      }
+      await getIt<ResourcesModel>().removeBackblazeBucket();
+      emit(BackupsUnititialized());
+      getIt<NavigationService>().showSnackBar('backup.repository_removed'.tr());
+      getIt<ApiConnectionRepository>().apiData.backupConfig.invalidate();
+      getIt<ApiConnectionRepository>().apiData.backups.invalidate();
+      await getIt<ApiConnectionRepository>().reload(null);
     }
   }
 

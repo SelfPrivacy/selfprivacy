@@ -498,13 +498,14 @@
         "no_access": "Non ha accesso alle risorse associate",
         "tap_to_add_token": "Clicca qui per aggiungere un token",
         "add_server_provider_token": "Aggiungi un token del provider del server",
-        "server_provider_unknown": "Provider del server sconosciuto"
+        "server_provider_unknown": "Provider del server sconosciuto",
+        "add_backups_token": "Aggiungi token del provider di backup"
     },
     "ssh": {
         "no_key_name": "Chiave senza nome",
         "root_title": "Queste sono le chiavi di amministrazione",
         "root_subtitle": "I proprietari di queste chiavi hanno pieno accesso al server e possono compiere qualsiasi azione. Aggiungere al server solo le proprie chiavi.",
-        "input_label": "Public ED25519, ECDSA o RSA key",
+        "input_label": "Chiave pubblica ED25519, ECDSA o Chiave RSA",
         "ssh_disabled_warning": "SSH è disabilitato. Puoi abilitarlo nelle impostazioni del server.",
         "create": "Crea una chiave SSH",
         "title": "Chiavi SSH",
@@ -790,5 +791,10 @@
         "empty_title": "Nessun servizio da installare",
         "empty_subtitle": "Hai installato tutto. Riprova più tardi.",
         "install": "Installa"
+    },
+    "troubleshooting": {
+        "title": "Risoluzione dei problemi",
+        "configuration_switch_logs_description": "Si sono verificati degli errori durante il passaggio alla nuova configurazione.",
+        "configuration_switch_logs": "Registri di configurazione"
     }
 }

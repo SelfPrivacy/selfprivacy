@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -46,6 +47,8 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   late double _currentSliderGbValue;
   double _pricePerGb = 1;
 
+  TextSelection? _selection;
+
   final DiskSize maxSize = const DiskSize(byte: 500000000000);
   late DiskSize minSize;
 
@@ -53,7 +56,9 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
   final TextEditingController _priceController = TextEditingController();
 
   void _updateErrorStatuses() {
-    _isError = minSize.gibibyte > _currentSliderGbValue;
+    _isError =
+        (minSize.gibibyte > _currentSliderGbValue) ||
+        (_currentSliderGbValue > maxSize.gibibyte);
   }
 
   @override
@@ -77,11 +82,9 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
       final price = snapshot.data!;
       _pricePerGb = price.value;
       final currentSizeValue = _currentSliderGbValue.truncate().toString();
-      _sizeController.text = 'storage.gb'.tr(args: [currentSizeValue]);
-      _priceController.text =
-          '${(_pricePerGb * double.parse(currentSizeValue)).toStringAsFixed(2)}'
-          ' '
-          '${price.currency.shortcode}';
+      _sizeController.text = _currentSliderGbValue == 0 ? '' : currentSizeValue;
+      _priceController.text = (_pricePerGb * _currentSliderGbValue.truncate())
+          .toStringAsFixed(2);
       minSize = widget.diskVolumeToResize.sizeTotal + DiskSize.fromGibibyte(3);
       if (_currentSliderGbValue < 0) {
         _currentSliderGbValue = minSize.gibibyte;
@@ -89,6 +92,10 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
 
       final isAlreadyResizing =
           context.watch<VolumesBloc>().state is VolumesResizing;
+
+      if (_selection != null) {
+        _sizeController.selection = _selection!;
+      }
 
       return BrandHeroScreen(
         hasBackButton: true,
@@ -104,16 +111,37 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 130),
                 child: TextField(
-                  readOnly: true,
+                  readOnly: false,
                   textAlign: TextAlign.start,
                   textInputAction: TextInputAction.next,
                   enabled: true,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter(
+                      RegExp(r'^[1-9][0-9]*$'),
+                      allow: true,
+                    ),
+                  ],
                   controller: _sizeController,
                   decoration: InputDecoration(
+                    suffixText: 'storage.gb'.tr(args: ['']),
                     border: const OutlineInputBorder(),
                     errorText: _isError ? ' ' : null,
                     labelText: 'storage.size'.tr(),
                   ),
+                  onChanged: (final text) {
+                    setState(() {
+                      if (text == '') {
+                        _currentSliderGbValue = 0;
+                        _selection = null;
+                      } else {
+                        _currentSliderGbValue = double.parse(text);
+                        _selection = _sizeController.selection;
+                      }
+
+                      _updateErrorStatuses();
+                    });
+                  },
                 ),
               ),
               const SizedBox(width: 16),
@@ -126,6 +154,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                   enabled: true,
                   controller: _priceController,
                   decoration: InputDecoration(
+                    suffixText: price.currency.shortcode,
                     border: const OutlineInputBorder(),
                     errorText: _isError ? ' ' : null,
                     labelText: 'storage.price'.tr(),
@@ -137,7 +166,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
           const SizedBox(height: 16),
           Slider(
             min: minSize.gibibyte,
-            value: _currentSliderGbValue,
+            value: _isError ? minSize.gibibyte : _currentSliderGbValue,
             max: maxSize.gibibyte,
             onChanged: (final double value) {
               setState(() {
@@ -157,8 +186,13 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                         description:
                             'storage.extending_volume_modal_description'.tr(
                               namedArgs: {
-                                'size': _sizeController.text,
-                                'price': _priceController.text,
+                                'size': 'storage.gb'.tr(
+                                  args: [currentSizeValue],
+                                ),
+                                'price':
+                                    '${_priceController.text}'
+                                    ' '
+                                    '${price.currency.shortcode}',
                               },
                             ),
                         actionButtonTitle: 'basis.continue'.tr(),

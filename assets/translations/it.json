@@ -328,7 +328,7 @@
         "invalid_format_ssh": "Deve rispettare il formato della chiave SSH",
         "invalid_format": "Formato non valido",
         "invalid_format_password": "La password non deve contenere spazi",
-        "root_name": "Non può essere 'root'",
+        "root_name": "Non é possibile usare un username riservato",
         "length_not_equal": "La lunghezza è [], dovrebbe essere {}",
         "required": "Richiesto",
         "already_exist": "Già esistente"
@@ -504,7 +504,13 @@
         "tap_to_add_token": "Clicca qui per aggiungere un token",
         "add_server_provider_token": "Aggiungi un token del provider del server",
         "server_provider_unknown": "Provider del server sconosciuto",
-        "add_backups_token": "Aggiungi token del provider di backup"
+        "add_backups_token": "Aggiungi token del provider di backup",
+        "remove_backup_token_alert": {
+            "yes": "Rimovi",
+            "no": "Annulla",
+            "title": "Rimuovere il token dell'archivio di backup?",
+            "description": "Questa operazione rimuoverà solo il token di accesso dall'app. Se hai già inizializzato i backup, questi continueranno a funzionare."
+        }
     },
     "ssh": {
         "no_key_name": "Chiave senza nome",

@@ -725,7 +725,7 @@
         "invalid_format": "Kehtetu vorming",
         "invalid_format_password": "Parool ei tohi sisaldada tühikuid",
         "invalid_format_ssh": "Peab järgima SSH võtme formaati",
-        "root_name": "Ei saa olla 'root'",
+        "root_name": "Broneeritud kasutajanime ei saa kasutada",
         "length_not_equal": "Pikkus on [], peaks olema {}",
         "length_longer": "Pikkus on [], peaks olema lühem või võrdne kui {}"
     },
@@ -789,7 +789,13 @@
         "add_server_provider_token": "Lisa serveri pakkuja token",
         "server_provider_unknown": "Tundmatu serveri pakkuja",
         "server_provider_unknown_description": "Teie serveri pakkujat ei toetata selle rakenduse versioonis.",
-        "add_backups_token": "Lisa varukoopiate pakkuja tunnus"
+        "add_backups_token": "Lisa varukoopiate pakkuja tunnus",
+        "remove_backup_token_alert": {
+            "title": "Eemalda varukoopia salvestamise token?",
+            "yes": "Eemalda",
+            "no": "Tühista",
+            "description": "See eemaldab rakendusest ainult juurdepääsutokeni. Kui olete juba varukoopiad algatanud, jätkavad need tööd."
+        }
     },
     "services_catalog": {
         "title": "Teenuste kataloog",

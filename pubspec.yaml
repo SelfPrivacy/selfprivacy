@@ -4,9 +4,9 @@ publish_to: 'none'
 version: 0.13.4+33
 
 environment:
-  sdk: '>=3.7.0 <4.0.0'
-  # RECOMMENDED_FLUTTER_VERSION=3.32.6
-  flutter: ">=3.32.0 <3.33.0"
+  sdk: '>=3.9.0 <4.0.0'
+  # RECOMMENDED_FLUTTER_VERSION=3.35.7
+  flutter: ">=3.35.0 <3.36.0"
 
 dependencies:
   animations: ^2.0.11

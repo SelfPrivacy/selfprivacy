@@ -22,7 +22,18 @@ class ServiceMigrationListItem extends StatelessWidget {
     children: [
       ServiceConsumptionTitle(service: service),
       const SizedBox(height: 16),
-      ..._radioRows(context),
+      RadioGroup<String>(
+        groupValue: selectedVolume,
+        onChanged: (final String? value) {
+          if (value == null) {
+            return;
+          }
+          onChange(value, service.id);
+        },
+        child: Column(
+          children: _radioRows(context),
+        ),
+      ),
     ],
   );
 
@@ -37,13 +48,6 @@ class ServiceMigrationListItem extends StatelessWidget {
           activeColor: Theme.of(context).colorScheme.secondary,
           dense: true,
           value: volume.name,
-          groupValue: selectedVolume,
-          onChanged: (final String? value) {
-            if (value == null) {
-              return;
-            }
-            onChange(value, service.id);
-          },
         ),
       );
     }

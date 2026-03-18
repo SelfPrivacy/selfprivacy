@@ -54,28 +54,29 @@ class _ServerLogsPageState extends State<ServerLogsPage> {
       padding: EdgeInsets.zero,
       children: [
         DrawerHeader(child: Text('server.filter_by_systemd_unit'.tr())),
-        // a tile to reset filter
-        RadioListTile(
-          title: Text('server.all_units'.tr()),
-          value: null,
+        RadioGroup<String>(
           groupValue: _selectedSystemdUnit,
           onChanged: (final value) {
             setState(() {
               _selectedSystemdUnit = value;
             });
           },
-        ),
-        for (final unit in systemdUnits.sorted())
-          RadioListTile(
-            title: Text(unit),
-            value: unit,
-            groupValue: _selectedSystemdUnit,
-            onChanged: (final value) {
-              setState(() {
-                _selectedSystemdUnit = value;
-              });
-            },
+          child: Column(
+            children: [
+              // a tile to reset filter
+              RadioListTile(
+                title: Text('server.all_units'.tr()),
+                value: null,
+              ),
+              for (final unit in systemdUnits.sorted())
+                RadioListTile(
+                  title: Text(unit),
+                  value: unit,
+                ),
+            ],
           ),
+        ),
+
       ],
     ),
   );

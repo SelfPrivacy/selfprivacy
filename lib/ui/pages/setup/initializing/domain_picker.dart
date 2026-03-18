@@ -56,53 +56,59 @@ class _DomainPickerState extends State<DomainPicker> {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           if (state is MoreThenOne)
-            ...state.domains.map(
-              (final domain) => Column(
+            RadioGroup<String>(
+              groupValue: selectedDomain,
+              onChanged: (final String? value) {
+                setState(() {
+                  selectedDomain = value;
+                });
+              },
+              child: Column(
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedCard(
-                      borderColor:
-                          domain == selectedDomain
-                              ? Theme.of(context).colorScheme.primary
-                              : null,
-                      borderWidth: domain == selectedDomain ? 3 : 1,
-                      child: InkResponse(
-                        highlightShape: BoxShape.rectangle,
-                        onTap:
-                            () => setState(() {
-                              selectedDomain = domain;
-                            }),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Radio<String>(
-                                value: domain,
-                                groupValue: selectedDomain,
-                                onChanged: (final String? value) {
-                                  setState(() {
-                                    selectedDomain = value;
-                                  });
-                                },
-                              ),
-                              Expanded(
-                                child: Text(
-                                  domain,
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
+                  ...state.domains.map(
+                    (final domain) => Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedCard(
+                            borderColor: domain == selectedDomain
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                            borderWidth: domain == selectedDomain ? 3 : 1,
+                            child: InkResponse(
+                              highlightShape: BoxShape.rectangle,
+                              onTap: () => setState(() {
+                                selectedDomain = domain;
+                              }),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Row(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Radio<String>(
+                                      value: domain,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        domain,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                        // Button to select and save domain
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  // Button to select and save domain
                 ],
               ),
             ),
@@ -110,11 +116,11 @@ class _DomainPickerState extends State<DomainPicker> {
             BrandButton.filled(
               onPressed:
                   (selectedDomain != null &&
-                          state.domains.contains(selectedDomain))
-                      ? () => context.read<DomainSetupCubit>().saveDomain(
-                        selectedDomain!,
-                      )
-                      : null,
+                      state.domains.contains(selectedDomain))
+                  ? () => context.read<DomainSetupCubit>().saveDomain(
+                      selectedDomain!,
+                    )
+                  : null,
               child: Text('initializing.use_this_domain'.tr()),
             ),
           if (state is Loaded) ...[
@@ -157,9 +163,8 @@ class _DomainPickerState extends State<DomainPicker> {
           if (state is Loaded) ...[
             const SizedBox(height: 32),
             BrandButton.filled(
-              onPressed:
-                  () =>
-                      context.read<DomainSetupCubit>().saveDomain(state.domain),
+              onPressed: () =>
+                  context.read<DomainSetupCubit>().saveDomain(state.domain),
               title: 'initializing.save_domain'.tr(),
             ),
           ],

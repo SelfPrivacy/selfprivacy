@@ -288,7 +288,6 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         SwitchListTile.adaptive(
           value: _isAmountToggled,
           title: Text('recovery_key.key_amount_toggle'.tr()),
-          activeColor: Theme.of(context).colorScheme.primary,
           onChanged: (final bool toggled) {
             setState(() {
               _isAmountToggled = toggled;
@@ -327,7 +326,6 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         SwitchListTile.adaptive(
           value: _isExpirationToggled,
           title: Text('recovery_key.key_duedate_toggle'.tr()),
-          activeColor: Theme.of(context).colorScheme.primary,
           onChanged: (final bool toggled) {
             setState(() {
               _isExpirationToggled = toggled;

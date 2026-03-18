@@ -39,8 +39,10 @@ class _ChangeAutobackupsPeriodModalState
 
   @override
   Widget build(final BuildContext context) {
-    final Duration? initialAutobackupPeriod =
-        context.watch<BackupsBloc>().state.autobackupPeriod;
+    final Duration? initialAutobackupPeriod = context
+        .watch<BackupsBloc>()
+        .state
+        .autobackupPeriod;
     return ListView(
       controller: widget.scrollController,
       padding: const EdgeInsets.all(16),
@@ -53,45 +55,46 @@ class _ChangeAutobackupsPeriodModalState
         ),
         const SizedBox(height: 16),
         // Select all services tile
-        RadioListTile<Duration?>.adaptive(
+        RadioGroup<Duration>(
+          groupValue: selectedPeriod,
           onChanged: (final Duration? value) {
             setState(() {
               selectedPeriod = value;
             });
           },
-          title: Text('backup.autobackup_period_disable'.tr()),
-          value: null,
-          groupValue: selectedPeriod,
-        ),
-        const Divider(height: 1),
-        ...autobackupPeriods.map(
-          (final Duration period) => RadioListTile<Duration?>.adaptive(
-            onChanged: (final Duration? value) {
-              setState(() {
-                selectedPeriod = value;
-              });
-            },
-            title: Text(
-              'backup.autobackup_period_every'.tr(
-                namedArgs: {'period': period.toPrettyString(context.locale)},
+          child: Column(
+            children: [
+              RadioListTile<Duration?>.adaptive(
+                title: Text('backup.autobackup_period_disable'.tr()),
+                value: null,
               ),
-            ),
-            value: period,
-            groupValue: selectedPeriod,
+              const Divider(height: 1),
+              ...autobackupPeriods.map(
+                (final Duration period) => RadioListTile<Duration?>.adaptive(
+                  title: Text(
+                    'backup.autobackup_period_every'.tr(
+                      namedArgs: {
+                        'period': period.toPrettyString(context.locale),
+                      },
+                    ),
+                  ),
+                  value: period,
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
         // Create backup button
         FilledButton(
-          onPressed:
-              selectedPeriod == initialAutobackupPeriod
-                  ? null
-                  : () {
-                    context.read<BackupsBloc>().add(
-                      SetAutobackupPeriod(selectedPeriod),
-                    );
-                    Navigator.of(context).pop();
-                  },
+          onPressed: selectedPeriod == initialAutobackupPeriod
+              ? null
+              : () {
+                  context.read<BackupsBloc>().add(
+                    SetAutobackupPeriod(selectedPeriod),
+                  );
+                  Navigator.of(context).pop();
+                },
           child: Text('backup.autobackup_set_period'.tr()),
         ),
       ],

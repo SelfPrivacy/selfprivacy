@@ -95,7 +95,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
                       : FontStyle.normal,
             ),
           ),
-          activeColor: Theme.of(context).colorScheme.primary,
         ),
         SwitchListTile.adaptive(
           value: rebootAfterUpgrade ?? false,
@@ -130,7 +129,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
                       : FontStyle.normal,
             ),
           ),
-          activeColor: Theme.of(context).colorScheme.primary,
         ),
         ListTile(
           title: Text('server.server_timezone'.tr()),
@@ -167,7 +165,6 @@ class _ServerSettingsState extends State<_ServerSettings> {
                       : FontStyle.normal,
             ),
           ),
-          activeColor: Theme.of(context).colorScheme.primary,
         ),
       ],
     );

@@ -1,7 +1,7 @@
 {
   nixConfig.bash-prompt = "\[selfprivacy\]$ ";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   inputs.systems.url = "github:nix-systems/default-linux";
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.flake-utils.inputs.systems.follows = "systems"; # only build for linux as `buildFlutterApplication` is broken on darwin
@@ -35,7 +35,7 @@
           config.android_sdk.accept_license = true;
         };
 
-        spFlutter = pkgs.flutter332;
+        spFlutter = pkgs.flutter335;
 
         androidComposition = pkgs.androidenv.composeAndroidPackages {
           platformToolsVersion = "34.0.5";

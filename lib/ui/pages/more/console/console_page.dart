@@ -61,9 +61,10 @@ class _ConsolePageState extends State<ConsolePage> {
         ],
       ),
       body: Scrollbar(
-        child: logs.isEmpty
-            ? const _ConsoleViewEmpty()
-            : _ConsoleViewLoaded(logs: logs),
+        child:
+            logs.isEmpty
+                ? const _ConsoleViewEmpty()
+                : _ConsoleViewLoaded(logs: logs),
       ),
     );
   }
@@ -74,9 +75,9 @@ class _ConsoleViewEmpty extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Align(
-        alignment: Alignment.topCenter,
-        child: Text('console_page.history_empty'.tr()),
-      );
+    alignment: Alignment.topCenter,
+    child: Text('console_page.history_empty'.tr()),
+  );
 }
 
 class _ConsoleViewLoaded extends StatelessWidget {
@@ -86,17 +87,14 @@ class _ConsoleViewLoaded extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListView.separated(
-        primary: true,
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        itemCount: logs.length,
-        itemBuilder: (final BuildContext context, final int index) {
-          final log = logs[logs.length - 1 - index];
+    primary: true,
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    itemCount: logs.length,
+    itemBuilder: (final BuildContext context, final int index) {
+      final log = logs[logs.length - 1 - index];
 
-          return ConsoleLogItemWidget(
-            key: ValueKey(log),
-            log: log,
-          );
-        },
-        separatorBuilder: (final context, final _) => const Divider(),
-      );
+      return ConsoleLogItemWidget(key: ValueKey(log), log: log);
+    },
+    separatorBuilder: (final context, final _) => const Divider(),
+  );
 }

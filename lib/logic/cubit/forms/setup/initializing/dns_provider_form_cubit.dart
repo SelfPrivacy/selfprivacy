@@ -8,17 +8,15 @@ class DnsProviderFormCubit extends FormCubit {
   DnsProviderFormCubit(this.initializingCubit) {
     apiKey = FieldCubit(
       initalValue: '',
-      validations: [
-        RequiredStringValidation('validations.required'.tr()),
-      ],
+      validations: [RequiredStringValidation('validations.required'.tr())],
     );
 
     super.addFields([apiKey]);
   }
 
   @override
-  FutureOr<void> onSubmit() async {
-    initializingCubit.setDnsApiToken(apiKey.state.value);
+  Future<void>? onSubmit() async {
+    await initializingCubit.setDnsApiToken(apiKey.state.value);
   }
 
   final ServerInstallationCubit initializingCubit;
@@ -29,8 +27,9 @@ class DnsProviderFormCubit extends FormCubit {
     bool? isKeyValid;
 
     try {
-      isKeyValid = await initializingCubit
-          .isDnsProviderApiTokenValid(apiKey.state.value);
+      isKeyValid = await initializingCubit.isDnsProviderApiTokenValid(
+        apiKey.state.value,
+      );
     } catch (e) {
       addError(e);
     }

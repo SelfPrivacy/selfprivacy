@@ -1,0 +1,27 @@
+# 0.13.2 Changelog
+
+## Changes
+
+### Bug fixes
+
+- Allow deleting admin users
+- Update base images of Ubuntu
+
+**Chores**
+
+- Upgrade Flutter to 3.32, reformat code
+
+
+### Translation contributions
+
+* French
+
+    * Chloe L. (18)
+
+* Japanese
+
+    * shirahara (14)
+
+* Spanish
+
+    * Me me (5)

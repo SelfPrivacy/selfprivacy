@@ -10,15 +10,13 @@ class SystemSettings {
   });
 
   SystemSettings.fromGraphQL(final Query$SystemSettings$system system)
-      : this(
-          sshSettings: SshSettings.fromGraphQL(
-            system.settings.ssh,
-          ),
-          autoUpgradeSettings: AutoUpgradeSettings.fromGraphQL(
-            system.settings.autoUpgrade,
-          ),
-          timezone: system.settings.timezone,
-        );
+    : this(
+        sshSettings: SshSettings.fromGraphQL(system.settings.ssh),
+        autoUpgradeSettings: AutoUpgradeSettings.fromGraphQL(
+          system.settings.autoUpgrade,
+        ),
+        timezone: system.settings.timezone,
+      );
 
   final SshSettings sshSettings;
   final AutoUpgradeSettings autoUpgradeSettings;

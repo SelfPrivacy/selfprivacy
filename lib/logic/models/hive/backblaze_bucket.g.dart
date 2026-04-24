@@ -8,7 +8,7 @@ part of 'backblaze_bucket.dart';
 
 class BackblazeBucketAdapter extends TypeAdapter<BackblazeBucket> {
   @override
-  final int typeId = 6;
+  final typeId = 6;
 
   @override
   BackblazeBucket read(BinaryReader reader) {

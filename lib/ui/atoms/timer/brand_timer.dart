@@ -31,8 +31,9 @@ class _BrandTimerState extends State<BrandTimer> {
   void _timerStart() {
     _timeString = differenceFromStart;
     timer = Timer.periodic(const Duration(seconds: 1), (final Timer t) {
-      final Duration timePassed =
-          DateTime.now().difference(widget.startDateTime);
+      final Duration timePassed = DateTime.now().difference(
+        widget.startDateTime,
+      );
       if (timePassed > widget.duration) {
         t.cancel();
       } else {
@@ -52,12 +53,12 @@ class _BrandTimerState extends State<BrandTimer> {
 
   @override
   Widget build(final BuildContext context) => Text(
-        _timeString ?? '',
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: NamedFontWeight.demiBold,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-      );
+    _timeString ?? '',
+    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+      fontWeight: NamedFontWeight.demiBold,
+      color: Theme.of(context).colorScheme.onSurface,
+    ),
+  );
 
   void _getTime() {
     setState(() {

@@ -6,18 +6,19 @@ typedef StringGeneratorFunction = String Function();
 
 class StringGenerators {
   static final List<String> letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
-  static final List<String> upperCaseLetters =
-      'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('');
+  static final List<String> upperCaseLetters = 'abcdefghijklmnopqrstuvwxyz'
+      .toUpperCase()
+      .split('');
   static final List<String> numbers = '1234567890'.split('');
   static const List<String> symbols = ['_'];
 
   static String getRandomString(
     final int length, {
-    hasLowercaseLetters = false,
-    hasUppercaseLetters = false,
-    hasNumbers = false,
-    hasSymbols = false,
-    final isStrict = false,
+    final bool hasLowercaseLetters = false,
+    final bool hasUppercaseLetters = false,
+    final bool hasNumbers = false,
+    final bool hasSymbols = false,
+    final bool isStrict = false,
   }) {
     final List<String> chars = [
       if (hasLowercaseLetters) ...letters,
@@ -32,10 +33,16 @@ class StringGenerators {
     if (!isStrict) {
       res = genString(length, chars);
     } else {
-      int sum = (hasLowercaseLetters ? 1 : 0) +
+      int sum =
+          (hasLowercaseLetters ? 1 : 0) +
           (hasUppercaseLetters ? 1 : 0) +
           (hasNumbers ? 1 : 0) +
           (hasSymbols ? 1 : 0);
+
+      bool needsLowercaseLetters = hasLowercaseLetters;
+      bool needsUppercaseLetters = hasUppercaseLetters;
+      bool needsNumbers = hasNumbers;
+      bool needsSymbols = hasSymbols;
 
       /// disable flags one by one when the len of generated string is less
       /// than count of flags
@@ -45,26 +52,26 @@ class StringGenerators {
 
         switch (step) {
           case 0:
-            if (hasLowercaseLetters) {
-              hasLowercaseLetters = false;
+            if (needsLowercaseLetters) {
+              needsLowercaseLetters = false;
               sum--;
               continue;
             }
           case 1:
-            if (hasUppercaseLetters) {
-              hasUppercaseLetters = false;
+            if (needsUppercaseLetters) {
+              needsUppercaseLetters = false;
               sum--;
               continue;
             }
           case 2:
-            if (hasNumbers) {
-              hasNumbers = false;
+            if (needsNumbers) {
+              needsNumbers = false;
               sum--;
               continue;
             }
           case 3: // symbols
-            if (hasSymbols) {
-              hasSymbols = false;
+            if (needsSymbols) {
+              needsSymbols = false;
               sum--;
               continue;
             }
@@ -72,14 +79,11 @@ class StringGenerators {
       }
 
       res = [
-        if (hasLowercaseLetters) ...genString(1, letters),
-        if (hasUppercaseLetters) ...genString(1, upperCaseLetters),
-        if (hasNumbers) ...genString(1, numbers),
-        if (hasSymbols) ...genString(1, symbols),
-        ...genString(
-          length - sum,
-          chars,
-        ),
+        if (needsLowercaseLetters) ...genString(1, letters),
+        if (needsUppercaseLetters) ...genString(1, upperCaseLetters),
+        if (needsNumbers) ...genString(1, numbers),
+        if (needsSymbols) ...genString(1, symbols),
+        ...genString(length - sum, chars),
       ];
     }
     res.shuffle();
@@ -87,15 +91,14 @@ class StringGenerators {
   }
 
   static List<String> genString(final int length, final List<String> chars) => [
-        for (int i = 0; i < length; i++) chars[_rnd.nextInt(chars.length)],
-      ];
+    for (int i = 0; i < length; i++) chars[_rnd.nextInt(chars.length)],
+  ];
 
-  static StringGeneratorFunction simpleId = () => getRandomString(
-        5,
-        hasLowercaseLetters: true,
-      );
+  static StringGeneratorFunction simpleId =
+      () => getRandomString(5, hasLowercaseLetters: true);
 
-  static StringGeneratorFunction dbPassword = () => getRandomString(
+  static StringGeneratorFunction dbPassword =
+      () => getRandomString(
         40,
         hasLowercaseLetters: true,
         hasUppercaseLetters: true,
@@ -103,14 +106,16 @@ class StringGenerators {
         hasSymbols: true,
       );
 
-  static StringGeneratorFunction storageName = () => getRandomString(
+  static StringGeneratorFunction storageName =
+      () => getRandomString(
         6,
         hasLowercaseLetters: true,
         hasUppercaseLetters: false,
         hasNumbers: true,
       );
 
-  static StringGeneratorFunction apiToken = () => getRandomString(
+  static StringGeneratorFunction apiToken =
+      () => getRandomString(
         64,
         hasLowercaseLetters: true,
         hasUppercaseLetters: true,

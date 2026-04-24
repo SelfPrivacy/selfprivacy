@@ -9,14 +9,15 @@ export 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 part 'server_connection_dependent_state.dart';
 
 abstract class ServerConnectionDependentCubit<
-    T extends ServerInstallationDependendState> extends Cubit<T> {
-  ServerConnectionDependentCubit(
-    super.initState,
-  ) {
+  T extends ServerInstallationDependendState
+>
+    extends Cubit<T> {
+  ServerConnectionDependentCubit(super.initialState) {
     final connectionRepository = getIt<ApiConnectionRepository>();
 
-    apiStatusSubscription =
-        connectionRepository.connectionStatusStream.listen(checkAuthStatus);
+    apiStatusSubscription = connectionRepository.connectionStatusStream.listen(
+      checkAuthStatus,
+    );
     checkAuthStatus(connectionRepository.connectionStatus);
   }
 
@@ -25,14 +26,14 @@ abstract class ServerConnectionDependentCubit<
       case ConnectionStatus.nonexistent:
         clear();
         isLoaded = false;
-        break;
       case ConnectionStatus.connected:
         if (!isLoaded) {
           load();
           isLoaded = true;
         }
-        break;
-      default:
+      case ConnectionStatus.reconnecting:
+      case ConnectionStatus.offline:
+      case ConnectionStatus.unauthorized:
         break;
     }
   }
@@ -44,8 +45,8 @@ abstract class ServerConnectionDependentCubit<
   void clear();
 
   @override
-  Future<void> close() {
-    apiStatusSubscription.cancel();
+  Future<void> close() async {
+    await apiStatusSubscription.cancel();
     return super.close();
   }
 }

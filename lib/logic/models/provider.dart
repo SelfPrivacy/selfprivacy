@@ -3,11 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 
-enum ProviderType {
-  server,
-  domain,
-  backup,
-}
+enum ProviderType { server, domain, backup }
 
 class ProviderModel extends Equatable {
   const ProviderModel({required this.state, required this.type});
@@ -15,10 +11,8 @@ class ProviderModel extends Equatable {
   final StateType state;
   final ProviderType type;
 
-  ProviderModel updateState(final StateType newState) => ProviderModel(
-        state: newState,
-        type: type,
-      );
+  ProviderModel updateState(final StateType newState) =>
+      ProviderModel(state: newState, type: type);
 
   @override
   List<Object?> get props => [state, type];

@@ -1,10 +1,10 @@
 part of 'server_settings.dart';
 
-final List<Location> locations = timeZoneDatabase.locations.values.toList()
-  ..sort(
-    (final l1, final l2) =>
-        l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset),
-  );
+final List<Location> locations =
+    timeZoneDatabase.locations.values.toList()..sort(
+      (final l1, final l2) =>
+          l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset),
+    );
 
 @RoutePage()
 class SelectTimezonePage extends StatefulWidget {
@@ -39,13 +39,14 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
       (final element) =>
           Duration(milliseconds: element.currentTimeZone.offset) == t,
     );
-    print(t);
 
     if (index >= 0) {
-      scrollController.animateTo(
-        60.0 * index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeIn,
+      unawaited(
+        scrollController.animateTo(
+          60.0 * index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        ),
       );
     }
   }
@@ -63,30 +64,33 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: (isDesktop || isSearching)
-            ? TextField(
-                readOnly: false,
-                textAlign: TextAlign.start,
-                textInputAction: TextInputAction.next,
-                enabled: true,
-                controller: searchController,
-                decoration: InputDecoration(
-                  errorText: null,
-                  hintText: 'server.timezone_search_bar'.tr(),
+        title:
+            (isDesktop || isSearching)
+                ? TextField(
+                  readOnly: false,
+                  textAlign: TextAlign.start,
+                  textInputAction: TextInputAction.next,
+                  enabled: true,
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    errorText: null,
+                    hintText: 'server.timezone_search_bar'.tr(),
+                  ),
+                )
+                : Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text('server.select_timezone'.tr()),
                 ),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text('server.select_timezone'.tr()),
-              ),
-        leading: !isDesktop
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: isSearching
-                    ? () => setState(() => isSearching = false)
-                    : () => Navigator.of(context).pop(),
-              )
-            : null,
+        leading:
+            !isDesktop
+                ? IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed:
+                      isSearching
+                          ? () => setState(() => isSearching = false)
+                          : () => Navigator.of(context).pop(),
+                )
+                : null,
         actions: [
           if (!isSearching && !isDesktop)
             IconButton(
@@ -98,26 +102,23 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
       body: SafeArea(
         child: ListView(
           controller: scrollController,
-          children: locations
-              .where(
-                (final Location location) => timezoneFilterValue == null
-                    ? true
-                    : location.name
-                            .toLowerCase()
-                            .contains(timezoneFilterValue!) ||
-                        Duration(
-                          milliseconds: location.currentTimeZone.offset,
-                        )
+          children:
+              locations
+                  .where(
+                    (final Location location) =>
+                        timezoneFilterValue == null ||
+                        location.name.toLowerCase().contains(
+                          timezoneFilterValue!,
+                        ) ||
+                        Duration(milliseconds: location.currentTimeZone.offset)
                             .toTimezoneOffsetFormat()
                             .contains(timezoneFilterValue!),
-              )
-              .toList()
-              .asMap()
-              .map(
-                (final key, final value) => locationToListTile(key, value),
-              )
-              .values
-              .toList(),
+                  )
+                  .toList()
+                  .asMap()
+                  .map(locationToListTile)
+                  .values
+                  .toList(),
         ),
       ),
     );
@@ -128,24 +129,22 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
     final Location location,
   ) {
     final duration = Duration(milliseconds: location.currentTimeZone.offset);
-    final area = location.currentTimeZone.abbreviation
-        .replaceAll(RegExp(r'[\d+()-]'), '');
+    final area = location.currentTimeZone.abbreviation.replaceAll(
+      RegExp(r'[\d+()-]'),
+      '',
+    );
 
     return MapEntry(
       key,
       ListTile(
-        title: Text(
-          location.name,
-        ),
+        title: Text(location.name),
         subtitle: Text(
           'GMT ${duration.toTimezoneOffsetFormat()} ${area.isNotEmpty ? '($area)' : ''}',
         ),
         onTap: () {
           context.read<JobsCubit>().addJob(
-                ChangeServerTimezoneJob(
-                  timezone: location.name,
-                ),
-              );
+            ChangeServerTimezoneJob(timezone: location.name),
+          );
           Navigator.of(context).pop();
         },
       ),

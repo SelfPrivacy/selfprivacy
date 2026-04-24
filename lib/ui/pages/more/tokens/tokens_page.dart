@@ -37,40 +37,47 @@ class TokensPage extends StatelessWidget {
                   leadingIcon: Icons.warning_amber_outlined,
                 ),
               Column(
-                children: state.serverProviderCredentials
-                    .map(
-                      (final serverProviderCredential) =>
-                          _ServerProviderListItem(
-                        serverProviderCredential: serverProviderCredential,
-                      ),
-                    )
-                    .toList(),
+                children:
+                    state.serverProviderCredentials
+                        .map(
+                          (final serverProviderCredential) =>
+                              _ServerProviderListItem(
+                                serverProviderCredential:
+                                    serverProviderCredential,
+                              ),
+                        )
+                        .toList(),
               ),
               if (state.serversWithoutProviderCredentials.isNotEmpty)
                 Column(
                   children: [
                     const Divider(height: 0),
                     Column(
-                      children: state.serversWithoutProviderCredentials
-                          .map(
-                            (final server) => ListTileOnSurfaceVariant(
-                              title: 'tokens.server_without_token'.tr(
-                                namedArgs: {
-                                  'server_domain': server.domain.domainName,
-                                  'provider': server
-                                      .hostingDetails.provider.displayName,
-                                },
-                              ),
-                              subtitle: 'tokens.tap_to_add_token'.tr(),
-                              leadingIcon: Icons.add_circle_outline,
-                              onTap: () => context.router.push(
-                                AddServerProviderTokenRoute(
-                                  server: server,
+                      children:
+                          state.serversWithoutProviderCredentials
+                              .map(
+                                (final server) => ListTileOnSurfaceVariant(
+                                  title: 'tokens.server_without_token'.tr(
+                                    namedArgs: {
+                                      'server_domain': server.domain.domainName,
+                                      'provider':
+                                          server
+                                              .hostingDetails
+                                              .provider
+                                              .displayName,
+                                    },
+                                  ),
+                                  subtitle: 'tokens.tap_to_add_token'.tr(),
+                                  leadingIcon: Icons.add_circle_outline,
+                                  onTap:
+                                      () => context.router.push(
+                                        AddServerProviderTokenRoute(
+                                          server: server,
+                                        ),
+                                      ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .toList(),
+                              )
+                              .toList(),
                     ),
                   ],
                 ),
@@ -91,13 +98,14 @@ class TokensPage extends StatelessWidget {
                   leadingIcon: Icons.warning_amber_outlined,
                 ),
               Column(
-                children: state.dnsProviderCredentials
-                    .map(
-                      (final dnsProviderCredential) => _DnsProviderListItem(
-                        dnsProviderCredential: dnsProviderCredential,
-                      ),
-                    )
-                    .toList(),
+                children:
+                    state.dnsProviderCredentials
+                        .map(
+                          (final dnsProviderCredential) => _DnsProviderListItem(
+                            dnsProviderCredential: dnsProviderCredential,
+                          ),
+                        )
+                        .toList(),
               ),
             ],
           ),
@@ -116,24 +124,35 @@ class TokensPage extends StatelessWidget {
                   leadingIcon: Icons.warning_amber_outlined,
                 ),
               Column(
-                children: state.backupsCredentials
-                    .map(
-                      (final backupProviderCredential) =>
-                          _BackupProviderListItem(
-                        backupProviderCredential: backupProviderCredential,
-                      ),
-                    )
-                    .toList(),
+                children:
+                    state.backupsCredentials
+                        .map(
+                          (final backupProviderCredential) =>
+                              _BackupProviderListItem(
+                                backupProviderCredential:
+                                    backupProviderCredential,
+                              ),
+                        )
+                        .toList(),
               ),
+              if (state.backupsCredentials.isEmpty)
+                ListTileOnSurfaceVariant(
+                  title: 'tokens.tap_to_add_token'.tr(),
+                  leadingIcon: Icons.add_circle_outline,
+                  onTap:
+                      () => context.router.push(const AddBackupsTokenRoute()),
+                ),
             ],
           ),
         ),
         const Gap(16),
         ListTile(
           title: Text('tokens.check_again'.tr()),
-          onTap: (state is TokensInitial)
-              ? null
-              : () => context.read<TokensBloc>().add(const RevalidateTokens()),
+          onTap:
+              (state is TokensInitial)
+                  ? null
+                  : () =>
+                      context.read<TokensBloc>().add(const RevalidateTokens()),
           leading: const Icon(Icons.refresh_outlined),
           enabled: state is! TokensInitial,
         ),
@@ -143,9 +162,7 @@ class TokensPage extends StatelessWidget {
 }
 
 class _ServerProviderListItem extends StatelessWidget {
-  const _ServerProviderListItem({
-    required this.serverProviderCredential,
-  });
+  const _ServerProviderListItem({required this.serverProviderCredential});
 
   final TokenStatusWrapper<ServerProviderCredential> serverProviderCredential;
 
@@ -153,17 +170,19 @@ class _ServerProviderListItem extends StatelessWidget {
     String subtitle = '';
     subtitle += serverProviderCredential.status.statusText;
     if (serverProviderCredential.data.associatedServerIds.isNotEmpty) {
-      final String serverDomains =
-          serverProviderCredential.data.associatedServerIds
-              .map(
-                (final int serverId) => context
+      final String serverDomains = serverProviderCredential
+          .data
+          .associatedServerIds
+          .map(
+            (final int serverId) =>
+                context
                     .read<TokensBloc>()
                     .state
                     .getServerById(serverId)
                     .domain
                     .domainName,
-              )
-              .join(', ');
+          )
+          .join(', ');
       subtitle +=
           '. ${'tokens.used_by'.tr(namedArgs: {'servers': serverDomains})}';
     }
@@ -172,21 +191,19 @@ class _ServerProviderListItem extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
-          ListTileOnSurfaceVariant(
-            title:
-                '${serverProviderCredential.data.provider.displayName} (${serverProviderCredential.data.tokenPrefix}...)',
-            subtitle: getSubtitle(context),
-            leadingIcon: serverProviderCredential.status.icon,
-          ),
-        ],
-      );
+    children: [
+      ListTileOnSurfaceVariant(
+        title:
+            '${serverProviderCredential.data.provider.displayName} (${serverProviderCredential.data.tokenPrefix}...)',
+        subtitle: getSubtitle(context),
+        leadingIcon: serverProviderCredential.status.icon,
+      ),
+    ],
+  );
 }
 
 class _DnsProviderListItem extends StatelessWidget {
-  const _DnsProviderListItem({
-    required this.dnsProviderCredential,
-  });
+  const _DnsProviderListItem({required this.dnsProviderCredential});
 
   final TokenStatusWrapper<DnsProviderCredential> dnsProviderCredential;
 
@@ -194,8 +211,10 @@ class _DnsProviderListItem extends StatelessWidget {
     String subtitle = '';
     subtitle += dnsProviderCredential.status.statusText;
     if (dnsProviderCredential.data.associatedDomainNames.isNotEmpty) {
-      final String serverDomains =
-          dnsProviderCredential.data.associatedDomainNames.join(', ');
+      final String serverDomains = dnsProviderCredential
+          .data
+          .associatedDomainNames
+          .join(', ');
       subtitle +=
           '. ${'tokens.used_by'.tr(namedArgs: {'servers': serverDomains})}';
     }
@@ -204,41 +223,97 @@ class _DnsProviderListItem extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
-          ListTileOnSurfaceVariant(
-            title:
-                '${dnsProviderCredential.data.provider.displayName} (${dnsProviderCredential.data.tokenPrefix}...)',
-            subtitle: getSubtitle(context),
-            leadingIcon: dnsProviderCredential.status.icon,
-          ),
-        ],
-      );
+    children: [
+      ListTileOnSurfaceVariant(
+        title:
+            '${dnsProviderCredential.data.provider.displayName} (${dnsProviderCredential.data.tokenPrefix}...)',
+        subtitle: getSubtitle(context),
+        leadingIcon: dnsProviderCredential.status.icon,
+      ),
+    ],
+  );
 }
 
 class _BackupProviderListItem extends StatelessWidget {
-  const _BackupProviderListItem({
-    required this.backupProviderCredential,
-  });
+  const _BackupProviderListItem({required this.backupProviderCredential});
 
   final TokenStatusWrapper<BackupsCredential> backupProviderCredential;
 
   String getSubtitle(final BuildContext context) {
     String subtitle = '';
-    subtitle += backupProviderCredential.status.statusText;
-    return subtitle;
+    return subtitle += backupProviderCredential.status.statusText;
   }
+
+  Future _showConfirmationDialog(
+    final BuildContext context,
+    final BackupsCredential credential,
+  ) => showDialog(
+    context: context,
+    builder:
+        (final context) => AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.link_off_outlined),
+              const SizedBox(height: 16),
+              Text(
+                'tokens.remove_backup_token_alert.title'.tr(),
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'tokens.remove_backup_token_alert.description'.tr(
+                  args: [credential.provider.name],
+                ),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('tokens.remove_backup_token_alert.no'.tr()),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'tokens.remove_backup_token_alert.yes'.tr(),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              onPressed: () {
+                context.read<TokensBloc>().add(
+                  RemoveBackupsProviderCredential(credential),
+                );
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+  );
 
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
-          ListTileOnSurfaceVariant(
-            title:
-                '${backupProviderCredential.data.provider.name} (${backupProviderCredential.data.tokenPrefix})',
-            subtitle: getSubtitle(context),
-            leadingIcon: backupProviderCredential.status.icon,
-          ),
-        ],
-      );
+    children: [
+      ListTileOnSurfaceVariant(
+        title:
+            '${backupProviderCredential.data.provider.name} (${backupProviderCredential.data.tokenPrefix})',
+        subtitle: getSubtitle(context),
+        leadingIcon: backupProviderCredential.status.icon,
+        onTap:
+            () =>
+                _showConfirmationDialog(context, backupProviderCredential.data),
+      ),
+    ],
+  );
 }
 
 extension on TokenStatus {

@@ -6,8 +6,6 @@ part 'server_job.g.dart';
 
 @JsonSerializable()
 class ServerJob extends Equatable {
-  factory ServerJob.fromJson(final Map<String, dynamic> json) =>
-      _$ServerJobFromJson(json);
   const ServerJob({
     required this.name,
     required this.description,
@@ -23,21 +21,24 @@ class ServerJob extends Equatable {
     this.finishedAt,
   });
 
+  factory ServerJob.fromJson(final Map<String, dynamic> json) =>
+      _$ServerJobFromJson(json);
+
   ServerJob.fromGraphQL(final Fragment$basicApiJobsFields serverJob)
-      : this(
-          createdAt: serverJob.createdAt,
-          description: serverJob.description,
-          error: serverJob.error,
-          finishedAt: serverJob.finishedAt,
-          name: serverJob.name,
-          progress: serverJob.progress,
-          result: serverJob.result,
-          status: JobStatusEnum.fromString(serverJob.status),
-          statusText: serverJob.statusText,
-          uid: serverJob.uid,
-          typeId: serverJob.typeId,
-          updatedAt: serverJob.updatedAt,
-        );
+    : this(
+        createdAt: serverJob.createdAt,
+        description: serverJob.description,
+        error: serverJob.error,
+        finishedAt: serverJob.finishedAt,
+        name: serverJob.name,
+        progress: serverJob.progress,
+        result: serverJob.result,
+        status: JobStatusEnum.fromString(serverJob.status),
+        statusText: serverJob.statusText,
+        uid: serverJob.uid,
+        typeId: serverJob.typeId,
+        updatedAt: serverJob.updatedAt,
+      );
   final String name;
   final String description;
   final JobStatusEnum status;
@@ -54,19 +55,19 @@ class ServerJob extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        description,
-        status,
-        uid,
-        typeId,
-        updatedAt,
-        createdAt,
-        error,
-        progress,
-        result,
-        statusText,
-        finishedAt,
-      ];
+    name,
+    description,
+    status,
+    uid,
+    typeId,
+    updatedAt,
+    createdAt,
+    error,
+    progress,
+    result,
+    statusText,
+    finishedAt,
+  ];
 }
 
 enum JobStatusEnum {

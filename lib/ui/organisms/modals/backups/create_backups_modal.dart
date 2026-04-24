@@ -30,8 +30,9 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
     final List<String> busyServices =
         context.read<ServerJobsBloc>().state.busyServices;
     selectedServices.addAll(
-      widget.services
-          .where((final Service service) => !busyServices.contains(service.id)),
+      widget.services.where(
+        (final Service service) => !busyServices.contains(service.id),
+      ),
     );
   }
 
@@ -57,30 +58,26 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
             setState(() {
               if (value ?? true) {
                 setState(() {
-                  selectedServices.clear();
-                  selectedServices.addAll(
-                    widget.services.where(
-                      (final service) => !busyServices.contains(service.id),
-                    ),
-                  );
+                  selectedServices
+                    ..clear()
+                    ..addAll(
+                      widget.services.where(
+                        (final service) => !busyServices.contains(service.id),
+                      ),
+                    );
                 });
               } else {
                 selectedServices.clear();
               }
             });
           },
-          title: Text(
-            'backup.select_all'.tr(),
-          ),
-          secondary: const Icon(
-            Icons.checklist_outlined,
-          ),
-          value: selectedServices.length >=
+          title: Text('backup.select_all'.tr()),
+          secondary: const Icon(Icons.checklist_outlined),
+          value:
+              selectedServices.length >=
               widget.services.length - busyServices.length,
         ),
-        const Divider(
-          height: 1.0,
-        ),
+        const Divider(height: 1),
         ...widget.services.map(
           (final Service service) => CreateBackupCheckboxItem(
             service: service,
@@ -104,17 +101,16 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         const SizedBox(height: 16),
         // Create backup button
         FilledButton(
-          onPressed: selectedServices.isEmpty
-              ? null
-              : () {
-                  context
-                      .read<BackupsBloc>()
-                      .add(CreateBackups(selectedServices));
-                  Navigator.of(context).pop();
-                },
-          child: Text(
-            'backup.start'.tr(),
-          ),
+          onPressed:
+              selectedServices.isEmpty
+                  ? null
+                  : () {
+                    context.read<BackupsBloc>().add(
+                      CreateBackups(selectedServices),
+                    );
+                    Navigator.of(context).pop();
+                  },
+          child: Text('backup.start'.tr()),
         ),
       ],
     );

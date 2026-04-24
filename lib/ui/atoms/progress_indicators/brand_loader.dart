@@ -11,11 +11,11 @@ class HorizontalLoader extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('basis.wait'.tr()),
-          const SizedBox(height: 10),
-          const LinearProgressIndicator(minHeight: 3),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text('basis.wait'.tr()),
+      const SizedBox(height: 10),
+      const LinearProgressIndicator(minHeight: 3),
+    ],
+  );
 }

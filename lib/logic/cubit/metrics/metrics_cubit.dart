@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 part 'metrics_state.dart';
 
@@ -14,6 +15,8 @@ class MetricsCubit extends Cubit<MetricsState> {
   final MetricsRepository repository = MetricsRepository();
 
   Timer? timer;
+
+  static final logger = const AppLogger(name: 'metrics_cubit').log;
 
   @override
   Future<void> close() {
@@ -27,35 +30,32 @@ class MetricsCubit extends Cubit<MetricsState> {
     }
   }
 
-  void changePeriod(final Period period) async {
+  Future<void> changePeriod(final Period period) async {
     if (state is! MetricsLoading) {
       closeTimer();
       emit(MetricsLoading(period));
-      load(period);
+      await load(period);
     }
   }
 
-  void restart() async {
-    load(state.period);
+  void restart() {
+    unawaited(load(state.period));
   }
 
-  void load(final Period period) async {
+  Future<void> load(final Period period) async {
     try {
-      final MetricsStateUpdate newStateUpdate =
-          await repository.getRelevantServerMetrics(period);
+      final MetricsStateUpdate newStateUpdate = await repository
+          .getRelevantServerMetrics(period);
 
       int duration = newStateUpdate.nextCheckInSeconds;
       if (duration <= 0) {
         duration = state.period.stepPeriodInSeconds;
       }
-      timer = Timer(
-        Duration(seconds: duration),
-        () => load(period),
-      );
+      timer = Timer(Duration(seconds: duration), () => load(period));
 
       emit(newStateUpdate.newState);
     } on StateError {
-      print('Tried to emit metrics when cubit is closed');
+      logger('Tried to emit metrics when cubit is closed');
     }
   }
 }

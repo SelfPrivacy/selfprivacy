@@ -26,15 +26,14 @@ class DnsDetailsPage extends StatefulWidget {
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
   @override
   Widget build(final BuildContext context) {
-    final bool isReady = context.watch<ServerInstallationCubit>().state
-        is ServerInstallationFinished;
+    final bool isReady =
+        context.watch<ServerInstallationCubit>().state
+            is ServerInstallationFinished;
     final String domain =
         getIt<ResourcesModel>().serverDomain?.domainName ?? '';
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
     final List<DesiredDnsRecord> dnsRecords =
         context.watch<DnsRecordsCubit>().state.dnsRecords;
-
-    print(dnsCubit.dnsState);
 
     if (!isReady) {
       return BrandHeroScreen(
@@ -55,27 +54,21 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       final String title,
       final String subtitle,
       final DnsRecordsCategory category,
-    ) =>
-        [
-          SectionHeadline(
-            title: title,
-            subtitle: subtitle,
-          ),
-          ...recordsToShow
-              .where(
-                (final dnsRecord) => dnsRecord.category == category,
-              )
-              .map(
-                (final dnsRecord) => Skeletonizer(
-                  enabled: refreshing,
-                  enableSwitchAnimation: true,
-                  child: DnsRecordItem(
-                    dnsRecord: dnsRecord,
-                    refreshing: refreshing,
-                  ),
-                ),
+    ) => [
+      SectionHeadline(title: title, subtitle: subtitle),
+      ...recordsToShow
+          .where((final dnsRecord) => dnsRecord.category == category)
+          .map(
+            (final dnsRecord) => Skeletonizer(
+              enabled: refreshing,
+              enableSwitchAnimation: true,
+              child: DnsRecordItem(
+                dnsRecord: dnsRecord,
+                refreshing: refreshing,
               ),
-        ];
+            ),
+          ),
+    ];
 
     return BrandHeroScreen(
       hasBackButton: true,
@@ -85,23 +78,23 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       children: <Widget>[
         DnsStateCard(
           dnsState: dnsCubit.dnsState,
-          fixCallback: () {
-            context.read<DnsRecordsCubit>().fix();
+          fixCallback: () async {
+            await context.read<DnsRecordsCubit>().fix();
           },
         ),
-        const Gap(8.0),
+        const Gap(8),
         ...recordsSection(
           'domain.services_title'.tr(),
           'domain.services_subtitle'.tr(),
           DnsRecordsCategory.services,
         ),
-        const Gap(8.0),
+        const Gap(8),
         ...recordsSection(
           'domain.email_title'.tr(),
           'domain.email_subtitle'.tr(),
           DnsRecordsCategory.email,
         ),
-        const Gap(8.0),
+        const Gap(8),
         ...recordsSection(
           'domain.other_title'.tr(),
           'domain.other_subtitle'.tr(),

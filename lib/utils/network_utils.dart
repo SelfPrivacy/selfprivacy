@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum DnsRecordStatus { ok, waiting, nonexistent }
 
@@ -22,15 +22,13 @@ Future<Map<String, DnsRecordStatus>> validateDnsMatch(
   final Map<String, DnsRecordStatus> matches = <String, DnsRecordStatus>{};
 
   Future<void> lookup(final String address) async {
-    await InternetAddress.lookup(address).then(
-      (final records) {
-        for (final record in records) {
-          final bool isIpCorrect = record.address == ip4;
-          matches[record.host] =
-              isIpCorrect ? DnsRecordStatus.ok : DnsRecordStatus.waiting;
-        }
-      },
-    );
+    await InternetAddress.lookup(address).then((final records) {
+      for (final record in records) {
+        final bool isIpCorrect = record.address == ip4;
+        matches[record.host] =
+            isIpCorrect ? DnsRecordStatus.ok : DnsRecordStatus.waiting;
+      }
+    });
   }
 
   try {
@@ -39,7 +37,9 @@ Future<Map<String, DnsRecordStatus>> validateDnsMatch(
       await lookup('$subdomain.$domain');
     }
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 
   if (matches.isEmpty) {
@@ -63,8 +63,9 @@ DnsRecord? extractDkimRecord(final List<DnsRecord> records) {
 
 String getHostnameFromDomain(final String domain) {
   // Replace all non-alphanumeric characters with an underscore
-  String hostname =
-      domain.split('.')[0].replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+  String hostname = domain
+      .split('.')[0]
+      .replaceAll(RegExp('[^a-zA-Z0-9]'), '-');
   if (hostname.endsWith('-')) {
     hostname = hostname.substring(0, hostname.length - 1);
   }
@@ -78,25 +79,16 @@ String getHostnameFromDomain(final String domain) {
   return hostname;
 }
 
-void launchURL(final url) async {
-  try {
-    final Uri uri = Uri.parse(url);
-    await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-  } catch (e) {
-    print(e);
-  }
-}
-
-List<DnsRecord> getProjectDnsRecords(
+List<DnsRecord> getProjectDnsRecords({
+  required final bool isCreating,
   final String? domainName,
   final String? ip4,
-  final bool isCreating,
-) {
-  final DnsRecord domainA =
-      DnsRecord(type: 'A', name: domainName, content: ip4);
+}) {
+  final DnsRecord domainA = DnsRecord(
+    type: 'A',
+    name: domainName,
+    content: ip4,
+  );
 
   final DnsRecord mx = DnsRecord(type: 'MX', name: '@', content: domainName);
   final DnsRecord apiA = DnsRecord(type: 'A', name: 'api', content: ip4);

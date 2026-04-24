@@ -11,7 +11,6 @@ import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_new_device_key.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_old_token.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_recovery_key.dart';
-import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_backblaze.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_dns.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
@@ -19,8 +18,8 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_server_provider_c
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
 
 @RoutePage()
-class RecoveryRouting extends StatelessWidget {
-  const RecoveryRouting({super.key});
+class RecoveryRoutingPage extends StatelessWidget {
+  const RecoveryRoutingPage({super.key});
 
   @override
   Widget build(final BuildContext context) {
@@ -39,28 +38,18 @@ class RecoveryRouting extends StatelessWidget {
               ServerRecoveryCapabilities.legacy) {
             currentPage = const RecoveryFallbackMethodSelect();
           }
-          break;
         case RecoveryStep.recoveryKey:
           currentPage = const RecoverByRecoveryKey();
-          break;
         case RecoveryStep.newDeviceKey:
           currentPage = const RecoverByNewDeviceKeyInstruction();
-          break;
         case RecoveryStep.oldToken:
           currentPage = const RecoverByOldToken();
-          break;
         case RecoveryStep.serverProviderToken:
           currentPage = const RecoveryServerProviderConnected();
-          break;
         case RecoveryStep.serverSelection:
           currentPage = const RecoveryConfirmServer();
-          break;
         case RecoveryStep.dnsProviderToken:
           currentPage = const RecoveryConfirmDns();
-          break;
-        case RecoveryStep.backblazeToken:
-          currentPage = const RecoveryConfirmBackblaze();
-          break;
       }
     }
 
@@ -86,10 +75,11 @@ class SelectDomainToRecover extends StatelessWidget {
     final serverInstallation = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final context) => RecoveryDomainFormCubit(
-        serverInstallation,
-        FieldCubitFactory(context),
-      ),
+      create:
+          (final context) => RecoveryDomainFormCubit(
+            serverInstallation,
+            FieldCubitFactory(context),
+          ),
       child: Builder(
         builder: (final context) {
           final formCubitState = context.watch<RecoveryDomainFormCubit>().state;
@@ -100,9 +90,9 @@ class SelectDomainToRecover extends StatelessWidget {
                 if (state.currentStep == RecoveryStep.selecting) {
                   if (state.recoveryCapabilities ==
                       ServerRecoveryCapabilities.none) {
-                    context
-                        .read<RecoveryDomainFormCubit>()
-                        .setCustomError('recovering.domain_recover_error'.tr());
+                    context.read<RecoveryDomainFormCubit>().setCustomError(
+                      'recovering.domain_recover_error'.tr(),
+                    );
                   }
                 }
               }
@@ -113,8 +103,8 @@ class SelectDomainToRecover extends StatelessWidget {
               hasBackButton: true,
               hasFlashButton: false,
               ignoreBreakpoints: true,
-              onBackButtonPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
+              onBackButtonPressed: () async {
+                await Navigator.of(context).pushAndRemoveUntil(
                   materialRoute(const RootPage()),
                   (final predicate) => false,
                 );
@@ -131,10 +121,13 @@ class SelectDomainToRecover extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 BrandButton.filled(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () =>
-                          context.read<RecoveryDomainFormCubit>().trySubmit(),
+                  onPressed:
+                      formCubitState.isSubmitting
+                          ? null
+                          : () =>
+                              context
+                                  .read<RecoveryDomainFormCubit>()
+                                  .trySubmit(),
                   child: Text('basis.continue'.tr()),
                 ),
               ],

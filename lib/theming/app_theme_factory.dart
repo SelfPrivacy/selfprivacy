@@ -9,11 +9,7 @@ abstract class AppThemeFactory {
   static Future<ThemeData> create({
     required final bool isDark,
     required final Color fallbackColor,
-  }) =>
-      _createAppTheme(
-        isDark: isDark,
-        fallbackColor: fallbackColor,
-      );
+  }) => _createAppTheme(isDark: isDark, fallbackColor: fallbackColor);
 
   static Future<ThemeData> _createAppTheme({
     required final Color fallbackColor,
@@ -21,8 +17,9 @@ abstract class AppThemeFactory {
   }) async {
     final Brightness brightness = isDark ? Brightness.dark : Brightness.light;
 
-    final ColorScheme? dynamicColorsScheme =
-        await _getDynamicColors(brightness);
+    final ColorScheme? dynamicColorsScheme = await _getDynamicColors(
+      brightness,
+    );
 
     final Color? accentColor = await _getAccentColor();
 
@@ -42,9 +39,7 @@ abstract class AppThemeFactory {
       typography: appTypography,
       useMaterial3: true,
       listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
 
@@ -55,37 +50,36 @@ abstract class AppThemeFactory {
     final Brightness brightness,
   ) async {
     List<Color> extractAdditionalColours(final ColorScheme scheme) => [
-          scheme.surface,
-          scheme.surfaceDim,
-          scheme.surfaceBright,
-          scheme.surfaceContainerLowest,
-          scheme.surfaceContainerLow,
-          scheme.surfaceContainer,
-          scheme.surfaceContainerHigh,
-          scheme.surfaceContainerHighest,
-        ];
+      scheme.surface,
+      scheme.surfaceDim,
+      scheme.surfaceBright,
+      scheme.surfaceContainerLowest,
+      scheme.surfaceContainerLow,
+      scheme.surfaceContainer,
+      scheme.surfaceContainerHigh,
+      scheme.surfaceContainerHighest,
+    ];
 
     ColorScheme insertAdditionalColours(
       final ColorScheme scheme,
       final List<Color> additionalColours,
-    ) =>
-        scheme.copyWith(
-          surface: additionalColours[0],
-          surfaceDim: additionalColours[1],
-          surfaceBright: additionalColours[2],
-          surfaceContainerLowest: additionalColours[3],
-          surfaceContainerLow: additionalColours[4],
-          surfaceContainer: additionalColours[5],
-          surfaceContainerHigh: additionalColours[6],
-          surfaceContainerHighest: additionalColours[7],
-        );
+    ) => scheme.copyWith(
+      surface: additionalColours[0],
+      surfaceDim: additionalColours[1],
+      surfaceBright: additionalColours[2],
+      surfaceContainerLowest: additionalColours[3],
+      surfaceContainerLow: additionalColours[4],
+      surfaceContainer: additionalColours[5],
+      surfaceContainerHigh: additionalColours[6],
+      surfaceContainerHighest: additionalColours[7],
+    );
 
     try {
-      final ColorScheme? colorScheme =
-          await DynamicColorPlugin.getCorePalette().then(
-        (final corePalette) =>
-            corePalette?.toColorScheme(brightness: brightness),
-      );
+      final ColorScheme? colorScheme = await DynamicColorPlugin.getCorePalette()
+          .then(
+            (final corePalette) =>
+                corePalette?.toColorScheme(brightness: brightness),
+          );
       if (colorScheme == null) {
         return Future.value(null);
       }
@@ -95,8 +89,10 @@ abstract class AppThemeFactory {
         brightness: brightness,
       );
       final additionalColours = extractAdditionalColours(fromSeed);
-      final updatedColorScheme =
-          insertAdditionalColours(colorScheme, additionalColours);
+      final updatedColorScheme = insertAdditionalColours(
+        colorScheme,
+        additionalColours,
+      );
       return Future.value(updatedColorScheme);
     } on PlatformException {
       return Future.value(null);

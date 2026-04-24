@@ -8,7 +8,7 @@ part of 'server.dart';
 
 class ServerAdapter extends TypeAdapter<Server> {
   @override
-  final int typeId = 9;
+  final typeId = 9;
 
   @override
   Server read(BinaryReader reader) {

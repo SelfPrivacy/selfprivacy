@@ -5,24 +5,25 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
 class SecureStorage {
-  static final log = const AppLogger(name: 'secure_storage').log;
+  static final logger = const AppLogger(name: 'secure_storage').log;
 
   static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
   static String keyName = 'key';
 
   static Future<Uint8List?> getKey() async {
     try {
-      final bool hasEncryptionKey =
-          await secureStorage.containsKey(key: keyName);
+      final bool hasEncryptionKey = await secureStorage.containsKey(
+        key: keyName,
+      );
       if (!hasEncryptionKey) {
         return null;
       }
       final String? string = await secureStorage.read(key: keyName);
-      log('successfully got encryption key: $string');
+      logger('successfully got encryption key: $string');
 
       return base64Url.decode(string!);
     } catch (error, stackTrace) {
-      log(
+      logger(
         'error reading encryption key',
         error: error,
         stackTrace: stackTrace,
@@ -35,9 +36,9 @@ class SecureStorage {
     try {
       final value = base64UrlEncode(key);
       await secureStorage.write(key: keyName, value: value);
-      log('successfully saved encryption key: $value');
+      logger('successfully saved encryption key: $value');
     } catch (error, stackTrace) {
-      log(
+      logger(
         'error saving new encryption key',
         error: error,
         stackTrace: stackTrace,

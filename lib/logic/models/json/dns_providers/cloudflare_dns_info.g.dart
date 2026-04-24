@@ -7,16 +7,10 @@ part of 'cloudflare_dns_info.dart';
 // **************************************************************************
 
 CloudflareZone _$CloudflareZoneFromJson(Map<String, dynamic> json) =>
-    CloudflareZone(
-      id: json['id'] as String,
-      name: json['name'] as String,
-    );
+    CloudflareZone(id: json['id'] as String, name: json['name'] as String);
 
 Map<String, dynamic> _$CloudflareZoneToJson(CloudflareZone instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };
+    <String, dynamic>{'id': instance.id, 'name': instance.name};
 
 CloudflareDnsRecord _$CloudflareDnsRecordFromJson(Map<String, dynamic> json) =>
     CloudflareDnsRecord(
@@ -31,14 +25,14 @@ CloudflareDnsRecord _$CloudflareDnsRecordFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CloudflareDnsRecordToJson(
-        CloudflareDnsRecord instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'name': instance.name,
-      'content': instance.content,
-      'data': instance.data,
-      'ttl': instance.ttl,
-      'priority': instance.priority,
-      'comment': instance.comment,
-    };
+  CloudflareDnsRecord instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'type': instance.type,
+  'name': instance.name,
+  'content': instance.content,
+  'data': instance.data,
+  'ttl': instance.ttl,
+  'priority': instance.priority,
+  'comment': instance.comment,
+};

@@ -11,35 +11,24 @@ part 'users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc() : super(UsersInitial()) {
-    on<UsersListChanged>(
-      _updateList,
-      transformer: sequential(),
-    );
-    on<UsersListRefresh>(
-      _reload,
-      transformer: droppable(),
-    );
+    on<UsersListChanged>(_updateList, transformer: sequential());
+    on<UsersListRefresh>(_reload, transformer: droppable());
     on<UsersConnectionStatusChanged>(
       _mapConnectionStatusChangedToState,
       transformer: sequential(),
     );
 
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiConnectionStatusSubscription =
-        apiConnectionRepository.connectionStatusStream.listen(
-      (final ConnectionStatus connectionStatus) {
-        add(
-          UsersConnectionStatusChanged(connectionStatus),
-        );
-      },
-    );
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        add(
-          UsersListChanged(apiData.users.data ?? []),
-        );
-      },
-    );
+    _apiConnectionStatusSubscription = apiConnectionRepository
+        .connectionStatusStream
+        .listen((final ConnectionStatus connectionStatus) {
+          add(UsersConnectionStatusChanged(connectionStatus));
+        });
+    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      add(UsersListChanged(apiData.users.data ?? []));
+    });
   }
 
   Future<void> _updateList(
@@ -50,9 +39,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       emit(UsersInitial());
       return;
     }
-    final newState = UsersLoaded(
-      users: event.users,
-    );
+    final newState = UsersLoaded(users: event.users);
     emit(newState);
   }
 
@@ -76,7 +63,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     switch (event.connectionStatus) {
       case ConnectionStatus.nonexistent:
         emit(UsersInitial());
-        break;
       case ConnectionStatus.reconnecting:
       case ConnectionStatus.connected:
         if (state is! UsersLoaded) {
@@ -97,9 +83,9 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   }
 
   @override
-  Future<void> close() {
-    _apiDataSubscription?.cancel();
-    _apiConnectionStatusSubscription?.cancel();
+  Future<void> close() async {
+    await _apiDataSubscription?.cancel();
+    await _apiConnectionStatusSubscription?.cancel();
     return super.close();
   }
 }

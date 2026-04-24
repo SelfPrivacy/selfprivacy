@@ -23,16 +23,11 @@ part 'tokens_state.dart';
 
 class TokensBloc extends Bloc<TokensEvent, TokensState> {
   TokensBloc() : super(const TokensInitial()) {
-    on<RevalidateTokens>(
-      validateTokens,
-      transformer: droppable(),
-    );
-    on<AddServerProviderToken>(
-      addServerProviderCredential,
-    );
-    on<ServerSelectedForProviderToken>(
-      connectServerToProviderToken,
-    );
+    on<RevalidateTokens>(validateTokens, transformer: droppable());
+    on<AddServerProviderToken>(addServerProviderCredential);
+    on<AddBackupsProviderCredential>(addBackupsProviderCredential);
+    on<RemoveBackupsProviderCredential>(removeBackupsProviderCredential);
+    on<ServerSelectedForProviderToken>(connectServerToProviderToken);
     on<RefreshServerApiTokenEvent>(
       refreshServerApiToken,
       transformer: droppable(),
@@ -40,8 +35,9 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
 
     add(const RevalidateTokens());
 
-    _resourcesModelSubscription =
-        getIt<ResourcesModel>().statusStream.listen((final _) {
+    _resourcesModelSubscription = getIt<ResourcesModel>().statusStream.listen((
+      final _,
+    ) {
       add(const RevalidateTokens());
     });
   }
@@ -59,28 +55,31 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
         getIt<ResourcesModel>().backupsCredentials;
 
     final List<TokenStatusWrapper<ServerProviderCredential>>
-        validatedServerProviderCredentials = [];
+    validatedServerProviderCredentials = [];
     final List<TokenStatusWrapper<DnsProviderCredential>>
-        validatedDnsProviderCredentials = [];
+    validatedDnsProviderCredentials = [];
     final List<TokenStatusWrapper<BackupsCredential>>
-        validatedBackupsCredentials = [];
+    validatedBackupsCredentials = [];
 
     for (final credential in serverProviderCredentials) {
       final TokenStatus status = await _validateServerProviderToken(credential);
-      validatedServerProviderCredentials
-          .add(TokenStatusWrapper(data: credential, status: status));
+      validatedServerProviderCredentials.add(
+        TokenStatusWrapper(data: credential, status: status),
+      );
     }
 
     for (final credential in dnsProviderCredentials) {
       final TokenStatus status = await _validateDnsProviderToken(credential);
-      validatedDnsProviderCredentials
-          .add(TokenStatusWrapper(data: credential, status: status));
+      validatedDnsProviderCredentials.add(
+        TokenStatusWrapper(data: credential, status: status),
+      );
     }
 
     for (final credential in backupsCredentials) {
       final TokenStatus status = await _validateBackupsToken(credential);
-      validatedBackupsCredentials
-          .add(TokenStatusWrapper(data: credential, status: status));
+      validatedBackupsCredentials.add(
+        TokenStatusWrapper(data: credential, status: status),
+      );
     }
 
     emit(
@@ -100,11 +99,13 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       token: credential.token,
       isAuthorized: true,
     );
-    final serverProvider =
-        ServerProviderFactory.createServerProviderInterface(settings);
+    final serverProvider = ServerProviderFactory.createServerProviderInterface(
+      settings,
+    );
     // First, we check if the token works at all
-    final basicInitCheckResult =
-        await serverProvider.tryInitApiByToken(credential.token);
+    final basicInitCheckResult = await serverProvider.tryInitApiByToken(
+      credential.token,
+    );
     if (!basicInitCheckResult.data) {
       return TokenStatus.invalid;
     }
@@ -129,8 +130,9 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       isAuthorized: true,
     );
     final dnsProvider = DnsProviderFactory.createDnsProviderInterface(settings);
-    final basicInitCheckResult =
-        await dnsProvider.tryInitApiByToken(credential.token);
+    final basicInitCheckResult = await dnsProvider.tryInitApiByToken(
+      credential.token,
+    );
     if (!basicInitCheckResult.data) {
       return TokenStatus.invalid;
     }
@@ -157,10 +159,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final backupsProvider =
         BackupsProviderFactory.createBackupsProviderInterface(settings);
     final basicInitCheckResult = await backupsProvider.tryInitApiByToken(
-      encodedBackblazeKey(
-        credential.keyId,
-        credential.applicationKey,
-      ),
+      encodedBackblazeKey(credential.keyId, credential.applicationKey),
     );
     if (!basicInitCheckResult.data) {
       return TokenStatus.invalid;
@@ -172,8 +171,9 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final AddServerProviderToken event,
     final Emitter<TokensState> emit,
   ) async {
-    await getIt<ResourcesModel>()
-        .addServerProviderToken(event.serverProviderCredential);
+    await getIt<ResourcesModel>().addServerProviderToken(
+      event.serverProviderCredential,
+    );
 
     final ServerProviderSettings settings = ServerProviderSettings(
       provider: event.serverProviderCredential.provider,
@@ -181,6 +181,31 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       isAuthorized: true,
     );
     ProvidersController.initServerProvider(settings);
+  }
+
+  Future<void> addBackupsProviderCredential(
+    final AddBackupsProviderCredential event,
+    final Emitter<TokensState> emit,
+  ) async {
+    // TODO(inex): Validate token
+    await getIt<ResourcesModel>().addBackupsCredential(event.credential);
+
+    final BackupsProviderSettings settings = BackupsProviderSettings(
+      provider: event.credential.provider,
+      token: event.credential.applicationKey,
+      tokenId: event.credential.keyId,
+      isAuthorized: true,
+    );
+
+    ProvidersController.initBackupsProvider(settings);
+  }
+
+  Future<void> removeBackupsProviderCredential(
+    final RemoveBackupsProviderCredential event,
+    final Emitter<TokensState> emit,
+  ) async {
+    await getIt<ResourcesModel>().removeBackupsCredential(event.credential);
+    ProvidersController.clearBackupsProvider();
   }
 
   Future<void> connectServerToProviderToken(
@@ -230,10 +255,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       apiToken: newToken,
     );
     await getIt<ResourcesModel>().updateServerByDomain(
-      Server(
-        hostingDetails: hostingDetails,
-        domain: serverDetails.domain,
-      ),
+      Server(hostingDetails: hostingDetails, domain: serverDetails.domain),
     );
     getIt<NavigationService>().showSnackBar(
       'devices.refresh_token_alert.success_refresh_token'.tr(),
@@ -241,8 +263,8 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
   }
 
   @override
-  Future<void> close() {
-    _resourcesModelSubscription.cancel();
+  Future<void> close() async {
+    await _resourcesModelSubscription.cancel();
     return super.close();
   }
 

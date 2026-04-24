@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -48,65 +49,55 @@ class AboutApplicationPage extends StatelessWidget {
         SectionTitle(title: 'about_application_page.versions'.tr()),
         FutureBuilder(
           future: _packageVersion(),
-          builder: (final context, final snapshot) => ListTile(
-            title: Text(
-              'about_application_page.application_version_text'.tr(),
-            ),
-            subtitle: Text(
-              snapshot.data.toString(),
-            ),
-            leading: Icon(
-              deviceIcon,
-            ),
-            onLongPress: () {
-              PlatformAdapter.setClipboard(
-                snapshot.data.toString(),
-              );
-              getIt<NavigationService>().showSnackBar(
-                'basis.copied_to_clipboard'.tr(),
-              );
-            },
-          ),
+          builder:
+              (final context, final snapshot) => ListTile(
+                title: Text(
+                  'about_application_page.application_version_text'.tr(),
+                ),
+                subtitle: Text(snapshot.data.toString()),
+                leading: Icon(deviceIcon),
+                onLongPress: () async {
+                  await PlatformAdapter.setClipboard(snapshot.data.toString());
+                  getIt<NavigationService>().showSnackBar(
+                    'basis.copied_to_clipboard'.tr(),
+                  );
+                },
+              ),
         ),
         if (getIt<ApiConnectionRepository>().apiData.apiVersion.data != null)
           FutureBuilder(
             future: _apiVersion(),
-            builder: (final context, final snapshot) => ListTile(
-              title: Text(
-                'about_application_page.api_version_text'.tr(),
-              ),
-              subtitle: Text(snapshot.data.toString()),
-              leading: const Icon(
-                Icons.api_outlined,
-              ),
-              onLongPress: () {
-                PlatformAdapter.setClipboard(
-                  snapshot.data.toString(),
-                );
-                getIt<NavigationService>().showSnackBar(
-                  'basis.copied_to_clipboard'.tr(),
-                );
-              },
-            ),
+            builder:
+                (final context, final snapshot) => ListTile(
+                  title: Text('about_application_page.api_version_text'.tr()),
+                  subtitle: Text(snapshot.data.toString()),
+                  leading: const Icon(Icons.api_outlined),
+                  onLongPress: () async {
+                    await PlatformAdapter.setClipboard(
+                      snapshot.data.toString(),
+                    );
+                    getIt<NavigationService>().showSnackBar(
+                      'basis.copied_to_clipboard'.tr(),
+                    );
+                  },
+                ),
           ),
         FutureBuilder(
           future: _packageVersion(),
-          builder: (final context, final snapshot) => ListTile(
-            title: Text('about_application_page.open_source_licenses'.tr()),
-            onTap: () => showLicensePage(
-              context: context,
-              applicationName: 'SelfPrivacy',
-              applicationVersion: snapshot.data.toString(),
-              applicationLegalese: '© 2024 SelfPrivacy',
-            ),
-            leading: const Icon(
-              Icons.copyright_outlined,
-            ),
-          ),
+          builder:
+              (final context, final snapshot) => ListTile(
+                title: Text('about_application_page.open_source_licenses'.tr()),
+                onTap:
+                    () => showLicensePage(
+                      context: context,
+                      applicationName: 'SelfPrivacy',
+                      applicationVersion: snapshot.data.toString(),
+                      applicationLegalese: '© 2024 SelfPrivacy',
+                    ),
+                leading: const Icon(Icons.copyright_outlined),
+              ),
         ),
-        SectionTitle(
-          title: 'about_application_page.links'.tr(),
-        ),
+        SectionTitle(title: 'about_application_page.links'.tr()),
         LinkListTile(
           title: 'about_application_page.website'.tr(),
           subtitle: 'selfprivacy.org',
@@ -161,9 +152,7 @@ class AboutApplicationPage extends StatelessWidget {
           icon: Icons.email_outlined,
           longPressText: 'support@selfprivacy.org',
         ),
-        SectionTitle(
-          title: 'about_application_page.contribute'.tr(),
-        ),
+        SectionTitle(title: 'about_application_page.contribute'.tr()),
         LinkListTile(
           title: 'about_application_page.source_code'.tr(),
           subtitle: 'git.selfprivacy.org',
@@ -207,7 +196,9 @@ class AboutApplicationPage extends StatelessWidget {
       final PackageInfo packageInfo = await PackageInfo.fromPlatform();
       packageVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
 
     return packageVersion;

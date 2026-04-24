@@ -12,20 +12,20 @@ void showPopUpAlert({
   final String? cancelButtonTitle,
 }) {
   getIt.get<NavigationService>().showPopUpDialog(
-        AlertDialog(
-          title: Text(alertTitle ?? 'basis.alert'.tr()),
-          content: Text(description),
-          actions: [
-            DialogActionButton(
-              text: actionButtonTitle,
-              isRed: true,
-              onPressed: actionButtonOnPressed,
-            ),
-            DialogActionButton(
-              text: cancelButtonTitle ?? 'basis.cancel'.tr(),
-              onPressed: cancelButtonOnPressed,
-            ),
-          ],
+    AlertDialog(
+      title: Text(alertTitle ?? 'basis.alert'.tr()),
+      content: Text(description),
+      actions: [
+        DialogActionButton(
+          text: actionButtonTitle,
+          isRed: true,
+          onPressed: actionButtonOnPressed,
         ),
-      );
+        DialogActionButton(
+          text: cancelButtonTitle ?? 'basis.cancel'.tr(),
+          onPressed: cancelButtonOnPressed,
+        ),
+      ],
+    ),
+  );
 }

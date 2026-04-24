@@ -1,8 +1,4 @@
-enum DnsRecordsCategory {
-  services,
-  email,
-  other,
-}
+enum DnsRecordsCategory { services, email, other }
 
 class DesiredDnsRecord {
   const DesiredDnsRecord({
@@ -39,13 +35,12 @@ class DesiredDnsRecord {
     final String? description,
     final String? displayName,
     final bool? isSatisfied,
-  }) =>
-      DesiredDnsRecord(
-        name: name ?? this.name,
-        type: type ?? this.type,
-        content: content ?? this.content,
-        description: description ?? this.description,
-        isSatisfied: isSatisfied ?? this.isSatisfied,
-        displayName: displayName ?? this.displayName,
-      );
+  }) => DesiredDnsRecord(
+    name: name ?? this.name,
+    type: type ?? this.type,
+    content: content ?? this.content,
+    description: description ?? this.description,
+    isSatisfied: isSatisfied ?? this.isSatisfied,
+    displayName: displayName ?? this.displayName,
+  );
 }

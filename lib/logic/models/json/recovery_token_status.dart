@@ -6,8 +6,6 @@ part 'recovery_token_status.g.dart';
 
 @JsonSerializable()
 class RecoveryKeyStatus extends Equatable {
-  factory RecoveryKeyStatus.fromJson(final Map<String, dynamic> json) =>
-      _$RecoveryKeyStatusFromJson(json);
   const RecoveryKeyStatus({
     required this.exists,
     required this.valid,
@@ -16,15 +14,18 @@ class RecoveryKeyStatus extends Equatable {
     this.usesLeft,
   });
 
+  factory RecoveryKeyStatus.fromJson(final Map<String, dynamic> json) =>
+      _$RecoveryKeyStatusFromJson(json);
+
   RecoveryKeyStatus.fromGraphQL(
     final Query$RecoveryKey$api$recoveryKey recoveryKey,
   ) : this(
-          exists: recoveryKey.exists,
-          date: recoveryKey.creationDate,
-          expiration: recoveryKey.expirationDate,
-          usesLeft: recoveryKey.usesLeft,
-          valid: recoveryKey.valid,
-        );
+        exists: recoveryKey.exists,
+        date: recoveryKey.creationDate,
+        expiration: recoveryKey.expirationDate,
+        usesLeft: recoveryKey.usesLeft,
+        valid: recoveryKey.valid,
+      );
 
   final bool exists;
   final DateTime? date;
@@ -34,11 +35,5 @@ class RecoveryKeyStatus extends Equatable {
   final bool valid;
 
   @override
-  List<Object?> get props => [
-        exists,
-        date,
-        expiration,
-        usesLeft,
-        valid,
-      ];
+  List<Object?> get props => [exists, date, expiration, usesLeft, valid];
 }

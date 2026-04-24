@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -13,41 +15,33 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
-  ApiAdapter({
-    final bool isWithToken = true,
-    final String? token,
-  }) : _api = HetznerApi(
-          isWithToken: isWithToken,
-          token: token ?? '',
-        );
+  ApiAdapter({final bool isWithToken = true, final String? token})
+    : _api = HetznerApi(isWithToken: isWithToken, token: token ?? '');
 
-  HetznerApi api({final bool getInitialized = true}) => getInitialized
-      ? _api
-      : HetznerApi(
-          isWithToken: false,
-        );
+  HetznerApi api({final bool getInitialized = true}) =>
+      getInitialized ? _api : HetznerApi(isWithToken: false);
 
   final HetznerApi _api;
 }
 
 class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider() : _adapter = ApiAdapter(isWithToken: false);
-  HetznerServerProvider.load(
-    final bool isAuthorized,
+  HetznerServerProvider.load({
+    required final bool isAuthorized,
     final String? token,
-  ) : _adapter = ApiAdapter(
-          isWithToken: isAuthorized,
-          token: token,
-        );
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);
   int? cachedCoreAmount;
+
+  static final logger = const AppLogger(name: 'hetzner').log;
 
   @override
   bool get isAuthorized => _adapter.api().isWithToken;
@@ -119,12 +113,8 @@ class HetznerServerProvider extends ServerProvider {
 
     if (server == null) {
       const String msg = 'getServerType: no server!';
-      print(msg);
-      return GenericResult(
-        success: false,
-        data: serverType,
-        message: msg,
-      );
+      logger(msg);
+      return GenericResult(success: false, data: serverType, message: msg);
     }
 
     double? priceValue;
@@ -136,12 +126,8 @@ class HetznerServerProvider extends ServerProvider {
 
     if (priceValue == null) {
       const String msg = 'getServerType: no price!';
-      print(msg);
-      return GenericResult(
-        success: false,
-        data: serverType,
-        message: msg,
-      );
+      logger(msg);
+      return GenericResult(success: false, data: serverType, message: msg);
     }
 
     return GenericResult(
@@ -152,10 +138,7 @@ class HetznerServerProvider extends ServerProvider {
         ram: server.serverType.memory.toDouble(),
         cores: server.serverType.cores,
         disk: DiskSize(byte: server.serverType.disk * 1024 * 1024 * 1024),
-        price: Price(
-          value: priceValue,
-          currency: currency,
-        ),
+        price: Price(value: priceValue, currency: currency),
         location: ServerProviderLocation(
           title: server.location.city,
           description: server.location.description,
@@ -172,9 +155,9 @@ class HetznerServerProvider extends ServerProvider {
     final LaunchInstallationData installationData,
   ) async {
     final volumeResult = await _adapter.api().createVolume(
-          gb: installationData.storageSize.gibibyte.toInt(),
-          region: installationData.location,
-        );
+      gb: installationData.storageSize.gibibyte.toInt(),
+      region: installationData.location,
+    );
 
     if (!volumeResult.success || volumeResult.data == null) {
       return GenericResult(
@@ -186,7 +169,7 @@ class HetznerServerProvider extends ServerProvider {
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async => launchInstallation(installationData),
+              callback: () => launchInstallation(installationData),
             ),
           ],
           description:
@@ -206,21 +189,21 @@ class HetznerServerProvider extends ServerProvider {
     );
 
     final serverResult = await _adapter.api().createServer(
-          dnsApiToken: installationData.dnsApiToken,
-          rootUser: installationData.rootUser,
-          domainName: installationData.serverDomain.domainName,
-          serverType: installationData.serverTypeId,
-          dnsProviderType: installationData.dnsProviderType.toInfectName(),
-          hostName: hostname,
-          volumeId: volume.id,
-          base64Password: base64.encode(
-            utf8.encode(installationData.rootUser.password ?? 'PASS'),
-          ),
-          databasePassword: StringGenerators.dbPassword(),
-          serverApiToken: serverApiToken,
-          customSshKey: installationData.customSshKey,
-          region: installationData.location,
-        );
+      dnsApiToken: installationData.dnsApiToken,
+      rootUser: installationData.rootUser,
+      domainName: installationData.serverDomain.domainName,
+      serverType: installationData.serverTypeId,
+      dnsProviderType: installationData.dnsProviderType.toInfectName(),
+      hostName: hostname,
+      volumeId: volume.id,
+      base64Password: base64.encode(
+        utf8.encode(installationData.rootUser.password ?? 'PASS'),
+      ),
+      databasePassword: StringGenerators.dbPassword(),
+      serverApiToken: serverApiToken,
+      customSshKey: installationData.customSshKey,
+      region: installationData.location,
+    );
 
     if (!serverResult.success || serverResult.data == null) {
       await _adapter.api().deleteVolume(volume.id);
@@ -270,7 +253,7 @@ class HetznerServerProvider extends ServerProvider {
               ),
               CallbackDialogueChoice(
                 title: 'modals.try_again'.tr(),
-                callback: () async => launchInstallation(installationData),
+                callback: () => launchInstallation(installationData),
               ),
             ],
             description:
@@ -302,10 +285,10 @@ class HetznerServerProvider extends ServerProvider {
     cachedCoreAmount = serverResult.data!.serverType.cores;
 
     final createDnsResult = await _adapter.api().createReverseDns(
-          serverId: serverDetails.id,
-          ip4: serverDetails.ip4,
-          dnsPtr: installationData.serverDomain.domainName,
-        );
+      serverId: serverDetails.id,
+      ip4: serverDetails.ip4,
+      dnsPtr: installationData.serverDomain.domainName,
+    );
 
     if (!createDnsResult.success) {
       return GenericResult(
@@ -379,15 +362,12 @@ class HetznerServerProvider extends ServerProvider {
 
       await Future.wait(laterFutures);
     } catch (e) {
-      print(e);
+      logger(e.toString());
       return GenericResult(
         success: false,
         data: CallbackDialogueBranching(
           choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: null,
-            ),
+            CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
               callback: () async {
@@ -403,10 +383,7 @@ class HetznerServerProvider extends ServerProvider {
       );
     }
 
-    return GenericResult(
-      success: true,
-      data: null,
-    );
+    return GenericResult(success: true, data: null);
   }
 
   @override
@@ -422,7 +399,7 @@ class HetznerServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<List<ServerProviderLocation>>>
-      getAvailableLocations() async {
+  getAvailableLocations() async {
     final List<ServerProviderLocation> locations = [];
     final result = await _adapter.api().getAvailableLocations();
     if (result.data.isEmpty || !result.success) {
@@ -483,10 +460,7 @@ class HetznerServerProvider extends ServerProvider {
               ram: rawType.memory.toDouble(),
               cores: rawType.cores,
               disk: DiskSize(byte: rawType.disk * 1024 * 1024 * 1024),
-              price: Price(
-                value: rawPrice.monthly,
-                currency: currency,
-              ),
+              price: Price(value: rawPrice.monthly, currency: currency),
               location: location,
             ),
           );
@@ -512,10 +486,7 @@ class HetznerServerProvider extends ServerProvider {
 
     timestamp = DateTime.now();
 
-    return GenericResult(
-      success: true,
-      data: timestamp,
-    );
+    return GenericResult(success: true, data: timestamp);
   }
 
   @override
@@ -533,10 +504,7 @@ class HetznerServerProvider extends ServerProvider {
 
     timestamp = DateTime.now();
 
-    return GenericResult(
-      success: true,
-      data: timestamp,
-    );
+    return GenericResult(success: true, data: timestamp);
   }
 
   @override
@@ -557,10 +525,7 @@ class HetznerServerProvider extends ServerProvider {
     return GenericResult(
       success: true,
       data: AdditionalPricing(
-        perVolumeGb: Price(
-          value: result.data!.perVolumeGb,
-          currency: currency,
-        ),
+        perVolumeGb: Price(value: result.data!.perVolumeGb, currency: currency),
         perPublicIpv4: Price(
           value: result.data!.perPublicIpv4,
           currency: currency,
@@ -605,11 +570,7 @@ class HetznerServerProvider extends ServerProvider {
         volumes.add(volume);
       }
     } catch (e) {
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      return GenericResult(data: [], success: false, message: e.toString());
     }
 
     return GenericResult(
@@ -647,12 +608,8 @@ class HetznerServerProvider extends ServerProvider {
         linuxDevice: result.data!.linuxDevice,
       );
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: null,
-        success: false,
-        message: e.toString(),
-      );
+      logger(e.toString());
+      return GenericResult(data: null, success: false, message: e.toString());
     }
 
     return GenericResult(
@@ -664,52 +621,44 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<void>> deleteVolume(
-    final ServerProviderVolume volume,
-  ) async =>
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
       _adapter.api().deleteVolume(volume.id);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) async =>
-      _adapter.api().resizeVolume(
-            HetznerVolume(
-              volume.id,
-              volume.sizeByte,
-              volume.serverId,
-              volume.name,
-              volume.linuxDevice,
-              HetznerLocation.empty(),
-            ),
-            size,
-          );
+  ) => _adapter.api().resizeVolume(
+    HetznerVolume(
+      volume.id,
+      volume.sizeByte,
+      volume.serverId,
+      volume.name,
+      volume.linuxDevice,
+      HetznerLocation.empty(),
+    ),
+    size,
+  );
 
   @override
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final int serverId,
-  ) async =>
-      _adapter.api().attachVolume(
-            HetznerVolume(
-              volume.id,
-              volume.sizeByte,
-              volume.serverId,
-              volume.name,
-              volume.linuxDevice,
-              HetznerLocation.empty(),
-            ),
-            serverId,
-          );
+  ) => _adapter.api().attachVolume(
+    HetznerVolume(
+      volume.id,
+      volume.sizeByte,
+      volume.serverId,
+      volume.name,
+      volume.linuxDevice,
+      HetznerLocation.empty(),
+    ),
+    serverId,
+  );
 
   @override
-  Future<GenericResult<bool>> detachVolume(
-    final ServerProviderVolume volume,
-  ) async =>
-      _adapter.api().detachVolume(
-            volume.id,
-          );
+  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
+      _adapter.api().detachVolume(volume.id);
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
@@ -777,13 +726,13 @@ class HetznerServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.ram,
           trId: 'server.ram',
-          value: '${server.serverType.memory.toString()} GB',
+          value: '${server.serverType.memory} GB',
         ),
         ServerMetadataEntity(
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
           value:
-              // TODO: Make more descriptive
+              // TODO(NaiJi): Make more descriptive
               '${server.serverType.prices[1].monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} + ${pricePerIp.value.toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
@@ -798,11 +747,7 @@ class HetznerServerProvider extends ServerProvider {
         ),
       ];
     } catch (e) {
-      return GenericResult(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: [], message: e.toString());
     }
 
     return GenericResult(success: true, data: metadata);
@@ -859,20 +804,18 @@ class HetznerServerProvider extends ServerProvider {
       final List list = json['time_series'][type]['values'];
       return list
           .map(
-            (final el) => TimeSeriesData(
-              el[0],
-              double.parse(el[1]) / cachedCoreAmount!,
-            ),
+            (final el) =>
+                TimeSeriesData(el[0], double.parse(el[1]) / cachedCoreAmount!),
           )
           .toList();
     }
 
     final cpuResult = await _adapter.api().getMetrics(
-          serverId,
-          start,
-          end,
-          'cpu',
-        );
+      serverId,
+      start,
+      end,
+      'cpu',
+    );
 
     if (cpuResult.data.isEmpty || !cpuResult.success) {
       return GenericResult(
@@ -884,11 +827,11 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     final netResult = await _adapter.api().getMetrics(
-          serverId,
-          start,
-          end,
-          'network',
-        );
+      serverId,
+      start,
+      end,
+      'network',
+    );
 
     if (cpuResult.data.isEmpty || !netResult.success) {
       return GenericResult(
@@ -900,10 +843,7 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     metrics = ServerMetrics(
-      cpu: serializeTimeCpuSeries(
-        cpuResult.data,
-        'cpu',
-      ),
+      cpu: serializeTimeCpuSeries(cpuResult.data, 'cpu'),
       bandwidthIn: serializeTimeNetworkSeries(
         netResult.data,
         'network.0.bandwidth.in',

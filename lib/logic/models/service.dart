@@ -3,56 +3,11 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 
 class Service extends Equatable {
-  Service.fromGraphQL(final Query$AllServices$services$allServices service)
-      : this(
-          id: service.id,
-          displayName: service.displayName,
-          description: service.description,
-          isEnabled: service.isEnabled,
-          isInstalled: service.isInstalled,
-          isRequired: service.isRequired,
-          isSystemService: service.isSystemService,
-          isMovable: service.isMovable,
-          canBeBackedUp: service.canBeBackedUp,
-          backupDescription: service.backupDescription,
-          status: ServiceStatus.fromGraphQL(service.status),
-          storageUsage: ServiceStorageUsage(
-            used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
-            volume: service.storageUsage.volume?.name,
-          ),
-          // Decode the base64 encoded svg icon to text.
-          svgIcon: utf8.decode(base64.decode(service.svgIcon)),
-          license: service.license.map(LicenseType.fromGraphQL).toList(),
-          supportLevel: SupportLevel.fromGraphQL(service.supportLevel),
-          dnsRecords: service.dnsRecords
-                  ?.map(
-                    (
-                      final Fragment$fragmentDnsRecords record,
-                    ) =>
-                        DnsRecord.fromGraphQL(record),
-                  )
-                  .toList() ??
-              [],
-          url: service.url,
-          homepage: service.homepage,
-          sourcePage: service.sourcePage,
-          configuration: service.configuration
-                  ?.map(
-                    (
-                      final Query$AllServices$services$allServices$configuration
-                          configItem,
-                    ) =>
-                        ServiceConfigItem.fromGraphQL(configItem),
-                  )
-                  .toList() ??
-              [],
-        );
   const Service({
     required this.id,
     required this.displayName,
@@ -76,7 +31,40 @@ class Service extends Equatable {
     this.sourcePage,
   });
 
-  /// TODO Turn loginInfo into dynamic data, not static!
+  Service.fromGraphQL(final Query$AllServices$services$allServices service)
+    : this(
+        id: service.id,
+        displayName: service.displayName,
+        description: service.description,
+        isEnabled: service.isEnabled,
+        isInstalled: service.isInstalled,
+        isRequired: service.isRequired,
+        isSystemService: service.isSystemService,
+        isMovable: service.isMovable,
+        canBeBackedUp: service.canBeBackedUp,
+        backupDescription: service.backupDescription,
+        status: ServiceStatus.fromGraphQL(service.status),
+        storageUsage: ServiceStorageUsage(
+          used: DiskSize(byte: int.parse(service.storageUsage.usedSpace)),
+          volume: service.storageUsage.volume?.name,
+        ),
+        // Decode the base64 encoded svg icon to text.
+        svgIcon: utf8.decode(base64.decode(service.svgIcon)),
+        license: service.license.map(LicenseType.fromGraphQL).toList(),
+        supportLevel: SupportLevel.fromGraphQL(service.supportLevel),
+        dnsRecords:
+            service.dnsRecords?.map(DnsRecord.fromGraphQL).toList() ?? [],
+        url: service.url,
+        homepage: service.homepage,
+        sourcePage: service.sourcePage,
+        configuration:
+            service.configuration
+                ?.map(ServiceConfigItem.fromGraphQL)
+                .toList() ??
+            [],
+      );
+
+  // TODO(NaiJi): Turn loginInfo into dynamic data, not static!
   String get loginInfo {
     switch (id) {
       case 'simple-nixos-mailserver':
@@ -90,7 +78,7 @@ class Service extends Equatable {
           (final configItem) =>
               configItem is BoolServiceConfigItem &&
               configItem.id == 'enableSso' &&
-              configItem.value == true,
+              configItem.value,
         )) {
           return '';
         }
@@ -102,7 +90,7 @@ class Service extends Equatable {
           (final configItem) =>
               configItem is BoolServiceConfigItem &&
               configItem.id == 'enableSso' &&
-              configItem.value == true,
+              configItem.value,
         )) {
           return '';
         }
@@ -122,10 +110,7 @@ class Service extends Equatable {
     canBeBackedUp: false,
     backupDescription: '',
     status: ServiceStatus.off,
-    storageUsage: ServiceStorageUsage(
-      used: DiskSize(byte: 0),
-      volume: '',
-    ),
+    storageUsage: ServiceStorageUsage(used: DiskSize(byte: 0), volume: ''),
     svgIcon: '',
     dnsRecords: [],
     url: 'https://example.org/',
@@ -159,21 +144,21 @@ class Service extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        displayName,
-        description,
-        isEnabled,
-        isRequired,
-        isMovable,
-        canBeBackedUp,
-        backupDescription,
-        status,
-        storageUsage,
-        svgIcon,
-        dnsRecords,
-        url,
-        configuration,
-      ];
+    id,
+    displayName,
+    description,
+    isEnabled,
+    isRequired,
+    isMovable,
+    canBeBackedUp,
+    backupDescription,
+    status,
+    storageUsage,
+    svgIcon,
+    dnsRecords,
+    url,
+    configuration,
+  ];
 }
 
 class LicenseType extends Equatable {
@@ -188,12 +173,12 @@ class LicenseType extends Equatable {
   LicenseType.fromGraphQL(
     final Query$AllServices$services$allServices$license license,
   ) : this(
-          free: license.free,
-          redistributable: license.redistributable,
-          fullName: license.fullName,
-          shortName: license.shortName,
-          url: license.url,
-        );
+        free: license.free,
+        redistributable: license.redistributable,
+        fullName: license.fullName,
+        shortName: license.shortName,
+        url: license.url,
+      );
 
   final bool free;
   final bool redistributable;
@@ -206,10 +191,7 @@ class LicenseType extends Equatable {
 }
 
 class ServiceStorageUsage extends Equatable {
-  const ServiceStorageUsage({
-    required this.used,
-    required this.volume,
-  });
+  const ServiceStorageUsage({required this.used, required this.volume});
 
   final DiskSize used;
   final String? volume;
@@ -283,9 +265,9 @@ sealed class ServiceConfigItem extends Equatable {
 
   factory ServiceConfigItem.fromGraphQL(
     final Query$AllServices$services$allServices$configuration configItem,
-  ) =>
-      configItem.when<ServiceConfigItem>(
-        boolConfigItem: (final boolConfigItem) => BoolServiceConfigItem(
+  ) => configItem.when<ServiceConfigItem>(
+    boolConfigItem:
+        (final boolConfigItem) => BoolServiceConfigItem(
           id: boolConfigItem.fieldId,
           description: boolConfigItem.description,
           widget: boolConfigItem.widget,
@@ -293,7 +275,8 @@ sealed class ServiceConfigItem extends Equatable {
           value: boolConfigItem.boolValue,
           defaultValue: boolConfigItem.defaultBoolValue,
         ),
-        enumConfigItem: (final enumConfigItem) => EnumServiceConfigItem(
+    enumConfigItem:
+        (final enumConfigItem) => EnumServiceConfigItem(
           id: enumConfigItem.fieldId,
           description: enumConfigItem.description,
           widget: enumConfigItem.widget,
@@ -302,7 +285,8 @@ sealed class ServiceConfigItem extends Equatable {
           defaultValue: enumConfigItem.defaultStringValue,
           options: enumConfigItem.options,
         ),
-        stringConfigItem: (final stringConfigItem) => StringServiceConfigItem(
+    stringConfigItem:
+        (final stringConfigItem) => StringServiceConfigItem(
           id: stringConfigItem.fieldId,
           description: stringConfigItem.description,
           widget: stringConfigItem.widget,
@@ -311,12 +295,13 @@ sealed class ServiceConfigItem extends Equatable {
           defaultValue: stringConfigItem.defaultStringValue,
           regex: stringConfigItem.regex,
         ),
-        orElse: () => FallbackServiceConfigItem(
+    orElse:
+        () => FallbackServiceConfigItem(
           id: configItem.fieldId,
           description: configItem.description,
           type: configItem.type,
         ),
-      );
+  );
 
   final String id;
   final String description;
@@ -340,8 +325,15 @@ class StringServiceConfigItem extends ServiceConfigItem {
   final String? regex;
 
   @override
-  List<Object?> get props =>
-      [id, description, widget, type, value, defaultValue, regex];
+  List<Object?> get props => [
+    id,
+    description,
+    widget,
+    type,
+    value,
+    defaultValue,
+    regex,
+  ];
 }
 
 class BoolServiceConfigItem extends ServiceConfigItem {
@@ -358,8 +350,14 @@ class BoolServiceConfigItem extends ServiceConfigItem {
   final bool defaultValue;
 
   @override
-  List<Object?> get props =>
-      [id, description, widget, type, value, defaultValue];
+  List<Object?> get props => [
+    id,
+    description,
+    widget,
+    type,
+    value,
+    defaultValue,
+  ];
 }
 
 class EnumServiceConfigItem extends ServiceConfigItem {
@@ -378,8 +376,15 @@ class EnumServiceConfigItem extends ServiceConfigItem {
   final List<String> options;
 
   @override
-  List<Object?> get props =>
-      [id, description, widget, type, value, defaultValue, options];
+  List<Object?> get props => [
+    id,
+    description,
+    widget,
+    type,
+    value,
+    defaultValue,
+    options,
+  ];
 }
 
 class FallbackServiceConfigItem extends ServiceConfigItem {
@@ -393,7 +398,7 @@ class FallbackServiceConfigItem extends ServiceConfigItem {
   List<Object?> get props => [id, description, widget, type];
 }
 
-// TODO: Not used yet by the API
+// TODO(inex): Not used yet by the API
 class IntServiceConfigItem extends ServiceConfigItem {
   const IntServiceConfigItem({
     required super.id,
@@ -412,6 +417,14 @@ class IntServiceConfigItem extends ServiceConfigItem {
   final int max;
 
   @override
-  List<Object?> get props =>
-      [id, description, widget, type, value, defaultValue, min, max];
+  List<Object?> get props => [
+    id,
+    description,
+    widget,
+    type,
+    value,
+    defaultValue,
+    min,
+    max,
+  ];
 }

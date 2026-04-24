@@ -15,16 +15,27 @@ class ServiceMigrationListItem extends StatelessWidget {
   final Service service;
   final DiskStatus diskStatus;
   final String selectedVolume;
-  final Function onChange;
+  final Function(String, String) onChange;
 
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
-          ServiceConsumptionTitle(service: service),
-          const SizedBox(height: 16),
-          ..._radioRows(context),
-        ],
-      );
+    children: [
+      ServiceConsumptionTitle(service: service),
+      const SizedBox(height: 16),
+      RadioGroup<String>(
+        groupValue: selectedVolume,
+        onChanged: (final String? value) {
+          if (value == null) {
+            return;
+          }
+          onChange(value, service.id);
+        },
+        child: Column(
+          children: _radioRows(context),
+        ),
+      ),
+    ],
+  );
 
   List<Widget> _radioRows(final BuildContext context) {
     final List<Widget> volumeRows = [];
@@ -32,17 +43,11 @@ class ServiceMigrationListItem extends StatelessWidget {
     for (final DiskVolume volume in diskStatus.diskVolumes) {
       volumeRows.add(
         RadioListTile(
-          title: Text(
-            volume.displayName,
-          ),
+          title: Text(volume.displayName),
           contentPadding: EdgeInsets.zero,
           activeColor: Theme.of(context).colorScheme.secondary,
           dense: true,
           value: volume.name,
-          groupValue: selectedVolume,
-          onChanged: (final value) {
-            onChange(value, service.id);
-          },
         ),
       );
     }
@@ -52,52 +57,49 @@ class ServiceMigrationListItem extends StatelessWidget {
 }
 
 class ServiceConsumptionTitle extends StatelessWidget {
-  const ServiceConsumptionTitle({
-    required this.service,
-    super.key,
-  });
+  const ServiceConsumptionTitle({required this.service, super.key});
 
   final Service service;
 
   @override
   Widget build(final BuildContext context) => SizedBox(
-        height: 24,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            children: [
-              Container(
-                alignment: Alignment.topLeft,
-                child: SvgPicture.string(
-                  service.svgIcon,
-                  width: 24.0,
-                  height: 24.0,
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.onSurface,
-                    BlendMode.srcIn,
-                  ),
-                ),
+    height: 24,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: SvgPicture.string(
+              service.svgIcon,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
               ),
-              const SizedBox(width: 16),
-              Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  service.displayName,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    service.storageUsage.used.toString(),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      );
+          const SizedBox(width: 16),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Text(
+              service.displayName,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Container(
+              alignment: Alignment.centerRight,
+              child: Text(
+                service.storageUsage.used.toString(),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

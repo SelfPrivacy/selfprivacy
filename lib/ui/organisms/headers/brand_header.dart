@@ -9,7 +9,7 @@ class BrandHeader extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(52.0);
+  Size get preferredSize => const Size.fromHeight(52);
 
   final String title;
   final bool hasBackButton;
@@ -17,14 +17,15 @@ class BrandHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(final BuildContext context) => AppBar(
-        centerTitle: true,
-        title: Text(title),
-        leading: hasBackButton
+    centerTitle: true,
+    title: Text(title),
+    leading:
+        hasBackButton
             ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed:
-                    onBackButtonPressed ?? () => Navigator.of(context).pop(),
-              )
+              icon: const Icon(Icons.arrow_back),
+              onPressed:
+                  onBackButtonPressed ?? () => Navigator.of(context).pop(),
+            )
             : null,
-      );
+  );
 }

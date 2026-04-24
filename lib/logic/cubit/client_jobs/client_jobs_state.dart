@@ -45,13 +45,16 @@ class JobsStateWithJobs extends JobsState {
   @override
   JobsState addJob(final ClientJob job) {
     if (job is ReplaceableJob) {
-      final List<ClientJob> newJobsList = clientJobList
-          .where(
-            (final element) => job.shouldReplaceOnlyIfSameId
-                ? element.runtimeType != job.runtimeType || element.id != job.id
-                : element.runtimeType != job.runtimeType,
-          )
-          .toList();
+      final List<ClientJob> newJobsList =
+          clientJobList
+              .where(
+                (final element) =>
+                    job.shouldReplaceOnlyIfSameId
+                        ? element.runtimeType != job.runtimeType ||
+                            element.id != job.id
+                        : element.runtimeType != job.runtimeType,
+              )
+              .toList();
       if (job.shouldRemoveInsteadOfAdd(clientJobList)) {
         getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
       } else {
@@ -91,12 +94,13 @@ class JobsStateLoading extends JobsState {
     final JobStatusEnum status, {
     final String? message,
   }) {
-    final List<ClientJob> newJobsList = clientJobList.map((final job) {
-      if (job.id == id) {
-        return job.copyWithNewStatus(status: status, message: message);
-      }
-      return job;
-    }).toList();
+    final List<ClientJob> newJobsList =
+        clientJobList.map((final job) {
+          if (job.id == id) {
+            return job.copyWithNewStatus(status: status, message: message);
+          }
+          return job;
+        }).toList();
     return JobsStateLoading(newJobsList, rebuildJobUid, postponedJobs);
   }
 
@@ -104,12 +108,11 @@ class JobsStateLoading extends JobsState {
     final List<ClientJob>? clientJobList,
     final String? rebuildJobUid,
     final List<ClientJob>? postponedJobs,
-  }) =>
-      JobsStateLoading(
-        clientJobList ?? this.clientJobList,
-        rebuildJobUid ?? this.rebuildJobUid,
-        postponedJobs ?? this.postponedJobs,
-      );
+  }) => JobsStateLoading(
+    clientJobList ?? this.clientJobList,
+    rebuildJobUid ?? this.rebuildJobUid,
+    postponedJobs ?? this.postponedJobs,
+  );
 
   JobsStateFinished finished() =>
       JobsStateFinished(clientJobList, rebuildJobUid, postponedJobs);
@@ -120,9 +123,10 @@ class JobsStateLoading extends JobsState {
   @override
   JobsState addJob(final ClientJob job) {
     if (job is ReplaceableJob) {
-      final List<ClientJob> newPostponedJobs = postponedJobs
-          .where((final element) => element.runtimeType != job.runtimeType)
-          .toList();
+      final List<ClientJob> newPostponedJobs =
+          postponedJobs
+              .where((final element) => element.runtimeType != job.runtimeType)
+              .toList();
       if (job.shouldRemoveInsteadOfAdd(postponedJobs)) {
         getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
       } else {
@@ -160,9 +164,10 @@ class JobsStateFinished extends JobsState {
   @override
   JobsState addJob(final ClientJob job) {
     if (job is ReplaceableJob) {
-      final List<ClientJob> newPostponedJobs = postponedJobs
-          .where((final element) => element.runtimeType != job.runtimeType)
-          .toList();
+      final List<ClientJob> newPostponedJobs =
+          postponedJobs
+              .where((final element) => element.runtimeType != job.runtimeType)
+              .toList();
       if (job.shouldRemoveInsteadOfAdd(postponedJobs)) {
         getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
       } else {

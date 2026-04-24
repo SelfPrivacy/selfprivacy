@@ -8,21 +8,23 @@ mixin ServicesApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       response = await client.query$AllServices();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetAllServices request: ${response.exception}',
+          error: response.exception,
+        );
       }
-      services = response.parsedData?.services.allServices
-              .map<Service>((final service) => Service.fromGraphQL(service))
+      services =
+          response.parsedData?.services.allServices
+              .map<Service>(Service.fromGraphQL)
               .toList() ??
           [];
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetAllServices request: $e', error: e);
     }
     return services;
   }
 
-  Future<GenericResult<bool>> enableService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<bool>> enableService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$EnableService(serviceId: serviceId);
@@ -35,7 +37,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.enableService.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL EnableService request: $e', error: e);
       return GenericResult(
         data: false,
         success: false,
@@ -45,9 +47,7 @@ mixin ServicesApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<void>> disableService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<void>> disableService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$DisableService(serviceId: serviceId);
@@ -60,7 +60,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.disableService.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL DisableService request: $e', error: e);
       return GenericResult(
         data: null,
         success: false,
@@ -70,9 +70,7 @@ mixin ServicesApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<bool>> stopService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<bool>> stopService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$StopService(serviceId: serviceId);
@@ -85,7 +83,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.stopService.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL StopService request: $e', error: e);
       return GenericResult(
         data: false,
         success: false,
@@ -108,7 +106,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.startService.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL StartService request: $e', error: e);
       return GenericResult(
         data: null,
         success: false,
@@ -118,9 +116,7 @@ mixin ServicesApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<bool>> restartService(
-    final String serviceId,
-  ) async {
+  Future<GenericResult<bool>> restartService(final String serviceId) async {
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$RestartService(serviceId: serviceId);
@@ -133,7 +129,7 @@ mixin ServicesApi on GraphQLApiMap {
         message: response.parsedData?.services.restartService.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL RestartService request: $e', error: e);
       return GenericResult(
         data: false,
         success: false,
@@ -165,7 +161,7 @@ mixin ServicesApi on GraphQLApiMap {
         data: jobJson != null ? ServerJob.fromJson(jobJson) : null,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL MoveService request: $e', error: e);
       return GenericResult(
         success: false,
         code: 0,
@@ -187,19 +183,20 @@ mixin ServicesApi on GraphQLApiMap {
           configuration: settings,
         ),
       );
-      final mutation =
-          Options$Mutation$SetServiceConfiguration(variables: variables);
+      final mutation = Options$Mutation$SetServiceConfiguration(
+        variables: variables,
+      );
       final response = await client.mutate$SetServiceConfiguration(mutation);
       return GenericResult(
         data: null,
         success:
             response.parsedData?.services.setServiceConfiguration.success ??
-                false,
+            false,
         code: response.parsedData?.services.setServiceConfiguration.code ?? 0,
         message: response.parsedData?.services.setServiceConfiguration.message,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL SetServiceConfiguration request: $e', error: e);
       return GenericResult(
         data: null,
         success: false,

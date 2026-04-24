@@ -1,15 +1,31 @@
 {
   nixConfig.bash-prompt = "\[selfprivacy\]$ ";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/c1ce56e9c606b4cd31f0950768911b1171b8db51";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+  inputs.systems.url = "github:nix-systems/default-linux";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flake-utils.inputs.systems.follows = "systems"; # only build for linux as `buildFlutterApplication` is broken on darwin
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         lib = nixpkgs.lib;
-        
-        fromYAML = path: lib.importJSON (pkgs.runCommand "yml2json" { nativeBuildInputs = [pkgs.yq]; src = path; } ''cat $src | yq . > $out'');
+
+        fromYAML =
+          path:
+          lib.importJSON (
+            pkgs.runCommand "yml2json" {
+              nativeBuildInputs = [ pkgs.yq ];
+              src = path;
+            } ''cat $src | yq . > $out''
+          );
 
         pubSpec = fromYAML ./pubspec.yaml;
 
@@ -19,12 +35,18 @@
           config.android_sdk.accept_license = true;
         };
 
-        spFlutter = pkgs.flutter324;
+        spFlutter = pkgs.flutter335;
 
         androidComposition = pkgs.androidenv.composeAndroidPackages {
-          platformToolsVersion = "34.0.4";
+          platformToolsVersion = "34.0.5";
           buildToolsVersions = [ "34.0.0" ];
-          platformVersions = [ "34" "33" "32" "31" "30" ];
+          platformVersions = [
+            "34"
+            "33"
+            "32"
+            "31"
+            "30"
+          ];
         };
 
         buildDeps = with pkgs; [
@@ -61,7 +83,7 @@
           cmake
           ninja
           pkg-config
-          wrapGAppsHook
+          wrapGAppsHook3
           autoPatchelfHook
           androidComposition.androidsdk
           openjdk11_headless
@@ -70,28 +92,32 @@
         ];
 
         releaseDerivation = spFlutter.buildFlutterApplication rec {
-            pname = pubSpec.name;
-            version = pubSpec.version;
+          pname = pubSpec.name;
+          version = pubSpec.version;
 
-            autoPubspecLock = ./pubspec.lock;
+          autoPubspecLock = ./pubspec.lock;
 
-            src = ./.;
+          src = ./.;
 
-            desktopItem = pkgs.makeDesktopItem {
-              name = "${pname}";
-              exec = "@out@/bin/${pname}";
-              desktopName = "SelfPrivacy";
-            };
+          gitHashes = {
+            "sp_lints" = "sha256-henUl8JcN6YRSnymnVAiNjm8bmRJGPPjVhLP0EJcZk0=";
+          };
 
-            postInstall = ''
-              patchShebangs $out/bin/$pname
-              chmod +x $out/bin/$pname
-              wrapProgram $out/bin/$pname --set PATH ${pkgs.lib.makeBinPath [ pkgs.xdg-user-dirs ]}
+          desktopItem = pkgs.makeDesktopItem {
+            name = "${pname}";
+            exec = "@out@/bin/${pname}";
+            desktopName = "SelfPrivacy";
+          };
 
-              mkdir -p $out/share/applications
-              cp $desktopItem/share/applications/*.desktop $out/share/applications
-              substituteInPlace $out/share/applications/*.desktop --subst-var out
-            '';
+          postInstall = ''
+            patchShebangs $out/bin/$pname
+            chmod +x $out/bin/$pname
+            wrapProgram $out/bin/$pname --set PATH ${pkgs.lib.makeBinPath [ pkgs.xdg-user-dirs ]}
+
+            mkdir -p $out/share/applications
+            cp $desktopItem/share/applications/*.desktop $out/share/applications
+            substituteInPlace $out/share/applications/*.desktop --subst-var out
+          '';
         };
       in
       {
@@ -119,5 +145,6 @@
             export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
           '';
         };
-      });
+      }
+    );
 }

@@ -7,7 +7,7 @@ class AppLogger {
 
   final String name;
 
-  // TODO: research other possible options, which could support both
+  // TODO(Aliaksei): research other possible options, which could support both
   // throttling and output formatting
   void log(
     final String message, {
@@ -15,7 +15,7 @@ class AppLogger {
     final StackTrace? stackTrace,
   }) {
     if (config.shouldDebugPrint) {
-      // TODO: could probably add UI logging for console_page
+      // TODO(Aliaksei): could probably add UI logging for console_page
       developer.log(
         message,
         error: error,

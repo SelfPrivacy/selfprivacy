@@ -5,34 +5,23 @@ import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 
 class ApiAdapter {
-  ApiAdapter({
-    final String? token,
-    final String? tokenId,
-  }) : _api = BackblazeApi(
-          isWithToken: true,
-          token: token ?? '',
-          tokenId: tokenId ?? '',
-        );
+  ApiAdapter({final String? token, final String? tokenId})
+    : _api = BackblazeApi(
+        isWithToken: true,
+        token: token ?? '',
+        tokenId: tokenId ?? '',
+      );
 
-  BackblazeApi api({final bool getInitialized = true}) => getInitialized
-      ? _api
-      : BackblazeApi(
-          isWithToken: false,
-        );
+  BackblazeApi api({final bool getInitialized = true}) =>
+      getInitialized ? _api : BackblazeApi(isWithToken: false);
 
   final BackblazeApi _api;
 }
 
 class BackblazeBackupsProvider extends BackupsProvider {
   BackblazeBackupsProvider() : _adapter = ApiAdapter();
-  BackblazeBackupsProvider.load(
-    final bool isAuthorized,
-    final String? token,
-    final String? tokenId,
-  ) : _adapter = ApiAdapter(
-          token: token,
-          tokenId: tokenId,
-        );
+  BackblazeBackupsProvider.load({final String? token, final String? tokenId})
+    : _adapter = ApiAdapter(token: token, tokenId: tokenId);
 
   final ApiAdapter _adapter;
 
@@ -69,11 +58,7 @@ class BackblazeBackupsProvider extends BackupsProvider {
     final api = _adapter.api();
     final result = await api.createKey(storageId);
     if (!result.success) {
-      return GenericResult(
-        success: false,
-        data: null,
-        message: result.message,
-      );
+      return GenericResult(success: false, data: null, message: result.message);
     }
     return GenericResult(
       success: result.success,

@@ -1,9 +1,9 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 part 'dns_provider_credential.g.dart';
 
-// TODO: Make a constant type.
+// TODO(inex): Make a constant type.
 @HiveType(typeId: 8)
 class DnsProviderCredential {
   DnsProviderCredential({

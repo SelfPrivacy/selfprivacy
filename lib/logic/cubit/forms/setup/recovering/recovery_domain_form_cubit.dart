@@ -17,8 +17,8 @@ class RecoveryDomainFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
-    initializingCubit.submitDomainForAccessRecovery(
+  Future<void>? onSubmit() async {
+    await initializingCubit.submitDomainForAccessRecovery(
       serverDomainField.state.value.toLowerCase(),
     );
   }
@@ -44,7 +44,7 @@ class RecoveryDomainFormCubit extends FormCubit {
     return domainValid;
   }
 
-  FutureOr<void> setCustomError(final String error) {
+  void setCustomError(final String error) {
     serverDomainField.setError(error);
   }
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
@@ -50,13 +50,15 @@ class ApiConnectionRepository {
 
   Future<void> removeServerJob(final String uid) async {
     await api.removeApiJob(uid);
-    _apiData.serverJobs.data
-        ?.removeWhere((final ServerJob element) => element.uid == uid);
+    _apiData.serverJobs.data?.removeWhere(
+      (final ServerJob element) => element.uid == uid,
+    );
     _dataStream.add(_apiData);
   }
 
   Future<void> removeAllFinishedServerJobs() async {
-    final List<ServerJob> finishedJobs = _apiData.serverJobs.data
+    final List<ServerJob> finishedJobs =
+        _apiData.serverJobs.data
             ?.where(
               (final ServerJob element) =>
                   element.status == JobStatusEnum.finished ||
@@ -74,7 +76,7 @@ class ApiConnectionRepository {
 
     await Future.forEach<ServerJob>(
       finishedJobs,
-      (final ServerJob job) async => removeServerJob(job.uid),
+      (final ServerJob job) => removeServerJob(job.uid),
     );
   }
 
@@ -84,8 +86,9 @@ class ApiConnectionRepository {
       return (false, 'basis.network_error'.tr());
     }
     // If user exists on server, do nothing
-    if (loadedUsers
-        .any((final User u) => u.login == user.login && u.isFoundOnServer)) {
+    if (loadedUsers.any(
+      (final User u) => u.login == user.login && u.isFoundOnServer,
+    )) {
       return (false, 'users.user_already_exists'.tr());
     }
 
@@ -123,8 +126,9 @@ class ApiConnectionRepository {
     }
 
     // Update the user instance in the cache
-    final int index =
-        loadedUsers.indexWhere((final User u) => u.login == user.login);
+    final int index = loadedUsers.indexWhere(
+      (final User u) => u.login == user.login,
+    );
     loadedUsers[index] = result.data!;
     _apiData.users.invalidate();
 
@@ -146,7 +150,7 @@ class ApiConnectionRepository {
       _apiData.users.invalidate();
     }
 
-    if (!result.success || !result.data) {
+    if (!result.success || result.data == false) {
       return (false, result.message ?? 'jobs.generic_error'.tr());
     }
 
@@ -154,15 +158,14 @@ class ApiConnectionRepository {
   }
 
   // url and error message
-  Future<(Uri?, String)> generatePasswordResetLink(
-    final User user,
-  ) async {
+  Future<(Uri?, String)> generatePasswordResetLink(final User user) async {
     String errorMessage = 'users.user_modify_protected'.tr();
     if (user.type == UserType.root) {
       return (null, errorMessage);
     }
-    final GenericResult<String?> result =
-        await api.generatePasswordResetLink(user.login);
+    final GenericResult<String?> result = await api.generatePasswordResetLink(
+      user.login,
+    );
 
     // check if got valid url
     final uri = Uri.tryParse(result.data ?? '');
@@ -187,17 +190,18 @@ class ApiConnectionRepository {
       // Find a user and delete the email password with a given uuid
       final List<User>? loadedUsers = _apiData.users.data;
       if (loadedUsers != null) {
-        final int index =
-            loadedUsers.indexWhere((final User u) => u.login == user.login);
+        final int index = loadedUsers.indexWhere(
+          (final User u) => u.login == user.login,
+        );
         if (index != -1) {
           final User updatedUser = loadedUsers[index].copyWith(
-            emailPasswordMetadata: loadedUsers[index]
-                .emailPasswordMetadata
-                ?.where(
-                  (final EmailPasswordMetadata metadata) =>
-                      metadata.uuid != uuid,
-                )
-                .toList(),
+            emailPasswordMetadata:
+                loadedUsers[index].emailPasswordMetadata
+                    ?.where(
+                      (final EmailPasswordMetadata metadata) =>
+                          metadata.uuid != uuid,
+                    )
+                    .toList(),
           );
           loadedUsers[index] = updatedUser;
         }
@@ -217,12 +221,15 @@ class ApiConnectionRepository {
     if (loadedUsers == null) {
       return (false, 'basis.network_error'.tr());
     }
-    final GenericResult<User?> result =
-        await api.addSshKey(user.login, publicKey);
+    final GenericResult<User?> result = await api.addSshKey(
+      user.login,
+      publicKey,
+    );
     if (result.data != null) {
       final User updatedUser = result.data!;
-      final int index =
-          loadedUsers.indexWhere((final User u) => u.login == user.login);
+      final int index = loadedUsers.indexWhere(
+        (final User u) => u.login == user.login,
+      );
       loadedUsers[index] = updatedUser;
       _apiData.users.invalidate();
     } else {
@@ -240,12 +247,15 @@ class ApiConnectionRepository {
     if (loadedUsers == null) {
       return (false, 'basis.network_error'.tr());
     }
-    final GenericResult<User?> result =
-        await api.removeSshKey(user.login, publicKey);
+    final GenericResult<User?> result = await api.removeSshKey(
+      user.login,
+      publicKey,
+    );
     if (result.data != null) {
       final User updatedUser = result.data!;
-      final int index =
-          loadedUsers.indexWhere((final User u) => u.login == user.login);
+      final int index = loadedUsers.indexWhere(
+        (final User u) => u.login == user.login,
+      );
       loadedUsers[index] = updatedUser;
       _apiData.users.invalidate();
     } else {
@@ -254,17 +264,14 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
-  Future<(bool, String)> setAutoUpgradeSettings(
-    final bool enable,
-    final bool allowReboot,
-  ) async {
-    final GenericResult<AutoUpgradeSettings?> result =
-        await api.setAutoUpgradeSettings(
-      AutoUpgradeSettings(
-        enable: enable,
-        allowReboot: allowReboot,
-      ),
-    );
+  Future<(bool, String)> setAutoUpgradeSettings({
+    required final bool enable,
+    required final bool allowReboot,
+  }) async {
+    final GenericResult<AutoUpgradeSettings?> result = await api
+        .setAutoUpgradeSettings(
+          AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
+        );
     _apiData.settings.invalidate();
     if (result.data != null) {
       return (true, result.message ?? 'basis.done'.tr());
@@ -273,9 +280,7 @@ class ApiConnectionRepository {
     }
   }
 
-  Future<(bool, String)> setServerTimezone(
-    final String timezone,
-  ) async {
+  Future<(bool, String)> setServerTimezone(final String timezone) async {
     final GenericResult result = await api.setTimezone(timezone);
     _apiData.settings.invalidate();
     if (result.success) {
@@ -285,13 +290,9 @@ class ApiConnectionRepository {
     }
   }
 
-  Future<(bool, String)> setSshSettings(
-    final bool enable,
-  ) async {
+  Future<(bool, String)> setSshSettings({required final bool enable}) async {
     final GenericResult<SshSettings?> result = await api.setSshSettings(
-      SshSettings(
-        enable: enable,
-      ),
+      SshSettings(enable: enable),
     );
     _apiData.settings.invalidate();
     if (result.data != null) {
@@ -305,8 +306,10 @@ class ApiConnectionRepository {
     final String serviceId,
     final Map<String, dynamic> settings,
   ) async {
-    final GenericResult result =
-        await api.setServiceConfiguration(serviceId, settings);
+    final GenericResult result = await api.setServiceConfiguration(
+      serviceId,
+      settings,
+    );
     _apiData.services.invalidate();
     if (result.success) {
       return (true, result.message ?? 'basis.done'.tr());
@@ -326,8 +329,8 @@ class ApiConnectionRepository {
   }
 
   void dispose() {
-    _dataStream.close();
-    _connectionStatusStream.close();
+    unawaited(_dataStream.close());
+    unawaited(_connectionStatusStream.close());
     _timer?.cancel();
   }
 
@@ -335,7 +338,7 @@ class ApiConnectionRepository {
       getIt<ResourcesModel>().serverDetails;
   ServerDomain? get serverDomain => getIt<ResourcesModel>().serverDomain;
 
-  void init() async {
+  Future<void> init() async {
     final serverDetails = getIt<ResourcesModel>().serverDetails;
     if (serverDetails == null) {
       return;
@@ -358,25 +361,23 @@ class ApiConnectionRepository {
     connectionStatus = ConnectionStatus.connected;
     _connectionStatusStream.add(connectionStatus);
 
-    if (VersionConstraint.parse(wsJobsUpdatesSupportedVersion)
-        .allows(Version.parse(apiVersion))) {
+    if (VersionConstraint.parse(
+      wsJobsUpdatesSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
       _serverJobsStreamSubscription = api
           .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
           .listen((final List<ServerJob> jobs) {
-        _apiData.serverJobs.data = jobs;
-        _dataStream.add(_apiData);
-        _jobsStreamDisconnectTime = null;
-      });
+            _apiData.serverJobs.data = jobs;
+            _dataStream.add(_apiData);
+            _jobsStreamDisconnectTime = null;
+          });
     }
 
     // Use timer to periodically check for new jobs
-    _timer = Timer.periodic(
-      const Duration(seconds: 10),
-      reload,
-    );
+    _timer = Timer.periodic(const Duration(seconds: 10), reload);
   }
 
-  void clear() async {
+  Future<void> clear() async {
     connectionStatus = ConnectionStatus.nonexistent;
     _connectionStatusStream.add(connectionStatus);
     _timer?.cancel();
@@ -406,18 +407,24 @@ class ApiConnectionRepository {
   Future<void> _refetchEverything(final Version version) async {
     await Future.wait([
       if (_isForceServerJobsRefetchRequired())
-        _apiData.serverJobs
-            .refetchData(version, () => _dataStream.add(_apiData)),
+        _apiData.serverJobs.refetchData(
+          version,
+          () => _dataStream.add(_apiData),
+        ),
       _apiData.services.refetchData(version, () => _dataStream.add(_apiData)),
       _apiData.users.refetchData(version, () => _dataStream.add(_apiData)),
       _apiData.groups.refetchData(version, () => _dataStream.add(_apiData)),
       _apiData.volumes.refetchData(version, () => _dataStream.add(_apiData)),
       _apiData.settings.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.recoveryKeyStatus
-          .refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.recoveryKeyStatus.refetchData(
+        version,
+        () => _dataStream.add(_apiData),
+      ),
       _apiData.devices.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.backupConfig
-          .refetchData(version, () => _dataStream.add(_apiData)),
+      _apiData.backupConfig.refetchData(
+        version,
+        () => _dataStream.add(_apiData),
+      ),
       _apiData.backups.refetchData(version, () => _dataStream.add(_apiData)),
     ]);
   }
@@ -449,48 +456,44 @@ class ApiConnectionRepository {
 
 class ApiData {
   ApiData(final ServerApi api)
-      : apiVersion = ApiDataElement<String>(
-          fetchData: () async => api.getApiVersion(),
-        ),
-        serverJobs = ApiDataElement<List<ServerJob>>(
-          fetchData: () async => api.getServerJobs(),
-          ttl: 10,
-        ),
-        backupConfig = ApiDataElement<BackupConfiguration>(
-          fetchData: () async => api.getBackupsConfiguration(),
-          requiredApiVersion: '>=2.4.2',
-          ttl: 120,
-        ),
-        backups = ApiDataElement<List<Backup>>(
-          fetchData: () async => api.getBackups(),
-          requiredApiVersion: '>=2.4.2',
-          ttl: 120,
-        ),
-        services = ApiDataElement<List<Service>>(
-          fetchData: () async => api.getAllServices(),
-          requiredApiVersion: '>=2.4.3',
-        ),
-        volumes = ApiDataElement<List<ServerDiskVolume>>(
-          fetchData: () async => api.getServerDiskVolumes(),
-        ),
-        recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
-          fetchData: () async => (await api.getRecoveryTokenStatus()).data,
-          ttl: 300,
-        ),
-        devices = ApiDataElement<List<ApiToken>>(
-          fetchData: () async => (await api.getApiTokens()).data,
-        ),
-        users = ApiDataElement<List<User>>(
-          fetchData: () async => api.getAllUsers(),
-        ),
-        groups = ApiDataElement<List<String>>(
-          fetchData: () async => api.getAllGroups(),
-          requiredApiVersion: '>=3.6.0',
-        ),
-        settings = ApiDataElement<SystemSettings>(
-          fetchData: () async => api.getSystemSettings(),
-          ttl: 600,
-        );
+    : apiVersion = ApiDataElement<String>(fetchData: api.getApiVersion),
+      serverJobs = ApiDataElement<List<ServerJob>>(
+        fetchData: api.getServerJobs,
+        ttl: 10,
+      ),
+      backupConfig = ApiDataElement<BackupConfiguration>(
+        fetchData: api.getBackupsConfiguration,
+        requiredApiVersion: '>=2.4.2',
+        ttl: 120,
+      ),
+      backups = ApiDataElement<List<Backup>>(
+        fetchData: api.getBackups,
+        requiredApiVersion: '>=2.4.2',
+        ttl: 120,
+      ),
+      services = ApiDataElement<List<Service>>(
+        fetchData: api.getAllServices,
+        requiredApiVersion: '>=2.4.3',
+      ),
+      volumes = ApiDataElement<List<ServerDiskVolume>>(
+        fetchData: api.getServerDiskVolumes,
+      ),
+      recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
+        fetchData: () async => (await api.getRecoveryTokenStatus()).data,
+        ttl: 300,
+      ),
+      devices = ApiDataElement<List<ApiToken>>(
+        fetchData: () async => (await api.getApiTokens()).data,
+      ),
+      users = ApiDataElement<List<User>>(fetchData: api.getAllUsers),
+      groups = ApiDataElement<List<String>>(
+        fetchData: api.getAllGroups,
+        requiredApiVersion: '>=3.6.0',
+      ),
+      settings = ApiDataElement<SystemSettings>(
+        fetchData: api.getSystemSettings,
+        ttl: 600,
+      );
 
   ApiDataElement<List<ServerJob>> serverJobs;
   ApiDataElement<String> apiVersion;
@@ -519,8 +522,8 @@ class ApiDataElement<T> {
     final T? data,
     this.requiredApiVersion = '>=2.3.0',
     this.ttl = 60,
-  })  : _data = data,
-        _lastUpdated = DateTime.now();
+  }) : _data = data,
+       _lastUpdated = DateTime.now();
 
   T? _data;
   final String requiredApiVersion;
@@ -529,15 +532,15 @@ class ApiDataElement<T> {
 
   Future<void> refetchData(
     final Version version,
-    final Function callback,
+    final Function() callback,
   ) async {
     if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
       if (isExpired || _data == null) {
         final newData = await fetchData();
         if (T is List) {
-          if (Object.hashAll(newData as Iterable<Object?>) !=
-              Object.hashAll(_data as Iterable<Object?>)) {
-            _data = [...newData] as T?;
+          if (Object.hashAll(newData! as Iterable<Object?>) !=
+              Object.hashAll(_data! as Iterable<Object?>)) {
+            _data = [...newData as Iterable] as T?;
           }
         } else {
           if (newData.hashCode != _data.hashCode) {

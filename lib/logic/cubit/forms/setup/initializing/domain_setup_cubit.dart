@@ -20,11 +20,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
     } else {
       emit(
         MoreThenOne(
-          result.data
-              .map<String>(
-                (final d) => d.domainName,
-              )
-              .toList(),
+          result.data.map<String>((final d) => d.domainName).toList(),
         ),
       );
     }
@@ -40,7 +36,7 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
       provider: dnsProvider.type,
     );
 
-    serverInstallationCubit.setDomain(domain);
+    await serverInstallationCubit.setDomain(domain);
     emit(DomainSet());
   }
 }

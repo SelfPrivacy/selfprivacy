@@ -20,6 +20,24 @@ class AddServerProviderToken extends TokensEvent {
   List<Object> get props => [serverProviderCredential];
 }
 
+class AddBackupsProviderCredential extends TokensEvent {
+  const AddBackupsProviderCredential(this.credential);
+
+  final BackupsCredential credential;
+
+  @override
+  List<Object> get props => [credential];
+}
+
+class RemoveBackupsProviderCredential extends TokensEvent {
+  const RemoveBackupsProviderCredential(this.credential);
+
+  final BackupsCredential credential;
+
+  @override
+  List<Object> get props => [credential];
+}
+
 class ServerSelectedForProviderToken extends TokensEvent {
   const ServerSelectedForProviderToken(
     this.providerServer,

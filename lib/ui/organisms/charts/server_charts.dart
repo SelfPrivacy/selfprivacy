@@ -51,10 +51,8 @@ class ServerCharts extends StatelessWidget {
                   Icons.area_chart_outlined,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                onTap: () {
-                  context.pushRoute(
-                    const MemoryUsageByServiceRoute(),
-                  );
+                onTap: () async {
+                  await context.pushRoute(const MemoryUsageByServiceRoute());
                 },
                 enabled: metricsLoaded,
               ),
@@ -104,10 +102,9 @@ class ServerCharts extends StatelessWidget {
                 for (final entry in diskData.entries) {
                   res.add(
                     DiskGraphData(
-                      volume: context
-                          .read<VolumesBloc>()
-                          .state
-                          .getVolume(entry.key.split('/').last),
+                      volume: context.read<VolumesBloc>().state.getVolume(
+                        entry.key.split('/').last,
+                      ),
                       color: colors[diskData.keys.toList().indexOf(entry.key)],
                       diskData: entry.value,
                       originalId: entry.key,
@@ -144,15 +141,15 @@ class ServerCharts extends StatelessWidget {
         FilledCard(
           clipped: false,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'resource_chart.unsupported'.tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -160,16 +157,13 @@ class ServerCharts extends StatelessWidget {
         ),
       ];
     } else {
-      throw 'wrong state';
+      throw StateError('Wrong state');
     }
 
     return Column(
       children: [
         if (state is! MetricsUnsupported)
-          PeriodSelector(
-            period: period,
-            onChange: cubit.changePeriod,
-          ),
+          PeriodSelector(period: period, onChange: cubit.changePeriod),
         const Gap(8),
         ...charts,
       ],
@@ -178,10 +172,7 @@ class ServerCharts extends StatelessWidget {
 }
 
 class ServerCpuChart extends StatelessWidget {
-  const ServerCpuChart({
-    required this.state,
-    super.key,
-  });
+  const ServerCpuChart({required this.state, super.key});
   final MetricsLoaded? state;
 
   @override
@@ -227,10 +218,7 @@ class ServerDiskChart extends StatelessWidget {
 }
 
 class ServerMemoryChart extends StatelessWidget {
-  const ServerMemoryChart({
-    required this.state,
-    super.key,
-  });
+  const ServerMemoryChart({required this.state, super.key});
   final MetricsLoaded? state;
 
   @override
@@ -251,10 +239,7 @@ class ServerMemoryChart extends StatelessWidget {
 }
 
 class ServerSwapChart extends StatelessWidget {
-  const ServerSwapChart({
-    required this.state,
-    super.key,
-  });
+  const ServerSwapChart({required this.state, super.key});
   final MetricsLoaded? state;
 
   @override
@@ -276,10 +261,7 @@ class ServerSwapChart extends StatelessWidget {
 }
 
 class ServerBandwidthChart extends StatelessWidget {
-  const ServerBandwidthChart({
-    required this.state,
-    super.key,
-  });
+  const ServerBandwidthChart({required this.state, super.key});
   final MetricsLoaded? state;
 
   @override

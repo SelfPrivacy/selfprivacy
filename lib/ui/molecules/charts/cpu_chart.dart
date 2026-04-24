@@ -15,7 +15,8 @@ class CpuChart extends GenericLineChart {
     final lastData = data.first.last;
     final lastValue = lastData.value;
 
-    final averageUsage = data.first
+    final averageUsage =
+        data.first
             .map((final e) => e.value)
             .reduce((final a, final b) => a + b) /
         data.length;
@@ -31,8 +32,10 @@ class CpuChart extends GenericLineChart {
         'lastValue': lastValue.toStringAsFixed(1),
         'averageUsage': averageUsage.toStringAsFixed(1),
         'maxUsage': maxUsage.toStringAsFixed(1),
-        'maxUsageTime': DateFormat('HH:mm dd MMMM', context.locale.languageCode)
-            .format(maxUsageTime),
+        'maxUsageTime': DateFormat(
+          'HH:mm dd MMMM',
+          context.locale.languageCode,
+        ).format(maxUsageTime),
       },
     );
 

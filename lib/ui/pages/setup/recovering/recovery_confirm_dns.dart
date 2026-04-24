@@ -23,7 +23,7 @@ class RecoveryConfirmDns extends StatelessWidget {
               context.watch<DnsProviderFormCubit>().state;
           final String providerDisplayName =
               appConfig.state.serverDomain?.provider.displayName ??
-                  'DNS Provider';
+              'DNS Provider';
           final String providerSupportArticle =
               appConfig.state.serverDomain?.provider.supportArticle ?? '';
           return BrandHeroScreen(
@@ -52,21 +52,24 @@ class RecoveryConfirmDns extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               BrandButton.filled(
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<DnsProviderFormCubit>().trySubmit(),
+                onPressed:
+                    formCubitState.isSubmitting
+                        ? null
+                        : () =>
+                            context.read<DnsProviderFormCubit>().trySubmit(),
                 title: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),
               Builder(
-                builder: (final context) => BrandButton.text(
-                  onPressed: () =>
-                      context.read<SupportSystemCubit>().showArticle(
+                builder:
+                    (final context) => BrandButton.text(
+                      onPressed:
+                          () => context.read<SupportSystemCubit>().showArticle(
                             article: providerSupportArticle,
                             context: context,
                           ),
-                  title: 'initializing.how'.tr(),
-                ),
+                      title: 'initializing.how'.tr(),
+                    ),
               ),
             ],
           );

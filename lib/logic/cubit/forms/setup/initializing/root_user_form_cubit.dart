@@ -19,13 +19,13 @@ class RootUserFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
+  Future<void>? onSubmit() async {
     final User user = User(
       login: userName.state.value,
       type: UserType.primary,
       password: password.state.value,
     );
-    serverInstallationCubit.setRootUser(user);
+    await serverInstallationCubit.setRootUser(user);
   }
 
   final ServerInstallationCubit serverInstallationCubit;

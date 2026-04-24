@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
 
 part 'server_details.g.dart';
@@ -23,14 +23,14 @@ class ServerHostingDetails {
   @HiveField(1)
   final int id;
 
-  // TODO: Check if it is still needed
+  // TODO(inex): Check if it is still needed
   @HiveField(2)
   final DateTime? startTime;
 
   @HiveField(3)
   final DateTime? createTime;
 
-  // TODO: Check if it is still needed
+  // TODO(inex): Check if it is still needed
   @HiveField(4)
   final ServerProviderVolume volume;
 
@@ -51,18 +51,17 @@ class ServerHostingDetails {
     final String? serverLocation,
     final String? serverType,
     final String? apiToken,
-  }) =>
-      ServerHostingDetails(
-        startTime: startTime ?? this.startTime,
-        serverLocation: serverLocation ?? this.serverLocation,
-        serverType: serverType ?? this.serverType,
-        apiToken: apiToken ?? this.apiToken,
-        createTime: createTime,
-        id: id,
-        ip4: ip4,
-        volume: volume,
-        provider: provider,
-      );
+  }) => ServerHostingDetails(
+    startTime: startTime ?? this.startTime,
+    serverLocation: serverLocation ?? this.serverLocation,
+    serverType: serverType ?? this.serverType,
+    apiToken: apiToken ?? this.apiToken,
+    createTime: createTime,
+    id: id,
+    ip4: ip4,
+    volume: volume,
+    provider: provider,
+  );
 
   @override
   String toString() => id.toString();
@@ -111,22 +110,23 @@ enum ServerProviderType {
         return hetzner;
       case Enum$ServerProvider.DIGITALOCEAN:
         return digitalOcean;
-      default:
+      case Enum$ServerProvider.OTHER:
+      case Enum$ServerProvider.$unknown:
         return unknown;
     }
   }
 
   String get displayName => switch (this) {
-        digitalOcean => 'Digital Ocean',
-        hetzner => 'Hetzner Cloud',
-        unknown => 'Unknown',
-      };
+    digitalOcean => 'Digital Ocean',
+    hetzner => 'Hetzner Cloud',
+    unknown => 'Unknown',
+  };
 
   String get supportArticle => switch (this) {
-        digitalOcean => 'how_digital_ocean',
-        hetzner => 'how_hetzner',
-        unknown => '',
-      };
+    digitalOcean => 'how_digital_ocean',
+    hetzner => 'how_hetzner',
+    unknown => '',
+  };
 }
 
 extension ServerProviderTypeIsSpecified on ServerProviderType? {

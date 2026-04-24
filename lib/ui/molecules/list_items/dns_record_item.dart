@@ -21,11 +21,12 @@ class DnsRecordItem extends StatelessWidget {
         dnsRecord.isSatisfied
             ? Icons.check_circle_outline
             : refreshing
-                ? Icons.refresh
-                : Icons.error_outline,
-        color: dnsRecord.isSatisfied
-            ? goodColor
-            : refreshing
+            ? Icons.refresh
+            : Icons.error_outline,
+        color:
+            dnsRecord.isSatisfied
+                ? goodColor
+                : refreshing
                 ? neutralColor
                 : errorColor,
       ),

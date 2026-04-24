@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -24,24 +26,18 @@ class AppSettingsPage extends StatefulWidget {
 class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        hasBackButton: true,
-        hasFlashButton: false,
-        heroTitle: 'application_settings.title'.tr(),
-        heroIcon: Icons.settings_outlined,
-        children: [
-          _ThemePicker(
-            key: ValueKey('theme_picker'.tr()),
-          ),
-          _LanguagePicker(
-            key: ValueKey('language_picker'.tr()),
-          ),
-          SectionTitle(
-            title: 'application_settings.dangerous_settings'.tr(),
-            error: true,
-          ),
-          _ResetAppTile(
-            key: ValueKey('reset_app'.tr()),
-          ),
-        ],
-      );
+    hasBackButton: true,
+    hasFlashButton: false,
+    heroTitle: 'application_settings.title'.tr(),
+    heroIcon: Icons.settings_outlined,
+    children: [
+      _ThemePicker(key: ValueKey('theme_picker'.tr())),
+      _LanguagePicker(key: ValueKey('language_picker'.tr())),
+      SectionTitle(
+        title: 'application_settings.dangerous_settings'.tr(),
+        error: true,
+      ),
+      _ResetAppTile(key: ValueKey('reset_app'.tr())),
+    ],
+  );
 }

@@ -8,10 +8,7 @@ part 'cloudflare_dns_adapter.dart';
 /// https://developers.cloudflare.com/api/operations/zones-get
 @JsonSerializable()
 class CloudflareZone {
-  CloudflareZone({
-    required this.id,
-    required this.name,
-  });
+  CloudflareZone({required this.id, required this.name});
 
   /// Zone identifier
   ///
@@ -49,8 +46,7 @@ class CloudflareDnsRecord {
   factory CloudflareDnsRecord.fromDnsRecord(
     final DnsRecord dnsRecord,
     final String rootDomain,
-  ) =>
-      _fromDnsRecord(dnsRecord, rootDomain);
+  ) => _fromDnsRecord(dnsRecord, rootDomain);
 
   /// Record identifier
   ///

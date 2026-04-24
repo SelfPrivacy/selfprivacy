@@ -14,21 +14,20 @@ class BrandOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: double.infinity,
-        ),
-        child: OutlinedButton(
-          onPressed: onPressed,
-          style: OutlinedButton.styleFrom(
-            tapTargetSize: MaterialTapTargetSize.padded,
+    constraints: const BoxConstraints(minWidth: double.infinity),
+    child: OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.padded,
+      ),
+      child:
+          child ??
+          Text(
+            title ?? '',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
-          child: child ??
-              Text(
-                title ?? '',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-              ),
-        ),
-      );
+    ),
+  );
 }

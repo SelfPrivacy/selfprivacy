@@ -23,23 +23,16 @@ class UiHelpers {
   ) {
     if (permissionType == 'users') {
       return 'users.permission_description_user_access'.tr(
-        namedArgs: {
-          'serviceName': serviceName,
-        },
+        namedArgs: {'serviceName': serviceName},
       );
     }
     if (permissionType == 'admins') {
       return 'users.permission_description_admin_access'.tr(
-        namedArgs: {
-          'serviceName': serviceName,
-        },
+        namedArgs: {'serviceName': serviceName},
       );
     }
     return 'users.permission_description_fallback'.tr(
-      namedArgs: {
-        'permissionType': permissionType,
-        'serviceName': serviceName,
-      },
+      namedArgs: {'permissionType': permissionType, 'serviceName': serviceName},
     );
   }
 }

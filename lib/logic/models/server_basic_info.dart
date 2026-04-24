@@ -16,21 +16,6 @@ class ServerBasicInfo {
 }
 
 class ServerBasicInfoWithValidators extends ServerBasicInfo {
-  ServerBasicInfoWithValidators.fromServerBasicInfo({
-    required final ServerBasicInfo serverBasicInfo,
-    required final isIpValid,
-    required final isReverseDnsValid,
-  }) : this(
-          id: serverBasicInfo.id,
-          name: serverBasicInfo.name,
-          reverseDns: serverBasicInfo.reverseDns,
-          ip: serverBasicInfo.ip,
-          created: serverBasicInfo.created,
-          location: serverBasicInfo.location,
-          isIpValid: isIpValid,
-          isReverseDnsValid: isReverseDnsValid,
-        );
-
   ServerBasicInfoWithValidators({
     required super.id,
     required super.name,
@@ -41,6 +26,21 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
     required this.isIpValid,
     required this.isReverseDnsValid,
   });
+
+  ServerBasicInfoWithValidators.fromServerBasicInfo({
+    required final ServerBasicInfo serverBasicInfo,
+    required final isIpValid,
+    required final isReverseDnsValid,
+  }) : this(
+         id: serverBasicInfo.id,
+         name: serverBasicInfo.name,
+         reverseDns: serverBasicInfo.reverseDns,
+         ip: serverBasicInfo.ip,
+         created: serverBasicInfo.created,
+         location: serverBasicInfo.location,
+         isIpValid: isIpValid,
+         isReverseDnsValid: isReverseDnsValid,
+       );
   final bool isIpValid;
   final bool isReverseDnsValid;
 }

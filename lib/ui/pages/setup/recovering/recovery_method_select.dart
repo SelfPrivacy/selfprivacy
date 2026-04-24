@@ -13,47 +13,51 @@ class RecoveryMethodSelect extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        heroTitle: 'recovering.recovery_main_header'.tr(),
-        heroSubtitle: 'recovering.method_select_description'.tr(),
-        hasBackButton: true,
-        hasFlashButton: false,
-        ignoreBreakpoints: true,
-        onBackButtonPressed:
-            context.read<ServerInstallationCubit>().revertRecoveryStep,
-        children: [
-          OutlinedCard(
-            child: ListTile(
-              title: Text(
-                'recovering.method_select_other_device'.tr(),
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              leading: const Icon(Icons.offline_share_outlined),
-              onTap: () => context
+    heroTitle: 'recovering.recovery_main_header'.tr(),
+    heroSubtitle: 'recovering.method_select_description'.tr(),
+    hasBackButton: true,
+    hasFlashButton: false,
+    ignoreBreakpoints: true,
+    onBackButtonPressed:
+        context.read<ServerInstallationCubit>().revertRecoveryStep,
+    children: [
+      OutlinedCard(
+        child: ListTile(
+          title: Text(
+            'recovering.method_select_other_device'.tr(),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          leading: const Icon(Icons.offline_share_outlined),
+          onTap:
+              () => context
                   .read<ServerInstallationCubit>()
                   .selectRecoveryMethod(ServerRecoveryMethods.newDeviceKey),
-            ),
+        ),
+      ),
+      const SizedBox(height: 16),
+      OutlinedCard(
+        child: ListTile(
+          title: Text(
+            'recovering.method_select_recovery_key'.tr(),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-          const SizedBox(height: 16),
-          OutlinedCard(
-            child: ListTile(
-              title: Text(
-                'recovering.method_select_recovery_key'.tr(),
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              leading: const Icon(Icons.password_outlined),
-              onTap: () => context
+          leading: const Icon(Icons.password_outlined),
+          onTap:
+              () => context
                   .read<ServerInstallationCubit>()
                   .selectRecoveryMethod(ServerRecoveryMethods.recoveryKey),
-            ),
-          ),
-          const SizedBox(height: 16),
-          BrandButton.text(
-            title: 'recovering.method_select_nothing'.tr(),
-            onPressed: () => Navigator.of(context)
-                .push(materialRoute(const RecoveryFallbackMethodSelect())),
-          ),
-        ],
-      );
+        ),
+      ),
+      const SizedBox(height: 16),
+      BrandButton.text(
+        title: 'recovering.method_select_nothing'.tr(),
+        onPressed:
+            () => Navigator.of(
+              context,
+            ).push(materialRoute(const RecoveryFallbackMethodSelect())),
+      ),
+    ],
+  );
 }
 
 class RecoveryFallbackMethodSelect extends StatelessWidget {
@@ -84,13 +88,14 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 leading: const Icon(Icons.vpn_key),
-                onTap: () => Navigator.of(context).push(
-                  materialRoute(
-                    const RecoverByOldTokenInstruction(
-                      instructionFilename: 'how_fallback_old',
+                onTap:
+                    () => Navigator.of(context).push(
+                      materialRoute(
+                        const RecoverByOldTokenInstruction(
+                          instructionFilename: 'how_fallback_old',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -101,13 +106,14 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 leading: const Icon(Icons.terminal),
-                onTap: () => Navigator.of(context).push(
-                  materialRoute(
-                    const RecoverByOldTokenInstruction(
-                      instructionFilename: 'how_fallback_ssh',
+                onTap:
+                    () => Navigator.of(context).push(
+                      materialRoute(
+                        const RecoverByOldTokenInstruction(
+                          instructionFilename: 'how_fallback_ssh',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -122,13 +128,14 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 leading: const Icon(Icons.web),
-                onTap: () => Navigator.of(context).push(
-                  materialRoute(
-                    const RecoverByOldTokenInstruction(
-                      instructionFilename: 'how_fallback_terminal',
+                onTap:
+                    () => Navigator.of(context).push(
+                      materialRoute(
+                        const RecoverByOldTokenInstruction(
+                          instructionFilename: 'how_fallback_terminal',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
             ),
           ],

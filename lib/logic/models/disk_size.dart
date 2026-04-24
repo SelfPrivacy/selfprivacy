@@ -4,11 +4,11 @@ class DiskSize {
   const DiskSize({this.byte = 0});
 
   DiskSize.fromKibibyte(final double kibibyte)
-      : this(byte: (kibibyte * 1024).round());
+    : this(byte: (kibibyte * 1024).round());
   DiskSize.fromMebibyte(final double mebibyte)
-      : this(byte: (mebibyte * 1024 * 1024).round());
+    : this(byte: (mebibyte * 1024 * 1024).round());
   DiskSize.fromGibibyte(final double gibibyte)
-      : this(byte: (gibibyte * 1024 * 1024 * 1024).round());
+    : this(byte: (gibibyte * 1024 * 1024 * 1024).round());
 
   final int byte;
 

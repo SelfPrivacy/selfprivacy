@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -21,7 +21,6 @@ class ServerInstallationWizardData {
     required this.serverProviderKey,
     required this.dnsProviderType,
     required this.dnsProviderKey,
-    required this.backupsCredential,
     required this.serverTypeIdentifier,
     required this.serverLocation,
     required this.serverDetails,
@@ -29,24 +28,23 @@ class ServerInstallationWizardData {
   });
 
   ServerInstallationWizardData.empty()
-      : this(
-          hasFinalChecked: false,
-          isServerStarted: false,
-          isServerResetedFirstTime: false,
-          isServerResetedSecondTime: false,
-          isLoading: false,
-          isRecoveringServer: false,
-          rootUser: null,
-          serverProviderType: null,
-          serverProviderKey: null,
-          dnsProviderType: null,
-          dnsProviderKey: null,
-          backupsCredential: null,
-          serverTypeIdentifier: null,
-          serverLocation: null,
-          serverDetails: null,
-          serverDomain: null,
-        );
+    : this(
+        hasFinalChecked: false,
+        isServerStarted: false,
+        isServerResetedFirstTime: false,
+        isServerResetedSecondTime: false,
+        isLoading: false,
+        isRecoveringServer: false,
+        rootUser: null,
+        serverProviderType: null,
+        serverProviderKey: null,
+        dnsProviderType: null,
+        dnsProviderKey: null,
+        serverTypeIdentifier: null,
+        serverLocation: null,
+        serverDetails: null,
+        serverDomain: null,
+      );
 
   // Bool flags used by installer
   @HiveField(0)
@@ -76,8 +74,8 @@ class ServerInstallationWizardData {
   @HiveField(10)
   final String? dnsProviderKey;
 
-  @HiveField(11)
-  final BackupsCredential? backupsCredential;
+  // @HiveField(11)
+  // was backupsCredential
 
   @HiveField(12)
   final String? serverTypeIdentifier;
@@ -105,26 +103,23 @@ class ServerInstallationWizardData {
     final String? serverLocation,
     final ValueGetter<ServerHostingDetails?>? serverDetails,
     final ValueGetter<ServerDomain?>? serverDomain,
-  }) =>
-      ServerInstallationWizardData(
-        hasFinalChecked: hasFinalChecked ?? this.hasFinalChecked,
-        isServerStarted: isServerStarted ?? this.isServerStarted,
-        isServerResetedFirstTime:
-            isServerResetedFirstTime ?? this.isServerResetedFirstTime,
-        isServerResetedSecondTime:
-            isServerResetedSecondTime ?? this.isServerResetedSecondTime,
-        isLoading: isLoading ?? this.isLoading,
-        isRecoveringServer: isRecoveringServer ?? this.isRecoveringServer,
-        rootUser: rootUser ?? this.rootUser,
-        serverProviderType: serverProviderType ?? this.serverProviderType,
-        serverProviderKey: serverProviderKey ?? this.serverProviderKey,
-        dnsProviderType: dnsProviderType ?? this.dnsProviderType,
-        dnsProviderKey: dnsProviderKey ?? this.dnsProviderKey,
-        backupsCredential: backupsCredential ?? this.backupsCredential,
-        serverTypeIdentifier: serverTypeIdentifier ?? this.serverTypeIdentifier,
-        serverLocation: serverLocation ?? this.serverLocation,
-        serverDetails:
-            serverDetails != null ? serverDetails() : this.serverDetails,
-        serverDomain: serverDomain != null ? serverDomain() : this.serverDomain,
-      );
+  }) => ServerInstallationWizardData(
+    hasFinalChecked: hasFinalChecked ?? this.hasFinalChecked,
+    isServerStarted: isServerStarted ?? this.isServerStarted,
+    isServerResetedFirstTime:
+        isServerResetedFirstTime ?? this.isServerResetedFirstTime,
+    isServerResetedSecondTime:
+        isServerResetedSecondTime ?? this.isServerResetedSecondTime,
+    isLoading: isLoading ?? this.isLoading,
+    isRecoveringServer: isRecoveringServer ?? this.isRecoveringServer,
+    rootUser: rootUser ?? this.rootUser,
+    serverProviderType: serverProviderType ?? this.serverProviderType,
+    serverProviderKey: serverProviderKey ?? this.serverProviderKey,
+    dnsProviderType: dnsProviderType ?? this.dnsProviderType,
+    dnsProviderKey: dnsProviderKey ?? this.dnsProviderKey,
+    serverTypeIdentifier: serverTypeIdentifier ?? this.serverTypeIdentifier,
+    serverLocation: serverLocation ?? this.serverLocation,
+    serverDetails: serverDetails != null ? serverDetails() : this.serverDetails,
+    serverDomain: serverDomain != null ? serverDomain() : this.serverDomain,
+  );
 }

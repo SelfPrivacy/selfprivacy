@@ -8,10 +8,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 
 class SshFormCubit extends FormCubit {
-  SshFormCubit({
-    required this.jobsCubit,
-    required this.user,
-  }) {
+  SshFormCubit({required this.jobsCubit, required this.user}) {
     final RegExp keyRegExp = RegExp(
       r'^(ecdsa-sha2-nistp256 AAAAE2VjZH|ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',
     );
@@ -26,11 +23,7 @@ class SshFormCubit extends FormCubit {
         ),
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-          (final String s) {
-            print(s);
-            print(keyRegExp.hasMatch(s));
-            return !keyRegExp.hasMatch(s);
-          },
+          (final String s) => !keyRegExp.hasMatch(s),
           'validations.invalid_format_ssh'.tr(),
         ),
       ],
@@ -40,10 +33,10 @@ class SshFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() {
-    print(key.state.isValid);
-    jobsCubit
-        .addJob(CreateSSHKeyJob(user: user, publicKey: key.state.value.trim()));
+  void onSubmit() {
+    jobsCubit.addJob(
+      CreateSSHKeyJob(user: user, publicKey: key.state.value.trim()),
+    );
   }
 
   late FieldCubit<String> key;
@@ -53,9 +46,7 @@ class SshFormCubit extends FormCubit {
 }
 
 class JoblessSshFormCubit extends FormCubit {
-  JoblessSshFormCubit(
-    this.serverInstallationCubit,
-  ) {
+  JoblessSshFormCubit(this.serverInstallationCubit) {
     final RegExp keyRegExp = RegExp(
       r'^(ecdsa-sha2-nistp256 AAAAE2VjZH|ssh-rsa AAAAB3NzaC1yc2|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5)[0-9A-Za-z+/]+[=]{0,3}( .*)?$',
     );
@@ -65,11 +56,7 @@ class JoblessSshFormCubit extends FormCubit {
       validations: [
         RequiredStringValidation('validations.required'.tr()),
         ValidationModel<String>(
-          (final String s) {
-            print(s);
-            print(keyRegExp.hasMatch(s));
-            return !keyRegExp.hasMatch(s);
-          },
+          (final String s) => !keyRegExp.hasMatch(s),
           'validations.invalid_format_ssh'.tr(),
         ),
       ],
@@ -79,8 +66,8 @@ class JoblessSshFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() {
-    serverInstallationCubit.setCustomSshKey(key.state.value);
+  Future<void> onSubmit() async {
+    await serverInstallationCubit.setCustomSshKey(key.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;

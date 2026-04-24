@@ -42,23 +42,25 @@ class PlatformAdapter {
               '${value.utsname.machine} ${value.systemName} ${value.systemVersion}',
         );
       } else if (Platform.isLinux) {
-        return deviceInfo.linuxInfo
-            .then((final LinuxDeviceInfo value) => value.prettyName);
+        return deviceInfo.linuxInfo.then(
+          (final LinuxDeviceInfo value) => value.prettyName,
+        );
       } else if (Platform.isMacOS) {
         return deviceInfo.macOsInfo.then(
           (final MacOsDeviceInfo value) =>
               '${value.hostName} ${value.computerName}',
         );
       } else if (Platform.isWindows) {
-        return deviceInfo.windowsInfo
-            .then((final WindowsDeviceInfo value) => value.computerName);
+        return deviceInfo.windowsInfo.then(
+          (final WindowsDeviceInfo value) => value.computerName,
+        );
       }
     }
 
     return 'Unidentified';
   }
 
-  static void setClipboard(final String clipboardData) {
-    Clipboard.setData(ClipboardData(text: clipboardData));
+  static Future<void> setClipboard(final String clipboardData) async {
+    await Clipboard.setData(ClipboardData(text: clipboardData));
   }
 }

@@ -15,10 +15,7 @@ class MetricsLoading extends MetricsState {
   List<Object?> get props => [period];
 }
 
-enum MetricsDataSource {
-  server,
-  legacy,
-}
+enum MetricsDataSource { server, legacy }
 
 class MetricsLoaded extends MetricsState {
   const MetricsLoaded({
@@ -38,8 +35,13 @@ class MetricsLoaded extends MetricsState {
   final MetricsDataSource source;
 
   @override
-  List<Object?> get props =>
-      [period, metrics, memoryMetrics, diskMetrics, source];
+  List<Object?> get props => [
+    period,
+    metrics,
+    memoryMetrics,
+    diskMetrics,
+    source,
+  ];
 }
 
 class MetricsUnsupported extends MetricsState {

@@ -22,24 +22,22 @@ class LinkListTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        onTap: uri != null
-            ? () => launchUrl(
-                  Uri.parse(uri!),
-                  mode: LaunchMode.externalApplication,
-                )
+    title: Text(title),
+    subtitle: Text(subtitle),
+    onTap:
+        uri != null
+            ? () =>
+                launchUrl(Uri.parse(uri!), mode: LaunchMode.externalApplication)
             : null,
-        leading: Icon(icon),
-        onLongPress: uri != null
-            ? () {
-                PlatformAdapter.setClipboard(
-                  longPressText ?? uri!,
-                );
-                getIt<NavigationService>().showSnackBar(
-                  'basis.copied_to_clipboard'.tr(),
-                );
-              }
+    leading: Icon(icon),
+    onLongPress:
+        uri != null
+            ? () async {
+              await PlatformAdapter.setClipboard(longPressText ?? uri!);
+              getIt<NavigationService>().showSnackBar(
+                'basis.copied_to_clipboard'.tr(),
+              );
+            }
             : null,
-      );
+  );
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
@@ -22,30 +24,31 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Future<void> scrollTo(final int targetView) => pageController.animateToPage(
-        targetView,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOutCubicEmphasized,
-      );
+    targetView,
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeInOutCubicEmphasized,
+  );
 
   @override
   Widget build(final BuildContext context) => Material(
-        child: PageView(
-          controller: pageController,
-          children: [
-            OnboardingFirstView(
-              onProceed: () => scrollTo(1),
-            ),
-            OnboardingSecondView(
-              onProceed: () {
-                InheritedAppController.of(context)
-                    .setShouldShowOnboarding(false);
-                context.router.replaceAll([
-                  const RootRoute(),
-                  const InitializingRoute(),
-                ]);
-              },
-            ),
-          ],
+    child: PageView(
+      controller: pageController,
+      children: [
+        OnboardingFirstView(onProceed: () => scrollTo(1)),
+        OnboardingSecondView(
+          onProceed: () async {
+            unawaited(
+              InheritedAppController.of(
+                context,
+              ).setShouldShowOnboarding(shouldOnboard: false),
+            );
+            await context.router.replaceAll([
+              const RootRoute(),
+              const InitializingRoute(),
+            ]);
+          },
         ),
-      );
+      ],
+    ),
+  );
 }

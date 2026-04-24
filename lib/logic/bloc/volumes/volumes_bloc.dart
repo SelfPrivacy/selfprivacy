@@ -20,59 +20,45 @@ part 'volumes_state.dart';
 
 class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   VolumesBloc() : super(VolumesInitial()) {
-    on<VolumesServerLoaded>(
-      _loadState,
-      transformer: droppable(),
-    );
-    on<VolumesServerReset>(
-      _resetState,
-      transformer: droppable(),
-    );
-    on<VolumesServerStateChanged>(
-      _updateState,
-      transformer: droppable(),
-    );
-    on<VolumeResize>(
-      _resizeVolume,
-      transformer: droppable(),
-    );
+    on<VolumesServerLoaded>(_loadState, transformer: droppable());
+    on<VolumesServerReset>(_resetState, transformer: droppable());
+    on<VolumesServerStateChanged>(_updateState, transformer: droppable());
+    on<VolumeResize>(_resizeVolume, transformer: droppable());
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
-    _apiStatusSubscription = connectionRepository.connectionStatusStream
-        .listen((final ConnectionStatus connectionStatus) {
-      switch (connectionStatus) {
-        case ConnectionStatus.nonexistent:
-          add(const VolumesServerReset());
-          isLoaded = false;
-          break;
-        case ConnectionStatus.connected:
-          if (!isLoaded) {
-            add(const VolumesServerLoaded());
-            isLoaded = true;
-          }
-          break;
-        default:
-          break;
-      }
-    });
-
-    _apiDataSubscription = connectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        if (apiData.volumes.data == null) {
-          add(const VolumesServerReset());
-        } else {
-          add(
-            VolumesServerStateChanged(
-              apiData.volumes.data!,
-            ),
-          );
+    _apiStatusSubscription = connectionRepository.connectionStatusStream.listen(
+      (final ConnectionStatus connectionStatus) {
+        switch (connectionStatus) {
+          case ConnectionStatus.nonexistent:
+            add(const VolumesServerReset());
+            isLoaded = false;
+          case ConnectionStatus.connected:
+            if (!isLoaded) {
+              add(const VolumesServerLoaded());
+              isLoaded = true;
+            }
+          case ConnectionStatus.reconnecting:
+          case ConnectionStatus.offline:
+          case ConnectionStatus.unauthorized:
+            break;
         }
       },
     );
 
-    _resourcesModelSubscription =
-        getIt<ResourcesModel>().statusStream.listen((final event) {
+    _apiDataSubscription = connectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      if (apiData.volumes.data == null) {
+        add(const VolumesServerReset());
+      } else {
+        add(VolumesServerStateChanged(apiData.volumes.data!));
+      }
+    });
+
+    _resourcesModelSubscription = getIt<ResourcesModel>().statusStream.listen((
+      final event,
+    ) {
       if (event is ChangedServerProviderCredentials) {
         add(const VolumesServerLoaded());
       }
@@ -97,8 +83,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
         getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
         return price;
       }
-      price = pricingResult.data!.perVolumeGb;
-      return price;
+      return pricingResult.data!.perVolumeGb;
     } else {
       await Future.delayed(Duration.zero);
       getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
@@ -179,10 +164,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     if (state is VolumesLoading) {
       emit(
         VolumesLoaded(
-          diskStatus: DiskStatus.fromVolumes(
-            serverVolumes,
-            providerVolumes,
-          ),
+          diskStatus: DiskStatus.fromVolumes(serverVolumes, providerVolumes),
           providerVolumes: providerVolumes,
           serverVolumesHashCode: Object.hashAll(serverVolumes),
         ),
@@ -191,10 +173,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     }
     emit(
       state.copyWith(
-        diskStatus: DiskStatus.fromVolumes(
-          serverVolumes,
-          providerVolumes,
-        ),
+        diskStatus: DiskStatus.fromVolumes(serverVolumes, providerVolumes),
         providerVolumes: providerVolumes,
         serverVolumesHashCode: Object.hashAll(serverVolumes),
       ),
@@ -222,11 +201,8 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       ),
     );
 
-    final resizedResult =
-        await ProvidersController.currentServerProvider!.resizeVolume(
-      event.volume.providerVolume!,
-      event.newSize,
-    );
+    final resizedResult = await ProvidersController.currentServerProvider!
+        .resizeVolume(event.volume.providerVolume!, event.newSize);
 
     if (!resizedResult.success || !resizedResult.data) {
       getIt<NavigationService>().showSnackBar(

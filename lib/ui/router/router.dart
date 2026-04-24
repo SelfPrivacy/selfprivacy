@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
@@ -15,6 +16,7 @@ import 'package:selfprivacy/ui/pages/more/app_settings/app_settings.dart';
 import 'package:selfprivacy/ui/pages/more/app_settings/developer_settings.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
+import 'package:selfprivacy/ui/pages/more/tokens/add_backups_token.dart';
 import 'package:selfprivacy/ui/pages/more/tokens/add_server_provider_token.dart';
 import 'package:selfprivacy/ui/pages/more/tokens/tokens_page.dart';
 import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
@@ -46,22 +48,21 @@ Widget fadeThroughTransition(
   final Animation<double> animation,
   final Animation<double> secondaryAnimation,
   final Widget child,
-) =>
-    SharedAxisTransition(
-      key: UniqueKey(),
-      animation: animation,
-      secondaryAnimation: secondaryAnimation,
-      transitionType: SharedAxisTransitionType.vertical,
-      child: child,
-    );
+) => SharedAxisTransition(
+  key: UniqueKey(),
+  animation: animation,
+  secondaryAnimation: secondaryAnimation,
+  transitionType: SharedAxisTransitionType.vertical,
+  child: child,
+);
 
 @AutoRouterConfig(
   // transitionsBuilder: fadeThroughTransition,
-  replaceInRouteName: 'Page|Screen|Routing,Route',
+  replaceInRouteName: 'Page|Screen,Route',
 )
 class RootRouter extends RootStackRouter {
   RootRouter(final GlobalKey<NavigatorState> navigatorKey)
-      : super(navigatorKey: navigatorKey);
+    : super(navigatorKey: navigatorKey);
 
   @override
   RouteType get defaultRouteType => const RouteType.material();
@@ -70,7 +71,7 @@ class RootRouter extends RootStackRouter {
   final List<AutoRoute> routes = [
     AutoRoute(page: OnboardingRoute.page),
     AutoRoute(page: InitializingRoute.page),
-    AutoRoute(page: RecoveryRoute.page),
+    AutoRoute(page: RecoveryRoutingRoute.page),
     AutoRoute(
       page: RootRoute.page,
       path: '/',
@@ -80,25 +81,25 @@ class RootRouter extends RootStackRouter {
           usesPathAsKey: true,
           path: '',
           transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
+          duration: const Duration(milliseconds: 400),
         ),
         CustomRoute(
           page: ServicesRoute.page,
           usesPathAsKey: true,
           transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
+          duration: const Duration(milliseconds: 400),
         ),
         CustomRoute(
           page: UsersRoute.page,
           usesPathAsKey: true,
           transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
+          duration: const Duration(milliseconds: 400),
         ),
         CustomRoute(
           page: MoreRoute.page,
           usesPathAsKey: true,
           transitionsBuilder: fadeThroughTransition,
-          durationInMilliseconds: 400,
+          duration: const Duration(milliseconds: 400),
         ),
         AutoRoute(page: AppSettingsRoute.page),
         AutoRoute(page: UserDetailsRoute.page),
@@ -124,6 +125,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: TokensRoute.page),
         AutoRoute(page: MemoryUsageByServiceRoute.page),
         AutoRoute(page: AddServerProviderTokenRoute.page),
+        AutoRoute(page: AddBackupsTokenRoute.page),
       ],
     ),
     AutoRoute(page: ServicesMigrationRoute.page),
@@ -189,6 +191,8 @@ String getRouteTitle(final String routeName) {
       return 'resource_chart.memory';
     case 'AddServerProviderTokenPage':
       return 'tokens.add_server_provider_token';
+    case 'AddBackupsTokenPage':
+      return 'tokens.add_backups_token';
     default:
       return routeName;
   }

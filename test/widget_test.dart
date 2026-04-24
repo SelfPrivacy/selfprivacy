@@ -6,18 +6,17 @@ void main() {
   group('StringGenerators', () {
     group('Basic', () {
       test('assert chart empty', () {
-        expect(
-          () {
-            StringGenerators.getRandomString(8);
-          },
-          throwsAssertionError,
-        );
+        expect(() {
+          StringGenerators.getRandomString(8);
+        }, throwsAssertionError);
       });
 
       test('only lowercase string', () {
         const int length = 8;
-        final String generatedString =
-            StringGenerators.getRandomString(length, hasLowercaseLetters: true);
+        final String generatedString = StringGenerators.getRandomString(
+          length,
+          hasLowercaseLetters: true,
+        );
 
         expect(generatedString, isNot(matches(regExpNewLines)));
         expect(generatedString, isNot(matches(regExpWhiteSpaces)));
@@ -128,7 +127,7 @@ void main() {
 
 RegExp regExpNewLines = RegExp(r'[\n\r]+');
 RegExp regExpWhiteSpaces = RegExp(r'[\s]+');
-RegExp regExpUppercaseLetters = RegExp(r'[A-Z]');
-RegExp regExpLowercaseLetters = RegExp(r'[a-z]');
-RegExp regExpNumbers = RegExp(r'[0-9]');
+RegExp regExpUppercaseLetters = RegExp('[A-Z]');
+RegExp regExpLowercaseLetters = RegExp('[a-z]');
+RegExp regExpNumbers = RegExp('[0-9]');
 RegExp regExpSymbols = RegExp(r'(?:_|[^\w\s])+');

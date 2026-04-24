@@ -7,15 +7,11 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
-final _log = const AppLogger(name: 'ResetPasswordBloc').log;
+final _logger = const AppLogger(name: 'ResetPasswordBloc').log;
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
-  ResetPasswordBloc({
-    required this.user,
-  }) : super(
-          const ResetPasswordState(),
-        ) {
-    _log('ResetPasswordBloc created for user: ${user.login}');
+  ResetPasswordBloc({required this.user}) : super(const ResetPasswordState()) {
+    _logger('ResetPasswordBloc created for user: ${user.login}');
 
     on<RequestNewPassword>(
       _mapResetPasswordRequestedToState,
@@ -35,25 +31,21 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     final RequestNewPassword event,
     final Emitter<ResetPasswordState> emit,
   ) async {
-    _log('Reset password requested for user: ${user.login}');
+    _logger('Reset password requested for user: ${user.login}');
     if (state.isLoading) {
       return;
     }
 
-    emit(
-      const ResetPasswordState(
-        passwordResetLink: null,
-        isLoading: true,
-      ),
-    );
+    emit(const ResetPasswordState(passwordResetLink: null, isLoading: true));
 
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
     if (apiVersion == null) {
       throw Exception('basis.network_error'.tr());
     }
-    if (!VersionConstraint.parse(ssoSupportedVersion)
-        .allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(
+      ssoSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
       emit(
         ResetPasswordUnsupported(
           errorMessage: 'basis.feature_unsupported_on_api_version'.tr(
@@ -67,21 +59,19 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       return;
     }
 
-    _log('Load start');
-    final (link, message) =
-        await getIt<ApiConnectionRepository>().generatePasswordResetLink(user);
+    _logger('Load start');
+    final (link, message) = await getIt<ApiConnectionRepository>()
+        .generatePasswordResetLink(user);
 
-    _log('Got link: $link, message: $message');
+    _logger('Got link: $link, message: $message');
     if (state.isLoading) {
       emit(
         link != null
             ? ResetPasswordState(
-                passwordResetLink: link,
-                passwordResetMessage: message,
-              )
-            : ResetPasswordState(
-                errorMessage: message,
-              ),
+              passwordResetLink: link,
+              passwordResetMessage: message,
+            )
+            : ResetPasswordState(errorMessage: message),
       );
     }
   }
@@ -90,14 +80,9 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     final CancelNewPasswordRequest event,
     final Emitter<ResetPasswordState> emit,
   ) async {
-    _log('Reset password request cancelled');
+    _logger('Reset password request cancelled');
     if (state.isLoading) {
-      emit(
-        const ResetPasswordState(
-          passwordResetLink: null,
-          isLoading: false,
-        ),
-      );
+      emit(const ResetPasswordState(passwordResetLink: null, isLoading: false));
     }
   }
 }
@@ -132,12 +117,14 @@ class ResetPasswordState extends Equatable {
   final String errorMessage;
 
   @override
-  List<Object?> get props =>
-      [passwordResetMessage, isLoading, passwordResetLink, errorMessage];
+  List<Object?> get props => [
+    passwordResetMessage,
+    isLoading,
+    passwordResetLink,
+    errorMessage,
+  ];
 }
 
 class ResetPasswordUnsupported extends ResetPasswordState {
-  const ResetPasswordUnsupported({
-    super.errorMessage,
-  }) : super();
+  const ResetPasswordUnsupported({super.errorMessage}) : super();
 }

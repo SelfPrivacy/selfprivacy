@@ -13,10 +13,14 @@ class Fragment$MonitoringMetrics {
     final l$metrics = json['metrics'];
     final l$$__typename = json['__typename'];
     return Fragment$MonitoringMetrics(
-      metrics: (l$metrics as List<dynamic>)
-          .map((e) => Fragment$MonitoringMetrics$metrics.fromJson(
-              (e as Map<String, dynamic>)))
-          .toList(),
+      metrics:
+          (l$metrics as List<dynamic>)
+              .map(
+                (e) => Fragment$MonitoringMetrics$metrics.fromJson(
+                  (e as Map<String, dynamic>),
+                ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -49,7 +53,7 @@ class Fragment$MonitoringMetrics {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$MonitoringMetrics) ||
+    if (other is! Fragment$MonitoringMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -77,10 +81,7 @@ class Fragment$MonitoringMetrics {
 extension UtilityExtension$Fragment$MonitoringMetrics
     on Fragment$MonitoringMetrics {
   CopyWith$Fragment$MonitoringMetrics<Fragment$MonitoringMetrics>
-      get copyWith => CopyWith$Fragment$MonitoringMetrics(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Fragment$MonitoringMetrics(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$MonitoringMetrics<TRes> {
@@ -97,19 +98,20 @@ abstract class CopyWith$Fragment$MonitoringMetrics<TRes> {
     String? $__typename,
   });
   TRes metrics(
-      Iterable<Fragment$MonitoringMetrics$metrics> Function(
-              Iterable<
-                  CopyWith$Fragment$MonitoringMetrics$metrics<
-                      Fragment$MonitoringMetrics$metrics>>)
-          _fn);
+    Iterable<Fragment$MonitoringMetrics$metrics> Function(
+      Iterable<
+        CopyWith$Fragment$MonitoringMetrics$metrics<
+          Fragment$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Fragment$MonitoringMetrics<TRes>
     implements CopyWith$Fragment$MonitoringMetrics<TRes> {
-  _CopyWithImpl$Fragment$MonitoringMetrics(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$MonitoringMetrics(this._instance, this._then);
 
   final Fragment$MonitoringMetrics _instance;
 
@@ -117,31 +119,37 @@ class _CopyWithImpl$Fragment$MonitoringMetrics<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? metrics = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$MonitoringMetrics(
-        metrics: metrics == _undefined || metrics == null
-            ? _instance.metrics
-            : (metrics as List<Fragment$MonitoringMetrics$metrics>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  TRes call({Object? metrics = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Fragment$MonitoringMetrics(
+          metrics:
+              metrics == _undefined || metrics == null
+                  ? _instance.metrics
+                  : (metrics as List<Fragment$MonitoringMetrics$metrics>),
+          $__typename:
+              $__typename == _undefined || $__typename == null
+                  ? _instance.$__typename
+                  : ($__typename as String),
+        ),
+      );
 
   TRes metrics(
-          Iterable<Fragment$MonitoringMetrics$metrics> Function(
-                  Iterable<
-                      CopyWith$Fragment$MonitoringMetrics$metrics<
-                          Fragment$MonitoringMetrics$metrics>>)
-              _fn) =>
-      call(
-          metrics: _fn(_instance.metrics
-              .map((e) => CopyWith$Fragment$MonitoringMetrics$metrics(
-                    e,
-                    (i) => i,
-                  ))).toList());
+    Iterable<Fragment$MonitoringMetrics$metrics> Function(
+      Iterable<
+        CopyWith$Fragment$MonitoringMetrics$metrics<
+          Fragment$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    metrics:
+        _fn(
+          _instance.metrics.map(
+            (e) => CopyWith$Fragment$MonitoringMetrics$metrics(e, (i) => i),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$MonitoringMetrics<TRes>
@@ -153,8 +161,7 @@ class _CopyWithStubImpl$Fragment$MonitoringMetrics<TRes>
   call({
     List<Fragment$MonitoringMetrics$metrics>? metrics,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   metrics(_fn) => _res;
 }
@@ -162,44 +169,58 @@ class _CopyWithStubImpl$Fragment$MonitoringMetrics<TRes>
 const fragmentDefinitionMonitoringMetrics = FragmentDefinitionNode(
   name: NameNode(value: 'MonitoringMetrics'),
   typeCondition: TypeConditionNode(
-      on: NamedTypeNode(
-    name: NameNode(value: 'MonitoringMetrics'),
-    isNonNull: false,
-  )),
+    on: NamedTypeNode(
+      name: NameNode(value: 'MonitoringMetrics'),
+      isNonNull: false,
+    ),
+  ),
   directives: [],
-  selectionSet: SelectionSetNode(selections: [
-    FieldNode(
-      name: NameNode(value: 'metrics'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: SelectionSetNode(selections: [
-        FieldNode(
-          name: NameNode(value: 'metricId'),
-          alias: null,
-          arguments: [],
-          directives: [],
-          selectionSet: null,
-        ),
-        FieldNode(
-          name: NameNode(value: 'values'),
-          alias: null,
-          arguments: [],
-          directives: [],
-          selectionSet: SelectionSetNode(selections: [
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'metrics'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(
+          selections: [
             FieldNode(
-              name: NameNode(value: 'timestamp'),
+              name: NameNode(value: 'metricId'),
               alias: null,
               arguments: [],
               directives: [],
               selectionSet: null,
             ),
             FieldNode(
-              name: NameNode(value: 'value'),
+              name: NameNode(value: 'values'),
               alias: null,
               arguments: [],
               directives: [],
-              selectionSet: null,
+              selectionSet: SelectionSetNode(
+                selections: [
+                  FieldNode(
+                    name: NameNode(value: 'timestamp'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: 'value'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
+                    name: NameNode(value: '__typename'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                ],
+              ),
             ),
             FieldNode(
               name: NameNode(value: '__typename'),
@@ -208,47 +229,39 @@ const fragmentDefinitionMonitoringMetrics = FragmentDefinitionNode(
               directives: [],
               selectionSet: null,
             ),
-          ]),
+          ],
         ),
-        FieldNode(
-          name: NameNode(value: '__typename'),
-          alias: null,
-          arguments: [],
-          directives: [],
-          selectionSet: null,
-        ),
-      ]),
-    ),
-    FieldNode(
-      name: NameNode(value: '__typename'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-  ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
 );
-const documentNodeFragmentMonitoringMetrics = DocumentNode(definitions: [
-  fragmentDefinitionMonitoringMetrics,
-]);
+const documentNodeFragmentMonitoringMetrics = DocumentNode(
+  definitions: [fragmentDefinitionMonitoringMetrics],
+);
 
 extension ClientExtension$Fragment$MonitoringMetrics on graphql.GraphQLClient {
   void writeFragment$MonitoringMetrics({
     required Fragment$MonitoringMetrics data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
-  }) =>
-      this.writeFragment(
-        graphql.FragmentRequest(
-          idFields: idFields,
-          fragment: const graphql.Fragment(
-            fragmentName: 'MonitoringMetrics',
-            document: documentNodeFragmentMonitoringMetrics,
-          ),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'MonitoringMetrics',
+        document: documentNodeFragmentMonitoringMetrics,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Fragment$MonitoringMetrics? readFragment$MonitoringMetrics({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -275,16 +288,21 @@ class Fragment$MonitoringMetrics$metrics {
   });
 
   factory Fragment$MonitoringMetrics$metrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metricId = json['metricId'];
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Fragment$MonitoringMetrics$metrics(
       metricId: (l$metricId as String),
-      values: (l$values as List<dynamic>)
-          .map((e) => Fragment$MonitoringMetrics$metrics$values.fromJson(
-              (e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) => Fragment$MonitoringMetrics$metrics$values.fromJson(
+                  (e as Map<String, dynamic>),
+                ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -323,7 +341,7 @@ class Fragment$MonitoringMetrics$metrics {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$MonitoringMetrics$metrics) ||
+    if (other is! Fragment$MonitoringMetrics$metrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -356,11 +374,9 @@ class Fragment$MonitoringMetrics$metrics {
 extension UtilityExtension$Fragment$MonitoringMetrics$metrics
     on Fragment$MonitoringMetrics$metrics {
   CopyWith$Fragment$MonitoringMetrics$metrics<
-          Fragment$MonitoringMetrics$metrics>
-      get copyWith => CopyWith$Fragment$MonitoringMetrics$metrics(
-            this,
-            (i) => i,
-          );
+    Fragment$MonitoringMetrics$metrics
+  >
+  get copyWith => CopyWith$Fragment$MonitoringMetrics$metrics(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$MonitoringMetrics$metrics<TRes> {
@@ -378,19 +394,20 @@ abstract class CopyWith$Fragment$MonitoringMetrics$metrics<TRes> {
     String? $__typename,
   });
   TRes values(
-      Iterable<Fragment$MonitoringMetrics$metrics$values> Function(
-              Iterable<
-                  CopyWith$Fragment$MonitoringMetrics$metrics$values<
-                      Fragment$MonitoringMetrics$metrics$values>>)
-          _fn);
+    Iterable<Fragment$MonitoringMetrics$metrics$values> Function(
+      Iterable<
+        CopyWith$Fragment$MonitoringMetrics$metrics$values<
+          Fragment$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Fragment$MonitoringMetrics$metrics<TRes>
     implements CopyWith$Fragment$MonitoringMetrics$metrics<TRes> {
-  _CopyWithImpl$Fragment$MonitoringMetrics$metrics(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$MonitoringMetrics$metrics(this._instance, this._then);
 
   final Fragment$MonitoringMetrics$metrics _instance;
 
@@ -402,31 +419,41 @@ class _CopyWithImpl$Fragment$MonitoringMetrics$metrics<TRes>
     Object? metricId = _undefined,
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$MonitoringMetrics$metrics(
-        metricId: metricId == _undefined || metricId == null
-            ? _instance.metricId
-            : (metricId as String),
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<Fragment$MonitoringMetrics$metrics$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Fragment$MonitoringMetrics$metrics(
+      metricId:
+          metricId == _undefined || metricId == null
+              ? _instance.metricId
+              : (metricId as String),
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values as List<Fragment$MonitoringMetrics$metrics$values>),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Fragment$MonitoringMetrics$metrics$values> Function(
-                  Iterable<
-                      CopyWith$Fragment$MonitoringMetrics$metrics$values<
-                          Fragment$MonitoringMetrics$metrics$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values
-              .map((e) => CopyWith$Fragment$MonitoringMetrics$metrics$values(
-                    e,
-                    (i) => i,
-                  ))).toList());
+    Iterable<Fragment$MonitoringMetrics$metrics$values> Function(
+      Iterable<
+        CopyWith$Fragment$MonitoringMetrics$metrics$values<
+          Fragment$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Fragment$MonitoringMetrics$metrics$values(e, (i) => i),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$MonitoringMetrics$metrics<TRes>
@@ -439,8 +466,7 @@ class _CopyWithStubImpl$Fragment$MonitoringMetrics$metrics<TRes>
     String? metricId,
     List<Fragment$MonitoringMetrics$metrics$values>? values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -453,7 +479,8 @@ class Fragment$MonitoringMetrics$metrics$values {
   });
 
   factory Fragment$MonitoringMetrics$metrics$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$timestamp = json['timestamp'];
     final l$value = json['value'];
     final l$$__typename = json['__typename'];
@@ -486,11 +513,7 @@ class Fragment$MonitoringMetrics$metrics$values {
     final l$timestamp = timestamp;
     final l$value = value;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$timestamp,
-      l$value,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$timestamp, l$value, l$$__typename]);
   }
 
   @override
@@ -498,7 +521,7 @@ class Fragment$MonitoringMetrics$metrics$values {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$MonitoringMetrics$metrics$values) ||
+    if (other is! Fragment$MonitoringMetrics$metrics$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -524,11 +547,10 @@ class Fragment$MonitoringMetrics$metrics$values {
 extension UtilityExtension$Fragment$MonitoringMetrics$metrics$values
     on Fragment$MonitoringMetrics$metrics$values {
   CopyWith$Fragment$MonitoringMetrics$metrics$values<
-          Fragment$MonitoringMetrics$metrics$values>
-      get copyWith => CopyWith$Fragment$MonitoringMetrics$metrics$values(
-            this,
-            (i) => i,
-          );
+    Fragment$MonitoringMetrics$metrics$values
+  >
+  get copyWith =>
+      CopyWith$Fragment$MonitoringMetrics$metrics$values(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$MonitoringMetrics$metrics$values<TRes> {
@@ -540,11 +562,7 @@ abstract class CopyWith$Fragment$MonitoringMetrics$metrics$values<TRes> {
   factory CopyWith$Fragment$MonitoringMetrics$metrics$values.stub(TRes res) =
       _CopyWithStubImpl$Fragment$MonitoringMetrics$metrics$values;
 
-  TRes call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  });
+  TRes call({DateTime? timestamp, String? value, String? $__typename});
 }
 
 class _CopyWithImpl$Fragment$MonitoringMetrics$metrics$values<TRes>
@@ -564,18 +582,22 @@ class _CopyWithImpl$Fragment$MonitoringMetrics$metrics$values<TRes>
     Object? timestamp = _undefined,
     Object? value = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$MonitoringMetrics$metrics$values(
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Fragment$MonitoringMetrics$metrics$values(
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$MonitoringMetrics$metrics$values<TRes>
@@ -584,12 +606,7 @@ class _CopyWithStubImpl$Fragment$MonitoringMetrics$metrics$values<TRes>
 
   TRes _res;
 
-  call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  }) =>
-      _res;
+  call({DateTime? timestamp, String? value, String? $__typename}) => _res;
 }
 
 class Fragment$MonitoringValues {
@@ -602,10 +619,14 @@ class Fragment$MonitoringValues {
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Fragment$MonitoringValues(
-      values: (l$values as List<dynamic>)
-          .map((e) => Fragment$MonitoringValues$values.fromJson(
-              (e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) => Fragment$MonitoringValues$values.fromJson(
+                  (e as Map<String, dynamic>),
+                ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -638,7 +659,7 @@ class Fragment$MonitoringValues {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$MonitoringValues) ||
+    if (other is! Fragment$MonitoringValues ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -666,10 +687,7 @@ class Fragment$MonitoringValues {
 extension UtilityExtension$Fragment$MonitoringValues
     on Fragment$MonitoringValues {
   CopyWith$Fragment$MonitoringValues<Fragment$MonitoringValues> get copyWith =>
-      CopyWith$Fragment$MonitoringValues(
-        this,
-        (i) => i,
-      );
+      CopyWith$Fragment$MonitoringValues(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$MonitoringValues<TRes> {
@@ -686,19 +704,20 @@ abstract class CopyWith$Fragment$MonitoringValues<TRes> {
     String? $__typename,
   });
   TRes values(
-      Iterable<Fragment$MonitoringValues$values> Function(
-              Iterable<
-                  CopyWith$Fragment$MonitoringValues$values<
-                      Fragment$MonitoringValues$values>>)
-          _fn);
+    Iterable<Fragment$MonitoringValues$values> Function(
+      Iterable<
+        CopyWith$Fragment$MonitoringValues$values<
+          Fragment$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Fragment$MonitoringValues<TRes>
     implements CopyWith$Fragment$MonitoringValues<TRes> {
-  _CopyWithImpl$Fragment$MonitoringValues(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$MonitoringValues(this._instance, this._then);
 
   final Fragment$MonitoringValues _instance;
 
@@ -706,31 +725,37 @@ class _CopyWithImpl$Fragment$MonitoringValues<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? values = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$MonitoringValues(
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<Fragment$MonitoringValues$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  TRes call({Object? values = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Fragment$MonitoringValues(
+          values:
+              values == _undefined || values == null
+                  ? _instance.values
+                  : (values as List<Fragment$MonitoringValues$values>),
+          $__typename:
+              $__typename == _undefined || $__typename == null
+                  ? _instance.$__typename
+                  : ($__typename as String),
+        ),
+      );
 
   TRes values(
-          Iterable<Fragment$MonitoringValues$values> Function(
-                  Iterable<
-                      CopyWith$Fragment$MonitoringValues$values<
-                          Fragment$MonitoringValues$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values
-              .map((e) => CopyWith$Fragment$MonitoringValues$values(
-                    e,
-                    (i) => i,
-                  ))).toList());
+    Iterable<Fragment$MonitoringValues$values> Function(
+      Iterable<
+        CopyWith$Fragment$MonitoringValues$values<
+          Fragment$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) => CopyWith$Fragment$MonitoringValues$values(e, (i) => i),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$MonitoringValues<TRes>
@@ -739,10 +764,7 @@ class _CopyWithStubImpl$Fragment$MonitoringValues<TRes>
 
   TRes _res;
 
-  call({
-    List<Fragment$MonitoringValues$values>? values,
-    String? $__typename,
-  }) =>
+  call({List<Fragment$MonitoringValues$values>? values, String? $__typename}) =>
       _res;
 
   values(_fn) => _res;
@@ -751,71 +773,75 @@ class _CopyWithStubImpl$Fragment$MonitoringValues<TRes>
 const fragmentDefinitionMonitoringValues = FragmentDefinitionNode(
   name: NameNode(value: 'MonitoringValues'),
   typeCondition: TypeConditionNode(
-      on: NamedTypeNode(
-    name: NameNode(value: 'MonitoringValues'),
-    isNonNull: false,
-  )),
+    on: NamedTypeNode(
+      name: NameNode(value: 'MonitoringValues'),
+      isNonNull: false,
+    ),
+  ),
   directives: [],
-  selectionSet: SelectionSetNode(selections: [
-    FieldNode(
-      name: NameNode(value: 'values'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: SelectionSetNode(selections: [
-        FieldNode(
-          name: NameNode(value: 'value'),
-          alias: null,
-          arguments: [],
-          directives: [],
-          selectionSet: null,
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'values'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(
+          selections: [
+            FieldNode(
+              name: NameNode(value: 'value'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: 'timestamp'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            FieldNode(
+              name: NameNode(value: '__typename'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+          ],
         ),
-        FieldNode(
-          name: NameNode(value: 'timestamp'),
-          alias: null,
-          arguments: [],
-          directives: [],
-          selectionSet: null,
-        ),
-        FieldNode(
-          name: NameNode(value: '__typename'),
-          alias: null,
-          arguments: [],
-          directives: [],
-          selectionSet: null,
-        ),
-      ]),
-    ),
-    FieldNode(
-      name: NameNode(value: '__typename'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-  ]),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
 );
-const documentNodeFragmentMonitoringValues = DocumentNode(definitions: [
-  fragmentDefinitionMonitoringValues,
-]);
+const documentNodeFragmentMonitoringValues = DocumentNode(
+  definitions: [fragmentDefinitionMonitoringValues],
+);
 
 extension ClientExtension$Fragment$MonitoringValues on graphql.GraphQLClient {
   void writeFragment$MonitoringValues({
     required Fragment$MonitoringValues data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
-  }) =>
-      this.writeFragment(
-        graphql.FragmentRequest(
-          idFields: idFields,
-          fragment: const graphql.Fragment(
-            fragmentName: 'MonitoringValues',
-            document: documentNodeFragmentMonitoringValues,
-          ),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'MonitoringValues',
+        document: documentNodeFragmentMonitoringValues,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Fragment$MonitoringValues? readFragment$MonitoringValues({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -874,11 +900,7 @@ class Fragment$MonitoringValues$values {
     final l$value = value;
     final l$timestamp = timestamp;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$value,
-      l$timestamp,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$value, l$timestamp, l$$__typename]);
   }
 
   @override
@@ -886,7 +908,7 @@ class Fragment$MonitoringValues$values {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$MonitoringValues$values) ||
+    if (other is! Fragment$MonitoringValues$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -912,10 +934,7 @@ class Fragment$MonitoringValues$values {
 extension UtilityExtension$Fragment$MonitoringValues$values
     on Fragment$MonitoringValues$values {
   CopyWith$Fragment$MonitoringValues$values<Fragment$MonitoringValues$values>
-      get copyWith => CopyWith$Fragment$MonitoringValues$values(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Fragment$MonitoringValues$values(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$MonitoringValues$values<TRes> {
@@ -927,19 +946,12 @@ abstract class CopyWith$Fragment$MonitoringValues$values<TRes> {
   factory CopyWith$Fragment$MonitoringValues$values.stub(TRes res) =
       _CopyWithStubImpl$Fragment$MonitoringValues$values;
 
-  TRes call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  });
+  TRes call({String? value, DateTime? timestamp, String? $__typename});
 }
 
 class _CopyWithImpl$Fragment$MonitoringValues$values<TRes>
     implements CopyWith$Fragment$MonitoringValues$values<TRes> {
-  _CopyWithImpl$Fragment$MonitoringValues$values(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$MonitoringValues$values(this._instance, this._then);
 
   final Fragment$MonitoringValues$values _instance;
 
@@ -951,18 +963,22 @@ class _CopyWithImpl$Fragment$MonitoringValues$values<TRes>
     Object? value = _undefined,
     Object? timestamp = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$MonitoringValues$values(
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Fragment$MonitoringValues$values(
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Fragment$MonitoringValues$values<TRes>
@@ -971,12 +987,7 @@ class _CopyWithStubImpl$Fragment$MonitoringValues$values<TRes>
 
   TRes _res;
 
-  call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? value, DateTime? timestamp, String? $__typename}) => _res;
 }
 
 class Fragment$MonitoringQueryError {
@@ -1011,10 +1022,7 @@ class Fragment$MonitoringQueryError {
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -1022,7 +1030,7 @@ class Fragment$MonitoringQueryError {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Fragment$MonitoringQueryError) ||
+    if (other is! Fragment$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1043,10 +1051,7 @@ class Fragment$MonitoringQueryError {
 extension UtilityExtension$Fragment$MonitoringQueryError
     on Fragment$MonitoringQueryError {
   CopyWith$Fragment$MonitoringQueryError<Fragment$MonitoringQueryError>
-      get copyWith => CopyWith$Fragment$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Fragment$MonitoringQueryError(this, (i) => i);
 }
 
 abstract class CopyWith$Fragment$MonitoringQueryError<TRes> {
@@ -1058,18 +1063,12 @@ abstract class CopyWith$Fragment$MonitoringQueryError<TRes> {
   factory CopyWith$Fragment$MonitoringQueryError.stub(TRes res) =
       _CopyWithStubImpl$Fragment$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Fragment$MonitoringQueryError<TRes>
     implements CopyWith$Fragment$MonitoringQueryError<TRes> {
-  _CopyWithImpl$Fragment$MonitoringQueryError(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Fragment$MonitoringQueryError(this._instance, this._then);
 
   final Fragment$MonitoringQueryError _instance;
 
@@ -1077,18 +1076,19 @@ class _CopyWithImpl$Fragment$MonitoringQueryError<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({
-    Object? error = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(Fragment$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  TRes call({Object? error = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Fragment$MonitoringQueryError(
+          error:
+              error == _undefined || error == null
+                  ? _instance.error
+                  : (error as String),
+          $__typename:
+              $__typename == _undefined || $__typename == null
+                  ? _instance.$__typename
+                  : ($__typename as String),
+        ),
+      );
 }
 
 class _CopyWithStubImpl$Fragment$MonitoringQueryError<TRes>
@@ -1097,41 +1097,40 @@ class _CopyWithStubImpl$Fragment$MonitoringQueryError<TRes>
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 const fragmentDefinitionMonitoringQueryError = FragmentDefinitionNode(
   name: NameNode(value: 'MonitoringQueryError'),
   typeCondition: TypeConditionNode(
-      on: NamedTypeNode(
-    name: NameNode(value: 'MonitoringQueryError'),
-    isNonNull: false,
-  )),
+    on: NamedTypeNode(
+      name: NameNode(value: 'MonitoringQueryError'),
+      isNonNull: false,
+    ),
+  ),
   directives: [],
-  selectionSet: SelectionSetNode(selections: [
-    FieldNode(
-      name: NameNode(value: 'error'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-    FieldNode(
-      name: NameNode(value: '__typename'),
-      alias: null,
-      arguments: [],
-      directives: [],
-      selectionSet: null,
-    ),
-  ]),
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'error'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
 );
-const documentNodeFragmentMonitoringQueryError = DocumentNode(definitions: [
-  fragmentDefinitionMonitoringQueryError,
-]);
+const documentNodeFragmentMonitoringQueryError = DocumentNode(
+  definitions: [fragmentDefinitionMonitoringQueryError],
+);
 
 extension ClientExtension$Fragment$MonitoringQueryError
     on graphql.GraphQLClient {
@@ -1139,18 +1138,17 @@ extension ClientExtension$Fragment$MonitoringQueryError
     required Fragment$MonitoringQueryError data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
-  }) =>
-      this.writeFragment(
-        graphql.FragmentRequest(
-          idFields: idFields,
-          fragment: const graphql.Fragment(
-            fragmentName: 'MonitoringQueryError',
-            document: documentNodeFragmentMonitoringQueryError,
-          ),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'MonitoringQueryError',
+        document: documentNodeFragmentMonitoringQueryError,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Fragment$MonitoringQueryError? readFragment$MonitoringQueryError({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -1176,17 +1174,17 @@ class Variables$Query$GetOverallCpuAndNetworkMetrics {
     DateTime? start,
     DateTime? end,
     required int step,
-  }) =>
-      Variables$Query$GetOverallCpuAndNetworkMetrics._({
-        if (start != null) r'start': start,
-        if (end != null) r'end': end,
-        r'step': step,
-      });
+  }) => Variables$Query$GetOverallCpuAndNetworkMetrics._({
+    if (start != null) r'start': start,
+    if (end != null) r'end': end,
+    r'step': step,
+  });
 
   Variables$Query$GetOverallCpuAndNetworkMetrics._(this._$data);
 
   factory Variables$Query$GetOverallCpuAndNetworkMetrics.fromJson(
-      Map<String, dynamic> data) {
+    Map<String, dynamic> data,
+  ) {
     final result$data = <String, dynamic>{};
     if (data.containsKey('start')) {
       final l$start = data['start'];
@@ -1225,18 +1223,17 @@ class Variables$Query$GetOverallCpuAndNetworkMetrics {
   }
 
   CopyWith$Variables$Query$GetOverallCpuAndNetworkMetrics<
-          Variables$Query$GetOverallCpuAndNetworkMetrics>
-      get copyWith => CopyWith$Variables$Query$GetOverallCpuAndNetworkMetrics(
-            this,
-            (i) => i,
-          );
+    Variables$Query$GetOverallCpuAndNetworkMetrics
+  >
+  get copyWith =>
+      CopyWith$Variables$Query$GetOverallCpuAndNetworkMetrics(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Query$GetOverallCpuAndNetworkMetrics) ||
+    if (other is! Variables$Query$GetOverallCpuAndNetworkMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1284,14 +1281,10 @@ abstract class CopyWith$Variables$Query$GetOverallCpuAndNetworkMetrics<TRes> {
   ) = _CopyWithImpl$Variables$Query$GetOverallCpuAndNetworkMetrics;
 
   factory CopyWith$Variables$Query$GetOverallCpuAndNetworkMetrics.stub(
-          TRes res) =
-      _CopyWithStubImpl$Variables$Query$GetOverallCpuAndNetworkMetrics;
+    TRes res,
+  ) = _CopyWithStubImpl$Variables$Query$GetOverallCpuAndNetworkMetrics;
 
-  TRes call({
-    DateTime? start,
-    DateTime? end,
-    int? step,
-  });
+  TRes call({DateTime? start, DateTime? end, int? step});
 }
 
 class _CopyWithImpl$Variables$Query$GetOverallCpuAndNetworkMetrics<TRes>
@@ -1311,13 +1304,14 @@ class _CopyWithImpl$Variables$Query$GetOverallCpuAndNetworkMetrics<TRes>
     Object? start = _undefined,
     Object? end = _undefined,
     Object? step = _undefined,
-  }) =>
-      _then(Variables$Query$GetOverallCpuAndNetworkMetrics._({
-        ..._instance._$data,
-        if (start != _undefined) 'start': (start as DateTime?),
-        if (end != _undefined) 'end': (end as DateTime?),
-        if (step != _undefined && step != null) 'step': (step as int),
-      }));
+  }) => _then(
+    Variables$Query$GetOverallCpuAndNetworkMetrics._({
+      ..._instance._$data,
+      if (start != _undefined) 'start': (start as DateTime?),
+      if (end != _undefined) 'end': (end as DateTime?),
+      if (step != _undefined && step != null) 'step': (step as int),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Query$GetOverallCpuAndNetworkMetrics<TRes>
@@ -1326,12 +1320,7 @@ class _CopyWithStubImpl$Variables$Query$GetOverallCpuAndNetworkMetrics<TRes>
 
   TRes _res;
 
-  call({
-    DateTime? start,
-    DateTime? end,
-    int? step,
-  }) =>
-      _res;
+  call({DateTime? start, DateTime? end, int? step}) => _res;
 }
 
 class Query$GetOverallCpuAndNetworkMetrics {
@@ -1341,12 +1330,14 @@ class Query$GetOverallCpuAndNetworkMetrics {
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$monitoring = json['monitoring'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics(
       monitoring: Query$GetOverallCpuAndNetworkMetrics$monitoring.fromJson(
-          (l$monitoring as Map<String, dynamic>)),
+        (l$monitoring as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1368,10 +1359,7 @@ class Query$GetOverallCpuAndNetworkMetrics {
   int get hashCode {
     final l$monitoring = monitoring;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$monitoring,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$monitoring, l$$__typename]);
   }
 
   @override
@@ -1379,7 +1367,7 @@ class Query$GetOverallCpuAndNetworkMetrics {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetOverallCpuAndNetworkMetrics) ||
+    if (other is! Query$GetOverallCpuAndNetworkMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1400,11 +1388,9 @@ class Query$GetOverallCpuAndNetworkMetrics {
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics
     on Query$GetOverallCpuAndNetworkMetrics {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics<
-          Query$GetOverallCpuAndNetworkMetrics>
-      get copyWith => CopyWith$Query$GetOverallCpuAndNetworkMetrics(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics
+  >
+  get copyWith => CopyWith$Query$GetOverallCpuAndNetworkMetrics(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics<TRes> {
@@ -1439,21 +1425,26 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics<TRes>
   TRes call({
     Object? monitoring = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetOverallCpuAndNetworkMetrics(
-        monitoring: monitoring == _undefined || monitoring == null
-            ? _instance.monitoring
-            : (monitoring as Query$GetOverallCpuAndNetworkMetrics$monitoring),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics(
+      monitoring:
+          monitoring == _undefined || monitoring == null
+              ? _instance.monitoring
+              : (monitoring as Query$GetOverallCpuAndNetworkMetrics$monitoring),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes>
-      get monitoring {
+  get monitoring {
     final local$monitoring = _instance.monitoring;
     return CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring(
-        local$monitoring, (e) => call(monitoring: e));
+      local$monitoring,
+      (e) => call(monitoring: e),
+    );
   }
 }
 
@@ -1466,157 +1457,173 @@ class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics<TRes>
   call({
     Query$GetOverallCpuAndNetworkMetrics$monitoring? monitoring,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes>
-      get monitoring =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring.stub(_res);
+  get monitoring =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring.stub(_res);
 }
 
-const documentNodeQueryGetOverallCpuAndNetworkMetrics =
-    DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.query,
-    name: NameNode(value: 'GetOverallCpuAndNetworkMetrics'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'start')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'DateTime'),
-          isNonNull: false,
-        ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'end')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'DateTime'),
-          isNonNull: false,
-        ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'step')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'Int'),
-          isNonNull: true,
-        ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'monitoring'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
-          FieldNode(
-            name: NameNode(value: 'cpuUsage'),
-            alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'start'),
-                value: VariableNode(name: NameNode(value: 'start')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'end'),
-                value: VariableNode(name: NameNode(value: 'end')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'step'),
-                value: VariableNode(name: NameNode(value: 'step')),
-              ),
-            ],
-            directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'overallUsage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringValues'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+const documentNodeQueryGetOverallCpuAndNetworkMetrics = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'GetOverallCpuAndNetworkMetrics'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'start')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'DateTime'),
+            isNonNull: false,
           ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'end')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'DateTime'),
+            isNonNull: false,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'step')),
+          type: NamedTypeNode(name: NameNode(value: 'Int'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'networkUsage'),
+            name: NameNode(value: 'monitoring'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'start'),
-                value: VariableNode(name: NameNode(value: 'start')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'end'),
-                value: VariableNode(name: NameNode(value: 'end')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'step'),
-                value: VariableNode(name: NameNode(value: 'step')),
-              ),
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'overallUsage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'cpuUsage'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'start'),
+                      value: VariableNode(name: NameNode(value: 'start')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'end'),
+                      value: VariableNode(name: NameNode(value: 'end')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'step'),
+                      value: VariableNode(name: NameNode(value: 'step')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FieldNode(
+                        name: NameNode(value: 'overallUsage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringValues'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
                   ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringMetrics'),
-                    directives: [],
+                ),
+                FieldNode(
+                  name: NameNode(value: 'networkUsage'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'start'),
+                      value: VariableNode(name: NameNode(value: 'start')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'end'),
+                      value: VariableNode(name: NameNode(value: 'end')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'step'),
+                      value: VariableNode(name: NameNode(value: 'step')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FieldNode(
+                        name: NameNode(value: 'overallUsage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringMetrics'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
                   ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -1625,29 +1632,22 @@ const documentNodeQueryGetOverallCpuAndNetworkMetrics =
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionMonitoringQueryError,
-  fragmentDefinitionMonitoringValues,
-  fragmentDefinitionMonitoringMetrics,
-]);
-Query$GetOverallCpuAndNetworkMetrics
-    _parserFn$Query$GetOverallCpuAndNetworkMetrics(Map<String, dynamic> data) =>
-        Query$GetOverallCpuAndNetworkMetrics.fromJson(data);
-typedef OnQueryComplete$Query$GetOverallCpuAndNetworkMetrics = FutureOr<void>
-    Function(
-  Map<String, dynamic>?,
-  Query$GetOverallCpuAndNetworkMetrics?,
+    ),
+    fragmentDefinitionMonitoringQueryError,
+    fragmentDefinitionMonitoringValues,
+    fragmentDefinitionMonitoringMetrics,
+  ],
 );
+Query$GetOverallCpuAndNetworkMetrics
+_parserFn$Query$GetOverallCpuAndNetworkMetrics(Map<String, dynamic> data) =>
+    Query$GetOverallCpuAndNetworkMetrics.fromJson(data);
+typedef OnQueryComplete$Query$GetOverallCpuAndNetworkMetrics =
+    FutureOr<void> Function(
+      Map<String, dynamic>?,
+      Query$GetOverallCpuAndNetworkMetrics?,
+    );
 
 class Options$Query$GetOverallCpuAndNetworkMetrics
     extends graphql.QueryOptions<Query$GetOverallCpuAndNetworkMetrics> {
@@ -1663,39 +1663,40 @@ class Options$Query$GetOverallCpuAndNetworkMetrics
     graphql.Context? context,
     OnQueryComplete$Query$GetOverallCpuAndNetworkMetrics? onComplete,
     graphql.OnQueryError? onError,
-  })  : onCompleteWithParsed = onComplete,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          pollInterval: pollInterval,
-          context: context,
-          onComplete: onComplete == null
-              ? null
-              : (data) => onComplete(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Query$GetOverallCpuAndNetworkMetrics(data),
-                  ),
-          onError: onError,
-          document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
-          parserFn: _parserFn$Query$GetOverallCpuAndNetworkMetrics,
-        );
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete:
+             onComplete == null
+                 ? null
+                 : (data) => onComplete(
+                   data,
+                   data == null
+                       ? null
+                       : _parserFn$Query$GetOverallCpuAndNetworkMetrics(data),
+                 ),
+         onError: onError,
+         document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
+         parserFn: _parserFn$Query$GetOverallCpuAndNetworkMetrics,
+       );
 
   final OnQueryComplete$Query$GetOverallCpuAndNetworkMetrics?
-      onCompleteWithParsed;
+  onCompleteWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onComplete == null
-            ? super.properties
-            : super.properties.where((property) => property != onComplete),
-        onCompleteWithParsed,
-      ];
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
 }
 
 class WatchOptions$Query$GetOverallCpuAndNetworkMetrics
@@ -1714,20 +1715,20 @@ class WatchOptions$Query$GetOverallCpuAndNetworkMetrics
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Query$GetOverallCpuAndNetworkMetrics,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$GetOverallCpuAndNetworkMetrics,
+       );
 }
 
 class FetchMoreOptions$Query$GetOverallCpuAndNetworkMetrics
@@ -1736,45 +1737,46 @@ class FetchMoreOptions$Query$GetOverallCpuAndNetworkMetrics
     required graphql.UpdateQuery updateQuery,
     required Variables$Query$GetOverallCpuAndNetworkMetrics variables,
   }) : super(
-          updateQuery: updateQuery,
-          variables: variables.toJson(),
-          document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
-        );
+         updateQuery: updateQuery,
+         variables: variables.toJson(),
+         document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
+       );
 }
 
 extension ClientExtension$Query$GetOverallCpuAndNetworkMetrics
     on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$GetOverallCpuAndNetworkMetrics>>
-      query$GetOverallCpuAndNetworkMetrics(
-              Options$Query$GetOverallCpuAndNetworkMetrics options) async =>
-          await this.query(options);
+  query$GetOverallCpuAndNetworkMetrics(
+    Options$Query$GetOverallCpuAndNetworkMetrics options,
+  ) async => await this.query(options);
   graphql.ObservableQuery<Query$GetOverallCpuAndNetworkMetrics>
-      watchQuery$GetOverallCpuAndNetworkMetrics(
-              WatchOptions$Query$GetOverallCpuAndNetworkMetrics options) =>
-          this.watchQuery(options);
+  watchQuery$GetOverallCpuAndNetworkMetrics(
+    WatchOptions$Query$GetOverallCpuAndNetworkMetrics options,
+  ) => this.watchQuery(options);
   void writeQuery$GetOverallCpuAndNetworkMetrics({
     required Query$GetOverallCpuAndNetworkMetrics data,
     required Variables$Query$GetOverallCpuAndNetworkMetrics variables,
     bool broadcast = true,
-  }) =>
-      this.writeQuery(
-        graphql.Request(
-          operation: graphql.Operation(
-              document: documentNodeQueryGetOverallCpuAndNetworkMetrics),
-          variables: variables.toJson(),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(
+        document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
+      ),
+      variables: variables.toJson(),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Query$GetOverallCpuAndNetworkMetrics?
-      readQuery$GetOverallCpuAndNetworkMetrics({
+  readQuery$GetOverallCpuAndNetworkMetrics({
     required Variables$Query$GetOverallCpuAndNetworkMetrics variables,
     bool optimistic = true,
   }) {
     final result = this.readQuery(
       graphql.Request(
         operation: graphql.Operation(
-            document: documentNodeQueryGetOverallCpuAndNetworkMetrics),
+          document: documentNodeQueryGetOverallCpuAndNetworkMetrics,
+        ),
         variables: variables.toJson(),
       ),
       optimistic: optimistic,
@@ -1793,17 +1795,20 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring {
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$cpuUsage = json['cpuUsage'];
     final l$networkUsage = json['networkUsage'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring(
       cpuUsage:
           Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage.fromJson(
-              (l$cpuUsage as Map<String, dynamic>)),
+            (l$cpuUsage as Map<String, dynamic>),
+          ),
       networkUsage:
           Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage.fromJson(
-              (l$networkUsage as Map<String, dynamic>)),
+            (l$networkUsage as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1811,7 +1816,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring {
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage cpuUsage;
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
-      networkUsage;
+  networkUsage;
 
   final String $__typename;
 
@@ -1831,11 +1836,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring {
     final l$cpuUsage = cpuUsage;
     final l$networkUsage = networkUsage;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$cpuUsage,
-      l$networkUsage,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$cpuUsage, l$networkUsage, l$$__typename]);
   }
 
   @override
@@ -1843,7 +1844,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetOverallCpuAndNetworkMetrics$monitoring) ||
+    if (other is! Query$GetOverallCpuAndNetworkMetrics$monitoring ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1869,11 +1870,10 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring {
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring
     on Query$GetOverallCpuAndNetworkMetrics$monitoring {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring>
-      get copyWith => CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes> {
@@ -1883,8 +1883,8 @@ abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes> {
   ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring;
 
   TRes call({
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage? cpuUsage,
@@ -1892,9 +1892,9 @@ abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes> {
     String? $__typename,
   });
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<TRes>
-      get cpuUsage;
+  get cpuUsage;
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<TRes>
-      get networkUsage;
+  get networkUsage;
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes>
@@ -1914,33 +1914,41 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes>
     Object? cpuUsage = _undefined,
     Object? networkUsage = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetOverallCpuAndNetworkMetrics$monitoring(
-        cpuUsage: cpuUsage == _undefined || cpuUsage == null
-            ? _instance.cpuUsage
-            : (cpuUsage
-                as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage),
-        networkUsage: networkUsage == _undefined || networkUsage == null
-            ? _instance.networkUsage
-            : (networkUsage
-                as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring(
+      cpuUsage:
+          cpuUsage == _undefined || cpuUsage == null
+              ? _instance.cpuUsage
+              : (cpuUsage
+                  as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage),
+      networkUsage:
+          networkUsage == _undefined || networkUsage == null
+              ? _instance.networkUsage
+              : (networkUsage
+                  as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<TRes>
-      get cpuUsage {
+  get cpuUsage {
     final local$cpuUsage = _instance.cpuUsage;
     return CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
-        local$cpuUsage, (e) => call(cpuUsage: e));
+      local$cpuUsage,
+      (e) => call(cpuUsage: e),
+    );
   }
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<TRes>
-      get networkUsage {
+  get networkUsage {
     final local$networkUsage = _instance.networkUsage;
     return CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
-        local$networkUsage, (e) => call(networkUsage: e));
+      local$networkUsage,
+      (e) => call(networkUsage: e),
+    );
   }
 }
 
@@ -1954,18 +1962,19 @@ class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring<TRes>
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage? cpuUsage,
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage? networkUsage,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<TRes>
-      get cpuUsage =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage
-              .stub(_res);
+  get cpuUsage =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage.stub(
+        _res,
+      );
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<TRes>
-      get networkUsage =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
-              .stub(_res);
+  get networkUsage =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage.stub(
+        _res,
+      );
 }
 
 class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage {
@@ -1975,19 +1984,21 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage {
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$overallUsage = json['overallUsage'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
       overallUsage:
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
-              .fromJson((l$overallUsage as Map<String, dynamic>)),
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage.fromJson(
+            (l$overallUsage as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
-      overallUsage;
+  overallUsage;
 
   final String $__typename;
 
@@ -2004,10 +2015,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage {
   int get hashCode {
     final l$overallUsage = overallUsage;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$overallUsage,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$overallUsage, l$$__typename]);
   }
 
   @override
@@ -2015,7 +2023,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage) ||
+    if (other is! Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2036,40 +2044,46 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage {
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage
     on Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage instance,
     TRes Function(Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage)
-        then,
+    then,
   ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage;
 
   TRes call({
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage?
-        overallUsage,
+    overallUsage,
     String? $__typename,
   });
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-      TRes> get overallUsage;
+    TRes
+  >
+  get overallUsage;
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
     this._instance,
     this._then,
@@ -2078,75 +2092,91 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage _instance;
 
   final TRes Function(Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage)
-      _then;
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? overallUsage = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
-        overallUsage: overallUsage == _undefined || overallUsage == null
-            ? _instance.overallUsage
-            : (overallUsage
-                as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
+      overallUsage:
+          overallUsage == _undefined || overallUsage == null
+              ? _instance.overallUsage
+              : (overallUsage
+                  as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-      TRes> get overallUsage {
+    TRes
+  >
+  get overallUsage {
     final local$overallUsage = _instance.overallUsage;
     return CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
-        local$overallUsage, (e) => call(overallUsage: e));
+      local$overallUsage,
+      (e) => call(overallUsage: e),
+    );
   }
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage?
-        overallUsage,
+    overallUsage,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-          TRes>
-      get overallUsage =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
-              .stub(_res);
+    TRes
+  >
+  get overallUsage =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage.stub(
+        _res,
+      );
 }
 
 class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage {
-  Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
-      {required this.$__typename});
+  Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage({
+    required this.$__typename,
+  });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringValues":
-        return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues
-            .fromJson(json);
+        return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -2170,8 +2200,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2187,29 +2217,36 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage {
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
     on Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues)
-        monitoringValues,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues,
+    )
+    monitoringValues,
     required _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringValues":
-        return monitoringValues(this
-            as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues);
+        return monitoringValues(
+          this
+              as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -2218,26 +2255,32 @@ extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUs
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues)?
-        monitoringValues,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues,
+    )?
+    monitoringValues,
     _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringValues":
         if (monitoringValues != null) {
-          return monitoringValues(this
-              as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues);
+          return monitoringValues(
+            this
+                as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -2249,55 +2292,68 @@ extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUs
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage;
 
   TRes call({String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? $__typename = _undefined}) => _then(
-      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
-          $__typename: $__typename == _undefined || $__typename == null
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -2314,22 +2370,28 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>
-      values;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+  >
+  values;
 
   final String $__typename;
 
@@ -2357,8 +2419,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2384,107 +2446,145 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues;
 
   TRes call({
-    List<Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>?
-        values,
+    List<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values> Function(
-              Iterable<
-                  CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-                      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>>)
-          _fn);
+    Iterable<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-                          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>?
-        values,
+    List<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -2498,7 +2598,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$value = json['value'];
     final l$timestamp = json['timestamp'];
     final l$$__typename = json['__typename'];
@@ -2531,11 +2632,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
     final l$value = value;
     final l$timestamp = timestamp;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$value,
-      l$timestamp,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$value, l$timestamp, l$$__typename]);
   }
 
   @override
@@ -2543,8 +2640,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2568,53 +2665,58 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values;
 
-  TRes call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  });
+  TRes call({String? value, DateTime? timestamp, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -2622,37 +2724,38 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$ove
     Object? value = _undefined,
     Object? timestamp = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringValues$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? value, DateTime? timestamp, String? $__typename}) => _res;
 }
 
 class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError
@@ -2665,7 +2768,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
@@ -2691,10 +2795,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -2702,8 +2803,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2722,85 +2823,92 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$Mon
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$cpuUsage$overallUsage$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage {
@@ -2810,19 +2918,21 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage {
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$overallUsage = json['overallUsage'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
       overallUsage:
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
-              .fromJson((l$overallUsage as Map<String, dynamic>)),
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage.fromJson(
+            (l$overallUsage as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
-      overallUsage;
+  overallUsage;
 
   final String $__typename;
 
@@ -2839,10 +2949,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage {
   int get hashCode {
     final l$overallUsage = overallUsage;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$overallUsage,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$overallUsage, l$$__typename]);
   }
 
   @override
@@ -2850,8 +2957,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -2872,40 +2979,47 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage {
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
     on Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage instance,
     TRes Function(Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage)
-        then,
+    then,
   ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage;
 
   TRes call({
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage?
-        overallUsage,
+    overallUsage,
     String? $__typename,
   });
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-      TRes> get overallUsage;
+    TRes
+  >
+  get overallUsage;
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
     this._instance,
     this._then,
@@ -2914,75 +3028,93 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage _instance;
 
   final TRes Function(
-      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage) _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? overallUsage = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
-        overallUsage: overallUsage == _undefined || overallUsage == null
-            ? _instance.overallUsage
-            : (overallUsage
-                as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
+      overallUsage:
+          overallUsage == _undefined || overallUsage == null
+              ? _instance.overallUsage
+              : (overallUsage
+                  as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-      TRes> get overallUsage {
+    TRes
+  >
+  get overallUsage {
     final local$overallUsage = _instance.overallUsage;
     return CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
-        local$overallUsage, (e) => call(overallUsage: e));
+      local$overallUsage,
+      (e) => call(overallUsage: e),
+    );
   }
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage?
-        overallUsage,
+    overallUsage,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-          TRes>
-      get overallUsage =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
-              .stub(_res);
+    TRes
+  >
+  get overallUsage =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage.stub(
+        _res,
+      );
 }
 
 class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage {
-  Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
-      {required this.$__typename});
+  Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage({
+    required this.$__typename,
+  });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringMetrics":
-        return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics
-            .fromJson(json);
+        return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -3006,8 +3138,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage 
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3023,29 +3155,36 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
     on Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics)
-        monitoringMetrics,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics,
+    )
+    monitoringMetrics,
     required _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
-        return monitoringMetrics(this
-            as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics);
+        return monitoringMetrics(
+          this
+              as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -3054,26 +3193,32 @@ extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$netwo
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics)?
-        monitoringMetrics,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics,
+    )?
+    monitoringMetrics,
     _T Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
         if (monitoringMetrics != null) {
-          return monitoringMetrics(this
-              as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics);
+          return monitoringMetrics(
+            this
+                as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -3085,55 +3230,68 @@ extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$netwo
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage;
 
   TRes call({String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({Object? $__typename = _undefined}) => _then(
-      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
-          $__typename: $__typename == _undefined || $__typename == null
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -3150,22 +3308,28 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metrics = json['metrics'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
-      metrics: (l$metrics as List<dynamic>)
-          .map((e) =>
-              Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      metrics:
+          (l$metrics as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>
-      metrics;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+  >
+  metrics;
 
   final String $__typename;
 
@@ -3193,8 +3357,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3220,107 +3384,145 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics;
 
   TRes call({
-    List<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
   });
   TRes metrics(
-      Iterable<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics> Function(
-              Iterable<
-                  CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-                      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>>)
-          _fn);
+    Iterable<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? metrics = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
-        metrics: metrics == _undefined || metrics == null
-            ? _instance.metrics
-            : (metrics as List<
-                Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
+      metrics:
+          metrics == _undefined || metrics == null
+              ? _instance.metrics
+              : (metrics
+                  as List<
+                    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes metrics(
-          Iterable<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics> Function(
-                  Iterable<
-                      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-                          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>>)
-              _fn) =>
-      call(
-          metrics: _fn(_instance.metrics.map((e) =>
-              CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    metrics:
+        _fn(
+          _instance.metrics.map(
+            (e) =>
+                CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   metrics(_fn) => _res;
 }
@@ -3334,17 +3536,22 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metricId = json['metricId'];
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
       metricId: (l$metricId as String),
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -3352,8 +3559,9 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
   final String metricId;
 
   final List<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>
-      values;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+  >
+  values;
 
   final String $__typename;
 
@@ -3385,8 +3593,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3417,60 +3625,78 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics;
 
   TRes call({
     String? metricId,
-    List<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values> Function(
-              Iterable<
-                  CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-                      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>>)
-          _fn);
+    Iterable<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3478,52 +3704,73 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
     Object? metricId = _undefined,
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
-        metricId: metricId == _undefined || metricId == null
-            ? _instance.metricId
-            : (metricId as String),
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
+      metricId:
+          metricId == _undefined || metricId == null
+              ? _instance.metricId
+              : (metricId as String),
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-                          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
+          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
     String? metricId,
-    List<Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -3537,7 +3784,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$timestamp = json['timestamp'];
     final l$value = json['value'];
     final l$$__typename = json['__typename'];
@@ -3570,11 +3818,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
     final l$timestamp = timestamp;
     final l$value = value;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$timestamp,
-      l$value,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$timestamp, l$value, l$$__typename]);
   }
 
   @override
@@ -3582,8 +3826,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3607,53 +3851,58 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values;
 
-  TRes call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  });
+  TRes call({DateTime? timestamp, String? value, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -3661,37 +3910,38 @@ class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage
     Object? timestamp = _undefined,
     Object? value = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringMetrics$metrics$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  }) =>
-      _res;
+  call({DateTime? timestamp, String? value, String? $__typename}) => _res;
 }
 
 class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError
@@ -3704,7 +3954,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
   });
 
   factory Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
@@ -3730,10 +3981,7 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -3741,8 +3989,8 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3761,85 +4009,92 @@ class Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$
 }
 
 extension UtilityExtension$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError
-    on Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError {
+    on
+        Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError {
   CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError<
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
     Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError;
+      Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError;
 
   factory CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError)
-      _then;
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetOverallCpuAndNetworkMetrics$monitoring$networkUsage$overallUsage$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 class Variables$Query$GetMemoryMetrics {
@@ -3847,12 +4102,11 @@ class Variables$Query$GetMemoryMetrics {
     DateTime? start,
     DateTime? end,
     required int step,
-  }) =>
-      Variables$Query$GetMemoryMetrics._({
-        if (start != null) r'start': start,
-        if (end != null) r'end': end,
-        r'step': step,
-      });
+  }) => Variables$Query$GetMemoryMetrics._({
+    if (start != null) r'start': start,
+    if (end != null) r'end': end,
+    r'step': step,
+  });
 
   Variables$Query$GetMemoryMetrics._(this._$data);
 
@@ -3895,17 +4149,14 @@ class Variables$Query$GetMemoryMetrics {
   }
 
   CopyWith$Variables$Query$GetMemoryMetrics<Variables$Query$GetMemoryMetrics>
-      get copyWith => CopyWith$Variables$Query$GetMemoryMetrics(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Query$GetMemoryMetrics(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Query$GetMemoryMetrics) ||
+    if (other is! Variables$Query$GetMemoryMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -3955,19 +4206,12 @@ abstract class CopyWith$Variables$Query$GetMemoryMetrics<TRes> {
   factory CopyWith$Variables$Query$GetMemoryMetrics.stub(TRes res) =
       _CopyWithStubImpl$Variables$Query$GetMemoryMetrics;
 
-  TRes call({
-    DateTime? start,
-    DateTime? end,
-    int? step,
-  });
+  TRes call({DateTime? start, DateTime? end, int? step});
 }
 
 class _CopyWithImpl$Variables$Query$GetMemoryMetrics<TRes>
     implements CopyWith$Variables$Query$GetMemoryMetrics<TRes> {
-  _CopyWithImpl$Variables$Query$GetMemoryMetrics(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Query$GetMemoryMetrics(this._instance, this._then);
 
   final Variables$Query$GetMemoryMetrics _instance;
 
@@ -3979,13 +4223,14 @@ class _CopyWithImpl$Variables$Query$GetMemoryMetrics<TRes>
     Object? start = _undefined,
     Object? end = _undefined,
     Object? step = _undefined,
-  }) =>
-      _then(Variables$Query$GetMemoryMetrics._({
-        ..._instance._$data,
-        if (start != _undefined) 'start': (start as DateTime?),
-        if (end != _undefined) 'end': (end as DateTime?),
-        if (step != _undefined && step != null) 'step': (step as int),
-      }));
+  }) => _then(
+    Variables$Query$GetMemoryMetrics._({
+      ..._instance._$data,
+      if (start != _undefined) 'start': (start as DateTime?),
+      if (end != _undefined) 'end': (end as DateTime?),
+      if (step != _undefined && step != null) 'step': (step as int),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Query$GetMemoryMetrics<TRes>
@@ -3994,12 +4239,7 @@ class _CopyWithStubImpl$Variables$Query$GetMemoryMetrics<TRes>
 
   TRes _res;
 
-  call({
-    DateTime? start,
-    DateTime? end,
-    int? step,
-  }) =>
-      _res;
+  call({DateTime? start, DateTime? end, int? step}) => _res;
 }
 
 class Query$GetMemoryMetrics {
@@ -4013,7 +4253,8 @@ class Query$GetMemoryMetrics {
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics(
       monitoring: Query$GetMemoryMetrics$monitoring.fromJson(
-          (l$monitoring as Map<String, dynamic>)),
+        (l$monitoring as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -4035,10 +4276,7 @@ class Query$GetMemoryMetrics {
   int get hashCode {
     final l$monitoring = monitoring;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$monitoring,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$monitoring, l$$__typename]);
   }
 
   @override
@@ -4046,8 +4284,7 @@ class Query$GetMemoryMetrics {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetMemoryMetrics) ||
-        runtimeType != other.runtimeType) {
+    if (other is! Query$GetMemoryMetrics || runtimeType != other.runtimeType) {
       return false;
     }
     final l$monitoring = monitoring;
@@ -4066,10 +4303,7 @@ class Query$GetMemoryMetrics {
 
 extension UtilityExtension$Query$GetMemoryMetrics on Query$GetMemoryMetrics {
   CopyWith$Query$GetMemoryMetrics<Query$GetMemoryMetrics> get copyWith =>
-      CopyWith$Query$GetMemoryMetrics(
-        this,
-        (i) => i,
-      );
+      CopyWith$Query$GetMemoryMetrics(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics<TRes> {
@@ -4090,10 +4324,7 @@ abstract class CopyWith$Query$GetMemoryMetrics<TRes> {
 
 class _CopyWithImpl$Query$GetMemoryMetrics<TRes>
     implements CopyWith$Query$GetMemoryMetrics<TRes> {
-  _CopyWithImpl$Query$GetMemoryMetrics(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Query$GetMemoryMetrics(this._instance, this._then);
 
   final Query$GetMemoryMetrics _instance;
 
@@ -4104,20 +4335,25 @@ class _CopyWithImpl$Query$GetMemoryMetrics<TRes>
   TRes call({
     Object? monitoring = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetMemoryMetrics(
-        monitoring: monitoring == _undefined || monitoring == null
-            ? _instance.monitoring
-            : (monitoring as Query$GetMemoryMetrics$monitoring),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics(
+      monitoring:
+          monitoring == _undefined || monitoring == null
+              ? _instance.monitoring
+              : (monitoring as Query$GetMemoryMetrics$monitoring),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetMemoryMetrics$monitoring<TRes> get monitoring {
     final local$monitoring = _instance.monitoring;
     return CopyWith$Query$GetMemoryMetrics$monitoring(
-        local$monitoring, (e) => call(monitoring: e));
+      local$monitoring,
+      (e) => call(monitoring: e),
+    );
   }
 }
 
@@ -4127,176 +4363,193 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics<TRes>
 
   TRes _res;
 
-  call({
-    Query$GetMemoryMetrics$monitoring? monitoring,
-    String? $__typename,
-  }) =>
+  call({Query$GetMemoryMetrics$monitoring? monitoring, String? $__typename}) =>
       _res;
 
   CopyWith$Query$GetMemoryMetrics$monitoring<TRes> get monitoring =>
       CopyWith$Query$GetMemoryMetrics$monitoring.stub(_res);
 }
 
-const documentNodeQueryGetMemoryMetrics = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.query,
-    name: NameNode(value: 'GetMemoryMetrics'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'start')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'DateTime'),
-          isNonNull: false,
+const documentNodeQueryGetMemoryMetrics = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'GetMemoryMetrics'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'start')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'DateTime'),
+            isNonNull: false,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'end')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'DateTime'),
-          isNonNull: false,
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'end')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'DateTime'),
+            isNonNull: false,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'step')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'Int'),
-          isNonNull: true,
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'step')),
+          type: NamedTypeNode(name: NameNode(value: 'Int'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'monitoring'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'memoryUsage'),
+            name: NameNode(value: 'monitoring'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'start'),
-                value: VariableNode(name: NameNode(value: 'start')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'end'),
-                value: VariableNode(name: NameNode(value: 'end')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'step'),
-                value: VariableNode(name: NameNode(value: 'step')),
-              ),
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'overallUsage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'memoryUsage'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'start'),
+                      value: VariableNode(name: NameNode(value: 'start')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'end'),
+                      value: VariableNode(name: NameNode(value: 'end')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'step'),
+                      value: VariableNode(name: NameNode(value: 'step')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FieldNode(
+                        name: NameNode(value: 'overallUsage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringValues'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'swapUsageOverall'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringValues'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'averageUsageByService'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringMetrics'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'maxUsageByService'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringMetrics'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
                   ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringValues'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: 'swapUsageOverall'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringValues'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: 'averageUsageByService'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringMetrics'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: 'maxUsageByService'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
-                  ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringMetrics'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -4305,28 +4558,19 @@ const documentNodeQueryGetMemoryMetrics = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionMonitoringQueryError,
-  fragmentDefinitionMonitoringValues,
-  fragmentDefinitionMonitoringMetrics,
-]);
-Query$GetMemoryMetrics _parserFn$Query$GetMemoryMetrics(
-        Map<String, dynamic> data) =>
-    Query$GetMemoryMetrics.fromJson(data);
-typedef OnQueryComplete$Query$GetMemoryMetrics = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Query$GetMemoryMetrics?,
+    ),
+    fragmentDefinitionMonitoringQueryError,
+    fragmentDefinitionMonitoringValues,
+    fragmentDefinitionMonitoringMetrics,
+  ],
 );
+Query$GetMemoryMetrics _parserFn$Query$GetMemoryMetrics(
+  Map<String, dynamic> data,
+) => Query$GetMemoryMetrics.fromJson(data);
+typedef OnQueryComplete$Query$GetMemoryMetrics =
+    FutureOr<void> Function(Map<String, dynamic>?, Query$GetMemoryMetrics?);
 
 class Options$Query$GetMemoryMetrics
     extends graphql.QueryOptions<Query$GetMemoryMetrics> {
@@ -4342,38 +4586,37 @@ class Options$Query$GetMemoryMetrics
     graphql.Context? context,
     OnQueryComplete$Query$GetMemoryMetrics? onComplete,
     graphql.OnQueryError? onError,
-  })  : onCompleteWithParsed = onComplete,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          pollInterval: pollInterval,
-          context: context,
-          onComplete: onComplete == null
-              ? null
-              : (data) => onComplete(
-                    data,
-                    data == null
-                        ? null
-                        : _parserFn$Query$GetMemoryMetrics(data),
-                  ),
-          onError: onError,
-          document: documentNodeQueryGetMemoryMetrics,
-          parserFn: _parserFn$Query$GetMemoryMetrics,
-        );
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete:
+             onComplete == null
+                 ? null
+                 : (data) => onComplete(
+                   data,
+                   data == null ? null : _parserFn$Query$GetMemoryMetrics(data),
+                 ),
+         onError: onError,
+         document: documentNodeQueryGetMemoryMetrics,
+         parserFn: _parserFn$Query$GetMemoryMetrics,
+       );
 
   final OnQueryComplete$Query$GetMemoryMetrics? onCompleteWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onComplete == null
-            ? super.properties
-            : super.properties.where((property) => property != onComplete),
-        onCompleteWithParsed,
-      ];
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
 }
 
 class WatchOptions$Query$GetMemoryMetrics
@@ -4392,20 +4635,20 @@ class WatchOptions$Query$GetMemoryMetrics
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeQueryGetMemoryMetrics,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Query$GetMemoryMetrics,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryGetMemoryMetrics,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$GetMemoryMetrics,
+       );
 }
 
 class FetchMoreOptions$Query$GetMemoryMetrics extends graphql.FetchMoreOptions {
@@ -4413,41 +4656,40 @@ class FetchMoreOptions$Query$GetMemoryMetrics extends graphql.FetchMoreOptions {
     required graphql.UpdateQuery updateQuery,
     required Variables$Query$GetMemoryMetrics variables,
   }) : super(
-          updateQuery: updateQuery,
-          variables: variables.toJson(),
-          document: documentNodeQueryGetMemoryMetrics,
-        );
+         updateQuery: updateQuery,
+         variables: variables.toJson(),
+         document: documentNodeQueryGetMemoryMetrics,
+       );
 }
 
 extension ClientExtension$Query$GetMemoryMetrics on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$GetMemoryMetrics>> query$GetMemoryMetrics(
-          Options$Query$GetMemoryMetrics options) async =>
-      await this.query(options);
+    Options$Query$GetMemoryMetrics options,
+  ) async => await this.query(options);
   graphql.ObservableQuery<Query$GetMemoryMetrics> watchQuery$GetMemoryMetrics(
-          WatchOptions$Query$GetMemoryMetrics options) =>
-      this.watchQuery(options);
+    WatchOptions$Query$GetMemoryMetrics options,
+  ) => this.watchQuery(options);
   void writeQuery$GetMemoryMetrics({
     required Query$GetMemoryMetrics data,
     required Variables$Query$GetMemoryMetrics variables,
     bool broadcast = true,
-  }) =>
-      this.writeQuery(
-        graphql.Request(
-          operation:
-              graphql.Operation(document: documentNodeQueryGetMemoryMetrics),
-          variables: variables.toJson(),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(document: documentNodeQueryGetMemoryMetrics),
+      variables: variables.toJson(),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Query$GetMemoryMetrics? readQuery$GetMemoryMetrics({
     required Variables$Query$GetMemoryMetrics variables,
     bool optimistic = true,
   }) {
     final result = this.readQuery(
       graphql.Request(
-        operation:
-            graphql.Operation(document: documentNodeQueryGetMemoryMetrics),
+        operation: graphql.Operation(
+          document: documentNodeQueryGetMemoryMetrics,
+        ),
         variables: variables.toJson(),
       ),
       optimistic: optimistic,
@@ -4463,12 +4705,14 @@ class Query$GetMemoryMetrics$monitoring {
   });
 
   factory Query$GetMemoryMetrics$monitoring.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$memoryUsage = json['memoryUsage'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring(
       memoryUsage: Query$GetMemoryMetrics$monitoring$memoryUsage.fromJson(
-          (l$memoryUsage as Map<String, dynamic>)),
+        (l$memoryUsage as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -4490,10 +4734,7 @@ class Query$GetMemoryMetrics$monitoring {
   int get hashCode {
     final l$memoryUsage = memoryUsage;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$memoryUsage,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$memoryUsage, l$$__typename]);
   }
 
   @override
@@ -4501,7 +4742,7 @@ class Query$GetMemoryMetrics$monitoring {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetMemoryMetrics$monitoring) ||
+    if (other is! Query$GetMemoryMetrics$monitoring ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4522,10 +4763,7 @@ class Query$GetMemoryMetrics$monitoring {
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring
     on Query$GetMemoryMetrics$monitoring {
   CopyWith$Query$GetMemoryMetrics$monitoring<Query$GetMemoryMetrics$monitoring>
-      get copyWith => CopyWith$Query$GetMemoryMetrics$monitoring(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Query$GetMemoryMetrics$monitoring(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring<TRes> {
@@ -4546,10 +4784,7 @@ abstract class CopyWith$Query$GetMemoryMetrics$monitoring<TRes> {
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring<TRes>
     implements CopyWith$Query$GetMemoryMetrics$monitoring<TRes> {
-  _CopyWithImpl$Query$GetMemoryMetrics$monitoring(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Query$GetMemoryMetrics$monitoring(this._instance, this._then);
 
   final Query$GetMemoryMetrics$monitoring _instance;
 
@@ -4560,20 +4795,25 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring<TRes>
   TRes call({
     Object? memoryUsage = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetMemoryMetrics$monitoring(
-        memoryUsage: memoryUsage == _undefined || memoryUsage == null
-            ? _instance.memoryUsage
-            : (memoryUsage as Query$GetMemoryMetrics$monitoring$memoryUsage),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring(
+      memoryUsage:
+          memoryUsage == _undefined || memoryUsage == null
+              ? _instance.memoryUsage
+              : (memoryUsage as Query$GetMemoryMetrics$monitoring$memoryUsage),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes> get memoryUsage {
     final local$memoryUsage = _instance.memoryUsage;
     return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage(
-        local$memoryUsage, (e) => call(memoryUsage: e));
+      local$memoryUsage,
+      (e) => call(memoryUsage: e),
+    );
   }
 }
 
@@ -4586,12 +4826,11 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring<TRes>
   call({
     Query$GetMemoryMetrics$monitoring$memoryUsage? memoryUsage,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
-      get memoryUsage =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage.stub(_res);
+  get memoryUsage =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage.stub(_res);
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage {
@@ -4604,7 +4843,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$overallUsage = json['overallUsage'];
     final l$swapUsageOverall = json['swapUsageOverall'];
     final l$averageUsageByService = json['averageUsageByService'];
@@ -4613,16 +4853,20 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
     return Query$GetMemoryMetrics$monitoring$memoryUsage(
       overallUsage:
           Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage.fromJson(
-              (l$overallUsage as Map<String, dynamic>)),
+            (l$overallUsage as Map<String, dynamic>),
+          ),
       swapUsageOverall:
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
-              .fromJson((l$swapUsageOverall as Map<String, dynamic>)),
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall.fromJson(
+            (l$swapUsageOverall as Map<String, dynamic>),
+          ),
       averageUsageByService:
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
-              .fromJson((l$averageUsageByService as Map<String, dynamic>)),
+          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService.fromJson(
+            (l$averageUsageByService as Map<String, dynamic>),
+          ),
       maxUsageByService:
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService
-              .fromJson((l$maxUsageByService as Map<String, dynamic>)),
+          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService.fromJson(
+            (l$maxUsageByService as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -4630,13 +4874,13 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
   final Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage overallUsage;
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
-      swapUsageOverall;
+  swapUsageOverall;
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
-      averageUsageByService;
+  averageUsageByService;
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService
-      maxUsageByService;
+  maxUsageByService;
 
   final String $__typename;
 
@@ -4676,7 +4920,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetMemoryMetrics$monitoring$memoryUsage) ||
+    if (other is! Query$GetMemoryMetrics$monitoring$memoryUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4712,11 +4956,10 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage {
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage
     on Query$GetMemoryMetrics$monitoring$memoryUsage {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<
-          Query$GetMemoryMetrics$monitoring$memoryUsage>
-      get copyWith => CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes> {
@@ -4726,27 +4969,29 @@ abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes> {
   ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage;
 
   TRes call({
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage? overallUsage,
     Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall?
-        swapUsageOverall,
+    swapUsageOverall,
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService?
-        averageUsageByService,
+    averageUsageByService,
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService?
-        maxUsageByService,
+    maxUsageByService,
     String? $__typename,
   });
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<TRes>
-      get overallUsage;
+  get overallUsage;
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<TRes>
-      get swapUsageOverall;
+  get swapUsageOverall;
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-      TRes> get averageUsageByService;
+    TRes
+  >
+  get averageUsageByService;
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<TRes>
-      get maxUsageByService;
+  get maxUsageByService;
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
@@ -4768,58 +5013,71 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
     Object? averageUsageByService = _undefined,
     Object? maxUsageByService = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetMemoryMetrics$monitoring$memoryUsage(
-        overallUsage: overallUsage == _undefined || overallUsage == null
-            ? _instance.overallUsage
-            : (overallUsage
-                as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage),
-        swapUsageOverall: swapUsageOverall == _undefined ||
-                swapUsageOverall == null
-            ? _instance.swapUsageOverall
-            : (swapUsageOverall
-                as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall),
-        averageUsageByService: averageUsageByService == _undefined ||
-                averageUsageByService == null
-            ? _instance.averageUsageByService
-            : (averageUsageByService
-                as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService),
-        maxUsageByService: maxUsageByService == _undefined ||
-                maxUsageByService == null
-            ? _instance.maxUsageByService
-            : (maxUsageByService
-                as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage(
+      overallUsage:
+          overallUsage == _undefined || overallUsage == null
+              ? _instance.overallUsage
+              : (overallUsage
+                  as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage),
+      swapUsageOverall:
+          swapUsageOverall == _undefined || swapUsageOverall == null
+              ? _instance.swapUsageOverall
+              : (swapUsageOverall
+                  as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall),
+      averageUsageByService:
+          averageUsageByService == _undefined || averageUsageByService == null
+              ? _instance.averageUsageByService
+              : (averageUsageByService
+                  as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService),
+      maxUsageByService:
+          maxUsageByService == _undefined || maxUsageByService == null
+              ? _instance.maxUsageByService
+              : (maxUsageByService
+                  as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<TRes>
-      get overallUsage {
+  get overallUsage {
     final local$overallUsage = _instance.overallUsage;
     return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
-        local$overallUsage, (e) => call(overallUsage: e));
+      local$overallUsage,
+      (e) => call(overallUsage: e),
+    );
   }
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<TRes>
-      get swapUsageOverall {
+  get swapUsageOverall {
     final local$swapUsageOverall = _instance.swapUsageOverall;
     return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
-        local$swapUsageOverall, (e) => call(swapUsageOverall: e));
+      local$swapUsageOverall,
+      (e) => call(swapUsageOverall: e),
+    );
   }
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-      TRes> get averageUsageByService {
+    TRes
+  >
+  get averageUsageByService {
     final local$averageUsageByService = _instance.averageUsageByService;
     return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
-        local$averageUsageByService, (e) => call(averageUsageByService: e));
+      local$averageUsageByService,
+      (e) => call(averageUsageByService: e),
+    );
   }
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<TRes>
-      get maxUsageByService {
+  get maxUsageByService {
     final local$maxUsageByService = _instance.maxUsageByService;
     return CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
-        local$maxUsageByService, (e) => call(maxUsageByService: e));
+      local$maxUsageByService,
+      (e) => call(maxUsageByService: e),
+    );
   }
 }
 
@@ -4832,56 +5090,65 @@ class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage<TRes>
   call({
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage? overallUsage,
     Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall?
-        swapUsageOverall,
+    swapUsageOverall,
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService?
-        averageUsageByService,
+    averageUsageByService,
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService?
-        maxUsageByService,
+    maxUsageByService,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<TRes>
-      get overallUsage =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage
-              .stub(_res);
+  get overallUsage =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage.stub(
+        _res,
+      );
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<TRes>
-      get swapUsageOverall =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
-              .stub(_res);
+  get swapUsageOverall =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall.stub(
+        _res,
+      );
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-          TRes>
-      get averageUsageByService =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
-              .stub(_res);
+    TRes
+  >
+  get averageUsageByService =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService.stub(
+        _res,
+      );
 
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<TRes>
-      get maxUsageByService =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService
-              .stub(_res);
+  get maxUsageByService =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService.stub(
+        _res,
+      );
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage {
-  Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
-      {required this.$__typename});
+  Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage({
+    required this.$__typename,
+  });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringValues":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -4905,8 +5172,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage) ||
+    if (other is! Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -4922,29 +5188,36 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage {
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage
     on Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues)
-        monitoringValues,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues,
+    )
+    monitoringValues,
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringValues":
-        return monitoringValues(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues);
+        return monitoringValues(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -4953,26 +5226,32 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$overall
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues)?
-        monitoringValues,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues,
+    )?
+    monitoringValues,
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringValues":
         if (monitoringValues != null) {
-          return monitoringValues(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues);
+          return monitoringValues(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -4984,25 +5263,28 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$overall
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage instance,
     TRes Function(Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage)
-        then,
+    then,
   ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage;
 
   TRes call({String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
     this._instance,
     this._then,
@@ -5011,24 +5293,32 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
   final Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage _instance;
 
   final TRes Function(
-      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage) _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? $__typename = _undefined}) =>
-      _then(Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
-          $__typename: $__typename == _undefined || $__typename == null
+  TRes call({Object? $__typename = _undefined}) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -5045,22 +5335,28 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>
-      values;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+  >
+  values;
 
   final String $__typename;
 
@@ -5088,8 +5384,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5117,105 +5413,142 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues
     on Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues;
 
   TRes call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values> Function(
-              Iterable<
-                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-                      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>>)
-          _fn);
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-                          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -5229,7 +5562,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$value = json['value'];
     final l$timestamp = json['timestamp'];
     final l$$__typename = json['__typename'];
@@ -5262,11 +5596,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
     final l$value = value;
     final l$timestamp = timestamp;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$value,
-      l$timestamp,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$value, l$timestamp, l$$__typename]);
   }
 
   @override
@@ -5274,8 +5604,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5299,53 +5629,58 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValu
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values;
 
-  TRes call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  });
+  TRes call({String? value, DateTime? timestamp, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -5353,37 +5688,38 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$
     Object? value = _undefined,
     Object? timestamp = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringValues$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? value, DateTime? timestamp, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError
@@ -5396,7 +5732,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQuer
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
@@ -5422,10 +5759,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQuer
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -5433,8 +5767,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQuer
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5453,106 +5787,118 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQuer
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
     Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$overallUsage$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
-  Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
-      {required this.$__typename});
+  Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall({
+    required this.$__typename,
+  });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringValues":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -5576,8 +5922,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5593,29 +5939,36 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
     on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)
-        monitoringValues,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues,
+    )
+    monitoringValues,
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringValues":
-        return monitoringValues(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues);
+        return monitoringValues(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -5624,26 +5977,32 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsa
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)?
-        monitoringValues,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues,
+    )?
+    monitoringValues,
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringValues":
         if (monitoringValues != null) {
-          return monitoringValues(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues);
+          return monitoringValues(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -5655,53 +6014,66 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsa
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
     Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall)
-        then,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall,
+    )
+    then,
   ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall;
 
   TRes call({String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall
-      _instance;
+  _instance;
 
   final TRes Function(
-      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall) _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? $__typename = _undefined}) =>
-      _then(Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
-          $__typename: $__typename == _undefined || $__typename == null
+  TRes call({Object? $__typename = _undefined}) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -5718,22 +6090,28 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>
-      values;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+  >
+  values;
 
   final String $__typename;
 
@@ -5761,8 +6139,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5788,107 +6166,145 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
     Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues;
 
   TRes call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values> Function(
-              Iterable<
-                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-                      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>>)
-          _fn);
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-                          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -5902,7 +6318,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$value = json['value'];
     final l$timestamp = json['timestamp'];
     final l$$__typename = json['__typename'];
@@ -5935,11 +6352,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
     final l$value = value;
     final l$timestamp = timestamp;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$value,
-      l$timestamp,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$value, l$timestamp, l$$__typename]);
   }
 
   @override
@@ -5947,8 +6360,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -5972,53 +6385,58 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
     Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values;
 
-  TRes call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  });
+  TRes call({String? value, DateTime? timestamp, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -6026,37 +6444,38 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOvera
     Object? value = _undefined,
     Object? timestamp = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringValues$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? value,
-    DateTime? timestamp,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? value, DateTime? timestamp, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
@@ -6069,7 +6488,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
@@ -6095,10 +6515,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -6106,8 +6523,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6126,106 +6543,118 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$Monitoring
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
     Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$swapUsageOverall$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService {
-  Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
-      {required this.$__typename});
+  Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService({
+    required this.$__typename,
+  });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringMetrics":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -6249,8 +6678,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6266,29 +6695,36 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService {
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
     on Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics)
-        monitoringMetrics,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics,
+    )
+    monitoringMetrics,
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
-        return monitoringMetrics(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics);
+        return monitoringMetrics(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -6297,26 +6733,32 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$average
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics)?
-        monitoringMetrics,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics,
+    )?
+    monitoringMetrics,
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
         if (monitoringMetrics != null) {
-          return monitoringMetrics(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics);
+          return monitoringMetrics(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -6328,55 +6770,68 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$average
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService;
 
   TRes call({String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? $__typename = _undefined}) =>
-      _then(Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
-          $__typename: $__typename == _undefined || $__typename == null
+  TRes call({Object? $__typename = _undefined}) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -6393,22 +6848,28 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metrics = json['metrics'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
-      metrics: (l$metrics as List<dynamic>)
-          .map((e) =>
-              Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      metrics:
+          (l$metrics as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>
-      metrics;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+  >
+  metrics;
 
   final String $__typename;
 
@@ -6436,8 +6897,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6463,107 +6924,145 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics;
 
   TRes call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
   });
   TRes metrics(
-      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics> Function(
-              Iterable<
-                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-                      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>>)
-          _fn);
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? metrics = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
-        metrics: metrics == _undefined || metrics == null
-            ? _instance.metrics
-            : (metrics as List<
-                Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
+      metrics:
+          metrics == _undefined || metrics == null
+              ? _instance.metrics
+              : (metrics
+                  as List<
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes metrics(
-          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics> Function(
-                  Iterable<
-                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-                          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>>)
-              _fn) =>
-      call(
-          metrics: _fn(_instance.metrics.map((e) =>
-              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    metrics:
+        _fn(
+          _instance.metrics.map(
+            (e) =>
+                CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   metrics(_fn) => _res;
 }
@@ -6577,17 +7076,22 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metricId = json['metricId'];
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
       metricId: (l$metricId as String),
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -6595,8 +7099,9 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
   final String metricId;
 
   final List<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>
-      values;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+  >
+  values;
 
   final String $__typename;
 
@@ -6628,8 +7133,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6660,60 +7165,78 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics;
 
   TRes call({
     String? metricId,
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values> Function(
-              Iterable<
-                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-                      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>>)
-          _fn);
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -6721,52 +7244,73 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageBy
     Object? metricId = _undefined,
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
-        metricId: metricId == _undefined || metricId == null
-            ? _instance.metricId
-            : (metricId as String),
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
+      metricId:
+          metricId == _undefined || metricId == null
+              ? _instance.metricId
+              : (metricId as String),
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-                          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
     String? metricId,
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -6780,7 +7324,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$timestamp = json['timestamp'];
     final l$value = json['value'];
     final l$$__typename = json['__typename'];
@@ -6813,11 +7358,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
     final l$timestamp = timestamp;
     final l$value = value;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$timestamp,
-      l$value,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$timestamp, l$value, l$$__typename]);
   }
 
   @override
@@ -6825,8 +7366,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -6850,53 +7391,58 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values;
 
-  TRes call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  });
+  TRes call({DateTime? timestamp, String? value, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -6904,37 +7450,38 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageBy
     Object? timestamp = _undefined,
     Object? value = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringMetrics$metrics$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  }) =>
-      _res;
+  call({DateTime? timestamp, String? value, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError
@@ -6947,7 +7494,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
@@ -6973,10 +7521,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -6984,8 +7529,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7004,106 +7549,118 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$Monit
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
     Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$averageUsageByService$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService {
-  Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
-      {required this.$__typename});
+  Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService({
+    required this.$__typename,
+  });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringMetrics":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -7127,8 +7684,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7144,29 +7701,36 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService {
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService
     on Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics)
-        monitoringMetrics,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics,
+    )
+    monitoringMetrics,
     required _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
-        return monitoringMetrics(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics);
+        return monitoringMetrics(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -7175,26 +7739,32 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsag
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics)?
-        monitoringMetrics,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics,
+    )?
+    monitoringMetrics,
     _T Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
         if (monitoringMetrics != null) {
-          return monitoringMetrics(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics);
+          return monitoringMetrics(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -7206,53 +7776,67 @@ extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsag
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService;
 
   TRes call({String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService
-      _instance;
+  _instance;
 
   final TRes Function(
-      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService) _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? $__typename = _undefined}) =>
-      _then(Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
-          $__typename: $__typename == _undefined || $__typename == null
+  TRes call({Object? $__typename = _undefined}) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -7269,22 +7853,28 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metrics = json['metrics'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
-      metrics: (l$metrics as List<dynamic>)
-          .map((e) =>
-              Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      metrics:
+          (l$metrics as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>
-      metrics;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+  >
+  metrics;
 
   final String $__typename;
 
@@ -7312,8 +7902,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7339,107 +7929,145 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics;
 
   TRes call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
   });
   TRes metrics(
-      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics> Function(
-              Iterable<
-                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-                      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>>)
-          _fn);
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? metrics = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
-        metrics: metrics == _undefined || metrics == null
-            ? _instance.metrics
-            : (metrics as List<
-                Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
+      metrics:
+          metrics == _undefined || metrics == null
+              ? _instance.metrics
+              : (metrics
+                  as List<
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes metrics(
-          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics> Function(
-                  Iterable<
-                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-                          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>>)
-              _fn) =>
-      call(
-          metrics: _fn(_instance.metrics.map((e) =>
-              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    metrics:
+        _fn(
+          _instance.metrics.map(
+            (e) =>
+                CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   metrics(_fn) => _res;
 }
@@ -7453,17 +8081,22 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metricId = json['metricId'];
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
       metricId: (l$metricId as String),
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -7471,8 +8104,9 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
   final String metricId;
 
   final List<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>
-      values;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+  >
+  values;
 
   final String $__typename;
 
@@ -7504,8 +8138,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7536,60 +8170,78 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics;
 
   TRes call({
     String? metricId,
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values> Function(
-              Iterable<
-                  CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-                      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>>)
-          _fn);
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -7597,52 +8249,73 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByServ
     Object? metricId = _undefined,
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
-        metricId: metricId == _undefined || metricId == null
-            ? _instance.metricId
-            : (metricId as String),
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
+      metricId:
+          metricId == _undefined || metricId == null
+              ? _instance.metricId
+              : (metricId as String),
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-                          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
+          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
     String? metricId,
-    List<Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -7656,7 +8329,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$timestamp = json['timestamp'];
     final l$value = json['value'];
     final l$$__typename = json['__typename'];
@@ -7689,11 +8363,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
     final l$timestamp = timestamp;
     final l$value = value;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$timestamp,
-      l$value,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$timestamp, l$value, l$$__typename]);
   }
 
   @override
@@ -7701,8 +8371,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7726,53 +8396,58 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values;
 
-  TRes call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  });
+  TRes call({DateTime? timestamp, String? value, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -7780,37 +8455,38 @@ class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByServ
     Object? timestamp = _undefined,
     Object? value = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringMetrics$metrics$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  }) =>
-      _res;
+  call({DateTime? timestamp, String? value, String? $__typename}) => _res;
 }
 
 class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError
@@ -7823,7 +8499,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
   });
 
   factory Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
@@ -7849,10 +8526,7 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -7860,8 +8534,8 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -7880,85 +8554,92 @@ class Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$Monitorin
 }
 
 extension UtilityExtension$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError
-    on Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError {
+    on
+        Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError {
   CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError<
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
     Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError;
+      Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError;
 
   factory CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError)
-      _then;
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetMemoryMetrics$monitoring$memoryUsage$maxUsageByService$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }
 
 class Variables$Query$GetDiskMetrics {
@@ -7966,12 +8647,11 @@ class Variables$Query$GetDiskMetrics {
     DateTime? start,
     DateTime? end,
     required int step,
-  }) =>
-      Variables$Query$GetDiskMetrics._({
-        if (start != null) r'start': start,
-        if (end != null) r'end': end,
-        r'step': step,
-      });
+  }) => Variables$Query$GetDiskMetrics._({
+    if (start != null) r'start': start,
+    if (end != null) r'end': end,
+    r'step': step,
+  });
 
   Variables$Query$GetDiskMetrics._(this._$data);
 
@@ -8014,17 +8694,14 @@ class Variables$Query$GetDiskMetrics {
   }
 
   CopyWith$Variables$Query$GetDiskMetrics<Variables$Query$GetDiskMetrics>
-      get copyWith => CopyWith$Variables$Query$GetDiskMetrics(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Variables$Query$GetDiskMetrics(this, (i) => i);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Query$GetDiskMetrics) ||
+    if (other is! Variables$Query$GetDiskMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8074,19 +8751,12 @@ abstract class CopyWith$Variables$Query$GetDiskMetrics<TRes> {
   factory CopyWith$Variables$Query$GetDiskMetrics.stub(TRes res) =
       _CopyWithStubImpl$Variables$Query$GetDiskMetrics;
 
-  TRes call({
-    DateTime? start,
-    DateTime? end,
-    int? step,
-  });
+  TRes call({DateTime? start, DateTime? end, int? step});
 }
 
 class _CopyWithImpl$Variables$Query$GetDiskMetrics<TRes>
     implements CopyWith$Variables$Query$GetDiskMetrics<TRes> {
-  _CopyWithImpl$Variables$Query$GetDiskMetrics(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Variables$Query$GetDiskMetrics(this._instance, this._then);
 
   final Variables$Query$GetDiskMetrics _instance;
 
@@ -8098,13 +8768,14 @@ class _CopyWithImpl$Variables$Query$GetDiskMetrics<TRes>
     Object? start = _undefined,
     Object? end = _undefined,
     Object? step = _undefined,
-  }) =>
-      _then(Variables$Query$GetDiskMetrics._({
-        ..._instance._$data,
-        if (start != _undefined) 'start': (start as DateTime?),
-        if (end != _undefined) 'end': (end as DateTime?),
-        if (step != _undefined && step != null) 'step': (step as int),
-      }));
+  }) => _then(
+    Variables$Query$GetDiskMetrics._({
+      ..._instance._$data,
+      if (start != _undefined) 'start': (start as DateTime?),
+      if (end != _undefined) 'end': (end as DateTime?),
+      if (step != _undefined && step != null) 'step': (step as int),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Variables$Query$GetDiskMetrics<TRes>
@@ -8113,26 +8784,19 @@ class _CopyWithStubImpl$Variables$Query$GetDiskMetrics<TRes>
 
   TRes _res;
 
-  call({
-    DateTime? start,
-    DateTime? end,
-    int? step,
-  }) =>
-      _res;
+  call({DateTime? start, DateTime? end, int? step}) => _res;
 }
 
 class Query$GetDiskMetrics {
-  Query$GetDiskMetrics({
-    required this.monitoring,
-    this.$__typename = 'Query',
-  });
+  Query$GetDiskMetrics({required this.monitoring, this.$__typename = 'Query'});
 
   factory Query$GetDiskMetrics.fromJson(Map<String, dynamic> json) {
     final l$monitoring = json['monitoring'];
     final l$$__typename = json['__typename'];
     return Query$GetDiskMetrics(
       monitoring: Query$GetDiskMetrics$monitoring.fromJson(
-          (l$monitoring as Map<String, dynamic>)),
+        (l$monitoring as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -8154,10 +8818,7 @@ class Query$GetDiskMetrics {
   int get hashCode {
     final l$monitoring = monitoring;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$monitoring,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$monitoring, l$$__typename]);
   }
 
   @override
@@ -8165,7 +8826,7 @@ class Query$GetDiskMetrics {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetDiskMetrics) || runtimeType != other.runtimeType) {
+    if (other is! Query$GetDiskMetrics || runtimeType != other.runtimeType) {
       return false;
     }
     final l$monitoring = monitoring;
@@ -8184,10 +8845,7 @@ class Query$GetDiskMetrics {
 
 extension UtilityExtension$Query$GetDiskMetrics on Query$GetDiskMetrics {
   CopyWith$Query$GetDiskMetrics<Query$GetDiskMetrics> get copyWith =>
-      CopyWith$Query$GetDiskMetrics(
-        this,
-        (i) => i,
-      );
+      CopyWith$Query$GetDiskMetrics(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetDiskMetrics<TRes> {
@@ -8199,19 +8857,13 @@ abstract class CopyWith$Query$GetDiskMetrics<TRes> {
   factory CopyWith$Query$GetDiskMetrics.stub(TRes res) =
       _CopyWithStubImpl$Query$GetDiskMetrics;
 
-  TRes call({
-    Query$GetDiskMetrics$monitoring? monitoring,
-    String? $__typename,
-  });
+  TRes call({Query$GetDiskMetrics$monitoring? monitoring, String? $__typename});
   CopyWith$Query$GetDiskMetrics$monitoring<TRes> get monitoring;
 }
 
 class _CopyWithImpl$Query$GetDiskMetrics<TRes>
     implements CopyWith$Query$GetDiskMetrics<TRes> {
-  _CopyWithImpl$Query$GetDiskMetrics(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Query$GetDiskMetrics(this._instance, this._then);
 
   final Query$GetDiskMetrics _instance;
 
@@ -8222,20 +8874,25 @@ class _CopyWithImpl$Query$GetDiskMetrics<TRes>
   TRes call({
     Object? monitoring = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetDiskMetrics(
-        monitoring: monitoring == _undefined || monitoring == null
-            ? _instance.monitoring
-            : (monitoring as Query$GetDiskMetrics$monitoring),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics(
+      monitoring:
+          monitoring == _undefined || monitoring == null
+              ? _instance.monitoring
+              : (monitoring as Query$GetDiskMetrics$monitoring),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetDiskMetrics$monitoring<TRes> get monitoring {
     final local$monitoring = _instance.monitoring;
     return CopyWith$Query$GetDiskMetrics$monitoring(
-        local$monitoring, (e) => call(monitoring: e));
+      local$monitoring,
+      (e) => call(monitoring: e),
+    );
   }
 }
 
@@ -8245,107 +8902,118 @@ class _CopyWithStubImpl$Query$GetDiskMetrics<TRes>
 
   TRes _res;
 
-  call({
-    Query$GetDiskMetrics$monitoring? monitoring,
-    String? $__typename,
-  }) =>
+  call({Query$GetDiskMetrics$monitoring? monitoring, String? $__typename}) =>
       _res;
 
   CopyWith$Query$GetDiskMetrics$monitoring<TRes> get monitoring =>
       CopyWith$Query$GetDiskMetrics$monitoring.stub(_res);
 }
 
-const documentNodeQueryGetDiskMetrics = DocumentNode(definitions: [
-  OperationDefinitionNode(
-    type: OperationType.query,
-    name: NameNode(value: 'GetDiskMetrics'),
-    variableDefinitions: [
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'start')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'DateTime'),
-          isNonNull: false,
+const documentNodeQueryGetDiskMetrics = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'GetDiskMetrics'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'start')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'DateTime'),
+            isNonNull: false,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'end')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'DateTime'),
-          isNonNull: false,
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'end')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'DateTime'),
+            isNonNull: false,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-      VariableDefinitionNode(
-        variable: VariableNode(name: NameNode(value: 'step')),
-        type: NamedTypeNode(
-          name: NameNode(value: 'Int'),
-          isNonNull: true,
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'step')),
+          type: NamedTypeNode(name: NameNode(value: 'Int'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
         ),
-        defaultValue: DefaultValueNode(value: null),
-        directives: [],
-      ),
-    ],
-    directives: [],
-    selectionSet: SelectionSetNode(selections: [
-      FieldNode(
-        name: NameNode(value: 'monitoring'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: SelectionSetNode(selections: [
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
           FieldNode(
-            name: NameNode(value: 'diskUsage'),
+            name: NameNode(value: 'monitoring'),
             alias: null,
-            arguments: [
-              ArgumentNode(
-                name: NameNode(value: 'start'),
-                value: VariableNode(name: NameNode(value: 'start')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'end'),
-                value: VariableNode(name: NameNode(value: 'end')),
-              ),
-              ArgumentNode(
-                name: NameNode(value: 'step'),
-                value: VariableNode(name: NameNode(value: 'step')),
-              ),
-            ],
+            arguments: [],
             directives: [],
-            selectionSet: SelectionSetNode(selections: [
-              FieldNode(
-                name: NameNode(value: 'overallUsage'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringQueryError'),
-                    directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'diskUsage'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'start'),
+                      value: VariableNode(name: NameNode(value: 'start')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'end'),
+                      value: VariableNode(name: NameNode(value: 'end')),
+                    ),
+                    ArgumentNode(
+                      name: NameNode(value: 'step'),
+                      value: VariableNode(name: NameNode(value: 'step')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FieldNode(
+                        name: NameNode(value: 'overallUsage'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringQueryError'),
+                              directives: [],
+                            ),
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'MonitoringMetrics'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
                   ),
-                  FragmentSpreadNode(
-                    name: NameNode(value: 'MonitoringMetrics'),
-                    directives: [],
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
-                name: NameNode(value: '__typename'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-            ]),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
           ),
           FieldNode(
             name: NameNode(value: '__typename'),
@@ -8354,27 +9022,18 @@ const documentNodeQueryGetDiskMetrics = DocumentNode(definitions: [
             directives: [],
             selectionSet: null,
           ),
-        ]),
+        ],
       ),
-      FieldNode(
-        name: NameNode(value: '__typename'),
-        alias: null,
-        arguments: [],
-        directives: [],
-        selectionSet: null,
-      ),
-    ]),
-  ),
-  fragmentDefinitionMonitoringQueryError,
-  fragmentDefinitionMonitoringMetrics,
-]);
-Query$GetDiskMetrics _parserFn$Query$GetDiskMetrics(
-        Map<String, dynamic> data) =>
-    Query$GetDiskMetrics.fromJson(data);
-typedef OnQueryComplete$Query$GetDiskMetrics = FutureOr<void> Function(
-  Map<String, dynamic>?,
-  Query$GetDiskMetrics?,
+    ),
+    fragmentDefinitionMonitoringQueryError,
+    fragmentDefinitionMonitoringMetrics,
+  ],
 );
+Query$GetDiskMetrics _parserFn$Query$GetDiskMetrics(
+  Map<String, dynamic> data,
+) => Query$GetDiskMetrics.fromJson(data);
+typedef OnQueryComplete$Query$GetDiskMetrics =
+    FutureOr<void> Function(Map<String, dynamic>?, Query$GetDiskMetrics?);
 
 class Options$Query$GetDiskMetrics
     extends graphql.QueryOptions<Query$GetDiskMetrics> {
@@ -8390,36 +9049,37 @@ class Options$Query$GetDiskMetrics
     graphql.Context? context,
     OnQueryComplete$Query$GetDiskMetrics? onComplete,
     graphql.OnQueryError? onError,
-  })  : onCompleteWithParsed = onComplete,
-        super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          pollInterval: pollInterval,
-          context: context,
-          onComplete: onComplete == null
-              ? null
-              : (data) => onComplete(
-                    data,
-                    data == null ? null : _parserFn$Query$GetDiskMetrics(data),
-                  ),
-          onError: onError,
-          document: documentNodeQueryGetDiskMetrics,
-          parserFn: _parserFn$Query$GetDiskMetrics,
-        );
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete:
+             onComplete == null
+                 ? null
+                 : (data) => onComplete(
+                   data,
+                   data == null ? null : _parserFn$Query$GetDiskMetrics(data),
+                 ),
+         onError: onError,
+         document: documentNodeQueryGetDiskMetrics,
+         parserFn: _parserFn$Query$GetDiskMetrics,
+       );
 
   final OnQueryComplete$Query$GetDiskMetrics? onCompleteWithParsed;
 
   @override
   List<Object?> get properties => [
-        ...super.onComplete == null
-            ? super.properties
-            : super.properties.where((property) => property != onComplete),
-        onCompleteWithParsed,
-      ];
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
 }
 
 class WatchOptions$Query$GetDiskMetrics
@@ -8438,20 +9098,20 @@ class WatchOptions$Query$GetDiskMetrics
     bool carryForwardDataOnException = true,
     bool fetchResults = false,
   }) : super(
-          variables: variables.toJson(),
-          operationName: operationName,
-          fetchPolicy: fetchPolicy,
-          errorPolicy: errorPolicy,
-          cacheRereadPolicy: cacheRereadPolicy,
-          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
-          context: context,
-          document: documentNodeQueryGetDiskMetrics,
-          pollInterval: pollInterval,
-          eagerlyFetchResults: eagerlyFetchResults,
-          carryForwardDataOnException: carryForwardDataOnException,
-          fetchResults: fetchResults,
-          parserFn: _parserFn$Query$GetDiskMetrics,
-        );
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryGetDiskMetrics,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$GetDiskMetrics,
+       );
 }
 
 class FetchMoreOptions$Query$GetDiskMetrics extends graphql.FetchMoreOptions {
@@ -8459,33 +9119,31 @@ class FetchMoreOptions$Query$GetDiskMetrics extends graphql.FetchMoreOptions {
     required graphql.UpdateQuery updateQuery,
     required Variables$Query$GetDiskMetrics variables,
   }) : super(
-          updateQuery: updateQuery,
-          variables: variables.toJson(),
-          document: documentNodeQueryGetDiskMetrics,
-        );
+         updateQuery: updateQuery,
+         variables: variables.toJson(),
+         document: documentNodeQueryGetDiskMetrics,
+       );
 }
 
 extension ClientExtension$Query$GetDiskMetrics on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$GetDiskMetrics>> query$GetDiskMetrics(
-          Options$Query$GetDiskMetrics options) async =>
-      await this.query(options);
+    Options$Query$GetDiskMetrics options,
+  ) async => await this.query(options);
   graphql.ObservableQuery<Query$GetDiskMetrics> watchQuery$GetDiskMetrics(
-          WatchOptions$Query$GetDiskMetrics options) =>
-      this.watchQuery(options);
+    WatchOptions$Query$GetDiskMetrics options,
+  ) => this.watchQuery(options);
   void writeQuery$GetDiskMetrics({
     required Query$GetDiskMetrics data,
     required Variables$Query$GetDiskMetrics variables,
     bool broadcast = true,
-  }) =>
-      this.writeQuery(
-        graphql.Request(
-          operation:
-              graphql.Operation(document: documentNodeQueryGetDiskMetrics),
-          variables: variables.toJson(),
-        ),
-        data: data.toJson(),
-        broadcast: broadcast,
-      );
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(document: documentNodeQueryGetDiskMetrics),
+      variables: variables.toJson(),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
   Query$GetDiskMetrics? readQuery$GetDiskMetrics({
     required Variables$Query$GetDiskMetrics variables,
     bool optimistic = true,
@@ -8512,7 +9170,8 @@ class Query$GetDiskMetrics$monitoring {
     final l$$__typename = json['__typename'];
     return Query$GetDiskMetrics$monitoring(
       diskUsage: Query$GetDiskMetrics$monitoring$diskUsage.fromJson(
-          (l$diskUsage as Map<String, dynamic>)),
+        (l$diskUsage as Map<String, dynamic>),
+      ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -8534,10 +9193,7 @@ class Query$GetDiskMetrics$monitoring {
   int get hashCode {
     final l$diskUsage = diskUsage;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$diskUsage,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$diskUsage, l$$__typename]);
   }
 
   @override
@@ -8545,7 +9201,7 @@ class Query$GetDiskMetrics$monitoring {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetDiskMetrics$monitoring) ||
+    if (other is! Query$GetDiskMetrics$monitoring ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8566,10 +9222,7 @@ class Query$GetDiskMetrics$monitoring {
 extension UtilityExtension$Query$GetDiskMetrics$monitoring
     on Query$GetDiskMetrics$monitoring {
   CopyWith$Query$GetDiskMetrics$monitoring<Query$GetDiskMetrics$monitoring>
-      get copyWith => CopyWith$Query$GetDiskMetrics$monitoring(
-            this,
-            (i) => i,
-          );
+  get copyWith => CopyWith$Query$GetDiskMetrics$monitoring(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring<TRes> {
@@ -8590,10 +9243,7 @@ abstract class CopyWith$Query$GetDiskMetrics$monitoring<TRes> {
 
 class _CopyWithImpl$Query$GetDiskMetrics$monitoring<TRes>
     implements CopyWith$Query$GetDiskMetrics$monitoring<TRes> {
-  _CopyWithImpl$Query$GetDiskMetrics$monitoring(
-    this._instance,
-    this._then,
-  );
+  _CopyWithImpl$Query$GetDiskMetrics$monitoring(this._instance, this._then);
 
   final Query$GetDiskMetrics$monitoring _instance;
 
@@ -8604,20 +9254,25 @@ class _CopyWithImpl$Query$GetDiskMetrics$monitoring<TRes>
   TRes call({
     Object? diskUsage = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetDiskMetrics$monitoring(
-        diskUsage: diskUsage == _undefined || diskUsage == null
-            ? _instance.diskUsage
-            : (diskUsage as Query$GetDiskMetrics$monitoring$diskUsage),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics$monitoring(
+      diskUsage:
+          diskUsage == _undefined || diskUsage == null
+              ? _instance.diskUsage
+              : (diskUsage as Query$GetDiskMetrics$monitoring$diskUsage),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage<TRes> get diskUsage {
     final local$diskUsage = _instance.diskUsage;
     return CopyWith$Query$GetDiskMetrics$monitoring$diskUsage(
-        local$diskUsage, (e) => call(diskUsage: e));
+      local$diskUsage,
+      (e) => call(diskUsage: e),
+    );
   }
 }
 
@@ -8630,8 +9285,7 @@ class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring<TRes>
   call({
     Query$GetDiskMetrics$monitoring$diskUsage? diskUsage,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage<TRes> get diskUsage =>
       CopyWith$Query$GetDiskMetrics$monitoring$diskUsage.stub(_res);
@@ -8644,13 +9298,15 @@ class Query$GetDiskMetrics$monitoring$diskUsage {
   });
 
   factory Query$GetDiskMetrics$monitoring$diskUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$overallUsage = json['overallUsage'];
     final l$$__typename = json['__typename'];
     return Query$GetDiskMetrics$monitoring$diskUsage(
       overallUsage:
           Query$GetDiskMetrics$monitoring$diskUsage$overallUsage.fromJson(
-              (l$overallUsage as Map<String, dynamic>)),
+            (l$overallUsage as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -8672,10 +9328,7 @@ class Query$GetDiskMetrics$monitoring$diskUsage {
   int get hashCode {
     final l$overallUsage = overallUsage;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$overallUsage,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$overallUsage, l$$__typename]);
   }
 
   @override
@@ -8683,7 +9336,7 @@ class Query$GetDiskMetrics$monitoring$diskUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetDiskMetrics$monitoring$diskUsage) ||
+    if (other is! Query$GetDiskMetrics$monitoring$diskUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8704,11 +9357,10 @@ class Query$GetDiskMetrics$monitoring$diskUsage {
 extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage
     on Query$GetDiskMetrics$monitoring$diskUsage {
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage<
-          Query$GetDiskMetrics$monitoring$diskUsage>
-      get copyWith => CopyWith$Query$GetDiskMetrics$monitoring$diskUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetDiskMetrics$monitoring$diskUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage(this, (i) => i);
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage<TRes> {
@@ -8725,7 +9377,7 @@ abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage<TRes> {
     String? $__typename,
   });
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<TRes>
-      get overallUsage;
+  get overallUsage;
 }
 
 class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage<TRes>
@@ -8744,22 +9396,27 @@ class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage<TRes>
   TRes call({
     Object? overallUsage = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(Query$GetDiskMetrics$monitoring$diskUsage(
-        overallUsage: overallUsage == _undefined || overallUsage == null
-            ? _instance.overallUsage
-            : (overallUsage
-                as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics$monitoring$diskUsage(
+      overallUsage:
+          overallUsage == _undefined || overallUsage == null
+              ? _instance.overallUsage
+              : (overallUsage
+                  as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<TRes>
-      get overallUsage {
+  get overallUsage {
     final local$overallUsage = _instance.overallUsage;
     return CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
-        local$overallUsage, (e) => call(overallUsage: e));
+      local$overallUsage,
+      (e) => call(overallUsage: e),
+    );
   }
 }
 
@@ -8772,34 +9429,39 @@ class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage<TRes>
   call({
     Query$GetDiskMetrics$monitoring$diskUsage$overallUsage? overallUsage,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<TRes>
-      get overallUsage =>
-          CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage.stub(
-              _res);
+  get overallUsage =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage.stub(
+        _res,
+      );
 }
 
 class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage {
-  Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
-      {required this.$__typename});
+  Query$GetDiskMetrics$monitoring$diskUsage$overallUsage({
+    required this.$__typename,
+  });
 
   factory Query$GetDiskMetrics$monitoring$diskUsage$overallUsage.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     switch (json["__typename"] as String) {
       case "MonitoringMetrics":
-        return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
-            .fromJson(json);
+        return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics.fromJson(
+          json,
+        );
 
       case "MonitoringQueryError":
-        return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError
-            .fromJson(json);
+        return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError.fromJson(
+          json,
+        );
 
       default:
         final l$$__typename = json['__typename'];
         return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
-            $__typename: (l$$__typename as String));
+          $__typename: (l$$__typename as String),
+        );
     }
   }
 
@@ -8823,7 +9485,7 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Query$GetDiskMetrics$monitoring$diskUsage$overallUsage) ||
+    if (other is! Query$GetDiskMetrics$monitoring$diskUsage$overallUsage ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -8839,29 +9501,36 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage {
 extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage
     on Query$GetDiskMetrics$monitoring$diskUsage$overallUsage {
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage>
-      get copyWith =>
-          CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
-            this,
-            (i) => i,
-          );
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage
+  >
+  get copyWith =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
+        this,
+        (i) => i,
+      );
   _T when<_T>({
     required _T Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics)
-        monitoringMetrics,
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics,
+    )
+    monitoringMetrics,
     required _T Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError)
-        monitoringQueryError,
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError,
+    )
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
-        return monitoringMetrics(this
-            as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics);
+        return monitoringMetrics(
+          this
+              as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics,
+        );
 
       case "MonitoringQueryError":
-        return monitoringQueryError(this
-            as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError);
+        return monitoringQueryError(
+          this
+              as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError,
+        );
 
       default:
         return orElse();
@@ -8870,26 +9539,32 @@ extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsag
 
   _T maybeWhen<_T>({
     _T Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics)?
-        monitoringMetrics,
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics,
+    )?
+    monitoringMetrics,
     _T Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError)?
-        monitoringQueryError,
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError,
+    )?
+    monitoringQueryError,
     required _T Function() orElse,
   }) {
     switch ($__typename) {
       case "MonitoringMetrics":
         if (monitoringMetrics != null) {
-          return monitoringMetrics(this
-              as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics);
+          return monitoringMetrics(
+            this
+                as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics,
+          );
         } else {
           return orElse();
         }
 
       case "MonitoringQueryError":
         if (monitoringQueryError != null) {
-          return monitoringQueryError(this
-              as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError);
+          return monitoringQueryError(
+            this
+                as Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError,
+          );
         } else {
           return orElse();
         }
@@ -8901,15 +9576,16 @@ extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsag
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
     Query$GetDiskMetrics$monitoring$diskUsage$overallUsage instance,
     TRes Function(Query$GetDiskMetrics$monitoring$diskUsage$overallUsage) then,
   ) = _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage;
 
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage.stub(
-          TRes res) =
-      _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage;
+    TRes res,
+  ) = _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage;
 
   TRes call({String? $__typename});
 }
@@ -8925,23 +9601,28 @@ class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<TRes>
   final Query$GetDiskMetrics$monitoring$diskUsage$overallUsage _instance;
 
   final TRes Function(Query$GetDiskMetrics$monitoring$diskUsage$overallUsage)
-      _then;
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? $__typename = _undefined}) =>
-      _then(Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
-          $__typename: $__typename == _undefined || $__typename == null
+  TRes call({Object? $__typename = _undefined}) => _then(
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
+      $__typename:
+          $__typename == _undefined || $__typename == null
               ? _instance.$__typename
-              : ($__typename as String)));
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage<TRes> {
   _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
@@ -8958,22 +9639,28 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
   });
 
   factory Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metrics = json['metrics'];
     final l$$__typename = json['__typename'];
     return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
-      metrics: (l$metrics as List<dynamic>)
-          .map((e) =>
-              Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      metrics:
+          (l$metrics as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
 
   final List<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>
-      metrics;
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+  >
+  metrics;
 
   final String $__typename;
 
@@ -9001,8 +9688,8 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics) ||
+    if (other
+            is! Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -9030,105 +9717,142 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
 extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
     on Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics {
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics>
-      get copyWith =>
-          CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
-            this,
-            (i) => i,
-          );
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
     Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics)
-        then,
-  ) = _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics;
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics;
 
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics;
 
   TRes call({
-    List<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
   });
   TRes metrics(
-      Iterable<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics> Function(
-              Iterable<
-                  CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-                      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>>)
-          _fn);
+    Iterable<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
+          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
     this._instance,
     this._then,
   );
 
   final Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics)
-      _then;
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? metrics = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
-        metrics: metrics == _undefined || metrics == null
-            ? _instance.metrics
-            : (metrics as List<
-                Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
+      metrics:
+          metrics == _undefined || metrics == null
+              ? _instance.metrics
+              : (metrics
+                  as List<
+                    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes metrics(
-          Iterable<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics> Function(
-                  Iterable<
-                      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-                          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>>)
-              _fn) =>
-      call(
-          metrics: _fn(_instance.metrics.map((e) =>
-              CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
+          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    metrics:
+        _fn(
+          _instance.metrics.map(
+            (e) =>
+                CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
-    List<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>?
-        metrics,
+    List<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+    >?
+    metrics,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   metrics(_fn) => _res;
 }
@@ -9142,17 +9866,22 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
   });
 
   factory Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$metricId = json['metricId'];
     final l$values = json['values'];
     final l$$__typename = json['__typename'];
     return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
       metricId: (l$metricId as String),
-      values: (l$values as List<dynamic>)
-          .map((e) =>
-              Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
-                  .fromJson((e as Map<String, dynamic>)))
-          .toList(),
+      values:
+          (l$values as List<dynamic>)
+              .map(
+                (e) =>
+                    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values.fromJson(
+                      (e as Map<String, dynamic>),
+                    ),
+              )
+              .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -9160,8 +9889,9 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
   final String metricId;
 
   final List<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>
-      values;
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+  >
+  values;
 
   final String $__typename;
 
@@ -9193,8 +9923,8 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics) ||
+    if (other
+            is! Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -9225,60 +9955,78 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
 }
 
 extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
-    on Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics {
+    on
+        Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics {
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics>
-      get copyWith =>
-          CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
-            this,
-            (i) => i,
-          );
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
+  >
+  get copyWith =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
     Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
-        instance,
+    instance,
     TRes Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics)
-        then,
-  ) = _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics;
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics;
 
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics;
 
   TRes call({
     String? metricId,
-    List<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
   });
   TRes values(
-      Iterable<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values> Function(
-              Iterable<
-                  CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-                      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>>)
-          _fn);
+    Iterable<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
+          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  );
 }
 
 class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
     this._instance,
     this._then,
   );
 
   final Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics)
-      _then;
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -9286,52 +10034,73 @@ class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$Moni
     Object? metricId = _undefined,
     Object? values = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
-        metricId: metricId == _undefined || metricId == null
-            ? _instance.metricId
-            : (metricId as String),
-        values: values == _undefined || values == null
-            ? _instance.values
-            : (values as List<
-                Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
+      metricId:
+          metricId == _undefined || metricId == null
+              ? _instance.metricId
+              : (metricId as String),
+      values:
+          values == _undefined || values == null
+              ? _instance.values
+              : (values
+                  as List<
+                    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+                  >),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 
   TRes values(
-          Iterable<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values> Function(
-                  Iterable<
-                      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-                          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>>)
-              _fn) =>
-      call(
-          values: _fn(_instance.values.map((e) =>
-              CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
-                e,
-                (i) => i,
-              ))).toList());
+    Iterable<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >
+    Function(
+      Iterable<
+        CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
+          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+        >
+      >,
+    )
+    _fn,
+  ) => call(
+    values:
+        _fn(
+          _instance.values.map(
+            (e) =>
+                CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
+                  e,
+                  (i) => i,
+                ),
+          ),
+        ).toList(),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
   call({
     String? metricId,
-    List<Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>?
-        values,
+    List<
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+    >?
+    values,
     String? $__typename,
-  }) =>
-      _res;
+  }) => _res;
 
   values(_fn) => _res;
 }
@@ -9345,7 +10114,8 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
   });
 
   factory Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$timestamp = json['timestamp'];
     final l$value = json['value'];
     final l$$__typename = json['__typename'];
@@ -9378,11 +10148,7 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
     final l$timestamp = timestamp;
     final l$value = value;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$timestamp,
-      l$value,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$timestamp, l$value, l$$__typename]);
   }
 
   @override
@@ -9390,8 +10156,8 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values) ||
+    if (other
+            is! Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -9415,53 +10181,58 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$
 }
 
 extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
-    on Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values {
+    on
+        Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values {
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values>
-      get copyWith =>
-          CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
-            this,
-            (i) => i,
-          );
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
+  >
+  get copyWith =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
     Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
-        instance,
+    instance,
     TRes Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values)
-        then,
-  ) = _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values;
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values;
 
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values;
 
-  TRes call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  });
+  TRes call({DateTime? timestamp, String? value, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
     this._instance,
     this._then,
   );
 
   final Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values)
-      _then;
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
@@ -9469,37 +10240,38 @@ class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$Moni
     Object? timestamp = _undefined,
     Object? value = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
-        timestamp: timestamp == _undefined || timestamp == null
-            ? _instance.timestamp
-            : (timestamp as DateTime),
-        value: value == _undefined || value == null
-            ? _instance.value
-            : (value as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
+      timestamp:
+          timestamp == _undefined || timestamp == null
+              ? _instance.timestamp
+              : (timestamp as DateTime),
+      value:
+          value == _undefined || value == null
+              ? _instance.value
+              : (value as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringMetrics$metrics$values(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    DateTime? timestamp,
-    String? value,
-    String? $__typename,
-  }) =>
-      _res;
+  call({DateTime? timestamp, String? value, String? $__typename}) => _res;
 }
 
 class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError
@@ -9512,7 +10284,8 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryErr
   });
 
   factory Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     final l$error = json['error'];
     final l$$__typename = json['__typename'];
     return Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
@@ -9538,10 +10311,7 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryErr
   int get hashCode {
     final l$error = error;
     final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$error,
-      l$$__typename,
-    ]);
+    return Object.hashAll([l$error, l$$__typename]);
   }
 
   @override
@@ -9549,8 +10319,8 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryErr
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError) ||
+    if (other
+            is! Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -9571,81 +10341,87 @@ class Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryErr
 extension UtilityExtension$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError
     on Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError {
   CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError<
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError>
-      get copyWith =>
-          CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
-            this,
-            (i) => i,
-          );
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError
+  >
+  get copyWith =>
+      CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
+        this,
+        (i) => i,
+      );
 }
 
 abstract class CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError<
-    TRes> {
+  TRes
+> {
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
     Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError
-        instance,
+    instance,
     TRes Function(
-            Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError)
-        then,
-  ) = _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError;
+      Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError,
+    )
+    then,
+  ) =
+      _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError;
 
   factory CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError.stub(
-          TRes res) =
+    TRes res,
+  ) =
       _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError;
 
-  TRes call({
-    String? error,
-    String? $__typename,
-  });
+  TRes call({String? error, String? $__typename});
 }
 
 class _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
     this._instance,
     this._then,
   );
 
   final Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError
-      _instance;
+  _instance;
 
   final TRes Function(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError)
-      _then;
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError,
+  )
+  _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
     Object? error = _undefined,
     Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
-        error: error == _undefined || error == null
-            ? _instance.error
-            : (error as String),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
+  }) => _then(
+    Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
+      error:
+          error == _undefined || error == null
+              ? _instance.error
+              : (error as String),
+      $__typename:
+          $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+    ),
+  );
 }
 
 class _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError<
-        TRes>
+  TRes
+>
     implements
         CopyWith$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError<
-            TRes> {
+          TRes
+        > {
   _CopyWithStubImpl$Query$GetDiskMetrics$monitoring$diskUsage$overallUsage$$MonitoringQueryError(
-      this._res);
+    this._res,
+  );
 
   TRes _res;
 
-  call({
-    String? error,
-    String? $__typename,
-  }) =>
-      _res;
+  call({String? error, String? $__typename}) => _res;
 }

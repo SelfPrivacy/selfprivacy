@@ -24,8 +24,8 @@ class UserEmailLoginCard extends StatelessWidget {
       child: Column(
         children: [
           ListTileOnSurfaceVariant(
-            onTap: () {
-              PlatformAdapter.setClipboard(email);
+            onTap: () async {
+              await PlatformAdapter.setClipboard(email);
               getIt<NavigationService>().showSnackBar(
                 'basis.copied_to_clipboard'.tr(),
               );

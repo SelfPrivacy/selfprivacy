@@ -19,15 +19,16 @@ class FilledCard extends StatelessWidget {
   final bool mergeSemantics;
   @override
   Widget build(final BuildContext context) => Card.filled(
-        clipBehavior: clipped ? Clip.antiAlias : Clip.none,
-        color: error
+    clipBehavior: clipped ? Clip.antiAlias : Clip.none,
+    color:
+        error
             ? Theme.of(context).colorScheme.errorContainer
             : secondary
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : tertiary
-                    ? Theme.of(context).colorScheme.tertiaryContainer
-                    : Theme.of(context).colorScheme.surfaceContainerHighest,
-        semanticContainer: mergeSemantics,
-        child: child,
-      );
+            ? Theme.of(context).colorScheme.secondaryContainer
+            : tertiary
+            ? Theme.of(context).colorScheme.tertiaryContainer
+            : Theme.of(context).colorScheme.surfaceContainerHighest,
+    semanticContainer: mergeSemantics,
+    child: child,
+  );
 }

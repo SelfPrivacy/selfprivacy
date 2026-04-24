@@ -6,11 +6,14 @@ mixin LogsApi on GraphQLApiMap {
     final String? upCursor,
     final String? downCursor,
     final String? slice,
+    final String? unit,
   }) async {
     QueryResult<Query$Logs> response;
     List<ServerLogEntry> logsList = [];
-    ServerLogsPageMeta pageMeta =
-        const ServerLogsPageMeta(downCursor: null, upCursor: null);
+    ServerLogsPageMeta pageMeta = const ServerLogsPageMeta(
+      downCursor: null,
+      upCursor: null,
+    );
 
     try {
       final GraphQLClient client = await getClient();
@@ -19,26 +22,26 @@ mixin LogsApi on GraphQLApiMap {
         downCursor: downCursor,
         limit: limit,
         filterBySlice: slice,
+        filterByUnit: unit,
       );
       final query = Options$Query$Logs(variables: variables);
       response = await client.query$Logs(query);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(response.exception.toString());
       }
       if (response.parsedData == null) {
         return (logsList, pageMeta);
       }
-      logsList = response.parsedData?.logs.paginated.entries
-              .map<ServerLogEntry>(
-                (final log) => ServerLogEntry.fromGraphQL(log),
-              )
+      logsList =
+          response.parsedData?.logs.paginated.entries
+              .map<ServerLogEntry>(ServerLogEntry.fromGraphQL)
               .toList() ??
           [];
       pageMeta = ServerLogsPageMeta.fromGraphQL(
         response.parsedData!.logs.paginated.pageMeta,
       );
     } catch (e) {
-      print(e);
+      logger("Couldn't load server logs", error: e);
     }
 
     return (logsList, pageMeta);

@@ -8,17 +8,15 @@ class ServerProviderFormCubit extends FormCubit {
   ServerProviderFormCubit(this.serverInstallationCubit) {
     apiKey = FieldCubit(
       initalValue: '',
-      validations: [
-        RequiredStringValidation('validations.required'.tr()),
-      ],
+      validations: [RequiredStringValidation('validations.required'.tr())],
     );
 
     super.addFields([apiKey]);
   }
 
   @override
-  FutureOr<void> onSubmit() async {
-    serverInstallationCubit.setServerProviderKey(apiKey.state.value);
+  Future<void>? onSubmit() async {
+    await serverInstallationCubit.setServerProviderKey(apiKey.state.value);
   }
 
   final ServerInstallationCubit serverInstallationCubit;
@@ -29,8 +27,9 @@ class ServerProviderFormCubit extends FormCubit {
     bool? isKeyValid;
 
     try {
-      isKeyValid = await serverInstallationCubit
-          .isServerProviderApiTokenValid(apiKey.state.value);
+      isKeyValid = await serverInstallationCubit.isServerProviderApiTokenValid(
+        apiKey.state.value,
+      );
     } catch (e) {
       addError(e);
     }

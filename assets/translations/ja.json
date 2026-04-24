@@ -196,7 +196,8 @@
         "ram_usage": "平均的な使用状況: {average}. 最大: {max}.",
         "disk_title": "保存領域の使用状況",
         "failed_to_load_memory_metrics": "メモリーの使用状況を読み込めませんでした。回線の接続に問題があるか、十分なデータがまだありません。",
-        "swap_usage": "スワップの使用状況"
+        "swap_usage": "スワップの使用状況",
+        "swap_chart_screen_reader_explanation": "この表は直近の{period}で使用したメモリーのスワップ量を示しています。直近の値は{lastValue}%です。平均値は{averageUsage}%です。最大の使用量は{maxUsageTime}の{maxUsage}%です。"
     },
     "domain": {
         "email_subtitle": "安全な電子メールの送受信に必要なレコードです。",
@@ -362,7 +363,18 @@
         "update_job": "ジョブを更新",
         "wait_for_jobs": "サーバーは他のジョブを実行しています。ジョブが終了するまで待機してください。",
         "logs": "サービスのログ",
-        "modified": "変更済"
+        "modified": "変更済",
+        "support_levels": {
+            "community": "コミュニティー",
+            "experimental": "試験中",
+            "unknown": "不明",
+            "system": "システム"
+        },
+        "hide_system_services": "システムに関するサービスを表示しない",
+        "homepage": "プロジェクトのウェブサイト",
+        "source_code": "ソースコード",
+        "license": "ライセンス",
+        "show_system_services": "システムに関するサービスを表示"
     },
     "users": {
         "could_not_fetch_users": "ユーザーの一覧を取得できませんでした",
@@ -665,7 +677,7 @@
         "login_info": "ウェブサイトでアカウントを作成する必要があります。"
     },
     "mail": {
-        "login_info": "ユーザーは、リンク先のセルフサービスポータルで、接続に関する設定とパスワードを入手できます。"
+        "login_info": "ユーザーは、リンク先のセルフサービスポータルで、接続に関する設定項目とパスワードを確認できます。"
     },
     "video": {
         "login_info": "アカウントは不要です。"
@@ -748,5 +760,10 @@
         "add_server_provider_token": "サーバーのサービス提供者のトークンを追加",
         "server_provider_unknown": "サーバーのサービス提供者が不明です",
         "server_provider_unknown_description": "あなたのサーバーのサービス提供者はこのアプリのバージョンではサポートされていません。"
+    },
+    "services_catalog": {
+        "title": "サービスの一覧",
+        "empty_title": "インストールできるサービスがありません",
+        "install": "インストール"
     }
 }

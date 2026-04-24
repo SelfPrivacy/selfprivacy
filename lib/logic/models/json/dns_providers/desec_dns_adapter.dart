@@ -38,8 +38,10 @@ DnsRecord _toDnsRecord(
     final contentBulk = content.split(' ');
     content = contentBulk[1];
     if (content.contains(domainName)) {
-      content =
-          content.substring(0, content.length - 1); // cut away trailing dot
+      content = content.substring(
+        0,
+        content.length - 1,
+      ); // cut away trailing dot
     }
     priority = int.parse(contentBulk[0]);
   }
@@ -62,7 +64,5 @@ DnsRecord _toDnsRecord(
 DesecDomain _fromServerDomain(final ServerDomain serverDomain) =>
     DesecDomain(name: serverDomain.domainName);
 
-ServerDomain _toServerDomain(final DesecDomain desecDomain) => ServerDomain(
-      domainName: desecDomain.name,
-      provider: DnsProviderType.desec,
-    );
+ServerDomain _toServerDomain(final DesecDomain desecDomain) =>
+    ServerDomain(domainName: desecDomain.name, provider: DnsProviderType.desec);

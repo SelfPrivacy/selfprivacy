@@ -21,18 +21,9 @@ part 'backups_state.dart';
 
 class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   BackupsBloc() : super(BackupsInitial()) {
-    on<BackupsServerLoaded>(
-      _loadState,
-      transformer: droppable(),
-    );
-    on<BackupsServerReset>(
-      _resetState,
-      transformer: droppable(),
-    );
-    on<BackupsStateChanged>(
-      _updateState,
-      transformer: droppable(),
-    );
+    on<BackupsServerLoaded>(_loadState, transformer: droppable());
+    on<BackupsServerReset>(_resetState, transformer: droppable());
+    on<BackupsStateChanged>(_updateState, transformer: droppable());
     on<InitializeBackupsRepository>(
       _initializeRepository,
       transformer: droppable(),
@@ -41,63 +32,47 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       _forceSnapshotListUpdate,
       transformer: droppable(),
     );
-    on<CreateBackups>(
-      _createBackups,
-      transformer: sequential(),
-    );
-    on<RestoreBackup>(
-      _restoreBackup,
-      transformer: sequential(),
-    );
-    on<SetAutobackupPeriod>(
-      _setAutobackupPeriod,
-      transformer: restartable(),
-    );
-    on<SetAutobackupQuotas>(
-      _setAutobackupQuotas,
-      transformer: restartable(),
-    );
-    on<ForgetSnapshot>(
-      _forgetSnapshot,
-      transformer: sequential(),
-    );
+    on<CreateBackups>(_createBackups, transformer: sequential());
+    on<RestoreBackup>(_restoreBackup, transformer: sequential());
+    on<SetAutobackupPeriod>(_setAutobackupPeriod, transformer: restartable());
+    on<SetAutobackupQuotas>(_setAutobackupQuotas, transformer: restartable());
+    on<ForgetSnapshot>(_forgetSnapshot, transformer: sequential());
+    on<RemoveBackupsRepository>(_removeRepository, transformer: droppable());
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
-    _apiStatusSubscription = connectionRepository.connectionStatusStream
-        .listen((final ConnectionStatus connectionStatus) {
-      switch (connectionStatus) {
-        case ConnectionStatus.nonexistent:
-          add(const BackupsServerReset());
-          isLoaded = false;
-          break;
-        case ConnectionStatus.connected:
-          if (!isLoaded) {
-            add(const BackupsServerLoaded());
-            isLoaded = true;
-          }
-          break;
-        default:
-          break;
-      }
-    });
-
-    _apiDataSubscription = connectionRepository.dataStream.listen(
-      (final ApiData apiData) {
-        if (apiData.backups.data == null || apiData.backupConfig.data == null) {
-          add(const BackupsServerReset());
-          isLoaded = false;
-        } else {
-          add(
-            BackupsStateChanged(
-              apiData.backups.data!,
-              apiData.backupConfig.data,
-            ),
-          );
-          isLoaded = true;
+    _apiStatusSubscription = connectionRepository.connectionStatusStream.listen(
+      (final ConnectionStatus connectionStatus) {
+        switch (connectionStatus) {
+          case ConnectionStatus.nonexistent:
+            add(const BackupsServerReset());
+            isLoaded = false;
+          case ConnectionStatus.connected:
+            if (!isLoaded) {
+              add(const BackupsServerLoaded());
+              isLoaded = true;
+            }
+          case ConnectionStatus.reconnecting:
+          case ConnectionStatus.offline:
+          case ConnectionStatus.unauthorized:
+            break;
         }
       },
     );
+
+    _apiDataSubscription = connectionRepository.dataStream.listen((
+      final ApiData apiData,
+    ) {
+      if (apiData.backups.data == null || apiData.backupConfig.data == null) {
+        add(const BackupsServerReset());
+        isLoaded = false;
+      } else {
+        add(
+          BackupsStateChanged(apiData.backups.data!, apiData.backupConfig.data),
+        );
+        isLoaded = true;
+      }
+    });
 
     if (connectionRepository.connectionStatus == ConnectionStatus.connected) {
       add(const BackupsServerLoaded());
@@ -118,9 +93,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     }
     if (bucket != null &&
         backupConfig.data!.encryptionKey != bucket.encryptionKey) {
-      bucket = bucket.copyWith(
-        encryptionKey: backupConfig.data!.encryptionKey,
-      );
+      bucket = bucket.copyWith(encryptionKey: backupConfig.data!.encryptionKey);
       await getIt<ApiConfigModel>().setBackblazeBucket(bucket);
     }
     if (backupConfig.data!.isInitialized) {
@@ -151,15 +124,17 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       return;
     }
     emit(BackupsInitializing());
-    final String? encryptionKey = getIt<ApiConnectionRepository>()
-        .apiData
-        .backupConfig
-        .data
-        ?.encryptionKey;
+    final String? encryptionKey =
+        getIt<ApiConnectionRepository>()
+            .apiData
+            .backupConfig
+            .data
+            ?.encryptionKey;
     if (encryptionKey == null) {
       emit(BackupsUnititialized());
-      getIt<NavigationService>()
-          .showSnackBar("Couldn't get encryption key from your server.");
+      getIt<NavigationService>().showSnackBar(
+        "Couldn't get encryption key from your server.",
+      );
       return;
     }
 
@@ -172,12 +147,13 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         token: event.credential.applicationKey,
         isAuthorized: true,
       );
-      final provider =
-          BackupsProviderFactory.createBackupsProviderInterface(settings);
+      final provider = BackupsProviderFactory.createBackupsProviderInterface(
+        settings,
+      );
       final String domain = getIt<ApiConnectionRepository>()
           .serverDomain!
           .domainName
-          .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '-');
+          .replaceAll(RegExp('[^a-zA-Z0-9]'), '-');
       final int serverId = getIt<ApiConnectionRepository>().serverDetails!.id;
       String bucketName =
           '${DateTime.now().millisecondsSinceEpoch}-$serverId-$domain';
@@ -186,8 +162,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       }
 
       final createStorageResult = await provider.createStorage(bucketName);
-      if (createStorageResult.success == false ||
-          createStorageResult.data.isEmpty) {
+      if (!createStorageResult.success || createStorageResult.data.isEmpty) {
         getIt<NavigationService>().showSnackBar(
           createStorageResult.message ??
               "Couldn't create storage on your server.",
@@ -222,17 +197,17 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       bucket = state.backblazeBucket!;
     }
 
-    final GenericResult result =
-        await getIt<ApiConnectionRepository>().api.initializeRepository(
-              InitializeRepositoryInput(
-                provider: BackupsProviderType.backblaze,
-                locationId: bucket.bucketId,
-                locationName: bucket.bucketName,
-                login: bucket.applicationKeyId,
-                password: bucket.applicationKey,
-              ),
-            );
-    if (result.success == false) {
+    final GenericResult result = await getIt<ApiConnectionRepository>().api
+        .initializeRepository(
+          InitializeRepositoryInput(
+            provider: BackupsProviderType.backblaze,
+            locationId: bucket.bucketId,
+            locationName: bucket.bucketName,
+            login: bucket.applicationKeyId,
+            password: bucket.applicationKey,
+          ),
+        );
+    if (!result.success) {
       getIt<NavigationService>().showSnackBar(
         result.message ?? "Couldn't initialize repository on your server.",
       );
@@ -253,7 +228,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final Emitter<BackupsState> emit,
   ) async {
     if (event.backupConfiguration == null ||
-        event.backupConfiguration!.isInitialized == false) {
+        !event.backupConfiguration!.isInitialized) {
       emit(BackupsUnititialized());
       return;
     }
@@ -290,19 +265,16 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsBusy.fromState(currentState));
       for (final service in event.services) {
         final GenericResult<ServerJob?> result =
-            await getIt<ApiConnectionRepository>().api.startBackup(
-                  service.id,
-                );
-        if (result.success == false) {
-          getIt<NavigationService>()
-              .showSnackBar(result.message ?? 'Unknown error');
+            await getIt<ApiConnectionRepository>().api.startBackup(service.id);
+        if (!result.success) {
+          getIt<NavigationService>().showSnackBar(
+            result.message ?? 'Unknown error',
+          );
         }
         if (result.data != null) {
-          getIt<ApiConnectionRepository>()
-              .apiData
-              .serverJobs
-              .data
-              ?.add(result.data!);
+          getIt<ApiConnectionRepository>().apiData.serverJobs.data?.add(
+            result.data!,
+          );
         }
       }
       emit(currentState);
@@ -317,14 +289,12 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final currentState = state;
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result =
-          await getIt<ApiConnectionRepository>().api.restoreBackup(
-                event.backupId,
-                event.restoreStrategy,
-              );
-      if (result.success == false) {
-        getIt<NavigationService>()
-            .showSnackBar(result.message ?? 'Unknown error');
+      final GenericResult result = await getIt<ApiConnectionRepository>().api
+          .restoreBackup(event.backupId, event.restoreStrategy);
+      if (!result.success) {
+        getIt<NavigationService>().showSnackBar(
+          result.message ?? 'Unknown error',
+        );
       }
       emit(currentState);
     }
@@ -337,23 +307,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final currentState = state;
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result =
-          await getIt<ApiConnectionRepository>().api.setAutobackupPeriod(
-                period: event.period?.inMinutes,
-              );
-      if (result.success == false) {
-        getIt<NavigationService>()
-            .showSnackBar(result.message ?? 'Unknown error');
+      final GenericResult result = await getIt<ApiConnectionRepository>().api
+          .setAutobackupPeriod(period: event.period?.inMinutes);
+      if (!result.success) {
+        getIt<NavigationService>().showSnackBar(
+          result.message ?? 'Unknown error',
+        );
       }
-      if (result.success == true) {
-        getIt<ApiConnectionRepository>().apiData.backupConfig.data =
-            getIt<ApiConnectionRepository>()
-                .apiData
-                .backupConfig
-                .data
-                ?.copyWith(
-                  autobackupPeriod: event.period,
-                );
+      if (result.success) {
+        getIt<ApiConnectionRepository>()
+            .apiData
+            .backupConfig
+            .data = getIt<ApiConnectionRepository>().apiData.backupConfig.data
+            ?.copyWith(autobackupPeriod: event.period);
       }
       emit(currentState);
       getIt<ApiConnectionRepository>().emitData();
@@ -367,23 +333,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final currentState = state;
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result =
-          await getIt<ApiConnectionRepository>().api.setAutobackupQuotas(
-                event.quotas,
-              );
-      if (result.success == false) {
-        getIt<NavigationService>()
-            .showSnackBar(result.message ?? 'Unknown error');
+      final GenericResult result = await getIt<ApiConnectionRepository>().api
+          .setAutobackupQuotas(event.quotas);
+      if (!result.success) {
+        getIt<NavigationService>().showSnackBar(
+          result.message ?? 'Unknown error',
+        );
       }
-      if (result.success == true) {
-        getIt<ApiConnectionRepository>().apiData.backupConfig.data =
-            getIt<ApiConnectionRepository>()
-                .apiData
-                .backupConfig
-                .data
-                ?.copyWith(
-                  autobackupQuotas: event.quotas,
-                );
+      if (result.success) {
+        getIt<ApiConnectionRepository>()
+            .apiData
+            .backupConfig
+            .data = getIt<ApiConnectionRepository>().apiData.backupConfig.data
+            ?.copyWith(autobackupQuotas: event.quotas);
       }
       emit(currentState);
       getIt<ApiConnectionRepository>().emitData();
@@ -398,32 +360,53 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     if (currentState is BackupsInitialized) {
       // Optimistically remove the snapshot from the list
       getIt<ApiConnectionRepository>().apiData.backups.data =
-          getIt<ApiConnectionRepository>()
-              .apiData
-              .backups
-              .data
+          getIt<ApiConnectionRepository>().apiData.backups.data
               ?.where((final Backup backup) => backup.id != event.backupId)
               .toList();
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result =
-          await getIt<ApiConnectionRepository>().api.forgetSnapshot(
-                event.backupId,
-              );
-      if (result.success == false) {
-        getIt<NavigationService>()
-            .showSnackBar(result.message ?? 'jobs.generic_error'.tr());
+      final GenericResult result = await getIt<ApiConnectionRepository>().api
+          .forgetSnapshot(event.backupId);
+      if (!result.success) {
+        getIt<NavigationService>().showSnackBar(
+          result.message ?? 'jobs.generic_error'.tr(),
+        );
       } else if (result.data == false) {
-        getIt<NavigationService>()
-            .showSnackBar('backup.forget_snapshot_error'.tr());
+        getIt<NavigationService>().showSnackBar(
+          'backup.forget_snapshot_error'.tr(),
+        );
       }
       emit(currentState);
     }
   }
 
+  Future<void> _removeRepository(
+    final RemoveBackupsRepository event,
+    final Emitter<BackupsState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is BackupsInitialized) {
+      emit(BackupsBusy.fromState(currentState));
+      final GenericResult result =
+          await getIt<ApiConnectionRepository>().api.removeRepository();
+      if (!result.success) {
+        getIt<NavigationService>().showSnackBar(
+          result.message ?? 'Unknown error',
+        );
+        return;
+      }
+      await getIt<ResourcesModel>().removeBackblazeBucket();
+      emit(BackupsUnititialized());
+      getIt<NavigationService>().showSnackBar('backup.repository_removed'.tr());
+      getIt<ApiConnectionRepository>().apiData.backupConfig.invalidate();
+      getIt<ApiConnectionRepository>().apiData.backups.invalidate();
+      await getIt<ApiConnectionRepository>().reload(null);
+    }
+  }
+
   @override
-  Future<void> close() {
-    _apiStatusSubscription.cancel();
-    _apiDataSubscription.cancel();
+  Future<void> close() async {
+    await _apiStatusSubscription.cancel();
+    await _apiDataSubscription.cancel();
     return super.close();
   }
 

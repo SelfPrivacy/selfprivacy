@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -13,40 +15,32 @@ import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
-  ApiAdapter({
-    final bool isWithToken = true,
-    final String? token,
-  }) : _api = DigitalOceanApi(
-          isWithToken: isWithToken,
-          token: token ?? '',
-        );
+  ApiAdapter({final bool isWithToken = true, final String? token})
+    : _api = DigitalOceanApi(isWithToken: isWithToken, token: token ?? '');
 
-  DigitalOceanApi api({final bool getInitialized = true}) => getInitialized
-      ? _api
-      : DigitalOceanApi(
-          isWithToken: false,
-        );
+  DigitalOceanApi api({final bool getInitialized = true}) =>
+      getInitialized ? _api : DigitalOceanApi(isWithToken: false);
 
   final DigitalOceanApi _api;
 }
 
 class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DigitalOceanServerProvider.load(
-    final bool isAuthorized,
+  DigitalOceanServerProvider.load({
+    required final bool isAuthorized,
     final String? token,
-  ) : _adapter = ApiAdapter(
-          isWithToken: isAuthorized,
-          token: token,
-        );
+  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);
+
+  static final logger = const AppLogger(name: 'digital_ocean').log;
 
   @override
   bool get isAuthorized => _adapter.api().isWithToken;
@@ -68,27 +62,26 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final List rawServers = result.data;
-    servers = rawServers.map<ServerBasicInfo>(
-      (final server) {
-        String ipv4 = '0.0.0.0';
-        if (server['networks']['v4'].isNotEmpty) {
-          for (final v4 in server['networks']['v4']) {
-            if (v4['type'].toString() == 'public') {
-              ipv4 = v4['ip_address'].toString();
+    servers =
+        rawServers.map<ServerBasicInfo>((final server) {
+          String ipv4 = '0.0.0.0';
+          if (server['networks']['v4'].isNotEmpty) {
+            for (final v4 in server['networks']['v4']) {
+              if (v4['type'].toString() == 'public') {
+                ipv4 = v4['ip_address'].toString();
+              }
             }
           }
-        }
 
-        return ServerBasicInfo(
-          id: server['id'],
-          reverseDns: server['name'],
-          created: DateTime.now(),
-          ip: ipv4,
-          name: server['name'],
-          location: server['region']['slug'],
-        );
-      },
-    ).toList();
+          return ServerBasicInfo(
+            id: server['id'],
+            reverseDns: server['name'],
+            created: DateTime.now(),
+            ip: ipv4,
+            name: server['name'],
+            location: server['region']['slug'],
+          );
+        }).toList();
 
     return GenericResult(success: true, data: servers);
   }
@@ -120,12 +113,8 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     if (server == null) {
       const String msg = 'getServerType: no server!';
-      print(msg);
-      return GenericResult(
-        success: false,
-        data: serverType,
-        message: msg,
-      );
+      logger(msg);
+      return GenericResult(success: false, data: serverType, message: msg);
     }
 
     final rawLocationsResult = await getAvailableLocations();
@@ -147,12 +136,8 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     if (location == null) {
       const String msg = 'getServerType: no location!';
-      print(msg);
-      return GenericResult(
-        success: false,
-        data: serverType,
-        message: msg,
-      );
+      logger(msg);
+      return GenericResult(success: false, data: serverType, message: msg);
     }
 
     ServerType? type;
@@ -165,19 +150,13 @@ class DigitalOceanServerProvider extends ServerProvider {
           ram: rawSize.memory / 1024,
           cores: rawSize.vcpus,
           disk: DiskSize(byte: rawSize.disk * 1024 * 1024 * 1024),
-          price: Price(
-            value: rawSize.priceMonthly,
-            currency: currency,
-          ),
+          price: Price(value: rawSize.priceMonthly, currency: currency),
           location: location,
         );
       }
     }
 
-    return GenericResult(
-      success: true,
-      data: type,
-    );
+    return GenericResult(success: true, data: type);
   }
 
   @override
@@ -222,20 +201,20 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final serverResult = await _adapter.api().createServer(
-          dnsApiToken: installationData.dnsApiToken,
-          rootUser: installationData.rootUser,
-          domainName: installationData.serverDomain.domainName,
-          serverType: installationData.serverTypeId,
-          dnsProviderType: installationData.dnsProviderType.toInfectName(),
-          hostName: hostname,
-          base64Password: base64.encode(
-            utf8.encode(installationData.rootUser.password ?? 'PASS'),
-          ),
-          databasePassword: StringGenerators.dbPassword(),
-          serverApiToken: serverApiToken,
-          customSshKey: installationData.customSshKey,
-          region: installationData.location,
-        );
+      dnsApiToken: installationData.dnsApiToken,
+      rootUser: installationData.rootUser,
+      domainName: installationData.serverDomain.domainName,
+      serverType: installationData.serverTypeId,
+      dnsProviderType: installationData.dnsProviderType.toInfectName(),
+      hostName: hostname,
+      base64Password: base64.encode(
+        utf8.encode(installationData.rootUser.password ?? 'PASS'),
+      ),
+      databasePassword: StringGenerators.dbPassword(),
+      serverApiToken: serverApiToken,
+      customSshKey: installationData.customSshKey,
+      region: installationData.location,
+    );
 
     if (!serverResult.success || serverResult.data == null) {
       GenericResult(
@@ -247,7 +226,7 @@ class DigitalOceanServerProvider extends ServerProvider {
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async => launchInstallation(installationData),
+              callback: () => launchInstallation(installationData),
             ),
           ],
           description: serverResult.message ?? 'recovering.generic_error'.tr(),
@@ -261,17 +240,17 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     try {
       final int dropletId = serverResult.data!;
-      final newVolume = (await createVolume(
-        installationData.storageSize.gibibyte.toInt(),
-        installationData.location,
-      ))
-          .data;
-      final bool attachedVolume = (await _adapter.api().attachVolume(
-                name: newVolume!.name,
-                serverId: dropletId,
-                region: installationData.location,
-              ))
-          .data;
+      final newVolume =
+          (await createVolume(
+            installationData.storageSize.gibibyte.toInt(),
+            installationData.location,
+          )).data;
+      final bool attachedVolume =
+          (await _adapter.api().attachVolume(
+            name: newVolume!.name,
+            serverId: dropletId,
+            region: installationData.location,
+          )).data;
 
       String? ipv4;
       int attempts = 0;
@@ -302,10 +281,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         success: false,
         data: CallbackDialogueBranching(
           choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: null,
-            ),
+            CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
               callback: () async {
@@ -355,27 +331,25 @@ class DigitalOceanServerProvider extends ServerProvider {
       }
 
       await _adapter.api().detachVolume(
-            name: volumeToRemove.name,
-            serverId: volumeToRemove.serverId!,
-            region: volumeToRemove.location!,
-          );
+        name: volumeToRemove.name,
+        serverId: volumeToRemove.serverId!,
+        region: volumeToRemove.location!,
+      );
 
       await Future.delayed(const Duration(seconds: 10));
-      final List<Future> laterFutures = <Future>[];
-      laterFutures.add(_adapter.api().deleteVolume(volumeToRemove.uuid!));
-      laterFutures.add(_adapter.api().deleteServer(foundServer!.id));
+      final List<Future> laterFutures = <Future>[
+        _adapter.api().deleteVolume(volumeToRemove.uuid!),
+        _adapter.api().deleteServer(foundServer!.id),
+      ];
 
       await Future.wait(laterFutures);
     } catch (e) {
-      print(e);
+      logger("Couldn't delete the server", error: e);
       return GenericResult(
         success: false,
         data: CallbackDialogueBranching(
           choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: null,
-            ),
+            CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
               callback: () async {
@@ -391,10 +365,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    return GenericResult(
-      success: true,
-      data: null,
-    );
+    return GenericResult(success: true, data: null);
   }
 
   @override
@@ -410,7 +381,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<List<ServerProviderLocation>>>
-      getAvailableLocations() async {
+  getAvailableLocations() async {
     final List<ServerProviderLocation> locations = [];
     final result = await _adapter.api().getAvailableLocations();
     if (result.data.isEmpty || !result.success) {
@@ -468,10 +439,7 @@ class DigitalOceanServerProvider extends ServerProvider {
               ram: rawSize.memory / 1024,
               cores: rawSize.vcpus,
               disk: DiskSize(byte: rawSize.disk * 1024 * 1024 * 1024),
-              price: Price(
-                value: rawSize.priceMonthly,
-                currency: currency,
-              ),
+              price: Price(value: rawSize.priceMonthly, currency: currency),
               location: location,
             ),
           );
@@ -497,10 +465,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     timestamp = DateTime.now();
 
-    return GenericResult(
-      success: true,
-      data: timestamp,
-    );
+    return GenericResult(success: true, data: timestamp);
   }
 
   @override
@@ -518,30 +483,23 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     timestamp = DateTime.now();
 
-    return GenericResult(
-      success: true,
-      data: timestamp,
-    );
+    return GenericResult(success: true, data: timestamp);
   }
 
   @override
   Future<GenericResult<AdditionalPricing?>> getAdditionalPricing(
     final String location,
-  ) async =>
-      GenericResult(
-        success: true,
-        data: AdditionalPricing(
-          perVolumeGb: Price(
-            /// Hardcoded in their documentation and there is no pricing API
-            value: 0.10,
-            currency: currency,
-          ),
-          perPublicIpv4: Price(
-            value: 0,
-            currency: currency,
-          ),
-        ),
-      );
+  ) async => GenericResult(
+    success: true,
+    data: AdditionalPricing(
+      perVolumeGb: Price(
+        /// Hardcoded in their documentation and there is no pricing API
+        value: 0.10,
+        currency: currency,
+      ),
+      perPublicIpv4: Price(value: 0, currency: currency),
+    ),
+  );
 
   @override
   Future<GenericResult<List<ServerProviderVolume>>> getVolumes({
@@ -579,18 +537,11 @@ class DigitalOceanServerProvider extends ServerProvider {
         volumes.add(volume);
       }
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      logger("Couldn't parse volumes", error: e);
+      return GenericResult(data: [], success: false, message: e.toString());
     }
 
-    return GenericResult(
-      data: volumes,
-      success: true,
-    );
+    return GenericResult(data: volumes, success: true);
   }
 
   @override
@@ -632,10 +583,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       uuid: result.data!.id,
     );
 
-    return GenericResult(
-      data: volume,
-      success: true,
-    );
+    return GenericResult(data: volume, success: true);
   }
 
   Future<GenericResult<ServerProviderVolume?>> getVolume(
@@ -660,51 +608,40 @@ class DigitalOceanServerProvider extends ServerProvider {
       }
     }
 
-    return GenericResult(
-      data: requestedVolume,
-      success: true,
-    );
+    return GenericResult(data: requestedVolume, success: true);
   }
 
   @override
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final int serverId,
-  ) async =>
-      _adapter.api().attachVolume(
-            name: volume.name,
-            serverId: serverId,
-            region: volume.location!,
-          );
+  ) => _adapter.api().attachVolume(
+    name: volume.name,
+    serverId: serverId,
+    region: volume.location!,
+  );
 
   @override
-  Future<GenericResult<bool>> detachVolume(
-    final ServerProviderVolume volume,
-  ) async =>
+  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
       _adapter.api().detachVolume(
-            name: volume.name,
-            serverId: volume.serverId!,
-            region: volume.location!,
-          );
+        name: volume.name,
+        serverId: volume.serverId!,
+        region: volume.location!,
+      );
 
   @override
-  Future<GenericResult<void>> deleteVolume(
-    final ServerProviderVolume volume,
-  ) async =>
-      _adapter.api().deleteVolume(
-            volume.uuid!,
-          );
+  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
+      _adapter.api().deleteVolume(volume.uuid!);
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) async =>
-      _adapter.api().resizeVolume(
-            uuid: volume.uuid!,
-            gb: size.gibibyte.toInt(),
-            region: volume.location!,
-          );
+  ) => _adapter.api().resizeVolume(
+    uuid: volume.uuid!,
+    gb: size.gibibyte.toInt(),
+    region: volume.location!,
+  );
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
@@ -771,7 +708,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         ServerMetadataEntity(
           type: MetadataType.ram,
           trId: 'server.ram',
-          value: "${droplet['memory'].toString()} MB",
+          value: "${droplet['memory']} MB",
         ),
         ServerMetadataEntity(
           type: MetadataType.cost,
@@ -791,11 +728,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         ),
       ];
     } catch (e) {
-      return GenericResult(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
+      return GenericResult(success: false, data: [], message: e.toString());
     }
 
     return GenericResult(success: true, data: metadata);
@@ -816,7 +749,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final int pointsInTime = (rawProcStatMetrics[0]['values'] as List).length;
     for (int i = 0; i < pointsInTime; ++i) {
-      double currentMetricLoad = 0.0;
+      double currentMetricLoad = 0;
       double? currentMetricIdle;
       for (final rawProcStat in rawProcStatMetrics) {
         final String rawProcValue = rawProcStat['values'][i][1];
@@ -851,11 +784,11 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     const int step = 15;
     final inboundResult = await _adapter.api().getMetricsBandwidth(
-          serverId,
-          start,
-          end,
-          true,
-        );
+      serverId: serverId,
+      start: start,
+      end: end,
+      isInbound: true,
+    );
 
     if (inboundResult.data.isEmpty || !inboundResult.success) {
       return GenericResult(
@@ -867,11 +800,11 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final outboundResult = await _adapter.api().getMetricsBandwidth(
-          serverId,
-          start,
-          end,
-          false,
-        );
+      serverId: serverId,
+      start: start,
+      end: end,
+      isInbound: false,
+    );
 
     if (outboundResult.data.isEmpty || !outboundResult.success) {
       return GenericResult(
@@ -894,16 +827,20 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     metrics = ServerMetrics(
-      bandwidthIn: inboundResult.data
-          .map(
-            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-          )
-          .toList(),
-      bandwidthOut: outboundResult.data
-          .map(
-            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-          )
-          .toList(),
+      bandwidthIn:
+          inboundResult.data
+              .map(
+                (final el) =>
+                    TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+              )
+              .toList(),
+      bandwidthOut:
+          outboundResult.data
+              .map(
+                (final el) =>
+                    TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+              )
+              .toList(),
       cpu: calculateCpuLoadMetrics(cpuResult.data),
       start: start,
       end: end,

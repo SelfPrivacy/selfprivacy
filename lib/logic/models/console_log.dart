@@ -4,19 +4,17 @@ import 'package:gql/language.dart' as gql;
 import 'package:graphql/client.dart' as gql_client;
 import 'package:intl/intl.dart';
 
-enum ConsoleLogSeverity {
-  normal,
-  warning,
-}
+enum ConsoleLogSeverity { normal, warning }
 
 /// Base entity for console logs.
 sealed class ConsoleLog {
   ConsoleLog({
     final String? customTitle,
     this.severity = ConsoleLogSeverity.normal,
-  })  : title = customTitle ??
-            (severity == ConsoleLogSeverity.warning ? 'Error' : 'Log'),
-        time = DateTime.now();
+  }) : title =
+           customTitle ??
+           (severity == ConsoleLogSeverity.warning ? 'Error' : 'Log'),
+       time = DateTime.now();
 
   final DateTime time;
   final ConsoleLogSeverity severity;
@@ -29,7 +27,8 @@ sealed class ConsoleLog {
   String get content;
 
   /// data available for copy in dialog
-  String? get shareableData => '{"title": "$title",\n'
+  String? get shareableData =>
+      '{"title": "$title",\n'
       '"timestamp": "$fullUTCString",\n'
       '"data":{\n$content\n}'
       '\n}';
@@ -47,16 +46,10 @@ abstract class LogWithRawResponse {
 /// entity for manually created logs, as opposed to automated ones coming
 /// from requests / responses
 class ManualConsoleLog extends ConsoleLog {
-  ManualConsoleLog({
-    required this.content,
-    super.customTitle,
-    super.severity,
-  });
+  ManualConsoleLog({required this.content, super.customTitle, super.severity});
 
-  ManualConsoleLog.warning({
-    required this.content,
-    super.customTitle,
-  }) : super(severity: ConsoleLogSeverity.warning);
+  ManualConsoleLog.warning({required this.content, super.customTitle})
+    : super(severity: ConsoleLogSeverity.warning);
 
   @override
   String content;
@@ -85,14 +78,15 @@ class RestApiRequestConsoleLog extends ConsoleLog {
   String get title => 'Rest API Request';
 
   Map<String, dynamic> get filteredHeaders => Map.fromEntries(
-        headers?.entries.where(
-              (final entry) => !blacklistedHeaders.contains(entry.key),
-            ) ??
-            const [],
-      );
+    headers?.entries.where(
+          (final entry) => !blacklistedHeaders.contains(entry.key),
+        ) ??
+        const [],
+  );
 
   @override
-  String get content => '"method": "$method",\n'
+  String get content =>
+      '"method": "$method",\n'
       '"uri": "$uri",\n'
       '"headers": ${jsonEncode(filteredHeaders)},\n' // censor header to not expose API keys
       '"data": $data';
@@ -115,7 +109,8 @@ class RestApiResponseConsoleLog extends ConsoleLog {
   @override
   String get title => 'Rest API Response';
   @override
-  String get content => '"method": "$method",\n'
+  String get content =>
+      '"method": "$method",\n'
       '"status_code": $statusCode,\n'
       '"uri": "$uri",\n'
       '"data": $data';

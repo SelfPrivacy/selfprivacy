@@ -15,11 +15,17 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   ServerLogsBloc() : super(ServerLogsInitial()) {
     on<ServerLogsFetch>((final event, final emit) async {
       emit(ServerLogsLoading());
-      final String? slice = event.serviceId != null
-          ? '${event.serviceId?.replaceAll('-', '_')}.slice'
-          : null;
+      final String? slice =
+          event.serviceId != null
+              ? '${event.serviceId?.replaceAll('-', '_')}.slice'
+              : null;
+      final String? unit = event.unitId;
       try {
-        final (logsData, meta) = await _getLogs(limit: 50, slice: slice);
+        final (logsData, meta) = await _getLogs(
+          limit: 50,
+          slice: slice,
+          unit: unit,
+        );
         emit(
           ServerLogsLoaded(
             oldEntries: logsData.sorted(
@@ -29,19 +35,17 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             meta: meta,
             loadingMore: false,
             slice: slice,
+            unit: unit,
           ),
         );
         if (_apiLogsSubscription != null) {
           await _apiLogsSubscription?.cancel();
         }
-        _apiLogsSubscription =
-            getIt<ApiConnectionRepository>().api.getServerLogsStream().listen(
-          (final ServerLogEntry logEntry) {
-            print('Got new log entry');
-            print(logEntry);
-            add(ServerLogsGotNewEntry(logEntry));
-          },
-        );
+        _apiLogsSubscription = getIt<ApiConnectionRepository>().api
+            .getServerLogsStream()
+            .listen((final ServerLogEntry logEntry) {
+              add(ServerLogsGotNewEntry(logEntry));
+            });
       } catch (e) {
         emit(ServerLogsError(e.toString()));
       }
@@ -57,10 +61,14 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             limit: 50,
             downCursor: currentState.meta.upCursor,
             slice: currentState.slice,
+            unit: currentState.unit,
           );
-          final allEntries = currentState.oldEntries
-            ..addAll(logsData)
-            ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
+          final allEntries =
+              currentState.oldEntries
+                ..addAll(logsData)
+                ..sort(
+                  (final a, final b) => b.timestamp.compareTo(a.timestamp),
+                );
           emit(
             ServerLogsLoaded(
               oldEntries: allEntries.toSet().toList(),
@@ -68,6 +76,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
               meta: meta,
               loadingMore: false,
               slice: currentState.slice,
+              unit: currentState.unit,
             ),
           );
         } catch (e) {
@@ -83,11 +92,14 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             event.entry.systemdSlice != currentState.slice) {
           return;
         }
-        final allEntries = currentState.newEntries
-          ..add(event.entry)
-          ..sort(
-            (final a, final b) => b.timestamp.compareTo(a.timestamp),
-          );
+        if (currentState.unit != null &&
+            event.entry.systemdUnit != currentState.unit) {
+          return;
+        }
+        final allEntries =
+            currentState.newEntries
+              ..add(event.entry)
+              ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
         emit(
           ServerLogsLoaded(
             oldEntries: currentState.oldEntries,
@@ -95,13 +107,14 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             meta: currentState.meta,
             loadingMore: currentState.loadingMore,
             slice: currentState.slice,
+            unit: currentState.unit,
           ),
         );
       }
     });
 
-    on<ServerLogsDisconnect>((final event, final emit) {
-      _apiLogsSubscription?.cancel();
+    on<ServerLogsDisconnect>((final event, final emit) async {
+      await _apiLogsSubscription?.cancel();
       emit(ServerLogsInitial());
     });
   }
@@ -117,14 +130,16 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     final String? downCursor,
     // Only one cursor can be set at a time.
     final String? slice,
+    final String? unit,
   }) {
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
     if (apiVersion == null) {
       throw Exception('basis.network_error'.tr());
     }
-    if (!VersionConstraint.parse(logsSupportedVersion)
-        .allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(
+      logsSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
       throw Exception(
         'basis.feature_unsupported_on_api_version'.tr(
           namedArgs: {
@@ -135,16 +150,17 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       );
     }
     return getIt<ApiConnectionRepository>().api.getServerLogs(
-          limit: limit,
-          upCursor: upCursor,
-          downCursor: downCursor,
-          slice: slice,
-        );
+      limit: limit,
+      upCursor: upCursor,
+      downCursor: downCursor,
+      slice: slice,
+      unit: unit,
+    );
   }
 
   @override
-  Future<void> close() {
-    _apiLogsSubscription?.cancel();
+  Future<void> close() async {
+    await _apiLogsSubscription?.cancel();
     return super.close();
   }
 

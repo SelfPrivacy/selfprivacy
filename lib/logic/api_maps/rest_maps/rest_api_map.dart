@@ -9,17 +9,21 @@ import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
 abstract class RestApiMap {
-  static final log = const AppLogger(name: 'rest_api_map').log;
+  static final logger = const AppLogger(name: 'rest_api_map').log;
 
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
     final Dio dio = Dio(customOptions ?? (await options));
     dio.interceptors.add(ConsoleInterceptor());
     dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
-        final client = HttpClient();
-        client.badCertificateCallback =
-            (final X509Certificate cert, final String host, final int port) =>
-                true;
+        final client =
+            HttpClient()
+              ..badCertificateCallback =
+                  (
+                    final X509Certificate cert,
+                    final String host,
+                    final int port,
+                  ) => true;
         return client;
       },
     );
@@ -30,7 +34,7 @@ abstract class RestApiMap {
           final DioException exception,
           final ErrorInterceptorHandler handler,
         ) {
-          log('got dio exception:', error: exception);
+          logger('got dio exception:', error: exception);
 
           return handler.next(exception);
         },
@@ -88,10 +92,7 @@ class ConsoleInterceptor extends InterceptorsWrapper {
         data: jsonEncode(response.data),
       ),
     );
-    return super.onResponse(
-      response,
-      handler,
-    );
+    return super.onResponse(response, handler);
   }
 
   @override
@@ -111,7 +112,8 @@ class ConsoleInterceptor extends InterceptorsWrapper {
     addConsoleLog(
       ManualConsoleLog.warning(
         customTitle: 'RestAPI error',
-        content: '"uri": "${response?.realUri}",\n'
+        content:
+            '"uri": "${response?.realUri}",\n'
             '"status_code": ${response?.statusCode},\n'
             '"response": $responseEncoded',
       ),

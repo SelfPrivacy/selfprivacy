@@ -29,10 +29,7 @@ class DigitalOceanVolume {
 
 @JsonSerializable()
 class DigitalOceanLocation {
-  DigitalOceanLocation(
-    this.slug,
-    this.name,
-  );
+  DigitalOceanLocation(this.slug, this.name);
 
   final String slug;
   final String name;
@@ -46,36 +43,28 @@ class DigitalOceanLocation {
     switch (slug.substring(0, 3)) {
       case 'fra':
         emoji = '🇩🇪';
-        break;
 
       case 'ams':
         emoji = '🇳🇱';
-        break;
 
       case 'sgp':
         emoji = '🇸🇬';
-        break;
 
       case 'lon':
         emoji = '🇬🇧';
-        break;
 
       case 'tor':
         emoji = '🇨🇦';
-        break;
 
       case 'blr':
         emoji = '🇮🇳';
-        break;
 
       case 'syd':
         emoji = '🇦🇺';
-        break;
 
       case 'nyc':
       case 'sfo':
         emoji = '🇺🇸';
-        break;
     }
     return emoji;
   }

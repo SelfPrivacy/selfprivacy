@@ -4,9 +4,9 @@ abstract class PreferencesDataSource {
   Future<bool> getOnboardingFlag();
 
   /// should onboarding be shown
-  Future<void> setOnboardingFlag(final bool newValue);
+  Future<void> setOnboardingFlag({required final bool shouldOnboard});
 
-  // TODO: should probably deprecate the following, instead add the
+  // TODO(Aliaksei): should probably deprecate the following, instead add the
   // getThemeMode and setThemeMode methods, which store one value instead of
   // flags.
 
@@ -14,13 +14,13 @@ abstract class PreferencesDataSource {
   Future<bool?> getSystemThemeModeFlag();
 
   /// should system theme mode be enabled
-  Future<void> setSystemThemeModeFlag(final bool newValue);
+  Future<void> setSystemThemeModeFlag({required final bool useSystem});
 
   /// should dark theme be enabled
   Future<bool?> getDarkThemeModeFlag();
 
   /// should dark theme be enabled
-  Future<void> setDarkThemeModeFlag(final bool newValue);
+  Future<void> setDarkThemeModeFlag({required final bool useDark});
 
   /// locale, as set by user
   ///

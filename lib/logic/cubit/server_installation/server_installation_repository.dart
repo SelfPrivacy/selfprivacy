@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
@@ -9,7 +9,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -23,6 +22,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 
@@ -39,6 +39,9 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
 
+  static final logger =
+      const AppLogger(name: 'server_installation_repository').log;
+
   Future<ServerInstallationState> load() async {
     final ServerInstallationWizardData? wizardData =
         getIt<WizardDataModel>().serverInstallation;
@@ -51,12 +54,10 @@ class ServerInstallationRepository {
     final DnsProviderType? dnsProvider = getIt<ResourcesModel>().dnsProvider;
     final ServerProviderType? serverProvider =
         getIt<ResourcesModel>().serverProvider;
-    final BackupsCredential? backblazeCredential =
-        getIt<ResourcesModel>().backblazeCredential;
     final ServerHostingDetails? serverDetails =
         getIt<ResourcesModel>().serverDetails;
 
-    // TODO: Init server providers in another place
+    // TODO(inex): Init server providers in another place
     if (serverProvider != null ||
         (serverDetails != null &&
             serverDetails.provider != ServerProviderType.unknown)) {
@@ -97,7 +98,6 @@ class ServerInstallationRepository {
           serverTypeIdentificator: serverTypeIdentificator,
           dnsApiToken: dnsApiToken!,
           serverDomain: serverDomain!,
-          backblazeCredential: backblazeCredential!,
           serverDetails: serverDetails!,
           serverLocation: location,
         );
@@ -134,7 +134,6 @@ class ServerInstallationRepository {
         serverDomain: wizardData.serverDomain,
         serverTypeIdentificator: wizardData.serverTypeIdentifier,
         serverLocation: wizardData.serverLocation,
-        backblazeCredential: wizardData.backupsCredential,
         serverDetails: wizardData.serverDetails,
         currentStep: _getCurrentRecoveryStep(
           wizardData.serverProviderKey,
@@ -142,8 +141,9 @@ class ServerInstallationRepository {
           wizardData.serverDomain!,
           wizardData.serverDetails,
         ),
-        recoveryCapabilities:
-            await getRecoveryCapabilities(wizardData.serverDomain!),
+        recoveryCapabilities: await getRecoveryCapabilities(
+          wizardData.serverDomain!,
+        ),
       );
     }
 
@@ -168,18 +168,14 @@ class ServerInstallationRepository {
       return RecoveryStep.serverSelection;
     }
 
-    if (dnsProviderToken == null) {
-      return RecoveryStep.dnsProviderToken;
-    }
-
-    return RecoveryStep.backblazeToken;
+    return RecoveryStep.dnsProviderToken;
   }
 
-  void clearAppConfig() {
-    box.clear();
-    getIt<ResourcesModel>().clear();
-    getIt<WizardDataModel>().clear();
-    getIt<ApiConnectionRepository>().clear();
+  Future<void> clearAppConfig() async {
+    await box.clear();
+    await getIt<ResourcesModel>().clear();
+    await getIt<WizardDataModel>().clear();
+    await getIt<ApiConnectionRepository>().clear();
   }
 
   Future<ServerHostingDetails> startServer(
@@ -200,8 +196,8 @@ class ServerInstallationRepository {
     final String token,
     final String domain,
   ) async {
-    final result =
-        await ProvidersController.currentDnsProvider!.tryInitApiByToken(token);
+    final result = await ProvidersController.currentDnsProvider!
+        .tryInitApiByToken(token);
     if (!result.success) {
       return result;
     }
@@ -239,17 +235,14 @@ class ServerInstallationRepository {
     try {
       record = extractDkimRecord(await api.getDnsRecords())!;
     } catch (e) {
-      print(e);
+      logger('Failed to extract DKIM record: $e');
       rethrow;
     }
 
-    await ProvidersController.currentDnsProvider!.setDnsRecord(
-      record,
-      domain,
-    );
+    await ProvidersController.currentDnsProvider!.setDnsRecord(record, domain);
   }
 
-  Future<bool> isHttpServerWorking() async {
+  Future<bool> isHttpServerWorking() {
     final ServerApi api = ServerApi(
       overrideDomain:
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
@@ -263,13 +256,20 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> restart() async {
     final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
 
-    final result = await ServerApi(
-      overrideDomain:
-          getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
-      customToken:
-          getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
-      isWithToken: true,
-    ).reboot();
+    final result =
+        await ServerApi(
+          overrideDomain:
+              getIt<WizardDataModel>()
+                  .serverInstallation!
+                  .serverDomain!
+                  .domainName,
+          customToken:
+              getIt<WizardDataModel>()
+                  .serverInstallation!
+                  .serverDetails!
+                  .apiToken,
+          isWithToken: true,
+        ).reboot();
 
     if (result.success && result.data != null) {
       server.copyWith(startTime: result.data);
@@ -280,7 +280,7 @@ class ServerInstallationRepository {
     return server;
   }
 
-  Future<ServerHostingDetails> powerOn() async {
+  Future<ServerHostingDetails> powerOn() {
     final server = getIt<ResourcesModel>().serverDetails!;
     return startServer(server);
   }
@@ -309,13 +309,11 @@ class ServerInstallationRepository {
 
   Future<String> getServerIpFromDomain(final ServerDomain serverDomain) async {
     String? domain;
-    await InternetAddress.lookup(serverDomain.domainName).then(
-      (final records) {
-        for (final record in records) {
-          domain = record.address;
-        }
-      },
-    );
+    await InternetAddress.lookup(serverDomain.domainName).then((final records) {
+      for (final record in records) {
+        domain = record.address;
+      }
+    });
     if (domain == null || domain!.isEmpty) {
       throw IpNotFoundException('No IP found for domain $serverDomain');
     }
@@ -357,9 +355,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(
-      result.message ?? result.data,
-    );
+    throw ServerAuthorizationException(result.message ?? result.data);
   }
 
   Future<ServerHostingDetails> authorizeByRecoveryKey(
@@ -394,9 +390,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(
-      result.message ?? result.data,
-    );
+    throw ServerAuthorizationException(result.message ?? result.data);
   }
 
   Future<ServerHostingDetails> authorizeByApiToken(
@@ -460,9 +454,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(
-      result.message ?? result.data,
-    );
+    throw ServerAuthorizationException(result.message ?? result.data);
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async =>
@@ -516,12 +508,6 @@ class ServerInstallationRepository {
     );
   }
 
-  Future<void> saveBackupsCredential(
-    final BackupsCredential backupsCredential,
-  ) async {
-    await getIt<WizardDataModel>().setBackupsCredential(backupsCredential);
-  }
-
   Future<void> setDnsApiToken(final String key) async {
     await getIt<WizardDataModel>().setDnsProviderKey(key);
     await getIt<ResourcesModel>().addDnsProviderToken(
@@ -549,30 +535,44 @@ class ServerInstallationRepository {
     await getIt<WizardDataModel>().deleteServerDomain();
   }
 
-  Future<void> saveIsServerStarted(final bool value) async {
-    await getIt<WizardDataModel>().setIsServerStarted(value);
+  Future<void> saveIsServerStarted({required final bool serverStarted}) async {
+    await getIt<WizardDataModel>().setIsServerStarted(isStarted: serverStarted);
   }
 
-  Future<void> saveIsServerRebootedFirstTime(final bool value) async {
-    await getIt<WizardDataModel>().setIsServerRebootedFirstTime(value);
+  Future<void> saveIsServerRebootedFirstTime({
+    required final bool serverRebootedFirstTime,
+  }) async {
+    await getIt<WizardDataModel>().setIsServerRebootedFirstTime(
+      isRebooted: serverRebootedFirstTime,
+    );
   }
 
-  Future<void> saveIsServerRebootedSecondTime(final bool value) async {
-    await getIt<WizardDataModel>().setIsServerRebootedSecondTime(value);
+  Future<void> saveIsServerRebootedSecondTime({
+    required final bool serverRebootedSecondTime,
+  }) async {
+    await getIt<WizardDataModel>().setIsServerRebootedSecondTime(
+      isRebooted: serverRebootedSecondTime,
+    );
   }
 
   Future<void> saveRootUser(final User rootUser) async {
     await getIt<WizardDataModel>().setRootUser(rootUser);
   }
 
-  Future<void> saveIsRecoveringServer(final bool value) async {
-    await getIt<WizardDataModel>().setIsRecoveringServer(value);
+  Future<void> saveIsRecoveringServer({
+    required final bool isRecoveringServer,
+  }) async {
+    await getIt<WizardDataModel>().setIsRecoveringServer(
+      isRecovering: isRecoveringServer,
+    );
   }
 
-  Future<void> saveHasFinalChecked(final bool value) async {
+  Future<void> saveHasFinalChecked({
+    required final bool finalCheckCompleted,
+  }) async {
     // We are finished here. Time to save the state and finish the wizard
-    // TODO: A lot of null checks are skipped here. Implication that every value exists might become false in the future.
-    // TODO: We would actually want to handle token creation elsewhere.
+    // TODO(inex): A lot of null checks are skipped here. Implication that every value exists might become false in the future.
+    // TODO(inex): We would actually want to handle token creation elsewhere.
     await getIt<WizardDataModel>().moveServerTypeToServerDetails();
     final ServerInstallationWizardData wizardData =
         getIt<WizardDataModel>().serverInstallation!;
@@ -592,11 +592,6 @@ class ServerInstallationRepository {
       await getIt<ResourcesModel>().associateDomainWithToken(
         wizardData.serverDomain!.domainName,
         wizardData.dnsProviderKey!,
-      );
-    }
-    if (wizardData.backupsCredential != null) {
-      await getIt<ResourcesModel>().addBackupsCredential(
-        wizardData.backupsCredential!,
       );
     }
     await getIt<WizardDataModel>().clearServerInstallation();

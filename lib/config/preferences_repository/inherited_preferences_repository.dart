@@ -14,8 +14,7 @@ class _PreferencesRepositoryInjector extends InheritedWidget {
   @override
   bool updateShouldNotify(
     covariant final _PreferencesRepositoryInjector oldWidget,
-  ) =>
-      oldWidget.settingsRepository != settingsRepository;
+  ) => oldWidget.settingsRepository != settingsRepository;
 }
 
 /// Creates and injects app preferences repository inside widget tree.
@@ -33,9 +32,10 @@ class InheritedPreferencesRepository extends StatefulWidget {
   State<InheritedPreferencesRepository> createState() =>
       _InheritedPreferencesRepositoryState();
 
-  static PreferencesRepository? of(final BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<_PreferencesRepositoryInjector>()
-      ?.settingsRepository;
+  static PreferencesRepository? of(final BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<_PreferencesRepositoryInjector>()
+          ?.settingsRepository;
 }
 
 class _InheritedPreferencesRepositoryState
@@ -58,7 +58,7 @@ class _InheritedPreferencesRepositoryState
 
   @override
   Widget build(final BuildContext context) => _PreferencesRepositoryInjector(
-        settingsRepository: repo,
-        child: widget.child,
-      );
+    settingsRepository: repo,
+    child: widget.child,
+  );
 }

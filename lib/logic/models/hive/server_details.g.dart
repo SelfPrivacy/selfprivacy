@@ -8,7 +8,7 @@ part of 'server_details.dart';
 
 class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   ServerHostingDetails read(BinaryReader reader) {
@@ -18,13 +18,14 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
     };
     return ServerHostingDetails(
       ip4: fields[0] as String,
-      id: fields[1] as int,
+      id: (fields[1] as num).toInt(),
       createTime: fields[3] as DateTime?,
       volume: fields[4] as ServerProviderVolume,
       apiToken: fields[5] as String,
-      provider: fields[6] == null
-          ? ServerProviderType.hetzner
-          : fields[6] as ServerProviderType,
+      provider:
+          fields[6] == null
+              ? ServerProviderType.hetzner
+              : fields[6] as ServerProviderType,
       serverLocation: fields[7] as String?,
       serverType: fields[8] as String?,
       startTime: fields[2] as DateTime?,
@@ -68,7 +69,7 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
 
 class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
   @override
-  final int typeId = 5;
+  final typeId = 5;
 
   @override
   ServerProviderVolume read(BinaryReader reader) {
@@ -77,10 +78,10 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ServerProviderVolume(
-      id: fields[1] as int,
+      id: (fields[1] as num).toInt(),
       name: fields[2] as String,
-      sizeByte: fields[3] == null ? 10737418240 : fields[3] as int,
-      serverId: fields[4] as int?,
+      sizeByte: fields[3] == null ? 10737418240 : (fields[3] as num).toInt(),
+      serverId: (fields[4] as num?)?.toInt(),
       linuxDevice: fields[5] as String?,
       uuid: fields[6] as String?,
       location: fields[7] as String?,
@@ -120,7 +121,7 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
 
 class ServerProviderTypeAdapter extends TypeAdapter<ServerProviderType> {
   @override
-  final int typeId = 101;
+  final typeId = 101;
 
   @override
   ServerProviderType read(BinaryReader reader) {
@@ -141,13 +142,10 @@ class ServerProviderTypeAdapter extends TypeAdapter<ServerProviderType> {
     switch (obj) {
       case ServerProviderType.unknown:
         writer.writeByte(0);
-        break;
       case ServerProviderType.hetzner:
         writer.writeByte(1);
-        break;
       case ServerProviderType.digitalOcean:
         writer.writeByte(2);
-        break;
     }
   }
 

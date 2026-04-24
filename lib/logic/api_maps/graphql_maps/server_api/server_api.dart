@@ -70,18 +70,21 @@ class ServerApi extends GraphQLApiMap
   String? overrideDomain;
 
   Future<String?> getApiVersion() async {
-    QueryResult response;
+    QueryResult<Query$GetApiVersion> response;
     String? apiVersion;
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$GetApiVersion();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetApiVersion request: ${response.exception}',
+          error: response.exception,
+        );
       }
-      apiVersion = response.data!['api']['version'];
+      apiVersion = response.parsedData?.api.version;
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetApiVersion request: $e', error: e);
     }
     return apiVersion;
   }
@@ -94,13 +97,16 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
       response = await client.query$SystemServerProvider();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL SystemServerProvider request: ${response.exception}',
+          error: response.exception,
+        );
       }
       providerType = ServerProviderType.fromGraphQL(
         response.parsedData!.system.provider.provider,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL SystemServerProvider request: $e', error: e);
     }
     return providerType;
   }
@@ -113,42 +119,50 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
       response = await client.query$SystemDnsProvider();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL SystemDnsProvider request: ${response.exception}',
+          error: response.exception,
+        );
       }
       providerType = DnsProviderType.fromGraphQL(
         response.parsedData!.system.domainInfo.provider,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL SystemDnsProvider request: $e', error: e);
     }
     return providerType;
   }
 
   Future<bool> isUsingBinds() async {
-    QueryResult response;
+    QueryResult<Query$SystemIsUsingBinds> response;
     bool usesBinds = false;
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$SystemIsUsingBinds();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL SystemIsUsingBinds request: ${response.exception}',
+          error: response.exception,
+        );
       }
-      usesBinds = response.data!['system']['info']['usingBinds'];
+      usesBinds = response.parsedData!.system.info.usingBinds;
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL SystemIsUsingBinds request: $e', error: e);
     }
     return usesBinds;
   }
 
-  Future<GenericResult> switchService(
-    final String uid,
-    final bool needTurnOn,
-  ) async {
+  Future<GenericResult> switchService({
+    required final String serviceId,
+    required final bool needTurnOn,
+  }) async {
     try {
       final GraphQLClient client = await getClient();
       if (needTurnOn) {
-        final variables = Variables$Mutation$EnableService(serviceId: uid);
+        final variables = Variables$Mutation$EnableService(
+          serviceId: serviceId,
+        );
         final mutation = Options$Mutation$EnableService(variables: variables);
         final result = await client.mutate$EnableService(mutation);
         if (result.hasException) {
@@ -164,7 +178,9 @@ class ServerApi extends GraphQLApiMap
           data: null,
         );
       } else {
-        final variables = Variables$Mutation$DisableService(serviceId: uid);
+        final variables = Variables$Mutation$DisableService(
+          serviceId: serviceId,
+        );
         final mutation = Options$Mutation$DisableService(variables: variables);
         final result = await client.mutate$DisableService(mutation);
         if (result.hasException) {
@@ -181,11 +197,7 @@ class ServerApi extends GraphQLApiMap
         );
       }
     } catch (e) {
-      return GenericResult(
-        success: false,
-        message: e.toString(),
-        data: null,
-      );
+      return GenericResult(success: false, message: e.toString(), data: null);
     }
   }
 
@@ -213,20 +225,30 @@ class ServerApi extends GraphQLApiMap
         );
       }
       return GenericResult<AutoUpgradeSettings?>(
-        success: result.parsedData?.system.changeAutoUpgradeSettings.success ??
+        success:
+            result.parsedData?.system.changeAutoUpgradeSettings.success ??
             false,
         message: result.parsedData?.system.changeAutoUpgradeSettings.message,
-        data: result.parsedData == null
-            ? null
-            : AutoUpgradeSettings(
-                allowReboot: result
-                    .parsedData!.system.changeAutoUpgradeSettings.allowReboot,
-                enable: result.parsedData!.system.changeAutoUpgradeSettings
-                    .enableAutoUpgrade,
-              ),
+        data:
+            result.parsedData == null
+                ? null
+                : AutoUpgradeSettings(
+                  allowReboot:
+                      result
+                          .parsedData!
+                          .system
+                          .changeAutoUpgradeSettings
+                          .allowReboot,
+                  enable:
+                      result
+                          .parsedData!
+                          .system
+                          .changeAutoUpgradeSettings
+                          .enableAutoUpgrade,
+                ),
       );
     } catch (e) {
-      print(e);
+      logger('Error setting auto upgrade settings: $e', error: e);
       return GenericResult<AutoUpgradeSettings?>(
         success: false,
         message: e.toString(),
@@ -238,12 +260,8 @@ class ServerApi extends GraphQLApiMap
   Future<GenericResult<String?>> setTimezone(final String timezone) async {
     try {
       final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$ChangeTimezone(
-        timezone: timezone,
-      );
-      final mutation = Options$Mutation$ChangeTimezone(
-        variables: variables,
-      );
+      final variables = Variables$Mutation$ChangeTimezone(timezone: timezone);
+      final mutation = Options$Mutation$ChangeTimezone(variables: variables);
       final result = await client.mutate$ChangeTimezone(mutation);
       if (result.hasException) {
         return GenericResult<String>(
@@ -258,7 +276,7 @@ class ServerApi extends GraphQLApiMap
         data: result.parsedData?.system.changeTimezone.timezone,
       );
     } catch (e) {
-      print(e);
+      logger('Error setting timezone: $e', error: e);
       return GenericResult<String?>(
         success: false,
         message: e.toString(),
@@ -272,15 +290,9 @@ class ServerApi extends GraphQLApiMap
   ) async {
     try {
       final GraphQLClient client = await getClient();
-      final input = Input$SSHSettingsInput(
-        enable: settings.enable,
-      );
-      final variables = Variables$Mutation$ChangeSshSettings(
-        settings: input,
-      );
-      final mutation = Options$Mutation$ChangeSshSettings(
-        variables: variables,
-      );
+      final input = Input$SSHSettingsInput(enable: settings.enable);
+      final variables = Variables$Mutation$ChangeSshSettings(settings: input);
+      final mutation = Options$Mutation$ChangeSshSettings(variables: variables);
       final result = await client.mutate$ChangeSshSettings(mutation);
       if (result.hasException) {
         return GenericResult<SshSettings?>(
@@ -292,14 +304,15 @@ class ServerApi extends GraphQLApiMap
       return GenericResult<SshSettings?>(
         success: result.parsedData?.system.changeSshSettings.success ?? false,
         message: result.parsedData?.system.changeSshSettings.message,
-        data: result.parsedData == null
-            ? null
-            : SshSettings(
-                enable: result.parsedData!.system.changeSshSettings.enable,
-              ),
+        data:
+            result.parsedData == null
+                ? null
+                : SshSettings(
+                  enable: result.parsedData!.system.changeSshSettings.enable,
+                ),
       );
     } catch (e) {
-      print(e);
+      logger('Error setting SSH settings: $e', error: e);
       return GenericResult<SshSettings?>(
         success: false,
         message: e.toString(),
@@ -315,9 +328,7 @@ class ServerApi extends GraphQLApiMap
         allowReboot: false,
         enable: false,
       ),
-      sshSettings: SshSettings(
-        enable: false,
-      ),
+      sshSettings: SshSettings(enable: false),
       timezone: 'Unknown',
     );
 
@@ -325,11 +336,14 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
       response = await client.query$SystemSettings();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL SystemSettings request: ${response.exception}',
+          error: response.exception,
+        );
       }
       settings = SystemSettings.fromGraphQL(response.parsedData!.system);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL SystemSettings request: $e', error: e);
     }
 
     return settings;
@@ -344,12 +358,15 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
       response = await client.query$RecoveryKey();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL RecoveryKey request: ${response.exception}',
+          error: response.exception,
+        );
         error = response.exception.toString();
       }
       key = RecoveryKeyStatus.fromGraphQL(response.parsedData!.api.recoveryKey);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL RecoveryKey request: $e', error: e);
     }
 
     return GenericResult<RecoveryKeyStatus?>(
@@ -373,17 +390,16 @@ class ServerApi extends GraphQLApiMap
         expirationDate: expirationDate?.toUtc(),
         uses: numberOfUses,
       );
-      final variables = Variables$Mutation$GetNewRecoveryApiKey(
-        limits: input,
-      );
+      final variables = Variables$Mutation$GetNewRecoveryApiKey(limits: input);
       final mutation = Options$Mutation$GetNewRecoveryApiKey(
         variables: variables,
       );
-      response = await client.mutate$GetNewRecoveryApiKey(
-        mutation,
-      );
+      response = await client.mutate$GetNewRecoveryApiKey(mutation);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetNewRecoveryApiKey request: ${response.exception}',
+          error: response.exception,
+        );
         key = GenericResult<String>(
           success: false,
           data: '',
@@ -395,7 +411,7 @@ class ServerApi extends GraphQLApiMap
         data: response.parsedData!.api.getNewRecoveryApiKey.key!,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetNewRecoveryApiKey request: $e', error: e);
       key = GenericResult<String>(
         success: false,
         data: '',
@@ -414,18 +430,17 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
       response = await client.query$GetDnsRecords();
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetDnsRecords request: ${response.exception}',
+          error: response.exception,
+        );
       }
-      records = response.parsedData!.system.domainInfo.requiredDnsRecords
-          .map<DnsRecord>(
-            (
-              final Fragment$fragmentDnsRecords record,
-            ) =>
-                DnsRecord.fromGraphQL(record),
-          )
-          .toList();
+      records =
+          response.parsedData!.system.domainInfo.requiredDnsRecords
+              .map<DnsRecord>(DnsRecord.fromGraphQL)
+              .toList();
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetDnsRecords request: $e', error: e);
     }
 
     return records;
@@ -440,27 +455,21 @@ class ServerApi extends GraphQLApiMap
       response = await client.query$GetApiTokens();
       if (response.hasException) {
         final message = response.exception.toString();
-        print(message);
+        logger(
+          'Exception in GraphQL GetApiTokens request: $message',
+          error: response.exception,
+        );
         tokens = GenericResult<List<ApiToken>>(
           success: false,
           data: [],
           message: message,
         );
       }
-      final List<ApiToken> parsed = response.parsedData!.api.devices
-          .map(
-            (
-              final Query$GetApiTokens$api$devices device,
-            ) =>
-                ApiToken.fromGraphQL(device),
-          )
-          .toList();
-      tokens = GenericResult<List<ApiToken>>(
-        success: true,
-        data: parsed,
-      );
+      final List<ApiToken> parsed =
+          response.parsedData!.api.devices.map(ApiToken.fromGraphQL).toList();
+      tokens = GenericResult<List<ApiToken>>(success: true, data: parsed);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetApiTokens request: $e', error: e);
       tokens = GenericResult<List<ApiToken>>(
         success: false,
         data: [],
@@ -478,29 +487,25 @@ class ServerApi extends GraphQLApiMap
     try {
       final GraphQLClient client = await getClient();
 
-      final variables = Variables$Mutation$DeleteDeviceApiToken(
-        device: name,
-      );
+      final variables = Variables$Mutation$DeleteDeviceApiToken(device: name);
       final mutation = Options$Mutation$DeleteDeviceApiToken(
         variables: variables,
       );
-      response = await client.mutate$DeleteDeviceApiToken(
-        mutation,
-      );
+      response = await client.mutate$DeleteDeviceApiToken(mutation);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL DeleteDeviceApiToken request: ${response.exception}',
+          error: response.exception,
+        );
         returnable = GenericResult<void>(
           success: false,
           data: null,
           message: response.exception.toString(),
         );
       }
-      returnable = GenericResult<void>(
-        success: true,
-        data: null,
-      );
+      returnable = GenericResult<void>(success: true, data: null);
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL DeleteDeviceApiToken request: $e', error: e);
       returnable = GenericResult<void>(
         success: false,
         data: null,
@@ -519,11 +524,12 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
 
       final mutation = Options$Mutation$GetNewDeviceApiKey();
-      response = await client.mutate$GetNewDeviceApiKey(
-        mutation,
-      );
+      response = await client.mutate$GetNewDeviceApiKey(mutation);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL GetNewDeviceApiKey request: ${response.exception}',
+          error: response.exception,
+        );
         token = GenericResult<String>(
           success: false,
           data: '',
@@ -535,7 +541,7 @@ class ServerApi extends GraphQLApiMap
         data: response.parsedData!.api.getNewDeviceApiKey.key!,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL GetNewDeviceApiKey request: $e', error: e);
       token = GenericResult<String>(
         success: false,
         data: '',
@@ -554,11 +560,12 @@ class ServerApi extends GraphQLApiMap
       final GraphQLClient client = await getClient();
 
       final mutation = Options$Mutation$RefreshDeviceApiToken();
-      response = await client.mutate$RefreshDeviceApiToken(
-        mutation,
-      );
+      response = await client.mutate$RefreshDeviceApiToken(mutation);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL RefreshDeviceApiToken request: ${response.exception}',
+          error: response.exception,
+        );
         token = GenericResult<String>(
           success: false,
           data: '',
@@ -570,7 +577,7 @@ class ServerApi extends GraphQLApiMap
         data: response.parsedData!.api.refreshDeviceApiToken.token!,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL RefreshDeviceApiToken request: $e', error: e);
       token = GenericResult<String>(
         success: false,
         data: '',
@@ -603,11 +610,12 @@ class ServerApi extends GraphQLApiMap
       final mutation = Options$Mutation$AuthorizeWithNewDeviceApiKey(
         variables: variables,
       );
-      response = await client.mutate$AuthorizeWithNewDeviceApiKey(
-        mutation,
-      );
+      response = await client.mutate$AuthorizeWithNewDeviceApiKey(mutation);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL AuthorizeWithNewDeviceApiKey request: ${response.exception}',
+          error: response.exception,
+        );
         token = GenericResult<String>(
           success: false,
           data: '',
@@ -619,7 +627,10 @@ class ServerApi extends GraphQLApiMap
         data: response.parsedData!.api.authorizeWithNewDeviceApiKey.token!,
       );
     } catch (e) {
-      print(e);
+      logger(
+        'Error in GraphQL AuthorizeWithNewDeviceApiKey request: $e',
+        error: e,
+      );
       token = GenericResult<String>(
         success: false,
         data: '',
@@ -644,17 +655,14 @@ class ServerApi extends GraphQLApiMap
         key: deviceToken.token,
       );
 
-      final variables = Variables$Mutation$UseRecoveryApiKey(
-        input: input,
-      );
-      final mutation = Options$Mutation$UseRecoveryApiKey(
-        variables: variables,
-      );
-      response = await client.mutate$UseRecoveryApiKey(
-        mutation,
-      );
+      final variables = Variables$Mutation$UseRecoveryApiKey(input: input);
+      final mutation = Options$Mutation$UseRecoveryApiKey(variables: variables);
+      response = await client.mutate$UseRecoveryApiKey(mutation);
       if (response.hasException) {
-        print(response.exception.toString());
+        logger(
+          'Exception in GraphQL UseRecoveryApiKey request: ${response.exception}',
+          error: response.exception,
+        );
         token = GenericResult<String>(
           success: false,
           data: '',
@@ -666,7 +674,7 @@ class ServerApi extends GraphQLApiMap
         data: response.parsedData!.api.useRecoveryApiKey.token!,
       );
     } catch (e) {
-      print(e);
+      logger('Error in GraphQL UseRecoveryApiKey request: $e', error: e);
       token = GenericResult<String>(
         success: false,
         data: '',

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +118,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
+                horizontal: 16,
                 vertical: headerVerticalPadding,
               ),
               child: Column(
@@ -143,7 +145,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         children: <Widget>[
           if (widget.services.isEmpty)
             const Center(child: CircularProgressIndicator.adaptive()),
@@ -163,7 +165,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: InfoBox(
               text: 'storage.data_migration_notice'.tr(),
               isWarning: true,
@@ -175,23 +177,22 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
               child: Text('storage.start_migration_button'.tr()),
               onPressed: () {
                 if (widget.isMigration) {
-                  context.read<ServerJobsBloc>().migrateToBinds(
-                        serviceToDisk,
-                      );
+                  unawaited(
+                    context.read<ServerJobsBloc>().migrateToBinds(
+                      serviceToDisk,
+                    ),
+                  );
                 } else {
                   for (final service in widget.services) {
                     if (serviceToDisk[service.id] != null) {
                       context.read<ServicesBloc>().add(
-                            ServiceMove(
-                              service,
-                              serviceToDisk[service.id]!,
-                            ),
-                          );
+                        ServiceMove(service, serviceToDisk[service.id]!),
+                      );
                     }
                   }
                 }
                 context.router.popUntilRoot();
-                showModalJobsSheet(context: context);
+                unawaited(showModalJobsSheet(context: context));
               },
             ),
           const SizedBox(height: 32),

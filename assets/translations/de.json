@@ -150,7 +150,7 @@
         "ssh_users": "SSH-Benutzer",
         "memory": "Arbeitsspeicher-Auslastung",
         "view_usage_by_service": "Auslastung nach Service anzeigen",
-        "ram_usage": "Durchschnittliche Auslastung: {avarage}. Maximum: {max}.",
+        "ram_usage": "Durchschnittliche Auslastung: {average}. Maximum: {max}.",
         "failed_to_load_memory_metrics": "Die Daten zur Auslastung des Speichers konnten nicht geladen werden. Dies kann an einem Verbindungsproblem liegen oder daran, dass noch nicht genügend Daten vorhanden sind.",
         "disk_title": "Festplatten-Auslastung",
         "cpu_chart_screen_reader_explanation": "Diese Grafik zeigt die CPU-Auslastung im letzten {period}. Der letzte Wert liegt bei {lastValue} %. Die durchschnittliche Auslastung liegt bei {averageUsage} %. Die maximale Auslastung liegt bei {maxUsage} % bei {maxUsageTime}.",
@@ -395,7 +395,7 @@
         "wait_for_jobs": "Der Server ist mit anderen Aufgaben beschäftigt. Bitte warten Sie, bis diese beendet sind."
     },
     "mail": {
-        "login_info": "Verwenden Sie den Benutzernamen und das Passwort von dem Benutzertab. IMAP-Port ist 143 mit STARTTLS, SMTP-Port ist 587 mit STARTTLS."
+        "login_info": "Verwenden Sie das Self-service Portal über den obrigen Link, um ein Passwort und Verbindungsinformationen zu erhalten."
     },
     "password_manager": {
         "login_info": "Ihr Konto müssen Sie auf der Webseite erstellen."
@@ -659,5 +659,9 @@
         "cubit_statuses": "Aktueller Status der Ladequbits",
         "ignore_tls": "Überprüfen Sie keine TLS-Zertifikate",
         "ignore_tls_description": "Die Anwendung validiert TLS-Zertifikate nicht, wenn sie eine Verbindung zum Server herstellt."
+    },
+    "tokens": {
+        "add_backups_token": "Token für Backup Anbieter hinzufügen",
+        "server_provider_unknown": "Unbekannter Server-Anbieter"
     }
 }

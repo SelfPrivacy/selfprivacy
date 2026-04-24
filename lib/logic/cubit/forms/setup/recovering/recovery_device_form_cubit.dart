@@ -16,7 +16,7 @@ class RecoveryDeviceFormCubit extends FormCubit {
   }
 
   @override
-  FutureOr<void> onSubmit() async {
+  Future<void>? onSubmit() async {
     late final String token;
     // Trim spaces and make lowercase
     if (recoveryMethod == ServerRecoveryMethods.recoveryKey ||
@@ -26,7 +26,7 @@ class RecoveryDeviceFormCubit extends FormCubit {
       token = tokenField.state.value.trim();
     }
 
-    installationCubit.tryToRecover(token, recoveryMethod);
+    await installationCubit.tryToRecover(token, recoveryMethod);
   }
 
   final ServerInstallationCubit installationCubit;

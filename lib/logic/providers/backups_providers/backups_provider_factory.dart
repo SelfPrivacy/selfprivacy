@@ -16,10 +16,9 @@ class BackupsProviderFactory {
       case BackupsProviderType.backblaze:
         return settings.isAuthorized
             ? BackblazeBackupsProvider.load(
-                settings.isAuthorized,
-                settings.token,
-                settings.tokenId,
-              )
+              token: settings.token,
+              tokenId: settings.tokenId,
+            )
             : BackblazeBackupsProvider();
       case BackupsProviderType.none:
       case BackupsProviderType.file:

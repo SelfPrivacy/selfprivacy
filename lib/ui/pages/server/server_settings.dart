@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +26,11 @@ class ServerSettingsPage extends StatefulWidget {
 class _ServerSettingsPageState extends State<ServerSettingsPage> {
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-        hasFlashButton: true,
-        heroIcon: Icons.settings_outlined,
-        heroTitle: 'server.settings'.tr(),
-        children: const [
-          _ServerSettings(),
-        ],
-      );
+    hasFlashButton: true,
+    heroIcon: Icons.settings_outlined,
+    heroTitle: 'server.settings'.tr(),
+    children: const [_ServerSettings()],
+  );
 }
 
 class _ServerSettings extends StatefulWidget {
@@ -66,11 +66,11 @@ class _ServerSettingsState extends State<_ServerSettings> {
           value: allowAutoUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
-                  ChangeAutoUpgradeSettingsJob(
-                    allowReboot: rebootAfterUpgrade ?? false,
-                    enable: switched,
-                  ),
-                );
+              ChangeAutoUpgradeSettingsJob(
+                allowReboot: rebootAfterUpgrade ?? false,
+                enable: switched,
+              ),
+            );
             setState(() {
               allowAutoUpgrade = switched;
             });
@@ -78,32 +78,33 @@ class _ServerSettingsState extends State<_ServerSettings> {
           title: Text(
             'server.allow_autoupgrade'.tr(),
             style: TextStyle(
-              fontStyle: allowAutoUpgrade !=
-                      serverDetailsState.autoUpgradeSettings.enable
-                  ? FontStyle.italic
-                  : FontStyle.normal,
+              fontStyle:
+                  allowAutoUpgrade !=
+                          serverDetailsState.autoUpgradeSettings.enable
+                      ? FontStyle.italic
+                      : FontStyle.normal,
             ),
           ),
           subtitle: Text(
             'server.allow_autoupgrade_hint'.tr(),
             style: TextStyle(
-              fontStyle: allowAutoUpgrade !=
-                      serverDetailsState.autoUpgradeSettings.enable
-                  ? FontStyle.italic
-                  : FontStyle.normal,
+              fontStyle:
+                  allowAutoUpgrade !=
+                          serverDetailsState.autoUpgradeSettings.enable
+                      ? FontStyle.italic
+                      : FontStyle.normal,
             ),
           ),
-          activeColor: Theme.of(context).colorScheme.primary,
         ),
         SwitchListTile.adaptive(
           value: rebootAfterUpgrade ?? false,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
-                  ChangeAutoUpgradeSettingsJob(
-                    allowReboot: switched,
-                    enable: allowAutoUpgrade ?? false,
-                  ),
-                );
+              ChangeAutoUpgradeSettingsJob(
+                allowReboot: switched,
+                enable: allowAutoUpgrade ?? false,
+              ),
+            );
             setState(() {
               rebootAfterUpgrade = switched;
             });
@@ -111,40 +112,37 @@ class _ServerSettingsState extends State<_ServerSettings> {
           title: Text(
             'server.reboot_after_upgrade'.tr(),
             style: TextStyle(
-              fontStyle: rebootAfterUpgrade !=
-                      serverDetailsState.autoUpgradeSettings.allowReboot
-                  ? FontStyle.italic
-                  : FontStyle.normal,
+              fontStyle:
+                  rebootAfterUpgrade !=
+                          serverDetailsState.autoUpgradeSettings.allowReboot
+                      ? FontStyle.italic
+                      : FontStyle.normal,
             ),
           ),
           subtitle: Text(
             'server.reboot_after_upgrade_hint'.tr(),
             style: TextStyle(
-              fontStyle: rebootAfterUpgrade !=
-                      serverDetailsState.autoUpgradeSettings.allowReboot
-                  ? FontStyle.italic
-                  : FontStyle.normal,
+              fontStyle:
+                  rebootAfterUpgrade !=
+                          serverDetailsState.autoUpgradeSettings.allowReboot
+                      ? FontStyle.italic
+                      : FontStyle.normal,
             ),
           ),
-          activeColor: Theme.of(context).colorScheme.primary,
         ),
         ListTile(
           title: Text('server.server_timezone'.tr()),
-          subtitle: Text(
-            serverDetailsState.serverTimezone.toString(),
-          ),
-          onTap: () {
-            context.pushRoute(const SelectTimezoneRoute());
+          subtitle: Text(serverDetailsState.serverTimezone.toString()),
+          onTap: () async {
+            await context.pushRoute(const SelectTimezoneRoute());
           },
         ),
         SwitchListTile.adaptive(
           value: enableSsh ?? true,
           onChanged: (final switched) {
             context.read<JobsCubit>().addJob(
-                  ChangeSshSettingsJob(
-                    enable: switched,
-                  ),
-                );
+              ChangeSshSettingsJob(enable: switched),
+            );
             setState(() {
               enableSsh = switched;
             });
@@ -152,20 +150,21 @@ class _ServerSettingsState extends State<_ServerSettings> {
           title: Text(
             'server.enable_ssh'.tr(),
             style: TextStyle(
-              fontStyle: enableSsh != serverDetailsState.sshSettings.enable
-                  ? FontStyle.italic
-                  : FontStyle.normal,
+              fontStyle:
+                  enableSsh != serverDetailsState.sshSettings.enable
+                      ? FontStyle.italic
+                      : FontStyle.normal,
             ),
           ),
           subtitle: Text(
             'server.enable_ssh_hint'.tr(),
             style: TextStyle(
-              fontStyle: enableSsh != serverDetailsState.sshSettings.enable
-                  ? FontStyle.italic
-                  : FontStyle.normal,
+              fontStyle:
+                  enableSsh != serverDetailsState.sshSettings.enable
+                      ? FontStyle.italic
+                      : FontStyle.normal,
             ),
           ),
-          activeColor: Theme.of(context).colorScheme.primary,
         ),
       ],
     );

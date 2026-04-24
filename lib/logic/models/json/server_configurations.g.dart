@@ -7,15 +7,15 @@ part of 'server_configurations.dart';
 // **************************************************************************
 
 AutoUpgradeConfigurations _$AutoUpgradeConfigurationsFromJson(
-        Map<String, dynamic> json) =>
-    AutoUpgradeConfigurations(
-      enable: json['enable'] as bool,
-      allowReboot: json['allowReboot'] as bool,
-    );
+  Map<String, dynamic> json,
+) => AutoUpgradeConfigurations(
+  enable: json['enable'] as bool,
+  allowReboot: json['allowReboot'] as bool,
+);
 
 Map<String, dynamic> _$AutoUpgradeConfigurationsToJson(
-        AutoUpgradeConfigurations instance) =>
-    <String, dynamic>{
-      'enable': instance.enable,
-      'allowReboot': instance.allowReboot,
-    };
+  AutoUpgradeConfigurations instance,
+) => <String, dynamic>{
+  'enable': instance.enable,
+  'allowReboot': instance.allowReboot,
+};

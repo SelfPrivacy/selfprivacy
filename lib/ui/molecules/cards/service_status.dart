@@ -4,10 +4,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 
 class ServiceStatusCard extends StatelessWidget {
-  const ServiceStatusCard({
-    required this.status,
-    super.key,
-  });
+  const ServiceStatusCard({required this.status, super.key});
   final ServiceStatus status;
 
   @override
@@ -19,32 +16,26 @@ class ServiceStatusCard extends StatelessWidget {
       case ServiceStatus.active:
         icon = Icons.check_circle_outline;
         buttonTitle = 'service_page.status.active';
-        break;
 
       case ServiceStatus.inactive:
         icon = Icons.stop_circle_outlined;
         buttonTitle = 'service_page.status.inactive';
-        break;
 
       case ServiceStatus.failed:
         icon = Icons.error_outline;
         buttonTitle = 'service_page.status.failed';
-        break;
 
       case ServiceStatus.off:
         icon = Icons.power_settings_new;
         buttonTitle = 'service_page.status.off';
-        break;
 
       case ServiceStatus.activating:
         icon = Icons.restart_alt_outlined;
         buttonTitle = 'service_page.status.activating';
-        break;
 
       case ServiceStatus.deactivating:
         icon = Icons.restart_alt_outlined;
         buttonTitle = 'service_page.status.deactivating';
-        break;
 
       case ServiceStatus.reloading:
         icon = Icons.restart_alt_outlined;
@@ -54,10 +45,7 @@ class ServiceStatusCard extends StatelessWidget {
     return FilledCard(
       tertiary: true,
       child: ListTile(
-        leading: Icon(
-          icon,
-          size: 24,
-        ),
+        leading: Icon(icon, size: 24),
         title: Text(buttonTitle.tr()),
       ),
     );

@@ -41,6 +41,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
   ) {
     switch (configItem) {
       case StringServiceConfigItem():
+        // ignore: avoid_positional_boolean_parameters
         void onChanged(final String value, final bool isFieldValid) {
           if (isFieldValid) {
             setState(() {
@@ -70,6 +71,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
           onChanged: onChanged,
         );
       case BoolServiceConfigItem():
+        // ignore: avoid_positional_boolean_parameters
         void onChanged(final bool value) {
           setState(() {
             if (value == configItem.value) {
@@ -126,10 +128,11 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
     if (state is JobsStateWithJobs) {
       final ChangeServiceConfiguration? existingJob =
           state.clientJobList.firstWhereOrNull(
-        (final ClientJob job) =>
-            job is ChangeServiceConfiguration &&
-            job.serviceId == widget.serviceId,
-      ) as ChangeServiceConfiguration?;
+                (final ClientJob job) =>
+                    job is ChangeServiceConfiguration &&
+                    job.serviceId == widget.serviceId,
+              )
+              as ChangeServiceConfiguration?;
       if (existingJob != null) {
         setState(() {
           settings = existingJob.settings;
@@ -141,17 +144,14 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
 
   @override
   Widget build(final BuildContext context) {
-    final Service? service =
-        context.watch<ServicesBloc>().state.getServiceById(widget.serviceId);
+    final Service? service = context.watch<ServicesBloc>().state.getServiceById(
+      widget.serviceId,
+    );
 
     if (service == null) {
       return const BrandHeroScreen(
         hasBackButton: true,
-        children: [
-          Center(
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        ],
+        children: [Center(child: CircularProgressIndicator.adaptive())],
       );
     }
 
@@ -163,8 +163,8 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         hasFlashButton: true,
         heroIconWidget: SvgPicture.string(
           service.svgIcon,
-          width: 48.0,
-          height: 48.0,
+          width: 48,
+          height: 48,
           colorFilter: ColorFilter.mode(
             Theme.of(context).colorScheme.onSurface,
             BlendMode.srcIn,
@@ -180,7 +180,7 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
                   'service_page.wait_for_jobs'.tr(),
                   textAlign: TextAlign.center,
                 ),
-                const Gap(16.0),
+                const Gap(16),
                 const CircularProgressIndicator.adaptive(),
               ],
             ),
@@ -196,8 +196,8 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
       hasFlashButton: true,
       heroIconWidget: SvgPicture.string(
         service.svgIcon,
-        width: 48.0,
-        height: 48.0,
+        width: 48,
+        height: 48,
         colorFilter: ColorFilter.mode(
           Theme.of(context).colorScheme.onSurface,
           BlendMode.srcIn,
@@ -208,37 +208,38 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
       children: [
         ...service.configuration.map(
           (final ServiceConfigItem configItem) => Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: 16),
             child: configurationItemToWidget(context, configItem, settings),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: const EdgeInsets.only(top: 16),
           child: FilledButton(
-            onPressed: ((widget.isInstalling || isModified) && isFormValid)
-                ? () {
-                    if (widget.isInstalling) {
-                      context.read<JobsCubit>().addJob(
-                            ServiceToggleJob(
-                              service: service,
-                              needToTurnOn: true,
-                            ),
-                          );
-                    }
-                    context.read<JobsCubit>().addJob(
-                          ChangeServiceConfiguration(
-                            serviceId: service.id,
-                            serviceDisplayName: service.displayName,
-                            settings: settings,
+            onPressed:
+                ((widget.isInstalling || isModified) && isFormValid)
+                    ? () async {
+                      if (widget.isInstalling) {
+                        context.read<JobsCubit>().addJob(
+                          ServiceToggleJob(
+                            service: service,
+                            needToTurnOn: true,
                           ),
                         );
-                    if (widget.isInstalling) {
-                      context.router.popUntilRoot();
-                    } else {
-                      context.router.maybePop();
+                      }
+                      context.read<JobsCubit>().addJob(
+                        ChangeServiceConfiguration(
+                          serviceId: service.id,
+                          serviceDisplayName: service.displayName,
+                          settings: settings,
+                        ),
+                      );
+                      if (widget.isInstalling) {
+                        context.router.popUntilRoot();
+                      } else {
+                        await context.router.maybePop();
+                      }
                     }
-                  }
-                : null,
+                    : null,
             child: Text(
               isJobAlreadyExists
                   ? 'service_page.update_job'.tr()

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -7,14 +9,15 @@ import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends RestApiMap {
-  HetznerApi({
-    this.token = '',
-    this.hasLogger = true,
-    this.isWithToken = true,
-  }) : assert(isWithToken ? token.isNotEmpty : true);
+  HetznerApi({this.token = '', this.hasLogger = true, this.isWithToken = true})
+    : assert(
+        !isWithToken || token.isNotEmpty,
+        'Token must not be empty if isWithToken is true',
+      );
 
   @override
   bool hasLogger;
@@ -22,6 +25,8 @@ class HetznerApi extends RestApiMap {
   bool isWithToken;
 
   final String token;
+
+  static final logger = const AppLogger(name: 'hetzner_api_map').log;
 
   @override
   BaseOptions get options {
@@ -31,7 +36,10 @@ class HetznerApi extends RestApiMap {
       responseType: ResponseType.json,
     );
     if (isWithToken) {
-      assert(token.isNotEmpty);
+      assert(
+        token.isNotEmpty,
+        'Hetzner API requires a token to be set when isWithToken is true.',
+      );
       options.headers = {'Authorization': 'Bearer $token'};
     }
 
@@ -52,18 +60,16 @@ class HetznerApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/servers');
-      servers = response.data!['servers']
-          .map<HetznerServerInfo>(
-            (final e) => HetznerServerInfo.fromJson(e),
-          )
-          .toList();
+      servers =
+          response.data!['servers']
+              .map<HetznerServerInfo>(
+                // ignore: unnecessary_lambdas
+                (final e) => HetznerServerInfo.fromJson(e),
+              )
+              .toList();
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
+      logger('Error while fetching servers: $e');
+      return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
     }
@@ -97,10 +103,11 @@ class HetznerApi extends RestApiMap {
         'name': hostName,
         'server_type': serverType,
         'start_after_create': false,
-        'image': 'ubuntu-20.04',
+        'image': 'ubuntu-24.04',
         'volumes': [volumeId],
         'networks': [],
-        'user_data': '#cloud-config\n'
+        'user_data':
+            '#cloud-config\n'
             'runcmd:\n'
             '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
             "API_TOKEN=$serverApiToken ENCODED_PASSWORD='$base64Password' "
@@ -112,7 +119,7 @@ class HetznerApi extends RestApiMap {
         'automount': true,
         'location': region,
       };
-      print('Decoded data: $data');
+      logger('Creating server with data: $data');
 
       serverCreateResponse = await client.post('/servers', data: data);
       serverInfo = HetznerServerInfo.fromJson(
@@ -120,10 +127,13 @@ class HetznerApi extends RestApiMap {
       );
       success = true;
     } on DioException catch (e) {
-      print(e);
+      logger(
+        'Error while creating server: ${e.message} - ${e.response?.data}',
+        error: e,
+      );
       hetznerError = e;
     } catch (e) {
-      print(e);
+      logger('Error while creating server: $e', error: e);
     } finally {
       close(client);
     }
@@ -137,7 +147,8 @@ class HetznerApi extends RestApiMap {
     return GenericResult(
       data: serverInfo,
       success: success && hetznerError == null,
-      code: serverCreateResponse?.statusCode ??
+      code:
+          serverCreateResponse?.statusCode ??
           hetznerError?.response?.statusCode,
       message: apiResultMessage,
     );
@@ -152,18 +163,11 @@ class HetznerApi extends RestApiMap {
     try {
       await client.post(
         '/servers/$serverId/actions/change_dns_ptr',
-        data: {
-          'ip': ip4,
-          'dns_ptr': dnsPtr,
-        },
+        data: {'ip': ip4, 'dns_ptr': dnsPtr},
       );
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      logger('Error while creating reverse DNS: $e');
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -178,12 +182,8 @@ class HetznerApi extends RestApiMap {
     try {
       await client.delete('/servers/$serverId');
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      logger('Error while deleting server: $e');
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -201,13 +201,14 @@ class HetznerApi extends RestApiMap {
         '/servers',
         options: Options(
           followRedirects: false,
-          validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+          validateStatus:
+              (final status) =>
+                  status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
     } catch (e) {
-      print(e);
+      logger('Error while validating API token: $e');
       isValid = false;
       message = e.toString();
     } finally {
@@ -215,11 +216,7 @@ class HetznerApi extends RestApiMap {
     }
 
     if (response == null) {
-      return GenericResult(
-        data: isValid,
-        success: false,
-        message: message,
-      );
+      return GenericResult(data: isValid, success: false, message: message);
     }
 
     message = response.statusMessage;
@@ -233,11 +230,7 @@ class HetznerApi extends RestApiMap {
       throw Exception('code: ${response.statusCode}');
     }
 
-    return GenericResult(
-      data: isValid,
-      success: true,
-      message: message,
-    );
+    return GenericResult(data: isValid, success: true, message: message);
   }
 
   Future<GenericResult<List<HetznerLocation>>> getAvailableLocations() async {
@@ -250,12 +243,8 @@ class HetznerApi extends RestApiMap {
         locations.add(HetznerLocation.fromJson(location));
       }
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: [],
-        message: e.toString(),
-      );
+      logger('Error while fetching locations: $e');
+      return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
     }
@@ -264,24 +253,18 @@ class HetznerApi extends RestApiMap {
   }
 
   Future<GenericResult<List<HetznerServerTypeInfo>>>
-      getAvailableServerTypes() async {
+  getAvailableServerTypes() async {
     final List<HetznerServerTypeInfo> types = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get(
-        '/server_types',
-      );
+      final Response response = await client.get('/server_types');
       for (final type in response.data!['server_types']) {
         types.add(HetznerServerTypeInfo.fromJson(type));
       }
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      logger('Error while fetching server types: $e');
+      return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
     }
@@ -294,12 +277,8 @@ class HetznerApi extends RestApiMap {
     try {
       await client.post('/servers/$serverId/actions/poweron');
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      logger('Error while powering on server: $e');
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -312,12 +291,8 @@ class HetznerApi extends RestApiMap {
     try {
       await client.post('/servers/$serverId/actions/reset');
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
+      logger('Error while restarting server: $e');
+      return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
     }
@@ -354,7 +329,7 @@ class HetznerApi extends RestApiMap {
         double.parse(ipPrice!),
       );
     } catch (e) {
-      print(e);
+      logger('Error while fetching pricing: $e');
       return GenericResult(
         success: false,
         data: pricing,
@@ -378,12 +353,8 @@ class HetznerApi extends RestApiMap {
         volumes.add(HetznerVolume.fromJson(volume));
       }
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: [],
-        success: false,
-        message: e.toString(),
-      );
+      logger('Error while fetching volumes: $e');
+      return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       client.close();
     }
@@ -417,12 +388,8 @@ class HetznerApi extends RestApiMap {
       );
       volume = HetznerVolume.fromJson(createVolumeResponse.data['volume']);
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: null,
-        success: false,
-        message: e.toString(),
-      );
+      logger('Error while creating volume: $e');
+      return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
     }
@@ -440,25 +407,16 @@ class HetznerApi extends RestApiMap {
     try {
       await client.delete('/volumes/$volumeId');
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: false,
-        message: e.toString(),
-      );
+      logger('Error while deleting volume: $e');
+      return GenericResult(success: false, data: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      success: true,
-      data: true,
-    );
+    return GenericResult(success: true, data: true);
   }
 
-  Future<GenericResult<HetznerVolume?>> getVolume(
-    final String volumeId,
-  ) async {
+  Future<GenericResult<HetznerVolume?>> getVolume(final String volumeId) async {
     HetznerVolume? volume;
 
     final Response getVolumeResponse;
@@ -467,20 +425,13 @@ class HetznerApi extends RestApiMap {
       getVolumeResponse = await client.get('/volumes/$volumeId');
       volume = HetznerVolume.fromJson(getVolumeResponse.data['volume']);
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: null,
-        success: false,
-        message: e.toString(),
-      );
+      logger('Error while fetching volume: $e');
+      return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      data: volume,
-      success: true,
-    );
+    return GenericResult(data: volume, success: true);
   }
 
   Future<GenericResult<bool>> detachVolume(final int volumeId) async {
@@ -495,20 +446,13 @@ class HetznerApi extends RestApiMap {
       success =
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: false,
-        message: e.toString(),
-      );
+      logger('Error while detaching volume: $e');
+      return GenericResult(success: false, data: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      success: false,
-      data: success,
-    );
+    return GenericResult(success: false, data: success);
   }
 
   Future<GenericResult<bool>> attachVolume(
@@ -522,15 +466,12 @@ class HetznerApi extends RestApiMap {
     try {
       attachVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/attach',
-        data: {
-          'automount': true,
-          'server': serverId,
-        },
+        data: {'automount': true, 'server': serverId},
       );
       success =
           attachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      print(e);
+      logger('Error while attaching volume: $e');
     } finally {
       client.close();
     }
@@ -554,27 +495,18 @@ class HetznerApi extends RestApiMap {
     try {
       resizeVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/resize',
-        data: {
-          'size': size.gibibyte.floor(),
-        },
+        data: {'size': size.gibibyte.floor()},
       );
       success =
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      print(e);
-      return GenericResult(
-        data: false,
-        success: false,
-        message: e.toString(),
-      );
+      logger('Error while resizing volume: $e');
+      return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
     }
 
-    return GenericResult(
-      data: success,
-      success: true,
-    );
+    return GenericResult(data: success, success: true);
   }
 
   Future<GenericResult<Map<String, dynamic>>> getMetrics(
@@ -597,12 +529,8 @@ class HetznerApi extends RestApiMap {
       );
       metrics = res.data['metrics'];
     } catch (e) {
-      print(e);
-      return GenericResult(
-        success: false,
-        data: {},
-        message: e.toString(),
-      );
+      logger('Error while fetching metrics: $e');
+      return GenericResult(success: false, data: {}, message: e.toString());
     } finally {
       close(client);
     }

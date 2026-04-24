@@ -22,56 +22,53 @@ class ProvidersPageCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkResponse(
-          highlightShape: BoxShape.rectangle,
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    clipBehavior: Clip.antiAlias,
+    child: InkResponse(
+      highlightShape: BoxShape.rectangle,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Skeleton.shade(
-                      child: IconStatusMask(
-                        status: state,
-                        icon: Icon(icon, size: 32, color: Colors.white),
-                      ),
-                    ),
-                    const Gap(8),
-                    Expanded(
-                      child: Skeleton.shade(
-                        child: Text(
-                          title,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                    ),
-                    if (state != StateType.uninitialized)
-                      IconStatusMask(
-                        status: state,
-                        icon: Icon(
-                          state == StateType.stable
-                              ? Icons.check_circle_outline
-                              : state == StateType.warning
-                                  ? Icons.warning_amber_outlined
-                                  : Icons.error_outline,
-                          color: Colors.white,
-                        ),
-                      ),
-                  ],
+                Skeleton.shade(
+                  child: IconStatusMask(
+                    status: state,
+                    icon: Icon(icon, size: 32, color: Colors.white),
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const Gap(8),
+                Expanded(
+                  child: Skeleton.shade(
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  ),
+                ),
                 if (state != StateType.uninitialized)
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                  IconStatusMask(
+                    status: state,
+                    icon: Icon(
+                      state == StateType.stable
+                          ? Icons.check_circle_outline
+                          : state == StateType.warning
+                          ? Icons.warning_amber_outlined
+                          : Icons.error_outline,
+                      color: Colors.white,
+                    ),
                   ),
               ],
             ),
-          ),
+            const SizedBox(height: 8),
+            if (state != StateType.uninitialized)
+              Text(subtitle, style: Theme.of(context).textTheme.bodyLarge),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

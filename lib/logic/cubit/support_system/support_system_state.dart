@@ -1,9 +1,7 @@
 part of 'support_system_cubit.dart';
 
 class SupportSystemState extends Equatable {
-  const SupportSystemState(
-    this.currentArticle,
-  );
+  const SupportSystemState(this.currentArticle);
 
   final String currentArticle;
 

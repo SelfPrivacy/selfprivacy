@@ -9,8 +9,6 @@ import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -21,10 +19,10 @@ import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 
 export 'package:provider/provider.dart';
@@ -41,6 +39,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   final DiskSize initialStorage = DiskSize.fromGibibyte(10);
 
+  static final logger = const AppLogger(name: 'server_installation_cubit').log;
+
   Future<void> load() async {
     final ServerInstallationState state = await repository.load();
 
@@ -48,47 +48,46 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       emit(state);
     } else if (state is ServerInstallationNotFinished) {
       if (state.progress == ServerSetupProgress.serverCreated) {
-        startServerIfDnsIsOkay(state: state);
+        await startServerIfDnsIsOkay(state: state);
       } else if (state.progress == ServerSetupProgress.serverStarted) {
-        resetServerIfServerIsOkay(state: state);
+        await resetServerIfServerIsOkay(state: state);
       } else if (state.progress == ServerSetupProgress.serverResetedFirstTime) {
-        oneMoreReset(state: state);
+        await oneMoreReset(state: state);
       } else if (state.progress ==
           ServerSetupProgress.serverResetedSecondTime) {
-        finishCheckIfServerIsOkay(state: state);
+        await finishCheckIfServerIsOkay(state: state);
       } else {
         emit(state);
       }
     } else if (state is ServerInstallationRecovery) {
       emit(state);
     } else {
-      throw 'wrong state';
+      throw StateError('wrong state');
     }
   }
 
-  void setServerProviderType(final ServerProviderType providerType) async {
+  Future<void> setServerProviderType(
+    final ServerProviderType providerType,
+  ) async {
     await repository.saveServerProviderType(providerType);
     ProvidersController.initServerProvider(
       ServerProviderSettings(provider: providerType),
     );
   }
 
-  void setDnsProviderType(final DnsProviderType providerType) async {
+  Future<void> setDnsProviderType(final DnsProviderType providerType) async {
     await repository.saveDnsProviderType(providerType);
     ProvidersController.initDnsProvider(
-      DnsProviderSettings(
-        provider: providerType,
-      ),
+      DnsProviderSettings(provider: providerType),
     );
   }
 
   Future<bool?> isServerProviderApiTokenValid(
     final String providerToken,
   ) async {
-    final GenericResult<bool> apiResponse =
-        await ProvidersController.currentServerProvider!.tryInitApiByToken(
-      providerToken,
-    );
+    final GenericResult<bool> apiResponse = await ProvidersController
+        .currentServerProvider!
+        .tryInitApiByToken(providerToken);
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -106,13 +105,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResponse.data;
   }
 
-  Future<bool?> isDnsProviderApiTokenValid(
-    final String providerToken,
-  ) async {
-    final GenericResult<bool> apiResponse =
-        await ProvidersController.currentDnsProvider!.tryInitApiByToken(
-      providerToken,
-    );
+  Future<bool?> isDnsProviderApiTokenValid(final String providerToken) async {
+    final GenericResult<bool> apiResponse = await ProvidersController
+        .currentDnsProvider!
+        .tryInitApiByToken(providerToken);
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -135,9 +131,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    final GenericResult apiResponse = await ProvidersController
-        .currentServerProvider!
-        .getAvailableLocations();
+    final GenericResult apiResponse =
+        await ProvidersController.currentServerProvider!
+            .getAvailableLocations();
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -179,11 +175,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return prices;
     }
 
-    prices = pricingResult.data;
-    return prices;
+    return pricingResult.data;
   }
 
-  void setServerProviderKey(final String serverProviderKey) async {
+  Future<void> setServerProviderKey(final String serverProviderKey) async {
     await repository.saveServerProviderKey(serverProviderKey);
 
     if (state is ServerInstallationRecovery) {
@@ -211,7 +206,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  void setServerType(final ServerType serverType) async {
+  Future<void> setServerType(final ServerType serverType) async {
     await repository.saveServerType(serverType);
 
     emit(
@@ -222,7 +217,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  void setDnsApiToken(final String dnsApiToken) async {
+  Future<void> setDnsApiToken(final String dnsApiToken) async {
     if (state is ServerInstallationRecovery) {
       await setAndValidateDnsApiToken(dnsApiToken);
       return;
@@ -230,63 +225,22 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.setDnsApiToken(dnsApiToken);
 
     emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(dnsApiToken: dnsApiToken),
+      (state as ServerInstallationNotFinished).copyWith(
+        dnsApiToken: dnsApiToken,
+      ),
     );
   }
 
-  void setBackblazeKey(final String keyId, final String applicationKey) async {
-    final BackupsCredential backblazeCredential = BackupsCredential(
-      keyId: keyId,
-      applicationKey: applicationKey,
-      provider: BackupsProviderType.backblaze,
-    );
-    final BackblazeBucket? bucket;
-    await repository.saveBackupsCredential(backblazeCredential);
-    if (state is ServerInstallationRecovery) {
-      final configuration = await ServerApi(
-        customToken:
-            (state as ServerInstallationRecovery).serverDetails!.apiToken,
-        isWithToken: true,
-        overrideDomain:
-            (state as ServerInstallationRecovery).serverDomain!.domainName,
-      ).getBackupsConfiguration();
-      if (configuration != null) {
-        try {
-          final settings = BackupsProviderSettings(
-            provider: BackupsProviderType.backblaze,
-            tokenId: keyId,
-            token: applicationKey,
-            isAuthorized: true,
-          );
-          final provider =
-              BackupsProviderFactory.createBackupsProviderInterface(settings);
-          final result =
-              await provider.getStorage(backblazeCredential, configuration);
-          bucket = result.data;
-          await getIt<ApiConfigModel>().setBackblazeBucket(bucket!);
-        } catch (e) {
-          print(e);
-        }
-      }
-      finishRecoveryProcess(backblazeCredential);
-      return;
-    }
-    emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(backblazeCredential: backblazeCredential),
-    );
-  }
-
-  void setDomain(final ServerDomain serverDomain) async {
+  Future<void> setDomain(final ServerDomain serverDomain) async {
     await repository.saveDomain(serverDomain);
     emit(
-      (state as ServerInstallationNotFinished)
-          .copyWith(serverDomain: serverDomain),
+      (state as ServerInstallationNotFinished).copyWith(
+        serverDomain: serverDomain,
+      ),
     );
   }
 
-  void setRootUser(final User rootUser) async {
+  Future<void> setRootUser(final User rootUser) async {
     await repository.saveRootUser(rootUser);
     emit((state as ServerInstallationNotFinished).copyWith(rootUser: rootUser));
   }
@@ -296,20 +250,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   ) async {
     await repository.saveServerDetails(serverDetails);
 
-    /// TODO: Error handling?
+    // TODO(NaiJi): Error handling?
     await ProvidersController.currentDnsProvider!.removeDomainRecords(
       records: getProjectDnsRecords(
-        state.serverDomain!.domainName,
-        serverDetails.ip4,
-        false,
+        domainName: state.serverDomain!.domainName,
+        ip4: serverDetails.ip4,
+        isCreating: false,
       ),
       domain: state.serverDomain!,
     );
     await ProvidersController.currentDnsProvider!.createDomainRecords(
       records: getProjectDnsRecords(
-        state.serverDomain!.domainName,
-        serverDetails.ip4,
-        true,
+        domainName: state.serverDomain!.domainName,
+        ip4: serverDetails.ip4,
+        isCreating: true,
       ),
       domain: state.serverDomain!,
     );
@@ -321,14 +275,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         installationDialoguePopUp: null,
       ),
     );
-    runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null);
+    unawaited(
+      runDelayed(startServerIfDnsIsOkay, const Duration(seconds: 30), null),
+    );
   }
 
-  void setCustomSshKey(final String key) async {
+  Future<void> setCustomSshKey(final String key) async {
     emit((state as ServerInstallationNotFinished).copyWith(customSshKey: key));
   }
 
-  void createServerAndSetDnsRecords() async {
+  Future<void> createServerAndSetDnsRecords() async {
     emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
 
     final installationData = LaunchInstallationData(
@@ -344,10 +300,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       location: state.serverLocation!,
     );
 
-    final result =
-        await ProvidersController.currentServerProvider!.launchInstallation(
-      installationData,
-    );
+    final result = await ProvidersController.currentServerProvider!
+        .launchInstallation(installationData);
 
     if (!result.success && result.data != null) {
       emit(
@@ -358,7 +312,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  void startServerIfDnsIsOkay({
+  Future<void> startServerIfDnsIsOkay({
     final ServerInstallationNotFinished? state,
   }) async {
     final ServerInstallationNotFinished dataState =
@@ -384,7 +338,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
 
       await repository.saveServerDetails(server);
-      await repository.saveIsServerStarted(true);
+      await repository.saveIsServerStarted(serverStarted: true);
 
       final ServerInstallationNotFinished newState = dataState.copyWith(
         isServerStarted: true,
@@ -392,10 +346,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         serverDetails: server,
       );
       emit(newState);
-      runDelayed(
-        resetServerIfServerIsOkay,
-        const Duration(seconds: 60),
-        newState,
+      unawaited(
+        runDelayed(
+          resetServerIfServerIsOkay,
+          const Duration(seconds: 60),
+          newState,
+        ),
       );
     } else {
       final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -403,15 +359,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dnsMatches: matches,
       );
       emit(newState);
-      runDelayed(
-        startServerIfDnsIsOkay,
-        const Duration(seconds: 30),
-        newState,
+      unawaited(
+        runDelayed(
+          startServerIfDnsIsOkay,
+          const Duration(seconds: 30),
+          newState,
+        ),
       );
     }
   }
 
-  void resetServerIfServerIsOkay({
+  Future<void> resetServerIfServerIsOkay({
     final ServerInstallationNotFinished? state,
   }) async {
     final ServerInstallationNotFinished dataState =
@@ -433,7 +391,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       timer = Timer(pauseDuration, () async {
         final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerRebootedFirstTime(true);
+        await repository.saveIsServerRebootedFirstTime(
+          serverRebootedFirstTime: true,
+        );
         await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -443,18 +403,24 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
 
         emit(newState);
-        runDelayed(oneMoreReset, const Duration(seconds: 60), newState);
+        unawaited(
+          runDelayed(oneMoreReset, const Duration(seconds: 60), newState),
+        );
       });
     } else {
-      runDelayed(
-        resetServerIfServerIsOkay,
-        const Duration(seconds: 60),
-        dataState,
+      unawaited(
+        runDelayed(
+          resetServerIfServerIsOkay,
+          const Duration(seconds: 60),
+          dataState,
+        ),
       );
     }
   }
 
-  void oneMoreReset({final ServerInstallationNotFinished? state}) async {
+  Future<void> oneMoreReset({
+    final ServerInstallationNotFinished? state,
+  }) async {
     final ServerInstallationNotFinished dataState =
         state ?? this.state as ServerInstallationNotFinished;
 
@@ -474,7 +440,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       timer = Timer(pauseDuration, () async {
         final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerRebootedSecondTime(true);
+        await repository.saveIsServerRebootedSecondTime(
+          serverRebootedSecondTime: true,
+        );
         await repository.saveServerDetails(serverDetails);
 
         final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -484,18 +452,22 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
 
         emit(newState);
-        runDelayed(
-          finishCheckIfServerIsOkay,
-          const Duration(seconds: 60),
-          newState,
+        unawaited(
+          runDelayed(
+            finishCheckIfServerIsOkay,
+            const Duration(seconds: 60),
+            newState,
+          ),
         );
       });
     } else {
-      runDelayed(oneMoreReset, const Duration(seconds: 60), dataState);
+      unawaited(
+        runDelayed(oneMoreReset, const Duration(seconds: 60), dataState),
+      );
     }
   }
 
-  void finishCheckIfServerIsOkay({
+  Future<void> finishCheckIfServerIsOkay({
     final ServerInstallationNotFinished? state,
   }) async {
     final ServerInstallationNotFinished dataState =
@@ -514,26 +486,30 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dkimCreated = false;
       }
       if (dkimCreated) {
-        await repository.saveHasFinalChecked(true);
+        await repository.saveHasFinalChecked(finalCheckCompleted: true);
         emit(dataState.finish());
-        getIt<ApiConnectionRepository>().init();
+        await getIt<ApiConnectionRepository>().init();
       } else {
+        unawaited(
+          runDelayed(
+            finishCheckIfServerIsOkay,
+            const Duration(seconds: 60),
+            dataState,
+          ),
+        );
+      }
+    } else {
+      unawaited(
         runDelayed(
           finishCheckIfServerIsOkay,
           const Duration(seconds: 60),
           dataState,
-        );
-      }
-    } else {
-      runDelayed(
-        finishCheckIfServerIsOkay,
-        const Duration(seconds: 60),
-        dataState,
+        ),
       );
     }
   }
 
-  void runDelayed(
+  Future<void> runDelayed(
     final void Function() work,
     final Duration delay,
     final ServerInstallationNotFinished? state,
@@ -552,16 +528,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     timer = Timer(delay, work);
   }
 
-  void submitDomainForAccessRecovery(final String domain) async {
+  Future<void> submitDomainForAccessRecovery(final String domain) async {
     final ServerDomain serverDomain = ServerDomain(
       domainName: domain,
       provider: DnsProviderType.unknown,
     );
-    final ServerRecoveryCapabilities recoveryCapabilities =
-        await repository.getRecoveryCapabilities(serverDomain);
+    final ServerRecoveryCapabilities recoveryCapabilities = await repository
+        .getRecoveryCapabilities(serverDomain);
 
     await repository.saveDomain(serverDomain);
-    await repository.saveIsRecoveringServer(true);
+    await repository.saveIsRecoveringServer(isRecoveringServer: true);
 
     emit(
       ServerInstallationRecovery(
@@ -577,30 +553,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         state as ServerInstallationRecovery;
     switch (method) {
       case ServerRecoveryMethods.newDeviceKey:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.newDeviceKey,
-          ),
-        );
-        break;
+        emit(dataState.copyWith(currentStep: RecoveryStep.newDeviceKey));
       case ServerRecoveryMethods.recoveryKey:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.recoveryKey,
-          ),
-        );
-        break;
+        emit(dataState.copyWith(currentStep: RecoveryStep.recoveryKey));
       case ServerRecoveryMethods.oldToken:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.oldToken,
-          ),
-        );
-        break;
+        emit(dataState.copyWith(currentStep: RecoveryStep.oldToken));
     }
   }
 
-  void tryToRecover(
+  Future<void> tryToRecover(
     final String token,
     final ServerRecoveryMethods method,
   ) async {
@@ -615,38 +576,37 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ServerDomain,
         String,
         ServerRecoveryCapabilities,
-      ) recoveryFunction;
+      )
+      recoveryFunction;
       switch (method) {
         case ServerRecoveryMethods.newDeviceKey:
           recoveryFunction = repository.authorizeByNewDeviceKey;
-          break;
         case ServerRecoveryMethods.recoveryKey:
           recoveryFunction = repository.authorizeByRecoveryKey;
-          break;
         case ServerRecoveryMethods.oldToken:
           recoveryFunction = repository.authorizeByApiToken;
-          break;
-        default:
-          throw Exception('Unknown recovery method');
       }
       final ServerHostingDetails serverDetails = await recoveryFunction(
         serverDomain,
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProviderType serverProvider = await ServerApi(
-        customToken: serverDetails.apiToken,
-        isWithToken: true,
-        overrideDomain: serverDomain.domainName,
-      ).getServerProviderType();
-      final dnsProvider = await ServerApi(
-        customToken: serverDetails.apiToken,
-        isWithToken: true,
-        overrideDomain: serverDomain.domainName,
-      ).getDnsProviderType();
+      final ServerProviderType serverProvider =
+          await ServerApi(
+            customToken: serverDetails.apiToken,
+            isWithToken: true,
+            overrideDomain: serverDomain.domainName,
+          ).getServerProviderType();
+      final dnsProvider =
+          await ServerApi(
+            customToken: serverDetails.apiToken,
+            isWithToken: true,
+            overrideDomain: serverDomain.domainName,
+          ).getDnsProviderType();
       if (dnsProvider == DnsProviderType.unknown) {
-        getIt<NavigationService>()
-            .showSnackBar('recovering.generic_error'.tr());
+        getIt<NavigationService>().showSnackBar(
+          'recovering.generic_error'.tr(),
+        );
         return;
       }
       final newServerDetails = ServerHostingDetails(
@@ -665,8 +625,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.saveServerDetails(newServerDetails);
       await repository.saveDnsProviderType(dnsProvider);
       await repository.saveDomain(newServerDomain);
-      setServerProviderType(serverProvider);
-      setDnsProviderType(dnsProvider);
+      await setServerProviderType(serverProvider);
+      await setDnsProviderType(dnsProvider);
       emit(
         dataState.copyWith(
           serverDetails: newServerDetails,
@@ -675,17 +635,19 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         ),
       );
     } on ServerAuthorizationException {
-      getIt<NavigationService>()
-          .showSnackBar('recovering.authorization_failed'.tr());
+      getIt<NavigationService>().showSnackBar(
+        'recovering.authorization_failed'.tr(),
+      );
       return;
     } on IpNotFoundException {
-      getIt<NavigationService>()
-          .showSnackBar('recovering.domain_recover_error'.tr());
+      getIt<NavigationService>().showSnackBar(
+        'recovering.domain_recover_error'.tr(),
+      );
       return;
     }
   }
 
-  void revertRecoveryStep() {
+  Future<void> revertRecoveryStep() async {
     if (state is ServerInstallationEmpty) {
       return;
     }
@@ -693,28 +655,18 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         state as ServerInstallationRecovery;
     switch (dataState.currentStep) {
       case RecoveryStep.selecting:
-        repository.deleteDomain();
+        await repository.deleteDomain();
         emit(const ServerInstallationEmpty());
-        break;
       case RecoveryStep.recoveryKey:
       case RecoveryStep.newDeviceKey:
       case RecoveryStep.oldToken:
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.selecting,
-          ),
-        );
-        break;
+        emit(dataState.copyWith(currentStep: RecoveryStep.selecting));
       case RecoveryStep.dnsProviderToken:
-        repository.deleteServerDetails();
-        emit(
-          dataState.copyWith(
-            currentStep: RecoveryStep.serverSelection,
-          ),
-        );
-        break;
+        await repository.deleteServerDetails();
+        emit(dataState.copyWith(currentStep: RecoveryStep.serverSelection));
       // We won't revert steps after client is authorized
-      default:
+      case RecoveryStep.serverProviderToken:
+      case RecoveryStep.serverSelection:
         break;
     }
   }
@@ -739,19 +691,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
           (final ServerBasicInfo hostingServer) =>
               ServerBasicInfoWithValidators.fromServerBasicInfo(
-            serverBasicInfo: hostingServer,
-            isIpValid: hostingServer.ip == server.hostingDetails.ip4,
-            isReverseDnsValid:
-                hostingServer.reverseDns == server.domain.domainName ||
+                serverBasicInfo: hostingServer,
+                isIpValid: hostingServer.ip == server.hostingDetails.ip4,
+                isReverseDnsValid:
+                    hostingServer.reverseDns == server.domain.domainName ||
                     hostingServer.reverseDns ==
                         server.domain.domainName.split('.')[0],
-          ),
+              ),
         );
         validatedList = validated.toList();
       } catch (e) {
-        print(e);
-        getIt<NavigationService>()
-            .showSnackBar('modals.server_validators_error'.tr());
+        logger('Error while validating servers', error: e);
+        getIt<NavigationService>().showSnackBar(
+          'modals.server_validators_error'.tr(),
+        );
       }
     } else {
       final ServerInstallationRecovery dataState =
@@ -762,19 +715,20 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
           (final ServerBasicInfo server) =>
               ServerBasicInfoWithValidators.fromServerBasicInfo(
-            serverBasicInfo: server,
-            isIpValid: server.ip == dataState.serverDetails?.ip4,
-            isReverseDnsValid:
-                server.reverseDns == dataState.serverDomain?.domainName ||
+                serverBasicInfo: server,
+                isIpValid: server.ip == dataState.serverDetails?.ip4,
+                isReverseDnsValid:
+                    server.reverseDns == dataState.serverDomain?.domainName ||
                     server.reverseDns ==
                         dataState.serverDomain?.domainName.split('.')[0],
-          ),
+              ),
         );
         validatedList = validated.toList();
       } catch (e) {
-        print(e);
-        getIt<NavigationService>()
-            .showSnackBar('modals.server_validators_error'.tr());
+        logger('Error while validating servers', error: e);
+        getIt<NavigationService>().showSnackBar(
+          'modals.server_validators_error'.tr(),
+        );
       }
     }
 
@@ -814,6 +768,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
+  // Merged with finish recovery process
   Future<void> setAndValidateDnsApiToken(final String token) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
@@ -821,8 +776,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (serverDomain == null) {
       return;
     }
-    final isTokenValidResult =
-        await repository.validateDnsToken(token, serverDomain.domainName);
+    final isTokenValidResult = await repository.validateDnsToken(
+      token,
+      serverDomain.domainName,
+    );
     if (!isTokenValidResult.success) {
       getIt<NavigationService>().showSnackBar(
         isTokenValidResult.message ??
@@ -830,11 +787,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       return;
     }
-    final dnsProviderType = await ServerApi(
-      customToken: dataState.serverDetails!.apiToken,
-      isWithToken: true,
-      overrideDomain: serverDomain.domainName,
-    ).getDnsProviderType();
+    final dnsProviderType =
+        await ServerApi(
+          customToken: dataState.serverDetails!.apiToken,
+          isWithToken: true,
+          overrideDomain: serverDomain.domainName,
+        ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,
@@ -842,25 +800,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       ),
     );
     await repository.setDnsApiToken(token);
-    emit(
-      dataState.copyWith(
-        serverDomain: ServerDomain(
-          domainName: serverDomain.domainName,
-          provider: dnsProviderType,
-        ),
-        dnsApiToken: token,
-        currentStep: RecoveryStep.backblazeToken,
-      ),
-    );
-  }
 
-  void finishRecoveryProcess(
-    final BackupsCredential backblazeCredential,
-  ) async {
-    await repository.saveIsServerStarted(true);
-    await repository.saveIsServerRebootedFirstTime(true);
-    await repository.saveIsServerRebootedSecondTime(true);
-    await repository.saveIsRecoveringServer(false);
+    await repository.saveIsServerStarted(serverStarted: true);
+    await repository.saveIsServerRebootedFirstTime(
+      serverRebootedFirstTime: true,
+    );
+    await repository.saveIsServerRebootedSecondTime(
+      serverRebootedSecondTime: true,
+    );
+    await repository.saveIsRecoveringServer(isRecoveringServer: false);
     late final GenericResult<ServerType?>? serverType;
     if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
       serverType = await ProvidersController.currentServerProvider
@@ -871,14 +819,17 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     } else {
       serverType = null;
     }
-    await repository.saveHasFinalChecked(true);
-    final ServerInstallationRecovery updatedState =
-        (state as ServerInstallationRecovery).copyWith(
-      backblazeCredential: backblazeCredential,
+    await repository.saveHasFinalChecked(finalCheckCompleted: true);
+    final ServerInstallationRecovery updatedState = dataState.copyWith(
+      serverDomain: ServerDomain(
+        domainName: serverDomain.domainName,
+        provider: dnsProviderType,
+      ),
+      dnsApiToken: token,
       serverTypeIdentificator: serverType?.data?.identifier,
     );
     emit(updatedState.finish());
-    getIt<ApiConnectionRepository>().init();
+    await getIt<ApiConnectionRepository>().init();
   }
 
   @override
@@ -917,11 +868,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     super.onChange(change);
   }
 
-  void clearAppConfig() {
+  Future<void> clearAppConfig() async {
     closeTimer();
     ProvidersController.clearProviders();
     TlsOptions.verifyCertificate = false;
-    repository.clearAppConfig();
+    await repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }
 

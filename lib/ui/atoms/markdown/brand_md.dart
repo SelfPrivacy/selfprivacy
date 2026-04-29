@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BrandMarkdown extends StatefulWidget {
   const BrandMarkdown({required this.fileName, super.key});
@@ -40,20 +41,36 @@ class _BrandMarkdownState extends State<BrandMarkdown> {
       shrinkWrap: true,
       styleSheet: markdown,
       selectable: true,
-      onTapLink: (
-        final String text,
-        final String? href,
-        final String title,
-      ) async {
-        if (href != null) {
-          await canLaunchUrlString(href).then((final bool canLaunchURL) async {
-            if (canLaunchURL) {
-              await launchUrlString(href);
+      onTapLink:
+          (final String text, final String? href, final String title) async {
+            if (href == null) {
+              return;
             }
-          });
-        }
-      },
+
+            final Uri? uri = Uri.tryParse(href);
+
+            if (uri == null) {
+              return;
+            }
+
+            await launchUrl(uri, mode: _launchModeForCurrentPlatform());
+          },
       data: _mdContent,
     );
+  }
+
+  LaunchMode _launchModeForCurrentPlatform() {
+    if (kIsWeb) {
+      return LaunchMode.platformDefault;
+    }
+
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.android ||
+      TargetPlatform.iOS ||
+      TargetPlatform.fuchsia => LaunchMode.platformDefault,
+      TargetPlatform.linux ||
+      TargetPlatform.macOS ||
+      TargetPlatform.windows => LaunchMode.externalApplication,
+    };
   }
 }

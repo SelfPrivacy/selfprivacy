@@ -7,10 +7,13 @@ part 'dns_provider_credential.g.dart';
 @HiveType(typeId: 8)
 class DnsProviderCredential {
   DnsProviderCredential({
-    required this.tokenId,
     required this.token,
     required this.provider,
     required this.associatedDomainNames,
+    this.tokenId,
+    this.url,
+    this.tenant,
+    this.secondaryToken,
   });
 
   @HiveField(0)
@@ -18,6 +21,15 @@ class DnsProviderCredential {
 
   @HiveField(1)
   final String token;
+
+  @HiveField(4)
+  final String? url;
+
+  @HiveField(5)
+  final String? tenant;
+
+  @HiveField(6)
+  final String? secondaryToken;
 
   @HiveField(2)
   final DnsProviderType provider;

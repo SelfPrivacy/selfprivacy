@@ -192,7 +192,6 @@ class HiveConfig {
       if (dnsProviderKey != null && dnsProvider.isSpecified) {
         final DnsProviderCredential dnsProviderCredential =
             DnsProviderCredential(
-              tokenId: null,
               token: dnsProviderKey,
               provider: dnsProvider!,
               associatedDomainNames: [

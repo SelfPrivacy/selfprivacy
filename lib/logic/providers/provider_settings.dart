@@ -18,12 +18,20 @@ class DnsProviderSettings {
   DnsProviderSettings({
     required this.provider,
     this.token,
+    this.tokenId,
+    this.url,
+    this.tenant,
+    this.secondaryToken,
     this.isAuthorized = false,
   });
 
   final bool isAuthorized;
   final DnsProviderType provider;
   final String? token;
+  final String? tokenId;
+  final String? url;
+  final String? tenant;
+  final String? secondaryToken;
 }
 
 class BackupsProviderSettings {

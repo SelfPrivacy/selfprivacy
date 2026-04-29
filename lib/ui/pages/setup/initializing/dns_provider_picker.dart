@@ -69,6 +69,15 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
             pathToHow: 'how_desec',
           ),
         );
+
+      case DnsProviderType.porkbun:
+        return ProviderInputDataPage(
+          providerCubit: widget.formCubit,
+          providerInfo: const ProviderPageInfo(
+            providerType: DnsProviderType.porkbun,
+            pathToHow: 'how_porkbun',
+          ),
+        );
     }
   }
 }

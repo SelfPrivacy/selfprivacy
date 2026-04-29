@@ -60,6 +60,8 @@ class DnsProviderTypeAdapter extends TypeAdapter<DnsProviderType> {
         return DnsProviderType.desec;
       case 3:
         return DnsProviderType.digitalOcean;
+      case 4:
+        return DnsProviderType.porkbun;
       default:
         return DnsProviderType.unknown;
     }
@@ -76,6 +78,8 @@ class DnsProviderTypeAdapter extends TypeAdapter<DnsProviderType> {
         writer.writeByte(2);
       case DnsProviderType.digitalOcean:
         writer.writeByte(3);
+      case DnsProviderType.porkbun:
+        writer.writeByte(4);
     }
   }
 

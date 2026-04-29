@@ -25,7 +25,9 @@ enum DnsProviderType {
   @HiveField(2)
   desec,
   @HiveField(3)
-  digitalOcean;
+  digitalOcean,
+  @HiveField(4)
+  porkbun;
 
   factory DnsProviderType.fromGraphQL(final Enum$DnsProvider provider) {
     switch (provider) {
@@ -35,6 +37,8 @@ enum DnsProviderType {
         return desec;
       case Enum$DnsProvider.DIGITALOCEAN:
         return digitalOcean;
+      case Enum$DnsProvider.PORKBUN:
+        return porkbun;
       case Enum$DnsProvider.$unknown:
         return unknown;
     }
@@ -44,6 +48,7 @@ enum DnsProviderType {
     digitalOcean => 'DIGITALOCEAN',
     cloudflare => 'CLOUDFLARE',
     desec => 'DESEC',
+    porkbun => 'PORKBUN',
     unknown => 'UNKNOWN',
   };
 
@@ -51,6 +56,7 @@ enum DnsProviderType {
     digitalOcean => 'Digital Ocean DNS',
     cloudflare => 'Cloudflare',
     desec => 'deSEC',
+    porkbun => 'Porkbun',
     unknown => 'Unknown',
   };
 
@@ -58,6 +64,7 @@ enum DnsProviderType {
     digitalOcean => 'how_digital_ocean',
     cloudflare => 'how_cloudflare',
     desec => 'how_desec',
+    porkbun => '',
     unknown => '',
   };
 }

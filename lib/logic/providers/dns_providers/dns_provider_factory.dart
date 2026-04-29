@@ -3,6 +3,7 @@ import 'package:selfprivacy/logic/providers/dns_providers/cloudflare.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/desec.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/digital_ocean_dns.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
+import 'package:selfprivacy/logic/providers/dns_providers/porkbun.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 
 class UnknownProviderException implements Exception {
@@ -36,6 +37,14 @@ class DnsProviderFactory {
                 token: settings.token,
               )
             : DesecDnsProvider();
+      case DnsProviderType.porkbun:
+        return settings.isAuthorized
+            ? PorkbunDnsProvider.load(
+                isAuthorized: settings.isAuthorized,
+                token: settings.token,
+                tokenId: settings.tokenId,
+              )
+            : PorkbunDnsProvider();
       case DnsProviderType.unknown:
         throw UnknownProviderException('Unknown server provider');
     }

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare_dns_info.dart';
+import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare/cloudflare_dns_info.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
 class CloudflareApi extends RestApiMap {

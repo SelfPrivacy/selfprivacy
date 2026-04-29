@@ -1,6 +1,6 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/dns_providers/desec_dns_info.dart';
+import 'package:selfprivacy/logic/models/json/dns_providers/desec/desec_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 

@@ -177,6 +177,7 @@ enum DnsProvider {
   CLOUDFLARE
   DIGITALOCEAN
   DESEC
+  PORKBUN
 }
 
 type DnsRecord {
@@ -536,7 +537,11 @@ type ServicesMutations {
 
 input SetDnsProviderInput {
   provider: DnsProvider!
-  apiToken: String!
+  token: String!
+  tokenId: String = null
+  url: String = null
+  tenant: String = null
+  secondaryToken: String = null
 }
 
 input SetServiceConfigurationInput {

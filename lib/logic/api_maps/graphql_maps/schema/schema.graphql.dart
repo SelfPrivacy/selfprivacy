@@ -1053,10 +1053,18 @@ class _CopyWithStubImpl$Input$SSHSettingsInput<TRes>
 class Input$SetDnsProviderInput {
   factory Input$SetDnsProviderInput({
     required Enum$DnsProvider provider,
-    required String apiToken,
+    required String token,
+    String? tokenId,
+    String? url,
+    String? tenant,
+    String? secondaryToken,
   }) => Input$SetDnsProviderInput._({
     r'provider': provider,
-    r'apiToken': apiToken,
+    r'token': token,
+    if (tokenId != null) r'tokenId': tokenId,
+    if (url != null) r'url': url,
+    if (tenant != null) r'tenant': tenant,
+    if (secondaryToken != null) r'secondaryToken': secondaryToken,
   });
 
   Input$SetDnsProviderInput._(this._$data);
@@ -1065,8 +1073,24 @@ class Input$SetDnsProviderInput {
     final result$data = <String, dynamic>{};
     final l$provider = data['provider'];
     result$data['provider'] = fromJson$Enum$DnsProvider((l$provider as String));
-    final l$apiToken = data['apiToken'];
-    result$data['apiToken'] = (l$apiToken as String);
+    final l$token = data['token'];
+    result$data['token'] = (l$token as String);
+    if (data.containsKey('tokenId')) {
+      final l$tokenId = data['tokenId'];
+      result$data['tokenId'] = (l$tokenId as String?);
+    }
+    if (data.containsKey('url')) {
+      final l$url = data['url'];
+      result$data['url'] = (l$url as String?);
+    }
+    if (data.containsKey('tenant')) {
+      final l$tenant = data['tenant'];
+      result$data['tenant'] = (l$tenant as String?);
+    }
+    if (data.containsKey('secondaryToken')) {
+      final l$secondaryToken = data['secondaryToken'];
+      result$data['secondaryToken'] = (l$secondaryToken as String?);
+    }
     return Input$SetDnsProviderInput._(result$data);
   }
 
@@ -1074,14 +1098,38 @@ class Input$SetDnsProviderInput {
 
   Enum$DnsProvider get provider => (_$data['provider'] as Enum$DnsProvider);
 
-  String get apiToken => (_$data['apiToken'] as String);
+  String get token => (_$data['token'] as String);
+
+  String? get tokenId => (_$data['tokenId'] as String?);
+
+  String? get url => (_$data['url'] as String?);
+
+  String? get tenant => (_$data['tenant'] as String?);
+
+  String? get secondaryToken => (_$data['secondaryToken'] as String?);
 
   Map<String, dynamic> toJson() {
     final result$data = <String, dynamic>{};
     final l$provider = provider;
     result$data['provider'] = toJson$Enum$DnsProvider(l$provider);
-    final l$apiToken = apiToken;
-    result$data['apiToken'] = l$apiToken;
+    final l$token = token;
+    result$data['token'] = l$token;
+    if (_$data.containsKey('tokenId')) {
+      final l$tokenId = tokenId;
+      result$data['tokenId'] = l$tokenId;
+    }
+    if (_$data.containsKey('url')) {
+      final l$url = url;
+      result$data['url'] = l$url;
+    }
+    if (_$data.containsKey('tenant')) {
+      final l$tenant = tenant;
+      result$data['tenant'] = l$tenant;
+    }
+    if (_$data.containsKey('secondaryToken')) {
+      final l$secondaryToken = secondaryToken;
+      result$data['secondaryToken'] = l$secondaryToken;
+    }
     return result$data;
   }
 
@@ -1102,9 +1150,42 @@ class Input$SetDnsProviderInput {
     if (l$provider != lOther$provider) {
       return false;
     }
-    final l$apiToken = apiToken;
-    final lOther$apiToken = other.apiToken;
-    if (l$apiToken != lOther$apiToken) {
+    final l$token = token;
+    final lOther$token = other.token;
+    if (l$token != lOther$token) {
+      return false;
+    }
+    final l$tokenId = tokenId;
+    final lOther$tokenId = other.tokenId;
+    if (_$data.containsKey('tokenId') != other._$data.containsKey('tokenId')) {
+      return false;
+    }
+    if (l$tokenId != lOther$tokenId) {
+      return false;
+    }
+    final l$url = url;
+    final lOther$url = other.url;
+    if (_$data.containsKey('url') != other._$data.containsKey('url')) {
+      return false;
+    }
+    if (l$url != lOther$url) {
+      return false;
+    }
+    final l$tenant = tenant;
+    final lOther$tenant = other.tenant;
+    if (_$data.containsKey('tenant') != other._$data.containsKey('tenant')) {
+      return false;
+    }
+    if (l$tenant != lOther$tenant) {
+      return false;
+    }
+    final l$secondaryToken = secondaryToken;
+    final lOther$secondaryToken = other.secondaryToken;
+    if (_$data.containsKey('secondaryToken') !=
+        other._$data.containsKey('secondaryToken')) {
+      return false;
+    }
+    if (l$secondaryToken != lOther$secondaryToken) {
       return false;
     }
     return true;
@@ -1113,8 +1194,19 @@ class Input$SetDnsProviderInput {
   @override
   int get hashCode {
     final l$provider = provider;
-    final l$apiToken = apiToken;
-    return Object.hashAll([l$provider, l$apiToken]);
+    final l$token = token;
+    final l$tokenId = tokenId;
+    final l$url = url;
+    final l$tenant = tenant;
+    final l$secondaryToken = secondaryToken;
+    return Object.hashAll([
+      l$provider,
+      l$token,
+      _$data.containsKey('tokenId') ? l$tokenId : const {},
+      _$data.containsKey('url') ? l$url : const {},
+      _$data.containsKey('tenant') ? l$tenant : const {},
+      _$data.containsKey('secondaryToken') ? l$secondaryToken : const {},
+    ]);
   }
 }
 
@@ -1127,7 +1219,14 @@ abstract class CopyWith$Input$SetDnsProviderInput<TRes> {
   factory CopyWith$Input$SetDnsProviderInput.stub(TRes res) =
       _CopyWithStubImpl$Input$SetDnsProviderInput;
 
-  TRes call({Enum$DnsProvider? provider, String? apiToken});
+  TRes call({
+    Enum$DnsProvider? provider,
+    String? token,
+    String? tokenId,
+    String? url,
+    String? tenant,
+    String? secondaryToken,
+  });
 }
 
 class _CopyWithImpl$Input$SetDnsProviderInput<TRes>
@@ -1140,16 +1239,26 @@ class _CopyWithImpl$Input$SetDnsProviderInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
-  TRes call({Object? provider = _undefined, Object? apiToken = _undefined}) =>
-      _then(
-        Input$SetDnsProviderInput._({
-          ..._instance._$data,
-          if (provider != _undefined && provider != null)
-            'provider': (provider as Enum$DnsProvider),
-          if (apiToken != _undefined && apiToken != null)
-            'apiToken': (apiToken as String),
-        }),
-      );
+  TRes call({
+    Object? provider = _undefined,
+    Object? token = _undefined,
+    Object? tokenId = _undefined,
+    Object? url = _undefined,
+    Object? tenant = _undefined,
+    Object? secondaryToken = _undefined,
+  }) => _then(
+    Input$SetDnsProviderInput._({
+      ..._instance._$data,
+      if (provider != _undefined && provider != null)
+        'provider': (provider as Enum$DnsProvider),
+      if (token != _undefined && token != null) 'token': (token as String),
+      if (tokenId != _undefined) 'tokenId': (tokenId as String?),
+      if (url != _undefined) 'url': (url as String?),
+      if (tenant != _undefined) 'tenant': (tenant as String?),
+      if (secondaryToken != _undefined)
+        'secondaryToken': (secondaryToken as String?),
+    }),
+  );
 }
 
 class _CopyWithStubImpl$Input$SetDnsProviderInput<TRes>
@@ -1158,7 +1267,14 @@ class _CopyWithStubImpl$Input$SetDnsProviderInput<TRes>
 
   TRes _res;
 
-  call({Enum$DnsProvider? provider, String? apiToken}) => _res;
+  call({
+    Enum$DnsProvider? provider,
+    String? token,
+    String? tokenId,
+    String? url,
+    String? tenant,
+    String? secondaryToken,
+  }) => _res;
 }
 
 class Input$SetServiceConfigurationInput {
@@ -1886,6 +2002,7 @@ enum Enum$DnsProvider {
   CLOUDFLARE,
   DIGITALOCEAN,
   DESEC,
+  PORKBUN,
   $unknown;
 
   factory Enum$DnsProvider.fromJson(String value) =>
@@ -1902,6 +2019,8 @@ String toJson$Enum$DnsProvider(Enum$DnsProvider e) {
       return r'DIGITALOCEAN';
     case Enum$DnsProvider.DESEC:
       return r'DESEC';
+    case Enum$DnsProvider.PORKBUN:
+      return r'PORKBUN';
     case Enum$DnsProvider.$unknown:
       return r'$unknown';
   }
@@ -1915,6 +2034,8 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
       return Enum$DnsProvider.DIGITALOCEAN;
     case r'DESEC':
       return Enum$DnsProvider.DESEC;
+    case r'PORKBUN':
+      return Enum$DnsProvider.PORKBUN;
     default:
       return Enum$DnsProvider.$unknown;
   }

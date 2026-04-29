@@ -22,10 +22,9 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       createTime: fields[3] as DateTime?,
       volume: fields[4] as ServerProviderVolume,
       apiToken: fields[5] as String,
-      provider:
-          fields[6] == null
-              ? ServerProviderType.hetzner
-              : fields[6] as ServerProviderType,
+      provider: fields[6] == null
+          ? ServerProviderType.hetzner
+          : fields[6] as ServerProviderType,
       serverLocation: fields[7] as String?,
       serverType: fields[8] as String?,
       startTime: fields[2] as DateTime?,

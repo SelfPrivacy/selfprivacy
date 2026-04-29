@@ -24,9 +24,8 @@ abstract class SubrouteSelector extends StatelessWidget {
     return activeIndex;
   }
 
-  ValueSetter<int> openSubpage(final BuildContext context) => (
-    final index,
-  ) async {
-    await context.router.replaceAll([subroutes[index].route]);
-  };
+  ValueSetter<int> openSubpage(final BuildContext context) =>
+      (final index) async {
+        await context.router.replaceAll([subroutes[index].route]);
+      };
 }

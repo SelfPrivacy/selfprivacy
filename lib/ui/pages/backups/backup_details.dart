@@ -35,27 +35,24 @@ class BackupDetailsPage extends StatelessWidget {
             is ServerInstallationFinished;
     final BackupsState backupsState = context.watch<BackupsBloc>().state;
     final bool isBackupInitialized = backupsState.isInitialized;
-    final StateType providerState =
-        isReady && isBackupInitialized
-            ? StateType.stable
-            : StateType.uninitialized;
+    final StateType providerState = isReady && isBackupInitialized
+        ? StateType.stable
+        : StateType.uninitialized;
     final bool preventActions = backupsState.preventActions;
     final List<Backup> backups = backupsState.backups;
-    final List<Service> services =
-        context
-            .watch<ServicesBloc>()
-            .state
-            .servicesThatCanBeBackedUp
-            .where((final service) => service.isEnabled)
-            .toList();
+    final List<Service> services = context
+        .watch<ServicesBloc>()
+        .state
+        .servicesThatCanBeBackedUp
+        .where((final service) => service.isEnabled)
+        .toList();
     final Duration? autobackupPeriod = backupsState.autobackupPeriod;
-    final List<ServerJob> backupJobs =
-        context
-            .watch<ServerJobsBloc>()
-            .state
-            .backupJobList
-            .where((final job) => job.status != JobStatusEnum.finished)
-            .toList();
+    final List<ServerJob> backupJobs = context
+        .watch<ServerJobsBloc>()
+        .state
+        .backupJobList
+        .where((final job) => job.status != JobStatusEnum.finished)
+        .toList();
 
     final TokensState tokensState = context.watch<TokensBloc>().state;
 
@@ -83,31 +80,30 @@ class BackupDetailsPage extends StatelessWidget {
             ),
           if (!preventActions)
             BrandButton.filled(
-              onPressed:
-                  preventActions
-                      ? null
-                      : () async {
-                        if (tokensState.backupsCredentials.isEmpty) {
-                          await context.pushRoute(const AddBackupsTokenRoute());
-                          return;
-                        }
-                        context.read<BackupsBloc>().add(
-                          InitializeBackupsRepository(
-                            tokensState.backupsCredentials.first.data,
-                          ),
-                        );
-                      },
-              title:
-                  tokensState.backupsCredentials.isEmpty
-                      ? 'tokens.add_backups_token'.tr()
-                      : 'backup.initialize'.tr(),
+              onPressed: preventActions
+                  ? null
+                  : () async {
+                      if (tokensState.backupsCredentials.isEmpty) {
+                        await context.pushRoute(const AddBackupsTokenRoute());
+                        return;
+                      }
+                      context.read<BackupsBloc>().add(
+                        InitializeBackupsRepository(
+                          tokensState.backupsCredentials.first.data,
+                        ),
+                      );
+                    },
+              title: tokensState.backupsCredentials.isEmpty
+                  ? 'tokens.add_backups_token'.tr()
+                  : 'backup.initialize'.tr(),
             ),
         ],
       );
     }
 
-    final Color? overrideColor =
-        preventActions ? Theme.of(context).colorScheme.secondary : null;
+    final Color? overrideColor = preventActions
+        ? Theme.of(context).colorScheme.secondary
+        : null;
 
     return BrandHeroScreen(
       heroIcon: BrandIcons.save,
@@ -115,30 +111,27 @@ class BackupDetailsPage extends StatelessWidget {
       heroSubtitle: 'backup.description'.tr(),
       children: [
         ListTile(
-          onTap:
-              preventActions
-                  ? null
-                  : () async {
-                    await showModalBottomSheet(
-                      useRootNavigator: true,
-                      context: context,
-                      isScrollControlled: true,
-                      builder:
-                          (final BuildContext context) =>
-                              DraggableScrollableSheet(
-                                expand: false,
-                                maxChildSize: 0.9,
-                                minChildSize: 0.4,
-                                initialChildSize: 0.6,
-                                builder:
-                                    (final context, final scrollController) =>
-                                        CreateBackupsModal(
-                                          services: services,
-                                          scrollController: scrollController,
-                                        ),
+          onTap: preventActions
+              ? null
+              : () async {
+                  await showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                          expand: false,
+                          maxChildSize: 0.9,
+                          minChildSize: 0.4,
+                          initialChildSize: 0.6,
+                          builder: (final context, final scrollController) =>
+                              CreateBackupsModal(
+                                services: services,
+                                scrollController: scrollController,
                               ),
-                    );
-                  },
+                        ),
+                  );
+                },
           leading: Icon(Icons.add_circle_outline_rounded, color: overrideColor),
           title: Text(
             'backup.create_new'.tr(),
@@ -146,29 +139,26 @@ class BackupDetailsPage extends StatelessWidget {
           ),
         ),
         ListTile(
-          onTap:
-              preventActions
-                  ? null
-                  : () async {
-                    await showModalBottomSheet(
-                      useRootNavigator: true,
-                      context: context,
-                      isScrollControlled: true,
-                      builder:
-                          (final BuildContext context) =>
-                              DraggableScrollableSheet(
-                                expand: false,
-                                maxChildSize: 0.9,
-                                minChildSize: 0.4,
-                                initialChildSize: 0.6,
-                                builder:
-                                    (final context, final scrollController) =>
-                                        ChangeAutobackupsPeriodModal(
-                                          scrollController: scrollController,
-                                        ),
+          onTap: preventActions
+              ? null
+              : () async {
+                  await showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                          expand: false,
+                          maxChildSize: 0.9,
+                          minChildSize: 0.4,
+                          initialChildSize: 0.6,
+                          builder: (final context, final scrollController) =>
+                              ChangeAutobackupsPeriodModal(
+                                scrollController: scrollController,
                               ),
-                    );
-                  },
+                        ),
+                  );
+                },
           leading: Icon(Icons.manage_history_outlined, color: overrideColor),
           title: Text(
             'backup.autobackup_period_title'.tr(),
@@ -178,37 +168,34 @@ class BackupDetailsPage extends StatelessWidget {
             style: TextStyle(color: overrideColor),
             autobackupPeriod != null
                 ? 'backup.autobackup_period_subtitle'.tr(
-                  namedArgs: {
-                    'period': autobackupPeriod.toPrettyString(context.locale),
-                  },
-                )
+                    namedArgs: {
+                      'period': autobackupPeriod.toPrettyString(context.locale),
+                    },
+                  )
                 : 'backup.autobackup_period_never'.tr(),
           ),
         ),
         ListTile(
-          onTap:
-              preventActions
-                  ? null
-                  : () async {
-                    await showModalBottomSheet(
-                      useRootNavigator: true,
-                      context: context,
-                      isScrollControlled: true,
-                      builder:
-                          (final BuildContext context) =>
-                              DraggableScrollableSheet(
-                                expand: false,
-                                maxChildSize: 0.9,
-                                minChildSize: 0.4,
-                                initialChildSize: 0.6,
-                                builder:
-                                    (final context, final scrollController) =>
-                                        ChangeRotationQuotasModal(
-                                          scrollController: scrollController,
-                                        ),
+          onTap: preventActions
+              ? null
+              : () async {
+                  await showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                          expand: false,
+                          maxChildSize: 0.9,
+                          minChildSize: 0.4,
+                          initialChildSize: 0.6,
+                          builder: (final context, final scrollController) =>
+                              ChangeRotationQuotasModal(
+                                scrollController: scrollController,
                               ),
-                    );
-                  },
+                        ),
+                  );
+                },
           leading: Icon(Icons.auto_delete_outlined, color: overrideColor),
           title: Text(
             'backup.rotation_quotas_title'.tr(),
@@ -216,29 +203,26 @@ class BackupDetailsPage extends StatelessWidget {
           ),
         ),
         ListTile(
-          onTap:
-              preventActions
-                  ? null
-                  : () async {
-                    await showModalBottomSheet(
-                      useRootNavigator: true,
-                      context: context,
-                      isScrollControlled: true,
-                      builder:
-                          (final BuildContext context) =>
-                              DraggableScrollableSheet(
-                                expand: false,
-                                maxChildSize: 0.9,
-                                minChildSize: 0.5,
-                                initialChildSize: 0.7,
-                                builder:
-                                    (final context, final scrollController) =>
-                                        CopyEncryptionKeyModal(
-                                          scrollController: scrollController,
-                                        ),
+          onTap: preventActions
+              ? null
+              : () async {
+                  await showModalBottomSheet(
+                    useRootNavigator: true,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (final BuildContext context) =>
+                        DraggableScrollableSheet(
+                          expand: false,
+                          maxChildSize: 0.9,
+                          minChildSize: 0.5,
+                          initialChildSize: 0.7,
+                          builder: (final context, final scrollController) =>
+                              CopyEncryptionKeyModal(
+                                scrollController: scrollController,
                               ),
-                    );
-                  },
+                        ),
+                  );
+                },
           leading: Icon(Icons.key_outlined, color: overrideColor),
           title: Text(
             'backup.backups_encryption_key'.tr(),
@@ -282,24 +266,23 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
               if (backups.isNotEmpty)
                 Column(
-                  children:
-                      backups
-                          .take(15)
-                          .map(
-                            (final Backup backup) => SnapshotItem(
-                              backup: backup,
-                              preventActions: preventActions,
-                              overrideColor: overrideColor,
-                            ),
-                          )
-                          .toList(),
+                  children: backups
+                      .take(15)
+                      .map(
+                        (final Backup backup) => SnapshotItem(
+                          backup: backup,
+                          preventActions: preventActions,
+                          overrideColor: overrideColor,
+                        ),
+                      )
+                      .toList(),
                 ),
               if (backups.isNotEmpty && backups.length > 15)
                 ListTile(
                   title: Text('backup.show_more'.tr()),
                   leading: const Icon(Icons.arrow_drop_down),
-                  onTap:
-                      () => context.pushRoute(BackupsListRoute(service: null)),
+                  onTap: () =>
+                      context.pushRoute(BackupsListRoute(service: null)),
                 ),
             ],
           ),
@@ -320,21 +303,19 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
                 leading: Icon(Icons.cached_outlined, color: overrideColor),
                 isThreeLine: true,
-                onTap:
-                    preventActions
-                        ? null
-                        : () => context.read<BackupsBloc>().add(
-                          const ForceSnapshotListUpdate(),
-                        ),
+                onTap: preventActions
+                    ? null
+                    : () => context.read<BackupsBloc>().add(
+                        const ForceSnapshotListUpdate(),
+                      ),
               ),
               ListTile(
                 title: Text(
                   'backup.detach_repository'.tr(),
                   style: TextStyle(
-                    color:
-                        preventActions
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.error,
+                    color: preventActions
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context).colorScheme.error,
                   ),
                 ),
                 subtitle: Text(
@@ -343,29 +324,26 @@ class BackupDetailsPage extends StatelessWidget {
                 ),
                 leading: Icon(
                   Icons.link_off_outlined,
-                  color:
-                      preventActions
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.error,
+                  color: preventActions
+                      ? Theme.of(context).colorScheme.secondary
+                      : Theme.of(context).colorScheme.error,
                 ),
                 isThreeLine: true,
-                onTap:
-                    preventActions
-                        ? null
-                        : () {
-                          showPopUpAlert(
-                            alertTitle: 'backup.detach_repository'.tr(),
-                            description:
-                                'backup.detach_repository_confirm'.tr(),
-                            actionButtonTitle:
-                                'backup.detach_repository_button'.tr(),
-                            actionButtonOnPressed: () {
-                              context.read<BackupsBloc>().add(
-                                const RemoveBackupsRepository(),
-                              );
-                            },
-                          );
-                        },
+                onTap: preventActions
+                    ? null
+                    : () {
+                        showPopUpAlert(
+                          alertTitle: 'backup.detach_repository'.tr(),
+                          description: 'backup.detach_repository_confirm'.tr(),
+                          actionButtonTitle: 'backup.detach_repository_button'
+                              .tr(),
+                          actionButtonOnPressed: () {
+                            context.read<BackupsBloc>().add(
+                              const RemoveBackupsRepository(),
+                            );
+                          },
+                        );
+                      },
               ),
             ],
           ),

@@ -26,8 +26,9 @@ class _RecoveryKeyPageState extends State<RecoveryKeyPage> {
     final RecoveryKeyState keyStatus = context.watch<RecoveryKeyBloc>().state;
 
     final List<Widget> widgets;
-    String? subtitle =
-        keyStatus.exists ? null : 'recovery_key.key_main_description'.tr();
+    String? subtitle = keyStatus.exists
+        ? null
+        : 'recovery_key.key_main_description'.tr();
 
     switch (keyStatus) {
       case RecoveryKeyRefreshing():
@@ -79,10 +80,9 @@ class _RecoveryKeyContentState extends State<RecoveryKeyContent> {
           duration: const Duration(milliseconds: 300),
           firstChild: RecoveryKeyInformation(state: keyStatus),
           secondChild: const RecoveryKeyConfiguration(),
-          crossFadeState:
-              _isConfigurationVisible || !keyStatus.exists
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
+          crossFadeState: _isConfigurationVisible || !keyStatus.exists
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
         ),
         const SizedBox(height: 16),
         if (!_isConfigurationVisible && keyStatus.isValid && keyStatus.exists)
@@ -116,34 +116,31 @@ class RecoveryKeyStatusCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => FilledCard(
     child: ListTile(
-      title:
-          isValid
-              ? Text(
-                'recovery_key.key_valid'.tr(),
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              )
-              : Text(
-                'recovery_key.key_invalid'.tr(),
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onErrorContainer,
-                ),
-              ),
-      leading:
-          isValid
-              ? Icon(
-                Icons.check_circle_outlined,
+      title: isValid
+          ? Text(
+              'recovery_key.key_valid'.tr(),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-              )
-              : Icon(
-                Icons.cancel_outlined,
+              ),
+            )
+          : Text(
+              'recovery_key.key_invalid'.tr(),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Theme.of(context).colorScheme.onErrorContainer,
               ),
-      tileColor:
-          isValid
-              ? Theme.of(context).colorScheme.surfaceContainerHighest
-              : Theme.of(context).colorScheme.errorContainer,
+            ),
+      leading: isValid
+          ? Icon(
+              Icons.check_circle_outlined,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            )
+          : Icon(
+              Icons.cancel_outlined,
+              color: Theme.of(context).colorScheme.onErrorContainer,
+            ),
+      tileColor: isValid
+          ? Theme.of(context).colorScheme.surfaceContainerHighest
+          : Theme.of(context).colorScheme.errorContainer,
     ),
   );
 }
@@ -166,10 +163,9 @@ class RecoveryKeyInformation extends StatelessWidget {
                 args: [DateFormat.yMMMMd().format(state.expiresAt!)],
               ),
             ),
-            textColor:
-                state.isInvalidBecauseExpired
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).colorScheme.onSurface,
+            textColor: state.isInvalidBecauseExpired
+                ? Theme.of(context).colorScheme.error
+                : Theme.of(context).colorScheme.onSurface,
           ),
         if (state.usesLeft != null)
           ListTile(
@@ -178,10 +174,9 @@ class RecoveryKeyInformation extends StatelessWidget {
                 args: [state.usesLeft!.toString()],
               ),
             ),
-            textColor:
-                state.isInvalidBecauseUsed
-                    ? Theme.of(context).colorScheme.error
-                    : Theme.of(context).colorScheme.onSurface,
+            textColor: state.isInvalidBecauseUsed
+                ? Theme.of(context).colorScheme.error
+                : Theme.of(context).colorScheme.onSurface,
           ),
         if (state.generatedAt != null)
           ListTile(
@@ -226,8 +221,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       final String token = await context
           .read<RecoveryKeyBloc>()
           .generateRecoveryKey(
-            numberOfUses:
-                _isAmountToggled ? int.tryParse(_amountController.text) : null,
+            numberOfUses: _isAmountToggled
+                ? int.tryParse(_amountController.text)
+                : null,
             expirationDate: _isExpirationToggled ? _selectedDate : null,
           );
       if (!mounted) {
@@ -297,10 +293,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         ),
         AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),
-          crossFadeState:
-              _isAmountToggled
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
+          crossFadeState: _isAmountToggled
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           firstChild: Column(
             children: [
               const SizedBox(height: 8),
@@ -335,10 +330,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         ),
         AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),
-          crossFadeState:
-              _isExpirationToggled
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
+          crossFadeState: _isExpirationToggled
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           firstChild: Column(
             children: [
               const SizedBox(height: 8),
@@ -366,10 +360,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         ),
         const SizedBox(height: 16),
         BrandButton.filled(
-          onPressed:
-              !_isAmountError && !_isExpirationError && !_isLoading
-                  ? _generateRecoveryToken
-                  : null,
+          onPressed: !_isAmountError && !_isExpirationError && !_isLoading
+              ? _generateRecoveryToken
+              : null,
           child: Text('recovery_key.key_receive_button'.tr()),
         ),
       ],

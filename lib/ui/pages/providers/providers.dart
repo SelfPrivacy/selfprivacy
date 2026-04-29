@@ -35,16 +35,20 @@ class _ProvidersPageState extends State<ProvidersPage> {
             is ServerInstallationFinished;
     final BackupsState backupsState = context.watch<BackupsBloc>().state;
 
-    final DnsRecordsStatus dnsStatus =
-        context.watch<DnsRecordsCubit>().state.dnsState;
+    final DnsRecordsStatus dnsStatus = context
+        .watch<DnsRecordsCubit>()
+        .state
+        .dnsState;
 
     final diskStatus = context.watch<VolumesBloc>().state.diskStatus;
 
-    final ServerInstallationState appConfig =
-        context.watch<ServerInstallationCubit>().state;
+    final ServerInstallationState appConfig = context
+        .watch<ServerInstallationCubit>()
+        .state;
 
-    final OutdatedServerCheckerState outdatedServerCheckerState =
-        context.watch<OutdatedServerCheckerBloc>().state;
+    final OutdatedServerCheckerState outdatedServerCheckerState = context
+        .watch<OutdatedServerCheckerBloc>()
+        .state;
 
     StateType getServerStatus() {
       if (!isReady) {
@@ -70,20 +74,19 @@ class _ProvidersPageState extends State<ProvidersPage> {
     }
 
     return Scaffold(
-      appBar:
-          Breakpoints.small.isActive(context)
-              ? BrandHeader(title: 'basis.providers_title'.tr())
-              : null,
+      appBar: Breakpoints.small.isActive(context)
+          ? BrandHeader(title: 'basis.providers_title'.tr())
+          : null,
       body: ListView(
         padding: paddingH16V0,
         children: [
           if (!isReady) ...[const NotReadyCard(), const SizedBox(height: 16)],
           if (outdatedServerCheckerState is OutdatedServerCheckerOutdated) ...[
             ServerOutdatedCard(
-              requiredVersion:
-                  outdatedServerCheckerState.requiredVersion.toString(),
-              currentVersion:
-                  outdatedServerCheckerState.currentVersion.toString(),
+              requiredVersion: outdatedServerCheckerState.requiredVersion
+                  .toString(),
+              currentVersion: outdatedServerCheckerState.currentVersion
+                  .toString(),
             ),
             const SizedBox(height: 16),
           ],
@@ -91,14 +94,12 @@ class _ProvidersPageState extends State<ProvidersPage> {
             state: getServerStatus(),
             icon: BrandIcons.server,
             title: 'server.card_title'.tr(),
-            subtitle:
-                diskStatus.isDiskOkay
-                    ? 'storage.status_ok'.tr()
-                    : 'storage.status_error'.tr(),
-            onTap:
-                isClickable()
-                    ? () => context.pushRoute(const ServerDetailsRoute())
-                    : null,
+            subtitle: diskStatus.isDiskOkay
+                ? 'storage.status_ok'.tr()
+                : 'storage.status_error'.tr(),
+            onTap: isClickable()
+                ? () => context.pushRoute(const ServerDetailsRoute())
+                : null,
           ),
           const SizedBox(height: 16),
           Skeletonizer(
@@ -108,14 +109,12 @@ class _ProvidersPageState extends State<ProvidersPage> {
               state: getDnsStatus(),
               icon: BrandIcons.globe,
               title: 'domain.screen_title'.tr(),
-              subtitle:
-                  appConfig.isDomainSelected
-                      ? appConfig.serverDomain!.domainName
-                      : '',
-              onTap:
-                  isClickable()
-                      ? () => context.pushRoute(const DnsDetailsRoute())
-                      : null,
+              subtitle: appConfig.isDomainSelected
+                  ? appConfig.serverDomain!.domainName
+                  : '',
+              onTap: isClickable()
+                  ? () => context.pushRoute(const DnsDetailsRoute())
+                  : null,
             ),
           ),
           const SizedBox(height: 16),
@@ -126,17 +125,15 @@ class _ProvidersPageState extends State<ProvidersPage> {
                     backupsState is BackupsInitial),
             enableSwitchAnimation: true,
             child: ProvidersPageCard(
-              state:
-                  backupsState is BackupsInitialized
-                      ? StateType.stable
-                      : StateType.uninitialized,
+              state: backupsState is BackupsInitialized
+                  ? StateType.stable
+                  : StateType.uninitialized,
               icon: BrandIcons.save,
               title: 'backup.card_title'.tr(),
               subtitle: _backupsCardSubtitle(backupsState),
-              onTap:
-                  isClickable()
-                      ? () => context.pushRoute(const BackupDetailsRoute())
-                      : null,
+              onTap: isClickable()
+                  ? () => context.pushRoute(const BackupDetailsRoute())
+                  : null,
             ),
           ),
         ],

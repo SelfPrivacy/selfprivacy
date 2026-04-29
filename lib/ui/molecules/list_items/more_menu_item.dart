@@ -22,17 +22,17 @@ class MoreMenuItem extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final Color color =
-        accent
-            ? Theme.of(context).colorScheme.onTertiaryContainer
-            : Theme.of(context).colorScheme.onSurface;
+    final Color color = accent
+        ? Theme.of(context).colorScheme.onTertiaryContainer
+        : Theme.of(context).colorScheme.onSurface;
     return FilledCard(
       tertiary: accent,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         onTap: () => context.pushRoute(goTo()),
-        onLongPress:
-            longGoTo != null ? () => context.pushRoute(longGoTo!) : null,
+        onLongPress: longGoTo != null
+            ? () => context.pushRoute(longGoTo!)
+            : null,
         leading: Icon(iconData, size: 24, color: color),
         title: Text(
           title,
@@ -40,15 +40,14 @@ class MoreMenuItem extends StatelessWidget {
             context,
           ).textTheme.titleMedium?.copyWith(color: color),
         ),
-        subtitle:
-            subtitle != null
-                ? Text(
-                  subtitle!,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: color),
-                )
-                : null,
+        subtitle: subtitle != null
+            ? Text(
+                subtitle!,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: color),
+              )
+            : null,
       ),
     );
   }

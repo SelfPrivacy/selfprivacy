@@ -61,10 +61,9 @@ class _ConsolePageState extends State<ConsolePage> {
         ],
       ),
       body: Scrollbar(
-        child:
-            logs.isEmpty
-                ? const _ConsoleViewEmpty()
-                : _ConsoleViewLoaded(logs: logs),
+        child: logs.isEmpty
+            ? const _ConsoleViewEmpty()
+            : _ConsoleViewLoaded(logs: logs),
       ),
     );
   }

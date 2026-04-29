@@ -23,12 +23,11 @@ class DnsRecordItem extends StatelessWidget {
             : refreshing
             ? Icons.refresh
             : Icons.error_outline,
-        color:
-            dnsRecord.isSatisfied
-                ? goodColor
-                : refreshing
-                ? neutralColor
-                : errorColor,
+        color: dnsRecord.isSatisfied
+            ? goodColor
+            : refreshing
+            ? neutralColor
+            : errorColor,
       ),
       title: Text(dnsRecord.displayName ?? dnsRecord.name),
       subtitle: Text(

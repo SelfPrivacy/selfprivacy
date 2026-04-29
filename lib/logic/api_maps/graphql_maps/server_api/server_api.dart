@@ -229,23 +229,20 @@ class ServerApi extends GraphQLApiMap
             result.parsedData?.system.changeAutoUpgradeSettings.success ??
             false,
         message: result.parsedData?.system.changeAutoUpgradeSettings.message,
-        data:
-            result.parsedData == null
-                ? null
-                : AutoUpgradeSettings(
-                  allowReboot:
-                      result
-                          .parsedData!
-                          .system
-                          .changeAutoUpgradeSettings
-                          .allowReboot,
-                  enable:
-                      result
-                          .parsedData!
-                          .system
-                          .changeAutoUpgradeSettings
-                          .enableAutoUpgrade,
-                ),
+        data: result.parsedData == null
+            ? null
+            : AutoUpgradeSettings(
+                allowReboot: result
+                    .parsedData!
+                    .system
+                    .changeAutoUpgradeSettings
+                    .allowReboot,
+                enable: result
+                    .parsedData!
+                    .system
+                    .changeAutoUpgradeSettings
+                    .enableAutoUpgrade,
+              ),
       );
     } catch (e) {
       logger('Error setting auto upgrade settings: $e', error: e);
@@ -304,12 +301,11 @@ class ServerApi extends GraphQLApiMap
       return GenericResult<SshSettings?>(
         success: result.parsedData?.system.changeSshSettings.success ?? false,
         message: result.parsedData?.system.changeSshSettings.message,
-        data:
-            result.parsedData == null
-                ? null
-                : SshSettings(
-                  enable: result.parsedData!.system.changeSshSettings.enable,
-                ),
+        data: result.parsedData == null
+            ? null
+            : SshSettings(
+                enable: result.parsedData!.system.changeSshSettings.enable,
+              ),
       );
     } catch (e) {
       logger('Error setting SSH settings: $e', error: e);
@@ -435,10 +431,9 @@ class ServerApi extends GraphQLApiMap
           error: response.exception,
         );
       }
-      records =
-          response.parsedData!.system.domainInfo.requiredDnsRecords
-              .map<DnsRecord>(DnsRecord.fromGraphQL)
-              .toList();
+      records = response.parsedData!.system.domainInfo.requiredDnsRecords
+          .map<DnsRecord>(DnsRecord.fromGraphQL)
+          .toList();
     } catch (e) {
       logger('Error in GraphQL GetDnsRecords request: $e', error: e);
     }
@@ -465,8 +460,9 @@ class ServerApi extends GraphQLApiMap
           message: message,
         );
       }
-      final List<ApiToken> parsed =
-          response.parsedData!.api.devices.map(ApiToken.fromGraphQL).toList();
+      final List<ApiToken> parsed = response.parsedData!.api.devices
+          .map(ApiToken.fromGraphQL)
+          .toList();
       tokens = GenericResult<List<ApiToken>>(success: true, data: parsed);
     } catch (e) {
       logger('Error in GraphQL GetApiTokens request: $e', error: e);

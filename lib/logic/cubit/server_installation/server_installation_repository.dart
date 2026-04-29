@@ -39,8 +39,9 @@ class ServerAuthorizationException implements Exception {
 class ServerInstallationRepository {
   Box box = Hive.box(BNames.serverInstallationBox);
 
-  static final logger =
-      const AppLogger(name: 'server_installation_repository').log;
+  static final logger = const AppLogger(
+    name: 'server_installation_repository',
+  ).log;
 
   Future<ServerInstallationState> load() async {
     final ServerInstallationWizardData? wizardData =
@@ -202,8 +203,8 @@ class ServerInstallationRepository {
       return result;
     }
     await setDnsApiToken(token);
-    final domainResult =
-        await ProvidersController.currentDnsProvider!.domainList();
+    final domainResult = await ProvidersController.currentDnsProvider!
+        .domainList();
     if (!domainResult.success || domainResult.data.isEmpty) {
       return GenericResult(
         success: false,
@@ -256,20 +257,13 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> restart() async {
     final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
 
-    final result =
-        await ServerApi(
-          overrideDomain:
-              getIt<WizardDataModel>()
-                  .serverInstallation!
-                  .serverDomain!
-                  .domainName,
-          customToken:
-              getIt<WizardDataModel>()
-                  .serverInstallation!
-                  .serverDetails!
-                  .apiToken,
-          isWithToken: true,
-        ).reboot();
+    final result = await ServerApi(
+      overrideDomain:
+          getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
+      customToken:
+          getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
+      isWithToken: true,
+    ).reboot();
 
     if (result.success && result.data != null) {
       server.copyWith(startTime: result.data);
@@ -427,8 +421,8 @@ class ServerInstallationRepository {
         );
       }
     }
-    final GenericResult<String> deviceAuthKey =
-        await serverApi.createDeviceToken();
+    final GenericResult<String> deviceAuthKey = await serverApi
+        .createDeviceToken();
     final GenericResult<String> result = await serverApi.authorizeDevice(
       DeviceToken(
         device: await PlatformAdapter.deviceName,

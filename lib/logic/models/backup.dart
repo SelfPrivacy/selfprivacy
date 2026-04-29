@@ -56,10 +56,9 @@ class BackupConfiguration extends Equatable {
     final Query$BackupConfiguration$backup$configuration configuration,
   ) : this(
         // Provided by API as int of minutes
-        autobackupPeriod:
-            configuration.autobackupPeriod != null
-                ? Duration(minutes: configuration.autobackupPeriod!)
-                : null,
+        autobackupPeriod: configuration.autobackupPeriod != null
+            ? Duration(minutes: configuration.autobackupPeriod!)
+            : null,
         encryptionKey: configuration.encryptionKey,
         isInitialized: configuration.isInitialized,
         locationId: configuration.locationId,

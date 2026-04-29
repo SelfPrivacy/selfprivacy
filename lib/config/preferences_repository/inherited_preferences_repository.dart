@@ -32,10 +32,9 @@ class InheritedPreferencesRepository extends StatefulWidget {
   State<InheritedPreferencesRepository> createState() =>
       _InheritedPreferencesRepositoryState();
 
-  static PreferencesRepository? of(final BuildContext context) =>
-      context
-          .dependOnInheritedWidgetOfExactType<_PreferencesRepositoryInjector>()
-          ?.settingsRepository;
+  static PreferencesRepository? of(final BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<_PreferencesRepositoryInjector>()
+      ?.settingsRepository;
 }
 
 class _InheritedPreferencesRepositoryState

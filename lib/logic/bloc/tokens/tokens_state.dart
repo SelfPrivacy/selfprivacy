@@ -18,21 +18,20 @@ sealed class TokensState extends Equatable {
   List<TokenStatusWrapper<BackupsCredential>> get backupsCredentials;
   List<Server> get servers => _servers;
 
-  List<Server> get serversWithoutProviderCredentials =>
-      servers
-          .where(
-            (final Server server) =>
-                server.hostingDetails.provider != ServerProviderType.unknown &&
-                serverProviderCredentials.every(
-                  (
-                    final TokenStatusWrapper<ServerProviderCredential>
-                    serverProviderCredential,
-                  ) =>
-                      !serverProviderCredential.data.associatedServerIds
-                          .contains(server.hostingDetails.id),
-                ),
-          )
-          .toList();
+  List<Server> get serversWithoutProviderCredentials => servers
+      .where(
+        (final Server server) =>
+            server.hostingDetails.provider != ServerProviderType.unknown &&
+            serverProviderCredentials.every(
+              (
+                final TokenStatusWrapper<ServerProviderCredential>
+                serverProviderCredential,
+              ) => !serverProviderCredential.data.associatedServerIds.contains(
+                server.hostingDetails.id,
+              ),
+            ),
+      )
+      .toList();
 
   Server getServerById(final int serverId) => servers.firstWhere(
     (final Server server) => server.hostingDetails.id == serverId,
@@ -52,16 +51,15 @@ final class TokensInitial extends TokensState {
 
   @override
   List<TokenStatusWrapper<ServerProviderCredential>>
-  get serverProviderCredentials =>
-      _serverProviderCredentials
-          .map(
-            (final ServerProviderCredential serverProviderCredential) =>
-                TokenStatusWrapper<ServerProviderCredential>(
-                  data: serverProviderCredential,
-                  status: TokenStatus.loading,
-                ),
-          )
-          .toList();
+  get serverProviderCredentials => _serverProviderCredentials
+      .map(
+        (final ServerProviderCredential serverProviderCredential) =>
+            TokenStatusWrapper<ServerProviderCredential>(
+              data: serverProviderCredential,
+              status: TokenStatus.loading,
+            ),
+      )
+      .toList();
 
   @override
   List<TokenStatusWrapper<DnsProviderCredential>> get dnsProviderCredentials =>

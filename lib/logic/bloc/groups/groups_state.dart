@@ -32,13 +32,10 @@ sealed class GroupsState extends Equatable {
     return serviceGroups;
   }
 
-  List<String> get unrecognizedGroups =>
-      groups.where((final String group) {
-        final parts = group.split('.');
-        return parts.length != 3 &&
-            group != fullUsersGroup &&
-            group != adminsGroup;
-      }).toList();
+  List<String> get unrecognizedGroups => groups.where((final String group) {
+    final parts = group.split('.');
+    return parts.length != 3 && group != fullUsersGroup && group != adminsGroup;
+  }).toList();
 }
 
 class GroupsInitial extends GroupsState {

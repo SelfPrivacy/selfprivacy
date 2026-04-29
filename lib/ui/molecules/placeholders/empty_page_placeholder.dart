@@ -17,30 +17,29 @@ class EmptyPagePlaceholder extends StatelessWidget {
   final String? description;
 
   @override
-  Widget build(final BuildContext context) =>
-      showReadyCard
-          ? Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (showReadyCard)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: NotReadyCard(),
-                ),
-              Expanded(
-                child: _ContentWidget(
-                  iconData: iconData,
-                  title: title,
-                  description: description,
-                ),
+  Widget build(final BuildContext context) => showReadyCard
+      ? Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (showReadyCard)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: NotReadyCard(),
               ),
-            ],
-          )
-          : _ContentWidget(
-            iconData: iconData,
-            title: title,
-            description: description,
-          );
+            Expanded(
+              child: _ContentWidget(
+                iconData: iconData,
+                title: title,
+                description: description,
+              ),
+            ),
+          ],
+        )
+      : _ContentWidget(
+          iconData: iconData,
+          title: title,
+          description: description,
+        );
 }
 
 class _ContentWidget extends StatelessWidget {

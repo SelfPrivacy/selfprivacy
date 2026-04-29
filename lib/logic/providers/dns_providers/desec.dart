@@ -53,10 +53,9 @@ class DesecDnsProvider extends DnsProvider {
       );
     }
 
-    domains =
-        result.data
-            .map<ServerDomain>((final el) => el.toServerDomain())
-            .toList();
+    domains = result.data
+        .map<ServerDomain>((final el) => el.toServerDomain())
+        .toList();
 
     return GenericResult(success: true, data: domains);
   }

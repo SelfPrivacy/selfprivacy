@@ -266,41 +266,37 @@ sealed class ServiceConfigItem extends Equatable {
   factory ServiceConfigItem.fromGraphQL(
     final Query$AllServices$services$allServices$configuration configItem,
   ) => configItem.when<ServiceConfigItem>(
-    boolConfigItem:
-        (final boolConfigItem) => BoolServiceConfigItem(
-          id: boolConfigItem.fieldId,
-          description: boolConfigItem.description,
-          widget: boolConfigItem.widget,
-          type: boolConfigItem.type,
-          value: boolConfigItem.boolValue,
-          defaultValue: boolConfigItem.defaultBoolValue,
-        ),
-    enumConfigItem:
-        (final enumConfigItem) => EnumServiceConfigItem(
-          id: enumConfigItem.fieldId,
-          description: enumConfigItem.description,
-          widget: enumConfigItem.widget,
-          type: enumConfigItem.type,
-          value: enumConfigItem.stringValue,
-          defaultValue: enumConfigItem.defaultStringValue,
-          options: enumConfigItem.options,
-        ),
-    stringConfigItem:
-        (final stringConfigItem) => StringServiceConfigItem(
-          id: stringConfigItem.fieldId,
-          description: stringConfigItem.description,
-          widget: stringConfigItem.widget,
-          type: stringConfigItem.type,
-          value: stringConfigItem.stringValue,
-          defaultValue: stringConfigItem.defaultStringValue,
-          regex: stringConfigItem.regex,
-        ),
-    orElse:
-        () => FallbackServiceConfigItem(
-          id: configItem.fieldId,
-          description: configItem.description,
-          type: configItem.type,
-        ),
+    boolConfigItem: (final boolConfigItem) => BoolServiceConfigItem(
+      id: boolConfigItem.fieldId,
+      description: boolConfigItem.description,
+      widget: boolConfigItem.widget,
+      type: boolConfigItem.type,
+      value: boolConfigItem.boolValue,
+      defaultValue: boolConfigItem.defaultBoolValue,
+    ),
+    enumConfigItem: (final enumConfigItem) => EnumServiceConfigItem(
+      id: enumConfigItem.fieldId,
+      description: enumConfigItem.description,
+      widget: enumConfigItem.widget,
+      type: enumConfigItem.type,
+      value: enumConfigItem.stringValue,
+      defaultValue: enumConfigItem.defaultStringValue,
+      options: enumConfigItem.options,
+    ),
+    stringConfigItem: (final stringConfigItem) => StringServiceConfigItem(
+      id: stringConfigItem.fieldId,
+      description: stringConfigItem.description,
+      widget: stringConfigItem.widget,
+      type: stringConfigItem.type,
+      value: stringConfigItem.stringValue,
+      defaultValue: stringConfigItem.defaultStringValue,
+      regex: stringConfigItem.regex,
+    ),
+    orElse: () => FallbackServiceConfigItem(
+      id: configItem.fieldId,
+      description: configItem.description,
+      type: configItem.type,
+    ),
   );
 
   final String id;

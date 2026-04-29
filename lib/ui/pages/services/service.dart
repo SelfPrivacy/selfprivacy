@@ -91,13 +91,9 @@ class _ServicePageState extends State<ServicePage> {
         if (!service.isInstalled) ...[
           BrandButton.filled(
             title: 'services_catalog.install'.tr(),
-            onPressed:
-                () => context.pushRoute(
-                  ServiceSettingsRoute(
-                    serviceId: service.id,
-                    isInstalling: true,
-                  ),
-                ),
+            onPressed: () => context.pushRoute(
+              ServiceSettingsRoute(serviceId: service.id, isInstalling: true),
+            ),
           ),
         ],
         if (service.isInstalled) ...[
@@ -129,26 +125,26 @@ class _ServicePageState extends State<ServicePage> {
           ],
           ListTile(
             iconColor: Theme.of(context).colorScheme.onSurface,
-            onTap:
-                () => context.read<ServicesBloc>().add(ServiceRestart(service)),
+            onTap: () =>
+                context.read<ServicesBloc>().add(ServiceRestart(service)),
             leading: const Icon(Icons.restart_alt_outlined),
             title: Text(
               'service_page.restart'.tr(),
-              style:
-                  isRestartingEnabled ? enabledTitleStyle : disabledTitleStyle,
+              style: isRestartingEnabled
+                  ? enabledTitleStyle
+                  : disabledTitleStyle,
             ),
             enabled: isRestartingEnabled,
           ),
           if (!service.isRequired)
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
-              onTap:
-                  () => context.read<JobsCubit>().addJob(
-                    ServiceToggleJob(
-                      service: service,
-                      needToTurnOn: serviceDisabled,
-                    ),
-                  ),
+              onTap: () => context.read<JobsCubit>().addJob(
+                ServiceToggleJob(
+                  service: service,
+                  needToTurnOn: serviceDisabled,
+                ),
+              ),
               leading: const Icon(Icons.power_settings_new),
               title: Text(
                 serviceDisabled
@@ -161,10 +157,9 @@ class _ServicePageState extends State<ServicePage> {
           if (service.configuration.isNotEmpty)
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
-              onTap:
-                  () => context.pushRoute(
-                    ServiceSettingsRoute(serviceId: service.id),
-                  ),
+              onTap: () => context.pushRoute(
+                ServiceSettingsRoute(serviceId: service.id),
+              ),
               leading: const Icon(Icons.settings_outlined),
               title: Text(
                 'service_page.settings'.tr(),
@@ -175,14 +170,13 @@ class _ServicePageState extends State<ServicePage> {
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
               // Open page ServicesMigrationPage
-              onTap:
-                  () => context.pushRoute(
-                    ServicesMigrationRoute(
-                      services: [service],
-                      diskStatus: context.read<VolumesBloc>().state.diskStatus,
-                      isMigration: false,
-                    ),
-                  ),
+              onTap: () => context.pushRoute(
+                ServicesMigrationRoute(
+                  services: [service],
+                  diskStatus: context.read<VolumesBloc>().state.diskStatus,
+                  isMigration: false,
+                ),
+              ),
               leading: const Icon(Icons.drive_file_move_outlined),
               title: Text(
                 'service_page.move'.tr(),
@@ -192,12 +186,11 @@ class _ServicePageState extends State<ServicePage> {
                 'service_page.uses'.tr(
                   namedArgs: {
                     'usage': service.storageUsage.used.toString(),
-                    'volume':
-                        context
-                            .read<VolumesBloc>()
-                            .state
-                            .getVolume(service.storageUsage.volume ?? '')
-                            .displayName,
+                    'volume': context
+                        .read<VolumesBloc>()
+                        .state
+                        .getVolume(service.storageUsage.volume ?? '')
+                        .displayName,
                   },
                 ),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -210,8 +203,8 @@ class _ServicePageState extends State<ServicePage> {
             ListTile(
               iconColor: Theme.of(context).colorScheme.onSurface,
               // Open page ServicesMigrationPage
-              onTap:
-                  () => context.pushRoute(BackupsListRoute(service: service)),
+              onTap: () =>
+                  context.pushRoute(BackupsListRoute(service: service)),
               leading: const Icon(Icons.settings_backup_restore_outlined),
               title: Text(
                 'service_page.snapshots'.tr(),
@@ -220,8 +213,8 @@ class _ServicePageState extends State<ServicePage> {
             ),
           ListTile(
             iconColor: Theme.of(context).colorScheme.onSurface,
-            onTap:
-                () => context.pushRoute(ServerLogsRoute(serviceId: service.id)),
+            onTap: () =>
+                context.pushRoute(ServerLogsRoute(serviceId: service.id)),
             leading: const Icon(Icons.manage_search_outlined),
             title: Text('service_page.logs'.tr(), style: enabledTitleStyle),
           ),

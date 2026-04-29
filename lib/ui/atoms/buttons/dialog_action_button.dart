@@ -20,10 +20,9 @@ class DialogActionButton extends StatelessWidget {
     return TextButton(
       child: Text(
         text!,
-        style:
-            isRed
-                ? TextStyle(color: Theme.of(context).colorScheme.error)
-                : null,
+        style: isRed
+            ? TextStyle(color: Theme.of(context).colorScheme.error)
+            : null,
       ),
       onPressed: () {
         navigator.pop();

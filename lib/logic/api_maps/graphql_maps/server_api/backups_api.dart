@@ -13,10 +13,9 @@ mixin BackupsApi on GraphQLApiMap {
         logger(message);
         backups = [];
       }
-      final List<Backup> parsed =
-          response.parsedData!.backup.allSnapshots
-              .map(Backup.fromGraphQL)
-              .toList();
+      final List<Backup> parsed = response.parsedData!.backup.allSnapshots
+          .map(Backup.fromGraphQL)
+          .toList();
       backups = parsed;
     } catch (e) {
       logger("Couldn't get backups", error: e);

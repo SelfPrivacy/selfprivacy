@@ -14,8 +14,9 @@ class OnboardingFirstView extends StatelessWidget {
     required final String fileName,
     required final String fileExtension,
   }) {
-    final String suffix =
-        Theme.of(context).brightness == Brightness.dark ? '-dark' : '-light';
+    final String suffix = Theme.of(context).brightness == Brightness.dark
+        ? '-dark'
+        : '-light';
     return '$path/$fileName$suffix.$fileExtension';
   }
 

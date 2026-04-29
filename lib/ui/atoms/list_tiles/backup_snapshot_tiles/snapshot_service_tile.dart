@@ -15,18 +15,17 @@ class SnapshotServiceTile extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ListTile(
-    leading:
-        service != null
-            ? SvgPicture.string(
-              service!.svgIcon,
-              height: 24,
-              width: 24,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.onSurface,
-                BlendMode.srcIn,
-              ),
-            )
-            : const Icon(Icons.question_mark_outlined),
+    leading: service != null
+        ? SvgPicture.string(
+            service!.svgIcon,
+            height: 24,
+            width: 24,
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).colorScheme.onSurface,
+              BlendMode.srcIn,
+            ),
+          )
+        : const Icon(Icons.question_mark_outlined),
     title: Text('backup.snapshot_service_title'.tr()),
     subtitle: Text(service?.displayName ?? fallbackServiceName),
   );

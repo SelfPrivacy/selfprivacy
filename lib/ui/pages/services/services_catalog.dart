@@ -18,8 +18,10 @@ class ServicesCatalogPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final availableServices =
-        context.watch<ServicesBloc>().state.availableServices;
+    final availableServices = context
+        .watch<ServicesBloc>()
+        .state
+        .availableServices;
 
     if (availableServices.isEmpty) {
       return BrandHeroScreen(

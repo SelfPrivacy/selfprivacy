@@ -58,11 +58,10 @@ class ResetPasswordPage extends StatelessWidget {
                       Expanded(
                         child: Text(
                           state.passwordResetLink!.toString(),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
@@ -90,24 +89,22 @@ class ResetPasswordPage extends StatelessWidget {
                       context: context,
                       isScrollControlled: true,
                       useRootNavigator: true,
-                      builder:
-                          (final BuildContext context) =>
-                              DraggableScrollableSheet(
-                                expand: false,
-                                initialChildSize: 0.8,
-                                maxChildSize: 0.9,
-                                minChildSize: 0.4,
-                                builder:
-                                    (
-                                      final BuildContext context,
-                                      final ScrollController scrollController,
-                                    ) => QrModal(
-                                      title: 'users.password_reset_link'.tr(),
-                                      qrData:
-                                          state.passwordResetLink.toString(),
-                                      scrollController: scrollController,
-                                    ),
-                              ),
+                      builder: (final BuildContext context) =>
+                          DraggableScrollableSheet(
+                            expand: false,
+                            initialChildSize: 0.8,
+                            maxChildSize: 0.9,
+                            minChildSize: 0.4,
+                            builder:
+                                (
+                                  final BuildContext context,
+                                  final ScrollController scrollController,
+                                ) => QrModal(
+                                  title: 'users.password_reset_link'.tr(),
+                                  qrData: state.passwordResetLink.toString(),
+                                  scrollController: scrollController,
+                                ),
+                          ),
                     );
                   },
                   child: Row(

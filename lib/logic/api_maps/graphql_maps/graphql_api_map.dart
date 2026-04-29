@@ -65,10 +65,8 @@ abstract class GraphQLApiMap {
   Future<GraphQLClient> getClient() async {
     IOClient? ioClient;
     if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {
-      final HttpClient httpClient =
-          HttpClient()
-            ..badCertificateCallback =
-                (final cert, final host, final port) => true;
+      final HttpClient httpClient = HttpClient()
+        ..badCertificateCallback = (final cert, final host, final port) => true;
       ioClient = IOClient(httpClient);
     }
 
@@ -82,8 +80,9 @@ abstract class GraphQLApiMap {
     final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
           ? AuthLink(
-            getToken: () => customToken == '' ? 'Bearer $_token' : customToken,
-          ).concat(httpLink)
+              getToken: () =>
+                  customToken == '' ? 'Bearer $_token' : customToken,
+            ).concat(httpLink)
           : httpLink,
     );
 
@@ -104,15 +103,12 @@ abstract class GraphQLApiMap {
       config: SocketClientConfig(
         onConnectionLost: onConnectionLost,
         autoReconnect: true,
-        initialPayload:
-            _token.isEmpty ? null : {'Authorization': 'Bearer $_token'},
-        headers:
-            _token.isEmpty
-                ? null
-                : {
-                  'Authorization': 'Bearer $_token',
-                  'Accept-Language': _locale,
-                },
+        initialPayload: _token.isEmpty
+            ? null
+            : {'Authorization': 'Bearer $_token'},
+        headers: _token.isEmpty
+            ? null
+            : {'Authorization': 'Bearer $_token', 'Accept-Language': _locale},
       ),
     );
 

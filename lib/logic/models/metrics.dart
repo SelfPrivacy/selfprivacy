@@ -42,17 +42,16 @@ class ServerMetrics {
     required final DateTime end,
   }) : this(
          stepsInSecond: stepsInSecond,
-         cpu:
-             (data.cpuUsage.overallUsage as Fragment$MonitoringValues).values
-                 .map(
-                   (final metric) => TimeSeriesData(
-                     // Convert DateTime to seconds since epoch
-                     metric.timestamp.millisecondsSinceEpoch ~/ 1000,
-                     // Parse string as a float
-                     double.parse(metric.value),
-                   ),
-                 )
-                 .toList(),
+         cpu: (data.cpuUsage.overallUsage as Fragment$MonitoringValues).values
+             .map(
+               (final metric) => TimeSeriesData(
+                 // Convert DateTime to seconds since epoch
+                 metric.timestamp.millisecondsSinceEpoch ~/ 1000,
+                 // Parse string as a float
+                 double.parse(metric.value),
+               ),
+             )
+             .toList(),
          bandwidthIn:
              (data.networkUsage.overallUsage as Fragment$MonitoringMetrics)
                  .metrics

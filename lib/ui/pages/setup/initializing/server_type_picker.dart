@@ -69,84 +69,86 @@ class SelectLocationPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => FutureBuilder(
     future: serverInstallationCubit.fetchAvailableLocations(),
-    builder: (
-      final BuildContext context,
-      final AsyncSnapshot<Object?> snapshot,
-    ) {
-      if (snapshot.hasData) {
-        if ((snapshot.data! as List<ServerProviderLocation>).isEmpty) {
-          return Text('initializing.no_locations_found'.tr());
-        }
-        return ResponsiveLayoutWithInfobox(
-          topChild: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'initializing.choose_location_type'.tr(),
-                style: Theme.of(context).textTheme.headlineSmall,
+    builder:
+        (final BuildContext context, final AsyncSnapshot<Object?> snapshot) {
+          if (snapshot.hasData) {
+            if ((snapshot.data! as List<ServerProviderLocation>).isEmpty) {
+              return Text('initializing.no_locations_found'.tr());
+            }
+            return ResponsiveLayoutWithInfobox(
+              topChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'initializing.choose_location_type'.tr(),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'initializing.choose_location_type_text'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                'initializing.choose_location_type_text'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-          primaryColumn: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...(snapshot.data! as List<ServerProviderLocation>).map(
-                (final location) => Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: InkResponse(
-                          highlightShape: BoxShape.rectangle,
-                          onTap: () {
-                            callback(location);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${location.flag} ${location.title}',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+              primaryColumn: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...(snapshot.data! as List<ServerProviderLocation>).map(
+                    (final location) => Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            child: InkResponse(
+                              highlightShape: BoxShape.rectangle,
+                              onTap: () {
+                                callback(location);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${location.flag} ${location.title}',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      location.countryDisplayKey.tr(),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
+                                    ),
+                                    if (location.description != null)
+                                      const SizedBox(height: 4),
+                                    if (location.description != null)
+                                      Text(
+                                        location.description!,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
+                                      ),
+                                  ],
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  location.countryDisplayKey.tr(),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                if (location.description != null)
-                                  const SizedBox(height: 4),
-                                if (location.description != null)
-                                  Text(
-                                    location.description!,
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      } else {
-        return const Center(child: CircularProgressIndicator.adaptive());
-      }
-    },
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator.adaptive());
+          }
+        },
   );
 }
 
@@ -170,10 +172,7 @@ class SelectTypePage extends StatelessWidget {
         .fetchAvailableAdditionalPricing(location);
     return FutureBuilder(
       future: Future.wait([serverTypes, prices]),
-      builder: (
-        final BuildContext context,
-        final AsyncSnapshot<List<dynamic>> snapshot,
-      ) {
+      builder: (final BuildContext context, final AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.hasData) {
           if ((snapshot.data![0] as List<ServerType>).isEmpty ||
               (snapshot.data![1] as AdditionalPricing?) == null) {
@@ -190,18 +189,15 @@ class SelectTypePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 LayoutBuilder(
-                  builder:
-                      (final context, final constraints) => CustomPaint(
-                        size: Size(
-                          constraints.maxWidth,
-                          constraints.maxWidth * 1,
-                        ),
-                        painter: StrayDeerPainter(
-                          colorScheme: Theme.of(context).colorScheme,
-                          colorPalette:
-                              InheritedAppController.of(context).corePalette,
-                        ),
-                      ),
+                  builder: (final context, final constraints) => CustomPaint(
+                    size: Size(constraints.maxWidth, constraints.maxWidth * 1),
+                    painter: StrayDeerPainter(
+                      colorScheme: Theme.of(context).colorScheme,
+                      colorPalette: InheritedAppController.of(
+                        context,
+                      ).corePalette,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 BrandButton.filled(
@@ -252,26 +248,25 @@ class SelectTypePage extends StatelessWidget {
                                 children: [
                                   Text(
                                     type.title,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
                                   ),
                                   const SizedBox(height: 8),
                                   Row(
                                     children: [
                                       Icon(
                                         Icons.memory_outlined,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
                                         'server.core_count'.plural(type.cores),
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodyMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -280,19 +275,17 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.memory_outlined,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
                                         'initializing.choose_server_type_ram'
                                             .tr(args: [type.ram.toString()]),
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodyMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -301,10 +294,9 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.sd_card_outlined,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
@@ -314,10 +306,9 @@ class SelectTypePage extends StatelessWidget {
                                                 type.disk.gibibyte.toString(),
                                               ],
                                             ),
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodyMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -328,10 +319,9 @@ class SelectTypePage extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.payments_outlined,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
@@ -340,10 +330,9 @@ class SelectTypePage extends StatelessWidget {
                                             '${UiHelpers.formatWithPrecision(type.price.value + storagePrice + publicIpPrice)} ${type.price.currency.shortcode}',
                                           ],
                                         ),
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodyLarge,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge,
                                       ),
                                     ],
                                   ),
@@ -450,12 +439,13 @@ class SelectTypePage extends StatelessWidget {
                                                         .textTheme
                                                         .bodyMedium
                                                         ?.copyWith(
-                                                          color: Theme.of(
-                                                                context,
-                                                              )
-                                                              .colorScheme
-                                                              .onSurface
-                                                              .withAlpha(128),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onSurface
+                                                                  .withAlpha(
+                                                                    128,
+                                                                  ),
                                                         ),
                                                   ),
                                                 ],

@@ -22,11 +22,10 @@ class BrokenDomainOutlinedCard extends StatelessWidget {
       error: true,
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
-        onTap:
-            () => context.read<SupportSystemCubit>().showArticle(
-              article: dnsProvider.howToRegister,
-              context: context,
-            ),
+        onTap: () => context.read<SupportSystemCubit>().showArticle(
+          article: dnsProvider.howToRegister,
+          context: context,
+        ),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(

@@ -849,7 +849,7 @@ class ServicesMigrationRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ServicesMigrationRouteArgs) return false;
-    return const ListEquality().equals(services, other.services) &&
+    return const ListEquality<Service>().equals(services, other.services) &&
         diskStatus == other.diskStatus &&
         isMigration == other.isMigration &&
         key == other.key;
@@ -857,7 +857,7 @@ class ServicesMigrationRouteArgs {
 
   @override
   int get hashCode =>
-      const ListEquality().hash(services) ^
+      const ListEquality<Service>().hash(services) ^
       diskStatus.hashCode ^
       isMigration.hashCode ^
       key.hashCode;

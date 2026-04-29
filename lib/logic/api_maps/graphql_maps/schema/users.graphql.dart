@@ -31,24 +31,24 @@ class Fragment$userFields {
     return Fragment$userFields(
       username: (l$username as String),
       userType: fromJson$Enum$UserType((l$userType as String)),
-      sshKeys:
-          (l$sshKeys as List<dynamic>?)?.map((e) => (e as String)).toList(),
-      directmemberof:
-          (l$directmemberof as List<dynamic>?)
-              ?.map((e) => (e as String))
-              .toList(),
+      sshKeys: (l$sshKeys as List<dynamic>?)
+          ?.map((e) => (e as String))
+          .toList(),
+      directmemberof: (l$directmemberof as List<dynamic>?)
+          ?.map((e) => (e as String))
+          .toList(),
       displayName: (l$displayName as String?),
-      memberof:
-          (l$memberof as List<dynamic>?)?.map((e) => (e as String)).toList(),
+      memberof: (l$memberof as List<dynamic>?)
+          ?.map((e) => (e as String))
+          .toList(),
       email: (l$email as String?),
-      emailPasswordMetadata:
-          (l$emailPasswordMetadata as List<dynamic>?)
-              ?.map(
-                (e) => Fragment$userFields$emailPasswordMetadata.fromJson(
-                  (e as Map<String, dynamic>),
-                ),
-              )
-              .toList(),
+      emailPasswordMetadata: (l$emailPasswordMetadata as List<dynamic>?)
+          ?.map(
+            (e) => Fragment$userFields$emailPasswordMetadata.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -88,8 +88,9 @@ class Fragment$userFields {
     final l$email = email;
     _resultData['email'] = l$email;
     final l$emailPasswordMetadata = emailPasswordMetadata;
-    _resultData['emailPasswordMetadata'] =
-        l$emailPasswordMetadata?.map((e) => e.toJson()).toList();
+    _resultData['emailPasswordMetadata'] = l$emailPasswordMetadata
+        ?.map((e) => e.toJson())
+        .toList();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -287,40 +288,32 @@ class _CopyWithImpl$Fragment$userFields<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$userFields(
-      username:
-          username == _undefined || username == null
-              ? _instance.username
-              : (username as String),
-      userType:
-          userType == _undefined || userType == null
-              ? _instance.userType
-              : (userType as Enum$UserType),
-      sshKeys:
-          sshKeys == _undefined
-              ? _instance.sshKeys
-              : (sshKeys as List<String>?),
-      directmemberof:
-          directmemberof == _undefined
-              ? _instance.directmemberof
-              : (directmemberof as List<String>?),
-      displayName:
-          displayName == _undefined
-              ? _instance.displayName
-              : (displayName as String?),
-      memberof:
-          memberof == _undefined
-              ? _instance.memberof
-              : (memberof as List<String>?),
+      username: username == _undefined || username == null
+          ? _instance.username
+          : (username as String),
+      userType: userType == _undefined || userType == null
+          ? _instance.userType
+          : (userType as Enum$UserType),
+      sshKeys: sshKeys == _undefined
+          ? _instance.sshKeys
+          : (sshKeys as List<String>?),
+      directmemberof: directmemberof == _undefined
+          ? _instance.directmemberof
+          : (directmemberof as List<String>?),
+      displayName: displayName == _undefined
+          ? _instance.displayName
+          : (displayName as String?),
+      memberof: memberof == _undefined
+          ? _instance.memberof
+          : (memberof as List<String>?),
       email: email == _undefined ? _instance.email : (email as String?),
-      emailPasswordMetadata:
-          emailPasswordMetadata == _undefined
-              ? _instance.emailPasswordMetadata
-              : (emailPasswordMetadata
-                  as List<Fragment$userFields$emailPasswordMetadata>?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      emailPasswordMetadata: emailPasswordMetadata == _undefined
+          ? _instance.emailPasswordMetadata
+          : (emailPasswordMetadata
+                as List<Fragment$userFields$emailPasswordMetadata>?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -334,13 +327,11 @@ class _CopyWithImpl$Fragment$userFields<TRes>
     )
     _fn,
   ) => call(
-    emailPasswordMetadata:
-        _fn(
-          _instance.emailPasswordMetadata?.map(
-            (e) =>
-                CopyWith$Fragment$userFields$emailPasswordMetadata(e, (i) => i),
-          ),
-        )?.toList(),
+    emailPasswordMetadata: _fn(
+      _instance.emailPasswordMetadata?.map(
+        (e) => CopyWith$Fragment$userFields$emailPasswordMetadata(e, (i) => i),
+      ),
+    )?.toList(),
   );
 }
 
@@ -504,6 +495,7 @@ extension ClientExtension$Fragment$userFields on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Fragment$userFields? readFragment$userFields({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -566,16 +558,19 @@ class Fragment$userFields$emailPasswordMetadata {
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$createdAt = createdAt;
-    _resultData['createdAt'] =
-        l$createdAt == null ? null : dateTimeToJson(l$createdAt);
+    _resultData['createdAt'] = l$createdAt == null
+        ? null
+        : dateTimeToJson(l$createdAt);
     final l$displayName = displayName;
     _resultData['displayName'] = l$displayName;
     final l$expiresAt = expiresAt;
-    _resultData['expiresAt'] =
-        l$expiresAt == null ? null : dateTimeToJson(l$expiresAt);
+    _resultData['expiresAt'] = l$expiresAt == null
+        ? null
+        : dateTimeToJson(l$expiresAt);
     final l$lastUsed = lastUsed;
-    _resultData['lastUsed'] =
-        l$lastUsed == null ? null : dateTimeToJson(l$lastUsed);
+    _resultData['lastUsed'] = l$lastUsed == null
+        ? null
+        : dateTimeToJson(l$lastUsed);
     final l$uuid = uuid;
     _resultData['uuid'] = l$uuid;
     final l$$__typename = $__typename;
@@ -694,28 +689,24 @@ class _CopyWithImpl$Fragment$userFields$emailPasswordMetadata<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$userFields$emailPasswordMetadata(
-      createdAt:
-          createdAt == _undefined
-              ? _instance.createdAt
-              : (createdAt as DateTime?),
-      displayName:
-          displayName == _undefined || displayName == null
-              ? _instance.displayName
-              : (displayName as String),
-      expiresAt:
-          expiresAt == _undefined
-              ? _instance.expiresAt
-              : (expiresAt as DateTime?),
-      lastUsed:
-          lastUsed == _undefined ? _instance.lastUsed : (lastUsed as DateTime?),
-      uuid:
-          uuid == _undefined || uuid == null
-              ? _instance.uuid
-              : (uuid as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      createdAt: createdAt == _undefined
+          ? _instance.createdAt
+          : (createdAt as DateTime?),
+      displayName: displayName == _undefined || displayName == null
+          ? _instance.displayName
+          : (displayName as String),
+      expiresAt: expiresAt == _undefined
+          ? _instance.expiresAt
+          : (expiresAt as DateTime?),
+      lastUsed: lastUsed == _undefined
+          ? _instance.lastUsed
+          : (lastUsed as DateTime?),
+      uuid: uuid == _undefined || uuid == null
+          ? _instance.uuid
+          : (uuid as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -821,14 +812,12 @@ class _CopyWithImpl$Query$AllUsers<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$AllUsers(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Query$AllUsers$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Query$AllUsers$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -962,13 +951,12 @@ class Options$Query$AllUsers extends graphql.QueryOptions<Query$AllUsers> {
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null ? null : _parserFn$Query$AllUsers(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$AllUsers(data),
+               ),
          onError: onError,
          document: documentNodeQueryAllUsers,
          parserFn: _parserFn$Query$AllUsers,
@@ -1024,9 +1012,11 @@ extension ClientExtension$Query$AllUsers on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$AllUsers>> query$AllUsers([
     Options$Query$AllUsers? options,
   ]) async => await this.query(options ?? Options$Query$AllUsers());
+
   graphql.ObservableQuery<Query$AllUsers> watchQuery$AllUsers([
     WatchOptions$Query$AllUsers? options,
   ]) => this.watchQuery(options ?? WatchOptions$Query$AllUsers());
+
   void writeQuery$AllUsers({
     required Query$AllUsers data,
     bool broadcast = true,
@@ -1037,6 +1027,7 @@ extension ClientExtension$Query$AllUsers on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$AllUsers? readQuery$AllUsers({bool optimistic = true}) {
     final result = this.readQuery(
       graphql.Request(
@@ -1060,19 +1051,12 @@ class Query$AllUsers$users {
     final l$rootUser = json['rootUser'];
     final l$$__typename = json['__typename'];
     return Query$AllUsers$users(
-      allUsers:
-          (l$allUsers as List<dynamic>)
-              .map(
-                (e) =>
-                    Fragment$userFields.fromJson((e as Map<String, dynamic>)),
-              )
-              .toList(),
-      rootUser:
-          l$rootUser == null
-              ? null
-              : Fragment$userFields.fromJson(
-                (l$rootUser as Map<String, dynamic>),
-              ),
+      allUsers: (l$allUsers as List<dynamic>)
+          .map((e) => Fragment$userFields.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      rootUser: l$rootUser == null
+          ? null
+          : Fragment$userFields.fromJson((l$rootUser as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1184,18 +1168,15 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllUsers$users(
-      allUsers:
-          allUsers == _undefined || allUsers == null
-              ? _instance.allUsers
-              : (allUsers as List<Fragment$userFields>),
-      rootUser:
-          rootUser == _undefined
-              ? _instance.rootUser
-              : (rootUser as Fragment$userFields?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      allUsers: allUsers == _undefined || allUsers == null
+          ? _instance.allUsers
+          : (allUsers as List<Fragment$userFields>),
+      rootUser: rootUser == _undefined
+          ? _instance.rootUser
+          : (rootUser as Fragment$userFields?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1205,12 +1186,9 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
     )
     _fn,
   ) => call(
-    allUsers:
-        _fn(
-          _instance.allUsers.map(
-            (e) => CopyWith$Fragment$userFields(e, (i) => i),
-          ),
-        ).toList(),
+    allUsers: _fn(
+      _instance.allUsers.map((e) => CopyWith$Fragment$userFields(e, (i) => i)),
+    ).toList(),
   );
 
   CopyWith$Fragment$userFields<TRes> get rootUser {
@@ -1218,9 +1196,9 @@ class _CopyWithImpl$Query$AllUsers$users<TRes>
     return local$rootUser == null
         ? CopyWith$Fragment$userFields.stub(_then(_instance))
         : CopyWith$Fragment$userFields(
-          local$rootUser,
-          (e) => call(rootUser: e),
-        );
+            local$rootUser,
+            (e) => call(rootUser: e),
+          );
   }
 }
 
@@ -1329,14 +1307,12 @@ class _CopyWithImpl$Query$AllGroups<TRes>
   TRes call({Object? groups = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$AllGroups(
-          groups:
-              groups == _undefined || groups == null
-                  ? _instance.groups
-                  : (groups as Query$AllGroups$groups),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          groups: groups == _undefined || groups == null
+              ? _instance.groups
+              : (groups as Query$AllGroups$groups),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -1449,13 +1425,12 @@ class Options$Query$AllGroups extends graphql.QueryOptions<Query$AllGroups> {
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null ? null : _parserFn$Query$AllGroups(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$AllGroups(data),
+               ),
          onError: onError,
          document: documentNodeQueryAllGroups,
          parserFn: _parserFn$Query$AllGroups,
@@ -1511,9 +1486,11 @@ extension ClientExtension$Query$AllGroups on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$AllGroups>> query$AllGroups([
     Options$Query$AllGroups? options,
   ]) async => await this.query(options ?? Options$Query$AllGroups());
+
   graphql.ObservableQuery<Query$AllGroups> watchQuery$AllGroups([
     WatchOptions$Query$AllGroups? options,
   ]) => this.watchQuery(options ?? WatchOptions$Query$AllGroups());
+
   void writeQuery$AllGroups({
     required Query$AllGroups data,
     bool broadcast = true,
@@ -1524,6 +1501,7 @@ extension ClientExtension$Query$AllGroups on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$AllGroups? readQuery$AllGroups({bool optimistic = true}) {
     final result = this.readQuery(
       graphql.Request(
@@ -1545,14 +1523,13 @@ class Query$AllGroups$groups {
     final l$allGroups = json['allGroups'];
     final l$$__typename = json['__typename'];
     return Query$AllGroups$groups(
-      allGroups:
-          (l$allGroups as List<dynamic>)
-              .map(
-                (e) => Query$AllGroups$groups$allGroups.fromJson(
-                  (e as Map<String, dynamic>),
-                ),
-              )
-              .toList(),
+      allGroups: (l$allGroups as List<dynamic>)
+          .map(
+            (e) => Query$AllGroups$groups$allGroups.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1654,14 +1631,12 @@ class _CopyWithImpl$Query$AllGroups$groups<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllGroups$groups(
-      allGroups:
-          allGroups == _undefined || allGroups == null
-              ? _instance.allGroups
-              : (allGroups as List<Query$AllGroups$groups$allGroups>),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      allGroups: allGroups == _undefined || allGroups == null
+          ? _instance.allGroups
+          : (allGroups as List<Query$AllGroups$groups$allGroups>),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1675,12 +1650,11 @@ class _CopyWithImpl$Query$AllGroups$groups<TRes>
     )
     _fn,
   ) => call(
-    allGroups:
-        _fn(
-          _instance.allGroups.map(
-            (e) => CopyWith$Query$AllGroups$groups$allGroups(e, (i) => i),
-          ),
-        ).toList(),
+    allGroups: _fn(
+      _instance.allGroups.map(
+        (e) => CopyWith$Query$AllGroups$groups$allGroups(e, (i) => i),
+      ),
+    ).toList(),
   );
 }
 
@@ -1787,14 +1761,12 @@ class _CopyWithImpl$Query$AllGroups$groups$allGroups<TRes>
   TRes call({Object? name = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$AllGroups$groups$allGroups(
-          name:
-              name == _undefined || name == null
-                  ? _instance.name
-                  : (name as String),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 }
@@ -1983,14 +1955,12 @@ class _CopyWithImpl$Query$GetUser<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$GetUser(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Query$GetUser$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Query$GetUser$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -2112,13 +2082,12 @@ class Options$Query$GetUser extends graphql.QueryOptions<Query$GetUser> {
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null ? null : _parserFn$Query$GetUser(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$GetUser(data),
+               ),
          onError: onError,
          document: documentNodeQueryGetUser,
          parserFn: _parserFn$Query$GetUser,
@@ -2182,9 +2151,11 @@ extension ClientExtension$Query$GetUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$GetUser>> query$GetUser(
     Options$Query$GetUser options,
   ) async => await this.query(options);
+
   graphql.ObservableQuery<Query$GetUser> watchQuery$GetUser(
     WatchOptions$Query$GetUser options,
   ) => this.watchQuery(options);
+
   void writeQuery$GetUser({
     required Query$GetUser data,
     required Variables$Query$GetUser variables,
@@ -2197,6 +2168,7 @@ extension ClientExtension$Query$GetUser on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$GetUser? readQuery$GetUser({
     required Variables$Query$GetUser variables,
     bool optimistic = true,
@@ -2219,12 +2191,9 @@ class Query$GetUser$users {
     final l$getUser = json['getUser'];
     final l$$__typename = json['__typename'];
     return Query$GetUser$users(
-      getUser:
-          l$getUser == null
-              ? null
-              : Fragment$userFields.fromJson(
-                (l$getUser as Map<String, dynamic>),
-              ),
+      getUser: l$getUser == null
+          ? null
+          : Fragment$userFields.fromJson((l$getUser as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
@@ -2302,14 +2271,12 @@ class _CopyWithImpl$Query$GetUser$users<TRes>
   TRes call({Object? getUser = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$GetUser$users(
-          getUser:
-              getUser == _undefined
-                  ? _instance.getUser
-                  : (getUser as Fragment$userFields?),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          getUser: getUser == _undefined
+              ? _instance.getUser
+              : (getUser as Fragment$userFields?),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -2515,14 +2482,12 @@ class _CopyWithImpl$Mutation$CreateUser<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$CreateUser(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Mutation$CreateUser$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$CreateUser$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -2672,13 +2637,12 @@ class Options$Mutation$CreateUser
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$CreateUser(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$CreateUser(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationCreateUser,
@@ -2732,6 +2696,7 @@ extension ClientExtension$Mutation$CreateUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$CreateUser>> mutate$CreateUser(
     Options$Mutation$CreateUser options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$CreateUser> watchMutation$CreateUser(
     WatchOptions$Mutation$CreateUser options,
   ) => this.watchMutation(options);
@@ -2834,14 +2799,12 @@ class _CopyWithImpl$Mutation$CreateUser$users<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$CreateUser$users(
-      createUser:
-          createUser == _undefined || createUser == null
-              ? _instance.createUser
-              : (createUser as Mutation$CreateUser$users$createUser),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      createUser: createUser == _undefined || createUser == null
+          ? _instance.createUser
+          : (createUser as Mutation$CreateUser$users$createUser),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2892,10 +2855,9 @@ class Mutation$CreateUser$users$createUser
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      user:
-          l$user == null
-              ? null
-              : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
+      user: l$user == null
+          ? null
+          : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
     );
   }
 
@@ -3027,20 +2989,18 @@ class _CopyWithImpl$Mutation$CreateUser$users$createUser<TRes>
   }) => _then(
     Mutation$CreateUser$users$createUser(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      user:
-          user == _undefined ? _instance.user : (user as Fragment$userFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      user: user == _undefined
+          ? _instance.user
+          : (user as Fragment$userFields?),
     ),
   );
 
@@ -3248,14 +3208,12 @@ class _CopyWithImpl$Mutation$DeleteUser<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$DeleteUser(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Mutation$DeleteUser$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$DeleteUser$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -3380,13 +3338,12 @@ class Options$Mutation$DeleteUser
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$DeleteUser(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$DeleteUser(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationDeleteUser,
@@ -3440,6 +3397,7 @@ extension ClientExtension$Mutation$DeleteUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$DeleteUser>> mutate$DeleteUser(
     Options$Mutation$DeleteUser options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$DeleteUser> watchMutation$DeleteUser(
     WatchOptions$Mutation$DeleteUser options,
   ) => this.watchMutation(options);
@@ -3542,14 +3500,12 @@ class _CopyWithImpl$Mutation$DeleteUser$users<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$DeleteUser$users(
-      deleteUser:
-          deleteUser == _undefined || deleteUser == null
-              ? _instance.deleteUser
-              : (deleteUser as Mutation$DeleteUser$users$deleteUser),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      deleteUser: deleteUser == _undefined || deleteUser == null
+          ? _instance.deleteUser
+          : (deleteUser as Mutation$DeleteUser$users$deleteUser),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -3705,18 +3661,15 @@ class _CopyWithImpl$Mutation$DeleteUser$users$deleteUser<TRes>
   }) => _then(
     Mutation$DeleteUser$users$deleteUser(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3913,14 +3866,12 @@ class _CopyWithImpl$Mutation$UpdateUser<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$UpdateUser(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Mutation$UpdateUser$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$UpdateUser$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -4070,13 +4021,12 @@ class Options$Mutation$UpdateUser
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$UpdateUser(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$UpdateUser(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationUpdateUser,
@@ -4130,6 +4080,7 @@ extension ClientExtension$Mutation$UpdateUser on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$UpdateUser>> mutate$UpdateUser(
     Options$Mutation$UpdateUser options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$UpdateUser> watchMutation$UpdateUser(
     WatchOptions$Mutation$UpdateUser options,
   ) => this.watchMutation(options);
@@ -4232,14 +4183,12 @@ class _CopyWithImpl$Mutation$UpdateUser$users<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$UpdateUser$users(
-      updateUser:
-          updateUser == _undefined || updateUser == null
-              ? _instance.updateUser
-              : (updateUser as Mutation$UpdateUser$users$updateUser),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      updateUser: updateUser == _undefined || updateUser == null
+          ? _instance.updateUser
+          : (updateUser as Mutation$UpdateUser$users$updateUser),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -4290,10 +4239,9 @@ class Mutation$UpdateUser$users$updateUser
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      user:
-          l$user == null
-              ? null
-              : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
+      user: l$user == null
+          ? null
+          : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
     );
   }
 
@@ -4425,20 +4373,18 @@ class _CopyWithImpl$Mutation$UpdateUser$users$updateUser<TRes>
   }) => _then(
     Mutation$UpdateUser$users$updateUser(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      user:
-          user == _undefined ? _instance.user : (user as Fragment$userFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      user: user == _undefined
+          ? _instance.user
+          : (user as Fragment$userFields?),
     ),
   );
 
@@ -4650,14 +4596,12 @@ class _CopyWithImpl$Mutation$AddSshKey<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$AddSshKey(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Mutation$AddSshKey$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$AddSshKey$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -4807,13 +4751,12 @@ class Options$Mutation$AddSshKey
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$AddSshKey(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$AddSshKey(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationAddSshKey,
@@ -4867,6 +4810,7 @@ extension ClientExtension$Mutation$AddSshKey on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$AddSshKey>> mutate$AddSshKey(
     Options$Mutation$AddSshKey options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$AddSshKey> watchMutation$AddSshKey(
     WatchOptions$Mutation$AddSshKey options,
   ) => this.watchMutation(options);
@@ -4969,14 +4913,12 @@ class _CopyWithImpl$Mutation$AddSshKey$users<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$AddSshKey$users(
-      addSshKey:
-          addSshKey == _undefined || addSshKey == null
-              ? _instance.addSshKey
-              : (addSshKey as Mutation$AddSshKey$users$addSshKey),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      addSshKey: addSshKey == _undefined || addSshKey == null
+          ? _instance.addSshKey
+          : (addSshKey as Mutation$AddSshKey$users$addSshKey),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5025,10 +4967,9 @@ class Mutation$AddSshKey$users$addSshKey
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      user:
-          l$user == null
-              ? null
-              : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
+      user: l$user == null
+          ? null
+          : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
     );
   }
 
@@ -5157,20 +5098,18 @@ class _CopyWithImpl$Mutation$AddSshKey$users$addSshKey<TRes>
   }) => _then(
     Mutation$AddSshKey$users$addSshKey(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      user:
-          user == _undefined ? _instance.user : (user as Fragment$userFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      user: user == _undefined
+          ? _instance.user
+          : (user as Fragment$userFields?),
     ),
   );
 
@@ -5382,14 +5321,12 @@ class _CopyWithImpl$Mutation$RemoveSshKey<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$RemoveSshKey(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Mutation$RemoveSshKey$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$RemoveSshKey$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -5540,13 +5477,12 @@ class Options$Mutation$RemoveSshKey
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$RemoveSshKey(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$RemoveSshKey(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationRemoveSshKey,
@@ -5600,6 +5536,7 @@ extension ClientExtension$Mutation$RemoveSshKey on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$RemoveSshKey>> mutate$RemoveSshKey(
     Options$Mutation$RemoveSshKey options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$RemoveSshKey> watchMutation$RemoveSshKey(
     WatchOptions$Mutation$RemoveSshKey options,
   ) => this.watchMutation(options);
@@ -5702,14 +5639,12 @@ class _CopyWithImpl$Mutation$RemoveSshKey$users<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$RemoveSshKey$users(
-      removeSshKey:
-          removeSshKey == _undefined || removeSshKey == null
-              ? _instance.removeSshKey
-              : (removeSshKey as Mutation$RemoveSshKey$users$removeSshKey),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      removeSshKey: removeSshKey == _undefined || removeSshKey == null
+          ? _instance.removeSshKey
+          : (removeSshKey as Mutation$RemoveSshKey$users$removeSshKey),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5760,10 +5695,9 @@ class Mutation$RemoveSshKey$users$removeSshKey
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      user:
-          l$user == null
-              ? null
-              : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
+      user: l$user == null
+          ? null
+          : Fragment$userFields.fromJson((l$user as Map<String, dynamic>)),
     );
   }
 
@@ -5896,20 +5830,18 @@ class _CopyWithImpl$Mutation$RemoveSshKey$users$removeSshKey<TRes>
   }) => _then(
     Mutation$RemoveSshKey$users$removeSshKey(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      user:
-          user == _undefined ? _instance.user : (user as Fragment$userFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      user: user == _undefined
+          ? _instance.user
+          : (user as Fragment$userFields?),
     ),
   );
 
@@ -6138,14 +6070,12 @@ class _CopyWithImpl$Mutation$GeneratePasswordResetLink<TRes>
   TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$GeneratePasswordResetLink(
-          users:
-              users == _undefined || users == null
-                  ? _instance.users
-                  : (users as Mutation$GeneratePasswordResetLink$users),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$GeneratePasswordResetLink$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -6284,15 +6214,14 @@ class Options$Mutation$GeneratePasswordResetLink
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$GeneratePasswordResetLink(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$GeneratePasswordResetLink(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationGeneratePasswordResetLink,
@@ -6349,6 +6278,7 @@ extension ClientExtension$Mutation$GeneratePasswordResetLink
   mutate$GeneratePasswordResetLink(
     Options$Mutation$GeneratePasswordResetLink options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$GeneratePasswordResetLink>
   watchMutation$GeneratePasswordResetLink(
     WatchOptions$Mutation$GeneratePasswordResetLink options,
@@ -6383,8 +6313,8 @@ class Mutation$GeneratePasswordResetLink$users {
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$generatePasswordResetLink = generatePasswordResetLink;
-    _resultData['generatePasswordResetLink'] =
-        l$generatePasswordResetLink.toJson();
+    _resultData['generatePasswordResetLink'] = l$generatePasswordResetLink
+        .toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -6469,14 +6399,13 @@ class _CopyWithImpl$Mutation$GeneratePasswordResetLink$users<TRes>
     Mutation$GeneratePasswordResetLink$users(
       generatePasswordResetLink:
           generatePasswordResetLink == _undefined ||
-                  generatePasswordResetLink == null
-              ? _instance.generatePasswordResetLink
-              : (generatePasswordResetLink
-                  as Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+              generatePasswordResetLink == null
+          ? _instance.generatePasswordResetLink
+          : (generatePasswordResetLink
+                as Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -6641,13 +6570,11 @@ abstract class CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswor
       Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink,
     )
     then,
-  ) =
-      _CopyWithImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink;
+  ) = _CopyWithImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink;
 
   factory CopyWith$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink;
+  ) = _CopyWithStubImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink;
 
   TRes call({
     int? code,
@@ -6689,22 +6616,18 @@ class _CopyWithImpl$Mutation$GeneratePasswordResetLink$users$generatePasswordRes
   }) => _then(
     Mutation$GeneratePasswordResetLink$users$generatePasswordResetLink(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      passwordResetLink:
-          passwordResetLink == _undefined
-              ? _instance.passwordResetLink
-              : (passwordResetLink as String?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      passwordResetLink: passwordResetLink == _undefined
+          ? _instance.passwordResetLink
+          : (passwordResetLink as String?),
     ),
   );
 }
@@ -6956,14 +6879,13 @@ class _CopyWithImpl$Mutation$DeleteEmailPassword<TRes>
     Mutation$DeleteEmailPassword(
       emailPasswordMetadataMutations:
           emailPasswordMetadataMutations == _undefined ||
-                  emailPasswordMetadataMutations == null
-              ? _instance.emailPasswordMetadataMutations
-              : (emailPasswordMetadataMutations
-                  as Mutation$DeleteEmailPassword$emailPasswordMetadataMutations),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+              emailPasswordMetadataMutations == null
+          ? _instance.emailPasswordMetadataMutations
+          : (emailPasswordMetadataMutations
+                as Mutation$DeleteEmailPassword$emailPasswordMetadataMutations),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -7127,15 +7049,14 @@ class Options$Mutation$DeleteEmailPassword
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$DeleteEmailPassword(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$DeleteEmailPassword(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationDeleteEmailPassword,
@@ -7191,6 +7112,7 @@ extension ClientExtension$Mutation$DeleteEmailPassword
   mutate$DeleteEmailPassword(
     Options$Mutation$DeleteEmailPassword options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$DeleteEmailPassword>
   watchMutation$DeleteEmailPassword(
     WatchOptions$Mutation$DeleteEmailPassword options,
@@ -7284,8 +7206,7 @@ abstract class CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutati
 
   factory CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations;
+  ) = _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations;
 
   TRes call({
     Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword?
@@ -7326,13 +7247,12 @@ class _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations<
     Mutation$DeleteEmailPassword$emailPasswordMetadataMutations(
       deleteEmailPassword:
           deleteEmailPassword == _undefined || deleteEmailPassword == null
-              ? _instance.deleteEmailPassword
-              : (deleteEmailPassword
-                  as Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.deleteEmailPassword
+          : (deleteEmailPassword
+                as Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -7486,13 +7406,11 @@ abstract class CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutati
       Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword,
     )
     then,
-  ) =
-      _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword;
+  ) = _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword;
 
   factory CopyWith$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword;
+  ) = _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword;
 
   TRes call({int? code, String? message, bool? success, String? $__typename});
 }
@@ -7527,18 +7445,15 @@ class _CopyWithImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$
   }) => _then(
     Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }

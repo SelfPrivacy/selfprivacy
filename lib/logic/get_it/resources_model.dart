@@ -224,37 +224,27 @@ class ResourcesModel {
   }
 
   void init() {
-    _serverProviderTokens =
-        _box
-            .get(
-              BNames.serverProviderTokens,
-              defaultValue: <ServerProviderCredential>[],
-            )
-            .map<ServerProviderCredential>(
-              (final e) => e as ServerProviderCredential,
-            )
-            .toList();
-    _dnsProviderTokens =
-        _box
-            .get(
-              BNames.dnsProviderTokens,
-              defaultValue: <DnsProviderCredential>[],
-            )
-            .map<DnsProviderCredential>((final e) => e as DnsProviderCredential)
-            .toList();
-    _backupsCredentials =
-        _box
-            .get(
-              BNames.backupsProviderTokens,
-              defaultValue: <BackupsCredential>[],
-            )
-            .map<BackupsCredential>((final e) => e as BackupsCredential)
-            .toList();
-    _servers =
-        _box
-            .get(BNames.servers, defaultValue: <Server>[])
-            .map<Server>((final e) => e as Server)
-            .toList();
+    _serverProviderTokens = _box
+        .get(
+          BNames.serverProviderTokens,
+          defaultValue: <ServerProviderCredential>[],
+        )
+        .map<ServerProviderCredential>(
+          (final e) => e as ServerProviderCredential,
+        )
+        .toList();
+    _dnsProviderTokens = _box
+        .get(BNames.dnsProviderTokens, defaultValue: <DnsProviderCredential>[])
+        .map<DnsProviderCredential>((final e) => e as DnsProviderCredential)
+        .toList();
+    _backupsCredentials = _box
+        .get(BNames.backupsProviderTokens, defaultValue: <BackupsCredential>[])
+        .map<BackupsCredential>((final e) => e as BackupsCredential)
+        .toList();
+    _servers = _box
+        .get(BNames.servers, defaultValue: <Server>[])
+        .map<Server>((final e) => e as Server)
+        .toList();
     _backblazeBucket = _box.get(BNames.backblazeBucket);
 
     _statusStreamController.add(const ResourcesModelLoaded());
@@ -269,44 +259,50 @@ class WizardDataModel {
   ServerInstallationWizardData? _serverInstallation;
 
   Future<void> setServerProviderType(final ServerProviderType provider) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverProviderType: provider);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverProviderType: provider,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setServerProviderKey(final String key) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverProviderKey: key);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverProviderKey: key,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setDnsProviderType(final DnsProviderType provider) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(dnsProviderType: provider);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          dnsProviderType: provider,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setDnsProviderKey(final String key) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(dnsProviderKey: key);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          dnsProviderKey: key,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setServerTypeIdentifier(final String identifier) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverTypeIdentifier: identifier);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverTypeIdentifier: identifier,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setServerLocation(final String location) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverLocation: location);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverLocation: location,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
@@ -316,11 +312,10 @@ class WizardDataModel {
       if (_serverInstallation?.serverTypeIdentifier != null &&
           _serverInstallation?.serverLocation != null) {
         _serverInstallation = _serverInstallation?.copyWith(
-          serverDetails:
-              () => details.copyWith(
-                serverType: _serverInstallation?.serverTypeIdentifier,
-                serverLocation: _serverInstallation?.serverLocation,
-              ),
+          serverDetails: () => details.copyWith(
+            serverType: _serverInstallation?.serverTypeIdentifier,
+            serverLocation: _serverInstallation?.serverLocation,
+          ),
         );
         await _box.put(
           BNames.serverInstallationWizardData,
@@ -335,69 +330,78 @@ class WizardDataModel {
       serverLocation: _serverInstallation?.serverLocation,
       serverType: _serverInstallation?.serverTypeIdentifier,
     );
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverDetails: () => detailsWithServerType);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverDetails: () => detailsWithServerType,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> deleteServerDetails() async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverDetails: () => null);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverDetails: () => null,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setServerDomain(final ServerDomain domain) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverDomain: () => domain);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverDomain: () => domain,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> deleteServerDomain() async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(serverDomain: () => null);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverDomain: () => null,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setIsServerStarted({required final bool isStarted}) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(isServerStarted: isStarted);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          isServerStarted: isStarted,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setIsServerRebootedFirstTime({
     required final bool isRebooted,
   }) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(isServerResetedFirstTime: isRebooted);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          isServerResetedFirstTime: isRebooted,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setIsServerRebootedSecondTime({
     required final bool isRebooted,
   }) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(isServerResetedSecondTime: isRebooted);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          isServerResetedSecondTime: isRebooted,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setRootUser(final User user) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(rootUser: user);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          rootUser: user,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
   Future<void> setIsRecoveringServer({required final bool isRecovering}) async {
-    _serverInstallation = (_serverInstallation ??
-            ServerInstallationWizardData.empty())
-        .copyWith(isRecoveringServer: isRecovering);
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          isRecoveringServer: isRecovering,
+        );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 

@@ -19,10 +19,9 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
     return BackupsCredential(
       keyId: fields[0] as String,
       applicationKey: fields[1] as String,
-      provider:
-          fields[2] == null
-              ? BackupsProviderType.backblaze
-              : fields[2] as BackupsProviderType,
+      provider: fields[2] == null
+          ? BackupsProviderType.backblaze
+          : fields[2] as BackupsProviderType,
     );
   }
 

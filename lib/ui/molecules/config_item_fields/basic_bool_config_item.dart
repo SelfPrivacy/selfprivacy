@@ -27,9 +27,9 @@ class _BasicBoolConfigItemState extends State<BasicBoolConfigItem> {
         title: Text(widget.configItem.description),
         subtitle:
             (widget.newValue != null &&
-                    widget.newValue != widget.configItem.value)
-                ? Text('service_page.modified'.tr())
-                : null,
+                widget.newValue != widget.configItem.value)
+            ? Text('service_page.modified'.tr())
+            : null,
         value: widget.newValue ?? widget.configItem.value,
         onChanged: (final bool value) {
           widget.onChanged(value);

@@ -28,43 +28,38 @@ class SnapshotItem extends StatelessWidget {
     );
 
     return ListTile(
-      onTap:
-          preventActions
-              ? null
-              : () async {
-                await showModalBottomSheet(
-                  useRootNavigator: true,
-                  context: context,
-                  isScrollControlled: true,
-                  builder:
-                      (final BuildContext context) => DraggableScrollableSheet(
-                        expand: false,
-                        maxChildSize: 0.9,
-                        minChildSize: 0.5,
-                        initialChildSize: 0.7,
-                        builder:
-                            (final context, final scrollController) =>
-                                SnapshotModal(
-                                  snapshot: backup,
-                                  scrollController: scrollController,
-                                ),
-                      ),
-                );
-              },
-      onLongPress:
-          preventActions
-              ? null
-              : () {
-                showPopUpAlert(
-                  alertTitle: 'backup.forget_snapshot'.tr(),
-                  description: 'backup.forget_snapshot_alert'.tr(),
-                  actionButtonTitle: 'backup.forget_snapshot'.tr(),
-                  actionButtonOnPressed:
-                      () => context.read<BackupsBloc>().add(
-                        ForgetSnapshot(backup.id),
-                      ),
-                );
-              },
+      onTap: preventActions
+          ? null
+          : () async {
+              await showModalBottomSheet(
+                useRootNavigator: true,
+                context: context,
+                isScrollControlled: true,
+                builder: (final BuildContext context) =>
+                    DraggableScrollableSheet(
+                      expand: false,
+                      maxChildSize: 0.9,
+                      minChildSize: 0.5,
+                      initialChildSize: 0.7,
+                      builder: (final context, final scrollController) =>
+                          SnapshotModal(
+                            snapshot: backup,
+                            scrollController: scrollController,
+                          ),
+                    ),
+              );
+            },
+      onLongPress: preventActions
+          ? null
+          : () {
+              showPopUpAlert(
+                alertTitle: 'backup.forget_snapshot'.tr(),
+                description: 'backup.forget_snapshot_alert'.tr(),
+                actionButtonTitle: 'backup.forget_snapshot'.tr(),
+                actionButtonOnPressed: () =>
+                    context.read<BackupsBloc>().add(ForgetSnapshot(backup.id)),
+              );
+            },
       title: Text(
         style: TextStyle(color: overrideColor),
         '${MaterialLocalizations.of(context).formatShortDate(backup.time.toLocal())} ${TimeOfDay.fromDateTime(backup.time.toLocal()).format(context)}',
@@ -73,18 +68,17 @@ class SnapshotItem extends StatelessWidget {
         style: TextStyle(color: overrideColor),
         service?.displayName ?? backup.fallbackServiceName,
       ),
-      leading:
-          service != null
-              ? SvgPicture.string(
-                service.svgIcon,
-                height: 24,
-                width: 24,
-                colorFilter: ColorFilter.mode(
-                  overrideColor ?? Theme.of(context).colorScheme.onSurface,
-                  BlendMode.srcIn,
-                ),
-              )
-              : Icon(Icons.question_mark_outlined, color: overrideColor),
+      leading: service != null
+          ? SvgPicture.string(
+              service.svgIcon,
+              height: 24,
+              width: 24,
+              colorFilter: ColorFilter.mode(
+                overrideColor ?? Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            )
+          : Icon(Icons.question_mark_outlined, color: overrideColor),
     );
   }
 }

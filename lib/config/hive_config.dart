@@ -96,16 +96,11 @@ class HiveConfig {
       final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
 
       // if it is an initial app launch, we do not need to perform any migrations
-      final int
-      savedVersion =
-          localSettingsBox.isEmpty
-              ? version
-              // if box was initialized, but database version was not introduced in
-              // it yet, it means that we have initial value
-              : await localSettingsBox.get(
-                BNames.databaseVersion,
-                defaultValue: 1,
-              );
+      final int savedVersion = localSettingsBox.isEmpty
+          ? version
+          // if box was initialized, but database version was not introduced in
+          // it yet, it means that we have initial value
+          : await localSettingsBox.get(BNames.databaseVersion, defaultValue: 1);
 
       /// launch migrations based on version
       if (savedVersion < version) {

@@ -38,21 +38,18 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
 
   ServerBasicInfoWithValidators _firstValidServer(
     final List<ServerBasicInfoWithValidators> servers,
-  ) =>
-      servers
-          .where((final server) => server.isIpValid && server.isReverseDnsValid)
-          .first;
+  ) => servers
+      .where((final server) => server.isIpValid && server.isReverseDnsValid)
+      .first;
 
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
-    heroTitle:
-        _isExtended
-            ? 'recovering.choose_server'.tr()
-            : 'recovering.confirm_server'.tr(),
-    heroSubtitle:
-        _isExtended
-            ? 'recovering.choose_server_description'.tr()
-            : 'recovering.confirm_server_description'.tr(),
+    heroTitle: _isExtended
+        ? 'recovering.choose_server'.tr()
+        : 'recovering.confirm_server'.tr(),
+    heroSubtitle: _isExtended
+        ? 'recovering.choose_server_description'.tr()
+        : 'recovering.confirm_server_description'.tr(),
     hasBackButton: true,
     ignoreBreakpoints: true,
     onBackButtonPressed: () {
@@ -202,81 +199,80 @@ class _RecoveryConfirmServerState extends State<RecoveryConfirmServer> {
     final ServerBasicInfoWithValidators server,
   ) => showDialog(
     context: context,
-    builder:
-        (final context) => AlertDialog(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(Icons.warning_amber_outlined),
-              const SizedBox(height: 16),
-              Text(
-                'recovering.modal_confirmation_title'.tr(),
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-            ],
+    builder: (final context) => AlertDialog(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(Icons.warning_amber_outlined),
+          const SizedBox(height: 16),
+          Text(
+            'recovering.modal_confirmation_title'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'recovering.modal_confirmation_description'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 12),
-              const Divider(),
-              const SizedBox(height: 12),
-              Text(
-                server.name,
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 8),
-              IsValidStringDisplay(
-                isValid: server.isReverseDnsValid,
-                textIfValid: 'recovering.modal_confirmation_dns_valid'.tr(),
-                textIfInvalid: 'recovering.modal_confirmation_dns_invalid'.tr(),
-              ),
-              const SizedBox(height: 8),
-              IsValidStringDisplay(
-                isValid: server.isIpValid,
-                textIfValid: 'recovering.modal_confirmation_ip_valid'.tr(),
-                textIfInvalid: 'recovering.modal_confirmation_ip_invalid'.tr(),
-              ),
-            ],
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'recovering.modal_confirmation_description'.tr(),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('modals.no'.tr()),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('modals.yes'.tr()),
-              onPressed: () {
-                if (widget.server != null &&
-                    widget.serverProviderCredential != null) {
-                  context.read<TokensBloc>().add(
-                    ServerSelectedForProviderToken(
-                      server,
-                      widget.server!,
-                      widget.serverProviderCredential!,
-                    ),
-                  );
-                  Navigator.of(context).pop();
-                  widget.submitCallback?.call();
-                } else {
-                  unawaited(
-                    context.read<ServerInstallationCubit>().setServerId(server),
-                  );
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
+          const SizedBox(height: 12),
+          const Divider(),
+          const SizedBox(height: 12),
+          Text(
+            server.name,
+            style: Theme.of(context).textTheme.titleMedium,
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 8),
+          IsValidStringDisplay(
+            isValid: server.isReverseDnsValid,
+            textIfValid: 'recovering.modal_confirmation_dns_valid'.tr(),
+            textIfInvalid: 'recovering.modal_confirmation_dns_invalid'.tr(),
+          ),
+          const SizedBox(height: 8),
+          IsValidStringDisplay(
+            isValid: server.isIpValid,
+            textIfValid: 'recovering.modal_confirmation_ip_valid'.tr(),
+            textIfInvalid: 'recovering.modal_confirmation_ip_invalid'.tr(),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text('modals.no'.tr()),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
+        TextButton(
+          child: Text('modals.yes'.tr()),
+          onPressed: () {
+            if (widget.server != null &&
+                widget.serverProviderCredential != null) {
+              context.read<TokensBloc>().add(
+                ServerSelectedForProviderToken(
+                  server,
+                  widget.server!,
+                  widget.serverProviderCredential!,
+                ),
+              );
+              Navigator.of(context).pop();
+              widget.submitCallback?.call();
+            } else {
+              unawaited(
+                context.read<ServerInstallationCubit>().setServerId(server),
+              );
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+      ],
+    ),
   );
 }
 
@@ -302,20 +298,19 @@ class IsValidStringDisplay extends StatelessWidget {
         Icon(Icons.close, color: Theme.of(context).colorScheme.error),
       const SizedBox(width: 8),
       Expanded(
-        child:
-            isValid
-                ? Text(
-                  textIfValid,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                )
-                : Text(
-                  textIfInvalid,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.error,
-                  ),
+        child: isValid
+            ? Text(
+                textIfValid,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
+              )
+            : Text(
+                textIfInvalid,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
       ),
     ],
   );

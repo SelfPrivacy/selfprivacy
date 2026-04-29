@@ -20,10 +20,9 @@ class MorePage extends StatelessWidget {
             is ServerInstallationFinished;
 
     return Scaffold(
-      appBar:
-          Breakpoints.small.isActive(context)
-              ? BrandHeader(title: 'basis.more'.tr())
-              : null,
+      appBar: Breakpoints.small.isActive(context)
+          ? BrandHeader(title: 'basis.more'.tr())
+          : null,
       body: ListView(
         children: [
           Padding(

@@ -96,10 +96,9 @@ mixin UsersApi on GraphQLApiMap {
         success: true,
         code: response.parsedData?.users.createUser.code ?? 500,
         message: response.parsedData?.users.createUser.message,
-        data:
-            response.parsedData?.users.createUser.user != null
-                ? User.fromGraphQL(response.parsedData!.users.createUser.user!)
-                : null,
+        data: response.parsedData?.users.createUser.user != null
+            ? User.fromGraphQL(response.parsedData!.users.createUser.user!)
+            : null,
       );
     } catch (e) {
       logger('Error in GraphQL CreateUser request: $e', error: e);
@@ -132,10 +131,9 @@ mixin UsersApi on GraphQLApiMap {
         success: true,
         code: response.parsedData?.users.updateUser.code ?? 500,
         message: response.parsedData?.users.updateUser.message,
-        data:
-            response.parsedData?.users.updateUser.user != null
-                ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
-                : null,
+        data: response.parsedData?.users.updateUser.user != null
+            ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
+            : null,
       );
     } catch (e) {
       logger('Error in GraphQL UpdateUser request: $e', error: e);
@@ -186,10 +184,9 @@ mixin UsersApi on GraphQLApiMap {
         success: true,
         code: response.parsedData?.users.addSshKey.code ?? 500,
         message: response.parsedData?.users.addSshKey.message,
-        data:
-            response.parsedData?.users.addSshKey.user != null
-                ? User.fromGraphQL(response.parsedData!.users.addSshKey.user!)
-                : null,
+        data: response.parsedData?.users.addSshKey.user != null
+            ? User.fromGraphQL(response.parsedData!.users.addSshKey.user!)
+            : null,
       );
     } catch (e) {
       logger('Error in GraphQL AddSshKey request: $e', error: e);
@@ -217,12 +214,9 @@ mixin UsersApi on GraphQLApiMap {
         success: response.parsedData?.users.removeSshKey.success ?? false,
         code: response.parsedData?.users.removeSshKey.code ?? 500,
         message: response.parsedData?.users.removeSshKey.message,
-        data:
-            response.parsedData?.users.removeSshKey.user != null
-                ? User.fromGraphQL(
-                  response.parsedData!.users.removeSshKey.user!,
-                )
-                : null,
+        data: response.parsedData?.users.removeSshKey.user != null
+            ? User.fromGraphQL(response.parsedData!.users.removeSshKey.user!)
+            : null,
       );
     } catch (e) {
       logger('Error in GraphQL RemoveSshKey request: $e', error: e);
@@ -282,11 +276,10 @@ mixin UsersApi on GraphQLApiMap {
         variables: variables,
       );
       final response = await client.mutate$DeleteEmailPassword(mutation);
-      final parsed =
-          response
-              .parsedData
-              ?.emailPasswordMetadataMutations
-              .deleteEmailPassword;
+      final parsed = response
+          .parsedData
+          ?.emailPasswordMetadataMutations
+          .deleteEmailPassword;
       return GenericResult(
         success: parsed?.success ?? false,
         code: parsed?.code ?? 500,

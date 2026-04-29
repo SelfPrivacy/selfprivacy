@@ -86,8 +86,8 @@ class CollectNixGarbageJob extends ClientJob {
 
   @override
   Future<(bool, String)> execute() async {
-    final result =
-        await getIt<ApiConnectionRepository>().api.collectNixGarbage();
+    final result = await getIt<ApiConnectionRepository>().api
+        .collectNixGarbage();
     return (result.success, result.message ?? '');
   }
 
@@ -123,10 +123,9 @@ class DeleteUserJob extends ClientJob {
   final User user;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      !jobs.any(
-        (final job) => job is DeleteUserJob && job.user.login == user.login,
-      );
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+    (final job) => job is DeleteUserJob && job.user.login == user.login,
+  );
 
   @override
   Future<(bool, String)> execute() =>
@@ -159,10 +158,9 @@ class ServiceToggleJob extends ClientJob {
   final Service service;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      !jobs.any(
-        (final job) => job is ServiceToggleJob && job.service.id == service.id,
-      );
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+    (final job) => job is ServiceToggleJob && job.service.id == service.id,
+  );
 
   @override
   Future<(bool, String)> execute() async {
@@ -234,13 +232,12 @@ class DeleteSSHKeyJob extends ClientJob {
   final String publicKey;
 
   @override
-  bool canAddTo(final List<ClientJob> jobs) =>
-      !jobs.any(
-        (final job) =>
-            job is DeleteSSHKeyJob &&
-            job.publicKey == publicKey &&
-            job.user.login == user.login,
-      );
+  bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
+    (final job) =>
+        job is DeleteSSHKeyJob &&
+        job.publicKey == publicKey &&
+        job.user.login == user.login,
+  );
 
   @override
   Future<(bool, String)> execute() =>
@@ -294,12 +291,11 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
 
   @override
   bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    final currentSettings =
-        getIt<ApiConnectionRepository>()
-            .apiData
-            .settings
-            .data
-            ?.autoUpgradeSettings;
+    final currentSettings = getIt<ApiConnectionRepository>()
+        .apiData
+        .settings
+        .data
+        ?.autoUpgradeSettings;
     if (currentSettings == null) {
       return false;
     }

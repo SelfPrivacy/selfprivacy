@@ -64,19 +64,12 @@ class _ServerLogsPageState extends State<ServerLogsPage> {
           child: Column(
             children: [
               // a tile to reset filter
-              RadioListTile(
-                title: Text('server.all_units'.tr()),
-                value: null,
-              ),
+              RadioListTile(title: Text('server.all_units'.tr()), value: null),
               for (final unit in systemdUnits.sorted())
-                RadioListTile(
-                  title: Text(unit),
-                  value: unit,
-                ),
+                RadioListTile(title: Text(unit), value: unit),
             ],
           ),
         ),
-
       ],
     ),
   );
@@ -109,12 +102,12 @@ class _ServerLogsPageState extends State<ServerLogsPage> {
           } else if (state is ServerLogsLoaded) {
             final List<ServerLogEntry> filteredNewLogs =
                 _selectedSystemdUnit == null
-                    ? state.newEntries
-                    : state.newEntriesForUnit(_selectedSystemdUnit!);
+                ? state.newEntries
+                : state.newEntriesForUnit(_selectedSystemdUnit!);
             final List<ServerLogEntry> filteredOldLogs =
                 _selectedSystemdUnit == null
-                    ? state.oldEntries
-                    : state.oldEntriesForUnit(_selectedSystemdUnit!);
+                ? state.oldEntries
+                : state.oldEntriesForUnit(_selectedSystemdUnit!);
             if (filteredOldLogs.isEmpty && filteredNewLogs.isEmpty) {
               return Center(
                 child: EmptyPagePlaceholder(
@@ -186,12 +179,11 @@ class LogEntryWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final Color color =
-        logEntry.priority == 4
-            ? Theme.of(context).colorScheme.primary
-            : logEntry.priority != null && logEntry.priority! <= 3
-            ? Theme.of(context).colorScheme.error
-            : Theme.of(context).colorScheme.onSurface;
+    final Color color = logEntry.priority == 4
+        ? Theme.of(context).colorScheme.primary
+        : logEntry.priority != null && logEntry.priority! <= 3
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.onSurface;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: ListTile(
@@ -219,13 +211,11 @@ class LogEntryWidget extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           maxLines: 6,
         ),
-        onTap:
-            () => showDialog(
-              context: context,
-              builder:
-                  (final BuildContext context) =>
-                      ServerLogEntryDialog(log: logEntry),
-            ),
+        onTap: () => showDialog(
+          context: context,
+          builder: (final BuildContext context) =>
+              ServerLogEntryDialog(log: logEntry),
+        ),
       ),
     );
   }

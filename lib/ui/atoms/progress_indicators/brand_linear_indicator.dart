@@ -17,32 +17,31 @@ class BrandLinearIndicator extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
-    builder:
-        (final context, final constraints) => Skeleton.leaf(
-          child: Container(
-            height: height,
+    builder: (final context, final constraints) => Skeleton.leaf(
+      child: Container(
+        height: height,
+        width: constraints.maxWidth,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(height),
+        ),
+        alignment: Alignment.centerLeft,
+        child: AnimatedSlide(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOutCubicEmphasized,
+          offset: Offset(-(1 - value), 0),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOutCubicEmphasized,
             width: constraints.maxWidth,
-            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              color: backgroundColor,
+              color: color,
               borderRadius: BorderRadius.circular(height),
-            ),
-            alignment: Alignment.centerLeft,
-            child: AnimatedSlide(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeInOutCubicEmphasized,
-              offset: Offset(-(1 - value), 0),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOutCubicEmphasized,
-                width: constraints.maxWidth,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(height),
-                ),
-              ),
             ),
           ),
         ),
+      ),
+    ),
   );
 }

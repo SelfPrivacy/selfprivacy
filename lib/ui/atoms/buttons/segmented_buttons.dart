@@ -33,29 +33,28 @@ class SegmentedButtons extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
-    builder:
-        (final context, final constraints) => ToggleButtons(
-          constraints: BoxConstraints(
-            minWidth: (constraints.maxWidth - 8) / titles.length,
-            minHeight: 40 + Theme.of(context).visualDensity.vertical * 4,
+    builder: (final context, final constraints) => ToggleButtons(
+      constraints: BoxConstraints(
+        minWidth: (constraints.maxWidth - 8) / titles.length,
+        minHeight: 40 + Theme.of(context).visualDensity.vertical * 4,
+      ),
+      borderRadius: BorderRadius.circular(48),
+      borderColor: Theme.of(context).colorScheme.outline,
+      selectedBorderColor: Theme.of(context).colorScheme.outline,
+      fillColor: Theme.of(context).colorScheme.secondaryContainer,
+      selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
+      color: Theme.of(context).colorScheme.onSurface,
+      isSelected: isSelected,
+      onPressed: onPressed,
+      children: [
+        for (int i = 0; i < titles.length; i++)
+          _ButtonSegment(
+            key: ValueKey(i),
+            isSelected: isSelected[i],
+            title: titles[i],
           ),
-          borderRadius: BorderRadius.circular(48),
-          borderColor: Theme.of(context).colorScheme.outline,
-          selectedBorderColor: Theme.of(context).colorScheme.outline,
-          fillColor: Theme.of(context).colorScheme.secondaryContainer,
-          selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
-          color: Theme.of(context).colorScheme.onSurface,
-          isSelected: isSelected,
-          onPressed: onPressed,
-          children: [
-            for (int i = 0; i < titles.length; i++)
-              _ButtonSegment(
-                key: ValueKey(i),
-                isSelected: isSelected[i],
-                title: titles[i],
-              ),
-          ],
-        ),
+      ],
+    ),
   );
 }
 

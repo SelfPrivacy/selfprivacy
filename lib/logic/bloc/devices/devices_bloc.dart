@@ -55,10 +55,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     // Optimistically remove the device from the list
     emit(
       DevicesDeleting(
-        devices:
-            state.devices
-                .where((final d) => d.name != event.device.name)
-                .toList(),
+        devices: state.devices
+            .where((final d) => d.name != event.device.name)
+            .toList(),
       ),
     );
 
@@ -69,10 +68,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       getIt<ApiConnectionRepository>().apiData.devices.invalidate();
       emit(
         DevicesLoaded(
-          devices:
-              state.devices
-                  .where((final d) => d.name != event.device.name)
-                  .toList(),
+          devices: state.devices
+              .where((final d) => d.name != event.device.name)
+              .toList(),
         ),
       );
     } else {

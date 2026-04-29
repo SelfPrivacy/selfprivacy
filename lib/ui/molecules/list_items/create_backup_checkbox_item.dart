@@ -32,12 +32,11 @@ class CreateBackupCheckboxItem extends StatelessWidget {
             'service_page.uses'.tr(
               namedArgs: {
                 'usage': service.storageUsage.used.toString(),
-                'volume':
-                    context
-                        .read<VolumesBloc>()
-                        .state
-                        .getVolume(service.storageUsage.volume ?? '')
-                        .displayName,
+                'volume': context
+                    .read<VolumesBloc>()
+                    .state
+                    .getVolume(service.storageUsage.volume ?? '')
+                    .displayName,
               },
             ),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(

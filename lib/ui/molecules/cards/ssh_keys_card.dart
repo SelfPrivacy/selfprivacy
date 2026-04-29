@@ -44,54 +44,50 @@ class SshKeysCard extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,
-                builder:
-                    (final BuildContext context) => DraggableScrollableSheet(
+                builder: (final BuildContext context) =>
+                    DraggableScrollableSheet(
                       expand: false,
                       maxChildSize: 0.9,
                       minChildSize: 0.3,
                       initialChildSize: 0.5,
-                      builder:
-                          (final context, final scrollController) =>
-                              NewSshKeyModal(
-                                user: user,
-                                scrollController: scrollController,
-                              ),
+                      builder: (final context, final scrollController) =>
+                          NewSshKeyModal(
+                            user: user,
+                            scrollController: scrollController,
+                          ),
                     ),
               );
             },
           ),
           Column(
-            children:
-                user.sshKeys.map((final String fullKey) {
-                  final keyParts = fullKey.split(' ');
-                  final keyType = keyParts[0];
-                  final publicKey = keyParts.length > 1 ? keyParts[1] : fullKey;
-                  final keyName =
-                      keyParts.length > 2
-                          ? keyParts[2]
-                          : 'ssh.no_key_name'.tr();
+            children: user.sshKeys.map((final String fullKey) {
+              final keyParts = fullKey.split(' ');
+              final keyType = keyParts[0];
+              final publicKey = keyParts.length > 1 ? keyParts[1] : fullKey;
+              final keyName = keyParts.length > 2
+                  ? keyParts[2]
+                  : 'ssh.no_key_name'.tr();
 
-                  return ListTileOnSurfaceVariant(
-                    title: '$keyName ($keyType)',
-                    disableSubtitleOverflow: true,
-                    // do not overflow text
-                    subtitle: publicKey,
-                    onTap: () async {
-                      await showDialog(
-                        context: context,
-                        builder:
-                            (final BuildContext context) =>
-                                _DeleteSshKeyConfirmationDialog(
-                                  fullKey: fullKey,
-                                  keyType: keyType,
-                                  publicKey: publicKey,
-                                  keyName: keyName,
-                                  user: user,
-                                ),
-                      );
-                    },
+              return ListTileOnSurfaceVariant(
+                title: '$keyName ($keyType)',
+                disableSubtitleOverflow: true,
+                // do not overflow text
+                subtitle: publicKey,
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (final BuildContext context) =>
+                        _DeleteSshKeyConfirmationDialog(
+                          fullKey: fullKey,
+                          keyType: keyType,
+                          publicKey: publicKey,
+                          keyName: keyName,
+                          user: user,
+                        ),
                   );
-                }).toList(),
+                },
+              );
+            }).toList(),
           ),
           if (sshDisabled)
             Column(

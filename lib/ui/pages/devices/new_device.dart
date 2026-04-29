@@ -20,20 +20,23 @@ class NewDevicePage extends StatelessWidget {
     children: [
       FutureBuilder(
         future: context.read<DevicesBloc>().getNewDeviceKey(),
-        builder: (
-          final BuildContext context,
-          final AsyncSnapshot<Object?> snapshot,
-        ) {
-          if (snapshot.hasData) {
-            return KeyDisplay(
-              keyToDisplay: snapshot.data.toString(),
-              canCopy: true,
-              infoboxText: 'devices.add_new_device_screen.tip'.tr(),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-        },
+        builder:
+            (
+              final BuildContext context,
+              final AsyncSnapshot<Object?> snapshot,
+            ) {
+              if (snapshot.hasData) {
+                return KeyDisplay(
+                  keyToDisplay: snapshot.data.toString(),
+                  canCopy: true,
+                  infoboxText: 'devices.add_new_device_screen.tip'.tr(),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
+            },
       ),
     ],
   );

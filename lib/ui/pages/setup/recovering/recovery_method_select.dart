@@ -18,8 +18,9 @@ class RecoveryMethodSelect extends StatelessWidget {
     hasBackButton: true,
     hasFlashButton: false,
     ignoreBreakpoints: true,
-    onBackButtonPressed:
-        context.read<ServerInstallationCubit>().revertRecoveryStep,
+    onBackButtonPressed: context
+        .read<ServerInstallationCubit>()
+        .revertRecoveryStep,
     children: [
       OutlinedCard(
         child: ListTile(
@@ -28,10 +29,9 @@ class RecoveryMethodSelect extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           leading: const Icon(Icons.offline_share_outlined),
-          onTap:
-              () => context
-                  .read<ServerInstallationCubit>()
-                  .selectRecoveryMethod(ServerRecoveryMethods.newDeviceKey),
+          onTap: () => context
+              .read<ServerInstallationCubit>()
+              .selectRecoveryMethod(ServerRecoveryMethods.newDeviceKey),
         ),
       ),
       const SizedBox(height: 16),
@@ -42,19 +42,17 @@ class RecoveryMethodSelect extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           leading: const Icon(Icons.password_outlined),
-          onTap:
-              () => context
-                  .read<ServerInstallationCubit>()
-                  .selectRecoveryMethod(ServerRecoveryMethods.recoveryKey),
+          onTap: () => context
+              .read<ServerInstallationCubit>()
+              .selectRecoveryMethod(ServerRecoveryMethods.recoveryKey),
         ),
       ),
       const SizedBox(height: 16),
       BrandButton.text(
         title: 'recovering.method_select_nothing'.tr(),
-        onPressed:
-            () => Navigator.of(
-              context,
-            ).push(materialRoute(const RecoveryFallbackMethodSelect())),
+        onPressed: () => Navigator.of(
+          context,
+        ).push(materialRoute(const RecoveryFallbackMethodSelect())),
       ),
     ],
   );
@@ -88,14 +86,13 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 leading: const Icon(Icons.vpn_key),
-                onTap:
-                    () => Navigator.of(context).push(
-                      materialRoute(
-                        const RecoverByOldTokenInstruction(
-                          instructionFilename: 'how_fallback_old',
-                        ),
-                      ),
+                onTap: () => Navigator.of(context).push(
+                  materialRoute(
+                    const RecoverByOldTokenInstruction(
+                      instructionFilename: 'how_fallback_old',
                     ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -106,14 +103,13 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 leading: const Icon(Icons.terminal),
-                onTap:
-                    () => Navigator.of(context).push(
-                      materialRoute(
-                        const RecoverByOldTokenInstruction(
-                          instructionFilename: 'how_fallback_ssh',
-                        ),
-                      ),
+                onTap: () => Navigator.of(context).push(
+                  materialRoute(
+                    const RecoverByOldTokenInstruction(
+                      instructionFilename: 'how_fallback_ssh',
                     ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -128,14 +124,13 @@ class RecoveryFallbackMethodSelect extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 leading: const Icon(Icons.web),
-                onTap:
-                    () => Navigator.of(context).push(
-                      materialRoute(
-                        const RecoverByOldTokenInstruction(
-                          instructionFilename: 'how_fallback_terminal',
-                        ),
-                      ),
+                onTap: () => Navigator.of(context).push(
+                  materialRoute(
+                    const RecoverByOldTokenInstruction(
+                      instructionFilename: 'how_fallback_terminal',
                     ),
+                  ),
+                ),
               ),
             ),
           ],

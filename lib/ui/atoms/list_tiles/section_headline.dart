@@ -14,9 +14,8 @@ class SectionHeadline extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondary,
       ),
     ),
-    subtitle:
-        subtitle != null
-            ? Text(subtitle!, style: Theme.of(context).textTheme.labelMedium)
-            : null,
+    subtitle: subtitle != null
+        ? Text(subtitle!, style: Theme.of(context).textTheme.labelMedium)
+        : null,
   );
 }

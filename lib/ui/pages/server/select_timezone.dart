@@ -1,10 +1,10 @@
 part of 'server_settings.dart';
 
-final List<Location> locations =
-    timeZoneDatabase.locations.values.toList()..sort(
-      (final l1, final l2) =>
-          l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset),
-    );
+final List<Location> locations = timeZoneDatabase.locations.values.toList()
+  ..sort(
+    (final l1, final l2) =>
+        l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset),
+  );
 
 @RoutePage()
 class SelectTimezonePage extends StatefulWidget {
@@ -26,8 +26,9 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     searchController.addListener(() {
       setState(() {
-        timezoneFilterValue =
-            searchController.text.isNotEmpty ? searchController.text : null;
+        timezoneFilterValue = searchController.text.isNotEmpty
+            ? searchController.text
+            : null;
       });
     });
     super.initState();
@@ -64,33 +65,30 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title:
-            (isDesktop || isSearching)
-                ? TextField(
-                  readOnly: false,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  enabled: true,
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    errorText: null,
-                    hintText: 'server.timezone_search_bar'.tr(),
-                  ),
-                )
-                : Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text('server.select_timezone'.tr()),
+        title: (isDesktop || isSearching)
+            ? TextField(
+                readOnly: false,
+                textAlign: TextAlign.start,
+                textInputAction: TextInputAction.next,
+                enabled: true,
+                controller: searchController,
+                decoration: InputDecoration(
+                  errorText: null,
+                  hintText: 'server.timezone_search_bar'.tr(),
                 ),
-        leading:
-            !isDesktop
-                ? IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed:
-                      isSearching
-                          ? () => setState(() => isSearching = false)
-                          : () => Navigator.of(context).pop(),
-                )
-                : null,
+              )
+            : Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text('server.select_timezone'.tr()),
+              ),
+        leading: !isDesktop
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: isSearching
+                    ? () => setState(() => isSearching = false)
+                    : () => Navigator.of(context).pop(),
+              )
+            : null,
         actions: [
           if (!isSearching && !isDesktop)
             IconButton(
@@ -102,23 +100,22 @@ class _SelectTimezonePageState extends State<SelectTimezonePage> {
       body: SafeArea(
         child: ListView(
           controller: scrollController,
-          children:
-              locations
-                  .where(
-                    (final Location location) =>
-                        timezoneFilterValue == null ||
-                        location.name.toLowerCase().contains(
-                          timezoneFilterValue!,
-                        ) ||
-                        Duration(milliseconds: location.currentTimeZone.offset)
-                            .toTimezoneOffsetFormat()
-                            .contains(timezoneFilterValue!),
-                  )
-                  .toList()
-                  .asMap()
-                  .map(locationToListTile)
-                  .values
-                  .toList(),
+          children: locations
+              .where(
+                (final Location location) =>
+                    timezoneFilterValue == null ||
+                    location.name.toLowerCase().contains(
+                      timezoneFilterValue!,
+                    ) ||
+                    Duration(
+                      milliseconds: location.currentTimeZone.offset,
+                    ).toTimezoneOffsetFormat().contains(timezoneFilterValue!),
+              )
+              .toList()
+              .asMap()
+              .map(locationToListTile)
+              .values
+              .toList(),
         ),
       ),
     );

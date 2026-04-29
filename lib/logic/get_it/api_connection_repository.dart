@@ -195,13 +195,12 @@ class ApiConnectionRepository {
         );
         if (index != -1) {
           final User updatedUser = loadedUsers[index].copyWith(
-            emailPasswordMetadata:
-                loadedUsers[index].emailPasswordMetadata
-                    ?.where(
-                      (final EmailPasswordMetadata metadata) =>
-                          metadata.uuid != uuid,
-                    )
-                    .toList(),
+            emailPasswordMetadata: loadedUsers[index].emailPasswordMetadata
+                ?.where(
+                  (final EmailPasswordMetadata metadata) =>
+                      metadata.uuid != uuid,
+                )
+                .toList(),
           );
           loadedUsers[index] = updatedUser;
         }

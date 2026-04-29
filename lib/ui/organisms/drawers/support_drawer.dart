@@ -9,8 +9,10 @@ class SupportDrawer extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final currentArticle =
-        context.watch<SupportSystemCubit>().state.currentArticle;
+    final currentArticle = context
+        .watch<SupportSystemCubit>()
+        .state
+        .currentArticle;
     return Drawer(
       width: 440,
       child: SingleChildScrollView(

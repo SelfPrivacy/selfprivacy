@@ -127,16 +127,16 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
         !widget.hasFlashButton ||
         context.watch<JobsCubit>().state is JobsStateEmpty;
     return SliverAppBar(
-      expandedHeight:
-          widget.hasHeroIcon ? 148.0 + _size.height : 72.0 + _size.height,
+      expandedHeight: widget.hasHeroIcon
+          ? 148.0 + _size.height
+          : 72.0 + _size.height,
       primary: true,
       pinned: isMobile,
       stretch: true,
       surfaceTintColor: isMobile ? null : Colors.transparent,
-      leading:
-          (widget.hasBackButton && isMobile)
-              ? const AutoLeadingButton()
-              : const SizedBox.shrink(),
+      leading: (widget.hasBackButton && isMobile)
+          ? const AutoLeadingButton()
+          : const SizedBox.shrink(),
       actions: [
         if (widget.hasFlashButton && isMobile)
           AnimatedSwitcher(
@@ -148,10 +148,9 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
               icon: Icon(
                 isJobsListEmpty ? Ionicons.flash_outline : Ionicons.flash,
               ),
-              color:
-                  isJobsListEmpty
-                      ? Theme.of(context).colorScheme.onSurface
-                      : Theme.of(context).colorScheme.primary,
+              color: isJobsListEmpty
+                  ? Theme.of(context).colorScheme.onSurface
+                  : Theme.of(context).colorScheme.primary,
               tooltip: 'jobs.title'.tr(),
             ),
           ),
@@ -159,21 +158,20 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: LayoutBuilder(
-          builder:
-              (final context, final constraints) => SizedBox(
-                width: constraints.maxWidth - 72.0,
-                child: WidgetSize(
-                  onChange: (final Size size) => setState(() => _size = size),
-                  child: Text(
-                    widget.heroTitle,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    overflow: TextOverflow.fade,
-                    textAlign: TextAlign.center,
-                  ),
+          builder: (final context, final constraints) => SizedBox(
+            width: constraints.maxWidth - 72.0,
+            child: WidgetSize(
+              onChange: (final Size size) => setState(() => _size = size),
+              child: Text(
+                widget.heroTitle,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.center,
               ),
+            ),
+          ),
         ),
         expandedTitleScale: 1.2,
         centerTitle: true,

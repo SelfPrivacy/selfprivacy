@@ -3,21 +3,23 @@ import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_log_item_dialog.dart';
 
 extension on ConsoleLog {
-  Color resolveColor(final BuildContext context) =>
-      isError
-          ? Theme.of(context).colorScheme.error
-          : switch (this) {
-            (final RestApiRequestConsoleLog _) =>
-              Theme.of(context).colorScheme.secondary,
-            (final RestApiResponseConsoleLog _) =>
-              Theme.of(context).colorScheme.primary,
-            (final GraphQlRequestConsoleLog _) =>
-              Theme.of(context).colorScheme.secondary,
-            (final GraphQlResponseConsoleLog _) =>
-              Theme.of(context).colorScheme.tertiary,
-            (final ManualConsoleLog _) =>
-              Theme.of(context).colorScheme.tertiary,
-          };
+  Color resolveColor(final BuildContext context) => isError
+      ? Theme.of(context).colorScheme.error
+      : switch (this) {
+          (final RestApiRequestConsoleLog _) => Theme.of(
+            context,
+          ).colorScheme.secondary,
+          (final RestApiResponseConsoleLog _) => Theme.of(
+            context,
+          ).colorScheme.primary,
+          (final GraphQlRequestConsoleLog _) => Theme.of(
+            context,
+          ).colorScheme.secondary,
+          (final GraphQlResponseConsoleLog _) => Theme.of(
+            context,
+          ).colorScheme.tertiary,
+          (final ManualConsoleLog _) => Theme.of(context).colorScheme.tertiary,
+        };
 
   IconData resolveIcon() => switch (this) {
     (final RestApiRequestConsoleLog _) => Icons.upload_outlined,
@@ -58,12 +60,10 @@ class ConsoleLogItemWidget extends StatelessWidget {
       subtitle: Text(log.content, overflow: TextOverflow.ellipsis, maxLines: 3),
       leading: Icon(log.resolveIcon()),
       iconColor: log.resolveColor(context),
-      onTap:
-          () => showDialog(
-            context: context,
-            builder:
-                (final BuildContext context) => ConsoleItemDialog(log: log),
-          ),
+      onTap: () => showDialog(
+        context: context,
+        builder: (final BuildContext context) => ConsoleItemDialog(log: log),
+      ),
     ),
   );
 }

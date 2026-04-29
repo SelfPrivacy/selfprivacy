@@ -21,10 +21,9 @@ class InheritedAppController extends StatefulWidget {
   @override
   State<InheritedAppController> createState() => _InheritedAppControllerState();
 
-  static AppController of(final BuildContext context) =>
-      context
-          .dependOnInheritedWidgetOfExactType<_AppControllerInjector>()!
-          .notifier!;
+  static AppController of(final BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<_AppControllerInjector>()!
+      .notifier!;
 }
 
 class _InheritedAppControllerState extends State<InheritedAppController> {

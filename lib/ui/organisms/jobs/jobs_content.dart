@@ -21,20 +21,27 @@ class JobsContent extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final List<ServerJob> serverJobs =
-        context.watch<ServerJobsBloc>().state.serverJobList;
+    final List<ServerJob> serverJobs = context
+        .watch<ServerJobsBloc>()
+        .state
+        .serverJobList;
 
-    final bool hasRemovableJobs =
-        context.watch<ServerJobsBloc>().state.hasRemovableJobs;
+    final bool hasRemovableJobs = context
+        .watch<ServerJobsBloc>()
+        .state
+        .hasRemovableJobs;
 
-    final bool hasBlockingJobs =
-        context.watch<ServerJobsBloc>().state.hasJobsBlockingRebuild;
+    final bool hasBlockingJobs = context
+        .watch<ServerJobsBloc>()
+        .state
+        .hasJobsBlockingRebuild;
 
     return BlocBuilder<JobsCubit, JobsState>(
       builder: (final context, final state) {
         late List<Widget> widgets;
-        final ServerInstallationState installationState =
-            context.read<ServerInstallationCubit>().state;
+        final ServerInstallationState installationState = context
+            .read<ServerInstallationCubit>()
+            .state;
         if (state is JobsStateEmpty) {
           widgets = [
             const Gap(64),
@@ -94,10 +101,9 @@ class JobsContent extends StatelessWidget {
             ),
             const Gap(16),
             BrandButton.filled(
-              onPressed:
-                  hasBlockingJobs
-                      ? null
-                      : () => context.read<JobsCubit>().applyAll(),
+              onPressed: hasBlockingJobs
+                  ? null
+                  : () => context.read<JobsCubit>().applyAll(),
               title: 'jobs.start'.tr(),
             ),
           ];
@@ -127,9 +133,9 @@ class JobsContent extends StatelessWidget {
                     key: ValueKey(job.uid),
                     direction:
                         job.status == JobStatusEnum.finished ||
-                                job.status == JobStatusEnum.error
-                            ? DismissDirection.horizontal
-                            : DismissDirection.none,
+                            job.status == JobStatusEnum.error
+                        ? DismissDirection.horizontal
+                        : DismissDirection.none,
                     child: ServerJobCard(serverJob: job),
                     onDismissed: (final direction) {
                       context.read<ServerJobsBloc>().add(
@@ -176,8 +182,9 @@ class _JobsEmptyActions extends StatelessWidget {
             alertTitle: 'jobs.reboot_server'.tr(),
             description: 'modals.are_you_sure'.tr(),
             actionButtonTitle: 'modals.reboot'.tr(),
-            actionButtonOnPressed:
-                () => {context.read<JobsCubit>().rebootServer()},
+            actionButtonOnPressed: () => {
+              context.read<JobsCubit>().rebootServer(),
+            },
           );
         },
       ),
@@ -287,18 +294,18 @@ class _ServerJobStatusCardInClientJobs extends StatelessWidget {
                   ),
                 const Gap(8),
                 LinearProgressIndicator(
-                  value:
-                      serverJob?.progress == null
-                          ? 0.0
-                          : ((serverJob?.progress ?? 0) < 1)
-                          ? null
-                          : serverJob!.progress! / 100.0,
+                  value: serverJob?.progress == null
+                      ? 0.0
+                      : ((serverJob?.progress ?? 0) < 1)
+                      ? null
+                      : serverJob!.progress! / 100.0,
                   color: getJobColor(
                     serverJob?.status ?? JobStatusEnum.created,
                     context,
                   ),
-                  backgroundColor:
-                      Theme.of(context).colorScheme.surfaceContainerHighest,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest,
                   minHeight: 8,
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -338,12 +345,10 @@ class _ServerJobsListTitle extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         IconButton(
-          onPressed:
-              hasRemovableJobs
-                  ? () => context.read<ServerJobsBloc>().add(
-                    RemoveAllFinishedJobs(),
-                  )
-                  : null,
+          onPressed: hasRemovableJobs
+              ? () =>
+                    context.read<ServerJobsBloc>().add(RemoveAllFinishedJobs())
+              : null,
           icon: const Icon(Icons.clear_all),
           color: Theme.of(context).colorScheme.onSurface,
         ),

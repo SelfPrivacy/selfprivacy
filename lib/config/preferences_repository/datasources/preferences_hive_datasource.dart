@@ -34,8 +34,7 @@ class PreferencesHiveDataSource implements PreferencesDataSource {
   Future<String?> getLocale() async => _appSettingsBox.get(BNames.appLocale);
 
   @override
-  Future<void> setLocale(final String? newLocale) =>
-      newLocale == null
-          ? _appSettingsBox.delete(BNames.appLocale)
-          : _appSettingsBox.put(BNames.appLocale, newLocale);
+  Future<void> setLocale(final String? newLocale) => newLocale == null
+      ? _appSettingsBox.delete(BNames.appLocale)
+      : _appSettingsBox.put(BNames.appLocale, newLocale);
 }

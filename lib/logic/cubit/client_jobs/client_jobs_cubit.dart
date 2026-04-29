@@ -232,8 +232,9 @@ class JobsCubit extends Cubit<JobsState> {
         JobStatusEnum.running,
       ),
     );
-    final List<DnsRecord> newDnsRecords =
-        await getIt<ApiConnectionRepository>().api.getDnsRecords();
+    final List<DnsRecord> newDnsRecords = await getIt<ApiConnectionRepository>()
+        .api
+        .getDnsRecords();
 
     // If any of the records have a null content, we don't want to update
     // the DNS records
@@ -265,8 +266,9 @@ class JobsCubit extends Cubit<JobsState> {
 
       final dnsCreateResult = await ProvidersController.currentDnsProvider!
           .updateDnsRecords(
-            newRecords:
-                newDnsRecords.where((final r) => r.content != null).toList(),
+            newRecords: newDnsRecords
+                .where((final r) => r.content != null)
+                .toList(),
             oldRecords: oldDnsRecords,
             domain: domain!,
           );
@@ -292,8 +294,8 @@ class JobsCubit extends Cubit<JobsState> {
           const [],
         ),
       );
-      final result =
-          await getIt<ApiConnectionRepository>().api.collectNixGarbage();
+      final result = await getIt<ApiConnectionRepository>().api
+          .collectNixGarbage();
       if (result.success && result.data != null) {
         emit(
           JobsStateLoading(

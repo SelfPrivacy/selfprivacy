@@ -74,8 +74,10 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
 
   @override
   Widget build(final BuildContext context) {
-    final AutobackupQuotas? initialAutobackupQuotas =
-        context.watch<BackupsBloc>().state.autobackupQuotas;
+    final AutobackupQuotas? initialAutobackupQuotas = context
+        .watch<BackupsBloc>()
+        .state
+        .autobackupQuotas;
     return ListView(
       controller: widget.scrollController,
       padding: const EdgeInsets.all(16),
@@ -180,15 +182,14 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
         ),
         const SizedBox(height: 16),
         FilledButton(
-          onPressed:
-              selectedQuotas == initialAutobackupQuotas
-                  ? null
-                  : () {
-                    context.read<BackupsBloc>().add(
-                      SetAutobackupQuotas(selectedQuotas),
-                    );
-                    Navigator.of(context).pop();
-                  },
+          onPressed: selectedQuotas == initialAutobackupQuotas
+              ? null
+              : () {
+                  context.read<BackupsBloc>().add(
+                    SetAutobackupQuotas(selectedQuotas),
+                  );
+                  Navigator.of(context).pop();
+                },
           child: Text('backup.set_rotation_quotas'.tr()),
         ),
       ],

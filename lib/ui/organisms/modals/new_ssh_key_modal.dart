@@ -66,10 +66,9 @@ class NewSshKeyModal extends StatelessWidget {
               ),
               const Gap(16),
               BrandButton.filled(
-                onPressed:
-                    formCubitState.isSubmitting
-                        ? null
-                        : () => context.read<SshFormCubit>().trySubmit(),
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<SshFormCubit>().trySubmit(),
                 title: 'ssh.create'.tr(),
               ),
             ],

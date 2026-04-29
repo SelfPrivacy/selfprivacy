@@ -62,10 +62,9 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
     emit(
       DnsRecordsState(
         dnsRecords: foundRecords.data,
-        dnsState:
-            foundRecords.data.any((final r) => !r.isSatisfied)
-                ? DnsRecordsStatus.error
-                : DnsRecordsStatus.good,
+        dnsState: foundRecords.data.any((final r) => !r.isSatisfied)
+            ? DnsRecordsStatus.error
+            : DnsRecordsStatus.good,
       ),
     );
   }
@@ -105,19 +104,20 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
             (final r) =>
                 (r.name == pendingDnsRecord.name) &&
                 r.type == pendingDnsRecord.type,
-            orElse:
-                () => DnsRecord(
-                  displayName: pendingDnsRecord.displayName,
-                  name: pendingDnsRecord.name,
-                  type: pendingDnsRecord.type,
-                  content: pendingDnsRecord.content,
-                  ttl: pendingDnsRecord.ttl,
-                ),
+            orElse: () => DnsRecord(
+              displayName: pendingDnsRecord.displayName,
+              name: pendingDnsRecord.name,
+              type: pendingDnsRecord.type,
+              content: pendingDnsRecord.content,
+              ttl: pendingDnsRecord.ttl,
+            ),
           );
-          final String foundContent =
-              foundRecord.content!.replaceAll(RegExp(r'\s+'), '').trim();
-          final String desiredContent =
-              pendingDnsRecord.content!.replaceAll(RegExp(r'\s+'), '').trim();
+          final String foundContent = foundRecord.content!
+              .replaceAll(RegExp(r'\s+'), '')
+              .trim();
+          final String desiredContent = pendingDnsRecord.content!
+              .replaceAll(RegExp(r'\s+'), '')
+              .trim();
           final isSatisfied = (desiredContent == foundContent);
           foundRecords.add(
             DesiredDnsRecord(
@@ -192,14 +192,12 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
 
     // If there are no AAAA records, make empty copies of A records
     if (!records.any((final r) => r.type == 'AAAA')) {
-      final recordsToAdd =
-          records
-              .where((final r) => r.type == 'A')
-              .map(
-                (final r) =>
-                    DnsRecord(name: r.name, type: 'AAAA', content: null),
-              )
-              .toList();
+      final recordsToAdd = records
+          .where((final r) => r.type == 'A')
+          .map(
+            (final r) => DnsRecord(name: r.name, type: 'AAAA', content: null),
+          )
+          .toList();
       records.addAll(recordsToAdd);
     }
 

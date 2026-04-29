@@ -30,9 +30,7 @@ class ServiceMigrationListItem extends StatelessWidget {
           }
           onChange(value, service.id);
         },
-        child: Column(
-          children: _radioRows(context),
-        ),
+        child: Column(children: _radioRows(context)),
       ),
     ],
   );

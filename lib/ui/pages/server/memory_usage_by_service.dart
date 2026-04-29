@@ -154,18 +154,17 @@ class ServiceMemoryConsumptionTile extends StatelessWidget {
           await context.pushRoute(ServiceRoute(serviceId: service.id));
         };
       }
-      icon =
-          service?.svgIcon != null
-              ? SvgPicture.string(
-                service!.svgIcon,
-                width: 22,
-                height: 24,
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.onSurface,
-                  BlendMode.srcIn,
-                ),
-              )
-              : const Icon(BrandIcons.box);
+      icon = service?.svgIcon != null
+          ? SvgPicture.string(
+              service!.svgIcon,
+              width: 22,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            )
+          : const Icon(BrandIcons.box);
     }
 
     if (serviceName == slice && averageUsage.byte == 0 && maxUsage.byte == 0) {

@@ -34,8 +34,10 @@ class _SnapshotModalState extends State<SnapshotModal> {
 
   @override
   Widget build(final BuildContext context) {
-    final List<String> busyServices =
-        context.watch<ServerJobsBloc>().state.busyServices;
+    final List<String> busyServices = context
+        .watch<ServerJobsBloc>()
+        .state
+        .busyServices;
 
     final bool isServiceBusy = busyServices.contains(widget.snapshot.serviceId);
 
@@ -84,8 +86,8 @@ class _SnapshotModalState extends State<SnapshotModal> {
                           BackupRestoreStrategy.downloadVerifyOverwrite;
                     });
                   },
-                  title:
-                      'backup.snapshot_modal_download_verify_option_title'.tr(),
+                  title: 'backup.snapshot_modal_download_verify_option_title'
+                      .tr(),
                   subtitle:
                       'backup.snapshot_modal_download_verify_option_description'
                           .tr(),
@@ -99,27 +101,23 @@ class _SnapshotModalState extends State<SnapshotModal> {
                     });
                   },
                   title: 'backup.snapshot_modal_inplace_option_title'.tr(),
-                  subtitle:
-                      'backup.snapshot_modal_inplace_option_description'.tr(),
+                  subtitle: 'backup.snapshot_modal_inplace_option_description'
+                      .tr(),
                 ),
                 const SizedBox(height: 16),
                 // Restore backup button
                 BrandButton.filled(
-                  onPressed:
-                      isServiceBusy
-                          ? null
-                          : () {
-                            context.read<BackupsBloc>().add(
-                              RestoreBackup(
-                                widget.snapshot.id,
-                                selectedStrategy,
-                              ),
-                            );
-                            Navigator.of(context).pop();
-                            getIt<NavigationService>().showSnackBar(
-                              'backup.restore_started'.tr(),
-                            );
-                          },
+                  onPressed: isServiceBusy
+                      ? null
+                      : () {
+                          context.read<BackupsBloc>().add(
+                            RestoreBackup(widget.snapshot.id, selectedStrategy),
+                          );
+                          Navigator.of(context).pop();
+                          getIt<NavigationService>().showSnackBar(
+                            'backup.restore_started'.tr(),
+                          );
+                        },
                   title: 'backup.restore'.tr(),
                 ),
               ],

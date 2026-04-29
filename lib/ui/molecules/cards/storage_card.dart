@@ -43,9 +43,9 @@ class StorageCard extends StatelessWidget {
 
     StateType state =
         context.watch<ServerInstallationCubit>().state
-                is ServerInstallationFinished
-            ? StateType.stable
-            : StateType.uninitialized;
+            is ServerInstallationFinished
+        ? StateType.stable
+        : StateType.uninitialized;
 
     if (state == StateType.stable && !diskStatus.isDiskOkay) {
       state = StateType.error;
@@ -58,11 +58,9 @@ class StorageCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkResponse(
           highlightShape: BoxShape.rectangle,
-          onTap:
-              () =>
-                  diskStatus.diskVolumes.isEmpty
-                      ? null
-                      : context.pushRoute(const ServerStorageRoute()),
+          onTap: () => diskStatus.diskVolumes.isEmpty
+              ? null
+              : context.pushRoute(const ServerStorageRoute()),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

@@ -68,9 +68,9 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       emit(
         link != null
             ? ResetPasswordState(
-              passwordResetLink: link,
-              passwordResetMessage: message,
-            )
+                passwordResetLink: link,
+                passwordResetMessage: message,
+              )
             : ResetPasswordState(errorMessage: message),
       );
     }

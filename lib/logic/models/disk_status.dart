@@ -83,34 +83,34 @@ class DiskStatus {
     final List<ServerDiskVolume> serverVolumes,
     final List<ServerProviderVolume> providerVolumes,
   ) {
-    diskVolumes =
-        serverVolumes.map((final ServerDiskVolume volume) {
-          ServerProviderVolume? providerVolume;
+    diskVolumes = serverVolumes.map((final ServerDiskVolume volume) {
+      ServerProviderVolume? providerVolume;
 
-          for (final ServerProviderVolume iterableProviderVolume
-              in providerVolumes) {
-            if (iterableProviderVolume.linuxDevice == null ||
-                volume.model == null ||
-                volume.serial == null) {
-              continue;
-            }
+      for (final ServerProviderVolume iterableProviderVolume
+          in providerVolumes) {
+        if (iterableProviderVolume.linuxDevice == null ||
+            volume.model == null ||
+            volume.serial == null) {
+          continue;
+        }
 
-            final String deviceId =
-                iterableProviderVolume.linuxDevice!.split('/').last;
-            if (deviceId.contains(volume.model!) &&
-                deviceId.contains(volume.serial!)) {
-              providerVolume = iterableProviderVolume;
-              break;
-            }
-          }
+        final String deviceId = iterableProviderVolume.linuxDevice!
+            .split('/')
+            .last;
+        if (deviceId.contains(volume.model!) &&
+            deviceId.contains(volume.serial!)) {
+          providerVolume = iterableProviderVolume;
+          break;
+        }
+      }
 
-          final DiskVolume diskVolume = DiskVolume.fromServerAndDiskVolume(
-            volume,
-            providerVolume,
-          );
+      final DiskVolume diskVolume = DiskVolume.fromServerAndDiskVolume(
+        volume,
+        providerVolume,
+      );
 
-          return diskVolume;
-        }).toList();
+      return diskVolume;
+    }).toList();
   }
 
   bool get isDiskOkay => diskVolumes.every((final volume) => volume.isDiskOkay);

@@ -87,13 +87,11 @@ class DiskConsumptionOverview extends StatelessWidget {
         ServerStorageSection(
           volume: volume,
           diskStatus: diskStatus,
-          services:
-              services
-                  .where(
-                    (final service) =>
-                        service.storageUsage.volume == volume.name,
-                  )
-                  .toList(),
+          services: services
+              .where(
+                (final service) => service.storageUsage.volume == volume.name,
+              )
+              .toList(),
         ),
         const Gap(16),
         const Divider(),
@@ -139,13 +137,12 @@ class ServerStorageSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BrandOutlinedButton(
             title: 'storage.extend_volume_button.title'.tr(),
-            onPressed:
-                () => context.pushRoute(
-                  ExtendingVolumeRoute(
-                    diskVolumeToResize: volume,
-                    diskStatus: diskStatus,
-                  ),
-                ),
+            onPressed: () => context.pushRoute(
+              ExtendingVolumeRoute(
+                diskVolumeToResize: volume,
+                diskStatus: diskStatus,
+              ),
+            ),
           ),
         ),
       ],
@@ -183,10 +180,9 @@ class ServerConsumptionListTile extends StatelessWidget {
         ),
         rightSideText: service.storageUsage.used.toString(),
         percentage: service.storageUsage.used.byte / volume.sizeTotal.byte,
-        color:
-            volume.root
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary,
+        color: volume.root
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.secondary,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         dense: true,
       ),

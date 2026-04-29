@@ -103,8 +103,9 @@ class _SelfprivacyAppState extends State<SelfprivacyApp> {
         // routing
         routeInformationParser: _appRouter.defaultRouteParser(),
         routerDelegate: _appRouter.delegate(),
-        scaffoldMessengerKey:
-            getIt.get<NavigationService>().scaffoldMessengerKey,
+        scaffoldMessengerKey: getIt
+            .get<NavigationService>()
+            .scaffoldMessengerKey,
         // localization settings
         locale: context.locale,
         supportedLocales: context.supportedLocales,

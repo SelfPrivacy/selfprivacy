@@ -27,8 +27,8 @@ class UserAdapter extends TypeAdapter<User> {
       displayName: fields[7] as String?,
       directmemberof: (fields[8] as List?)?.cast<String>(),
       memberof: (fields[9] as List?)?.cast<String>(),
-      emailPasswordMetadata:
-          (fields[10] as List?)?.cast<EmailPasswordMetadata>(),
+      emailPasswordMetadata: (fields[10] as List?)
+          ?.cast<EmailPasswordMetadata>(),
     );
   }
 

@@ -2,26 +2,25 @@ part of 'services_bloc.dart';
 
 sealed class ServicesState extends Equatable {
   ServicesState({final List<ServiceLock> lockedServices = const []})
-    : _lockedServices =
-          lockedServices.where((final lock) => lock.isLocked).toList();
+    : _lockedServices = lockedServices
+          .where((final lock) => lock.isLocked)
+          .toList();
   final List<ServiceLock> _lockedServices;
   List<Service> get services;
-  List<String> get lockedServices =>
-      _lockedServices
-          .where((final lock) => lock.isLocked)
-          .map((final lock) => lock.serviceId)
-          .toList();
+  List<String> get lockedServices => _lockedServices
+      .where((final lock) => lock.isLocked)
+      .map((final lock) => lock.serviceId)
+      .toList();
 
-  List<Service> get installedServices =>
-      services
-          .where(
-            (final service) =>
-                service.isInstalled &&
-                (!service.isSystemService ||
-                    (service.isSystemService &&
-                        service.status != ServiceStatus.active)),
-          )
-          .toList();
+  List<Service> get installedServices => services
+      .where(
+        (final service) =>
+            service.isInstalled &&
+            (!service.isSystemService ||
+                (service.isSystemService &&
+                    service.status != ServiceStatus.active)),
+      )
+      .toList();
 
   List<Service> get systemServices =>
       services.where((final service) => service.isSystemService).toList();

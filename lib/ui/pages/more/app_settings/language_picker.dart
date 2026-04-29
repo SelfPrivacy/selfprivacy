@@ -49,10 +49,9 @@ class _LanguagePickerDialog extends StatelessWidget {
             child: Text(
               Localization.getLanguageName(locale),
               style: TextStyle(
-                fontWeight:
-                    locale == appController.locale
-                        ? FontWeight.w800
-                        : FontWeight.w400,
+                fontWeight: locale == appController.locale
+                    ? FontWeight.w800
+                    : FontWeight.w400,
               ),
             ),
             onChanged: (final newValue) => Navigator.of(context).pop(newValue),

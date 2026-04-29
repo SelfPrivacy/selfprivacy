@@ -60,13 +60,12 @@ class HetznerApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/servers');
-      servers =
-          response.data!['servers']
-              .map<HetznerServerInfo>(
-                // ignore: unnecessary_lambdas
-                (final e) => HetznerServerInfo.fromJson(e),
-              )
-              .toList();
+      servers = response.data!['servers']
+          .map<HetznerServerInfo>(
+            // ignore: unnecessary_lambdas
+            (final e) => HetznerServerInfo.fromJson(e),
+          )
+          .toList();
     } catch (e) {
       logger('Error while fetching servers: $e');
       return GenericResult(success: false, data: [], message: e.toString());
@@ -201,9 +200,8 @@ class HetznerApi extends RestApiMap {
         '/servers',
         options: Options(
           followRedirects: false,
-          validateStatus:
-              (final status) =>
-                  status != null && (status >= 200 || status == 401),
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );

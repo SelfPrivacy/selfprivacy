@@ -27,8 +27,10 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
   @override
   void initState() {
     super.initState();
-    final List<String> busyServices =
-        context.read<ServerJobsBloc>().state.busyServices;
+    final List<String> busyServices = context
+        .read<ServerJobsBloc>()
+        .state
+        .busyServices;
     selectedServices.addAll(
       widget.services.where(
         (final Service service) => !busyServices.contains(service.id),
@@ -38,8 +40,10 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
 
   @override
   Widget build(final BuildContext context) {
-    final List<String> busyServices =
-        context.watch<ServerJobsBloc>().state.busyServices;
+    final List<String> busyServices = context
+        .watch<ServerJobsBloc>()
+        .state
+        .busyServices;
 
     return ListView(
       controller: widget.scrollController,
@@ -101,15 +105,14 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
         const SizedBox(height: 16),
         // Create backup button
         FilledButton(
-          onPressed:
-              selectedServices.isEmpty
-                  ? null
-                  : () {
-                    context.read<BackupsBloc>().add(
-                      CreateBackups(selectedServices),
-                    );
-                    Navigator.of(context).pop();
-                  },
+          onPressed: selectedServices.isEmpty
+              ? null
+              : () {
+                  context.read<BackupsBloc>().add(
+                    CreateBackups(selectedServices),
+                  );
+                  Navigator.of(context).pop();
+                },
           child: Text('backup.start'.tr()),
         ),
       ],

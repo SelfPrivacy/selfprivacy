@@ -26,12 +26,11 @@ class Fragment$genericBackupConfigReturn {
       code: (l$code as int),
       message: (l$message as String),
       success: (l$success as bool),
-      configuration:
-          l$configuration == null
-              ? null
-              : Fragment$genericBackupConfigReturn$configuration.fromJson(
-                (l$configuration as Map<String, dynamic>),
-              ),
+      configuration: l$configuration == null
+          ? null
+          : Fragment$genericBackupConfigReturn$configuration.fromJson(
+              (l$configuration as Map<String, dynamic>),
+            ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -162,23 +161,19 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn<TRes>
   }) => _then(
     Fragment$genericBackupConfigReturn(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      configuration:
-          configuration == _undefined
-              ? _instance.configuration
-              : (configuration
-                  as Fragment$genericBackupConfigReturn$configuration?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      configuration: configuration == _undefined
+          ? _instance.configuration
+          : (configuration
+                as Fragment$genericBackupConfigReturn$configuration?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -187,12 +182,12 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn<TRes>
     final local$configuration = _instance.configuration;
     return local$configuration == null
         ? CopyWith$Fragment$genericBackupConfigReturn$configuration.stub(
-          _then(_instance),
-        )
+            _then(_instance),
+          )
         : CopyWith$Fragment$genericBackupConfigReturn$configuration(
-          local$configuration,
-          (e) => call(configuration: e),
-        );
+            local$configuration,
+            (e) => call(configuration: e),
+          );
   }
 }
 
@@ -389,6 +384,7 @@ extension ClientExtension$Fragment$genericBackupConfigReturn
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Fragment$genericBackupConfigReturn? readFragment$genericBackupConfigReturn({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -620,39 +616,32 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$genericBackupConfigReturn$configuration(
-      provider:
-          provider == _undefined || provider == null
-              ? _instance.provider
-              : (provider as Enum$BackupProvider),
-      encryptionKey:
-          encryptionKey == _undefined || encryptionKey == null
-              ? _instance.encryptionKey
-              : (encryptionKey as String),
-      isInitialized:
-          isInitialized == _undefined || isInitialized == null
-              ? _instance.isInitialized
-              : (isInitialized as bool),
-      autobackupPeriod:
-          autobackupPeriod == _undefined
-              ? _instance.autobackupPeriod
-              : (autobackupPeriod as int?),
-      locationName:
-          locationName == _undefined
-              ? _instance.locationName
-              : (locationName as String?),
-      locationId:
-          locationId == _undefined
-              ? _instance.locationId
-              : (locationId as String?),
+      provider: provider == _undefined || provider == null
+          ? _instance.provider
+          : (provider as Enum$BackupProvider),
+      encryptionKey: encryptionKey == _undefined || encryptionKey == null
+          ? _instance.encryptionKey
+          : (encryptionKey as String),
+      isInitialized: isInitialized == _undefined || isInitialized == null
+          ? _instance.isInitialized
+          : (isInitialized as bool),
+      autobackupPeriod: autobackupPeriod == _undefined
+          ? _instance.autobackupPeriod
+          : (autobackupPeriod as int?),
+      locationName: locationName == _undefined
+          ? _instance.locationName
+          : (locationName as String?),
+      locationId: locationId == _undefined
+          ? _instance.locationId
+          : (locationId as String?),
       autobackupQuotas:
           autobackupQuotas == _undefined || autobackupQuotas == null
-              ? _instance.autobackupQuotas
-              : (autobackupQuotas
-                  as Fragment$genericBackupConfigReturn$configuration$autobackupQuotas),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.autobackupQuotas
+          : (autobackupQuotas
+                as Fragment$genericBackupConfigReturn$configuration$autobackupQuotas),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -836,13 +825,11 @@ abstract class CopyWith$Fragment$genericBackupConfigReturn$configuration$autobac
       Fragment$genericBackupConfigReturn$configuration$autobackupQuotas,
     )
     then,
-  ) =
-      _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
+  ) = _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
 
   factory CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
+  ) = _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
 
   TRes call({
     int? last,
@@ -886,26 +873,21 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQ
   }) => _then(
     Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
       last: last == _undefined || last == null ? _instance.last : (last as int),
-      daily:
-          daily == _undefined || daily == null
-              ? _instance.daily
-              : (daily as int),
-      weekly:
-          weekly == _undefined || weekly == null
-              ? _instance.weekly
-              : (weekly as int),
-      monthly:
-          monthly == _undefined || monthly == null
-              ? _instance.monthly
-              : (monthly as int),
-      yearly:
-          yearly == _undefined || yearly == null
-              ? _instance.yearly
-              : (yearly as int),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      daily: daily == _undefined || daily == null
+          ? _instance.daily
+          : (daily as int),
+      weekly: weekly == _undefined || weekly == null
+          ? _instance.weekly
+          : (weekly as int),
+      monthly: monthly == _undefined || monthly == null
+          ? _instance.monthly
+          : (monthly as int),
+      yearly: yearly == _undefined || yearly == null
+          ? _instance.yearly
+          : (yearly as int),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -1022,14 +1004,12 @@ class _CopyWithImpl$Query$BackupConfiguration<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$BackupConfiguration(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Query$BackupConfiguration$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Query$BackupConfiguration$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -1231,15 +1211,14 @@ class Options$Query$BackupConfiguration
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Query$BackupConfiguration(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Query$BackupConfiguration(data),
+               ),
          onError: onError,
          document: documentNodeQueryBackupConfiguration,
          parserFn: _parserFn$Query$BackupConfiguration,
@@ -1301,10 +1280,12 @@ extension ClientExtension$Query$BackupConfiguration on graphql.GraphQLClient {
   query$BackupConfiguration([
     Options$Query$BackupConfiguration? options,
   ]) async => await this.query(options ?? Options$Query$BackupConfiguration());
+
   graphql.ObservableQuery<Query$BackupConfiguration>
   watchQuery$BackupConfiguration([
     WatchOptions$Query$BackupConfiguration? options,
   ]) => this.watchQuery(options ?? WatchOptions$Query$BackupConfiguration());
+
   void writeQuery$BackupConfiguration({
     required Query$BackupConfiguration data,
     bool broadcast = true,
@@ -1317,6 +1298,7 @@ extension ClientExtension$Query$BackupConfiguration on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$BackupConfiguration? readQuery$BackupConfiguration({
     bool optimistic = true,
   }) {
@@ -1430,15 +1412,12 @@ class _CopyWithImpl$Query$BackupConfiguration$backup<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$BackupConfiguration$backup(
-      configuration:
-          configuration == _undefined || configuration == null
-              ? _instance.configuration
-              : (configuration
-                  as Query$BackupConfiguration$backup$configuration),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      configuration: configuration == _undefined || configuration == null
+          ? _instance.configuration
+          : (configuration as Query$BackupConfiguration$backup$configuration),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1677,39 +1656,32 @@ class _CopyWithImpl$Query$BackupConfiguration$backup$configuration<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$BackupConfiguration$backup$configuration(
-      autobackupPeriod:
-          autobackupPeriod == _undefined
-              ? _instance.autobackupPeriod
-              : (autobackupPeriod as int?),
-      encryptionKey:
-          encryptionKey == _undefined || encryptionKey == null
-              ? _instance.encryptionKey
-              : (encryptionKey as String),
-      isInitialized:
-          isInitialized == _undefined || isInitialized == null
-              ? _instance.isInitialized
-              : (isInitialized as bool),
-      locationId:
-          locationId == _undefined
-              ? _instance.locationId
-              : (locationId as String?),
-      locationName:
-          locationName == _undefined
-              ? _instance.locationName
-              : (locationName as String?),
-      provider:
-          provider == _undefined || provider == null
-              ? _instance.provider
-              : (provider as Enum$BackupProvider),
+      autobackupPeriod: autobackupPeriod == _undefined
+          ? _instance.autobackupPeriod
+          : (autobackupPeriod as int?),
+      encryptionKey: encryptionKey == _undefined || encryptionKey == null
+          ? _instance.encryptionKey
+          : (encryptionKey as String),
+      isInitialized: isInitialized == _undefined || isInitialized == null
+          ? _instance.isInitialized
+          : (isInitialized as bool),
+      locationId: locationId == _undefined
+          ? _instance.locationId
+          : (locationId as String?),
+      locationName: locationName == _undefined
+          ? _instance.locationName
+          : (locationName as String?),
+      provider: provider == _undefined || provider == null
+          ? _instance.provider
+          : (provider as Enum$BackupProvider),
       autobackupQuotas:
           autobackupQuotas == _undefined || autobackupQuotas == null
-              ? _instance.autobackupQuotas
-              : (autobackupQuotas
-                  as Query$BackupConfiguration$backup$configuration$autobackupQuotas),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.autobackupQuotas
+          : (autobackupQuotas
+                as Query$BackupConfiguration$backup$configuration$autobackupQuotas),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1889,13 +1861,11 @@ abstract class CopyWith$Query$BackupConfiguration$backup$configuration$autobacku
       Query$BackupConfiguration$backup$configuration$autobackupQuotas,
     )
     then,
-  ) =
-      _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
+  ) = _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
 
   factory CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
+  ) = _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
 
   TRes call({
     int? last,
@@ -1939,26 +1909,21 @@ class _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuo
   }) => _then(
     Query$BackupConfiguration$backup$configuration$autobackupQuotas(
       last: last == _undefined || last == null ? _instance.last : (last as int),
-      daily:
-          daily == _undefined || daily == null
-              ? _instance.daily
-              : (daily as int),
-      weekly:
-          weekly == _undefined || weekly == null
-              ? _instance.weekly
-              : (weekly as int),
-      monthly:
-          monthly == _undefined || monthly == null
-              ? _instance.monthly
-              : (monthly as int),
-      yearly:
-          yearly == _undefined || yearly == null
-              ? _instance.yearly
-              : (yearly as int),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      daily: daily == _undefined || daily == null
+          ? _instance.daily
+          : (daily as int),
+      weekly: weekly == _undefined || weekly == null
+          ? _instance.weekly
+          : (weekly as int),
+      monthly: monthly == _undefined || monthly == null
+          ? _instance.monthly
+          : (monthly as int),
+      yearly: yearly == _undefined || yearly == null
+          ? _instance.yearly
+          : (yearly as int),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -2075,14 +2040,12 @@ class _CopyWithImpl$Query$AllBackupSnapshots<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$AllBackupSnapshots(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Query$AllBackupSnapshots$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Query$AllBackupSnapshots$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -2242,15 +2205,12 @@ class Options$Query$AllBackupSnapshots
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Query$AllBackupSnapshots(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$AllBackupSnapshots(data),
+               ),
          onError: onError,
          document: documentNodeQueryAllBackupSnapshots,
          parserFn: _parserFn$Query$AllBackupSnapshots,
@@ -2311,10 +2271,12 @@ extension ClientExtension$Query$AllBackupSnapshots on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$AllBackupSnapshots>>
   query$AllBackupSnapshots([Options$Query$AllBackupSnapshots? options]) async =>
       await this.query(options ?? Options$Query$AllBackupSnapshots());
+
   graphql.ObservableQuery<Query$AllBackupSnapshots>
   watchQuery$AllBackupSnapshots([
     WatchOptions$Query$AllBackupSnapshots? options,
   ]) => this.watchQuery(options ?? WatchOptions$Query$AllBackupSnapshots());
+
   void writeQuery$AllBackupSnapshots({
     required Query$AllBackupSnapshots data,
     bool broadcast = true,
@@ -2327,6 +2289,7 @@ extension ClientExtension$Query$AllBackupSnapshots on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$AllBackupSnapshots? readQuery$AllBackupSnapshots({
     bool optimistic = true,
   }) {
@@ -2352,14 +2315,13 @@ class Query$AllBackupSnapshots$backup {
     final l$allSnapshots = json['allSnapshots'];
     final l$$__typename = json['__typename'];
     return Query$AllBackupSnapshots$backup(
-      allSnapshots:
-          (l$allSnapshots as List<dynamic>)
-              .map(
-                (e) => Query$AllBackupSnapshots$backup$allSnapshots.fromJson(
-                  (e as Map<String, dynamic>),
-                ),
-              )
-              .toList(),
+      allSnapshots: (l$allSnapshots as List<dynamic>)
+          .map(
+            (e) => Query$AllBackupSnapshots$backup$allSnapshots.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -2371,8 +2333,9 @@ class Query$AllBackupSnapshots$backup {
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
     final l$allSnapshots = allSnapshots;
-    _resultData['allSnapshots'] =
-        l$allSnapshots.map((e) => e.toJson()).toList();
+    _resultData['allSnapshots'] = l$allSnapshots
+        .map((e) => e.toJson())
+        .toList();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2464,15 +2427,13 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllBackupSnapshots$backup(
-      allSnapshots:
-          allSnapshots == _undefined || allSnapshots == null
-              ? _instance.allSnapshots
-              : (allSnapshots
-                  as List<Query$AllBackupSnapshots$backup$allSnapshots>),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      allSnapshots: allSnapshots == _undefined || allSnapshots == null
+          ? _instance.allSnapshots
+          : (allSnapshots
+                as List<Query$AllBackupSnapshots$backup$allSnapshots>),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2486,15 +2447,12 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup<TRes>
     )
     _fn,
   ) => call(
-    allSnapshots:
-        _fn(
-          _instance.allSnapshots.map(
-            (e) => CopyWith$Query$AllBackupSnapshots$backup$allSnapshots(
-              e,
-              (i) => i,
-            ),
-          ),
-        ).toList(),
+    allSnapshots: _fn(
+      _instance.allSnapshots.map(
+        (e) =>
+            CopyWith$Query$AllBackupSnapshots$backup$allSnapshots(e, (i) => i),
+      ),
+    ).toList(),
   );
 }
 
@@ -2670,23 +2628,18 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup$allSnapshots<TRes>
   }) => _then(
     Query$AllBackupSnapshots$backup$allSnapshots(
       id: id == _undefined || id == null ? _instance.id : (id as String),
-      createdAt:
-          createdAt == _undefined || createdAt == null
-              ? _instance.createdAt
-              : (createdAt as DateTime),
-      service:
-          service == _undefined || service == null
-              ? _instance.service
-              : (service
-                  as Query$AllBackupSnapshots$backup$allSnapshots$service),
-      reason:
-          reason == _undefined || reason == null
-              ? _instance.reason
-              : (reason as Enum$BackupReason),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      createdAt: createdAt == _undefined || createdAt == null
+          ? _instance.createdAt
+          : (createdAt as DateTime),
+      service: service == _undefined || service == null
+          ? _instance.service
+          : (service as Query$AllBackupSnapshots$backup$allSnapshots$service),
+      reason: reason == _undefined || reason == null
+          ? _instance.reason
+          : (reason as Enum$BackupReason),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2839,15 +2792,13 @@ class _CopyWithImpl$Query$AllBackupSnapshots$backup$allSnapshots$service<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllBackupSnapshots$backup$allSnapshots$service(
-      displayName:
-          displayName == _undefined || displayName == null
-              ? _instance.displayName
-              : (displayName as String),
+      displayName: displayName == _undefined || displayName == null
+          ? _instance.displayName
+          : (displayName as String),
       id: id == _undefined || id == null ? _instance.id : (id as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -2961,14 +2912,12 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$ForceSnapshotsReload(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$ForceSnapshotsReload$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$ForceSnapshotsReload$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -3084,15 +3033,14 @@ class Options$Mutation$ForceSnapshotsReload
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$ForceSnapshotsReload(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$ForceSnapshotsReload(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationForceSnapshotsReload,
@@ -3148,6 +3096,7 @@ extension ClientExtension$Mutation$ForceSnapshotsReload
     Options$Mutation$ForceSnapshotsReload? options,
   ]) async =>
       await this.mutate(options ?? Options$Mutation$ForceSnapshotsReload());
+
   graphql.ObservableQuery<Mutation$ForceSnapshotsReload>
   watchMutation$ForceSnapshotsReload([
     WatchOptions$Mutation$ForceSnapshotsReload? options,
@@ -3266,13 +3215,12 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload$backup<TRes>
     Mutation$ForceSnapshotsReload$backup(
       forceSnapshotsReload:
           forceSnapshotsReload == _undefined || forceSnapshotsReload == null
-              ? _instance.forceSnapshotsReload
-              : (forceSnapshotsReload
-                  as Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.forceSnapshotsReload
+          : (forceSnapshotsReload
+                as Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -3447,18 +3395,15 @@ class _CopyWithImpl$Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload<
   }) => _then(
     Mutation$ForceSnapshotsReload$backup$forceSnapshotsReload(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3658,14 +3603,12 @@ class _CopyWithImpl$Mutation$StartBackup<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$StartBackup(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$StartBackup$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$StartBackup$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -3813,13 +3756,12 @@ class Options$Mutation$StartBackup
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$StartBackup(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$StartBackup(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationStartBackup,
@@ -3873,6 +3815,7 @@ extension ClientExtension$Mutation$StartBackup on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$StartBackup>> mutate$StartBackup(
     Options$Mutation$StartBackup options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$StartBackup> watchMutation$StartBackup(
     WatchOptions$Mutation$StartBackup options,
   ) => this.watchMutation(options);
@@ -3975,14 +3918,12 @@ class _CopyWithImpl$Mutation$StartBackup$backup<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$StartBackup$backup(
-      startBackup:
-          startBackup == _undefined || startBackup == null
-              ? _instance.startBackup
-              : (startBackup as Mutation$StartBackup$backup$startBackup),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      startBackup: startBackup == _undefined || startBackup == null
+          ? _instance.startBackup
+          : (startBackup as Mutation$StartBackup$backup$startBackup),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -4033,12 +3974,11 @@ class Mutation$StartBackup$backup$startBackup
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      job:
-          l$job == null
-              ? null
-              : Fragment$basicApiJobsFields.fromJson(
-                (l$job as Map<String, dynamic>),
-              ),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>),
+            ),
     );
   }
 
@@ -4165,22 +4105,18 @@ class _CopyWithImpl$Mutation$StartBackup$backup$startBackup<TRes>
   }) => _then(
     Mutation$StartBackup$backup$startBackup(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      job:
-          job == _undefined
-              ? _instance.job
-              : (job as Fragment$basicApiJobsFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      job: job == _undefined
+          ? _instance.job
+          : (job as Fragment$basicApiJobsFields?),
     ),
   );
 
@@ -4409,14 +4345,12 @@ class _CopyWithImpl$Mutation$SetAutobackupPeriod<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$SetAutobackupPeriod(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$SetAutobackupPeriod$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$SetAutobackupPeriod$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -4546,15 +4480,14 @@ class Options$Mutation$SetAutobackupPeriod
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$SetAutobackupPeriod(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$SetAutobackupPeriod(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationSetAutobackupPeriod,
@@ -4611,6 +4544,7 @@ extension ClientExtension$Mutation$SetAutobackupPeriod
     Options$Mutation$SetAutobackupPeriod? options,
   ]) async =>
       await this.mutate(options ?? Options$Mutation$SetAutobackupPeriod());
+
   graphql.ObservableQuery<Mutation$SetAutobackupPeriod>
   watchMutation$SetAutobackupPeriod([
     WatchOptions$Mutation$SetAutobackupPeriod? options,
@@ -4722,12 +4656,11 @@ class _CopyWithImpl$Mutation$SetAutobackupPeriod$backup<TRes>
     Mutation$SetAutobackupPeriod$backup(
       setAutobackupPeriod:
           setAutobackupPeriod == _undefined || setAutobackupPeriod == null
-              ? _instance.setAutobackupPeriod
-              : (setAutobackupPeriod as Fragment$genericBackupConfigReturn),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.setAutobackupPeriod
+          : (setAutobackupPeriod as Fragment$genericBackupConfigReturn),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -4950,14 +4883,12 @@ class _CopyWithImpl$Mutation$setAutobackupQuotas<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$setAutobackupQuotas(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$setAutobackupQuotas$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$setAutobackupQuotas$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -5090,15 +5021,14 @@ class Options$Mutation$setAutobackupQuotas
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$setAutobackupQuotas(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$setAutobackupQuotas(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationsetAutobackupQuotas,
@@ -5154,6 +5084,7 @@ extension ClientExtension$Mutation$setAutobackupQuotas
   mutate$setAutobackupQuotas(
     Options$Mutation$setAutobackupQuotas options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$setAutobackupQuotas>
   watchMutation$setAutobackupQuotas(
     WatchOptions$Mutation$setAutobackupQuotas options,
@@ -5263,12 +5194,11 @@ class _CopyWithImpl$Mutation$setAutobackupQuotas$backup<TRes>
     Mutation$setAutobackupQuotas$backup(
       setAutobackupQuotas:
           setAutobackupQuotas == _undefined || setAutobackupQuotas == null
-              ? _instance.setAutobackupQuotas
-              : (setAutobackupQuotas as Fragment$genericBackupConfigReturn),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.setAutobackupQuotas
+          : (setAutobackupQuotas as Fragment$genericBackupConfigReturn),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5388,14 +5318,12 @@ class _CopyWithImpl$Mutation$RemoveRepository<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$RemoveRepository(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$RemoveRepository$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$RemoveRepository$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -5507,15 +5435,14 @@ class Options$Mutation$RemoveRepository
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$RemoveRepository(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$RemoveRepository(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationRemoveRepository,
@@ -5567,6 +5494,7 @@ extension ClientExtension$Mutation$RemoveRepository on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$RemoveRepository>>
   mutate$RemoveRepository([Options$Mutation$RemoveRepository? options]) async =>
       await this.mutate(options ?? Options$Mutation$RemoveRepository());
+
   graphql.ObservableQuery<Mutation$RemoveRepository>
   watchMutation$RemoveRepository([
     WatchOptions$Mutation$RemoveRepository? options,
@@ -5672,12 +5600,11 @@ class _CopyWithImpl$Mutation$RemoveRepository$backup<TRes>
     Mutation$RemoveRepository$backup(
       removeRepository:
           removeRepository == _undefined || removeRepository == null
-              ? _instance.removeRepository
-              : (removeRepository as Fragment$genericBackupConfigReturn),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.removeRepository
+          : (removeRepository as Fragment$genericBackupConfigReturn),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5903,14 +5830,12 @@ class _CopyWithImpl$Mutation$InitializeRepository<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$InitializeRepository(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$InitializeRepository$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$InitializeRepository$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -6043,15 +5968,14 @@ class Options$Mutation$InitializeRepository
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$InitializeRepository(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$InitializeRepository(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationInitializeRepository,
@@ -6108,6 +6032,7 @@ extension ClientExtension$Mutation$InitializeRepository
   mutate$InitializeRepository(
     Options$Mutation$InitializeRepository options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$InitializeRepository>
   watchMutation$InitializeRepository(
     WatchOptions$Mutation$InitializeRepository options,
@@ -6220,12 +6145,11 @@ class _CopyWithImpl$Mutation$InitializeRepository$backup<TRes>
     Mutation$InitializeRepository$backup(
       initializeRepository:
           initializeRepository == _undefined || initializeRepository == null
-              ? _instance.initializeRepository
-              : (initializeRepository as Fragment$genericBackupConfigReturn),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.initializeRepository
+          : (initializeRepository as Fragment$genericBackupConfigReturn),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -6467,14 +6391,12 @@ class _CopyWithImpl$Mutation$RestoreBackup<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$RestoreBackup(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$RestoreBackup$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$RestoreBackup$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -6639,13 +6561,12 @@ class Options$Mutation$RestoreBackup
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$RestoreBackup(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$RestoreBackup(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationRestoreBackup,
@@ -6699,6 +6620,7 @@ extension ClientExtension$Mutation$RestoreBackup on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$RestoreBackup>> mutate$RestoreBackup(
     Options$Mutation$RestoreBackup options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$RestoreBackup> watchMutation$RestoreBackup(
     WatchOptions$Mutation$RestoreBackup options,
   ) => this.watchMutation(options);
@@ -6801,14 +6723,12 @@ class _CopyWithImpl$Mutation$RestoreBackup$backup<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$RestoreBackup$backup(
-      restoreBackup:
-          restoreBackup == _undefined || restoreBackup == null
-              ? _instance.restoreBackup
-              : (restoreBackup as Mutation$RestoreBackup$backup$restoreBackup),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      restoreBackup: restoreBackup == _undefined || restoreBackup == null
+          ? _instance.restoreBackup
+          : (restoreBackup as Mutation$RestoreBackup$backup$restoreBackup),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -6860,12 +6780,11 @@ class Mutation$RestoreBackup$backup$restoreBackup
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      job:
-          l$job == null
-              ? null
-              : Fragment$basicApiJobsFields.fromJson(
-                (l$job as Map<String, dynamic>),
-              ),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>),
+            ),
     );
   }
 
@@ -6992,22 +6911,18 @@ class _CopyWithImpl$Mutation$RestoreBackup$backup$restoreBackup<TRes>
   }) => _then(
     Mutation$RestoreBackup$backup$restoreBackup(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      job:
-          job == _undefined
-              ? _instance.job
-              : (job as Fragment$basicApiJobsFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      job: job == _undefined
+          ? _instance.job
+          : (job as Fragment$basicApiJobsFields?),
     ),
   );
 
@@ -7220,14 +7135,12 @@ class _CopyWithImpl$Mutation$ForgetSnapshot<TRes>
   TRes call({Object? backup = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$ForgetSnapshot(
-          backup:
-              backup == _undefined || backup == null
-                  ? _instance.backup
-                  : (backup as Mutation$ForgetSnapshot$backup),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          backup: backup == _undefined || backup == null
+              ? _instance.backup
+              : (backup as Mutation$ForgetSnapshot$backup),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -7353,15 +7266,12 @@ class Options$Mutation$ForgetSnapshot
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$ForgetSnapshot(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$ForgetSnapshot(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationForgetSnapshot,
@@ -7415,6 +7325,7 @@ extension ClientExtension$Mutation$ForgetSnapshot on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$ForgetSnapshot>> mutate$ForgetSnapshot(
     Options$Mutation$ForgetSnapshot options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$ForgetSnapshot> watchMutation$ForgetSnapshot(
     WatchOptions$Mutation$ForgetSnapshot options,
   ) => this.watchMutation(options);
@@ -7518,15 +7429,12 @@ class _CopyWithImpl$Mutation$ForgetSnapshot$backup<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$ForgetSnapshot$backup(
-      forgetSnapshot:
-          forgetSnapshot == _undefined || forgetSnapshot == null
-              ? _instance.forgetSnapshot
-              : (forgetSnapshot
-                  as Mutation$ForgetSnapshot$backup$forgetSnapshot),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      forgetSnapshot: forgetSnapshot == _undefined || forgetSnapshot == null
+          ? _instance.forgetSnapshot
+          : (forgetSnapshot as Mutation$ForgetSnapshot$backup$forgetSnapshot),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -7686,18 +7594,15 @@ class _CopyWithImpl$Mutation$ForgetSnapshot$backup$forgetSnapshot<TRes>
   }) => _then(
     Mutation$ForgetSnapshot$backup$forgetSnapshot(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }

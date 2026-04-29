@@ -23,8 +23,9 @@ class CpuChart extends GenericLineChart {
     final maxUsage = data.first
         .map((final e) => e.value)
         .reduce((final a, final b) => a > b ? a : b);
-    final maxUsageTime =
-        data.first.firstWhere((final e) => e.value == maxUsage).time;
+    final maxUsageTime = data.first
+        .firstWhere((final e) => e.value == maxUsage)
+        .time;
 
     final label = 'resource_chart.cpu_chart_screen_reader_explanation'.tr(
       namedArgs: {

@@ -22,16 +22,16 @@ class UserDetailsPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationState config =
-        context.watch<ServerInstallationCubit>().state;
+    final ServerInstallationState config = context
+        .watch<ServerInstallationCubit>()
+        .state;
 
     final String domainName = UiHelpers.getDomainName(config);
 
     final User user = context.watch<UsersBloc>().state.users.firstWhere(
       (final User user) => user.login == login,
-      orElse:
-          () =>
-              const User(type: UserType.normal, login: 'error', note: 'ERROR'),
+      orElse: () =>
+          const User(type: UserType.normal, login: 'error', note: 'ERROR'),
     );
 
     if (user.note == 'ERROR') {
@@ -67,10 +67,9 @@ class UserDetailsPage extends StatelessWidget {
       hasBackButton: true,
       hasFlashButton: true,
       heroTitle: user.displayName ?? user.login,
-      heroSubtitle:
-          user.displayName != null && user.displayName != user.login
-              ? user.login
-              : null,
+      heroSubtitle: user.displayName != null && user.displayName != user.login
+          ? user.login
+          : null,
       heroIconWidget: CircleAvatar(child: Text(user.login[0].toUpperCase())),
       children: [
         UserEmailLoginCard(user: user, domainName: domainName),

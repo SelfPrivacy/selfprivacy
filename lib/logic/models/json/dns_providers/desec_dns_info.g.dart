@@ -22,8 +22,9 @@ DesecDnsRecord _$DesecDnsRecordFromJson(Map<String, dynamic> json) =>
       subname: json['subname'] as String,
       type: json['type'] as String,
       ttl: (json['ttl'] as num).toInt(),
-      records:
-          (json['records'] as List<dynamic>).map((e) => e as String).toList(),
+      records: (json['records'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$DesecDnsRecordToJson(DesecDnsRecord instance) =>

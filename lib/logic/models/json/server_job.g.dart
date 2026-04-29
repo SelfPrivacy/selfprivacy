@@ -18,10 +18,9 @@ ServerJob _$ServerJobFromJson(Map<String, dynamic> json) => ServerJob(
   progress: (json['progress'] as num?)?.toInt(),
   result: json['result'] as String?,
   statusText: json['statusText'] as String?,
-  finishedAt:
-      json['finishedAt'] == null
-          ? null
-          : DateTime.parse(json['finishedAt'] as String),
+  finishedAt: json['finishedAt'] == null
+      ? null
+      : DateTime.parse(json['finishedAt'] as String),
 );
 
 Map<String, dynamic> _$ServerJobToJson(ServerJob instance) => <String, dynamic>{

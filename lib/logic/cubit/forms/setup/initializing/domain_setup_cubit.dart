@@ -11,8 +11,9 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
   Future<void> load() async {
     emit(Loading(LoadingTypes.loadingDomain));
-    final GenericResult<List<ServerDomain>> result =
-        await ProvidersController.currentDnsProvider!.domainList();
+    final GenericResult<List<ServerDomain>> result = await ProvidersController
+        .currentDnsProvider!
+        .domainList();
     if (!result.success || result.data.isEmpty) {
       emit(Empty());
     } else if (result.data.length == 1) {

@@ -32,8 +32,10 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
     final String domain =
         getIt<ResourcesModel>().serverDomain?.domainName ?? '';
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
-    final List<DesiredDnsRecord> dnsRecords =
-        context.watch<DnsRecordsCubit>().state.dnsRecords;
+    final List<DesiredDnsRecord> dnsRecords = context
+        .watch<DnsRecordsCubit>()
+        .state
+        .dnsRecords;
 
     if (!isReady) {
       return BrandHeroScreen(
@@ -45,8 +47,9 @@ class _DnsDetailsPageState extends State<DnsDetailsPage> {
       );
     }
 
-    final recordsToShow =
-        dnsRecords.isEmpty ? FakeSelfPrivacyData.desiredDnsRecords : dnsRecords;
+    final recordsToShow = dnsRecords.isEmpty
+        ? FakeSelfPrivacyData.desiredDnsRecords
+        : dnsRecords;
     final refreshing =
         dnsCubit.dnsState == DnsRecordsStatus.refreshing || dnsRecords.isEmpty;
 

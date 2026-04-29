@@ -15,10 +15,9 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   ServerLogsBloc() : super(ServerLogsInitial()) {
     on<ServerLogsFetch>((final event, final emit) async {
       emit(ServerLogsLoading());
-      final String? slice =
-          event.serviceId != null
-              ? '${event.serviceId?.replaceAll('-', '_')}.slice'
-              : null;
+      final String? slice = event.serviceId != null
+          ? '${event.serviceId?.replaceAll('-', '_')}.slice'
+          : null;
       final String? unit = event.unitId;
       try {
         final (logsData, meta) = await _getLogs(
@@ -63,12 +62,9 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             slice: currentState.slice,
             unit: currentState.unit,
           );
-          final allEntries =
-              currentState.oldEntries
-                ..addAll(logsData)
-                ..sort(
-                  (final a, final b) => b.timestamp.compareTo(a.timestamp),
-                );
+          final allEntries = currentState.oldEntries
+            ..addAll(logsData)
+            ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
           emit(
             ServerLogsLoaded(
               oldEntries: allEntries.toSet().toList(),
@@ -96,10 +92,9 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
             event.entry.systemdUnit != currentState.unit) {
           return;
         }
-        final allEntries =
-            currentState.newEntries
-              ..add(event.entry)
-              ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
+        final allEntries = currentState.newEntries
+          ..add(event.entry)
+          ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
         emit(
           ServerLogsLoaded(
             oldEntries: currentState.oldEntries,

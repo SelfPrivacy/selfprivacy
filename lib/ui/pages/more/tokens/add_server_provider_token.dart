@@ -32,8 +32,8 @@ class _AddServerProviderTokenPageState
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationCubit appConfig =
-        context.watch<ServerInstallationCubit>();
+    final ServerInstallationCubit appConfig = context
+        .watch<ServerInstallationCubit>();
 
     void setServerProviderKey(final String key) {
       final newCredential = ServerProviderCredential(
@@ -72,10 +72,8 @@ class _AddServerProviderTokenPageState
         children: [
           BrandButton.filled(
             title: 'basis.close'.tr(),
-            onPressed:
-                () => Navigator.of(
-                  context,
-                ).popUntil((final route) => route.isFirst),
+            onPressed: () =>
+                Navigator.of(context).popUntil((final route) => route.isFirst),
           ),
         ],
       );
@@ -102,65 +100,57 @@ class _TokenProviderInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-    create:
-        (final BuildContext context) =>
-            AddServerProviderToExistingServerFormCubit(
-              appConfig,
-              setServerProviderKey,
-            ),
+    create: (final BuildContext context) =>
+        AddServerProviderToExistingServerFormCubit(
+          appConfig,
+          setServerProviderKey,
+        ),
     child: Builder(
-      builder:
-          (final BuildContext context) => BrandHeroScreen(
-            heroTitle: 'recovering.provider_connected'.tr(
-              args: [server.hostingDetails.provider.displayName],
+      builder: (final BuildContext context) => BrandHeroScreen(
+        heroTitle: 'recovering.provider_connected'.tr(
+          args: [server.hostingDetails.provider.displayName],
+        ),
+        heroSubtitle: 'recovering.provider_connected_description'.tr(
+          args: [server.domain.domainName],
+        ),
+        hasBackButton: true,
+        hasFlashButton: false,
+        hasSupportDrawer: true,
+        onBackButtonPressed: () {
+          Navigator.of(context).popUntil((final route) => route.isFirst);
+        },
+        children: [
+          CubitFormTextField(
+            autofocus: true,
+            formFieldCubit: context
+                .read<AddServerProviderToExistingServerFormCubit>()
+                .apiKey,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: 'recovering.provider_connected_placeholder'.tr(
+                args: [server.hostingDetails.provider.displayName],
+              ),
             ),
-            heroSubtitle: 'recovering.provider_connected_description'.tr(
-              args: [server.domain.domainName],
-            ),
-            hasBackButton: true,
-            hasFlashButton: false,
-            hasSupportDrawer: true,
-            onBackButtonPressed: () {
-              Navigator.of(context).popUntil((final route) => route.isFirst);
-            },
-            children: [
-              CubitFormTextField(
-                autofocus: true,
-                formFieldCubit:
-                    context
-                        .read<AddServerProviderToExistingServerFormCubit>()
-                        .apiKey,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: 'recovering.provider_connected_placeholder'.tr(
-                    args: [server.hostingDetails.provider.displayName],
-                  ),
-                ),
-              ),
-              const Gap(16),
-              BrandButton.filled(
-                onPressed:
-                    () =>
-                        context
-                            .read<AddServerProviderToExistingServerFormCubit>()
-                            .trySubmit(),
-                child: Text('basis.continue'.tr()),
-              ),
-              const Gap(16),
-              Builder(
-                builder:
-                    (final context) => BrandButton.text(
-                      title: 'initializing.how'.tr(),
-                      onPressed:
-                          () => context.read<SupportSystemCubit>().showArticle(
-                            article:
-                                server.hostingDetails.provider.supportArticle,
-                            context: context,
-                          ),
-                    ),
-              ),
-            ],
           ),
+          const Gap(16),
+          BrandButton.filled(
+            onPressed: () => context
+                .read<AddServerProviderToExistingServerFormCubit>()
+                .trySubmit(),
+            child: Text('basis.continue'.tr()),
+          ),
+          const Gap(16),
+          Builder(
+            builder: (final context) => BrandButton.text(
+              title: 'initializing.how'.tr(),
+              onPressed: () => context.read<SupportSystemCubit>().showArticle(
+                article: server.hostingDetails.provider.supportArticle,
+                context: context,
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

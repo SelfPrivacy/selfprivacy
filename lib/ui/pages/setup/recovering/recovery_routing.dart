@@ -75,11 +75,10 @@ class SelectDomainToRecover extends StatelessWidget {
     final serverInstallation = context.watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create:
-          (final context) => RecoveryDomainFormCubit(
-            serverInstallation,
-            FieldCubitFactory(context),
-          ),
+      create: (final context) => RecoveryDomainFormCubit(
+        serverInstallation,
+        FieldCubitFactory(context),
+      ),
       child: Builder(
         builder: (final context) {
           final formCubitState = context.watch<RecoveryDomainFormCubit>().state;
@@ -112,8 +111,9 @@ class SelectDomainToRecover extends StatelessWidget {
               children: [
                 CubitFormTextField(
                   autofocus: true,
-                  formFieldCubit:
-                      context.read<RecoveryDomainFormCubit>().serverDomainField,
+                  formFieldCubit: context
+                      .read<RecoveryDomainFormCubit>()
+                      .serverDomainField,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: 'recovering.domain_recover_placeholder'.tr(),
@@ -121,13 +121,10 @@ class SelectDomainToRecover extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 BrandButton.filled(
-                  onPressed:
-                      formCubitState.isSubmitting
-                          ? null
-                          : () =>
-                              context
-                                  .read<RecoveryDomainFormCubit>()
-                                  .trySubmit(),
+                  onPressed: formCubitState.isSubmitting
+                      ? null
+                      : () =>
+                            context.read<RecoveryDomainFormCubit>().trySubmit(),
                   child: Text('basis.continue'.tr()),
                 ),
               ],

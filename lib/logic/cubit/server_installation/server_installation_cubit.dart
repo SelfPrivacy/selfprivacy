@@ -131,9 +131,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return [];
     }
 
-    final GenericResult apiResponse =
-        await ProvidersController.currentServerProvider!
-            .getAvailableLocations();
+    final GenericResult apiResponse = await ProvidersController
+        .currentServerProvider!
+        .getAvailableLocations();
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
@@ -591,18 +591,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProviderType serverProvider =
-          await ServerApi(
-            customToken: serverDetails.apiToken,
-            isWithToken: true,
-            overrideDomain: serverDomain.domainName,
-          ).getServerProviderType();
-      final dnsProvider =
-          await ServerApi(
-            customToken: serverDetails.apiToken,
-            isWithToken: true,
-            overrideDomain: serverDomain.domainName,
-          ).getDnsProviderType();
+      final ServerProviderType serverProvider = await ServerApi(
+        customToken: serverDetails.apiToken,
+        isWithToken: true,
+        overrideDomain: serverDomain.domainName,
+      ).getServerProviderType();
+      final dnsProvider = await ServerApi(
+        customToken: serverDetails.apiToken,
+        isWithToken: true,
+        overrideDomain: serverDomain.domainName,
+      ).getDnsProviderType();
       if (dnsProvider == DnsProviderType.unknown) {
         getIt<NavigationService>().showSnackBar(
           'recovering.generic_error'.tr(),
@@ -685,8 +683,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }) async {
     List<ServerBasicInfoWithValidators> validatedList = [];
     if (server != null) {
-      final List<ServerBasicInfo> servers =
-          await repository.getServersOnProviderAccount();
+      final List<ServerBasicInfo> servers = await repository
+          .getServersOnProviderAccount();
       try {
         final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
           (final ServerBasicInfo hostingServer) =>
@@ -709,8 +707,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     } else {
       final ServerInstallationRecovery dataState =
           state as ServerInstallationRecovery;
-      final List<ServerBasicInfo> servers =
-          await repository.getServersOnProviderAccount();
+      final List<ServerBasicInfo> servers = await repository
+          .getServersOnProviderAccount();
       try {
         final Iterable<ServerBasicInfoWithValidators> validated = servers.map(
           (final ServerBasicInfo server) =>
@@ -787,12 +785,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       return;
     }
-    final dnsProviderType =
-        await ServerApi(
-          customToken: dataState.serverDetails!.apiToken,
-          isWithToken: true,
-          overrideDomain: serverDomain.domainName,
-        ).getDnsProviderType();
+    final dnsProviderType = await ServerApi(
+      customToken: dataState.serverDetails!.apiToken,
+      isWithToken: true,
+      overrideDomain: serverDomain.domainName,
+    ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(
         domainName: serverDomain.domainName,

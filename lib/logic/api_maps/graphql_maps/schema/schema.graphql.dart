@@ -806,8 +806,9 @@ class Input$RecoveryKeyLimitsInput {
     final result$data = <String, dynamic>{};
     if (data.containsKey('expirationDate')) {
       final l$expirationDate = data['expirationDate'];
-      result$data['expirationDate'] =
-          l$expirationDate == null ? null : dateTimeFromJson(l$expirationDate);
+      result$data['expirationDate'] = l$expirationDate == null
+          ? null
+          : dateTimeFromJson(l$expirationDate);
     }
     if (data.containsKey('uses')) {
       final l$uses = data['uses'];
@@ -826,8 +827,9 @@ class Input$RecoveryKeyLimitsInput {
     final result$data = <String, dynamic>{};
     if (_$data.containsKey('expirationDate')) {
       final l$expirationDate = expirationDate;
-      result$data['expirationDate'] =
-          l$expirationDate == null ? null : dateTimeToJson(l$expirationDate);
+      result$data['expirationDate'] = l$expirationDate == null
+          ? null
+          : dateTimeToJson(l$expirationDate);
     }
     if (_$data.containsKey('uses')) {
       final l$uses = uses;
@@ -1619,10 +1621,9 @@ class Input$UserMutationInput {
     result$data['username'] = (l$username as String);
     if (data.containsKey('directmemberof')) {
       final l$directmemberof = data['directmemberof'];
-      result$data['directmemberof'] =
-          (l$directmemberof as List<dynamic>?)
-              ?.map((e) => (e as String))
-              .toList();
+      result$data['directmemberof'] = (l$directmemberof as List<dynamic>?)
+          ?.map((e) => (e as String))
+          .toList();
     }
     if (data.containsKey('password')) {
       final l$password = data['password'];
@@ -1732,8 +1733,8 @@ class Input$UserMutationInput {
       l$username,
       _$data.containsKey('directmemberof')
           ? l$directmemberof == null
-              ? null
-              : Object.hashAll(l$directmemberof.map((v) => v))
+                ? null
+                : Object.hashAll(l$directmemberof.map((v) => v))
           : const {},
       _$data.containsKey('password') ? l$password : const {},
       _$data.containsKey('displayName') ? l$displayName : const {},

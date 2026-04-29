@@ -17,16 +17,16 @@ class ServerProviderFactory {
       case ServerProviderType.hetzner:
         return settings.isAuthorized
             ? HetznerServerProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
-            )
+                isAuthorized: settings.isAuthorized,
+                token: settings.token,
+              )
             : HetznerServerProvider();
       case ServerProviderType.digitalOcean:
         return settings.isAuthorized
             ? DigitalOceanServerProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
-            )
+                isAuthorized: settings.isAuthorized,
+                token: settings.token,
+              )
             : DigitalOceanServerProvider();
       case ServerProviderType.unknown:
         throw UnknownProviderException('Unknown server provider');

@@ -31,13 +31,12 @@ class _RootAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     ),
-    leading:
-        context.router.pageCount > 1
-            ? IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => context.router.maybePop(),
-            )
-            : null,
+    leading: context.router.pageCount > 1
+        ? IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.router.maybePop(),
+          )
+        : null,
     actions: const [SizedBox.shrink()],
   );
 }

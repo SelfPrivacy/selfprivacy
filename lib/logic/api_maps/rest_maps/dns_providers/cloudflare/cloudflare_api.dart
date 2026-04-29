@@ -67,9 +67,8 @@ class CloudflareApi extends RestApiMap {
         '/user/tokens/verify',
         options: Options(
           followRedirects: false,
-          validateStatus:
-              (final status) =>
-                  status != null && (status >= 200 || status == 401),
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
@@ -107,13 +106,12 @@ class CloudflareApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get(url, queryParameters: {'per_page': 50});
-      domains =
-          response.data['result']!
-              .map<CloudflareZone>(
-                // ignore: unnecessary_lambdas
-                (final json) => CloudflareZone.fromJson(json),
-              )
-              .toList();
+      domains = response.data['result']!
+          .map<CloudflareZone>(
+            // ignore: unnecessary_lambdas
+            (final json) => CloudflareZone.fromJson(json),
+          )
+          .toList();
     } catch (e) {
       logger('Error in Cloudflare getZones request: $e', error: e);
       return GenericResult(
@@ -201,13 +199,12 @@ class CloudflareApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       response = await client.get(url);
-      allRecords =
-          response.data['result']!
-              .map<CloudflareDnsRecord>(
-                // ignore: unnecessary_lambdas
-                (final json) => CloudflareDnsRecord.fromJson(json),
-              )
-              .toList();
+      allRecords = response.data['result']!
+          .map<CloudflareDnsRecord>(
+            // ignore: unnecessary_lambdas
+            (final json) => CloudflareDnsRecord.fromJson(json),
+          )
+          .toList();
     } catch (e) {
       logger('Error in Cloudflare getDnsRecords request: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());

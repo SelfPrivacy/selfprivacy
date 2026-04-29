@@ -48,10 +48,9 @@ class ServicesPageCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkResponse(
         highlightShape: BoxShape.rectangle,
-        onTap:
-            isReady
-                ? () => context.pushRoute(ServiceRoute(serviceId: service.id))
-                : null,
+        onTap: isReady
+            ? () => context.pushRoute(ServiceRoute(serviceId: service.id))
+            : null,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -60,21 +59,20 @@ class ServicesPageCard extends StatelessWidget {
               Row(
                 children: [
                   Skeleton.leaf(
-                    child:
-                        service.svgIcon == ''
-                            ? const Icon(Icons.question_mark_outlined, size: 32)
-                            : IconStatusMask(
-                              status: getStatus(service.status),
-                              icon: SvgPicture.string(
-                                service.svgIcon,
-                                width: 32,
-                                height: 32,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.white,
-                                  BlendMode.srcIn,
-                                ),
+                    child: service.svgIcon == ''
+                        ? const Icon(Icons.question_mark_outlined, size: 32)
+                        : IconStatusMask(
+                            status: getStatus(service.status),
+                            icon: SvgPicture.string(
+                              service.svgIcon,
+                              width: 32,
+                              height: 32,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
                               ),
                             ),
+                          ),
                   ),
                   const Gap(8),
                   Expanded(

@@ -18,10 +18,9 @@ class ServerDomainAdapter extends TypeAdapter<ServerDomain> {
     };
     return ServerDomain(
       domainName: fields[0] as String,
-      provider:
-          fields[2] == null
-              ? DnsProviderType.cloudflare
-              : fields[2] as DnsProviderType,
+      provider: fields[2] == null
+          ? DnsProviderType.cloudflare
+          : fields[2] as DnsProviderType,
     );
   }
 

@@ -7,11 +7,10 @@ class _ResetAppTile extends StatelessWidget {
   Widget build(final BuildContext context) => ListTile(
     title: Text('application_settings.reset_config_title'.tr()),
     subtitle: Text('application_settings.reset_config_description'.tr()),
-    onTap:
-        () => showDialog(
-          context: context,
-          builder: (final context) => const _ResetAppDialog(),
-        ),
+    onTap: () => showDialog(
+      context: context,
+      builder: (final context) => const _ResetAppDialog(),
+    ),
   );
 }
 

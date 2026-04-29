@@ -26,13 +26,13 @@ class MemoryChart extends GenericLineChart {
     final maxUsage = data.first
         .map((final e) => e.value)
         .reduce((final a, final b) => a > b ? a : b);
-    final maxUsageTime =
-        data.first.firstWhere((final e) => e.value == maxUsage).time;
+    final maxUsageTime = data.first
+        .firstWhere((final e) => e.value == maxUsage)
+        .time;
 
-    final labelKey =
-        isSwap
-            ? 'resource_chart.swap_chart_screen_reader_explanation'
-            : 'resource_chart.memory_chart_screen_reader_explanation';
+    final labelKey = isSwap
+        ? 'resource_chart.swap_chart_screen_reader_explanation'
+        : 'resource_chart.memory_chart_screen_reader_explanation';
 
     final label = labelKey.tr(
       namedArgs: {

@@ -16,28 +16,25 @@ abstract class RestApiMap {
     dio.interceptors.add(ConsoleInterceptor());
     dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
-        final client =
-            HttpClient()
-              ..badCertificateCallback =
-                  (
-                    final X509Certificate cert,
-                    final String host,
-                    final int port,
-                  ) => true;
+        final client = HttpClient()
+          ..badCertificateCallback =
+              (final X509Certificate cert, final String host, final int port) =>
+                  true;
         return client;
       },
     );
 
     dio.interceptors.add(
       InterceptorsWrapper(
-        onError: (
-          final DioException exception,
-          final ErrorInterceptorHandler handler,
-        ) {
-          logger('got dio exception:', error: exception);
+        onError:
+            (
+              final DioException exception,
+              final ErrorInterceptorHandler handler,
+            ) {
+              logger('got dio exception:', error: exception);
 
-          return handler.next(exception);
-        },
+              return handler.next(exception);
+            },
       ),
     );
     return dio;

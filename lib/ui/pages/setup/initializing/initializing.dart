@@ -43,19 +43,18 @@ class InitializingPage extends StatelessWidget {
     } else {
       Widget? actualInitializingPage;
       if (cubit.state is! ServerInstallationFinished) {
-        actualInitializingPage =
-            [
-              () => _stepServerProviderToken(cubit),
-              () => _stepServerType(cubit),
-              () => _stepDnsProviderToken(cubit),
-              () => _stepDomain(cubit),
-              () => _stepUser(cubit),
-              () => _stepServer(cubit),
-              () => _stepCheck(cubit),
-              () => _stepCheck(cubit),
-              () => _stepCheck(cubit),
-              () => _stepCheck(cubit),
-            ][cubit.state.progress.index]();
+        actualInitializingPage = [
+          () => _stepServerProviderToken(cubit),
+          () => _stepServerType(cubit),
+          () => _stepDnsProviderToken(cubit),
+          () => _stepDomain(cubit),
+          () => _stepUser(cubit),
+          () => _stepServer(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+          () => _stepCheck(cubit),
+        ][cubit.state.progress.index]();
       }
 
       const steps = [
@@ -80,132 +79,127 @@ class InitializingPage extends StatelessWidget {
         child: Scaffold(
           endDrawer: const SupportDrawer(),
           endDrawerEnableOpenDragGesture: false,
-          appBar:
-              Breakpoints.large.isActive(context)
-                  ? null
-                  : AppBar(
-                    actions: [
-                      if (cubit.state is ServerInstallationFinished)
-                        IconButton(
-                          icon: const Icon(Icons.check),
+          appBar: Breakpoints.large.isActive(context)
+              ? null
+              : AppBar(
+                  actions: [
+                    if (cubit.state is ServerInstallationFinished)
+                      IconButton(
+                        icon: const Icon(Icons.check),
+                        onPressed: () {
+                          context.router.popUntilRoot();
+                        },
+                      ),
+                    const SizedBox.shrink(),
+                  ],
+                  title: Text('more_page.configuration_wizard'.tr()),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(28),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: ProgressBar(
+                        steps: 8,
+                        activeIndex: cubit.state.progressBar,
+                      ),
+                    ),
+                  ),
+                ),
+          body: LayoutBuilder(
+            builder: (final context, final constraints) => Row(
+              children: [
+                if (Breakpoints.large.isActive(context))
+                  ProgressDrawer(
+                    steps: steps,
+                    currentStep: cubit.state.progress.index,
+                    title: 'more_page.configuration_wizard'.tr(),
+                    constraints: constraints,
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (cubit.state is ServerInstallationEmpty ||
+                            cubit.state is ServerInstallationNotFinished &&
+                                cubit.state.progress ==
+                                    ServerSetupProgress.nothingYet)
+                          Container(
+                            alignment: Alignment.center,
+                            child: BrandButton.filled(
+                              title: 'basis.connect_to_existing'.tr(),
+                              onPressed: () async {
+                                await context.router.replace(
+                                  const RecoveryRoutingRoute(),
+                                );
+                              },
+                            ),
+                          ),
+                        // const SizedBox(height: 8),
+                        BrandOutlinedButton(
+                          child: Text(
+                            cubit.state is ServerInstallationFinished
+                                ? 'basis.close'.tr()
+                                : 'basis.later'.tr(),
+                          ),
                           onPressed: () {
                             context.router.popUntilRoot();
                           },
                         ),
-                      const SizedBox.shrink(),
-                    ],
-                    title: Text('more_page.configuration_wizard'.tr()),
-                    bottom: PreferredSize(
-                      preferredSize: const Size.fromHeight(28),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                        child: ProgressBar(
-                          steps: 8,
-                          activeIndex: cubit.state.progressBar,
-                        ),
-                      ),
+                      ],
                     ),
                   ),
-          body: LayoutBuilder(
-            builder:
-                (final context, final constraints) => Row(
-                  children: [
-                    if (Breakpoints.large.isActive(context))
-                      ProgressDrawer(
-                        steps: steps,
-                        currentStep: cubit.state.progress.index,
-                        title: 'more_page.configuration_wizard'.tr(),
-                        constraints: constraints,
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (cubit.state is ServerInstallationEmpty ||
-                                cubit.state is ServerInstallationNotFinished &&
-                                    cubit.state.progress ==
-                                        ServerSetupProgress.nothingYet)
+                SizedBox(
+                  width:
+                      constraints.maxWidth -
+                      (Breakpoints.large.isActive(context) ? 300 : 0),
+                  height: constraints.maxHeight,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: Breakpoints.large.isActive(context)
+                              ? const EdgeInsets.all(16)
+                              : const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: actualInitializingPage,
+                          ),
+                        ),
+                        if (!Breakpoints.large.isActive(context))
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                               Container(
                                 alignment: Alignment.center,
-                                child: BrandButton.filled(
-                                  title: 'basis.connect_to_existing'.tr(),
-                                  onPressed: () async {
-                                    await context.router.replace(
-                                      const RecoveryRoutingRoute(),
-                                    );
+                                child: BrandButton.text(
+                                  title:
+                                      cubit.state is ServerInstallationFinished
+                                      ? 'basis.close'.tr()
+                                      : 'basis.later'.tr(),
+                                  onPressed: () {
+                                    context.router.popUntilRoot();
                                   },
                                 ),
                               ),
-                            // const SizedBox(height: 8),
-                            BrandOutlinedButton(
-                              child: Text(
-                                cubit.state is ServerInstallationFinished
-                                    ? 'basis.close'.tr()
-                                    : 'basis.later'.tr(),
-                              ),
-                              onPressed: () {
-                                context.router.popUntilRoot();
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    SizedBox(
-                      width:
-                          constraints.maxWidth -
-                          (Breakpoints.large.isActive(context) ? 300 : 0),
-                      height: constraints.maxHeight,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  Breakpoints.large.isActive(context)
-                                      ? const EdgeInsets.all(16)
-                                      : const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 300),
-                                child: actualInitializingPage,
-                              ),
-                            ),
-                            if (!Breakpoints.large.isActive(context))
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: BrandButton.text(
-                                      title:
-                                          cubit.state
-                                                  is ServerInstallationFinished
-                                              ? 'basis.close'.tr()
-                                              : 'basis.later'.tr(),
-                                      onPressed: () {
-                                        context.router.popUntilRoot();
-                                      },
-                                    ),
+                              if (cubit.state is ServerInstallationEmpty ||
+                                  cubit.state is ServerInstallationNotFinished)
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: BrandButton.text(
+                                    title: 'basis.connect_to_existing'.tr(),
+                                    onPressed: () async {
+                                      await context.router.replace(
+                                        const RecoveryRoutingRoute(),
+                                      );
+                                    },
                                   ),
-                                  if (cubit.state is ServerInstallationEmpty ||
-                                      cubit.state
-                                          is ServerInstallationNotFinished)
-                                    Container(
-                                      alignment: Alignment.center,
-                                      child: BrandButton.text(
-                                        title: 'basis.connect_to_existing'.tr(),
-                                        onPressed: () async {
-                                          await context.router.replace(
-                                            const RecoveryRoutingRoute(),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      ),
+                                ),
+                            ],
+                          ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
           ),
         ),
       );
@@ -232,10 +226,8 @@ class InitializingPage extends StatelessWidget {
   ) => BlocProvider(
     create: (final context) => ServerProviderFormCubit(serverInstallationCubit),
     child: Builder(
-      builder:
-          (final context) => ServerTypePicker(
-            serverInstallationCubit: serverInstallationCubit,
-          ),
+      builder: (final context) =>
+          ServerTypePicker(serverInstallationCubit: serverInstallationCubit),
     ),
   );
 
@@ -267,9 +259,8 @@ class InitializingPage extends StatelessWidget {
   Widget _stepUser(
     final ServerInstallationCubit initializingCubit,
   ) => BlocProvider(
-    create:
-        (final context) =>
-            RootUserFormCubit(initializingCubit, FieldCubitFactory(context)),
+    create: (final context) =>
+        RootUserFormCubit(initializingCubit, FieldCubitFactory(context)),
     child: Builder(
       builder: (final context) {
         final formCubitState = context.watch<RootUserFormCubit>().state;
@@ -322,11 +313,10 @@ class InitializingPage extends StatelessWidget {
                         icon: Icon(
                           isVisible ? Icons.visibility : Icons.visibility_off,
                         ),
-                        onPressed:
-                            () => context
-                                .read<RootUserFormCubit>()
-                                .isVisible
-                                .setValue(!isVisible),
+                        onPressed: () => context
+                            .read<RootUserFormCubit>()
+                            .isVisible
+                            .setValue(!isVisible),
                       ),
                       suffixIconConstraints: const BoxConstraints(minWidth: 60),
                       prefixIconConstraints: const BoxConstraints(maxWidth: 60),
@@ -337,10 +327,9 @@ class InitializingPage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               BrandButton.filled(
-                onPressed:
-                    formCubitState.isSubmitting
-                        ? null
-                        : () => context.read<RootUserFormCubit>().trySubmit(),
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<RootUserFormCubit>().trySubmit(),
                 title: 'basis.connect'.tr(),
               ),
             ],
@@ -357,62 +346,57 @@ class InitializingPage extends StatelessWidget {
         (appConfigCubit.state as ServerInstallationNotFinished).customSshKey !=
         null;
     return Builder(
-      builder:
-          (final context) => ResponsiveLayoutWithInfobox(
-            topChild: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'initializing.final'.tr(),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'initializing.create_server'.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
+      builder: (final context) => ResponsiveLayoutWithInfobox(
+        topChild: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'initializing.final'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            primaryColumn: Column(
-              children: [
-                BrandButton.filled(
-                  onPressed:
-                      isLoading
-                          ? null
-                          : appConfigCubit.createServerAndSetDnsRecords,
-                  title:
-                      isLoading
-                          ? 'basis.loading'.tr()
-                          : 'initializing.create_server'.tr(),
-                ),
-                const SizedBox(height: 16),
-                if (TlsOptions.allowCustomSshKeyDuringSetup)
-                  Column(
-                    children: [
-                      Text('developer_settings.title'.tr()),
-                      BrandOutlinedButton(
-                        title:
-                            hasSshKey
-                                ? 'developer_settings.root_ssh_key_added'.tr()
-                                : 'developer_settings.add_root_ssh_key'.tr(),
-                        onPressed: () async {
-                          await showModalBottomSheet<String?>(
-                            context: context,
-                            isScrollControlled: true,
-                            useRootNavigator: true,
-                            builder:
-                                (final BuildContext context) => Padding(
-                                  padding: MediaQuery.of(context).viewInsets,
-                                  child: AddSshKey(appConfigCubit),
-                                ),
-                          );
-                        },
-                      ),
-                    ],
+            const SizedBox(height: 16),
+            Text(
+              'initializing.create_server'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+        primaryColumn: Column(
+          children: [
+            BrandButton.filled(
+              onPressed: isLoading
+                  ? null
+                  : appConfigCubit.createServerAndSetDnsRecords,
+              title: isLoading
+                  ? 'basis.loading'.tr()
+                  : 'initializing.create_server'.tr(),
+            ),
+            const SizedBox(height: 16),
+            if (TlsOptions.allowCustomSshKeyDuringSetup)
+              Column(
+                children: [
+                  Text('developer_settings.title'.tr()),
+                  BrandOutlinedButton(
+                    title: hasSshKey
+                        ? 'developer_settings.root_ssh_key_added'.tr()
+                        : 'developer_settings.add_root_ssh_key'.tr(),
+                    onPressed: () async {
+                      await showModalBottomSheet<String?>(
+                        context: context,
+                        isScrollControlled: true,
+                        useRootNavigator: true,
+                        builder: (final BuildContext context) => Padding(
+                          padding: MediaQuery.of(context).viewInsets,
+                          child: AddSshKey(appConfigCubit),
+                        ),
+                      );
+                    },
                   ),
-              ],
-            ),
-          ),
+                ],
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -438,79 +422,73 @@ class InitializingPage extends StatelessWidget {
       doneCount = 0;
     }
     return Builder(
-      builder:
-          (final context) => SizedBox(
-            width: double.infinity,
-            child: ResponsiveLayoutWithInfobox(
-              topChild: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'initializing.checks'.tr(
-                      namedArgs: {'done': doneCount.toString(), 'total': '4'},
-                    ),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 16),
-                  if (text != null)
-                    Text(text, style: Theme.of(context).textTheme.bodyMedium),
-                ],
+      builder: (final context) => SizedBox(
+        width: double.infinity,
+        child: ResponsiveLayoutWithInfobox(
+          topChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'initializing.checks'.tr(
+                  namedArgs: {'done': doneCount.toString(), 'total': '4'},
+                ),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-              primaryColumn: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 128),
-                  const SizedBox(height: 10),
-                  if (doneCount == 0 && state.dnsMatches != null)
-                    Column(
-                      children:
-                          state.dnsMatches!.entries.map((final entry) {
-                            final String domain = entry.key;
-                            if (entry.value == DnsRecordStatus.nonexistent) {
-                              return BrokenDomainOutlinedCard(
-                                domain: domain,
-                                dnsProvider:
-                                    ProvidersController.currentDnsProvider!,
-                              );
-                            }
-                            return Row(
-                              children: [
-                                if (entry.value == DnsRecordStatus.ok)
-                                  const Icon(Icons.check, color: Colors.green),
-                                if (entry.value == DnsRecordStatus.waiting)
-                                  const Icon(
-                                    Icons.schedule,
-                                    color: Colors.amber,
-                                  ),
-                                const SizedBox(width: 10),
-                                Text(domain),
-                              ],
-                            );
-                          }).toList(),
-                    ),
-                  const SizedBox(height: 10),
-                  if (!state.isLoading)
-                    Row(
+              const SizedBox(height: 16),
+              if (text != null)
+                Text(text, style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
+          primaryColumn: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 128),
+              const SizedBox(height: 10),
+              if (doneCount == 0 && state.dnsMatches != null)
+                Column(
+                  children: state.dnsMatches!.entries.map((final entry) {
+                    final String domain = entry.key;
+                    if (entry.value == DnsRecordStatus.nonexistent) {
+                      return BrokenDomainOutlinedCard(
+                        domain: domain,
+                        dnsProvider: ProvidersController.currentDnsProvider!,
+                      );
+                    }
+                    return Row(
                       children: [
-                        Text(
-                          'initializing.until_the_next_check'.tr(),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        BrandTimer(
-                          startDateTime: state.timerStart!,
-                          duration: state.duration!,
-                        ),
+                        if (entry.value == DnsRecordStatus.ok)
+                          const Icon(Icons.check, color: Colors.green),
+                        if (entry.value == DnsRecordStatus.waiting)
+                          const Icon(Icons.schedule, color: Colors.amber),
+                        const SizedBox(width: 10),
+                        Text(domain),
                       ],
-                    ),
-                  if (state.isLoading)
+                    );
+                  }).toList(),
+                ),
+              const SizedBox(height: 10),
+              if (!state.isLoading)
+                Row(
+                  children: [
                     Text(
-                      'initializing.check'.tr(),
+                      'initializing.until_the_next_check'.tr(),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                ],
-              ),
-            ),
+                    BrandTimer(
+                      startDateTime: state.timerStart!,
+                      duration: state.duration!,
+                    ),
+                  ],
+                ),
+              if (state.isLoading)
+                Text(
+                  'initializing.check'.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+            ],
           ),
+        ),
+      ),
     );
   }
 }
@@ -556,13 +534,10 @@ class AddSshKey extends StatelessWidget {
                     ),
                     const SizedBox(height: 30),
                     BrandButton.filled(
-                      onPressed:
-                          formCubitState.isSubmitting
-                              ? null
-                              : () =>
-                                  context
-                                      .read<JoblessSshFormCubit>()
-                                      .trySubmit(),
+                      onPressed: formCubitState.isSubmitting
+                          ? null
+                          : () =>
+                                context.read<JoblessSshFormCubit>().trySubmit(),
                       title: 'ssh.create'.tr(),
                     ),
                     const SizedBox(height: 30),

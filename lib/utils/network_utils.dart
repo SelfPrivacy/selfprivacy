@@ -25,8 +25,9 @@ Future<Map<String, DnsRecordStatus>> validateDnsMatch(
     await InternetAddress.lookup(address).then((final records) {
       for (final record in records) {
         final bool isIpCorrect = record.address == ip4;
-        matches[record.host] =
-            isIpCorrect ? DnsRecordStatus.ok : DnsRecordStatus.waiting;
+        matches[record.host] = isIpCorrect
+            ? DnsRecordStatus.ok
+            : DnsRecordStatus.waiting;
       }
     });
   }

@@ -18,23 +18,23 @@ class DnsProviderFactory {
       case DnsProviderType.cloudflare:
         return settings.isAuthorized
             ? CloudflareDnsProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
-            )
+                isAuthorized: settings.isAuthorized,
+                token: settings.token,
+              )
             : CloudflareDnsProvider();
       case DnsProviderType.digitalOcean:
         return settings.isAuthorized
             ? DigitalOceanDnsProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
-            )
+                isAuthorized: settings.isAuthorized,
+                token: settings.token,
+              )
             : DigitalOceanDnsProvider();
       case DnsProviderType.desec:
         return settings.isAuthorized
             ? DesecDnsProvider.load(
-              isAuthorized: settings.isAuthorized,
-              token: settings.token,
-            )
+                isAuthorized: settings.isAuthorized,
+                token: settings.token,
+              )
             : DesecDnsProvider();
       case DnsProviderType.unknown:
         throw UnknownProviderException('Unknown server provider');

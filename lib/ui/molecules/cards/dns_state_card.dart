@@ -45,14 +45,12 @@ class DnsStateCard extends StatelessWidget {
         leading: icon,
         title: Text(description),
         subtitle: subtitle != '' ? Text(subtitle) : null,
-        textColor:
-            isError
-                ? Theme.of(context).colorScheme.onErrorContainer
-                : Theme.of(context).colorScheme.onSurfaceVariant,
-        iconColor:
-            isError
-                ? Theme.of(context).colorScheme.onErrorContainer
-                : Theme.of(context).colorScheme.onSurfaceVariant,
+        textColor: isError
+            ? Theme.of(context).colorScheme.onErrorContainer
+            : Theme.of(context).colorScheme.onSurfaceVariant,
+        iconColor: isError
+            ? Theme.of(context).colorScheme.onErrorContainer
+            : Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }

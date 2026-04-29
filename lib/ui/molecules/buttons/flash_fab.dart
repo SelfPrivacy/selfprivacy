@@ -70,8 +70,9 @@ class _BrandFabState extends State<BrandFab>
               animation: _colorTween,
               builder: (final BuildContext context, final Widget? child) {
                 final double v = _animationController.value;
-                final IconData icon =
-                    v > 0.5 ? Ionicons.flash : Ionicons.flash_outline;
+                final IconData icon = v > 0.5
+                    ? Ionicons.flash
+                    : Ionicons.flash_outline;
                 return Transform.scale(
                   scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
                   child: Icon(icon, color: _colorTween.value),

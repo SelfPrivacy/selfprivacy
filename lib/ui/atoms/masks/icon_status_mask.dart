@@ -28,13 +28,12 @@ class IconStatusMask extends StatelessWidget {
         ];
     }
     return ShaderMask(
-      shaderCallback:
-          (final bounds) => LinearGradient(
-            begin: const Alignment(-1, -0.8),
-            end: const Alignment(0.9, 0.9),
-            colors: colors,
-            tileMode: TileMode.mirror,
-          ).createShader(bounds),
+      shaderCallback: (final bounds) => LinearGradient(
+        begin: const Alignment(-1, -0.8),
+        end: const Alignment(0.9, 0.9),
+        colors: colors,
+        tileMode: TileMode.mirror,
+      ).createShader(bounds),
       child: icon,
     );
   }

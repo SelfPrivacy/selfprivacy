@@ -12,8 +12,7 @@ var originalColor = const Color(0xFFDBD8BD);
 var count = 40;
 var colorPalette = List.generate(
   count,
-  (final int index) =>
-      HSLColor.fromColor(
-        originalColor,
-      ).withHue(index * 360.0 / count).toColor(),
+  (final int index) => HSLColor.fromColor(
+    originalColor,
+  ).withHue(index * 360.0 / count).toColor(),
 );

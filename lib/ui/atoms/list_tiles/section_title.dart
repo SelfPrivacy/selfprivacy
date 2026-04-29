@@ -12,10 +12,9 @@ class SectionTitle extends StatelessWidget {
     child: Text(
       title,
       style: Theme.of(context).textTheme.labelLarge!.copyWith(
-        color:
-            error
-                ? Theme.of(context).colorScheme.error
-                : Theme.of(context).colorScheme.secondary,
+        color: error
+            ? Theme.of(context).colorScheme.error
+            : Theme.of(context).colorScheme.secondary,
       ),
     ),
   );

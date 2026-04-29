@@ -67,9 +67,8 @@ class DigitalOceanDnsApi extends RestApiMap {
         '/account',
         options: Options(
           followRedirects: false,
-          validateStatus:
-              (final status) =>
-                  status != null && (status >= 200 || status == 401),
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
@@ -105,13 +104,12 @@ class DigitalOceanDnsApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       final Response response = await client.get('/domains');
-      domains =
-          response.data['domains']!
-              .map<DigitalOceanDomain>(
-                // ignore: unnecessary_lambdas
-                (final e) => DigitalOceanDomain.fromJson(e),
-              )
-              .toList();
+      domains = response.data['domains']!
+          .map<DigitalOceanDomain>(
+            // ignore: unnecessary_lambdas
+            (final e) => DigitalOceanDomain.fromJson(e),
+          )
+          .toList();
     } catch (e) {
       logger('Error fetching DigitalOcean domains', error: e);
       return GenericResult(

@@ -11,12 +11,11 @@ mixin JobsApi on GraphQLApiMap {
       if (response.hasException) {
         logger(response.exception.toString());
       }
-      jobsList =
-          jobsList =
-              response.parsedData?.jobs.getJobs
-                  .map<ServerJob>(ServerJob.fromGraphQL)
-                  .toList() ??
-              [];
+      jobsList = jobsList =
+          response.parsedData?.jobs.getJobs
+              .map<ServerJob>(ServerJob.fromGraphQL)
+              .toList() ??
+          [];
     } catch (e) {
       logger("Couldn't get server jobs", error: e);
     }

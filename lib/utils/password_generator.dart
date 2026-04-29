@@ -94,31 +94,28 @@ class StringGenerators {
     for (int i = 0; i < length; i++) chars[_rnd.nextInt(chars.length)],
   ];
 
-  static StringGeneratorFunction simpleId =
-      () => getRandomString(5, hasLowercaseLetters: true);
+  static StringGeneratorFunction simpleId = () =>
+      getRandomString(5, hasLowercaseLetters: true);
 
-  static StringGeneratorFunction dbPassword =
-      () => getRandomString(
-        40,
-        hasLowercaseLetters: true,
-        hasUppercaseLetters: true,
-        hasNumbers: true,
-        hasSymbols: true,
-      );
+  static StringGeneratorFunction dbPassword = () => getRandomString(
+    40,
+    hasLowercaseLetters: true,
+    hasUppercaseLetters: true,
+    hasNumbers: true,
+    hasSymbols: true,
+  );
 
-  static StringGeneratorFunction storageName =
-      () => getRandomString(
-        6,
-        hasLowercaseLetters: true,
-        hasUppercaseLetters: false,
-        hasNumbers: true,
-      );
+  static StringGeneratorFunction storageName = () => getRandomString(
+    6,
+    hasLowercaseLetters: true,
+    hasUppercaseLetters: false,
+    hasNumbers: true,
+  );
 
-  static StringGeneratorFunction apiToken =
-      () => getRandomString(
-        64,
-        hasLowercaseLetters: true,
-        hasUppercaseLetters: true,
-        hasNumbers: true,
-      );
+  static StringGeneratorFunction apiToken = () => getRandomString(
+    64,
+    hasLowercaseLetters: true,
+    hasUppercaseLetters: true,
+    hasNumbers: true,
+  );
 }

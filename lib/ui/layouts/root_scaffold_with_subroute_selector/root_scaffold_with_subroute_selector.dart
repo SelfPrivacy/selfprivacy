@@ -32,12 +32,9 @@ class RootScaffoldWithSubrouteSelector extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-    appBar:
-        Breakpoints.mediumAndUp.isActive(context)
-            ? _RootAppBar(
-              title: getRouteTitle(context.router.current.name).tr(),
-            )
-            : null,
+    appBar: Breakpoints.mediumAndUp.isActive(context)
+        ? _RootAppBar(title: getRouteTitle(context.router.current.name).tr())
+        : null,
     endDrawer: const SupportDrawer(),
     endDrawerEnableOpenDragGesture: false,
     body: Row(
@@ -56,7 +53,7 @@ class RootScaffoldWithSubrouteSelector extends StatelessWidget {
     ),
     floatingActionButton:
         showFab && Breakpoints.small.isActive(context) && showBottomBar
-            ? const BrandFab()
-            : null,
+        ? const BrandFab()
+        : null,
   );
 }

@@ -80,9 +80,9 @@ class _ServerSettingsState extends State<_ServerSettings> {
             style: TextStyle(
               fontStyle:
                   allowAutoUpgrade !=
-                          serverDetailsState.autoUpgradeSettings.enable
-                      ? FontStyle.italic
-                      : FontStyle.normal,
+                      serverDetailsState.autoUpgradeSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
             ),
           ),
           subtitle: Text(
@@ -90,9 +90,9 @@ class _ServerSettingsState extends State<_ServerSettings> {
             style: TextStyle(
               fontStyle:
                   allowAutoUpgrade !=
-                          serverDetailsState.autoUpgradeSettings.enable
-                      ? FontStyle.italic
-                      : FontStyle.normal,
+                      serverDetailsState.autoUpgradeSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
             ),
           ),
         ),
@@ -114,9 +114,9 @@ class _ServerSettingsState extends State<_ServerSettings> {
             style: TextStyle(
               fontStyle:
                   rebootAfterUpgrade !=
-                          serverDetailsState.autoUpgradeSettings.allowReboot
-                      ? FontStyle.italic
-                      : FontStyle.normal,
+                      serverDetailsState.autoUpgradeSettings.allowReboot
+                  ? FontStyle.italic
+                  : FontStyle.normal,
             ),
           ),
           subtitle: Text(
@@ -124,9 +124,9 @@ class _ServerSettingsState extends State<_ServerSettings> {
             style: TextStyle(
               fontStyle:
                   rebootAfterUpgrade !=
-                          serverDetailsState.autoUpgradeSettings.allowReboot
-                      ? FontStyle.italic
-                      : FontStyle.normal,
+                      serverDetailsState.autoUpgradeSettings.allowReboot
+                  ? FontStyle.italic
+                  : FontStyle.normal,
             ),
           ),
         ),
@@ -150,19 +150,17 @@ class _ServerSettingsState extends State<_ServerSettings> {
           title: Text(
             'server.enable_ssh'.tr(),
             style: TextStyle(
-              fontStyle:
-                  enableSsh != serverDetailsState.sshSettings.enable
-                      ? FontStyle.italic
-                      : FontStyle.normal,
+              fontStyle: enableSsh != serverDetailsState.sshSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
             ),
           ),
           subtitle: Text(
             'server.enable_ssh_hint'.tr(),
             style: TextStyle(
-              fontStyle:
-                  enableSsh != serverDetailsState.sshSettings.enable
-                      ? FontStyle.italic
-                      : FontStyle.normal,
+              fontStyle: enableSsh != serverDetailsState.sshSettings.enable
+                  ? FontStyle.italic
+                  : FontStyle.normal,
             ),
           ),
         ),

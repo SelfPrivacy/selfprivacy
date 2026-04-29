@@ -10,12 +10,12 @@ RecoveryKeyStatus _$RecoveryKeyStatusFromJson(Map<String, dynamic> json) =>
     RecoveryKeyStatus(
       exists: json['exists'] as bool,
       valid: json['valid'] as bool,
-      date:
-          json['date'] == null ? null : DateTime.parse(json['date'] as String),
-      expiration:
-          json['expiration'] == null
-              ? null
-              : DateTime.parse(json['expiration'] as String),
+      date: json['date'] == null
+          ? null
+          : DateTime.parse(json['date'] as String),
+      expiration: json['expiration'] == null
+          ? null
+          : DateTime.parse(json['expiration'] as String),
       usesLeft: (json['uses_left'] as num?)?.toInt(),
     );
 

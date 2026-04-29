@@ -98,21 +98,20 @@ class ExplicitPermissionTile extends StatelessWidget {
         parts[1],
       );
       return ListTile(
-        leading:
-            service != null
-                ? SvgPicture.string(
-                  service.svgIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.onSurfaceVariant,
-                    BlendMode.srcIn,
-                  ),
-                )
-                : Icon(
-                  Icons.question_mark_outlined,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+        leading: service != null
+            ? SvgPicture.string(
+                service.svgIcon,
+                width: 24,
+                height: 24,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.onSurfaceVariant,
+                  BlendMode.srcIn,
                 ),
+              )
+            : Icon(
+                Icons.question_mark_outlined,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         textColor: Theme.of(context).colorScheme.onSurfaceVariant,
         title: Text(
           service != null

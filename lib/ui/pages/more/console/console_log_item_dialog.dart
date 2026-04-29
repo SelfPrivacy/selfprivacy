@@ -131,10 +131,9 @@ class ConsoleItemDialog extends StatelessWidget {
     actions: [
       if (log is LogWithRawResponse)
         TextButton(
-          onPressed:
-              () => PlatformAdapter.setClipboard(
-                (log as LogWithRawResponse).rawResponse,
-              ),
+          onPressed: () => PlatformAdapter.setClipboard(
+            (log as LogWithRawResponse).rawResponse,
+          ),
           child: Text('console_page.copy_raw'.tr()),
         ),
       // A button to copy the request to the clipboard
@@ -192,24 +191,23 @@ class _KeyValueRow extends StatelessWidget {
   final String? value;
 
   @override
-  Widget build(final BuildContext context) =>
-      hideList.contains(title)
-          ? _ObscuredKeyValueRow(title, value)
-          : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: SelectableText.rich(
-              TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: '$title: ',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: value ?? ''),
-                ],
-              ),
+  Widget build(final BuildContext context) => hideList.contains(title)
+      ? _ObscuredKeyValueRow(title, value)
+      : Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: SelectableText.rich(
+            TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(
+                  text: '$title: ',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(text: value ?? ''),
+              ],
             ),
-          );
+          ),
+        );
 }
 
 class _ObscuredKeyValueRow extends StatefulWidget {
@@ -241,10 +239,9 @@ class _ObscuredKeyValueRowState extends State<_ObscuredKeyValueRow> {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                  text:
-                      _obscureValue
-                          ? obscuringCharacter * (widget.value?.length ?? 4)
-                          : widget.value ?? '',
+                  text: _obscureValue
+                      ? obscuringCharacter * (widget.value?.length ?? 4)
+                      : widget.value ?? '',
                   style: const TextStyle(
                     fontFeatures: [FontFeature.tabularFigures()],
                   ),

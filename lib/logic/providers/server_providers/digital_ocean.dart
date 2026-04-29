@@ -62,26 +62,25 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final List rawServers = result.data;
-    servers =
-        rawServers.map<ServerBasicInfo>((final server) {
-          String ipv4 = '0.0.0.0';
-          if (server['networks']['v4'].isNotEmpty) {
-            for (final v4 in server['networks']['v4']) {
-              if (v4['type'].toString() == 'public') {
-                ipv4 = v4['ip_address'].toString();
-              }
-            }
+    servers = rawServers.map<ServerBasicInfo>((final server) {
+      String ipv4 = '0.0.0.0';
+      if (server['networks']['v4'].isNotEmpty) {
+        for (final v4 in server['networks']['v4']) {
+          if (v4['type'].toString() == 'public') {
+            ipv4 = v4['ip_address'].toString();
           }
+        }
+      }
 
-          return ServerBasicInfo(
-            id: server['id'],
-            reverseDns: server['name'],
-            created: DateTime.now(),
-            ip: ipv4,
-            name: server['name'],
-            location: server['region']['slug'],
-          );
-        }).toList();
+      return ServerBasicInfo(
+        id: server['id'],
+        reverseDns: server['name'],
+        created: DateTime.now(),
+        ip: ipv4,
+        name: server['name'],
+        location: server['region']['slug'],
+      );
+    }).toList();
 
     return GenericResult(success: true, data: servers);
   }
@@ -240,17 +239,15 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     try {
       final int dropletId = serverResult.data!;
-      final newVolume =
-          (await createVolume(
-            installationData.storageSize.gibibyte.toInt(),
-            installationData.location,
-          )).data;
-      final bool attachedVolume =
-          (await _adapter.api().attachVolume(
-            name: newVolume!.name,
-            serverId: dropletId,
-            region: installationData.location,
-          )).data;
+      final newVolume = (await createVolume(
+        installationData.storageSize.gibibyte.toInt(),
+        installationData.location,
+      )).data;
+      final bool attachedVolume = (await _adapter.api().attachVolume(
+        name: newVolume!.name,
+        serverId: dropletId,
+        region: installationData.location,
+      )).data;
 
       String? ipv4;
       int attempts = 0;
@@ -528,8 +525,8 @@ class DigitalOceanServerProvider extends ServerProvider {
           sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
           serverId:
               (rawVolume.dropletIds != null && rawVolume.dropletIds!.isNotEmpty)
-                  ? rawVolume.dropletIds![0]
-                  : null,
+              ? rawVolume.dropletIds![0]
+              : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
           uuid: rawVolume.id,
           location: rawVolume.region.slug,
@@ -827,20 +824,16 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     metrics = ServerMetrics(
-      bandwidthIn:
-          inboundResult.data
-              .map(
-                (final el) =>
-                    TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-              )
-              .toList(),
-      bandwidthOut:
-          outboundResult.data
-              .map(
-                (final el) =>
-                    TimeSeriesData(el[0], double.parse(el[1]) * 100000),
-              )
-              .toList(),
+      bandwidthIn: inboundResult.data
+          .map(
+            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+          )
+          .toList(),
+      bandwidthOut: outboundResult.data
+          .map(
+            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+          )
+          .toList(),
       cpu: calculateCpuLoadMetrics(cpuResult.data),
       start: start,
       end: end,

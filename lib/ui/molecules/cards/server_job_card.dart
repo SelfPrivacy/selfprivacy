@@ -50,13 +50,13 @@ class ServerJobCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               BrandLinearIndicator(
-                value:
-                    serverJob.progress == null
-                        ? 0.0
-                        : serverJob.progress! / 100.0,
+                value: serverJob.progress == null
+                    ? 0.0
+                    : serverJob.progress! / 100.0,
                 color: color,
-                backgroundColor:
-                    Theme.of(context).colorScheme.surfaceContainerHighest,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest,
                 height: 8,
               ),
               const SizedBox(height: 8),

@@ -33,10 +33,9 @@ class User extends Equatable {
         isFoundOnServer: true,
         directmemberof: user.directmemberof,
         memberof: user.memberof,
-        emailPasswordMetadata:
-            user.emailPasswordMetadata
-                ?.map(EmailPasswordMetadata.fromGraphQL)
-                .toList(),
+        emailPasswordMetadata: user.emailPasswordMetadata
+            ?.map(EmailPasswordMetadata.fromGraphQL)
+            .toList(),
         displayName: user.displayName,
         email: user.email,
       );

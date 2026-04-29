@@ -19,10 +19,9 @@ class DeviceItem extends StatelessWidget {
         args: [DateFormat.yMMMMd().format(device.date)],
       ),
     ),
-    onTap:
-        device.isCaller
-            ? () => _showTokenRefreshDialog(context, device)
-            : () => _showConfirmationDialog(context, device),
+    onTap: device.isCaller
+        ? () => _showTokenRefreshDialog(context, device)
+        : () => _showConfirmationDialog(context, device),
   );
 
   Future _showConfirmationDialog(
@@ -30,53 +29,50 @@ class DeviceItem extends StatelessWidget {
     final ApiToken device,
   ) => showDialog(
     context: context,
-    builder:
-        (final context) => AlertDialog(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(Icons.link_off_outlined),
-              const SizedBox(height: 16),
-              Text(
-                'devices.revoke_device_alert.header'.tr(),
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-            ],
+    builder: (final context) => AlertDialog(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(Icons.link_off_outlined),
+          const SizedBox(height: 16),
+          Text(
+            'devices.revoke_device_alert.header'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'devices.revoke_device_alert.description'.tr(
-                  args: [device.name],
-                ),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'devices.revoke_device_alert.description'.tr(args: [device.name]),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('devices.revoke_device_alert.no'.tr()),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'devices.revoke_device_alert.yes'.tr(),
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ),
-              onPressed: () {
-                context.read<DevicesBloc>().add(DeleteDevice(device));
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text('devices.revoke_device_alert.no'.tr()),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
+        TextButton(
+          child: Text(
+            'devices.revoke_device_alert.yes'.tr(),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+          onPressed: () {
+            context.read<DevicesBloc>().add(DeleteDevice(device));
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ),
   );
 
   Future _showTokenRefreshDialog(
@@ -84,49 +80,44 @@ class DeviceItem extends StatelessWidget {
     final ApiToken device,
   ) => showDialog(
     context: context,
-    builder:
-        (final context) => AlertDialog(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(Icons.update_outlined),
-              const SizedBox(height: 16),
-              Text(
-                'devices.refresh_token_alert.header'.tr(),
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-            ],
+    builder: (final context) => AlertDialog(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(Icons.update_outlined),
+          const SizedBox(height: 16),
+          Text(
+            'devices.refresh_token_alert.header'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'devices.refresh_token_alert.description'.tr(
-                  args: [device.name],
-                ),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'devices.refresh_token_alert.description'.tr(args: [device.name]),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('devices.refresh_token_alert.no'.tr()),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('devices.refresh_token_alert.yes'.tr()),
-              onPressed: () {
-                context.read<TokensBloc>().add(
-                  const RefreshServerApiTokenEvent(),
-                );
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text('devices.refresh_token_alert.no'.tr()),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
+        TextButton(
+          child: Text('devices.refresh_token_alert.yes'.tr()),
+          onPressed: () {
+            context.read<TokensBloc>().add(const RefreshServerApiTokenEvent());
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ),
   );
 }

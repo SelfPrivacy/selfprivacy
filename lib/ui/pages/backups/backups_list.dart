@@ -18,12 +18,13 @@ class BackupsListPage extends StatelessWidget {
   Widget build(final BuildContext context) {
     // If the service is null, get all backups from state. If not null, call the
     // serviceBackups(serviceId) on the backups state.
-    final List<Backup> backups =
-        service == null
-            ? context.watch<BackupsBloc>().state.backups
-            : context.watch<BackupsBloc>().state.serviceBackups(service!.id);
-    final bool preventActions =
-        context.watch<BackupsBloc>().state.preventActions;
+    final List<Backup> backups = service == null
+        ? context.watch<BackupsBloc>().state.backups
+        : context.watch<BackupsBloc>().state.serviceBackups(service!.id);
+    final bool preventActions = context
+        .watch<BackupsBloc>()
+        .state
+        .preventActions;
     return BrandHeroScreen(
       heroTitle: 'backup.snapshots_title'.tr(),
       hasFlashButton: true,

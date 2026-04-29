@@ -16,47 +16,37 @@ class DeleteUserTile extends StatelessWidget {
   Widget build(final BuildContext context) => ListTile(
     iconColor: Theme.of(context).colorScheme.error,
     textColor: Theme.of(context).colorScheme.error,
-    onTap:
-        () => showDialog(
-          context: context,
-          // useRootNavigator: false,
-          builder:
-              (final BuildContext context) => AlertDialog(
-                title: Text('basis.confirmation'.tr()),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text('users.delete_confirm_question'.tr()),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('basis.cancel'.tr()),
-                    onPressed: () async {
-                      await context.router.maybePop();
-                    },
-                  ),
-                  TextButton(
-                    child: Text(
-                      'basis.delete'.tr(),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                    onPressed: () {
-                      context.read<JobsCubit>().addJob(
-                        DeleteUserJob(user: user),
-                      );
-                      unawaited(
-                        context.router.childControllers.first.maybePop(),
-                      );
-                      unawaited(context.router.maybePop());
-                    },
-                  ),
-                ],
-              ),
+    onTap: () => showDialog(
+      context: context,
+      // useRootNavigator: false,
+      builder: (final BuildContext context) => AlertDialog(
+        title: Text('basis.confirmation'.tr()),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[Text('users.delete_confirm_question'.tr())],
+          ),
         ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('basis.cancel'.tr()),
+            onPressed: () async {
+              await context.router.maybePop();
+            },
+          ),
+          TextButton(
+            child: Text(
+              'basis.delete'.tr(),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+            onPressed: () {
+              context.read<JobsCubit>().addJob(DeleteUserJob(user: user));
+              unawaited(context.router.childControllers.first.maybePop());
+              unawaited(context.router.maybePop());
+            },
+          ),
+        ],
+      ),
+    ),
     leading: const Icon(Icons.person_remove_outlined),
     title: Text('users.delete_user'.tr()),
   );

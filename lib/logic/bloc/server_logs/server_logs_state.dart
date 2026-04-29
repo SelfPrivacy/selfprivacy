@@ -32,31 +32,34 @@ final class ServerLogsLoaded extends ServerLogsState {
   final String? slice;
   final String? unit;
 
-  List<String> get systemdUnits =>
-      oldEntries
-          .map((final entry) => entry.systemdUnit ?? 'kernel')
-          .toSet()
-          .toList();
+  List<String> get systemdUnits => oldEntries
+      .map((final entry) => entry.systemdUnit ?? 'kernel')
+      .toSet()
+      .toList();
 
   List<ServerLogEntry> oldEntriesForUnit(final String unit) {
     if (unit == 'kernel') {
-      final filteredEntries =
-          oldEntries.where((final entry) => entry.systemdUnit == null).toList();
+      final filteredEntries = oldEntries
+          .where((final entry) => entry.systemdUnit == null)
+          .toList();
       return filteredEntries;
     }
-    final filteredEntries =
-        oldEntries.where((final entry) => entry.systemdUnit == unit).toList();
+    final filteredEntries = oldEntries
+        .where((final entry) => entry.systemdUnit == unit)
+        .toList();
     return filteredEntries;
   }
 
   List<ServerLogEntry> newEntriesForUnit(final String unit) {
     if (unit == 'kernel') {
-      final filteredEntries =
-          newEntries.where((final entry) => entry.systemdUnit == null).toList();
+      final filteredEntries = newEntries
+          .where((final entry) => entry.systemdUnit == null)
+          .toList();
       return filteredEntries;
     }
-    final filteredEntries =
-        newEntries.where((final entry) => entry.systemdUnit == unit).toList();
+    final filteredEntries = newEntries
+        .where((final entry) => entry.systemdUnit == unit)
+        .toList();
     return filteredEntries;
   }
 

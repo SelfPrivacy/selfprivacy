@@ -124,12 +124,11 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       return;
     }
     emit(BackupsInitializing());
-    final String? encryptionKey =
-        getIt<ApiConnectionRepository>()
-            .apiData
-            .backupConfig
-            .data
-            ?.encryptionKey;
+    final String? encryptionKey = getIt<ApiConnectionRepository>()
+        .apiData
+        .backupConfig
+        .data
+        ?.encryptionKey;
     if (encryptionKey == null) {
       emit(BackupsUnititialized());
       getIt<NavigationService>().showSnackBar(
@@ -172,8 +171,9 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       }
       final String bucketId = createStorageResult.data;
 
-      final BackupsApplicationKey? key =
-          (await provider.createApplicationKey(bucketId)).data;
+      final BackupsApplicationKey? key = (await provider.createApplicationKey(
+        bucketId,
+      )).data;
 
       if (key == null) {
         getIt<NavigationService>().showSnackBar(
@@ -315,11 +315,9 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         );
       }
       if (result.success) {
-        getIt<ApiConnectionRepository>()
-            .apiData
-            .backupConfig
-            .data = getIt<ApiConnectionRepository>().apiData.backupConfig.data
-            ?.copyWith(autobackupPeriod: event.period);
+        getIt<ApiConnectionRepository>().apiData.backupConfig.data =
+            getIt<ApiConnectionRepository>().apiData.backupConfig.data
+                ?.copyWith(autobackupPeriod: event.period);
       }
       emit(currentState);
       getIt<ApiConnectionRepository>().emitData();
@@ -341,11 +339,9 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         );
       }
       if (result.success) {
-        getIt<ApiConnectionRepository>()
-            .apiData
-            .backupConfig
-            .data = getIt<ApiConnectionRepository>().apiData.backupConfig.data
-            ?.copyWith(autobackupQuotas: event.quotas);
+        getIt<ApiConnectionRepository>().apiData.backupConfig.data =
+            getIt<ApiConnectionRepository>().apiData.backupConfig.data
+                ?.copyWith(autobackupQuotas: event.quotas);
       }
       emit(currentState);
       getIt<ApiConnectionRepository>().emitData();
@@ -386,8 +382,8 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final currentState = state;
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result =
-          await getIt<ApiConnectionRepository>().api.removeRepository();
+      final GenericResult result = await getIt<ApiConnectionRepository>().api
+          .removeRepository();
       if (!result.success) {
         getIt<NavigationService>().showSnackBar(
           result.message ?? 'Unknown error',

@@ -12,15 +12,16 @@ class RecoveryConfirmDns extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationCubit appConfig =
-        context.watch<ServerInstallationCubit>();
+    final ServerInstallationCubit appConfig = context
+        .watch<ServerInstallationCubit>();
 
     return BlocProvider(
       create: (final BuildContext context) => DnsProviderFormCubit(appConfig),
       child: Builder(
         builder: (final BuildContext context) {
-          final FormCubitState formCubitState =
-              context.watch<DnsProviderFormCubit>().state;
+          final FormCubitState formCubitState = context
+              .watch<DnsProviderFormCubit>()
+              .state;
           final String providerDisplayName =
               appConfig.state.serverDomain?.provider.displayName ??
               'DNS Provider';
@@ -37,8 +38,9 @@ class RecoveryConfirmDns extends StatelessWidget {
             hasFlashButton: false,
             ignoreBreakpoints: true,
             hasSupportDrawer: true,
-            onBackButtonPressed:
-                context.read<ServerInstallationCubit>().revertRecoveryStep,
+            onBackButtonPressed: context
+                .read<ServerInstallationCubit>()
+                .revertRecoveryStep,
             children: [
               CubitFormTextField(
                 autofocus: true,
@@ -52,24 +54,21 @@ class RecoveryConfirmDns extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               BrandButton.filled(
-                onPressed:
-                    formCubitState.isSubmitting
-                        ? null
-                        : () =>
-                            context.read<DnsProviderFormCubit>().trySubmit(),
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<DnsProviderFormCubit>().trySubmit(),
                 title: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),
               Builder(
-                builder:
-                    (final context) => BrandButton.text(
-                      onPressed:
-                          () => context.read<SupportSystemCubit>().showArticle(
-                            article: providerSupportArticle,
-                            context: context,
-                          ),
-                      title: 'initializing.how'.tr(),
-                    ),
+                builder: (final context) => BrandButton.text(
+                  onPressed: () =>
+                      context.read<SupportSystemCubit>().showArticle(
+                        article: providerSupportArticle,
+                        context: context,
+                      ),
+                  title: 'initializing.how'.tr(),
+                ),
               ),
             ],
           );

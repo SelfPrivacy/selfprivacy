@@ -242,8 +242,8 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final RefreshServerApiTokenEvent event,
     final Emitter<TokensState> emit,
   ) async {
-    final (success, newToken) =
-        await getIt<ApiConnectionRepository>().refreshDeviceToken();
+    final (success, newToken) = await getIt<ApiConnectionRepository>()
+        .refreshDeviceToken();
     if (!success) {
       getIt<NavigationService>().showSnackBar(
         'devices.refresh_token_alert.failed_to_refresh_token'.tr(),

@@ -31,11 +31,10 @@ class NewUserPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-    create:
-        (final BuildContext context) => UserFormCubit(
-          fieldFactory: FieldCubitFactory(context),
-          initialUser: user,
-        ),
+    create: (final BuildContext context) => UserFormCubit(
+      fieldFactory: FieldCubitFactory(context),
+      initialUser: user,
+    ),
     child: BlocConsumer<UserFormCubit, FormCubitState>(
       listener: (final BuildContext context, final FormCubitState state) async {
         final formCubit = context.read<UserFormCubit>();
@@ -56,9 +55,8 @@ class NewUserPage extends StatelessWidget {
           }
         }
       },
-      builder:
-          (final BuildContext context, final FormCubitState state) =>
-              NewUserScreen(state: state, user: user),
+      builder: (final BuildContext context, final FormCubitState state) =>
+          NewUserScreen(state: state, user: user),
     ),
   );
 }
@@ -70,8 +68,9 @@ class NewUserScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationState config =
-        context.watch<ServerInstallationCubit>().state;
+    final ServerInstallationState config = context
+        .watch<ServerInstallationCubit>()
+        .state;
 
     final String domainName = UiHelpers.getDomainName(config);
     final formCubit = context.read<UserFormCubit>();
@@ -79,10 +78,9 @@ class NewUserScreen extends StatelessWidget {
     return BrandHeroScreen(
       heroTitle: user != null ? 'users.edit_user'.tr() : 'users.new_user'.tr(),
       heroIcon: user != null ? null : Icons.person_add_outlined,
-      heroIconWidget:
-          user != null
-              ? CircleAvatar(child: Text(user!.login[0].toUpperCase()))
-              : null,
+      heroIconWidget: user != null
+          ? CircleAvatar(child: Text(user!.login[0].toUpperCase()))
+          : null,
       children: [
         if (state.isErrorShown)
           Text(
@@ -96,10 +94,9 @@ class NewUserScreen extends StatelessWidget {
             autofocus: true,
             formFieldCubit: formCubit.login,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color:
-                  user != null
-                      ? Theme.of(context).colorScheme.onSurface.withAlpha(97)
-                      : Theme.of(context).colorScheme.onSurface,
+              color: user != null
+                  ? Theme.of(context).colorScheme.onSurface.withAlpha(97)
+                  : Theme.of(context).colorScheme.onSurface,
             ),
             decoration: InputDecoration(
               labelText: 'users.login'.tr(),
@@ -158,10 +155,10 @@ class _GroupsSelectorState extends State<GroupsSelector> {
 
   String getPrimaryGroupFromSelection(final List<String> groups) =>
       groups.contains('sp.admins')
-          ? 'sp.admins'
-          : groups.contains('sp.full_users')
-          ? 'sp.full_users'
-          : '';
+      ? 'sp.admins'
+      : groups.contains('sp.full_users')
+      ? 'sp.full_users'
+      : '';
 
   List<String> getExplicitGroupsFromSelection(final List<String> groups) =>
       groups
@@ -190,19 +187,17 @@ class _GroupsSelectorState extends State<GroupsSelector> {
         state is ExternalChangeFieldCubitState) {
       final groups = state.value;
       setState(() {
-        primaryGroup =
-            groups.contains('sp.admins')
-                ? 'sp.admins'
-                : groups.contains('sp.full_users')
-                ? 'sp.full_users'
-                : '';
-        explicitGroups =
-            groups
-                .where(
-                  (final String group) =>
-                      group != 'sp.full_users' && group != 'sp.admins',
-                )
-                .toList();
+        primaryGroup = groups.contains('sp.admins')
+            ? 'sp.admins'
+            : groups.contains('sp.full_users')
+            ? 'sp.full_users'
+            : '';
+        explicitGroups = groups
+            .where(
+              (final String group) =>
+                  group != 'sp.full_users' && group != 'sp.admins',
+            )
+            .toList();
       });
     }
   }
@@ -220,8 +215,10 @@ class _GroupsSelectorState extends State<GroupsSelector> {
     bloc: widget.formFieldCubit,
     builder: (final context, final state) {
       final serviceGroups = context.watch<GroupsBloc>().state.serviceGroups;
-      final unrecognizedGroups =
-          context.watch<GroupsBloc>().state.unrecognizedGroups;
+      final unrecognizedGroups = context
+          .watch<GroupsBloc>()
+          .state
+          .unrecognizedGroups;
       final isGroupsEmpty = context.watch<GroupsBloc>().state.isEmpty;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,26 +300,24 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                   return Column(
                     children: [
                       ListTile(
-                        leading:
-                            service != null
-                                ? SvgPicture.string(
-                                  service.svgIcon,
-                                  width: 24,
-                                  height: 24,
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                    BlendMode.srcIn,
-                                  ),
-                                )
-                                : Icon(
-                                  Icons.question_mark_outlined,
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
+                        leading: service != null
+                            ? SvgPicture.string(
+                                service.svgIcon,
+                                width: 24,
+                                height: 24,
+                                colorFilter: ColorFilter.mode(
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                  BlendMode.srcIn,
                                 ),
+                              )
+                            : Icon(
+                                Icons.question_mark_outlined,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         title: Text(service?.displayName ?? serviceEntry.key),
                       ),
                       ...serviceEntry.value.entries.map(

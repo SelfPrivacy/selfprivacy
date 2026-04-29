@@ -37,8 +37,9 @@ class UsersPage extends StatelessWidget {
     } else {
       child = BlocBuilder<UsersBloc, UsersState>(
         builder: (final BuildContext context, final UsersState state) {
-          final OutdatedServerCheckerState outdatedServerCheckerState =
-              context.watch<OutdatedServerCheckerBloc>().state;
+          final OutdatedServerCheckerState outdatedServerCheckerState = context
+              .watch<OutdatedServerCheckerBloc>()
+              .state;
 
           final users = state.orderedUsers;
           final isLoading =
@@ -62,10 +63,11 @@ class UsersPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ServerOutdatedCard(
-                      requiredVersion:
-                          outdatedServerCheckerState.requiredVersion.toString(),
-                      currentVersion:
-                          outdatedServerCheckerState.currentVersion.toString(),
+                      requiredVersion: outdatedServerCheckerState
+                          .requiredVersion
+                          .toString(),
+                      currentVersion: outdatedServerCheckerState.currentVersion
+                          .toString(),
                     ),
                   ),
                 ],
@@ -103,12 +105,12 @@ class UsersPage extends StatelessWidget {
                               enabled: isLoading,
                               enableSwitchAnimation: true,
                               child: UserListItem(
-                                user:
-                                    isLoading ? fakeUsers[index] : users[index],
-                                isPrimaryUser:
-                                    isLoading
-                                        ? index == 0
-                                        : users[index].type == UserType.primary,
+                                user: isLoading
+                                    ? fakeUsers[index]
+                                    : users[index],
+                                isPrimaryUser: isLoading
+                                    ? index == 0
+                                    : users[index].type == UserType.primary,
                               ),
                             ),
                   ),
@@ -121,10 +123,9 @@ class UsersPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar:
-          Breakpoints.small.isActive(context)
-              ? BrandHeader(title: 'basis.users'.tr())
-              : null,
+      appBar: Breakpoints.small.isActive(context)
+          ? BrandHeader(title: 'basis.users'.tr())
+          : null,
       body: child,
     );
   }

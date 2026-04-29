@@ -38,10 +38,12 @@ class NetworkChart extends GenericLineChart {
         .map((final e) => e.value)
         .reduce((final a, final b) => a > b ? a : b);
 
-    final maxUsageTimeIn =
-        data[0].firstWhere((final e) => e.value == maxUsageIn).time;
-    final maxUsageTimeOut =
-        data[1].firstWhere((final e) => e.value == maxUsageOut).time;
+    final maxUsageTimeIn = data[0]
+        .firstWhere((final e) => e.value == maxUsageIn)
+        .time;
+    final maxUsageTimeOut = data[1]
+        .firstWhere((final e) => e.value == maxUsageOut)
+        .time;
 
     final label = 'resource_chart.network_chart_screen_reader_explanation'.tr(
       namedArgs: {

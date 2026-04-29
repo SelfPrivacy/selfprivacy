@@ -215,31 +215,27 @@ class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
         Padding(
           padding: const EdgeInsets.only(top: 16),
           child: FilledButton(
-            onPressed:
-                ((widget.isInstalling || isModified) && isFormValid)
-                    ? () async {
-                      if (widget.isInstalling) {
-                        context.read<JobsCubit>().addJob(
-                          ServiceToggleJob(
-                            service: service,
-                            needToTurnOn: true,
-                          ),
-                        );
-                      }
+            onPressed: ((widget.isInstalling || isModified) && isFormValid)
+                ? () async {
+                    if (widget.isInstalling) {
                       context.read<JobsCubit>().addJob(
-                        ChangeServiceConfiguration(
-                          serviceId: service.id,
-                          serviceDisplayName: service.displayName,
-                          settings: settings,
-                        ),
+                        ServiceToggleJob(service: service, needToTurnOn: true),
                       );
-                      if (widget.isInstalling) {
-                        context.router.popUntilRoot();
-                      } else {
-                        await context.router.maybePop();
-                      }
                     }
-                    : null,
+                    context.read<JobsCubit>().addJob(
+                      ChangeServiceConfiguration(
+                        serviceId: service.id,
+                        serviceDisplayName: service.displayName,
+                        settings: settings,
+                      ),
+                    );
+                    if (widget.isInstalling) {
+                      context.router.popUntilRoot();
+                    } else {
+                      await context.router.maybePop();
+                    }
+                  }
+                : null,
             child: Text(
               isJobAlreadyExists
                   ? 'service_page.update_job'.tr()

@@ -13,33 +13,30 @@ sealed class ServerJobsState extends Equatable {
 
   List<ServerJob> get serverJobList {
     try {
-      final List<ServerJob> list =
-          _serverJobList
-            ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
+      final List<ServerJob> list = _serverJobList
+        ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
       return list;
     } on UnsupportedError {
       return _serverJobList;
     }
   }
 
-  List<ServerJob> get backupJobList =>
-      serverJobList
-          .where(
-            // The backup jobs has the format of 'service.<service_id>.backup'
-            (final job) =>
-                job.typeId.contains('backup') || job.typeId.contains('restore'),
-          )
-          .toList();
+  List<ServerJob> get backupJobList => serverJobList
+      .where(
+        // The backup jobs has the format of 'service.<service_id>.backup'
+        (final job) =>
+            job.typeId.contains('backup') || job.typeId.contains('restore'),
+      )
+      .toList();
 
-  List<String> get busyServices =>
-      backupJobList
-          .where(
-            (final ServerJob job) =>
-                job.status == JobStatusEnum.running ||
-                job.status == JobStatusEnum.created,
-          )
-          .map((final ServerJob job) => job.typeId.split('.')[1])
-          .toList();
+  List<String> get busyServices => backupJobList
+      .where(
+        (final ServerJob job) =>
+            job.status == JobStatusEnum.running ||
+            job.status == JobStatusEnum.created,
+      )
+      .map((final ServerJob job) => job.typeId.split('.')[1])
+      .toList();
 
   bool get hasRemovableJobs => serverJobList.any(
     (final job) =>

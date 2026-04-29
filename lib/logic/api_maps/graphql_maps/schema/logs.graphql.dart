@@ -178,32 +178,27 @@ class _CopyWithImpl$Fragment$LogEntry<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$LogEntry(
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      timestamp:
-          timestamp == _undefined || timestamp == null
-              ? _instance.timestamp
-              : (timestamp as DateTime),
-      priority:
-          priority == _undefined ? _instance.priority : (priority as int?),
-      systemdUnit:
-          systemdUnit == _undefined
-              ? _instance.systemdUnit
-              : (systemdUnit as String?),
-      systemdSlice:
-          systemdSlice == _undefined
-              ? _instance.systemdSlice
-              : (systemdSlice as String?),
-      cursor:
-          cursor == _undefined || cursor == null
-              ? _instance.cursor
-              : (cursor as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      timestamp: timestamp == _undefined || timestamp == null
+          ? _instance.timestamp
+          : (timestamp as DateTime),
+      priority: priority == _undefined
+          ? _instance.priority
+          : (priority as int?),
+      systemdUnit: systemdUnit == _undefined
+          ? _instance.systemdUnit
+          : (systemdUnit as String?),
+      systemdSlice: systemdSlice == _undefined
+          ? _instance.systemdSlice
+          : (systemdSlice as String?),
+      cursor: cursor == _undefined || cursor == null
+          ? _instance.cursor
+          : (cursor as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -305,6 +300,7 @@ extension ClientExtension$Fragment$LogEntry on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Fragment$LogEntry? readFragment$LogEntry({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -615,14 +611,12 @@ class _CopyWithImpl$Query$Logs<TRes> implements CopyWith$Query$Logs<TRes> {
   TRes call({Object? logs = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$Logs(
-          logs:
-              logs == _undefined || logs == null
-                  ? _instance.logs
-                  : (logs as Query$Logs$logs),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          logs: logs == _undefined || logs == null
+              ? _instance.logs
+              : (logs as Query$Logs$logs),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -847,13 +841,12 @@ class Options$Query$Logs extends graphql.QueryOptions<Query$Logs> {
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null ? null : _parserFn$Query$Logs(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$Logs(data),
+               ),
          onError: onError,
          document: documentNodeQueryLogs,
          parserFn: _parserFn$Query$Logs,
@@ -916,9 +909,11 @@ extension ClientExtension$Query$Logs on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$Logs>> query$Logs(
     Options$Query$Logs options,
   ) async => await this.query(options);
+
   graphql.ObservableQuery<Query$Logs> watchQuery$Logs(
     WatchOptions$Query$Logs options,
   ) => this.watchQuery(options);
+
   void writeQuery$Logs({
     required Query$Logs data,
     required Variables$Query$Logs variables,
@@ -931,6 +926,7 @@ extension ClientExtension$Query$Logs on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$Logs? readQuery$Logs({
     required Variables$Query$Logs variables,
     bool optimistic = true,
@@ -1035,14 +1031,12 @@ class _CopyWithImpl$Query$Logs$logs<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$Logs$logs(
-      paginated:
-          paginated == _undefined || paginated == null
-              ? _instance.paginated
-              : (paginated as Query$Logs$logs$paginated),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      paginated: paginated == _undefined || paginated == null
+          ? _instance.paginated
+          : (paginated as Query$Logs$logs$paginated),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1082,12 +1076,9 @@ class Query$Logs$logs$paginated {
       pageMeta: Query$Logs$logs$paginated$pageMeta.fromJson(
         (l$pageMeta as Map<String, dynamic>),
       ),
-      entries:
-          (l$entries as List<dynamic>)
-              .map(
-                (e) => Fragment$LogEntry.fromJson((e as Map<String, dynamic>)),
-              )
-              .toList(),
+      entries: (l$entries as List<dynamic>)
+          .map((e) => Fragment$LogEntry.fromJson((e as Map<String, dynamic>)))
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1201,18 +1192,15 @@ class _CopyWithImpl$Query$Logs$logs$paginated<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$Logs$logs$paginated(
-      pageMeta:
-          pageMeta == _undefined || pageMeta == null
-              ? _instance.pageMeta
-              : (pageMeta as Query$Logs$logs$paginated$pageMeta),
-      entries:
-          entries == _undefined || entries == null
-              ? _instance.entries
-              : (entries as List<Fragment$LogEntry>),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      pageMeta: pageMeta == _undefined || pageMeta == null
+          ? _instance.pageMeta
+          : (pageMeta as Query$Logs$logs$paginated$pageMeta),
+      entries: entries == _undefined || entries == null
+          ? _instance.entries
+          : (entries as List<Fragment$LogEntry>),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1230,10 +1218,9 @@ class _CopyWithImpl$Query$Logs$logs$paginated<TRes>
     )
     _fn,
   ) => call(
-    entries:
-        _fn(
-          _instance.entries.map((e) => CopyWith$Fragment$LogEntry(e, (i) => i)),
-        ).toList(),
+    entries: _fn(
+      _instance.entries.map((e) => CopyWith$Fragment$LogEntry(e, (i) => i)),
+    ).toList(),
   );
 }
 
@@ -1364,16 +1351,15 @@ class _CopyWithImpl$Query$Logs$logs$paginated$pageMeta<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$Logs$logs$paginated$pageMeta(
-      upCursor:
-          upCursor == _undefined ? _instance.upCursor : (upCursor as String?),
-      downCursor:
-          downCursor == _undefined
-              ? _instance.downCursor
-              : (downCursor as String?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      upCursor: upCursor == _undefined
+          ? _instance.upCursor
+          : (upCursor as String?),
+      downCursor: downCursor == _undefined
+          ? _instance.downCursor
+          : (downCursor as String?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -1461,10 +1447,9 @@ class _CopyWithImpl$Subscription$LogEntries<TRes>
 
   TRes call({Object? logEntries = _undefined}) => _then(
     Subscription$LogEntries(
-      logEntries:
-          logEntries == _undefined || logEntries == null
-              ? _instance.logEntries
-              : (logEntries as Fragment$LogEntry),
+      logEntries: logEntries == _undefined || logEntries == null
+          ? _instance.logEntries
+          : (logEntries as Fragment$LogEntry),
     ),
   );
 
@@ -1595,6 +1580,7 @@ extension ClientExtension$Subscription$LogEntries on graphql.GraphQLClient {
   Stream<graphql.QueryResult<Subscription$LogEntries>> subscribe$LogEntries([
     Options$Subscription$LogEntries? options,
   ]) => this.subscribe(options ?? Options$Subscription$LogEntries());
+
   graphql.ObservableQuery<Subscription$LogEntries>
   watchSubscription$LogEntries([
     WatchOptions$Subscription$LogEntries? options,

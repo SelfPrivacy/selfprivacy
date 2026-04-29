@@ -10,10 +10,9 @@ class UserFormCubit extends FormCubit {
     required final FieldCubitFactory fieldFactory,
     required this.initialUser,
   }) : userCreated = initialUser != null {
-    login =
-        initialUser == null
-            ? fieldFactory.createUserLoginField()
-            : fieldFactory.createRequiredStringField();
+    login = initialUser == null
+        ? fieldFactory.createUserLoginField()
+        : fieldFactory.createRequiredStringField();
     login.setValue(initialUser?.login ?? '');
 
     displayName = fieldFactory.createUserDisplayNameField();
@@ -30,8 +29,9 @@ class UserFormCubit extends FormCubit {
     final User user = User(
       login: initialUser?.login ?? login.state.value,
       type: UserType.normal,
-      displayName:
-          displayName.state.value == '' ? null : displayName.state.value,
+      displayName: displayName.state.value == ''
+          ? null
+          : displayName.state.value,
       directmemberof: groups.state.value,
     );
     if (!userCreated) {

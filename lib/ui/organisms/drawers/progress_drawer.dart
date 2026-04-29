@@ -79,12 +79,11 @@ class _StepIndicator extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => ListTile(
     selected: isCurrent,
-    leading:
-        isCurrent
-            ? const _StepCurrentIcon()
-            : isCompleted
-            ? const _StepCompletedIcon()
-            : const _StepPendingIcon(),
+    leading: isCurrent
+        ? const _StepCurrentIcon()
+        : isCompleted
+        ? const _StepCompletedIcon()
+        : const _StepPendingIcon(),
     title: Text(title),
     textColor: Theme.of(context).colorScheme.onSurfaceVariant,
     iconColor: Theme.of(context).colorScheme.onSurfaceVariant,

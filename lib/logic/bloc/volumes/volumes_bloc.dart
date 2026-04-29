@@ -104,8 +104,8 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     late final GenericResult<List<ServerProviderVolume>>? volumesResult;
 
     if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
-      volumesResult =
-          await ProvidersController.currentServerProvider?.getVolumes();
+      volumesResult = await ProvidersController.currentServerProvider
+          ?.getVolumes();
     } else {
       volumesResult = null;
     }

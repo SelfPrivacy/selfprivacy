@@ -25,20 +25,18 @@ class ServerStorageListItem extends StatelessWidget {
       },
     ),
     dense: dense,
-    color:
-        volume.root
-            ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.secondary,
+    color: volume.root
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.secondary,
     backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
     percentage: volume.percentage,
-    icon:
-        showIcon
-            ? Icon(
-              Icons.storage_outlined,
-              size: 24,
-              color: Theme.of(context).colorScheme.onSurface,
-            )
-            : null,
+    icon: showIcon
+        ? Icon(
+            Icons.storage_outlined,
+            size: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+          )
+        : null,
   );
 }
 
@@ -66,15 +64,13 @@ class ConsumptionListItem extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final TextStyle? titleStyle =
-        dense
-            ? Theme.of(context).textTheme.titleMedium
-            : Theme.of(context).textTheme.titleLarge;
+    final TextStyle? titleStyle = dense
+        ? Theme.of(context).textTheme.titleMedium
+        : Theme.of(context).textTheme.titleLarge;
 
-    final TextStyle? subtitleStyle =
-        dense
-            ? Theme.of(context).textTheme.bodySmall
-            : Theme.of(context).textTheme.bodyMedium;
+    final TextStyle? subtitleStyle = dense
+        ? Theme.of(context).textTheme.bodySmall
+        : Theme.of(context).textTheme.bodyMedium;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,10 +82,9 @@ class ConsumptionListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment:
-                    rightSideText != null
-                        ? MainAxisAlignment.spaceBetween
-                        : MainAxisAlignment.start,
+                mainAxisAlignment: rightSideText != null
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.start,
                 children: [
                   Text(title, style: titleStyle, textAlign: TextAlign.start),
                   if (rightSideText != null)

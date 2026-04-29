@@ -56,8 +56,9 @@ class AddBackupsTokenPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               CubitFormTextField(
-                formFieldCubit:
-                    context.read<BackblazeFormCubit>().applicationKey,
+                formFieldCubit: context
+                    .read<BackblazeFormCubit>()
+                    .applicationKey,
                 scrollPadding: const EdgeInsets.only(bottom: 70),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -66,10 +67,9 @@ class AddBackupsTokenPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               BrandButton.filled(
-                onPressed:
-                    formCubitState.isSubmitting
-                        ? null
-                        : () => context.read<BackblazeFormCubit>().trySubmit(),
+                onPressed: formCubitState.isSubmitting
+                    ? null
+                    : () => context.read<BackblazeFormCubit>().trySubmit(),
                 title: 'basis.connect'.tr(),
               ),
               const SizedBox(height: 16),

@@ -14,10 +14,9 @@ class SupportLevelChip extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final baseTextTheme =
-        dense
-            ? Theme.of(context).textTheme.labelSmall
-            : Theme.of(context).textTheme.labelLarge;
+    final baseTextTheme = dense
+        ? Theme.of(context).textTheme.labelSmall
+        : Theme.of(context).textTheme.labelLarge;
     switch (supportLevel) {
       case SupportLevel.normal:
         return ActionChip(
@@ -29,13 +28,12 @@ class SupportLevelChip extends StatelessWidget {
           onPressed: () async {
             await showDialog(
               context: context,
-              builder:
-                  (final BuildContext context) => _SupportLevelDialog(
-                    icon: Icons.check_circle_outline_outlined,
-                    title: 'service_page.support_levels.normal'.tr(),
-                    description:
-                        'service_page.support_levels.normal_description'.tr(),
-                  ),
+              builder: (final BuildContext context) => _SupportLevelDialog(
+                icon: Icons.check_circle_outline_outlined,
+                title: 'service_page.support_levels.normal'.tr(),
+                description: 'service_page.support_levels.normal_description'
+                    .tr(),
+              ),
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
@@ -57,14 +55,12 @@ class SupportLevelChip extends StatelessWidget {
           onPressed: () async {
             await showDialog(
               context: context,
-              builder:
-                  (final BuildContext context) => _SupportLevelDialog(
-                    icon: Icons.science_outlined,
-                    title: 'service_page.support_levels.experimental'.tr(),
-                    description:
-                        'service_page.support_levels.experimental_description'
-                            .tr(),
-                  ),
+              builder: (final BuildContext context) => _SupportLevelDialog(
+                icon: Icons.science_outlined,
+                title: 'service_page.support_levels.experimental'.tr(),
+                description:
+                    'service_page.support_levels.experimental_description'.tr(),
+              ),
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
@@ -86,14 +82,12 @@ class SupportLevelChip extends StatelessWidget {
           onPressed: () async {
             await showDialog(
               context: context,
-              builder:
-                  (final BuildContext context) => _SupportLevelDialog(
-                    icon: Icons.wb_twilight_outlined,
-                    title: 'service_page.support_levels.deprecated'.tr(),
-                    description:
-                        'service_page.support_levels.deprecated_description'
-                            .tr(),
-                  ),
+              builder: (final BuildContext context) => _SupportLevelDialog(
+                icon: Icons.wb_twilight_outlined,
+                title: 'service_page.support_levels.deprecated'.tr(),
+                description:
+                    'service_page.support_levels.deprecated_description'.tr(),
+              ),
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
@@ -115,14 +109,12 @@ class SupportLevelChip extends StatelessWidget {
           onPressed: () async {
             await showDialog(
               context: context,
-              builder:
-                  (final BuildContext context) => _SupportLevelDialog(
-                    icon: Icons.people_alt_outlined,
-                    title: 'service_page.support_levels.community'.tr(),
-                    description:
-                        'service_page.support_levels.community_description'
-                            .tr(),
-                  ),
+              builder: (final BuildContext context) => _SupportLevelDialog(
+                icon: Icons.people_alt_outlined,
+                title: 'service_page.support_levels.community'.tr(),
+                description: 'service_page.support_levels.community_description'
+                    .tr(),
+              ),
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
@@ -144,13 +136,12 @@ class SupportLevelChip extends StatelessWidget {
           onPressed: () async {
             await showDialog(
               context: context,
-              builder:
-                  (final BuildContext context) => _SupportLevelDialog(
-                    icon: Icons.question_mark_outlined,
-                    title: 'service_page.support_levels.unknown'.tr(),
-                    description:
-                        'service_page.support_levels.unknown_description'.tr(),
-                  ),
+              builder: (final BuildContext context) => _SupportLevelDialog(
+                icon: Icons.question_mark_outlined,
+                title: 'service_page.support_levels.unknown'.tr(),
+                description: 'service_page.support_levels.unknown_description'
+                    .tr(),
+              ),
             );
           },
           visualDensity: dense ? VisualDensity.compact : null,
@@ -167,10 +158,9 @@ class SystemServiceChip extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final baseTextTheme =
-        dense
-            ? Theme.of(context).textTheme.labelSmall
-            : Theme.of(context).textTheme.labelLarge;
+    final baseTextTheme = dense
+        ? Theme.of(context).textTheme.labelSmall
+        : Theme.of(context).textTheme.labelLarge;
 
     return ActionChip(
       avatar: const Icon(Icons.miscellaneous_services_outlined),
@@ -181,13 +171,11 @@ class SystemServiceChip extends StatelessWidget {
       onPressed: () async {
         await showDialog(
           context: context,
-          builder:
-              (final BuildContext context) => _SupportLevelDialog(
-                icon: Icons.miscellaneous_services_outlined,
-                title: 'service_page.support_levels.system'.tr(),
-                description:
-                    'service_page.support_levels.system_description'.tr(),
-              ),
+          builder: (final BuildContext context) => _SupportLevelDialog(
+            icon: Icons.miscellaneous_services_outlined,
+            title: 'service_page.support_levels.system'.tr(),
+            description: 'service_page.support_levels.system_description'.tr(),
+          ),
         );
       },
       visualDensity: dense ? VisualDensity.compact : null,

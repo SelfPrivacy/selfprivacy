@@ -67,9 +67,8 @@ class DesecApi extends RestApiMap {
         '',
         options: Options(
           followRedirects: false,
-          validateStatus:
-              (final status) =>
-                  status != null && (status >= 200 || status == 401),
+          validateStatus: (final status) =>
+              status != null && (status >= 200 || status == 401),
           headers: {'Authorization': 'Token $token'},
         ),
       );

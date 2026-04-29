@@ -180,34 +180,28 @@ class _CopyWithImpl$Fragment$BoolConfigItem<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$BoolConfigItem(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      boolValue:
-          boolValue == _undefined || boolValue == null
-              ? _instance.boolValue
-              : (boolValue as bool),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      boolValue: boolValue == _undefined || boolValue == null
+          ? _instance.boolValue
+          : (boolValue as bool),
       defaultBoolValue:
           defaultBoolValue == _undefined || defaultBoolValue == null
-              ? _instance.defaultBoolValue
-              : (defaultBoolValue as bool),
-      widget:
-          widget == _undefined || widget == null
-              ? _instance.widget
-              : (widget as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.defaultBoolValue
+          : (defaultBoolValue as bool),
+      widget: widget == _undefined || widget == null
+          ? _instance.widget
+          : (widget as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -312,6 +306,7 @@ extension ClientExtension$Fragment$BoolConfigItem on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Fragment$BoolConfigItem? readFragment$BoolConfigItem({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -528,38 +523,31 @@ class _CopyWithImpl$Fragment$EnumConfigItem<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$EnumConfigItem(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      stringValue:
-          stringValue == _undefined || stringValue == null
-              ? _instance.stringValue
-              : (stringValue as String),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      stringValue: stringValue == _undefined || stringValue == null
+          ? _instance.stringValue
+          : (stringValue as String),
       defaultStringValue:
           defaultStringValue == _undefined || defaultStringValue == null
-              ? _instance.defaultStringValue
-              : (defaultStringValue as String),
-      options:
-          options == _undefined || options == null
-              ? _instance.options
-              : (options as List<String>),
-      widget:
-          widget == _undefined || widget == null
-              ? _instance.widget
-              : (widget as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.defaultStringValue
+          : (defaultStringValue as String),
+      options: options == _undefined || options == null
+          ? _instance.options
+          : (options as List<String>),
+      widget: widget == _undefined || widget == null
+          ? _instance.widget
+          : (widget as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -672,6 +660,7 @@ extension ClientExtension$Fragment$EnumConfigItem on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Fragment$EnumConfigItem? readFragment$EnumConfigItem({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -883,35 +872,29 @@ class _CopyWithImpl$Fragment$StringConfigItem<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Fragment$StringConfigItem(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      stringValue:
-          stringValue == _undefined || stringValue == null
-              ? _instance.stringValue
-              : (stringValue as String),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      stringValue: stringValue == _undefined || stringValue == null
+          ? _instance.stringValue
+          : (stringValue as String),
       defaultStringValue:
           defaultStringValue == _undefined || defaultStringValue == null
-              ? _instance.defaultStringValue
-              : (defaultStringValue as String),
+          ? _instance.defaultStringValue
+          : (defaultStringValue as String),
       regex: regex == _undefined ? _instance.regex : (regex as String?),
-      widget:
-          widget == _undefined || widget == null
-              ? _instance.widget
-              : (widget as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      widget: widget == _undefined || widget == null
+          ? _instance.widget
+          : (widget as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -1024,6 +1007,7 @@ extension ClientExtension$Fragment$StringConfigItem on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Fragment$StringConfigItem? readFragment$StringConfigItem({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
@@ -1131,14 +1115,12 @@ class _CopyWithImpl$Query$AllServices<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Query$AllServices$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Query$AllServices$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1539,13 +1521,12 @@ class Options$Query$AllServices
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null ? null : _parserFn$Query$AllServices(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$AllServices(data),
+               ),
          onError: onError,
          document: documentNodeQueryAllServices,
          parserFn: _parserFn$Query$AllServices,
@@ -1601,9 +1582,11 @@ extension ClientExtension$Query$AllServices on graphql.GraphQLClient {
   Future<graphql.QueryResult<Query$AllServices>> query$AllServices([
     Options$Query$AllServices? options,
   ]) async => await this.query(options ?? Options$Query$AllServices());
+
   graphql.ObservableQuery<Query$AllServices> watchQuery$AllServices([
     WatchOptions$Query$AllServices? options,
   ]) => this.watchQuery(options ?? WatchOptions$Query$AllServices());
+
   void writeQuery$AllServices({
     required Query$AllServices data,
     bool broadcast = true,
@@ -1614,6 +1597,7 @@ extension ClientExtension$Query$AllServices on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$AllServices? readQuery$AllServices({bool optimistic = true}) {
     final result = this.readQuery(
       graphql.Request(
@@ -1635,14 +1619,13 @@ class Query$AllServices$services {
     final l$allServices = json['allServices'];
     final l$$__typename = json['__typename'];
     return Query$AllServices$services(
-      allServices:
-          (l$allServices as List<dynamic>)
-              .map(
-                (e) => Query$AllServices$services$allServices.fromJson(
-                  (e as Map<String, dynamic>),
-                ),
-              )
-              .toList(),
+      allServices: (l$allServices as List<dynamic>)
+          .map(
+            (e) => Query$AllServices$services$allServices.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1746,14 +1729,12 @@ class _CopyWithImpl$Query$AllServices$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services(
-      allServices:
-          allServices == _undefined || allServices == null
-              ? _instance.allServices
-              : (allServices as List<Query$AllServices$services$allServices>),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      allServices: allServices == _undefined || allServices == null
+          ? _instance.allServices
+          : (allServices as List<Query$AllServices$services$allServices>),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -1767,12 +1748,11 @@ class _CopyWithImpl$Query$AllServices$services<TRes>
     )
     _fn,
   ) => call(
-    allServices:
-        _fn(
-          _instance.allServices.map(
-            (e) => CopyWith$Query$AllServices$services$allServices(e, (i) => i),
-          ),
-        ).toList(),
+    allServices: _fn(
+      _instance.allServices.map(
+        (e) => CopyWith$Query$AllServices$services$allServices(e, (i) => i),
+      ),
+    ).toList(),
   );
 }
 
@@ -1842,14 +1822,13 @@ class Query$AllServices$services$allServices {
     return Query$AllServices$services$allServices(
       description: (l$description as String),
       displayName: (l$displayName as String),
-      dnsRecords:
-          (l$dnsRecords as List<dynamic>?)
-              ?.map(
-                (e) => Fragment$fragmentDnsRecords.fromJson(
-                  (e as Map<String, dynamic>),
-                ),
-              )
-              .toList(),
+      dnsRecords: (l$dnsRecords as List<dynamic>?)
+          ?.map(
+            (e) => Fragment$fragmentDnsRecords.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       id: (l$id as String),
       isEnabled: (l$isEnabled as bool),
       isInstalled: (l$isInstalled as bool),
@@ -1867,24 +1846,22 @@ class Query$AllServices$services$allServices {
       url: (l$url as String?),
       homepage: (l$homepage as String?),
       sourcePage: (l$sourcePage as String?),
-      license:
-          (l$license as List<dynamic>)
-              .map(
-                (e) => Query$AllServices$services$allServices$license.fromJson(
+      license: (l$license as List<dynamic>)
+          .map(
+            (e) => Query$AllServices$services$allServices$license.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
+      supportLevel: fromJson$Enum$SupportLevelEnum((l$supportLevel as String)),
+      configuration: (l$configuration as List<dynamic>?)
+          ?.map(
+            (e) =>
+                Query$AllServices$services$allServices$configuration.fromJson(
                   (e as Map<String, dynamic>),
                 ),
-              )
-              .toList(),
-      supportLevel: fromJson$Enum$SupportLevelEnum((l$supportLevel as String)),
-      configuration:
-          (l$configuration as List<dynamic>?)
-              ?.map(
-                (e) =>
-                    Query$AllServices$services$allServices$configuration.fromJson(
-                      (e as Map<String, dynamic>),
-                    ),
-              )
-              .toList(),
+          )
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -1973,8 +1950,9 @@ class Query$AllServices$services$allServices {
     final l$supportLevel = supportLevel;
     _resultData['supportLevel'] = toJson$Enum$SupportLevelEnum(l$supportLevel);
     final l$configuration = configuration;
-    _resultData['configuration'] =
-        l$configuration?.map((e) => e.toJson()).toList();
+    _resultData['configuration'] = l$configuration
+        ?.map((e) => e.toJson())
+        .toList();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -2287,87 +2265,68 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices(
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      displayName:
-          displayName == _undefined || displayName == null
-              ? _instance.displayName
-              : (displayName as String),
-      dnsRecords:
-          dnsRecords == _undefined
-              ? _instance.dnsRecords
-              : (dnsRecords as List<Fragment$fragmentDnsRecords>?),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      displayName: displayName == _undefined || displayName == null
+          ? _instance.displayName
+          : (displayName as String),
+      dnsRecords: dnsRecords == _undefined
+          ? _instance.dnsRecords
+          : (dnsRecords as List<Fragment$fragmentDnsRecords>?),
       id: id == _undefined || id == null ? _instance.id : (id as String),
-      isEnabled:
-          isEnabled == _undefined || isEnabled == null
-              ? _instance.isEnabled
-              : (isEnabled as bool),
-      isInstalled:
-          isInstalled == _undefined || isInstalled == null
-              ? _instance.isInstalled
-              : (isInstalled as bool),
-      isMovable:
-          isMovable == _undefined || isMovable == null
-              ? _instance.isMovable
-              : (isMovable as bool),
-      isRequired:
-          isRequired == _undefined || isRequired == null
-              ? _instance.isRequired
-              : (isRequired as bool),
-      isSystemService:
-          isSystemService == _undefined || isSystemService == null
-              ? _instance.isSystemService
-              : (isSystemService as bool),
-      canBeBackedUp:
-          canBeBackedUp == _undefined || canBeBackedUp == null
-              ? _instance.canBeBackedUp
-              : (canBeBackedUp as bool),
+      isEnabled: isEnabled == _undefined || isEnabled == null
+          ? _instance.isEnabled
+          : (isEnabled as bool),
+      isInstalled: isInstalled == _undefined || isInstalled == null
+          ? _instance.isInstalled
+          : (isInstalled as bool),
+      isMovable: isMovable == _undefined || isMovable == null
+          ? _instance.isMovable
+          : (isMovable as bool),
+      isRequired: isRequired == _undefined || isRequired == null
+          ? _instance.isRequired
+          : (isRequired as bool),
+      isSystemService: isSystemService == _undefined || isSystemService == null
+          ? _instance.isSystemService
+          : (isSystemService as bool),
+      canBeBackedUp: canBeBackedUp == _undefined || canBeBackedUp == null
+          ? _instance.canBeBackedUp
+          : (canBeBackedUp as bool),
       backupDescription:
           backupDescription == _undefined || backupDescription == null
-              ? _instance.backupDescription
-              : (backupDescription as String),
-      status:
-          status == _undefined || status == null
-              ? _instance.status
-              : (status as Enum$ServiceStatusEnum),
-      storageUsage:
-          storageUsage == _undefined || storageUsage == null
-              ? _instance.storageUsage
-              : (storageUsage
-                  as Query$AllServices$services$allServices$storageUsage),
-      svgIcon:
-          svgIcon == _undefined || svgIcon == null
-              ? _instance.svgIcon
-              : (svgIcon as String),
+          ? _instance.backupDescription
+          : (backupDescription as String),
+      status: status == _undefined || status == null
+          ? _instance.status
+          : (status as Enum$ServiceStatusEnum),
+      storageUsage: storageUsage == _undefined || storageUsage == null
+          ? _instance.storageUsage
+          : (storageUsage
+                as Query$AllServices$services$allServices$storageUsage),
+      svgIcon: svgIcon == _undefined || svgIcon == null
+          ? _instance.svgIcon
+          : (svgIcon as String),
       url: url == _undefined ? _instance.url : (url as String?),
-      homepage:
-          homepage == _undefined ? _instance.homepage : (homepage as String?),
-      sourcePage:
-          sourcePage == _undefined
-              ? _instance.sourcePage
-              : (sourcePage as String?),
-      license:
-          license == _undefined || license == null
-              ? _instance.license
-              : (license
-                  as List<Query$AllServices$services$allServices$license>),
-      supportLevel:
-          supportLevel == _undefined || supportLevel == null
-              ? _instance.supportLevel
-              : (supportLevel as Enum$SupportLevelEnum),
-      configuration:
-          configuration == _undefined
-              ? _instance.configuration
-              : (configuration
-                  as List<
-                    Query$AllServices$services$allServices$configuration
-                  >?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      homepage: homepage == _undefined
+          ? _instance.homepage
+          : (homepage as String?),
+      sourcePage: sourcePage == _undefined
+          ? _instance.sourcePage
+          : (sourcePage as String?),
+      license: license == _undefined || license == null
+          ? _instance.license
+          : (license as List<Query$AllServices$services$allServices$license>),
+      supportLevel: supportLevel == _undefined || supportLevel == null
+          ? _instance.supportLevel
+          : (supportLevel as Enum$SupportLevelEnum),
+      configuration: configuration == _undefined
+          ? _instance.configuration
+          : (configuration
+                as List<Query$AllServices$services$allServices$configuration>?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2379,12 +2338,11 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     )
     _fn,
   ) => call(
-    dnsRecords:
-        _fn(
-          _instance.dnsRecords?.map(
-            (e) => CopyWith$Fragment$fragmentDnsRecords(e, (i) => i),
-          ),
-        )?.toList(),
+    dnsRecords: _fn(
+      _instance.dnsRecords?.map(
+        (e) => CopyWith$Fragment$fragmentDnsRecords(e, (i) => i),
+      ),
+    )?.toList(),
   );
 
   CopyWith$Query$AllServices$services$allServices$storageUsage<TRes>
@@ -2406,15 +2364,14 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     )
     _fn,
   ) => call(
-    license:
-        _fn(
-          _instance.license.map(
-            (e) => CopyWith$Query$AllServices$services$allServices$license(
-              e,
-              (i) => i,
-            ),
-          ),
-        ).toList(),
+    license: _fn(
+      _instance.license.map(
+        (e) => CopyWith$Query$AllServices$services$allServices$license(
+          e,
+          (i) => i,
+        ),
+      ),
+    ).toList(),
   );
 
   TRes configuration(
@@ -2427,16 +2384,14 @@ class _CopyWithImpl$Query$AllServices$services$allServices<TRes>
     )
     _fn,
   ) => call(
-    configuration:
-        _fn(
-          _instance.configuration?.map(
-            (e) =>
-                CopyWith$Query$AllServices$services$allServices$configuration(
-                  e,
-                  (i) => i,
-                ),
-          ),
-        )?.toList(),
+    configuration: _fn(
+      _instance.configuration?.map(
+        (e) => CopyWith$Query$AllServices$services$allServices$configuration(
+          e,
+          (i) => i,
+        ),
+      ),
+    )?.toList(),
   );
 }
 
@@ -2499,12 +2454,11 @@ class Query$AllServices$services$allServices$storageUsage {
     return Query$AllServices$services$allServices$storageUsage(
       title: (l$title as String),
       usedSpace: (l$usedSpace as String),
-      volume:
-          l$volume == null
-              ? null
-              : Query$AllServices$services$allServices$storageUsage$volume.fromJson(
-                (l$volume as Map<String, dynamic>),
-              ),
+      volume: l$volume == null
+          ? null
+          : Query$AllServices$services$allServices$storageUsage$volume.fromJson(
+              (l$volume as Map<String, dynamic>),
+            ),
       $__typename: (l$$__typename as String),
     );
   }
@@ -2627,23 +2581,19 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices$storageUsage(
-      title:
-          title == _undefined || title == null
-              ? _instance.title
-              : (title as String),
-      usedSpace:
-          usedSpace == _undefined || usedSpace == null
-              ? _instance.usedSpace
-              : (usedSpace as String),
-      volume:
-          volume == _undefined
-              ? _instance.volume
-              : (volume
-                  as Query$AllServices$services$allServices$storageUsage$volume?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      title: title == _undefined || title == null
+          ? _instance.title
+          : (title as String),
+      usedSpace: usedSpace == _undefined || usedSpace == null
+          ? _instance.usedSpace
+          : (usedSpace as String),
+      volume: volume == _undefined
+          ? _instance.volume
+          : (volume
+                as Query$AllServices$services$allServices$storageUsage$volume?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2652,12 +2602,12 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage<TRes>
     final local$volume = _instance.volume;
     return local$volume == null
         ? CopyWith$Query$AllServices$services$allServices$storageUsage$volume.stub(
-          _then(_instance),
-        )
+            _then(_instance),
+          )
         : CopyWith$Query$AllServices$services$allServices$storageUsage$volume(
-          local$volume,
-          (e) => call(volume: e),
-        );
+            local$volume,
+            (e) => call(volume: e),
+          );
   }
 }
 
@@ -2798,14 +2748,12 @@ class _CopyWithImpl$Query$AllServices$services$allServices$storageUsage$volume<
   TRes call({Object? name = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$AllServices$services$allServices$storageUsage$volume(
-          name:
-              name == _undefined || name == null
-                  ? _instance.name
-                  : (name as String),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          name: name == _undefined || name == null
+              ? _instance.name
+              : (name as String),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 }
@@ -2996,25 +2944,22 @@ class _CopyWithImpl$Query$AllServices$services$allServices$license<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices$license(
-      free:
-          free == _undefined || free == null ? _instance.free : (free as bool),
-      fullName:
-          fullName == _undefined || fullName == null
-              ? _instance.fullName
-              : (fullName as String),
-      redistributable:
-          redistributable == _undefined || redistributable == null
-              ? _instance.redistributable
-              : (redistributable as bool),
-      shortName:
-          shortName == _undefined || shortName == null
-              ? _instance.shortName
-              : (shortName as String),
+      free: free == _undefined || free == null
+          ? _instance.free
+          : (free as bool),
+      fullName: fullName == _undefined || fullName == null
+          ? _instance.fullName
+          : (fullName as String),
+      redistributable: redistributable == _undefined || redistributable == null
+          ? _instance.redistributable
+          : (redistributable as bool),
+      shortName: shortName == _undefined || shortName == null
+          ? _instance.shortName
+          : (shortName as String),
       url: url == _undefined ? _instance.url : (url as String?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3148,6 +3093,7 @@ extension UtilityExtension$Query$AllServices$services$allServices$configuration
     this,
     (i) => i,
   );
+
   _T when<_T>({
     required _T Function(
       Query$AllServices$services$allServices$configuration$$BoolConfigItem,
@@ -3281,22 +3227,18 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices$configuration(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3479,13 +3421,11 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$Bo
       Query$AllServices$services$allServices$configuration$$BoolConfigItem,
     )
     then,
-  ) =
-      _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration$$BoolConfigItem.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$BoolConfigItem;
 
   TRes call({
     String? fieldId,
@@ -3530,34 +3470,28 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$BoolCo
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices$configuration$$BoolConfigItem(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      boolValue:
-          boolValue == _undefined || boolValue == null
-              ? _instance.boolValue
-              : (boolValue as bool),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      boolValue: boolValue == _undefined || boolValue == null
+          ? _instance.boolValue
+          : (boolValue as bool),
       defaultBoolValue:
           defaultBoolValue == _undefined || defaultBoolValue == null
-              ? _instance.defaultBoolValue
-              : (defaultBoolValue as bool),
-      widget:
-          widget == _undefined || widget == null
-              ? _instance.widget
-              : (widget as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.defaultBoolValue
+          : (defaultBoolValue as bool),
+      widget: widget == _undefined || widget == null
+          ? _instance.widget
+          : (widget as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3766,13 +3700,11 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$En
       Query$AllServices$services$allServices$configuration$$EnumConfigItem,
     )
     then,
-  ) =
-      _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration$$EnumConfigItem.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$EnumConfigItem;
 
   TRes call({
     String? fieldId,
@@ -3819,38 +3751,31 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$EnumCo
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices$configuration$$EnumConfigItem(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      stringValue:
-          stringValue == _undefined || stringValue == null
-              ? _instance.stringValue
-              : (stringValue as String),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      stringValue: stringValue == _undefined || stringValue == null
+          ? _instance.stringValue
+          : (stringValue as String),
       defaultStringValue:
           defaultStringValue == _undefined || defaultStringValue == null
-              ? _instance.defaultStringValue
-              : (defaultStringValue as String),
-      options:
-          options == _undefined || options == null
-              ? _instance.options
-              : (options as List<String>),
-      widget:
-          widget == _undefined || widget == null
-              ? _instance.widget
-              : (widget as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+          ? _instance.defaultStringValue
+          : (defaultStringValue as String),
+      options: options == _undefined || options == null
+          ? _instance.options
+          : (options as List<String>),
+      widget: widget == _undefined || widget == null
+          ? _instance.widget
+          : (widget as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -4053,13 +3978,11 @@ abstract class CopyWith$Query$AllServices$services$allServices$configuration$$St
       Query$AllServices$services$allServices$configuration$$StringConfigItem,
     )
     then,
-  ) =
-      _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
+  ) = _CopyWithImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
 
   factory CopyWith$Query$AllServices$services$allServices$configuration$$StringConfigItem.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
+  ) = _CopyWithStubImpl$Query$AllServices$services$allServices$configuration$$StringConfigItem;
 
   TRes call({
     String? fieldId,
@@ -4106,35 +4029,29 @@ class _CopyWithImpl$Query$AllServices$services$allServices$configuration$$String
     Object? $__typename = _undefined,
   }) => _then(
     Query$AllServices$services$allServices$configuration$$StringConfigItem(
-      fieldId:
-          fieldId == _undefined || fieldId == null
-              ? _instance.fieldId
-              : (fieldId as String),
-      description:
-          description == _undefined || description == null
-              ? _instance.description
-              : (description as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      stringValue:
-          stringValue == _undefined || stringValue == null
-              ? _instance.stringValue
-              : (stringValue as String),
+      fieldId: fieldId == _undefined || fieldId == null
+          ? _instance.fieldId
+          : (fieldId as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      stringValue: stringValue == _undefined || stringValue == null
+          ? _instance.stringValue
+          : (stringValue as String),
       defaultStringValue:
           defaultStringValue == _undefined || defaultStringValue == null
-              ? _instance.defaultStringValue
-              : (defaultStringValue as String),
+          ? _instance.defaultStringValue
+          : (defaultStringValue as String),
       regex: regex == _undefined ? _instance.regex : (regex as String?),
-      widget:
-          widget == _undefined || widget == null
-              ? _instance.widget
-              : (widget as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      widget: widget == _undefined || widget == null
+          ? _instance.widget
+          : (widget as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -4347,14 +4264,12 @@ class _CopyWithImpl$Mutation$EnableService<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$EnableService(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$EnableService$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$EnableService$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -4481,13 +4396,12 @@ class Options$Mutation$EnableService
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$EnableService(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$EnableService(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationEnableService,
@@ -4541,6 +4455,7 @@ extension ClientExtension$Mutation$EnableService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$EnableService>> mutate$EnableService(
     Options$Mutation$EnableService options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$EnableService> watchMutation$EnableService(
     WatchOptions$Mutation$EnableService options,
   ) => this.watchMutation(options);
@@ -4644,15 +4559,12 @@ class _CopyWithImpl$Mutation$EnableService$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$EnableService$services(
-      enableService:
-          enableService == _undefined || enableService == null
-              ? _instance.enableService
-              : (enableService
-                  as Mutation$EnableService$services$enableService),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      enableService: enableService == _undefined || enableService == null
+          ? _instance.enableService
+          : (enableService as Mutation$EnableService$services$enableService),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -4812,18 +4724,15 @@ class _CopyWithImpl$Mutation$EnableService$services$enableService<TRes>
   }) => _then(
     Mutation$EnableService$services$enableService(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -5023,14 +4932,12 @@ class _CopyWithImpl$Mutation$DisableService<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$DisableService(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$DisableService$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$DisableService$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5157,15 +5064,12 @@ class Options$Mutation$DisableService
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$DisableService(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$DisableService(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationDisableService,
@@ -5219,6 +5123,7 @@ extension ClientExtension$Mutation$DisableService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$DisableService>> mutate$DisableService(
     Options$Mutation$DisableService options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$DisableService> watchMutation$DisableService(
     WatchOptions$Mutation$DisableService options,
   ) => this.watchMutation(options);
@@ -5322,15 +5227,12 @@ class _CopyWithImpl$Mutation$DisableService$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$DisableService$services(
-      disableService:
-          disableService == _undefined || disableService == null
-              ? _instance.disableService
-              : (disableService
-                  as Mutation$DisableService$services$disableService),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      disableService: disableService == _undefined || disableService == null
+          ? _instance.disableService
+          : (disableService as Mutation$DisableService$services$disableService),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5490,18 +5392,15 @@ class _CopyWithImpl$Mutation$DisableService$services$disableService<TRes>
   }) => _then(
     Mutation$DisableService$services$disableService(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -5696,14 +5595,12 @@ class _CopyWithImpl$Mutation$StopService<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$StopService(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$StopService$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$StopService$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -5829,13 +5726,12 @@ class Options$Mutation$StopService
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$StopService(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$StopService(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationStopService,
@@ -5889,6 +5785,7 @@ extension ClientExtension$Mutation$StopService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$StopService>> mutate$StopService(
     Options$Mutation$StopService options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$StopService> watchMutation$StopService(
     WatchOptions$Mutation$StopService options,
   ) => this.watchMutation(options);
@@ -5991,14 +5888,12 @@ class _CopyWithImpl$Mutation$StopService$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$StopService$services(
-      stopService:
-          stopService == _undefined || stopService == null
-              ? _instance.stopService
-              : (stopService as Mutation$StopService$services$stopService),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      stopService: stopService == _undefined || stopService == null
+          ? _instance.stopService
+          : (stopService as Mutation$StopService$services$stopService),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -6155,18 +6050,15 @@ class _CopyWithImpl$Mutation$StopService$services$stopService<TRes>
   }) => _then(
     Mutation$StopService$services$stopService(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -6364,14 +6256,12 @@ class _CopyWithImpl$Mutation$StartService<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$StartService(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$StartService$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$StartService$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -6497,13 +6387,12 @@ class Options$Mutation$StartService
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$StartService(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$StartService(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationStartService,
@@ -6557,6 +6446,7 @@ extension ClientExtension$Mutation$StartService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$StartService>> mutate$StartService(
     Options$Mutation$StartService options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$StartService> watchMutation$StartService(
     WatchOptions$Mutation$StartService options,
   ) => this.watchMutation(options);
@@ -6659,14 +6549,12 @@ class _CopyWithImpl$Mutation$StartService$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$StartService$services(
-      startService:
-          startService == _undefined || startService == null
-              ? _instance.startService
-              : (startService as Mutation$StartService$services$startService),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      startService: startService == _undefined || startService == null
+          ? _instance.startService
+          : (startService as Mutation$StartService$services$startService),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -6823,18 +6711,15 @@ class _CopyWithImpl$Mutation$StartService$services$startService<TRes>
   }) => _then(
     Mutation$StartService$services$startService(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -7034,14 +6919,12 @@ class _CopyWithImpl$Mutation$RestartService<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$RestartService(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$RestartService$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$RestartService$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -7168,15 +7051,12 @@ class Options$Mutation$RestartService
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$RestartService(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$RestartService(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationRestartService,
@@ -7230,6 +7110,7 @@ extension ClientExtension$Mutation$RestartService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$RestartService>> mutate$RestartService(
     Options$Mutation$RestartService options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$RestartService> watchMutation$RestartService(
     WatchOptions$Mutation$RestartService options,
   ) => this.watchMutation(options);
@@ -7333,15 +7214,12 @@ class _CopyWithImpl$Mutation$RestartService$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$RestartService$services(
-      restartService:
-          restartService == _undefined || restartService == null
-              ? _instance.restartService
-              : (restartService
-                  as Mutation$RestartService$services$restartService),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      restartService: restartService == _undefined || restartService == null
+          ? _instance.restartService
+          : (restartService as Mutation$RestartService$services$restartService),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -7501,18 +7379,15 @@ class _CopyWithImpl$Mutation$RestartService$services$restartService<TRes>
   }) => _then(
     Mutation$RestartService$services$restartService(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -7711,14 +7586,12 @@ class _CopyWithImpl$Mutation$MoveService<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$MoveService(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$MoveService$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$MoveService$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -7869,13 +7742,12 @@ class Options$Mutation$MoveService
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$MoveService(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$MoveService(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationMoveService,
@@ -7929,6 +7801,7 @@ extension ClientExtension$Mutation$MoveService on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$MoveService>> mutate$MoveService(
     Options$Mutation$MoveService options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$MoveService> watchMutation$MoveService(
     WatchOptions$Mutation$MoveService options,
   ) => this.watchMutation(options);
@@ -8031,14 +7904,12 @@ class _CopyWithImpl$Mutation$MoveService$services<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$MoveService$services(
-      moveService:
-          moveService == _undefined || moveService == null
-              ? _instance.moveService
-              : (moveService as Mutation$MoveService$services$moveService),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      moveService: moveService == _undefined || moveService == null
+          ? _instance.moveService
+          : (moveService as Mutation$MoveService$services$moveService),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -8089,12 +7960,11 @@ class Mutation$MoveService$services$moveService
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      job:
-          l$job == null
-              ? null
-              : Fragment$basicApiJobsFields.fromJson(
-                (l$job as Map<String, dynamic>),
-              ),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>),
+            ),
     );
   }
 
@@ -8221,22 +8091,18 @@ class _CopyWithImpl$Mutation$MoveService$services$moveService<TRes>
   }) => _then(
     Mutation$MoveService$services$moveService(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      job:
-          job == _undefined
-              ? _instance.job
-              : (job as Fragment$basicApiJobsFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      job: job == _undefined
+          ? _instance.job
+          : (job as Fragment$basicApiJobsFields?),
     ),
   );
 
@@ -8466,14 +8332,12 @@ class _CopyWithImpl$Mutation$SetServiceConfiguration<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$SetServiceConfiguration(
-      services:
-          services == _undefined || services == null
-              ? _instance.services
-              : (services as Mutation$SetServiceConfiguration$services),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      services: services == _undefined || services == null
+          ? _instance.services
+          : (services as Mutation$SetServiceConfiguration$services),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -8608,15 +8472,14 @@ class Options$Mutation$SetServiceConfiguration
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$SetServiceConfiguration(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$SetServiceConfiguration(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationSetServiceConfiguration,
@@ -8673,6 +8536,7 @@ extension ClientExtension$Mutation$SetServiceConfiguration
   mutate$SetServiceConfiguration(
     Options$Mutation$SetServiceConfiguration options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$SetServiceConfiguration>
   watchMutation$SetServiceConfiguration(
     WatchOptions$Mutation$SetServiceConfiguration options,
@@ -8792,14 +8656,13 @@ class _CopyWithImpl$Mutation$SetServiceConfiguration$services<TRes>
     Mutation$SetServiceConfiguration$services(
       setServiceConfiguration:
           setServiceConfiguration == _undefined ||
-                  setServiceConfiguration == null
-              ? _instance.setServiceConfiguration
-              : (setServiceConfiguration
-                  as Mutation$SetServiceConfiguration$services$setServiceConfiguration),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+              setServiceConfiguration == null
+          ? _instance.setServiceConfiguration
+          : (setServiceConfiguration
+                as Mutation$SetServiceConfiguration$services$setServiceConfiguration),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -8945,13 +8808,11 @@ abstract class CopyWith$Mutation$SetServiceConfiguration$services$setServiceConf
       Mutation$SetServiceConfiguration$services$setServiceConfiguration,
     )
     then,
-  ) =
-      _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
+  ) = _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
 
   factory CopyWith$Mutation$SetServiceConfiguration$services$setServiceConfiguration.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
+  ) = _CopyWithStubImpl$Mutation$SetServiceConfiguration$services$setServiceConfiguration;
 
   TRes call({int? code, String? message, bool? success, String? $__typename});
 }
@@ -8986,18 +8847,15 @@ class _CopyWithImpl$Mutation$SetServiceConfiguration$services$setServiceConfigur
   }) => _then(
     Mutation$SetServiceConfiguration$services$setServiceConfiguration(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }

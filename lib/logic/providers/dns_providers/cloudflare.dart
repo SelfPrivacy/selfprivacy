@@ -61,10 +61,9 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    domains =
-        result.data
-            .map<ServerDomain>((final el) => el.toServerDomain())
-            .toList();
+    domains = result.data
+        .map<ServerDomain>((final el) => el.toServerDomain())
+        .toList();
 
     return GenericResult(success: true, data: domains);
   }
@@ -81,13 +80,12 @@ class CloudflareDnsProvider extends DnsProvider {
 
     return _adapter.api().createMultipleDnsRecords(
       zoneId: _adapter.cachedZoneId,
-      records:
-          records
-              .map<CloudflareDnsRecord>(
-                (final rec) =>
-                    CloudflareDnsRecord.fromDnsRecord(rec, domain.domainName),
-              )
-              .toList(),
+      records: records
+          .map<CloudflareDnsRecord>(
+            (final rec) =>
+                CloudflareDnsRecord.fromDnsRecord(rec, domain.domainName),
+          )
+          .toList(),
     );
   }
 
@@ -113,25 +111,22 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    final List<CloudflareDnsRecord> selfprivacyRecords =
-        records
-            .map(
-              (final record) =>
-                  CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
-            )
-            .toList();
+    final List<CloudflareDnsRecord> selfprivacyRecords = records
+        .map(
+          (final record) =>
+              CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
+        )
+        .toList();
 
-    final List<CloudflareDnsRecord> cloudflareRecords =
-        result.data
-          /// Remove all records that do not match with SelfPrivacy
-          ..removeWhere(
-            (final cloudflareRecord) =>
-                !selfprivacyRecords.any(
-                  (final selfprivacyRecord) =>
-                      selfprivacyRecord.type == cloudflareRecord.type &&
-                      selfprivacyRecord.name == cloudflareRecord.name,
-                ),
-          );
+    final List<CloudflareDnsRecord> cloudflareRecords = result.data
+      /// Remove all records that do not match with SelfPrivacy
+      ..removeWhere(
+        (final cloudflareRecord) => !selfprivacyRecords.any(
+          (final selfprivacyRecord) =>
+              selfprivacyRecord.type == cloudflareRecord.type &&
+              selfprivacyRecord.name == cloudflareRecord.name,
+        ),
+      );
 
     return _adapter.api().removeSimilarRecords(
       zoneId: _adapter.cachedZoneId,
@@ -212,45 +207,41 @@ class CloudflareDnsProvider extends DnsProvider {
       );
     }
 
-    final List<CloudflareDnsRecord> newSelfprivacyRecords =
-        newRecords
-            .map(
-              (final record) =>
-                  CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
-            )
-            .toList();
+    final List<CloudflareDnsRecord> newSelfprivacyRecords = newRecords
+        .map(
+          (final record) =>
+              CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
+        )
+        .toList();
 
-    final List<CloudflareDnsRecord>? oldSelfprivacyRecords =
-        oldRecords
-            ?.map(
-              (final record) =>
-                  CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
-            )
-            .toList();
+    final List<CloudflareDnsRecord>? oldSelfprivacyRecords = oldRecords
+        ?.map(
+          (final record) =>
+              CloudflareDnsRecord.fromDnsRecord(record, domain.domainName),
+        )
+        .toList();
 
     final List<CloudflareDnsRecord> cloudflareRecords = result.data;
 
-    final List<CloudflareDnsRecord> recordsToDelete =
-        newSelfprivacyRecords
-            .where(
-              (final newRecord) => cloudflareRecords.any(
-                (final oldRecord) =>
-                    newRecord.type == oldRecord.type &&
-                    newRecord.name == oldRecord.name,
-              ),
-            )
-            .toList();
+    final List<CloudflareDnsRecord> recordsToDelete = newSelfprivacyRecords
+        .where(
+          (final newRecord) => cloudflareRecords.any(
+            (final oldRecord) =>
+                newRecord.type == oldRecord.type &&
+                newRecord.name == oldRecord.name,
+          ),
+        )
+        .toList();
 
     if (oldSelfprivacyRecords != null) {
       recordsToDelete.addAll(
         oldSelfprivacyRecords
             .where(
-              (final oldRecord) =>
-                  !newSelfprivacyRecords.any(
-                    (final newRecord) =>
-                        newRecord.type == oldRecord.type &&
-                        newRecord.name == oldRecord.name,
-                  ),
+              (final oldRecord) => !newSelfprivacyRecords.any(
+                (final newRecord) =>
+                    newRecord.type == oldRecord.type &&
+                    newRecord.name == oldRecord.name,
+              ),
             )
             .toList(),
       );
@@ -258,16 +249,15 @@ class CloudflareDnsProvider extends DnsProvider {
 
     if (recordsToDelete.isNotEmpty) {
       await _adapter.api().removeSimilarRecords(
-        records:
-            cloudflareRecords
-                .where(
-                  (final record) => recordsToDelete.any(
-                    (final recordToDelete) =>
-                        recordToDelete.type == record.type &&
-                        recordToDelete.name == record.name,
-                  ),
-                )
-                .toList(),
+        records: cloudflareRecords
+            .where(
+              (final record) => recordsToDelete.any(
+                (final recordToDelete) =>
+                    recordToDelete.type == record.type &&
+                    recordToDelete.name == record.name,
+              ),
+            )
+            .toList(),
         zoneId: _adapter.cachedZoneId,
       );
     }

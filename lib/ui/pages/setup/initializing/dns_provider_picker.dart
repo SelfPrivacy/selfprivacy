@@ -120,11 +120,10 @@ class ProviderInputDataPage extends StatelessWidget {
       const SizedBox(height: 10),
       BrandOutlinedButton(
         child: Text('initializing.how'.tr()),
-        onPressed:
-            () => context.read<SupportSystemCubit>().showArticle(
-              article: providerInfo.pathToHow,
-              context: context,
-            ),
+        onPressed: () => context.read<SupportSystemCubit>().showArticle(
+          article: providerInfo.pathToHow,
+          context: context,
+        ),
       ),
     ],
   );
@@ -260,8 +259,8 @@ class ProviderSelectionPage extends StatelessWidget {
                 ),
                 // Outlined button that will open website
                 BrandOutlinedButton(
-                  onPressed:
-                      () => launchUrlString('https://dash.cloudflare.com/'),
+                  onPressed: () =>
+                      launchUrlString('https://dash.cloudflare.com/'),
                   title: 'initializing.select_provider_site_button'.tr(),
                 ),
               ],
@@ -317,8 +316,8 @@ class ProviderSelectionPage extends StatelessWidget {
                 ),
                 // Outlined button that will open website
                 BrandOutlinedButton(
-                  onPressed:
-                      () => launchUrlString('https://cloud.digitalocean.com/'),
+                  onPressed: () =>
+                      launchUrlString('https://cloud.digitalocean.com/'),
                   title: 'initializing.select_provider_site_button'.tr(),
                 ),
               ],

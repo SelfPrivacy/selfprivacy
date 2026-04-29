@@ -86,13 +86,12 @@ mixin VolumeApi on GraphQLApiMap {
       );
       final QueryResult<Mutation$MigrateToBinds> result = await client
           .mutate$MigrateToBinds(migrateMutation);
-      mutation =
-          mutation = GenericResult(
-            success: true,
-            code: result.parsedData!.storage.migrateToBinds.code,
-            message: result.parsedData!.storage.migrateToBinds.message,
-            data: result.parsedData!.storage.migrateToBinds.job?.uid,
-          );
+      mutation = mutation = GenericResult(
+        success: true,
+        code: result.parsedData!.storage.migrateToBinds.code,
+        message: result.parsedData!.storage.migrateToBinds.message,
+        data: result.parsedData!.storage.migrateToBinds.job?.uid,
+      );
     } catch (e) {
       logger('Error in GraphQL MigrateToBinds request: $e', error: e);
       mutation = GenericResult(

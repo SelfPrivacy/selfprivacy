@@ -96,14 +96,12 @@ class _CopyWithImpl$Query$GetServerDiskVolumes<TRes>
   TRes call({Object? storage = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$GetServerDiskVolumes(
-          storage:
-              storage == _undefined || storage == null
-                  ? _instance.storage
-                  : (storage as Query$GetServerDiskVolumes$storage),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          storage: storage == _undefined || storage == null
+              ? _instance.storage
+              : (storage as Query$GetServerDiskVolumes$storage),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -357,15 +355,14 @@ class Options$Query$GetServerDiskVolumes
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          pollInterval: pollInterval,
          context: context,
-         onComplete:
-             onComplete == null
-                 ? null
-                 : (data) => onComplete(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Query$GetServerDiskVolumes(data),
-                 ),
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Query$GetServerDiskVolumes(data),
+               ),
          onError: onError,
          document: documentNodeQueryGetServerDiskVolumes,
          parserFn: _parserFn$Query$GetServerDiskVolumes,
@@ -427,10 +424,12 @@ extension ClientExtension$Query$GetServerDiskVolumes on graphql.GraphQLClient {
   query$GetServerDiskVolumes([
     Options$Query$GetServerDiskVolumes? options,
   ]) async => await this.query(options ?? Options$Query$GetServerDiskVolumes());
+
   graphql.ObservableQuery<Query$GetServerDiskVolumes>
   watchQuery$GetServerDiskVolumes([
     WatchOptions$Query$GetServerDiskVolumes? options,
   ]) => this.watchQuery(options ?? WatchOptions$Query$GetServerDiskVolumes());
+
   void writeQuery$GetServerDiskVolumes({
     required Query$GetServerDiskVolumes data,
     bool broadcast = true,
@@ -443,6 +442,7 @@ extension ClientExtension$Query$GetServerDiskVolumes on graphql.GraphQLClient {
     data: data.toJson(),
     broadcast: broadcast,
   );
+
   Query$GetServerDiskVolumes? readQuery$GetServerDiskVolumes({
     bool optimistic = true,
   }) {
@@ -470,14 +470,13 @@ class Query$GetServerDiskVolumes$storage {
     final l$volumes = json['volumes'];
     final l$$__typename = json['__typename'];
     return Query$GetServerDiskVolumes$storage(
-      volumes:
-          (l$volumes as List<dynamic>)
-              .map(
-                (e) => Query$GetServerDiskVolumes$storage$volumes.fromJson(
-                  (e as Map<String, dynamic>),
-                ),
-              )
-              .toList(),
+      volumes: (l$volumes as List<dynamic>)
+          .map(
+            (e) => Query$GetServerDiskVolumes$storage$volumes.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       $__typename: (l$$__typename as String),
     );
   }
@@ -581,15 +580,12 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage<TRes>
   TRes call({Object? volumes = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Query$GetServerDiskVolumes$storage(
-          volumes:
-              volumes == _undefined || volumes == null
-                  ? _instance.volumes
-                  : (volumes
-                      as List<Query$GetServerDiskVolumes$storage$volumes>),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          volumes: volumes == _undefined || volumes == null
+              ? _instance.volumes
+              : (volumes as List<Query$GetServerDiskVolumes$storage$volumes>),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -603,15 +599,11 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage<TRes>
     )
     _fn,
   ) => call(
-    volumes:
-        _fn(
-          _instance.volumes.map(
-            (e) => CopyWith$Query$GetServerDiskVolumes$storage$volumes(
-              e,
-              (i) => i,
-            ),
-          ),
-        ).toList(),
+    volumes: _fn(
+      _instance.volumes.map(
+        (e) => CopyWith$Query$GetServerDiskVolumes$storage$volumes(e, (i) => i),
+      ),
+    ).toList(),
   );
 }
 
@@ -664,15 +656,13 @@ class Query$GetServerDiskVolumes$storage$volumes {
       serial: (l$serial as String?),
       totalSpace: (l$totalSpace as String),
       type: (l$type as String),
-      usages:
-          (l$usages as List<dynamic>)
-              .map(
-                (e) =>
-                    Query$GetServerDiskVolumes$storage$volumes$usages.fromJson(
-                      (e as Map<String, dynamic>),
-                    ),
-              )
-              .toList(),
+      usages: (l$usages as List<dynamic>)
+          .map(
+            (e) => Query$GetServerDiskVolumes$storage$volumes$usages.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
       usedSpace: (l$usedSpace as String),
       $__typename: (l$$__typename as String),
     );
@@ -887,39 +877,32 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$GetServerDiskVolumes$storage$volumes(
-      freeSpace:
-          freeSpace == _undefined || freeSpace == null
-              ? _instance.freeSpace
-              : (freeSpace as String),
+      freeSpace: freeSpace == _undefined || freeSpace == null
+          ? _instance.freeSpace
+          : (freeSpace as String),
       model: model == _undefined ? _instance.model : (model as String?),
-      name:
-          name == _undefined || name == null
-              ? _instance.name
-              : (name as String),
-      root:
-          root == _undefined || root == null ? _instance.root : (root as bool),
+      name: name == _undefined || name == null
+          ? _instance.name
+          : (name as String),
+      root: root == _undefined || root == null
+          ? _instance.root
+          : (root as bool),
       serial: serial == _undefined ? _instance.serial : (serial as String?),
-      totalSpace:
-          totalSpace == _undefined || totalSpace == null
-              ? _instance.totalSpace
-              : (totalSpace as String),
-      type:
-          type == _undefined || type == null
-              ? _instance.type
-              : (type as String),
-      usages:
-          usages == _undefined || usages == null
-              ? _instance.usages
-              : (usages
-                  as List<Query$GetServerDiskVolumes$storage$volumes$usages>),
-      usedSpace:
-          usedSpace == _undefined || usedSpace == null
-              ? _instance.usedSpace
-              : (usedSpace as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      totalSpace: totalSpace == _undefined || totalSpace == null
+          ? _instance.totalSpace
+          : (totalSpace as String),
+      type: type == _undefined || type == null
+          ? _instance.type
+          : (type as String),
+      usages: usages == _undefined || usages == null
+          ? _instance.usages
+          : (usages as List<Query$GetServerDiskVolumes$storage$volumes$usages>),
+      usedSpace: usedSpace == _undefined || usedSpace == null
+          ? _instance.usedSpace
+          : (usedSpace as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -933,15 +916,14 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes<TRes>
     )
     _fn,
   ) => call(
-    usages:
-        _fn(
-          _instance.usages.map(
-            (e) => CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages(
-              e,
-              (i) => i,
-            ),
-          ),
-        ).toList(),
+    usages: _fn(
+      _instance.usages.map(
+        (e) => CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages(
+          e,
+          (i) => i,
+        ),
+      ),
+    ).toList(),
   );
 }
 
@@ -1057,6 +1039,7 @@ extension UtilityExtension$Query$GetServerDiskVolumes$storage$volumes$usages
     this,
     (i) => i,
   );
+
   _T when<_T>({
     required _T Function(
       Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage,
@@ -1135,18 +1118,15 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Query$GetServerDiskVolumes$storage$volumes$usages(
-      title:
-          title == _undefined || title == null
-              ? _instance.title
-              : (title as String),
-      usedSpace:
-          usedSpace == _undefined || usedSpace == null
-              ? _instance.usedSpace
-              : (usedSpace as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      title: title == _undefined || title == null
+          ? _instance.title
+          : (title as String),
+      usedSpace: usedSpace == _undefined || usedSpace == null
+          ? _instance.usedSpace
+          : (usedSpace as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -1180,12 +1160,11 @@ class Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage
     final l$title = json['title'];
     final l$usedSpace = json['usedSpace'];
     return Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage(
-      service:
-          l$service == null
-              ? null
-              : Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service.fromJson(
-                (l$service as Map<String, dynamic>),
-              ),
+      service: l$service == null
+          ? null
+          : Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service.fromJson(
+              (l$service as Map<String, dynamic>),
+            ),
       $__typename: (l$$__typename as String),
       title: (l$title as String),
       usedSpace: (l$usedSpace as String),
@@ -1279,13 +1258,11 @@ abstract class CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$Servi
       Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage,
     )
     then,
-  ) =
-      _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage;
+  ) = _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage;
 
   factory CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage;
+  ) = _CopyWithStubImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage;
 
   TRes call({
     Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service?
@@ -1329,23 +1306,19 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceSt
     Object? usedSpace = _undefined,
   }) => _then(
     Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage(
-      service:
-          service == _undefined
-              ? _instance.service
-              : (service
-                  as Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service?),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      title:
-          title == _undefined || title == null
-              ? _instance.title
-              : (title as String),
-      usedSpace:
-          usedSpace == _undefined || usedSpace == null
-              ? _instance.usedSpace
-              : (usedSpace as String),
+      service: service == _undefined
+          ? _instance.service
+          : (service
+                as Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service?),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      title: title == _undefined || title == null
+          ? _instance.title
+          : (title as String),
+      usedSpace: usedSpace == _undefined || usedSpace == null
+          ? _instance.usedSpace
+          : (usedSpace as String),
     ),
   );
 
@@ -1356,12 +1329,12 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceSt
     final local$service = _instance.service;
     return local$service == null
         ? CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service.stub(
-          _then(_instance),
-        )
+            _then(_instance),
+          )
         : CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service(
-          local$service,
-          (e) => call(service: e),
-        );
+            local$service,
+            (e) => call(service: e),
+          );
   }
 }
 
@@ -1504,13 +1477,11 @@ abstract class CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$Servi
       Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service,
     )
     then,
-  ) =
-      _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service;
+  ) = _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service;
 
   factory CopyWith$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service.stub(
     TRes res,
-  ) =
-      _CopyWithStubImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service;
+  ) = _CopyWithStubImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service;
 
   TRes call({
     String? id,
@@ -1550,18 +1521,15 @@ class _CopyWithImpl$Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceSt
   }) => _then(
     Query$GetServerDiskVolumes$storage$volumes$usages$$ServiceStorageUsage$service(
       id: id == _undefined || id == null ? _instance.id : (id as String),
-      isMovable:
-          isMovable == _undefined || isMovable == null
-              ? _instance.isMovable
-              : (isMovable as bool),
-      displayName:
-          displayName == _undefined || displayName == null
-              ? _instance.displayName
-              : (displayName as String),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      isMovable: isMovable == _undefined || isMovable == null
+          ? _instance.isMovable
+          : (isMovable as bool),
+      displayName: displayName == _undefined || displayName == null
+          ? _instance.displayName
+          : (displayName as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -1764,14 +1732,12 @@ class _CopyWithImpl$Mutation$MountVolume<TRes>
   TRes call({Object? storage = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$MountVolume(
-          storage:
-              storage == _undefined || storage == null
-                  ? _instance.storage
-                  : (storage as Mutation$MountVolume$storage),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          storage: storage == _undefined || storage == null
+              ? _instance.storage
+              : (storage as Mutation$MountVolume$storage),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -1897,13 +1863,12 @@ class Options$Mutation$MountVolume
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$MountVolume(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$MountVolume(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationMountVolume,
@@ -1957,6 +1922,7 @@ extension ClientExtension$Mutation$MountVolume on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$MountVolume>> mutate$MountVolume(
     Options$Mutation$MountVolume options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$MountVolume> watchMutation$MountVolume(
     WatchOptions$Mutation$MountVolume options,
   ) => this.watchMutation(options);
@@ -2059,14 +2025,12 @@ class _CopyWithImpl$Mutation$MountVolume$storage<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$MountVolume$storage(
-      mountVolume:
-          mountVolume == _undefined || mountVolume == null
-              ? _instance.mountVolume
-              : (mountVolume as Mutation$MountVolume$storage$mountVolume),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      mountVolume: mountVolume == _undefined || mountVolume == null
+          ? _instance.mountVolume
+          : (mountVolume as Mutation$MountVolume$storage$mountVolume),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2223,18 +2187,15 @@ class _CopyWithImpl$Mutation$MountVolume$storage$mountVolume<TRes>
   }) => _then(
     Mutation$MountVolume$storage$mountVolume(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -2426,14 +2387,12 @@ class _CopyWithImpl$Mutation$ResizeVolume<TRes>
   TRes call({Object? storage = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$ResizeVolume(
-          storage:
-              storage == _undefined || storage == null
-                  ? _instance.storage
-                  : (storage as Mutation$ResizeVolume$storage),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          storage: storage == _undefined || storage == null
+              ? _instance.storage
+              : (storage as Mutation$ResizeVolume$storage),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -2559,13 +2518,12 @@ class Options$Mutation$ResizeVolume
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$ResizeVolume(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$ResizeVolume(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationResizeVolume,
@@ -2619,6 +2577,7 @@ extension ClientExtension$Mutation$ResizeVolume on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$ResizeVolume>> mutate$ResizeVolume(
     Options$Mutation$ResizeVolume options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$ResizeVolume> watchMutation$ResizeVolume(
     WatchOptions$Mutation$ResizeVolume options,
   ) => this.watchMutation(options);
@@ -2721,14 +2680,12 @@ class _CopyWithImpl$Mutation$ResizeVolume$storage<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$ResizeVolume$storage(
-      resizeVolume:
-          resizeVolume == _undefined || resizeVolume == null
-              ? _instance.resizeVolume
-              : (resizeVolume as Mutation$ResizeVolume$storage$resizeVolume),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      resizeVolume: resizeVolume == _undefined || resizeVolume == null
+          ? _instance.resizeVolume
+          : (resizeVolume as Mutation$ResizeVolume$storage$resizeVolume),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -2885,18 +2842,15 @@ class _CopyWithImpl$Mutation$ResizeVolume$storage$resizeVolume<TRes>
   }) => _then(
     Mutation$ResizeVolume$storage$resizeVolume(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3091,14 +3045,12 @@ class _CopyWithImpl$Mutation$UnmountVolume<TRes>
   TRes call({Object? storage = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$UnmountVolume(
-          storage:
-              storage == _undefined || storage == null
-                  ? _instance.storage
-                  : (storage as Mutation$UnmountVolume$storage),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          storage: storage == _undefined || storage == null
+              ? _instance.storage
+              : (storage as Mutation$UnmountVolume$storage),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -3224,13 +3176,12 @@ class Options$Mutation$UnmountVolume
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null ? null : _parserFn$Mutation$UnmountVolume(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$UnmountVolume(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationUnmountVolume,
@@ -3284,6 +3235,7 @@ extension ClientExtension$Mutation$UnmountVolume on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$UnmountVolume>> mutate$UnmountVolume(
     Options$Mutation$UnmountVolume options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$UnmountVolume> watchMutation$UnmountVolume(
     WatchOptions$Mutation$UnmountVolume options,
   ) => this.watchMutation(options);
@@ -3386,14 +3338,12 @@ class _CopyWithImpl$Mutation$UnmountVolume$storage<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$UnmountVolume$storage(
-      unmountVolume:
-          unmountVolume == _undefined || unmountVolume == null
-              ? _instance.unmountVolume
-              : (unmountVolume as Mutation$UnmountVolume$storage$unmountVolume),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      unmountVolume: unmountVolume == _undefined || unmountVolume == null
+          ? _instance.unmountVolume
+          : (unmountVolume as Mutation$UnmountVolume$storage$unmountVolume),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -3552,18 +3502,15 @@ class _CopyWithImpl$Mutation$UnmountVolume$storage$unmountVolume<TRes>
   }) => _then(
     Mutation$UnmountVolume$storage$unmountVolume(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 }
@@ -3765,14 +3712,12 @@ class _CopyWithImpl$Mutation$MigrateToBinds<TRes>
   TRes call({Object? storage = _undefined, Object? $__typename = _undefined}) =>
       _then(
         Mutation$MigrateToBinds(
-          storage:
-              storage == _undefined || storage == null
-                  ? _instance.storage
-                  : (storage as Mutation$MigrateToBinds$storage),
-          $__typename:
-              $__typename == _undefined || $__typename == null
-                  ? _instance.$__typename
-                  : ($__typename as String),
+          storage: storage == _undefined || storage == null
+              ? _instance.storage
+              : (storage as Mutation$MigrateToBinds$storage),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
         ),
       );
 
@@ -3923,15 +3868,12 @@ class Options$Mutation$MigrateToBinds
          cacheRereadPolicy: cacheRereadPolicy,
          optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
          context: context,
-         onCompleted:
-             onCompleted == null
-                 ? null
-                 : (data) => onCompleted(
-                   data,
-                   data == null
-                       ? null
-                       : _parserFn$Mutation$MigrateToBinds(data),
-                 ),
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null ? null : _parserFn$Mutation$MigrateToBinds(data),
+               ),
          update: update,
          onError: onError,
          document: documentNodeMutationMigrateToBinds,
@@ -3985,6 +3927,7 @@ extension ClientExtension$Mutation$MigrateToBinds on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$MigrateToBinds>> mutate$MigrateToBinds(
     Options$Mutation$MigrateToBinds options,
   ) async => await this.mutate(options);
+
   graphql.ObservableQuery<Mutation$MigrateToBinds> watchMutation$MigrateToBinds(
     WatchOptions$Mutation$MigrateToBinds options,
   ) => this.watchMutation(options);
@@ -4088,15 +4031,12 @@ class _CopyWithImpl$Mutation$MigrateToBinds$storage<TRes>
     Object? $__typename = _undefined,
   }) => _then(
     Mutation$MigrateToBinds$storage(
-      migrateToBinds:
-          migrateToBinds == _undefined || migrateToBinds == null
-              ? _instance.migrateToBinds
-              : (migrateToBinds
-                  as Mutation$MigrateToBinds$storage$migrateToBinds),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
+      migrateToBinds: migrateToBinds == _undefined || migrateToBinds == null
+          ? _instance.migrateToBinds
+          : (migrateToBinds as Mutation$MigrateToBinds$storage$migrateToBinds),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
     ),
   );
 
@@ -4149,12 +4089,11 @@ class Mutation$MigrateToBinds$storage$migrateToBinds
       message: (l$message as String),
       success: (l$success as bool),
       $__typename: (l$$__typename as String),
-      job:
-          l$job == null
-              ? null
-              : Fragment$basicApiJobsFields.fromJson(
-                (l$job as Map<String, dynamic>),
-              ),
+      job: l$job == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$job as Map<String, dynamic>),
+            ),
     );
   }
 
@@ -4282,22 +4221,18 @@ class _CopyWithImpl$Mutation$MigrateToBinds$storage$migrateToBinds<TRes>
   }) => _then(
     Mutation$MigrateToBinds$storage$migrateToBinds(
       code: code == _undefined || code == null ? _instance.code : (code as int),
-      message:
-          message == _undefined || message == null
-              ? _instance.message
-              : (message as String),
-      success:
-          success == _undefined || success == null
-              ? _instance.success
-              : (success as bool),
-      $__typename:
-          $__typename == _undefined || $__typename == null
-              ? _instance.$__typename
-              : ($__typename as String),
-      job:
-          job == _undefined
-              ? _instance.job
-              : (job as Fragment$basicApiJobsFields?),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      job: job == _undefined
+          ? _instance.job
+          : (job as Fragment$basicApiJobsFields?),
     ),
   );
 

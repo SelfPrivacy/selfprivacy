@@ -53,8 +53,8 @@ android {
     defaultConfig {
         applicationId "org.selfprivacy.app"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 35
-        compileSdkVersion 35
+        targetSdkVersion 36
+        compileSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

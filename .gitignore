@@ -52,3 +52,6 @@ result/
 
 result
 android/app/.cxx/
+
+# FVM Version Cache
+.fvm/

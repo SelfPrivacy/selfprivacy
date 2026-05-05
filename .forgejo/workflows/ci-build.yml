@@ -1,0 +1,59 @@
+name: Build CI
+
+on:
+  push:
+    branches:
+      - master
+      - bttmchnd/ci-rehaul
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on:
+      - linux:host
+
+    steps:
+      - run: |
+             nix build .#linux-nix -o artifact-nix
+             nix build .#linux-generic -o artifact-generic
+             nix build .#linux-flatpak -o artifact-flatpak
+             nix build .#linux-appimage -o artifact-appimage
+             # - nix build .#linux-snap -o artifact-snap
+
+  build-android:
+    runs-on:
+      - linux:host
+
+    steps:
+      - run: |
+             nix run .#build-android -- apk release production
+             nix run .#build-android -- aab release production
+
+  build-macos:
+    runs-on:
+      - macos:host
+
+    steps:
+      - run: nix build .#macos -o artifact-macos
+
+  build-ios:
+    runs-on:
+      - macos:host
+
+    steps:
+      - run: |
+             nix run .#build-ios -- ios release
+             nix run .#build-ios -- ipa release
+
+  build-windows:
+    runs-on:
+      - windows
+
+    steps:
+      - run: |
+             flutter config --no-analytics
+             flutter config --enable-windows-desktop
+             flutter pub get --no-precompile --enforce-lockfile
+             flutter build windows --release

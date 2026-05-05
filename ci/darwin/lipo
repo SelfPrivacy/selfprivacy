@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+for arg in "$@"; do
+  if [[ "$arg" == *"FlutterMacOS.framework/Versions/A/FlutterMacOS" ]]; then
+    FW_DIR=$(echo "$arg" | sed 's|/Versions/A/FlutterMacOS$||')
+    if [ -d "$FW_DIR" ]; then
+      chmod -R +w "$FW_DIR" 2>/dev/null
+    fi
+  elif [[ "$arg" == *"Flutter.framework/Flutter" ]]; then
+    FW_DIR=$(echo "$arg" | sed 's|/Flutter$||')
+    if [ -d "$FW_DIR" ]; then
+      chmod -R +w "$FW_DIR" 2>/dev/null
+    fi
+  fi
+done

@@ -1,0 +1,30 @@
+{ pkgs, sp, ... }:
+
+pkgs.stdenv.mkDerivation {
+  name = "${sp.applicationMetadata.name}-archive";
+  version = sp.applicationMetadata.version;
+
+  nativeBuildInputs = sp.archiveTools;
+
+  phases = [
+    "buildPhase"
+    "installPhase"
+  ];
+
+  buildPhase = ''
+    mkdir -p vendor/usr/share/{applications,metainfo,icons} vendor/usr/share/icons/hicolor/{scalable,512x512}/apps/
+    cp -r ${sp.applicationGeneric}/* vendor/
+    cp ${sp.desktopFile} vendor/usr/share/applications/org.selfprivacy.app.desktop
+    cp ${sp.appstreamFile} vendor/usr/share/metainfo/org.selfprivacy.app.metainfo.xml
+    cp ${sp.iconPNGFile} vendor/usr/share/icons/hicolor/512x512/apps/org.selfprivacy.app.png
+    cp ${sp.iconSVGFile} vendor/usr/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
+    chmod -R +rw vendor/
+  '';
+
+  installPhase = ''
+    mkdir -p $out
+
+    tar -cvf "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" -C vendor/ .
+    cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" $out/
+  '';
+}

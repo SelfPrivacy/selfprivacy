@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:sp_cubit_form/sp_cubit_form.dart';
@@ -16,7 +17,10 @@ class RecoveryConfirmDns extends StatelessWidget {
         .watch<ServerInstallationCubit>();
 
     return BlocProvider(
-      create: (final BuildContext context) => DnsProviderFormCubit(appConfig),
+      create: (final BuildContext context) => DnsProviderFormCubit(
+        appConfig,
+        appConfig.state.serverDomain?.provider ?? DnsProviderType.unknown,
+      ),
       child: Builder(
         builder: (final BuildContext context) {
           final FormCubitState formCubitState = context
@@ -42,9 +46,26 @@ class RecoveryConfirmDns extends StatelessWidget {
                 .read<ServerInstallationCubit>()
                 .revertRecoveryStep,
             children: [
+              if (appConfig
+                      .state
+                      .serverDomain
+                      ?.provider
+                      .requiredCredentials
+                      .requiresTokenId ??
+                  false) ...[
+                CubitFormTextField(
+                  autofocus: true,
+                  formFieldCubit: context.read<DnsProviderFormCubit>().tokenId,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Provider API Token ID',
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
               CubitFormTextField(
                 autofocus: true,
-                formFieldCubit: context.read<DnsProviderFormCubit>().apiKey,
+                formFieldCubit: context.read<DnsProviderFormCubit>().token,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: 'recovering.provider_connected_placeholder'.tr(
@@ -53,6 +74,59 @@ class RecoveryConfirmDns extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              if (appConfig
+                      .state
+                      .serverDomain
+                      ?.provider
+                      .requiredCredentials
+                      .requiresUrl ??
+                  false) ...[
+                CubitFormTextField(
+                  autofocus: true,
+                  formFieldCubit: context.read<DnsProviderFormCubit>().url,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Provider API URL',
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+              if (appConfig
+                      .state
+                      .serverDomain
+                      ?.provider
+                      .requiredCredentials
+                      .requiresTenant ??
+                  false) ...[
+                CubitFormTextField(
+                  autofocus: true,
+                  formFieldCubit: context.read<DnsProviderFormCubit>().tenant,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Provider Tenant',
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+              if (appConfig
+                      .state
+                      .serverDomain
+                      ?.provider
+                      .requiredCredentials
+                      .requiresSecondaryToken ??
+                  false) ...[
+                CubitFormTextField(
+                  autofocus: true,
+                  formFieldCubit: context
+                      .read<DnsProviderFormCubit>()
+                      .secondaryToken,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Provider Secondary API Token',
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
               BrandButton.filled(
                 onPressed: formCubitState.isSubmitting
                     ? null

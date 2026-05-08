@@ -67,6 +67,28 @@ enum DnsProviderType {
     porkbun => '',
     unknown => '',
   };
+
+  DnsProviderRequiredCredentials get requiredCredentials => switch (this) {
+    digitalOcean => DnsProviderRequiredCredentials(),
+    cloudflare => DnsProviderRequiredCredentials(),
+    desec => DnsProviderRequiredCredentials(),
+    porkbun => DnsProviderRequiredCredentials(requiresTokenId: true),
+    unknown => DnsProviderRequiredCredentials(),
+  };
+}
+
+class DnsProviderRequiredCredentials {
+  DnsProviderRequiredCredentials({
+    this.requiresTokenId = false,
+    this.requiresUrl = false,
+    this.requiresTenant = false,
+    this.requiresSecondaryToken = false,
+  });
+
+  final bool requiresTokenId;
+  final bool requiresUrl;
+  final bool requiresTenant;
+  final bool requiresSecondaryToken;
 }
 
 extension DnsProviderTypeIsSpecified on DnsProviderType? {

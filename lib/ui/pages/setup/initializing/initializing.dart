@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
@@ -233,18 +232,7 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepDnsProviderToken(
     final ServerInstallationCubit initializingCubit,
-  ) => BlocProvider(
-    create: (final context) => DnsProviderFormCubit(initializingCubit),
-    child: Builder(
-      builder: (final context) {
-        final providerCubit = context.watch<DnsProviderFormCubit>();
-        return DnsProviderPicker(
-          formCubit: providerCubit,
-          serverInstallationCubit: initializingCubit,
-        );
-      },
-    ),
-  );
+  ) => DnsProviderPicker(serverInstallationCubit: initializingCubit);
 
   Widget _stepDomain(final ServerInstallationCubit initializingCubit) =>
       BlocProvider(

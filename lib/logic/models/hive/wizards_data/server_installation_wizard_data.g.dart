@@ -28,7 +28,11 @@ class ServerInstallationWizardDataAdapter
       serverProviderType: fields[7] as ServerProviderType?,
       serverProviderKey: fields[8] as String?,
       dnsProviderType: fields[9] as DnsProviderType?,
-      dnsProviderKey: fields[10] as String?,
+      dnsProviderToken: fields[10] as String?,
+      dnsProviderTokenId: fields[16] as String?,
+      dnsProviderUrl: fields[17] as String?,
+      dnsProviderTenant: fields[18] as String?,
+      dnsProviderSecondaryToken: fields[19] as String?,
       serverTypeIdentifier: fields[12] as String?,
       serverLocation: fields[13] as String?,
       serverDetails: fields[14] as ServerHostingDetails?,
@@ -39,7 +43,7 @@ class ServerInstallationWizardDataAdapter
   @override
   void write(BinaryWriter writer, ServerInstallationWizardData obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.hasFinalChecked)
       ..writeByte(1)
@@ -61,7 +65,7 @@ class ServerInstallationWizardDataAdapter
       ..writeByte(9)
       ..write(obj.dnsProviderType)
       ..writeByte(10)
-      ..write(obj.dnsProviderKey)
+      ..write(obj.dnsProviderToken)
       ..writeByte(12)
       ..write(obj.serverTypeIdentifier)
       ..writeByte(13)
@@ -69,7 +73,15 @@ class ServerInstallationWizardDataAdapter
       ..writeByte(14)
       ..write(obj.serverDetails)
       ..writeByte(15)
-      ..write(obj.serverDomain);
+      ..write(obj.serverDomain)
+      ..writeByte(16)
+      ..write(obj.dnsProviderTokenId)
+      ..writeByte(17)
+      ..write(obj.dnsProviderUrl)
+      ..writeByte(18)
+      ..write(obj.dnsProviderTenant)
+      ..writeByte(19)
+      ..write(obj.dnsProviderSecondaryToken);
   }
 
   @override

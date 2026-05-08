@@ -12,13 +12,8 @@ import 'package:sp_cubit_form/sp_cubit_form.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DnsProviderPicker extends StatefulWidget {
-  const DnsProviderPicker({
-    required this.formCubit,
-    required this.serverInstallationCubit,
-    super.key,
-  });
+  const DnsProviderPicker({required this.serverInstallationCubit, super.key});
 
-  final DnsProviderFormCubit formCubit;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
@@ -45,38 +40,38 @@ class _DnsProviderPickerState extends State<DnsProviderPicker> {
 
       case DnsProviderType.cloudflare:
         return ProviderInputDataPage(
-          providerCubit: widget.formCubit,
           providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.cloudflare,
             pathToHow: 'how_cloudflare',
           ),
+          serverInstallationCubit: widget.serverInstallationCubit,
         );
 
       case DnsProviderType.digitalOcean:
         return ProviderInputDataPage(
-          providerCubit: widget.formCubit,
           providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.digitalOcean,
             pathToHow: 'how_digital_ocean',
           ),
+          serverInstallationCubit: widget.serverInstallationCubit,
         );
 
       case DnsProviderType.desec:
         return ProviderInputDataPage(
-          providerCubit: widget.formCubit,
           providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.desec,
             pathToHow: 'how_desec',
           ),
+          serverInstallationCubit: widget.serverInstallationCubit,
         );
 
       case DnsProviderType.porkbun:
         return ProviderInputDataPage(
-          providerCubit: widget.formCubit,
           providerInfo: const ProviderPageInfo(
             providerType: DnsProviderType.porkbun,
             pathToHow: 'how_porkbun',
           ),
+          serverInstallationCubit: widget.serverInstallationCubit,
         );
     }
   }
@@ -92,49 +87,113 @@ class ProviderPageInfo {
 class ProviderInputDataPage extends StatelessWidget {
   const ProviderInputDataPage({
     required this.providerInfo,
-    required this.providerCubit,
+    required this.serverInstallationCubit,
     super.key,
   });
 
   final ProviderPageInfo providerInfo;
-  final DnsProviderFormCubit providerCubit;
+  final ServerInstallationCubit serverInstallationCubit;
 
   @override
-  Widget build(final BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'initializing.connect_to_dns'.tr(),
-        style: Theme.of(context).textTheme.headlineSmall,
-      ),
-      const SizedBox(height: 16),
-      Text(
-        'initializing.connect_to_server_provider_text'.tr(),
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
-      const SizedBox(height: 32),
-      CubitFormTextField(
-        autofocus: true,
-        formFieldCubit: providerCubit.apiKey,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Provider API Token',
-        ),
-      ),
-      const SizedBox(height: 32),
-      BrandButton.filled(
-        title: 'basis.connect'.tr(),
-        onPressed: providerCubit.trySubmit,
-      ),
-      const SizedBox(height: 10),
-      BrandOutlinedButton(
-        child: Text('initializing.how'.tr()),
-        onPressed: () => context.read<SupportSystemCubit>().showArticle(
-          article: providerInfo.pathToHow,
-          context: context,
-        ),
-      ),
-    ],
+  Widget build(final BuildContext context) => BlocProvider(
+    create: (final context) => DnsProviderFormCubit(
+      serverInstallationCubit,
+      providerInfo.providerType,
+    ),
+    child: Builder(
+      builder: (final context) {
+        final formCubit = context.watch<DnsProviderFormCubit>();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'initializing.connect_to_dns'.tr(),
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'initializing.connect_to_server_provider_text'.tr(),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 32),
+            if (providerInfo
+                .providerType
+                .requiredCredentials
+                .requiresTokenId) ...[
+              CubitFormTextField(
+                autofocus: true,
+                formFieldCubit: formCubit.tokenId,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Provider API Token ID',
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            CubitFormTextField(
+              autofocus: true,
+              formFieldCubit: formCubit.token,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Provider API Token',
+              ),
+            ),
+            if (providerInfo.providerType.requiredCredentials.requiresUrl) ...[
+              const SizedBox(height: 16),
+              CubitFormTextField(
+                autofocus: true,
+                formFieldCubit: formCubit.url,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Provider API URL',
+                ),
+              ),
+            ],
+            if (providerInfo
+                .providerType
+                .requiredCredentials
+                .requiresTenant) ...[
+              const SizedBox(height: 16),
+              CubitFormTextField(
+                autofocus: true,
+                formFieldCubit: formCubit.tenant,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Provider API Tenant',
+                ),
+              ),
+            ],
+            if (providerInfo
+                .providerType
+                .requiredCredentials
+                .requiresSecondaryToken) ...[
+              const SizedBox(height: 16),
+              CubitFormTextField(
+                autofocus: true,
+                formFieldCubit: formCubit.secondaryToken,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Provider API Secondary Token',
+                ),
+              ),
+            ],
+            const SizedBox(height: 32),
+            BrandButton.filled(
+              title: 'basis.connect'.tr(),
+              onPressed: formCubit.trySubmit,
+            ),
+            const SizedBox(height: 10),
+            BrandOutlinedButton(
+              child: Text('initializing.how'.tr()),
+              onPressed: () => context.read<SupportSystemCubit>().showArticle(
+                article: providerInfo.pathToHow,
+                context: context,
+              ),
+            ),
+          ],
+        );
+      },
+    ),
   );
 }
 

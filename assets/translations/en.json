@@ -512,6 +512,7 @@
         "select_provider_price_free": "Free",
         "select_provider_price_text_hetzner": "€8 per month for a relatively small server and 50GB of disk storage",
         "select_provider_price_text_do": "$17 per month for a relatively small server and 50GB of disk storage",
+        "select_provider_price_text_registrar": "Free, but only for domains bought through this provider",
         "select_provider_payment_title": "Payment methods",
         "select_provider_payment_text_hetzner": "Credit cards, SWIFT, SEPA, PayPal",
         "select_provider_payment_text_do": "Credit cards, Google Pay, PayPal",

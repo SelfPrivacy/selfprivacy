@@ -392,6 +392,62 @@ class ProviderSelectionPage extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 16),
+        OutlinedCard(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: const Color.fromARGB(255, 242, 119, 119),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/images/logos/porkbun.svg',
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      'Porkbun',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'initializing.select_provider_price_title'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                Text(
+                  'initializing.select_provider_price_text_registrar'.tr(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 16),
+                BrandButton.filled(
+                  title: 'basis.select'.tr(),
+                  onPressed: () async {
+                    await serverInstallationCubit.setDnsProviderType(
+                      DnsProviderType.porkbun,
+                    );
+                    callback(DnsProviderType.porkbun);
+                  },
+                ),
+                // Outlined button that will open website
+                BrandOutlinedButton(
+                  onPressed: () => launchUrlString('https://porkbun.com/'),
+                  title: 'initializing.select_provider_site_button'.tr(),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     ),
   );

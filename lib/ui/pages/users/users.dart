@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:selfprivacy/ui/organisms/headers/brand_header.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class UsersPage extends StatelessWidget {

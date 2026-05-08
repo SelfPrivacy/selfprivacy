@@ -82,7 +82,7 @@ packages:
     source: hosted
     version: "3.0.0"
   bloc:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: bloc
       sha256: a48653a82055a900b88cd35f92429f068c5a8057ae9b136d197b3d56c57efb81
@@ -249,14 +249,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
-  cubit_form:
-    dependency: "direct main"
-    description:
-      name: cubit_form
-      sha256: "41202f95130e3f029c77ad96cba812939cfe77f9316c298bf5fcbaf56864c904"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   cupertino_icons:
     dependency: "direct dev"
     description:
@@ -1234,6 +1226,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.2"
+  sp_cubit_form:
+    dependency: "direct main"
+    description:
+      name: sp_cubit_form
+      sha256: e233dd1a030a081e318f825438349d9f969d9d9b6b71e6e2440ef30f1f3a9df9
+      url: "https://git.selfprivacy.org/api/packages/SelfPrivacy/pub/"
+    source: hosted
+    version: "2.0.5"
   stack_trace:
     dependency: transitive
     description:

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
@@ -16,6 +15,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.da
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_server_provider_connected.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class RecoveryRoutingPage extends StatelessWidget {

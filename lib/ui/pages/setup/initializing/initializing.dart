@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
@@ -29,6 +28,7 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class InitializingPage extends StatelessWidget {

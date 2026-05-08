@@ -1,4 +1,3 @@
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
@@ -6,6 +5,7 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class RecoveryConfirmDns extends StatelessWidget {
   const RecoveryConfirmDns({super.key});

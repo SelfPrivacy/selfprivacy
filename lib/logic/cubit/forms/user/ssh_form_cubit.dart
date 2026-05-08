@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class SshFormCubit extends FormCubit {
   SshFormCubit({required this.jobsCubit, required this.user}) {

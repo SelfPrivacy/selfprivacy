@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:cubit_form/cubit_form.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class UserFormCubit extends FormCubit {
   UserFormCubit({

@@ -1,10 +1,10 @@
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class DeviceItem extends StatelessWidget {
   const DeviceItem({required this.device, super.key});

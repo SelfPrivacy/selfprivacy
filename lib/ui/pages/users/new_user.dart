@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,6 +21,7 @@ import 'package:selfprivacy/ui/molecules/cards/radio_selection_card.dart';
 import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class NewUserPage extends StatelessWidget {

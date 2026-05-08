@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/organisms/displays/key_display.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class NewDevicePage extends StatelessWidget {

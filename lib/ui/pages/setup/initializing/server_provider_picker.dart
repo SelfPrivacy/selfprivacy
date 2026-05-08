@@ -1,4 +1,3 @@
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +11,7 @@ import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class ServerProviderPicker extends StatefulWidget {
   const ServerProviderPicker({

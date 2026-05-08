@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cubit_form/cubit_form.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class AddBackupsTokenPage extends StatelessWidget {

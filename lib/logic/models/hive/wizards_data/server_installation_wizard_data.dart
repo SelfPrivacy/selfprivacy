@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -20,7 +21,11 @@ class ServerInstallationWizardData {
     required this.serverProviderType,
     required this.serverProviderKey,
     required this.dnsProviderType,
-    required this.dnsProviderKey,
+    required this.dnsProviderToken,
+    required this.dnsProviderTokenId,
+    required this.dnsProviderUrl,
+    required this.dnsProviderTenant,
+    required this.dnsProviderSecondaryToken,
     required this.serverTypeIdentifier,
     required this.serverLocation,
     required this.serverDetails,
@@ -39,7 +44,11 @@ class ServerInstallationWizardData {
         serverProviderType: null,
         serverProviderKey: null,
         dnsProviderType: null,
-        dnsProviderKey: null,
+        dnsProviderToken: null,
+        dnsProviderTokenId: null,
+        dnsProviderUrl: null,
+        dnsProviderTenant: null,
+        dnsProviderSecondaryToken: null,
         serverTypeIdentifier: null,
         serverLocation: null,
         serverDetails: null,
@@ -72,7 +81,25 @@ class ServerInstallationWizardData {
   @HiveField(9)
   final DnsProviderType? dnsProviderType;
   @HiveField(10)
-  final String? dnsProviderKey;
+  final String? dnsProviderToken;
+  @HiveField(16)
+  final String? dnsProviderTokenId;
+  @HiveField(17)
+  final String? dnsProviderUrl;
+  @HiveField(18)
+  final String? dnsProviderTenant;
+  @HiveField(19)
+  final String? dnsProviderSecondaryToken;
+
+  DnsProviderCredential get dnsProviderCredential => DnsProviderCredential(
+    token: dnsProviderToken ?? '',
+    provider: dnsProviderType ?? DnsProviderType.unknown,
+    associatedDomainNames: [],
+    tokenId: dnsProviderTokenId,
+    url: dnsProviderUrl,
+    tenant: dnsProviderTenant,
+    secondaryToken: dnsProviderSecondaryToken,
+  );
 
   // @HiveField(11)
   // was backupsCredential
@@ -97,7 +124,11 @@ class ServerInstallationWizardData {
     final ServerProviderType? serverProviderType,
     final String? serverProviderKey,
     final DnsProviderType? dnsProviderType,
-    final String? dnsProviderKey,
+    final String? dnsProviderToken,
+    final String? dnsProviderTokenId,
+    final String? dnsProviderUrl,
+    final String? dnsProviderTenant,
+    final String? dnsProviderSecondaryToken,
     final BackupsCredential? backupsCredential,
     final String? serverTypeIdentifier,
     final String? serverLocation,
@@ -116,7 +147,12 @@ class ServerInstallationWizardData {
     serverProviderType: serverProviderType ?? this.serverProviderType,
     serverProviderKey: serverProviderKey ?? this.serverProviderKey,
     dnsProviderType: dnsProviderType ?? this.dnsProviderType,
-    dnsProviderKey: dnsProviderKey ?? this.dnsProviderKey,
+    dnsProviderToken: dnsProviderToken ?? this.dnsProviderToken,
+    dnsProviderTokenId: dnsProviderTokenId ?? this.dnsProviderTokenId,
+    dnsProviderUrl: dnsProviderUrl ?? this.dnsProviderUrl,
+    dnsProviderTenant: dnsProviderTenant ?? this.dnsProviderTenant,
+    dnsProviderSecondaryToken:
+        dnsProviderSecondaryToken ?? this.dnsProviderSecondaryToken,
     serverTypeIdentifier: serverTypeIdentifier ?? this.serverTypeIdentifier,
     serverLocation: serverLocation ?? this.serverLocation,
     serverDetails: serverDetails != null ? serverDetails() : this.serverDetails,

@@ -119,25 +119,29 @@ class ResourcesModel {
     _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
-  Future<void> addDnsProviderToken(final DnsProviderCredential token) async {
+  Future<void> addDnsProviderToken(
+    final DnsProviderCredential newCredential,
+  ) async {
     // Check if this token already exists
     if (_dnsProviderTokens.any(
-      (final credential) => credential.token == token.token,
+      (final credential) => credential.token == newCredential.token,
     )) {
       throw Exception('Token already exists');
     }
-    _dnsProviderTokens.add(token);
+    _dnsProviderTokens.add(newCredential);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
     await _box.flush();
     _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
-  Future<void> associateDomainWithToken(
+  Future<void> associateDomainWithCredential(
     final String domain,
-    final String token,
+    final DnsProviderCredential newCredential,
   ) async {
     _dnsProviderTokens
-        .firstWhere((final credential) => credential.token == token)
+        .firstWhere(
+          (final credential) => credential.token == newCredential.token,
+        )
         .associatedDomainNames
         .add(domain);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
@@ -145,8 +149,10 @@ class ResourcesModel {
     _statusStreamController.add(const ChangedDnsProviderCredentials());
   }
 
-  Future<void> removeDnsProviderToken(final DnsProviderCredential token) async {
-    _dnsProviderTokens.remove(token);
+  Future<void> removeDnsProviderToken(
+    final DnsProviderCredential credential,
+  ) async {
+    _dnsProviderTokens.remove(credential);
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
     await _box.flush();
     _statusStreamController.add(const ChangedDnsProviderCredentials());
@@ -282,10 +288,16 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setDnsProviderKey(final String key) async {
+  Future<void> setDnsProviderCredential(
+    final DnsProviderCredential credential,
+  ) async {
     _serverInstallation =
         (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
-          dnsProviderKey: key,
+          dnsProviderToken: credential.token,
+          dnsProviderTokenId: credential.tokenId,
+          dnsProviderUrl: credential.url,
+          dnsProviderTenant: credential.tenant,
+          dnsProviderSecondaryToken: credential.secondaryToken,
         );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }

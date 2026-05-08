@@ -189,11 +189,10 @@ class HetznerServerProvider extends ServerProvider {
     );
 
     final serverResult = await _adapter.api().createServer(
-      dnsApiToken: installationData.dnsApiToken,
+      dnsApiCredential: installationData.dnsApiCredential,
       rootUser: installationData.rootUser,
       domainName: installationData.serverDomain.domainName,
       serverType: installationData.serverTypeId,
-      dnsProviderType: installationData.dnsProviderType.toInfectName(),
       hostName: hostname,
       volumeId: volume.id,
       base64Password: base64.encode(

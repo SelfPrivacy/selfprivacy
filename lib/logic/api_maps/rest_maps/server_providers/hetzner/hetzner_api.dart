@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
@@ -77,8 +78,7 @@ class HetznerApi extends RestApiMap {
   }
 
   Future<GenericResult<HetznerServerInfo?>> createServer({
-    required final String dnsApiToken,
-    required final String dnsProviderType,
+    required final DnsProviderCredential dnsApiCredential,
     required final String serverApiToken,
     required final User rootUser,
     required final String base64Password,
@@ -91,6 +91,8 @@ class HetznerApi extends RestApiMap {
     required final String region,
   }) async {
     final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
+    final dnsProviderType = dnsApiCredential.provider.toInfectName();
+
     Response? serverCreateResponse;
     HetznerServerInfo? serverInfo;
     DioException? hetznerError;
@@ -110,9 +112,13 @@ class HetznerApi extends RestApiMap {
             'runcmd:\n'
             '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
             "API_TOKEN=$serverApiToken ENCODED_PASSWORD='$base64Password' "
-            "DNS_PROVIDER_TOKEN=$dnsApiToken DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName'  "
+            "DNS_PROVIDER_TOKEN=${dnsApiCredential.token} DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName'  "
             "HOSTNAME=$hostName LUSER='${rootUser.login}' PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
             "${customSshKey != null ? "SSH_AUTHORIZED_KEY='$customSshKey'" : ""} "
+            "${dnsApiCredential.tokenId != null ? "DNS_PROVIDER_TOKEN_ID=${dnsApiCredential.tokenId}" : ""} "
+            "${dnsApiCredential.url != null ? "DNS_PROVIDER_URL=${dnsApiCredential.url}" : ""} "
+            "${dnsApiCredential.tenant != null ? "DNS_PROVIDER_TENANT=${dnsApiCredential.tenant}" : ""} "
+            "${dnsApiCredential.secondaryToken != null ? "DNS_PROVIDER_SECONDARY_TOKEN=${dnsApiCredential.secondaryToken}" : ""} "
             'bash 2>&1 | tee /root/nixos-infect.log',
         'labels': {},
         'automount': true,

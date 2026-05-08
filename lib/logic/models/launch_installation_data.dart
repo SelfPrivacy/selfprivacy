@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -6,8 +7,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 class LaunchInstallationData {
   LaunchInstallationData({
     required this.rootUser,
-    required this.dnsApiToken,
-    required this.dnsProviderType,
+    required this.dnsApiCredential,
     required this.serverDomain,
     required this.serverTypeId,
     required this.errorCallback,
@@ -18,9 +18,8 @@ class LaunchInstallationData {
   });
 
   final User rootUser;
-  final String dnsApiToken;
+  final DnsProviderCredential dnsApiCredential;
   final ServerDomain serverDomain;
-  final DnsProviderType dnsProviderType;
   final String serverTypeId;
   final Function() errorCallback;
   final Function(ServerHostingDetails details) successCallback;

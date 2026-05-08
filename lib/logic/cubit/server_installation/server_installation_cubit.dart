@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -105,7 +106,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     return apiResponse.data;
   }
 
-  Future<bool?> isDnsProviderApiTokenValid(final String providerToken) async {
+  Future<bool?> isDnsProviderApiTokenValid(
+    final DnsProviderCredential providerToken,
+  ) async {
     final GenericResult<bool> apiResponse = await ProvidersController
         .currentDnsProvider!
         .tryInitApiByToken(providerToken);
@@ -217,7 +220,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  Future<void> setDnsApiToken(final String dnsApiToken) async {
+  Future<void> setDnsApiCredential(
+    final DnsProviderCredential dnsApiToken,
+  ) async {
     if (state is ServerInstallationRecovery) {
       await setAndValidateDnsApiToken(dnsApiToken);
       return;
@@ -226,7 +231,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
-        dnsApiToken: dnsApiToken,
+        dnsApiCredential: dnsApiToken,
       ),
     );
   }
@@ -289,8 +294,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     final installationData = LaunchInstallationData(
       rootUser: state.rootUser!,
-      dnsApiToken: state.dnsApiToken!,
-      dnsProviderType: state.serverDomain!.provider,
+      dnsApiCredential: state.dnsApiCredential!,
       serverDomain: state.serverDomain!,
       serverTypeId: state.serverTypeIdentificator!,
       errorCallback: clearAppConfig,
@@ -767,7 +771,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   // Merged with finish recovery process
-  Future<void> setAndValidateDnsApiToken(final String token) async {
+  Future<void> setAndValidateDnsApiToken(
+    final DnsProviderCredential credential,
+  ) async {
     final ServerInstallationRecovery dataState =
         state as ServerInstallationRecovery;
     final ServerDomain? serverDomain = dataState.serverDomain;
@@ -775,7 +781,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return;
     }
     final isTokenValidResult = await repository.validateDnsToken(
-      token,
+      credential,
       serverDomain.domainName,
     );
     if (!isTokenValidResult.success) {
@@ -796,7 +802,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         provider: dnsProviderType,
       ),
     );
-    await repository.setDnsApiToken(token);
+    await repository.setDnsApiToken(credential);
 
     await repository.saveIsServerStarted(serverStarted: true);
     await repository.saveIsServerRebootedFirstTime(
@@ -822,7 +828,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         domainName: serverDomain.domainName,
         provider: dnsProviderType,
       ),
-      dnsApiToken: token,
+      dnsApiCredential: credential,
       serverTypeIdentificator: serverType?.data?.identifier,
     );
     emit(updatedState.finish());

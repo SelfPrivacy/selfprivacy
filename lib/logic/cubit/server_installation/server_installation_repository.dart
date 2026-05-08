@@ -49,7 +49,8 @@ class ServerInstallationRepository {
     final List<Server> servers = getIt<ResourcesModel>().servers;
     final String? providerApiToken = getIt<ResourcesModel>().serverProviderKey;
     final String? location = getIt<ResourcesModel>().serverLocation;
-    final String? dnsApiToken = getIt<ResourcesModel>().dnsProviderKey;
+    final DnsProviderCredential? dnsApiCredential =
+        getIt<ResourcesModel>().dnsProviderCredentials.firstOrNull;
     final String? serverTypeIdentificator = getIt<ResourcesModel>().serverType;
     final ServerDomain? serverDomain = getIt<ResourcesModel>().serverDomain;
     final DnsProviderType? dnsProvider = getIt<ResourcesModel>().dnsProvider;
@@ -76,9 +77,13 @@ class ServerInstallationRepository {
             serverDomain.provider != DnsProviderType.unknown)) {
       ProvidersController.initDnsProvider(
         DnsProviderSettings(
-          isAuthorized: dnsApiToken != null,
+          isAuthorized: dnsApiCredential != null,
           provider: dnsProvider ?? serverDomain!.provider,
-          token: dnsApiToken,
+          token: dnsApiCredential?.token,
+          tokenId: dnsApiCredential?.tokenId,
+          url: dnsApiCredential?.url,
+          tenant: dnsApiCredential?.tenant,
+          secondaryToken: dnsApiCredential?.secondaryToken,
         ),
       );
     }
@@ -97,7 +102,7 @@ class ServerInstallationRepository {
         return ServerInstallationFinished(
           providerApiToken: providerApiToken,
           serverTypeIdentificator: serverTypeIdentificator,
-          dnsApiToken: dnsApiToken!,
+          dnsApiCredential: dnsApiCredential!,
           serverDomain: serverDomain!,
           serverDetails: serverDetails!,
           serverLocation: location,
@@ -122,8 +127,8 @@ class ServerInstallationRepository {
       ProvidersController.initDnsProvider(
         DnsProviderSettings(
           provider: wizardData.dnsProviderType!,
-          isAuthorized: wizardData.dnsProviderKey != null,
-          token: wizardData.dnsProviderKey,
+          isAuthorized: wizardData.dnsProviderToken != null,
+          token: wizardData.dnsProviderToken,
         ),
       );
     }
@@ -131,14 +136,14 @@ class ServerInstallationRepository {
     if (wizardData.isRecoveringServer && wizardData.serverDomain != null) {
       return ServerInstallationRecovery(
         providerApiToken: wizardData.serverProviderKey,
-        dnsApiToken: wizardData.dnsProviderKey,
+        dnsApiCredential: wizardData.dnsProviderCredential,
         serverDomain: wizardData.serverDomain,
         serverTypeIdentificator: wizardData.serverTypeIdentifier,
         serverLocation: wizardData.serverLocation,
         serverDetails: wizardData.serverDetails,
         currentStep: _getCurrentRecoveryStep(
           wizardData.serverProviderKey,
-          wizardData.dnsProviderKey,
+          wizardData.dnsProviderToken,
           wizardData.serverDomain!,
           wizardData.serverDetails,
         ),
@@ -194,15 +199,15 @@ class ServerInstallationRepository {
   }
 
   Future<GenericResult<bool>> validateDnsToken(
-    final String token,
+    final DnsProviderCredential credential,
     final String domain,
   ) async {
     final result = await ProvidersController.currentDnsProvider!
-        .tryInitApiByToken(token);
+        .tryInitApiByToken(credential);
     if (!result.success) {
       return result;
     }
-    await setDnsApiToken(token);
+    await setDnsApiToken(credential);
     final domainResult = await ProvidersController.currentDnsProvider!
         .domainList();
     if (!domainResult.success || domainResult.data.isEmpty) {
@@ -502,20 +507,17 @@ class ServerInstallationRepository {
     );
   }
 
-  Future<void> setDnsApiToken(final String key) async {
-    await getIt<WizardDataModel>().setDnsProviderKey(key);
-    await getIt<ResourcesModel>().addDnsProviderToken(
-      DnsProviderCredential(
-        tokenId: null,
-        token: key,
-        provider: getIt<WizardDataModel>().serverInstallation!.dnsProviderType!,
-        associatedDomainNames: [],
-      ),
-    );
+  Future<void> setDnsApiToken(final DnsProviderCredential credential) async {
+    await getIt<WizardDataModel>().setDnsProviderCredential(credential);
+    await getIt<ResourcesModel>().addDnsProviderToken(credential);
     ProvidersController.initDnsProvider(
       DnsProviderSettings(
         provider: getIt<WizardDataModel>().serverInstallation!.dnsProviderType!,
-        token: key,
+        token: credential.token,
+        tokenId: credential.tokenId,
+        url: credential.url,
+        tenant: credential.tenant,
+        secondaryToken: credential.secondaryToken,
         isAuthorized: true,
       ),
     );
@@ -582,10 +584,10 @@ class ServerInstallationRepository {
         wizardData.serverProviderKey!,
       );
     }
-    if (wizardData.dnsProviderKey != null) {
-      await getIt<ResourcesModel>().associateDomainWithToken(
+    if (wizardData.dnsProviderToken != null) {
+      await getIt<ResourcesModel>().associateDomainWithCredential(
         wizardData.serverDomain!.domainName,
-        wizardData.dnsProviderKey!,
+        wizardData.dnsProviderCredential,
       );
     }
     await getIt<WizardDataModel>().clearServerInstallation();

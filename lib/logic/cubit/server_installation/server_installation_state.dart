@@ -4,7 +4,7 @@ abstract class ServerInstallationState extends Equatable {
   const ServerInstallationState({
     required this.providerApiToken,
     required this.serverTypeIdentificator,
-    required this.dnsApiToken,
+    required this.dnsApiCredential,
     required this.serverDomain,
     required this.rootUser,
     required this.serverDetails,
@@ -19,7 +19,7 @@ abstract class ServerInstallationState extends Equatable {
   List<Object?> get props => [
     providerApiToken,
     serverTypeIdentificator,
-    dnsApiToken,
+    dnsApiCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -30,7 +30,7 @@ abstract class ServerInstallationState extends Equatable {
   ];
 
   final String? providerApiToken;
-  final String? dnsApiToken;
+  final DnsProviderCredential? dnsApiCredential;
   final String? serverTypeIdentificator;
   final String? serverLocation;
   final ServerDomain? serverDomain;
@@ -43,7 +43,7 @@ abstract class ServerInstallationState extends Equatable {
 
   bool get isServerProviderApiKeyFilled => providerApiToken != null;
   bool get isServerTypeFilled => serverTypeIdentificator != null;
-  bool get isDnsProviderFilled => dnsApiToken != null;
+  bool get isDnsProviderFilled => dnsApiCredential != null;
   bool get isDomainSelected => serverDomain != null;
   bool get isPrimaryUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
@@ -92,7 +92,7 @@ class TimerState extends ServerInstallationNotFinished {
          providerApiToken: dataState.providerApiToken,
          serverTypeIdentificator: dataState.serverTypeIdentificator,
          serverLocation: dataState.serverLocation,
-         dnsApiToken: dataState.dnsApiToken,
+         dnsApiCredential: dataState.dnsApiCredential,
          serverDomain: dataState.serverDomain,
          rootUser: dataState.rootUser,
          serverDetails: dataState.serverDetails,
@@ -136,7 +136,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     super.providerApiToken,
     super.serverLocation,
     super.serverTypeIdentificator,
-    super.dnsApiToken,
+    super.dnsApiCredential,
     super.serverDomain,
     super.rootUser,
     super.serverDetails,
@@ -147,7 +147,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final ServerInstallationWizardData data,
   ) : this(
         providerApiToken: data.serverProviderKey,
-        dnsApiToken: data.dnsProviderKey,
+        dnsApiCredential: data.dnsProviderCredential,
         serverDomain: data.serverDomain,
         serverTypeIdentificator: data.serverTypeIdentifier,
         serverLocation: data.serverLocation,
@@ -171,7 +171,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     providerApiToken,
     serverTypeIdentificator,
     serverLocation,
-    dnsApiToken,
+    dnsApiCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -187,7 +187,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final String? providerApiToken,
     final String? serverLocation,
     final String? serverTypeIdentificator,
-    final String? dnsApiToken,
+    final DnsProviderCredential? dnsApiCredential,
     final ServerDomain? serverDomain,
     final User? rootUser,
     final ServerHostingDetails? serverDetails,
@@ -203,7 +203,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     serverLocation: serverLocation ?? this.serverLocation,
     serverTypeIdentificator:
         serverTypeIdentificator ?? this.serverTypeIdentificator,
-    dnsApiToken: dnsApiToken ?? this.dnsApiToken,
+    dnsApiCredential: dnsApiCredential ?? this.dnsApiCredential,
     serverDomain: serverDomain ?? this.serverDomain,
     rootUser: rootUser ?? this.rootUser,
     serverDetails: serverDetails ?? this.serverDetails,
@@ -223,7 +223,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     providerApiToken: providerApiToken,
     serverLocation: serverLocation,
     serverTypeIdentificator: serverTypeIdentificator,
-    dnsApiToken: dnsApiToken!,
+    dnsApiCredential: dnsApiCredential!,
     serverDomain: serverDomain!,
     serverDetails: serverDetails!,
   );
@@ -235,7 +235,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
         providerApiToken: null,
         serverLocation: null,
         serverTypeIdentificator: null,
-        dnsApiToken: null,
+        dnsApiCredential: null,
         serverDomain: null,
         rootUser: null,
         serverDetails: null,
@@ -251,7 +251,7 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
 
 class ServerInstallationFinished extends ServerInstallationState {
   const ServerInstallationFinished({
-    required String super.dnsApiToken,
+    required DnsProviderCredential super.dnsApiCredential,
     required ServerDomain super.serverDomain,
     required ServerHostingDetails super.serverDetails,
     super.providerApiToken,
@@ -270,7 +270,7 @@ class ServerInstallationFinished extends ServerInstallationState {
     providerApiToken,
     serverTypeIdentificator,
     serverLocation,
-    dnsApiToken,
+    dnsApiCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -301,7 +301,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     super.providerApiToken,
     super.serverTypeIdentificator,
     super.serverLocation,
-    super.dnsApiToken,
+    super.dnsApiCredential,
     super.serverDomain,
     super.serverDetails,
   }) : super(
@@ -319,7 +319,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     providerApiToken,
     serverTypeIdentificator,
     serverLocation,
-    dnsApiToken,
+    dnsApiCredential,
     serverDomain,
     rootUser,
     serverDetails,
@@ -333,7 +333,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     final String? providerApiToken,
     final String? serverLocation,
     final String? serverTypeIdentificator,
-    final String? dnsApiToken,
+    final DnsProviderCredential? dnsApiCredential,
     final ServerDomain? serverDomain,
     final ServerHostingDetails? serverDetails,
     final RecoveryStep? currentStep,
@@ -343,7 +343,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     serverLocation: serverLocation ?? this.serverLocation,
     serverTypeIdentificator:
         serverTypeIdentificator ?? this.serverTypeIdentificator,
-    dnsApiToken: dnsApiToken ?? this.dnsApiToken,
+    dnsApiCredential: dnsApiCredential ?? this.dnsApiCredential,
     serverDomain: serverDomain ?? this.serverDomain,
     serverDetails: serverDetails ?? this.serverDetails,
     currentStep: currentStep ?? this.currentStep,
@@ -354,7 +354,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     providerApiToken: providerApiToken,
     serverLocation: serverLocation,
     serverTypeIdentificator: serverTypeIdentificator,
-    dnsApiToken: dnsApiToken!,
+    dnsApiCredential: dnsApiCredential!,
     serverDomain: serverDomain!,
     serverDetails: serverDetails!,
   );

@@ -200,11 +200,10 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final serverResult = await _adapter.api().createServer(
-      dnsApiToken: installationData.dnsApiToken,
+      dnsApiCredential: installationData.dnsApiCredential,
       rootUser: installationData.rootUser,
       domainName: installationData.serverDomain.domainName,
       serverType: installationData.serverTypeId,
-      dnsProviderType: installationData.dnsProviderType.toInfectName(),
       hostName: hostname,
       base64Password: base64.encode(
         utf8.encode(installationData.rootUser.password ?? 'PASS'),

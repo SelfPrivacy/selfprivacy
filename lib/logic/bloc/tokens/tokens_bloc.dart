@@ -127,6 +127,10 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final DnsProviderSettings settings = DnsProviderSettings(
       provider: credential.provider,
       token: credential.token,
+      tokenId: credential.tokenId,
+      url: credential.url,
+      tenant: credential.tenant,
+      secondaryToken: credential.secondaryToken,
       isAuthorized: true,
     );
     final dnsProvider = DnsProviderFactory.createDnsProviderInterface(settings);

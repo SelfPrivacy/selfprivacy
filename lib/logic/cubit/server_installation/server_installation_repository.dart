@@ -128,7 +128,11 @@ class ServerInstallationRepository {
         DnsProviderSettings(
           provider: wizardData.dnsProviderType!,
           isAuthorized: wizardData.dnsProviderToken != null,
-          token: wizardData.dnsProviderToken,
+          token: wizardData.dnsProviderCredential.token,
+          tokenId: wizardData.dnsProviderCredential.tokenId,
+          url: wizardData.dnsProviderCredential.url,
+          tenant: wizardData.dnsProviderCredential.tenant,
+          secondaryToken: wizardData.dnsProviderCredential.secondaryToken,
         ),
       );
     }

@@ -5,7 +5,7 @@ PorkbunDnsRecord _fromDnsRecord(
   final String rootDomain,
 ) {
   final String type = dnsRecord.type;
-  String content = dnsRecord.content ?? '';
+  final String content = dnsRecord.content ?? '';
   String name = dnsRecord.name ?? '';
   if (name == '@' || name == rootDomain) {
     name = '';

@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/porkbun/porkbun_api.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/porkbun/porkbun_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -36,71 +37,215 @@ class PorkbunDnsProvider extends DnsProvider {
   final ApiAdapter _adapter;
 
   @override
-  Future<GenericResult<void>> createDomainRecords({
-    required List<DnsRecord> records,
-    required ServerDomain domain,
-  }) {
-    // TODO: implement createDomainRecords
-    throw UnimplementedError();
+  bool get isAuthorized => _adapter.api().isWithToken;
+
+  @override
+  DnsProviderType get type => DnsProviderType.porkbun;
+
+  @override
+  // TODO(inexcode): implement howToRegister
+  String get howToRegister => throw UnimplementedError();
+
+  @override
+  Future<GenericResult<bool>> tryInitApiByToken(
+    final DnsProviderCredential credential,
+  ) async {
+    if (credential.tokenId == null) {
+      return GenericResult(
+        success: false,
+        data: false,
+        message: 'Token ID is required for Porkbun',
+      );
+    }
+    final api = _adapter.api(getInitialized: false);
+    return api.isApiTokenValid(credential.token, credential.tokenId ?? '');
   }
 
   @override
-  Future<GenericResult<List<ServerDomain>>> domainList() {
-    // TODO: implement domainList
-    throw UnimplementedError();
+  Future<GenericResult<List<ServerDomain>>> domainList() async {
+    List<ServerDomain> domains = [];
+    final result = await _adapter.api().getDomains();
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: domains,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    domains = result.data
+        .map<ServerDomain>((final el) => el.toServerDomain())
+        .toList();
+
+    return GenericResult(success: true, data: domains);
+  }
+
+  @override
+  Future<GenericResult<void>> createDomainRecords({
+    required final List<DnsRecord> records,
+    required final ServerDomain domain,
+  }) => _adapter.api().createMultipleDnsRecords(
+    domainName: domain.domainName,
+    records: records
+        .map<PorkbunDnsRecord>(
+          (final e) => PorkbunDnsRecord.fromDnsRecord(e, domain.domainName),
+        )
+        .toList(),
+  );
+
+  @override
+  Future<GenericResult<void>> removeDomainRecords({
+    required final List<DnsRecord> records,
+    required final ServerDomain domain,
+  }) async {
+    final result = await _adapter.api().getDnsRecords(
+      domainName: domain.domainName,
+    );
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: null,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<PorkbunDnsRecord> selfprivacyRecords = records
+        .map(
+          (final record) =>
+              PorkbunDnsRecord.fromDnsRecord(record, domain.domainName),
+        )
+        .toList();
+
+    final List<PorkbunDnsRecord> porkbunRecords = result.data
+      ..removeWhere(
+        (final porkbunRecord) => !selfprivacyRecords.any(
+          (final selfprivacyRecord) =>
+              selfprivacyRecord.type == porkbunRecord.type &&
+              selfprivacyRecord.name == porkbunRecord.name,
+        ),
+      );
+
+    return _adapter.api().removeRecords(
+      domainName: domain.domainName,
+      records: porkbunRecords,
+    );
+  }
+
+  @override
+  Future<GenericResult<void>> updateDnsRecords({
+    required final List<DnsRecord> newRecords,
+    required final ServerDomain domain,
+    final List<DnsRecord>? oldRecords,
+  }) async {
+    final result = await _adapter.api().getDnsRecords(
+      domainName: domain.domainName,
+    );
+    if (result.data.isEmpty || !result.success) {
+      return GenericResult(
+        success: result.success,
+        data: null,
+        code: result.code,
+        message: result.message,
+      );
+    }
+
+    final List<PorkbunDnsRecord> newSelfprivacyRecords = newRecords
+        .map(
+          (final record) =>
+              PorkbunDnsRecord.fromDnsRecord(record, domain.domainName),
+        )
+        .toList();
+
+    final List<PorkbunDnsRecord>? oldSelfprivacyRecords = oldRecords
+        ?.map(
+          (final record) =>
+              PorkbunDnsRecord.fromDnsRecord(record, domain.domainName),
+        )
+        .toList();
+
+    final List<PorkbunDnsRecord> porkbunRecords = result.data;
+
+    final List<PorkbunDnsRecord> recordsToDelete = newSelfprivacyRecords
+        .where(
+          (final newRecord) => porkbunRecords.any(
+            (final oldRecord) =>
+                newRecord.type == oldRecord.type &&
+                newRecord.name == oldRecord.name,
+          ),
+        )
+        .toList();
+
+    if (oldSelfprivacyRecords != null) {
+      recordsToDelete.addAll(
+        oldSelfprivacyRecords
+            .where(
+              (final oldRecord) => !newSelfprivacyRecords.any(
+                (final newRecord) =>
+                    newRecord.type == oldRecord.type &&
+                    newRecord.name == oldRecord.name,
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    if (recordsToDelete.isNotEmpty) {
+      final deleteResult = await _adapter.api().removeRecords(
+        domainName: domain.domainName,
+        records: recordsToDelete,
+      );
+      if (!deleteResult.success) {
+        return deleteResult;
+      }
+    }
+
+    return _adapter.api().createMultipleDnsRecords(
+      domainName: domain.domainName,
+      records: newSelfprivacyRecords,
+    );
   }
 
   @override
   Future<GenericResult<List<DnsRecord>>> getDnsRecords({
-    required ServerDomain domain,
+    required final ServerDomain domain,
   }) {
-    // TODO: implement getDnsRecords
-    throw UnimplementedError();
-  }
+    final List<DnsRecord> records = [];
+    return _adapter.api().getDnsRecords(domainName: domain.domainName).then((
+      final result,
+    ) {
+      if (result.data.isEmpty || !result.success) {
+        return GenericResult(
+          success: result.success,
+          data: records,
+          code: result.code,
+          message: result.message,
+        );
+      }
 
-  @override
-  // TODO: implement howToRegister
-  String get howToRegister => throw UnimplementedError();
+      try {
+        for (final record in result.data) {
+          records.add(record.toDnsRecord(domain.domainName));
+        }
+      } catch (e) {
+        return GenericResult(
+          success: false,
+          data: records,
+          message: e.toString(),
+        );
+      }
 
-  @override
-  // TODO: implement isAuthorized
-  bool get isAuthorized => throw UnimplementedError();
-
-  @override
-  Future<GenericResult<void>> removeDomainRecords({
-    required List<DnsRecord> records,
-    required ServerDomain domain,
-  }) {
-    // TODO: implement removeDomainRecords
-    throw UnimplementedError();
+      return GenericResult(success: true, data: records);
+    });
   }
 
   @override
   Future<GenericResult<void>> setDnsRecord(
-    DnsRecord record,
-    ServerDomain domain,
-  ) {
-    // TODO: implement setDnsRecord
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<GenericResult<bool>> tryInitApiByToken(String token) {
-    // TODO: implement tryInitApiByToken
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement type
-  DnsProviderType get type => throw UnimplementedError();
-
-  @override
-  Future<GenericResult<void>> updateDnsRecords({
-    required List<DnsRecord> newRecords,
-    required ServerDomain domain,
-    List<DnsRecord>? oldRecords,
-  }) {
-    // TODO: implement updateDnsRecords
-    throw UnimplementedError();
-  }
+    final DnsRecord record,
+    final ServerDomain domain,
+  ) => _adapter.api().createMultipleDnsRecords(
+    domainName: domain.domainName,
+    records: [PorkbunDnsRecord.fromDnsRecord(record, domain.domainName)],
+  );
 }

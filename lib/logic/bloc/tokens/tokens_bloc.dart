@@ -131,7 +131,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     );
     final dnsProvider = DnsProviderFactory.createDnsProviderInterface(settings);
     final basicInitCheckResult = await dnsProvider.tryInitApiByToken(
-      credential.token,
+      credential,
     );
     if (!basicInitCheckResult.data) {
       return TokenStatus.invalid;

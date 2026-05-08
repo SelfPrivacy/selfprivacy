@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec/desec_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -31,13 +32,11 @@ class DesecDnsProvider extends DnsProvider {
   String get howToRegister => 'how_fix_domain_desec';
 
   @override
-  Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
+  Future<GenericResult<bool>> tryInitApiByToken(
+    final DnsProviderCredential credential,
+  ) {
     final api = _adapter.api(getInitialized: false);
-    final result = await api.isApiTokenValid(token);
-    if (!result.data || !result.success) {
-      return result;
-    }
-    return result;
+    return api.isApiTokenValid(credential.token);
   }
 
   @override

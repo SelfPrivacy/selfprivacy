@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
@@ -18,7 +19,9 @@ abstract class DnsProvider {
   ///
   /// To generate a token for your account follow instructions of your
   /// DNS provider respectfully.
-  Future<GenericResult<bool>> tryInitApiByToken(final String token);
+  Future<GenericResult<bool>> tryInitApiByToken(
+    final DnsProviderCredential credential,
+  );
 
   /// Returns list of all available domain entries assigned to the account.
   Future<GenericResult<List<ServerDomain>>> domainList();

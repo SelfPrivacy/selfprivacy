@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/digital_ocean_dns/digital_ocean_dns_api.dart';
+import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/digital_ocean/digital_ocean_dns_info.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -33,13 +34,11 @@ class DigitalOceanDnsProvider extends DnsProvider {
   String get howToRegister => 'how_fix_domain_digital_ocean';
 
   @override
-  Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
+  Future<GenericResult<bool>> tryInitApiByToken(
+    final DnsProviderCredential credential,
+  ) {
     final api = _adapter.api(getInitialized: false);
-    final result = await api.isApiTokenValid(token);
-    if (!result.data || !result.success) {
-      return result;
-    }
-    return result;
+    return api.isApiTokenValid(credential.token);
   }
 
   @override
@@ -171,7 +170,7 @@ class DigitalOceanDnsProvider extends DnsProvider {
     }
 
     if (recordsToDelete.isNotEmpty) {
-      return _adapter.api().removeSimilarRecords(
+      await _adapter.api().removeSimilarRecords(
         domainName: domain.domainName,
         records: recordsToDelete,
       );

@@ -60,6 +60,8 @@ pkgs.stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mv $PUB_CACHE $out
+    mkdir $out
+
+    cp -r $PUB_CACHE/. $out/
   '';
 }

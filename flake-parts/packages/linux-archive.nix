@@ -24,7 +24,9 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
 
-    tar -cvf "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" -C vendor/ .
+    tar --sort=name --mtime="1970-01-01 00:00Z" --owner=0 --group=0 --numeric-owner \
+        --pax-option="exthdr.name=%d/PaxHeaders/%f",delete=atime,delete=ctime \
+        -cvf "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" -C vendor/ .
     cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" $out/
   '';
 }

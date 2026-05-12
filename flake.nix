@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     #nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    gradle2nix.url = "github:tadfisher/gradle2nix/v2";
   };
 
   outputs =
@@ -13,6 +14,7 @@
       nixpkgs,
       #nixpkgs-unstable,
       flake-parts,
+      gradle2nix,
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [

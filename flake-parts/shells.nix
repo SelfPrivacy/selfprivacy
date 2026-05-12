@@ -69,18 +69,31 @@
           shellHook = ''
             export HOME=$(mktemp -d)
             export PUB_CACHE="$HOME/pubcache"
-            export FLUTTER_ROOT="${sp.ourFlutter}"
+            export FLUTTER_ROOT="$HOME/flutter"
+            export GRADLE_USER_HOME="$HOME/gradle"
+            export MAVEN_REPO="${sp.androidGradleDeps}"
+            export ANDROID_SDK="${sp.ourAndroidSDK.androidsdk}"
 
             export JAVA_HOME="${sp.ourJava.home}"
             export ANDROID_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk"
             export ANDROID_SDK_ROOT="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk"
             export ANDROID_NDK_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/ndk"
+            export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/35.0.0/aapt2"
 
             mkdir $PUB_CACHE
             lndir -silent ${sp.flutterDeps} $PUB_CACHE
 
+            mkdir $FLUTTER_ROOT
+            lndir -silent ${sp.ourFlutter} $FLUTTER_ROOT
+            # rm -rf $FLUTTER_ROOT/bin
+            # cp -r ${sp.ourFlutter}/bin $FLUTTER_ROOT/
+            # chmod -R u+w $FLUTTER_ROOT/bin
+
             mkdir $HOME/builddir
             lndir -silent ${sp.projectFiles} $HOME/builddir
+            rm -rf $HOME/builddir/android
+            cp -r ${sp.projectFiles}/android $HOME/builddir/
+            chmod -R u+w $HOME/builddir/android
             cd $HOME/builddir
           '';
         };

@@ -72,7 +72,7 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
 
-    mv $HOME/ios $out/
-    mv $HOME/.cocoapods $out/cocoapods
+    cp -r $HOME/ios $out/
+    cp -r $HOME/.cocoapods $out/cocoapods
   '';
 }

@@ -85,14 +85,44 @@ class PorkbunDnsProvider extends DnsProvider {
   Future<GenericResult<void>> createDomainRecords({
     required final List<DnsRecord> records,
     required final ServerDomain domain,
-  }) => _adapter.api().createMultipleDnsRecords(
-    domainName: domain.domainName,
-    records: records
+  }) async {
+    final List<PorkbunDnsRecord> porkbunRecords = records
         .map<PorkbunDnsRecord>(
           (final e) => PorkbunDnsRecord.fromDnsRecord(e, domain.domainName),
         )
-        .toList(),
-  );
+        .toList();
+
+    final existingResult = await _adapter.api().getDnsRecords(
+      domainName: domain.domainName,
+    );
+    if (existingResult.success && existingResult.data.isNotEmpty) {
+      final Set<String?> newARecordNames = porkbunRecords
+          .where((final r) => r.type == 'A' || r.type == 'AAAA')
+          .map((final r) => r.name)
+          .toSet();
+      final List<PorkbunDnsRecord> conflictsToRemove = existingResult.data
+          .where(
+            (final existing) =>
+                (existing.type == 'ALIAS' || existing.type == 'CNAME') &&
+                newARecordNames.contains(existing.name),
+          )
+          .toList();
+      if (conflictsToRemove.isNotEmpty) {
+        final deleteResult = await _adapter.api().removeRecords(
+          domainName: domain.domainName,
+          records: conflictsToRemove,
+        );
+        if (!deleteResult.success) {
+          return deleteResult;
+        }
+      }
+    }
+
+    return _adapter.api().createMultipleDnsRecords(
+      domainName: domain.domainName,
+      records: porkbunRecords,
+    );
+  }
 
   @override
   Future<GenericResult<void>> removeDomainRecords({

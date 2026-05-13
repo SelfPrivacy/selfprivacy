@@ -28,7 +28,6 @@ class PorkbunDomain {
 
   final String tld;
 
-
   static PorkbunDomain fromJson(final Map<String, dynamic> json) =>
       _$PorkbunDomainFromJson(json);
   ServerDomain toServerDomain() => _toServerDomain(this);

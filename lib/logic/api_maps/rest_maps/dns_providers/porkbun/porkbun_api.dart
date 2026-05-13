@@ -227,7 +227,5 @@ class PorkbunApi extends RestApiMap {
     } finally {
       close(client);
     }
-
-
   }
 }

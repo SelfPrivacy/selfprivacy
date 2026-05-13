@@ -64,7 +64,7 @@ enum DnsProviderType {
     digitalOcean => 'how_digital_ocean',
     cloudflare => 'how_cloudflare',
     desec => 'how_desec',
-    porkbun => '',
+    porkbun => 'how_porkbun',
     unknown => '',
   };
 

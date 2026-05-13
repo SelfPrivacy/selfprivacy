@@ -43,8 +43,7 @@ class PorkbunDnsProvider extends DnsProvider {
   DnsProviderType get type => DnsProviderType.porkbun;
 
   @override
-  // TODO(inexcode): implement howToRegister
-  String get howToRegister => throw UnimplementedError();
+  String get howToRegister => 'how_fix_domain_porkbun';
 
   @override
   Future<GenericResult<bool>> tryInitApiByToken(

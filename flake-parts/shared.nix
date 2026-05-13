@@ -32,6 +32,26 @@
         applicationGeneric = self'.packages.linux-generic;
         applicationMetadata = toNixFromYAML ../pubspec.yaml;
 
+        buildroot = self'.packages.linux-buildroot;
+        buildrootDeps = self'.packages.linux-buildroot-deps;
+        buildrootToolkit = self'.packages.linux-buildroot-toolkit;
+        buildrootFlutter = pkgs.fetchzip {
+          url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.35.7-stable.tar.xz";
+          hash = "sha256-fQtSXDNaQUrvpq7V4/7Z6vtNhuLXiT9zu/eDwiJ9lAI=";
+        };
+        buildrootPixi = pkgs.fetchurl {
+          url = "https://github.com/prefix-dev/pixi/releases/download/v0.68.1/pixi-x86_64-unknown-linux-musl";
+          hash = "sha256-AdKdS3irB7rfV+3aCz0gC8cF1a+22plg66vnAQzYNuQ=";
+        };
+        buildrootPixiFiles = lib.fileset.toSource {
+          root = ../ci/.;
+          fileset = lib.fileset.unions [
+            ../ci/pixi.toml
+            ../ci/pixi.lock
+            ../ci/setup.sh
+          ];
+        };
+
         flutterDeps = self'.packages.flutter-deps;
         flutterPubspec = ../pubspec.yaml;
         flutterLockfile = ../pubspec.lock;

@@ -121,7 +121,6 @@ class ProviderInputDataPage extends StatelessWidget {
                 .requiredCredentials
                 .requiresTokenId) ...[
               CubitFormTextField(
-                autofocus: true,
                 formFieldCubit: formCubit.tokenId,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -131,7 +130,6 @@ class ProviderInputDataPage extends StatelessWidget {
               const SizedBox(height: 16),
             ],
             CubitFormTextField(
-              autofocus: true,
               formFieldCubit: formCubit.token,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -141,7 +139,6 @@ class ProviderInputDataPage extends StatelessWidget {
             if (providerInfo.providerType.requiredCredentials.requiresUrl) ...[
               const SizedBox(height: 16),
               CubitFormTextField(
-                autofocus: true,
                 formFieldCubit: formCubit.url,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -155,7 +152,6 @@ class ProviderInputDataPage extends StatelessWidget {
                 .requiresTenant) ...[
               const SizedBox(height: 16),
               CubitFormTextField(
-                autofocus: true,
                 formFieldCubit: formCubit.tenant,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -169,7 +165,6 @@ class ProviderInputDataPage extends StatelessWidget {
                 .requiresSecondaryToken) ...[
               const SizedBox(height: 16),
               CubitFormTextField(
-                autofocus: true,
                 formFieldCubit: formCubit.secondaryToken,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),

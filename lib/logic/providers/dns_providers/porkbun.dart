@@ -196,27 +196,33 @@ class PorkbunDnsProvider extends DnsProvider {
 
     final List<PorkbunDnsRecord> porkbunRecords = result.data;
 
-    final List<PorkbunDnsRecord> recordsToDelete = newSelfprivacyRecords
+    // Select records to delete by matching against porkbunRecords so that the
+    // entries carry the API-assigned IDs required by removeRecords.
+    final List<PorkbunDnsRecord> recordsToDelete = porkbunRecords
         .where(
-          (final newRecord) => porkbunRecords.any(
-            (final oldRecord) =>
-                newRecord.type == oldRecord.type &&
-                newRecord.name == oldRecord.name,
+          (final existing) => newSelfprivacyRecords.any(
+            (final newRecord) =>
+                newRecord.type == existing.type &&
+                newRecord.name == existing.name,
           ),
         )
         .toList();
 
     if (oldSelfprivacyRecords != null) {
       recordsToDelete.addAll(
-        oldSelfprivacyRecords
-            .where(
-              (final oldRecord) => !newSelfprivacyRecords.any(
+        porkbunRecords.where(
+          (final existing) =>
+              oldSelfprivacyRecords.any(
+                (final oldRecord) =>
+                    oldRecord.type == existing.type &&
+                    oldRecord.name == existing.name,
+              ) &&
+              !newSelfprivacyRecords.any(
                 (final newRecord) =>
-                    newRecord.type == oldRecord.type &&
-                    newRecord.name == oldRecord.name,
+                    newRecord.type == existing.type &&
+                    newRecord.name == existing.name,
               ),
-            )
-            .toList(),
+        ),
       );
     }
 

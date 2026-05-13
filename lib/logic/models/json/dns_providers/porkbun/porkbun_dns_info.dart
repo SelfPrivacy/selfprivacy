@@ -9,20 +9,13 @@ part 'porkbun_dns_adapter.dart';
 class PorkbunDomain {
   PorkbunDomain({
     required this.domain,
-    required this.autoRenew,
     required this.createDate,
     required this.expireDate,
-    required this.notLocal,
-    required this.securityLock,
     required this.status,
     required this.tld,
-    required this.whoisPrivacy,
   });
 
   final String domain;
-
-  /// 1 if auto-renew is enabled, 0 otherwise
-  final int autoRenew;
 
   /// Format: "2026-04-08 12:36:31"
   final String createDate;
@@ -30,19 +23,11 @@ class PorkbunDomain {
   /// Format: "2026-04-08 12:36:31"
   final String expireDate;
 
-  /// 1 if the domain is externally managed (not authoritative), 0 otherwise
-  final int notLocal;
-
-  /// 1 if transfer lock is enabled, 0 otherwise
-  final int securityLock;
-
   /// Domain registration status (e.g. ACTIVE)
   final String status;
 
   final String tld;
 
-  /// 1 if WHOIS privacy is enabled, 0 otherwise
-  final int whoisPrivacy;
 
   static PorkbunDomain fromJson(final Map<String, dynamic> json) =>
       _$PorkbunDomainFromJson(json);

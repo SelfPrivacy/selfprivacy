@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:async';
 import 'dart:io';
 
@@ -107,25 +109,26 @@ class PorkbunApi extends RestApiMap {
   Future<GenericResult<List<PorkbunDomain>>> getDomains() async {
     List<PorkbunDomain> domains = [];
 
-    late final Response? response;
+    late final Response response;
     final Dio client = await getClient();
     try {
       response = await client.get(
         '/domain/listAll',
         queryParameters: {'start': 0, 'includeLabels': false},
       );
-      domains =
-          // ignore: avoid_dynamic_calls
-          response.data['domains']!
-              .map<PorkbunDomain>(PorkbunDomain.fromJson)
-              .toList();
+      domains = response.data['domains']!
+          .map<PorkbunDomain>(
+            // ignore: unnecessary_lambdas
+            (final e) => PorkbunDomain.fromJson(e),
+          )
+          .toList();
     } catch (e) {
       logger('Error fetching Porkbun domains', error: e);
       return GenericResult(
         success: false,
         data: domains,
-        code: response?.statusCode,
-        message: response?.statusMessage ?? e.toString(),
+        code: response.statusCode,
+        message: response.statusMessage ?? e.toString(),
       );
     } finally {
       close(client);
@@ -198,32 +201,33 @@ class PorkbunApi extends RestApiMap {
   }) async {
     List<PorkbunDnsRecord> records = [];
 
-    late final Response? response;
     final Dio client = await getClient();
     try {
-      response = await client.get('/dns/retrieve/$domainName');
-      records =
-          // ignore: avoid_dynamic_calls
-          response.data['records']!
-              .map<PorkbunDnsRecord>(PorkbunDnsRecord.fromJson)
-              .toList();
+      final Response response = await client.get('/dns/retrieve/$domainName');
+      records = response.data['records']!
+          .map<PorkbunDnsRecord>(
+            // ignore: unnecessary_lambdas
+            (final e) => PorkbunDnsRecord.fromJson(e),
+          )
+          .toList();
+
+      return GenericResult(
+        success: true,
+        data: records,
+        code: response.statusCode,
+        message: response.statusMessage,
+      );
     } catch (e) {
       logger('Error fetching Porkbun DNS records', error: e);
       return GenericResult(
         success: false,
         data: records,
-        code: response?.statusCode,
-        message: response?.statusMessage ?? e.toString(),
+        message: e.toString(),
       );
     } finally {
       close(client);
     }
 
-    return GenericResult(
-      success: true,
-      data: records,
-      code: response.statusCode,
-      message: response.statusMessage,
-    );
+
   }
 }

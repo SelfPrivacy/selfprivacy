@@ -9,27 +9,19 @@ part of 'porkbun_dns_info.dart';
 PorkbunDomain _$PorkbunDomainFromJson(Map<String, dynamic> json) =>
     PorkbunDomain(
       domain: json['domain'] as String,
-      autoRenew: (json['autoRenew'] as num).toInt(),
       createDate: json['createDate'] as String,
       expireDate: json['expireDate'] as String,
-      notLocal: (json['notLocal'] as num).toInt(),
-      securityLock: (json['securityLock'] as num).toInt(),
       status: json['status'] as String,
       tld: json['tld'] as String,
-      whoisPrivacy: (json['whoisPrivacy'] as num).toInt(),
     );
 
 Map<String, dynamic> _$PorkbunDomainToJson(PorkbunDomain instance) =>
     <String, dynamic>{
       'domain': instance.domain,
-      'autoRenew': instance.autoRenew,
       'createDate': instance.createDate,
       'expireDate': instance.expireDate,
-      'notLocal': instance.notLocal,
-      'securityLock': instance.securityLock,
       'status': instance.status,
       'tld': instance.tld,
-      'whoisPrivacy': instance.whoisPrivacy,
     };
 
 PorkbunDnsRecord _$PorkbunDnsRecordFromJson(Map<String, dynamic> json) =>

@@ -91,15 +91,17 @@ class ServerInstallationWizardData {
   @HiveField(19)
   final String? dnsProviderSecondaryToken;
 
-  DnsProviderCredential get dnsProviderCredential => DnsProviderCredential(
-    token: dnsProviderToken ?? '',
-    provider: dnsProviderType ?? DnsProviderType.unknown,
-    associatedDomainNames: [],
-    tokenId: dnsProviderTokenId,
-    url: dnsProviderUrl,
-    tenant: dnsProviderTenant,
-    secondaryToken: dnsProviderSecondaryToken,
-  );
+  DnsProviderCredential? get dnsProviderCredential => dnsProviderToken == null
+      ? null
+      : DnsProviderCredential(
+          token: dnsProviderToken ?? '',
+          provider: dnsProviderType ?? DnsProviderType.unknown,
+          associatedDomainNames: [],
+          tokenId: dnsProviderTokenId,
+          url: dnsProviderUrl,
+          tenant: dnsProviderTenant,
+          secondaryToken: dnsProviderSecondaryToken,
+        );
 
   // @HiveField(11)
   // was backupsCredential

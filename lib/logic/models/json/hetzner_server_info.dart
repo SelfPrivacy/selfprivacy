@@ -85,6 +85,7 @@ class HetznerServerTypeInfo {
     this.name,
     this.description,
     this.architecture,
+    this.locations,
   );
   final int cores;
   final num memory;
@@ -96,8 +97,25 @@ class HetznerServerTypeInfo {
 
   final List<HetznerPriceInfo> prices;
 
+  @JsonKey(defaultValue: [])
+  final List<HetznerServerTypeLocation> locations;
+
   static HetznerServerTypeInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerServerTypeInfoFromJson(json);
+}
+
+@JsonSerializable()
+class HetznerServerTypeLocation {
+  HetznerServerTypeLocation(this.name, this.deprecation, this.available);
+
+  final String name;
+
+  final Map<String, dynamic>? deprecation;
+
+  final bool available;
+
+  static HetznerServerTypeLocation fromJson(final Map<String, dynamic> json) =>
+      _$HetznerServerTypeLocationFromJson(json);
 }
 
 @JsonSerializable()

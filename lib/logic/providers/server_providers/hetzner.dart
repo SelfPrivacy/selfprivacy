@@ -450,6 +450,14 @@ class HetznerServerProvider extends ServerProvider {
       if (rawType.architecture == 'arm') {
         continue;
       }
+      final locationEntry = rawType.locations
+          .where((final l) => l.name == location.identifier)
+          .firstOrNull;
+      if (locationEntry == null ||
+          !locationEntry.available ||
+          locationEntry.deprecation != null) {
+        continue;
+      }
       for (final rawPrice in rawType.prices) {
         if (rawPrice.location == location.identifier) {
           types.add(
@@ -467,6 +475,7 @@ class HetznerServerProvider extends ServerProvider {
       }
     }
 
+    types.sort((final a, final b) => a.price.value.compareTo(b.price.value));
     return GenericResult(success: true, data: types);
   }
 

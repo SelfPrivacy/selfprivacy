@@ -82,6 +82,13 @@ HetznerServerTypeInfo _$HetznerServerTypeInfoFromJson(
   json['name'] as String,
   json['description'] as String,
   json['architecture'] as String,
+  (json['locations'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                HetznerServerTypeLocation.fromJson(e as Map<String, dynamic>),
+          )
+          .toList() ??
+      [],
 );
 
 Map<String, dynamic> _$HetznerServerTypeInfoToJson(
@@ -94,6 +101,23 @@ Map<String, dynamic> _$HetznerServerTypeInfoToJson(
   'description': instance.description,
   'architecture': instance.architecture,
   'prices': instance.prices,
+  'locations': instance.locations,
+};
+
+HetznerServerTypeLocation _$HetznerServerTypeLocationFromJson(
+  Map<String, dynamic> json,
+) => HetznerServerTypeLocation(
+  json['name'] as String,
+  json['deprecation'] as Map<String, dynamic>?,
+  json['available'] as bool,
+);
+
+Map<String, dynamic> _$HetznerServerTypeLocationToJson(
+  HetznerServerTypeLocation instance,
+) => <String, dynamic>{
+  'name': instance.name,
+  'deprecation': instance.deprecation,
+  'available': instance.available,
 };
 
 HetznerPriceInfo _$HetznerPriceInfoFromJson(Map<String, dynamic> json) =>

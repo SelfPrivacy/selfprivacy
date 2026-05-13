@@ -28,6 +28,10 @@ class DesiredDnsRecord {
     }
   }
 
+  @override
+  String toString() =>
+      'DesiredDnsRecord(name: $name, type: $type, content: $content, description: $description, displayName: $displayName, isSatisfied: $isSatisfied)';
+
   DesiredDnsRecord copyWith({
     final String? name,
     final String? type,

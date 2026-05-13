@@ -27,10 +27,11 @@ DnsRecord _toDnsRecord(
 ) {
   final String type = porkbunRecord.type;
   String name = porkbunRecord.name;
-  // Strig the root domain from the end of the name
-  name = name.endsWith(rootDomain)
-      ? name.substring(0, name.length - rootDomain.length)
-      : name;
+  if (name == rootDomain) {
+    name = '';
+  } else if (name.endsWith('.$rootDomain')) {
+    name = name.substring(0, name.length - rootDomain.length - 1);
+  }
 
   if (name.isEmpty) {
     name = rootDomain;

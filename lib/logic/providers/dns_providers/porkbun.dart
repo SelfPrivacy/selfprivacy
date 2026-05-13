@@ -241,6 +241,22 @@ class PorkbunDnsProvider extends DnsProvider {
   }
 
   @override
+  Future<GenericResult<bool>> validateDomainAccess(
+    final String domainName,
+  ) async {
+    final result = await _adapter.api().getDnsRecords(domainName: domainName);
+    if (!result.success &&
+        (result.message?.startsWith('DOMAIN_IS_NOT_OPTED_IN') ?? false)) {
+      return GenericResult(
+        success: false,
+        data: false,
+        message: 'initializing.porkbun_domain_not_opted_in',
+      );
+    }
+    return GenericResult(success: result.success, data: result.success);
+  }
+
+  @override
   Future<GenericResult<void>> setDnsRecord(
     final DnsRecord record,
     final ServerDomain domain,

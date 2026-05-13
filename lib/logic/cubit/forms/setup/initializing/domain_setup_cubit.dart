@@ -32,6 +32,12 @@ class DomainSetupCubit extends Cubit<DomainSetupState> {
 
     final dnsProvider = ProvidersController.currentDnsProvider!;
 
+    final accessResult = await dnsProvider.validateDomainAccess(domainName);
+    if (!accessResult.success) {
+      emit(DomainAccessDenied(domainName));
+      return;
+    }
+
     final ServerDomain domain = ServerDomain(
       domainName: domainName,
       provider: dnsProvider.type,
@@ -66,3 +72,8 @@ class Loaded extends DomainSetupState {
 }
 
 class DomainSet extends DomainSetupState {}
+
+class DomainAccessDenied extends DomainSetupState {
+  DomainAccessDenied(this.domainName);
+  final String domainName;
+}

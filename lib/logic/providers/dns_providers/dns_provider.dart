@@ -67,4 +67,10 @@ abstract class DnsProvider {
     required final ServerDomain domain,
     final List<DnsRecord>? oldRecords,
   });
+
+  /// Checks whether the API token has access to manage the given domain.
+  /// Returns success for providers that do not have per-domain access controls.
+  Future<GenericResult<bool>> validateDomainAccess(
+    final String domainName,
+  ) async => GenericResult(success: true, data: true);
 }

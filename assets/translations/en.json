@@ -550,6 +550,8 @@
         "no_connected_domains": "No connected domains at the moment",
         "loading_domain_list": "Loading domain list",
         "save_domain": "Save domain",
+        "porkbun_domain_not_opted_in_title": "API access not enabled",
+        "porkbun_domain_not_opted_in": "This domain is not opted in to API access on Porkbun. Please visit your Porkbun account settings at porkbun.com to enable API access for this domain, then try again.",
         "final": "Final step",
         "create_server": "Create server",
         "server_rebooted": "Server rebooted. Waiting for the last verification…",

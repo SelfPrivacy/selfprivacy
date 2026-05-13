@@ -203,7 +203,29 @@ class PorkbunApi extends RestApiMap {
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/dns/retrieve/$domainName');
+      final Response response = await client.get(
+        '/dns/retrieve/$domainName',
+        options: Options(
+          validateStatus: (final status) =>
+              status != null &&
+              (status == HttpStatus.ok || status == HttpStatus.badRequest),
+        ),
+      );
+
+      if (response.statusCode == HttpStatus.badRequest) {
+        final responseData = response.data;
+        String? errorCode;
+        if (responseData is Map<String, dynamic>) {
+          errorCode = responseData['code'] as String?;
+        }
+        return GenericResult(
+          success: false,
+          data: records,
+          code: response.statusCode,
+          message: errorCode ?? response.statusMessage,
+        );
+      }
+
       records = response.data['records']!
           .map<PorkbunDnsRecord>(
             // ignore: unnecessary_lambdas

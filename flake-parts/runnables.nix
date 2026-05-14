@@ -48,35 +48,37 @@
 
         build-android = callPackage ./runnables/build-android.nix { inherit sp; };
 
-        sign-android-standalone = pkgs.writeShellApplication {
-          name = "sign-android-standalone-apk";
-          runtimeInputs = [ ];
-          text = "";
-        };
+        # FIXME: DRY these using cortesian products
 
-        sign-android-fdroid = pkgs.writeShellApplication {
-          name = "sign-android-fdroid-apk";
-          runtimeInputs = [ ];
-          text = "";
-        };
+        # sign-android-standalone = pkgs.writeShellApplication {
+        #   name = "sign-android-standalone-apk";
+        #   runtimeInputs = [ ];
+        #   text = "";
+        # };
 
-        sign-android-google = pkgs.writeShellApplication {
-          name = "sign-android-google-aab";
-          runtimeInputs = [ ];
-          text = "";
-        };
+        # sign-android-fdroid = pkgs.writeShellApplication {
+        #   name = "sign-android-fdroid-apk";
+        #   runtimeInputs = [ ];
+        #   text = "";
+        # };
 
-        deploy-android-google = pkgs.writeShellApplication {
-          name = "deploy-android-fdroid-apk";
-          runtimeInputs = [ ];
-          text = "";
-        };
+        # sign-android-google = pkgs.writeShellApplication {
+        #   name = "sign-android-google-aab";
+        #   runtimeInputs = [ ];
+        #   text = "";
+        # };
 
-        deploy-android-fdroid = pkgs.writeShellApplication {
-          name = "deploy-android-fdroid-apk";
-          runtimeInputs = [ ];
-          text = "";
-        };
+        # deploy-android-google = pkgs.writeShellApplication {
+        #   name = "deploy-android-fdroid-apk";
+        #   runtimeInputs = [ ];
+        #   text = "";
+        # };
+
+        # deploy-android-fdroid = pkgs.writeShellApplication {
+        #   name = "deploy-android-fdroid-apk";
+        #   runtimeInputs = [ ];
+        #   text = "";
+        # };
       };
     };
 }

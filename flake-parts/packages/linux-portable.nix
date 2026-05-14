@@ -6,7 +6,7 @@
   ...
 }:
 pkgs.stdenvNoCC.mkDerivation {
-  name = "${sp.applicationMetadata.name}-linux-generic-portable";
+  name = "${sp.applicationMetadata.name}-linux-portable";
   version = sp.applicationMetadata.version;
 
   nativeBuildInputs = with pkgs; [

@@ -26,7 +26,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    export HOME=$NIX_BUILD_TOP
     export PUB_CACHE="$HOME/pubcache"
     export FLUTTER_ROOT="$HOME/flutter"
     export GRADLE_USER_HOME="$HOME/gradle"

@@ -5,10 +5,26 @@
   ...
 }:
 let
+  alma = "https://repo.almalinux.org/almalinux/8/BaseOS/x86_64/os/Packages";
+  epel = "https://dl.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages";
+
+  fetch =
+    repo: name: hash:
+    pkgs.fetchurl {
+      url = "${repo}/${name}";
+      sha256 = hash;
+    };
+
+  pFilesystem = fetch alma "filesystem-3.8-6.el8.x86_64.rpm" "sha256-M+wZm374VldwQn5OrTRedbXY6W/74z8CNa4IjuRyY2E=";
+  pGlibc = fetch alma "glibc-2.28-251.el8_10.34.x86_64.rpm" "sha256-IWeHdVV1xkurDHd7mZQYU+ldIvYtPalOpobeFgZ6LYs=";
+  pGlibcCommon = fetch alma "glibc-common-2.28-251.el8_10.34.x86_64.rpm" "sha256-w2vorcxiIdbynMZgIY6cfrmE1UwJeqIu0VlNfrT7ASA=";
+  pNcursesLibs = fetch alma "ncurses-libs-6.1-10.20180224.el8.x86_64.rpm" "sha256-CSg3LEsDJ8RUzk35cKXq4aXbZn7TYJAlE7LpNmpEIpI=";
+  pBash = fetch alma "bash-4.4.20-6.el8_10.x86_64.rpm" "sha256-YJtRT9nLEyFQWGHdNOcOGWe4U5JE/uETDgqFov6fV2g=";
+  pBusybox = fetch "${epel}/b" "busybox-1.35.0-3.el8.x86_64.rpm" "sha256-CK9dZS/BWpTnnrVVUKVXGxH9ugbO/v8kepI96ON/ytw=";
+
   buildrootFS = pkgs.stdenvNoCC.mkDerivation {
     name = "${sp.applicationMetadata.name}-buildroot-fs";
 
-    src = sp.buildrootDeps;
     nativeBuildInputs = with pkgs; [
       rpm
       cpio
@@ -22,12 +38,8 @@ let
     buildPhase = ''
       mkdir -p $out
 
-      rpm2cpio $src/*filesystem*.rpm | cpio -idmu -D $out
-      chmod -R +w $out
-
-      for rpm in $src/*.rpm; do
-        [[ "$rpm" == "*filesystem*.rpm" ]] && continue
-        rpm2cpio "$rpm" | cpio -idmu -D $out
+      for p in "${pFilesystem}" "${pGlibc}" "${pGlibcCommon}" "${pNcursesLibs}" "${pBash}" "${pBusybox}"; do
+        rpm2cpio "$p" | cpio -idmu -D $out
         chmod -R +w $out
       done
     '';
@@ -47,10 +59,6 @@ pkgs.stdenvNoCC.mkDerivation {
 
   src = buildrootFS;
 
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "sha256-rz83/ffahbThfABBe/akeyqDZYG4Ot7Szh2T4OoaQkg=";
-
   nativeBuildInputs = with pkgs; [
     bubblewrap
   ];
@@ -67,20 +75,6 @@ pkgs.stdenvNoCC.mkDerivation {
     nameserver 1.1.1.1
     nameserver 8.8.8.8
     EOL
-
-    mkdir -p rootfs/opt
-
-    cp ${sp.buildrootPixi} rootfs/opt/pixi
-    cp -r ${sp.buildrootPixiFiles}/. rootfs/opt/
-
-    chmod -R +w rootfs/opt
-    chmod +x rootfs/opt/pixi
-
-    # bwrap --bind rootfs / --dev /dev --proc /proc --tmpfs /tmp --unshare-all --share-net \
-    # --setenv PATH /usr/bin:/usr/sbin:/sbin:/bin --setenv TMPDIR /tmp --die-with-parent \
-    # bash -c 'export HOME=$(mktemp -d) && export PIXI_CACHE_DIR=/opt/rattler/cache && \
-    #          cd /opt && source <(/opt/pixi shell-hook) && /opt/flutter/bin/flutter --version && \
-    #          rm -rf .pixi/envs/default/conda-meta && rm -rf $HOME'
 
     cp -r rootfs/. $out
   '';

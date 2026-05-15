@@ -4,17 +4,15 @@
 
 ### Builds
 
-| Target           | Hermetic? | Offline?     | Deterministic Buildenv? | Deterministic Output? | Distribution                     |
-|------------------|-----------|--------------|-------------------------|-----------------------|----------------------------------|
-| Linux (nixpkgs)  | Yes ✅    | Yes ✅       | Yes ✅                  | Yes ✅                | Nix                              |
-| Linux (Generic)  | Yes ✅    | Yes ✅       | Yes ✅                  | Yes ✅                | .tar.xz, AppImage, Flatpak, Snap |
-| Linux (Portable) | Yes ✅    | Maybe ❓[^1] | Yes ✅                  | Yes ✅                | .tar.xz, AppImage, .deb, .rpm    |
-| Android          | Yes ✅    | Yes ✅       | Yes ✅                  | Yes ✅                 | .apk, .aab                       |
-| macOS            | Yes ✅    | Yes ✅       | Yes ✅                  | No ❌                 | .app                             |
-| iOS              | No ❌     | Yes ✅       | Maybe ❓                | No ❌                 | .ipa                             |
-| Windows          | Maybe ❓  | Maybe ❓     | No ❌ [^3]              | No ❌                 | .zip, .msi                       |
-
-[^1]: It's actually capable of offline building, but we need to prebuild the Flutter CLI which isn't bootstrapped in Google's default distribution. Without that, it won't build anything without Internet access.
+| Target           | Hermetic? | Offline? | Deterministic Buildenv? | Deterministic Output? | Distribution                     |
+|------------------|-----------|----------|-------------------------|-----------------------|----------------------------------|
+| Linux (nixpkgs)  | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Nix                              |
+| Linux (Generic)  | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | .tar.xz, AppImage, Flatpak, Snap |
+| Linux (Portable) | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | .tar.xz, AppImage, .deb, .rpm    |
+| Android          | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | .apk, .aab                       |
+| macOS            | Yes ✅    | Yes ✅   | Yes ✅                  | No ❌                 | .app                             |
+| iOS              | No ❌     | Yes ✅   | Maybe ❓                | No ❌                 | .ipa                             |
+| Windows          | Maybe ❓  | Maybe ❓ | No ❌ [^3]              | No ❌                 | .zip, .msi                       |
 
 [^3]: Everything except MSVC installer can be bootstrapped predictably
 
@@ -37,17 +35,19 @@ And Linux zoo separately:
 
 Use `nix build .#<name>` to build a package and `nix run .#<name>` if it supports running. Produces a `result` directory with a collectible artifact. If reproducible, can be ran with `--rebuild` flag.
 
-| Name                | Note                                                                                       |
-|---------------------|--------------------------------------------------------------------------------------------|
-| default             | Alias for linux-nix                                                                        |
-| linux-nix           | Package for nixpkgs. Runnable                                                              |
-| linux-generic       | Redundant rebuild of linux-nix for packaging outside nixpkgs. See next section for explanation |
-| linux-portable      | Standalone target based on AlmaLinux 8, Conda Forge, Pixi, and Bubblewrap to link against glibc 2.28. We use Nix only for a controlled environment                                                                                           |
-| linux-flatpak       |                                                                                            |
-| linux-appimage      |                                                                                            |
-| linux-archive       |                                                                                            |
-| android-\$1-\$2-\$3 | Cartesian product of {apk,aab}-{release,debug}{production,fdroid,nightly}                  |
-| macos               |                                                                                            |
+| Name                    | Note                                                                                                                                               |
+|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| default                 | Alias for linux-nix                                                                                                                                |
+| linux-nix               | Package for nixpkgs. Runnable                                                                                                                      |
+| linux-generic           | Redundant rebuild of linux-nix for packaging outside nixpkgs. See next section for explanation                                                     |
+| linux-portable          | Standalone target based on AlmaLinux 8, Conda Forge, Pixi, and Bubblewrap to link against glibc 2.28. We use Nix only for a controlled environment |
+| linux-flatpak           |                                                                                                                                                    |
+| linux-appimage-generic  |                                                                                                                                                    |
+| linux-appimage-portable |                                                                                                                                                    |
+| linux-archive-generic   |                                                                                                                                                    |
+| linux-archive-portable  |                                                                                                                                                    |
+| android-\$1-\$2-\$3     | Cartesian product of {apk,aab}-{release,debug}{production,fdroid,nightly}                                                                          |
+| macos                   |                                                                                                                                                    |
 
 And dependencies:
 

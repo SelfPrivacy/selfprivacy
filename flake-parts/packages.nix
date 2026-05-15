@@ -21,12 +21,13 @@
           linux-portable = callPackage ./packages/linux-portable.nix { inherit sp; };
           linux-flatpak = callPackage ./packages/linux-flatpak.nix { inherit sp; };
           linux-flatpak-sdk = callPackage ./packages/linux-flatpak-sdk.nix { inherit sp; };
-          linux-appimage = callPackage ./packages/linux-appimage.nix { inherit sp; };
-          linux-archive = callPackage ./packages/linux-archive.nix { inherit sp; };
+          linux-appimage-generic = callPackage ./packages/linux-appimage-generic.nix { inherit sp; };
+          linux-appimage-portable = callPackage ./packages/linux-appimage-portable.nix { inherit sp; };
+          linux-archive-generic = callPackage ./packages/linux-archive-generic.nix { inherit sp; };
+          linux-archive-portable = callPackage ./packages/linux-archive-portable.nix { inherit sp; };
 
           linux-buildroot = callPackage ./packages/linux-buildroot.nix { inherit sp; };
-          linux-buildroot-deps = callPackage ./packages/linux-buildroot-deps.nix { };
-          linux-buildroot-toolkit = callPackage ./packages/linux-buildroot-toolkit.nix { inherit sp; };
+          linux-buildroot-deps = callPackage ./packages/linux-buildroot-deps.nix { inherit sp; };
 
           android-gradle-deps = inputs'.gradle2nix.packages.gradle2nix.buildMavenRepo {
             lockFile = ../android/gradle.lock;

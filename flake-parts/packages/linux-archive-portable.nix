@@ -1,7 +1,7 @@
 { pkgs, sp, ... }:
 
 pkgs.stdenv.mkDerivation {
-  name = "${sp.applicationMetadata.name}-archive";
+  name = "${sp.applicationMetadata.name}-archive-portable";
   version = sp.applicationMetadata.version;
 
   nativeBuildInputs = sp.archiveTools;
@@ -13,7 +13,7 @@ pkgs.stdenv.mkDerivation {
 
   buildPhase = ''
     mkdir -p vendor/usr/share/{applications,metainfo,icons} vendor/usr/share/icons/hicolor/{scalable,512x512}/apps/
-    cp -r ${sp.applicationGeneric}/* vendor/
+    cp -r ${sp.applicationPortable}/* vendor/
     cp ${sp.desktopFile} vendor/usr/share/applications/org.selfprivacy.app.desktop
     cp ${sp.appstreamFile} vendor/usr/share/metainfo/org.selfprivacy.app.metainfo.xml
     cp ${sp.iconPNGFile} vendor/usr/share/icons/hicolor/512x512/apps/org.selfprivacy.app.png
@@ -26,7 +26,7 @@ pkgs.stdenv.mkDerivation {
 
     tar --sort=name --mtime="1970-01-01 00:00Z" --owner=0 --group=0 --numeric-owner \
         --pax-option="exthdr.name=%d/PaxHeaders/%f",delete=atime,delete=ctime \
-        -cvf "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" -C vendor/ .
-    cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.tar.xz" $out/
+        -cvf "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.tar.xz" -C vendor/ .
+    cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.tar.xz" $out/
   '';
 }

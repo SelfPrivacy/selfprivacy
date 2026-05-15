@@ -30,18 +30,44 @@
         # Project named files and metadata
         applicationNix = self'.packages.linux-nix;
         applicationGeneric = self'.packages.linux-generic;
+        applicationPortable = self'.packages.linux-portable;
         applicationMetadata = toNixFromYAML ../pubspec.yaml;
 
         buildroot = self'.packages.linux-buildroot;
         buildrootDeps = self'.packages.linux-buildroot-deps;
-        buildrootToolkit = self'.packages.linux-buildroot-toolkit;
-        buildrootFlutter = pkgs.fetchzip {
-          url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.35.7-stable.tar.xz";
-          hash = "sha256-fQtSXDNaQUrvpq7V4/7Z6vtNhuLXiT9zu/eDwiJ9lAI=";
+        buildrootPixiPack = pkgs.stdenvNoCC.mkDerivation {
+          name = "pixi-pack";
+
+          src = pkgs.fetchurl {
+            url = "https://github.com/Quantco/pixi-pack/releases/download/v0.7.8/pixi-pack-x86_64-unknown-linux-musl";
+            hash = "sha256-Wr0lJo/nJfeX5FkpwALYQ+eErrBubpve2Xbb8h7qxHA=";
+          };
+
+          phases = [ "installPhase" ];
+
+          installPhase = ''
+            mkdir -p $out/bin
+
+            cp $src $out/bin/pixi-pack
+            chmod a+x $out/bin/pixi-pack
+          '';
         };
-        buildrootPixi = pkgs.fetchurl {
-          url = "https://github.com/prefix-dev/pixi/releases/download/v0.68.1/pixi-x86_64-unknown-linux-musl";
-          hash = "sha256-AdKdS3irB7rfV+3aCz0gC8cF1a+22plg66vnAQzYNuQ=";
+        buildrootPixiUnpack = pkgs.stdenvNoCC.mkDerivation {
+          name = "pixi-unpack";
+
+          src = pkgs.fetchurl {
+            url = "https://github.com/Quantco/pixi-pack/releases/download/v0.7.8/pixi-unpack-x86_64-unknown-linux-musl";
+            hash = "sha256-S+a9Ur1VYwIgXW1wdQrb23+4ctamX0iY6CU7itB5lWA=";
+          };
+
+          phases = [ "installPhase" ];
+
+          installPhase = ''
+            mkdir -p $out/bin
+
+            cp $src $out/bin/pixi-unpack
+            chmod a+x $out/bin/pixi-unpack
+          '';
         };
         buildrootPixiFiles = lib.fileset.toSource {
           root = ../ci/.;
@@ -51,6 +77,7 @@
             ../ci/setup.sh
           ];
         };
+        buildrootPixiLockfile = ../ci/pixi.lock;
 
         flutterDeps = self'.packages.flutter-deps;
         flutterPubspec = ../pubspec.yaml;

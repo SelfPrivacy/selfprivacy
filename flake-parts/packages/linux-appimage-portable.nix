@@ -1,10 +1,10 @@
 { pkgs, sp, ... }:
 
 pkgs.stdenv.mkDerivation {
-  name = "${sp.applicationMetadata.name}-appimage";
+  name = "${sp.applicationMetadata.name}-appimage-portable";
   version = sp.applicationMetadata.version;
 
-  nativeBuildInputs = (sp.appimageTools);
+  nativeBuildInputs = sp.appimageTools;
 
   phases = [
     "buildPhase"
@@ -13,7 +13,7 @@ pkgs.stdenv.mkDerivation {
 
   buildPhase = ''
     mkdir -p AppDir
-    cp -r ${sp.applicationGeneric}/* AppDir/
+    cp -r ${sp.applicationPortable}/. AppDir/
     cp ${sp.desktopFile} AppDir/org.selfprivacy.app.desktop
     cp ${sp.appstreamFile} AppDir/org.selfprivacy.app.metainfo.xml
     cp ${sp.iconSVGFile} AppDir/org.selfprivacy.app.svg
@@ -25,8 +25,8 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
 
-    appimagetool --runtime-file $(which appimage-runtime) AppDir "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.AppImage"
+    appimagetool --runtime-file $(which appimage-runtime) AppDir "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.AppImage"
 
-    cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}.AppImage" $out/
+    cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.AppImage" $out/
   '';
 }

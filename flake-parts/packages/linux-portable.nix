@@ -10,12 +10,8 @@ pkgs.stdenvNoCC.mkDerivation {
   version = sp.applicationMetadata.version;
 
   nativeBuildInputs = with pkgs; [
-    bubblewrap
+    bubblewrap lndir patchelf
   ];
-
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "sha256-nop1MU7dCaqDig/1w/gxZwJc6oj0dZl9dCzPvuDIhq0=";
 
   phases = [
     "buildPhase"
@@ -23,33 +19,41 @@ pkgs.stdenvNoCC.mkDerivation {
   ];
 
   buildPhase = ''
-    cp -r ${sp.buildroot} builddir
-    chmod -R +w builddir
-    mkdir -p builddir/opt
-    cp -r ${sp.buildrootToolkit}/.pixi builddir/opt/
-    cp -r ${sp.buildrootToolkit}/rattler builddir/opt/
-    cp -r ${sp.projectFiles} builddir/opt/src
-    chmod -R +w builddir/opt/src
+    mkdir -p builddir/opt/{src,flutter}
+    lndir -silent ${sp.buildroot} builddir
+    lndir -silent ${sp.projectFiles} builddir/opt/src
+    chmod -R a+w builddir/opt
 
-    mkdir -p builddir/opt/flutter
-    cp -r ${sp.buildrootFlutter}/. builddir/opt/flutter
-    chmod -R +w builddir/opt/flutter
+    lndir -silent ${sp.ourFlutter.unwrapped} builddir/opt/flutter
+    rm -rf builddir/opt/flutter/bin/cache
+    mkdir -p builddir/opt/flutter/bin/cache
+    lndir -silent ${sp.ourFlutter}/bin/cache builddir/opt/flutter/bin/cache
 
-    cp -r ${sp.flutterDeps} builddir/opt/pubcache
-    chmod -R +w builddir/opt/pubcache
+    mkdir builddir/opt/pubcache
+    lndir -silent ${sp.flutterDeps} builddir/opt/pubcache
 
-    bwrap --bind $(pwd)/builddir / --dev /dev --proc /proc --tmpfs /tmp --unshare-all --share-net \
-          --setenv PATH /usr/bin:/usr/sbin:/sbin:/bin --setenv TMPDIR /tmp --die-with-parent bash -c \
-            'export HOME=$(mktemp -d) && export PIXI_CACHE_DIR=/opt/rattler/cache && export DESTDIR=/opt/dest && \
-            cd /opt && source <(/opt/pixi shell-hook) && cd /opt/src && export PUB_CACHE=/opt/pubcache && \
-            export FLUTTER_NO_ANALYTICS=1 && export CI=true && /opt/flutter/bin/flutter config --no-analytics && \
-            /opt/flutter/bin/flutter config --enable-linux-desktop && /opt/flutter/bin/flutter pub get --offline --enforce-lockfile && \
-            /opt/flutter/bin/flutter build linux --release --no-pub'
+    bwrap --bind $(pwd)/builddir / --bind /nix/store /nix/store --dev /dev --proc /proc --tmpfs /tmp \
+          --unshare-all --clearenv --setenv PATH /usr/bin:/usr/sbin:/sbin:/bin:/opt/flutter/bin:${sp.buildrootPixiUnpack}/bin \
+          --setenv TMPDIR /tmp --die-with-parent /usr/bin/bash -c \
+            'export HOME=$(mktemp -d) && export XDG_CONFIG_HOME=$HOME/.config && export DESTDIR=/opt/dest && \
+            cd /opt && pixi-unpack ${sp.buildrootDeps}/deps.tar && source /opt/activate.sh && \
+            ln -sr /opt/env/bin/clang-22 /opt/env/bin/clang && ln -sr /opt/env/bin/clang++-22 /opt/env/bin/clang++ && \
+            cd /opt/src && export PUB_CACHE=/opt/pubcache && export FLUTTER_ROOT=/opt/flutter && export FLUTTER_NO_ANALYTICS=1 && \
+            export CI=true && flutter config --no-analytics && flutter config --enable-linux-desktop && \
+            flutter pub get --offline --enforce-lockfile && flutter build linux --release --no-pub && \
+            cp $CONDA_PREFIX/lib/{*libgio*,*libglib*,*libgmodule*,*libiconv*,*libpcre*,*libsecret*} /opt/dest/opt/src/build/linux/x64/release/bundle/lib/'
   '';
 
   installPhase = ''
     mkdir -p $out
 
-    cp -r $(pwd)/builddir/opt/dest/. $out/
+    cp -r $(pwd)/builddir/opt/dest/opt/src/build/linux/x64/release/bundle/. $out/
+    mv $out/selfprivacy $out/org.selfprivacy.app
+
+    patchelf --force-rpath --set-rpath '$ORIGIN:$ORIGIN/lib:$ORIGIN/../lib:$ORIGIN/../usr/lib:/usr/lib/x86_64-linux-gnu:/app/lib' $out/org.selfprivacy.app
+    patchelf --set-interpreter '/lib64/ld-linux-x86-64.so.2' $out/org.selfprivacy.app
+    for plib in "libdynamic_color_plugin.so" "libflutter_linux_gtk.so" "libflutter_secure_storage_linux_plugin.so" "liburl_launcher_linux_plugin.so"; do
+     patchelf --force-rpath --set-rpath '$ORIGIN:$ORIGIN/lib:$ORIGIN/../lib:$ORIGIN/../usr/lib:/usr/lib/x86_64-linux-gnu:/app/lib' $out/lib/"$plib"
+    done
   '';
 }

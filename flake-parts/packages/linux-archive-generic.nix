@@ -1,6 +1,6 @@
 { pkgs, sp, ... }:
 
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-archive-generic";
   version = sp.applicationMetadata.version;
 

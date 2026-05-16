@@ -5,7 +5,7 @@
   ...
 }:
 
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-ios-cocoa-deps";
   version = sp.applicationMetadata.version;
   src = lib.fileset.toSource {
@@ -13,7 +13,14 @@ pkgs.stdenv.mkDerivation {
     fileset = lib.fileset.unions [
       ../../pubspec.yaml
       ../../pubspec.lock
-      ../../ios/
+      ../../ios
+    ];
+  };
+
+  meta = {
+    platforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 
@@ -29,14 +36,14 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    export HOME="$NIX_BUILD_TOP"
     export XDG_CONFIG_HOME="$HOME/.config"
     export PUB_CACHE="$HOME/pubcache"
     export GEM_HOME="$HOME/gemcache"
     export LANG="en_US.UTF-8"
 
-    export FLUTTER_NO_ANALYTICS=1
-    export CI=true
+    export FLUTTER_NO_ANALYTICS="1"
+    export CI="true"
 
     mkdir $PUB_CACHE
     lndir -silent ${sp.flutterDeps} $PUB_CACHE
@@ -47,8 +54,8 @@ pkgs.stdenv.mkDerivation {
     cp $src/pubspec.lock .
     chmod -R u+w ios
 
-    flutter config --no-analytics &>/dev/null
-    flutter config --enable-macos-desktop --enable-ios &>/dev/null
+    flutter config --no-analytics
+    flutter config --enable-macos-desktop --enable-ios
     flutter pub get --no-precompile --enforce-lockfile
 
     mkdir ios/scripts
@@ -65,7 +72,7 @@ pkgs.stdenv.mkDerivation {
     find . -type d \( -name .symlinks -o \
                       -name SpIcon.icon -o \
                       -name xcuserdata \) -exec rm -rf {} + || true
-    find Flutter/ephemeral/ -type -f -mindepth 1 -exec rm -f {} + || true
+    find Flutter/ephemeral/ -type f -mindepth 1 -exec rm -f {} + || true
     popd
   '';
 

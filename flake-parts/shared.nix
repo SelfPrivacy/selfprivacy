@@ -103,7 +103,7 @@
         runnables = [
           "test-flutter"
           "analyze-flutter"
-          "scan-sonarcube"
+          "scan-sonarqube"
 
           "build-android"
           "build-macos"
@@ -162,7 +162,7 @@
             xz
             lndir
           ]
-          ++ lib.optionals stdenv.isLinux [
+          ++ lib.optionals stdenvNoCC.isLinux [
 
             clang
             cmake
@@ -170,7 +170,7 @@
             pkg-config
             libsecret
           ]
-          ++ lib.optionals stdenv.isDarwin [
+          ++ lib.optionals stdenvNoCC.isDarwin [
             ruby
             cocoapods
             rsync
@@ -189,7 +189,7 @@
           with pkgs;
           [ ]
           ++
-            lib.optionals stdenv.isLinux
+            lib.optionals stdenvNoCC.isLinux
 
               [
                 gtk3
@@ -218,25 +218,21 @@
                 xdg-user-dirs
                 libsecret
               ]
-          ++ lib.optionals stdenv.isDarwin [ ];
+          ++ lib.optionals stdenvNoCC.isDarwin [ ];
 
         signTools = with pkgs; [
           apksigner
           fastlane
         ];
 
-        fdroidTools = with pkgs; [
-          fdroidserver
-        ];
+        fdroidTools = with pkgs; [ fdroidserver ];
 
         analyzeTools = [
           ourFlutter
           ourFlutter.dart
         ];
 
-        scannerTools = with pkgs; [
-          sonar-scanner-cli-minimal
-        ];
+        scannerTools = with pkgs; [ sonar-scanner-cli-minimal ];
 
         flatpakTools = with pkgs; [
           flatpak
@@ -289,7 +285,7 @@
           };
         };
 
-        ourAppImageRuntime = pkgs.stdenv.mkDerivation rec {
+        ourAppImageRuntime = pkgs.stdenvNoCC.mkDerivation rec {
           pname = "appimage-runtime";
           version = "20251108";
 

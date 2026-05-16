@@ -2,19 +2,32 @@
 
 {
   perSystem =
-    { pkgs, sp, ... }:
+    {
+      self',
+      pkgs,
+      sp,
+      ...
+    }:
     {
       devShells = {
+        default =
+          if pkgs.stdenvNoCC.isLinux then
+            self'.devShells.linux
+          else if pkgs.stdenvNoCC.isDarwin then
+            self'.devShells.macos
+          else
+            throw "Unsupported operating system!";
+
         # Generic shells
-        analyze = pkgs.mkShell { nativeBuildInputs = sp.analyzeTools; };
+        analyze = pkgs.mkShellNoCC { nativeBuildInputs = sp.analyzeTools; };
 
-        scan = pkgs.mkShell { nativeBuildInputs = sp.scannerTools; };
+        scan = pkgs.mkShellNoCC { nativeBuildInputs = sp.scannerTools; };
 
-        test = pkgs.mkShell { nativeBuildInputs = sp.testTools; };
+        test = pkgs.mkShellNoCC { nativeBuildInputs = sp.testTools; };
 
-        sign = pkgs.mkShell { nativeBuildInputs = sp.signTools; };
+        sign = pkgs.mkShellNoCC { nativeBuildInputs = sp.signTools; };
 
-        fdroid = pkgs.mkShell { nativeBuildInputs = sp.fdroidTools; };
+        fdroid = pkgs.mkShellNoCC { nativeBuildInputs = sp.fdroidTools; };
 
         # Linux shells
         linux-precached = pkgs.mkShell {
@@ -25,13 +38,11 @@
             export HOME=$(mktemp -d)
             export PUB_CACHE="$HOME/pubcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
 
             mkdir $PUB_CACHE
             lndir -silent ${sp.flutterDeps} $PUB_CACHE
-
-            mkdir $HOME/builddir
-            lndir -silent ${sp.projectFiles} $HOME/builddir
-            cd $HOME/builddir
           '';
         };
 
@@ -40,27 +51,15 @@
           buildInputs = sp.buildLibs;
 
           shellHook = ''
-            export HOME=$(mktemp -d)
-            export PUB_CACHE="$HOME/pubcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
           '';
         };
 
-        linux-flatpak = pkgs.mkShell {
-          nativeBuildInputs = sp.flatpakTools;
+        linux-flatpak = pkgs.mkShell { nativeBuildInputs = sp.flatpakTools; };
 
-          shellHook = ''
-            export HOME=$(mktemp -d)
-          '';
-        };
-
-        linux-appimage = pkgs.mkShell {
-          nativeBuildInputs = sp.appimageTools;
-
-          shellHook = ''
-            export HOME=$(mktemp -d)
-          '';
-        };
+        linux-appimage = pkgs.mkShellNoCC { nativeBuildInputs = sp.appimageTools; };
 
         # Android shells
         android-precached = pkgs.mkShell {
@@ -73,28 +72,20 @@
             export GRADLE_USER_HOME="$HOME/gradle"
             export MAVEN_REPO="${sp.androidGradleDeps}"
             export ANDROID_SDK="${sp.ourAndroidSDK.androidsdk}"
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
 
             export JAVA_HOME="${sp.ourJava.home}"
             export ANDROID_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk"
             export ANDROID_SDK_ROOT="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk"
             export ANDROID_NDK_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/ndk"
-            export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/35.0.0/aapt2"
+            export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/36.0.0/aapt2"
 
             mkdir $PUB_CACHE
             lndir -silent ${sp.flutterDeps} $PUB_CACHE
 
             mkdir $FLUTTER_ROOT
             lndir -silent ${sp.ourFlutter} $FLUTTER_ROOT
-            # rm -rf $FLUTTER_ROOT/bin
-            # cp -r ${sp.ourFlutter}/bin $FLUTTER_ROOT/
-            # chmod -R u+w $FLUTTER_ROOT/bin
-
-            mkdir $HOME/builddir
-            lndir -silent ${sp.projectFiles} $HOME/builddir
-            rm -rf $HOME/builddir/android
-            cp -r ${sp.projectFiles}/android $HOME/builddir/
-            chmod -R u+w $HOME/builddir/android
-            cd $HOME/builddir
           '';
         };
 
@@ -102,14 +93,14 @@
           nativeBuildInputs = sp.buildTools ++ sp.androidBuildTools;
 
           shellHook = ''
-            export HOME=$(mktemp -d)
-            export PUB_CACHE="$HOME/pubcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
-
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
             export JAVA_HOME="${sp.ourJava.home}"
             export ANDROID_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk"
             export ANDROID_SDK_ROOT="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk"
             export ANDROID_NDK_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/ndk"
+            export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/36.0.0/aapt2"
           '';
         };
 
@@ -122,20 +113,13 @@
             export PUB_CACHE="$HOME/pubcache"
             export GEM_HOME="$HOME/gemcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
+            export LANG="en_US.UTF-8"
 
             export DEVELOPER_DIR="${sp.ourXcode}"
             export PATH="${sp.ourXcode}/Contents/Developer/usr/bin/:$PATH"
 
             mkdir $PUB_CACHE
             lndir -silent ${sp.flutterDeps} $PUB_CACHE
-
-            mkdir $HOME/builddir
-            lndir -silent ${sp.projectFiles} $HOME/builddir
-            rm -rf $HOME/builddir/macos $HOME/builddir/build
-            #cp -r ${sp.cocoaMacosDeps}/macos $HOME/builddir/
-            cp -r ${sp.cocoaMacosDeps}/cocoapods $HOME/.cocoapods
-            chmod -R u+w $HOME/builddir/macos $HOME/.cocoapods
-            cd $HOME/builddir
           '';
         };
 
@@ -143,10 +127,10 @@
           nativeBuildInputs = sp.buildTools;
 
           shellHook = ''
-            export HOME="$(mktemp -d)"
-            export PUB_CACHE="$HOME/pubcache"
-            export GEM_HOME="$HOME/gemcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
+            export LANG="en_US.UTF-8"
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
 
             export DEVELOPER_DIR="${sp.ourXcode}"
             export PATH="${sp.ourXcode}/Contents/Developer/usr/bin/:$PATH"
@@ -161,22 +145,14 @@
             export PUB_CACHE="$HOME/pubcache"
             export GEM_HOME="$HOME/gemcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
-
+            export LANG="en_US.UTF-8"
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
             export DEVELOPER_DIR="${sp.ourXcode}/Contents/Developer"
             export PATH="${sp.ourXcode}/Contents/Developer/usr/bin/:$PATH"
 
             mkdir $PUB_CACHE
             lndir -silent ${sp.flutterDeps} $PUB_CACHE
-
-            mkdir $HOME/builddir
-            lndir -silent ${sp.projectFiles} $HOME/builddir
-            rm -rf $HOME/builddir/ios $HOME/builddir/build
-            #cp -r ${sp.cocoaIosDeps}/ios $HOME/builddir/
-            cp -r ${sp.cocoaIosDeps}/cocoapods $HOME/.cocoapods
-            chmod -R u+w $HOME/builddir/ios $HOME/.cocoapods
-            cp -r ${sp.projectFiles}/ios/SpIcon.icon $HOME/builddir/ios/
-            chmod -R u+w $HOME/builddir/ios/SpIcon.icon
-            cd $HOME/builddir
           '';
         };
 
@@ -184,11 +160,10 @@
           nativeBuildInputs = sp.buildTools;
 
           shellHook = ''
-            export HOME="$(mktemp -d)"
-            export PUB_CACHE="$HOME/pubcache"
-            export GEM_HOME="$HOME/gemcache"
             export FLUTTER_ROOT="${sp.ourFlutter}"
-
+            export LANG="en_US.UTF-8"
+            export FLUTTER_NO_ANALYTICS="1"
+            export CI="true"
             export DEVELOPER_DIR="${sp.ourXcode}/Contents/Developer"
             export PATH="${sp.ourXcode}/Contents/Developer/usr/bin/:$PATH"
           '';

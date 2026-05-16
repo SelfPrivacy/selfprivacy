@@ -1,8 +1,4 @@
-{
-  pkgs,
-  sp,
-  ...
-}:
+{ pkgs, sp, ... }:
 
 let
   libsecretGit = pkgs.fetchFromGitLab {
@@ -20,9 +16,13 @@ let
     hash = "sha256-rf8d2UNTVEZhuiyChK2XnUbfGDvsfXnKADhaSp8qBwQ=";
   };
 in
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-flatpak";
   version = sp.flatpakSDK.version;
+
+  meta = {
+    platforms = [ "x86_64-linux" ];
+  };
 
   nativeBuildInputs = sp.flatpakTools;
 
@@ -32,10 +32,10 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$TMPDIR
-    export FLATPAK_USER_DIR=$HOME/.local/share/flatpak
-    export FLATPAK_SYSTEM_DIR=$HOME/.local/share/flatpak
-    export XDG_DATA_HOME=$HOME/.local/share
+    export HOME="$NIX_BUILD_TOP"
+    export FLATPAK_USER_DIR="$HOME/.local/share/flatpak"
+    export FLATPAK_SYSTEM_DIR="$HOME/.local/share/flatpak"
+    export XDG_DATA_HOME="$HOME/.local/share"
     mkdir -p $FLATPAK_USER_DIR
 
     mkdir vendor
@@ -49,7 +49,7 @@ pkgs.stdenv.mkDerivation {
     cp ${sp.iconPNGFile} vendor/org.selfprivacy.app.png
     #cp ${sp.iconSVGFile} vendor/org.selfprivacy.app.svg
 
-    chmod -R +rw vendor/ libsecret/ libjsoncpp/
+    chmod -R u+w vendor/ libsecret/ libjsoncpp/
   '';
 
   installPhase = ''

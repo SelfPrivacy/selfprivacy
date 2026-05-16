@@ -72,7 +72,7 @@ Use as `nix run .#<name>`.
 |-----------------|------|
 | test-flutter    |      |
 | analyze-flutter |      |
-| scan-sonarcube  |      |
+| scan-sonarqube  |      |
 | build-android   |      |
 | sign-android    |      |
 | deploy-android  |      |

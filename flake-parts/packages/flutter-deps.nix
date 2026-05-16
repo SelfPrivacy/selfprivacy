@@ -4,7 +4,7 @@
   lib,
   ...
 }:
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-flutter-deps";
   version = sp.applicationMetadata.version;
   src = lib.fileset.toSource {
@@ -19,7 +19,7 @@ pkgs.stdenv.mkDerivation {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-5KIEnvjeiSt/q4c6Vj+bVhD+56j6q+vgCu178Vf0jMA=";
+  outputHash = "sha256-7PMh3Z10BUHJJDa8O/vJz63T08+Zk4MS42aGWE/6FqA=";
 
   phases = [
     "buildPhase"
@@ -27,18 +27,18 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    export HOME="$NIX_BUILD_TOP"
     export PUB_CACHE="$HOME/pubcache"
     export XDG_CONFIG_HOME="$HOME/.config"
 
-    export FLUTTER_NO_ANALYTICS=1
-    export CI=true
+    export FLUTTER_NO_ANALYTICS="1"
+    export CI="true"
 
     cp "$src/pubspec.yaml" pubspec.yaml
     cp "$src/pubspec.lock" pubspec.lock
 
-    flutter config --no-analytics &>/dev/null
-    flutter config --enable-linux-desktop --enable-macos-desktop --enable-windows-desktop --enable-android --enable-ios &>/dev/null
+    flutter config --no-analytics
+    flutter config --enable-linux-desktop --enable-macos-desktop --enable-windows-desktop --enable-android --enable-ios
     flutter pub get --no-precompile --enforce-lockfile
 
     # Delete any non-deterministic miscellaneous files

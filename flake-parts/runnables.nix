@@ -31,8 +31,8 @@
           text = "flutter analyze";
         };
 
-        scan-sonarcube = pkgs.writeShellApplication {
-          name = "scan-sonarcube";
+        scan-sonarqube = pkgs.writeShellApplication {
+          name = "scan-sonarqube";
           runtimeInputs = sp.scannerTools;
           text = "";
         };

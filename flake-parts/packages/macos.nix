@@ -1,12 +1,8 @@
-{
-  pkgs,
-  sp,
-  ...
-}:
+{ pkgs, sp, ... }:
 pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-macos";
   version = sp.applicationMetadata.version;
-  src = sp.ProjectFiles;
+  src = sp.projectFiles;
 
   meta = {
     platforms = [
@@ -23,19 +19,19 @@ pkgs.stdenvNoCC.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    export HOME="$NIX_BUILD_TOP"
     export XDG_CONFIG_HOME="$HOME/.config"
-    export PUB_CACHE=$HOME/pubcache
-    export GEM_HOME=$HOME/gemcache
-    export FLUTTER_ROOT=${sp.ourFlutter}
+    export PUB_CACHE="$HOME/pubcache"
+    export GEM_HOME="$HOME/gemcache"
+    export FLUTTER_ROOT="${sp.ourFlutter}"
     export LANG="en_US.UTF-8"
 
-    export DEVELOPER_DIR=${sp.ourXcode}/Contents/Developer
-    export PATH=${sp.ourXcode}/Contents/Developer/usr/bin/:$PATH
+    export DEVELOPER_DIR="${sp.ourXcode}/Contents/Developer"
+    export PATH="${sp.ourXcode}/Contents/Developer/usr/bin/:$PATH"
 
     export FLUTTER_BUILD_DIRECTORY="$HOME/deriveddata"
-    export FLUTTER_NO_ANALYTICS=1
-    export CI=true
+    export FLUTTER_NO_ANALYTICS="1"
+    export CI="true"
 
     mkdir $PUB_CACHE
     lndir -silent ${sp.flutterDeps} $PUB_CACHE
@@ -48,8 +44,8 @@ pkgs.stdenvNoCC.mkDerivation {
     chmod -R u+w $HOME/builddir/macos $HOME/.cocoapods
 
     pushd $HOME/builddir
-    flutter config --no-analytics &>/dev/null
-    flutter config --enable-macos-desktop &>/dev/null
+    flutter config --no-analytics
+    flutter config --enable-macos-desktop
     flutter pub get --offline --enforce-lockfile
 
     # Build without signing (thus, without relying on /usr/bin/codesign)

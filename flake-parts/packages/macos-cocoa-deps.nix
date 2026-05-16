@@ -6,7 +6,7 @@
 }:
 
 # Darwin packages and runnables
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-macos-cocoa-deps";
   version = sp.applicationMetadata.version;
   src = lib.fileset.toSource {
@@ -16,6 +16,13 @@ pkgs.stdenv.mkDerivation {
       ../../pubspec.lock
       # FIXME: Add the macOS target
       (lib.fileset.maybeMissing ../../macos)
+    ];
+  };
+
+  meta = {
+    platforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 
@@ -31,7 +38,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    export HOME="$NIX_BUILD_TOP"
     export XDG_CONFIG_HOME="$HOME/.config"
     export PUB_CACHE="$HOME/pubcache"
     export GEM_HOME="$HOME/gemcache"
@@ -49,8 +56,8 @@ pkgs.stdenv.mkDerivation {
     cp $src/pubspec.lock .
     chmod -R u+w macos
 
-    flutter config --no-analytics &>/dev/null
-    flutter config --enable-macos-desktop --enable-ios &>/dev/null
+    flutter config --no-analytics
+    flutter config --enable-macos-desktop --enable-ios
     flutter pub get --no-precompile --enforce-lockfile
 
     mkdir macos/scripts

@@ -6,7 +6,7 @@
   androidFlavor,
   ...
 }:
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-android-${androidType}-${androidRelease}-${androidFlavor}";
   version = sp.applicationMetadata.version;
   src = sp.projectFiles;
@@ -26,7 +26,7 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$NIX_BUILD_TOP
+    export HOME="$NIX_BUILD_TOP"
     export PUB_CACHE="$HOME/pubcache"
     export FLUTTER_ROOT="$HOME/flutter"
     export GRADLE_USER_HOME="$HOME/gradle"
@@ -78,8 +78,8 @@ pkgs.stdenv.mkDerivation {
     chmod -R u+w $HOME/builddir/android
 
     pushd $HOME/builddir
-    flutter config --no-analytics &>/dev/null
-    flutter config --enable-android &>/dev/null
+    flutter config --no-analytics
+    flutter config --enable-android
     flutter pub get --offline --enforce-lockfile
     popd
 

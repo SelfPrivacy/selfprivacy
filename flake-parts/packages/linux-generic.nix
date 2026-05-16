@@ -1,15 +1,13 @@
 { pkgs, sp, ... }:
 
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-generic";
   version = sp.applicationMetadata.version;
+
   src = sp.projectFiles;
 
   meta = {
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = [ "x86_64-linux" ];
   };
 
   nativeBuildInputs = sp.buildTools;
@@ -21,28 +19,30 @@ pkgs.stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    export HOME="$NIX_BUILD_TOP"
     export XDG_CONFIG_HOME="$HOME/.config"
-    export PUB_CACHE=$HOME/pubcache
+    export PUB_CACHE="$HOME/pubcache"
 
-    export FLUTTER_NO_ANALYTICS=1
-    export CI=true
+    export FLUTTER_NO_ANALYTICS="1"
+    export CI="true"
+
+    mkdir $HOME/builddir
+    lndir -silent $src $HOME/builddir
 
     mkdir $PUB_CACHE
-    ln -s ${sp.flutterDeps}/* $PUB_CACHE/
+    lndir -silent ${sp.flutterDeps} $PUB_CACHE
 
-    cp -r $src/. .
-    chmod -R u+rw .
-
-    flutter config --no-analytics &>/dev/null
-    flutter config --enable-linux-desktop &>/dev/null
+    pushd $HOME/builddir
+    flutter config --no-analytics
+    flutter config --enable-linux-desktop
     flutter pub get --offline --enforce-lockfile
     flutter build linux --release --no-pub
+    popd
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r build/linux/x64/release/bundle/* $out/
+    cp -r $HOME/builddir/build/linux/x64/release/bundle/* $out/
 
     patchelf --force-rpath --set-rpath '$ORIGIN:$ORIGIN/lib:$ORIGIN/../lib:$ORIGIN/../usr/lib:/usr/lib/x86_64-linux-gnu:/app/lib' $out/selfprivacy
     patchelf --set-interpreter '/lib64/ld-linux-x86-64.so.2' $out/selfprivacy

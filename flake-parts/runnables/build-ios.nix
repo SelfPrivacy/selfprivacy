@@ -1,4 +1,9 @@
-{ pkgs, sp, lib, ... }:
+{
+  pkgs,
+  sp,
+  lib,
+  ...
+}:
 
 let
   iosBuildScript = pkgs.writeShellApplication {
@@ -55,8 +60,8 @@ let
       cp -r "${sp.cocoaIosDeps}/cocoapods" "$HOME/.cocoapods"
       chmod -R u+r "$HOME/.cocoapods"
 
-      flutter config --no-analytics &>/dev/null
-      flutter config --enable-ios &>/dev/null
+      flutter config --no-analytics
+      flutter config --enable-ios
       flutter pub get --offline --enforce-lockfile
 
       # Build without signing (thus, without relying on /usr/bin/codesign)
@@ -71,7 +76,7 @@ let
     '';
   };
 in
-pkgs.stdenv.mkDerivation rec {
+pkgs.stdenvNoCC.mkDerivation rec {
   name = "build-ios";
   phases = [ "installPhase" ];
 

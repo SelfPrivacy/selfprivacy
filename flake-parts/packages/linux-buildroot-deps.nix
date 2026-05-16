@@ -7,6 +7,10 @@
 pkgs.stdenvNoCC.mkDerivation {
   name = "selfprivacy-buildroot-deps";
 
+  meta = {
+    platforms = [ "x86_64-linux" ];
+  };
+
   nativeBuildInputs = [ sp.buildrootPixiPack ];
 
   outputHashMode = "recursive";

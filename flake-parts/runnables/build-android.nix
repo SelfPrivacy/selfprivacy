@@ -1,4 +1,9 @@
-{ pkgs, lib, sp, ... }:
+{
+  pkgs,
+  lib,
+  sp,
+  ...
+}:
 
 let
   androidBuildScript = pkgs.writeShellApplication {
@@ -41,9 +46,45 @@ let
           exit 1
       fi
 
+      if [[ "$RELEASE" == "release" ]]; then
+        SP_AB_RELEASE="Release"
+        export SP_AB_RELEASE
+      elif [[ "$RELEASE" == "debug" ]]; then
+        SP_AB_RELEASE="Debug"
+        export SP_AB_RELEASE
+      fi
+
+      if [[ "$FLAVOR" == "production" ]]; then
+        SP_AB_FLAVOR="Production"
+        export SP_AB_FLAVOR
+      elif [[ "$FLAVOR" == "fdroid" ]]; then
+        SP_AB_FLAVOR="Fdroid"
+        export SP_AB_FLAVOR
+      elif [[ "$FLAVOR" == "nightly" ]]; then
+        SP_AB_FLAVOR="Nightly"
+        export SP_AB_FLAVOR
+      fi
+
+      if [[ "$TYPE" == "apk" ]]; then
+        SP_AB_TYPE="assemble"
+        SP_AB_TYPE_PATH="apk"
+        SP_AB_RELEASE_PATH="$FLAVOR/$RELEASE"
+        export SP_AB_TYPE SP_AB_TYPE_PATH SP_AB_RELEASE_PATH
+      elif [[ "$TYPE" == "aab" ]]; then
+        SP_AB_TYPE="bundle"
+        SP_AB_TYPE_PATH="bundle"
+        SP_AB_RELEASE_PATH="$FLAVOR$SP_AB_RELEASE"
+        export SP_AB_TYPE SP_AB_TYPE_PATH SP_AB_RELEASE_PATH
+      fi
+
+      echo "Building: $SP_AB_TYPE$SP_AB_FLAVOR$SP_AB_RELEASE"
+      echo "in build/app/outputs/$SP_AB_TYPE_PATH/$SP_AB_RELEASE_PATH/"
+
       HOME="$(mktemp -d)"
       PUB_CACHE="$HOME/pubcache"
-      export HOME PUB_CACHE
+      GRADLE_USER_HOME="$HOME/gradle"
+      MAVEN_REPO="${sp.androidGradleDeps}"
+      export HOME PUB_CACHE GRADLE_USER_HOME MAVEN_REPO
 
       FLUTTER_BUILD_DIRECTORY="$HOME/builddir"
       FLUTTER_NO_ANALYTICS=1
@@ -53,10 +94,14 @@ let
       mkdir "$PUB_CACHE"
       lndir -silent "${sp.flutterDeps}" "$PUB_CACHE"
 
-      flutter config --no-analytics &>/dev/null
-      flutter config --enable-android &>/dev/null
+      flutter config --no-analytics
+      flutter config --enable-android
       flutter pub get --offline --enforce-lockfile
       flutter build "$1" --"$2" --flavor "$3" --no-pub
+
+      pushd "$(pwd)/android"
+      gradle --offline --no-daemon --no-watch-fs -I offline.gradle "$SP_AB_TYPE$SP_AB_FLAVOR$SP_AB_RELEASE" -Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/36.0.0/aapt2
+      popd
     '';
   };
 in
@@ -76,10 +121,15 @@ pkgs.stdenv.mkDerivation rec {
       --set ANDROID_HOME "${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk" \
       --set ANDROID_SDK_ROOT "${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk" \
       --set ANDROID_NDK_HOME "${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/ndk" \
-      --prefix PATH : "${lib.makeBinPath (sp.buildTools ++ sp.buildLibs)}" \
+      --set GRADLE_OPTS "-Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/36.0.0/aapt2" \
+      --prefix PATH : "${lib.makeBinPath (sp.buildTools ++ sp.buildLibs ++ sp.androidBuildTools)}" \
       --prefix PKG_CONFIG_PATH : "${
-        lib.makeSearchPathOutput "dev" "lib/pkgconfig" (sp.buildTools ++ sp.buildLibs)
+        lib.makeSearchPathOutput "dev" "lib/pkgconfig" (
+          sp.buildTools ++ sp.buildLibs ++ sp.androidBuildTools
+        )
       }" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (sp.buildTools ++ sp.buildLibs)}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath (sp.buildTools ++ sp.buildLibs ++ sp.androidBuildTools)
+      }"
   '';
 }

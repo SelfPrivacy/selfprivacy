@@ -37,7 +37,7 @@
           macos-cocoa-deps = callPackage ./packages/macos-cocoa-deps.nix { inherit sp; };
 
           #ios = callPackage ./packages/ios.nix { inherit sp; };
-          ios-cocoa-deps = callPackage ./packages/linux-nix.nix { inherit sp; };
+          ios-cocoa-deps = callPackage ./packages/ios-cocoa-deps.nix { inherit sp; };
         }
         // (
           let

@@ -1,8 +1,12 @@
 { pkgs, sp, ... }:
 
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-archive-portable";
   version = sp.applicationMetadata.version;
+
+  meta = {
+    platforms = [ "x86_64-linux" ];
+  };
 
   nativeBuildInputs = sp.archiveTools;
 

@@ -1,16 +1,16 @@
-{
-  config,
-  lib,
-  pkgs,
-  sp,
-  ...
-}:
+{ pkgs, sp, ... }:
 pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-linux-portable";
   version = sp.applicationMetadata.version;
 
+  meta = {
+    platforms = [ "x86_64-linux" ];
+  };
+
   nativeBuildInputs = with pkgs; [
-    bubblewrap lndir patchelf
+    bubblewrap
+    lndir
+    patchelf
   ];
 
   phases = [

@@ -1,4 +1,9 @@
-{ pkgs, sp, lib, ... }:
+{
+  pkgs,
+  sp,
+  lib,
+  ...
+}:
 
 let
   macosBuildScript = pkgs.writeShellApplication {
@@ -49,8 +54,8 @@ let
       cp -r "${sp.cocoaMacosDeps}/cocoapods" "$HOME/.cocoapods"
       chmod -R u+r "$HOME/.cocoapods"
 
-      flutter config --no-analytics &>/dev/null
-      flutter config --enable-macos-desktop &>/dev/null
+      flutter config --no-analytics
+      flutter config --enable-macos-desktop
       flutter pub get --offline --enforce-lockfile
 
       # Build without signing (thus, without relying on /usr/bin/codesign)
@@ -65,7 +70,7 @@ let
     '';
   };
 in
-pkgs.stdenv.mkDerivation rec {
+pkgs.stdenvNoCC.mkDerivation rec {
   name = "build-macos";
   phases = [ "installPhase" ];
 

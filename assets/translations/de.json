@@ -36,7 +36,7 @@
         "apply": "Anwenden",
         "app_name": "SelfPrivacy",
         "copied_to_clipboard": "In die Zwischenablage kopiert!",
-        "please_connect": "Bitte stellen sie eine Verbindung zu ihrem Server, ihrer Domain und ihrem DNS Betreiber her um zu beginnen!",
+        "please_connect": "Bitte stellen Sie eine Verbindung zu ihrem Server, ihrer Domain und ihrem DNS Betreiber her um zu beginnen!",
         "network_error": "Netzwerkfehler",
         "feature_unsupported_on_api_version": "Diese Funktionalität wird nur von der Serverversion {versionConstraint} unterstützt. Ihr Server hat die Version {currentVersion}.",
         "server_is_outdated": "Diese SelfPrivacy-Version erfordert die API-Version {versionConstraint}, aber Ihr Server hat die Versionsnummer {currentVersion}. Einige Funktionen funktionieren möglicherweise nicht und es können Fehler auftreten. Bitte aktualisieren Sie Ihren Server.",
@@ -558,7 +558,10 @@
         "server_provider_email_unavailable": "E-Mail funktioniert bei diesem Anbieter nicht.",
         "choose_server_type_payment_server": "{} für den Server",
         "multiple_domains_found": "Mehrere Domains gefunden",
-        "domain_critical_error": "Wir können diese Domain nicht erreichen! Tippen, um mehr zu lesen…"
+        "domain_critical_error": "Wir können diese Domain nicht erreichen! Tippen, um mehr zu lesen…",
+        "select_provider_price_text_registrar": "Kostenlos für Domains, die bei diesem Anbieter gekauft wurden",
+        "porkbun_domain_not_opted_in": "Diese Domain ist für den API-Zugriff bei Porkbun nicht freigeschaltet. Bitte aktivieren Sie ihn in den Account-Einstellungen auf porkbun.com und versuchen Sie es anschließend erneut.",
+        "porkbun_domain_not_opted_in_title": "API-Zugriff nicht aktiviert"
     },
     "validations": {
         "length_not_equal": "Länge ist [], sollte {} sein",
@@ -778,7 +781,13 @@
         "check_again": "Erneut prüfen",
         "no_access": "Hat keinen Zugang zu den zugehörigen Ressourcen",
         "no_tokens": "Keine Token",
-        "server_without_token": "{server_domain} hat keinen Token für {provider}."
+        "server_without_token": "{server_domain} hat keinen Token für {provider}.",
+        "remove_backup_token_alert": {
+            "no": "Abbrechen",
+            "title": "Token für Sicherungsspeicher entfernen?",
+            "description": "Das löscht den Token nur aus der App. Wenn Sie Backups schon eingerichtet haben, werden sie weiterhin funktionieren.",
+            "yes": "Entfernen"
+        }
     },
     "troubleshooting": {
         "title": "Fehlerbehebung",

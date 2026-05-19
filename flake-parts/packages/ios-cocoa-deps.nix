@@ -8,14 +8,7 @@
 pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-ios-cocoa-deps";
   version = sp.applicationMetadata.version;
-  src = lib.fileset.toSource {
-    root = ../../.;
-    fileset = lib.fileset.unions [
-      ../../pubspec.yaml
-      ../../pubspec.lock
-      ../../ios
-    ];
-  };
+  src = ../../ios;
 
   meta = {
     platforms = [
@@ -45,13 +38,13 @@ pkgs.stdenvNoCC.mkDerivation {
     export FLUTTER_NO_ANALYTICS="1"
     export CI="true"
 
-    mkdir $PUB_CACHE
-    lndir -silent ${sp.flutterDeps} $PUB_CACHE
+    mkdir -p $HOME/builddir
+    lndir -silent ${sp.flutterDeps}/pubcache $PUB_CACHE
+    rm $HOME/builddir/pubspec.{lock,yaml}
+    cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
 
-    pushd $HOME
-    cp -r $src/ios .
-    cp $src/pubspec.yaml .
-    cp $src/pubspec.lock .
+    pushd $HOME/builddir
+    cp -r $src ios
     chmod -R u+w ios
 
     flutter config --no-analytics

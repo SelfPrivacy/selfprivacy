@@ -19,7 +19,7 @@ pkgs.stdenvNoCC.mkDerivation {
   ];
 
   buildPhase = ''
-    mkdir -p builddir/opt/{src,flutter}
+    mkdir -p builddir/opt/{src,flutter,pubcache}
     lndir -silent ${sp.buildroot} builddir
     lndir -silent ${sp.projectFiles} builddir/opt/src
     chmod -R a+w builddir/opt
@@ -29,8 +29,9 @@ pkgs.stdenvNoCC.mkDerivation {
     mkdir -p builddir/opt/flutter/bin/cache
     lndir -silent ${sp.ourFlutter}/bin/cache builddir/opt/flutter/bin/cache
 
-    mkdir builddir/opt/pubcache
-    lndir -silent ${sp.flutterDeps} builddir/opt/pubcache
+    lndir -silent ${sp.flutterDeps}/pubcache builddir/opt/pubcache
+    rm builddir/opt/src/pubspec.{lock,yaml}
+    cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} builddir/opt/src/
 
     bwrap --bind $(pwd)/builddir / --bind /nix/store /nix/store --dev /dev --proc /proc --tmpfs /tmp \
           --unshare-all --clearenv --setenv PATH /usr/bin:/usr/sbin:/sbin:/bin:/opt/flutter/bin:${sp.buildrootPixiUnpack}/bin \

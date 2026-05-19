@@ -30,7 +30,9 @@ pkgs.stdenvNoCC.mkDerivation {
     lndir -silent $src $HOME/builddir
 
     mkdir $PUB_CACHE
-    lndir -silent ${sp.flutterDeps} $PUB_CACHE
+    lndir -silent ${sp.flutterDeps}/pubcache $PUB_CACHE
+    rm $HOME/builddir/pubspec.{lock,yaml}
+    cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
 
     pushd $HOME/builddir
     flutter config --no-analytics

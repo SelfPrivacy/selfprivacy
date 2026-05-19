@@ -9,15 +9,8 @@
 pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-macos-cocoa-deps";
   version = sp.applicationMetadata.version;
-  src = lib.fileset.toSource {
-    root = ../../.;
-    fileset = lib.fileset.unions [
-      ../../pubspec.yaml
-      ../../pubspec.lock
-      # FIXME: Add the macOS target
-      (lib.fileset.maybeMissing ../../macos)
-    ];
-  };
+  # FIXME: Add the macOS target
+  src = (lib.fileset.maybeMissing ../../macos);
 
   meta = {
     platforms = [
@@ -47,13 +40,12 @@ pkgs.stdenvNoCC.mkDerivation {
     export FLUTTER_NO_ANALYTICS=1
     export CI=true
 
-    mkdir $PUB_CACHE
-    lndir -silent ${sp.flutterDeps} $PUB_CACHE
+    mkdir -p $HOME/builddir
+    lndir -silent ${sp.flutterDeps}/pubcache $PUB_CACHE
+    cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
 
-    pushd $HOME
-    cp -r $src/macos .
-    cp $src/pubspec.yaml .
-    cp $src/pubspec.lock .
+    pushd $HOME/builddir
+    cp -r $src macos
     chmod -R u+w macos
 
     flutter config --no-analytics

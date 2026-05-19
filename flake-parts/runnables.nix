@@ -37,16 +37,12 @@
           text = "";
         };
 
-        build-macos = callPackage ./runnables/build-macos.nix { inherit sp; };
-
         build-ios = callPackage ./runnables/build-ios.nix { inherit sp; };
 
         # sign-macos = null;
         # sign-ios = null;
         # deploy-macos = null;
         # deploy-ios = null;
-
-        build-android = callPackage ./runnables/build-android.nix { inherit sp; };
 
         # FIXME: DRY these using cortesian products
 

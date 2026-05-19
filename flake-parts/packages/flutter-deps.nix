@@ -1,67 +1,77 @@
-{
-  pkgs,
-  sp,
-  lib,
-  ...
-}:
-pkgs.stdenvNoCC.mkDerivation {
+{ sp, pkgs, ... }:
+let
+  lockfileJSON = builtins.toFile "pubspec-lock.json" (
+    builtins.toJSON (sp.toNixFromYAML sp.flutterLockfile)
+  );
+in
+sp.ourFlutter.buildFlutterApplication {
   pname = "${sp.applicationMetadata.name}-flutter-deps";
   version = sp.applicationMetadata.version;
-  src = lib.fileset.toSource {
-    root = ../../.;
-    fileset = lib.fileset.unions [
-      ../../pubspec.yaml
-      ../../pubspec.lock
-    ];
-  };
 
-  nativeBuildInputs = sp.buildTools;
-
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "sha256-7PMh3Z10BUHJJDa8O/vJz63T08+Zk4MS42aGWE/6FqA=";
-
-  phases = [
-    "buildPhase"
-    "installPhase"
+  nativeBuildInputs = with pkgs; [
+    jq
+    yq-go
+    git
   ];
 
-  buildPhase = ''
-    export HOME="$NIX_BUILD_TOP"
-    export PUB_CACHE="$HOME/pubcache"
-    export XDG_CONFIG_HOME="$HOME/.config"
+  src = sp.projectFiles;
 
-    export FLUTTER_NO_ANALYTICS="1"
-    export CI="true"
+  gitHashes = {
+    "sp_cubit_form" = "sha256-fq3NimMBwrR4zEQOq/cW7Kn/raaIaqDgaZ5CbENhJMM=";
+  };
 
-    cp "$src/pubspec.yaml" pubspec.yaml
-    cp "$src/pubspec.lock" pubspec.lock
+  pubspecLock = sp.toNixFromYAML sp.flutterLockfile;
 
-    flutter config --no-analytics
-    flutter config --enable-linux-desktop --enable-macos-desktop --enable-windows-desktop --enable-android --enable-ios
-    flutter pub get --no-precompile --enforce-lockfile
-
-    # Delete any non-deterministic miscellaneous files
-    find "$PUB_CACHE" -type f \( -name "*.stamp" -o \
-                                 -name "*.snapshot" -o \
-                                 -name "*.dill" -o \
-                                 -name ".flutter-plugins-dependencies" \) -exec rm -f {} + || true
-
-    find "$PUB_CACHE" -type d \( -name ".dart_tool" -o \
-                                 -name ".dart-tool" -o \
-                                 -name ".git" -o \
-                                 -name ".cache" -o \
-                                 -name "active_roots" \) -exec rm -rf {} + || true
-
-    # Here it should be unsafeDiscardReferences.out = true, but it doesn't work
-    # It rewrites all references to the Nix store to satisfy the building process
-    # It complains mainly because of the sp-lints Git hooks
-    grep -rl '/nix/store' "$PUB_CACHE" | xargs -r sed -i 's|/nix/store/[a-z0-9]\{32\}-[^/:\"]*|/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-scrubbed|g' || true
-  '';
+  dontBuild = true;
 
   installPhase = ''
-    mkdir $out
+    runHook preInstall
 
-    cp -r $PUB_CACHE/. $out/
+    mkdir -p $out $debug
+
+    cp -r .dart_tool $out/
+
+    mkdir -p $out/pubcache/{hosted,hosted-hashes}/pub.dev
+
+    # Compile packages metadata
+    jq -r '.packages[] | [.name, .rootUri] | @tsv' .dart_tool/package_config.json > package-paths.tsv
+    jq -r '.packages | to_entries[] | select(.value.source == "hosted") | [.key, .value.version, .value.description.sha256] | @tsv' ${lockfileJSON} > hosted.tsv
+
+    # Create a symlink tree to mimic the $PUB_CACHE directory structure
+    while IFS=$'\t' read -r name version sha256; do
+      rootUri="$(awk -F '\t' -v pkg="$name" '$1 == pkg { print $2 }' package-paths.tsv)"
+      rootPath="''${rootUri#file://}"
+      rootPath="''${rootPath%/.}"
+
+      ln -s $rootPath $out/pubcache/hosted/pub.dev/$name-$version
+
+      printf "%s" "$sha256" > $out/pubcache/hosted-hashes/pub.dev/$name-$version.sha256
+    done < hosted.tsv
+
+    # Rewrite Git dependencies to Nix store paths
+    cp ${sp.flutterLockfile} pubspec.lock
+    cp ${sp.flutterPubspec} pubspec.yaml
+
+    jq -r '.packages | to_entries[] | select(.value.source == "git") | .key' ${lockfileJSON} | \
+      while read -r name; do
+        rootUri="$(jq -r --arg name "$name" '.packages[] | select(.name == $name) | .rootUri' .dart_tool/package_config.json)"
+        rootPath="''${rootUri#file://}"
+        rootPath="''${rootPath%/.}"
+
+        yq -i "
+          .packages[\"$name\"].source = \"path\" |
+          .packages[\"$name\"].description.path = \"$rootPath\" |
+          .packages[\"$name\"].description.relative = false |
+          del(.packages[\"$name\"].description.ref) |
+          del(.packages[\"$name\"].description.resolved-ref) |
+          del(.packages[\"$name\"].description.url)
+        " pubspec.lock
+
+        yq -i "del(.dependencies[\"$name\"].git) | .dependencies[\"$name\"].path = \"$rootPath\" " pubspec.yaml
+    done
+
+    cp pubspec.lock pubspec.yaml $out/
+
+    runHook postInstall
   '';
 }

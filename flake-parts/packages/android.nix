@@ -38,9 +38,6 @@ pkgs.stdenvNoCC.mkDerivation {
     export ANDROID_NDK_HOME="${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/ndk"
     export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=${sp.ourAndroidSDK.androidsdk}/libexec/android-sdk/build-tools/36.0.0/aapt2"
 
-    mkdir $PUB_CACHE
-    lndir -silent ${sp.flutterDeps} $PUB_CACHE
-
     mkdir $FLUTTER_ROOT
     lndir -silent ${sp.ourFlutter} $FLUTTER_ROOT
 
@@ -71,11 +68,16 @@ pkgs.stdenvNoCC.mkDerivation {
     echo "Building: $SP_AB_TYPE$SP_AB_FLAVOR$SP_AB_RELEASE"
     echo "in build/app/outputs/$SP_AB_TYPE_PATH/$SP_AB_RELEASE_PATH/"
 
+    cp -rL ${sp.flutterDeps}/pubcache $PUB_CACHE
+    chmod -R a+w $PUB_CACHE
+
     mkdir $HOME/builddir
     lndir -silent $src $HOME/builddir
     rm -rf $HOME/builddir/android
     cp -r $src/android $HOME/builddir/
     chmod -R u+w $HOME/builddir/android
+    rm $HOME/builddir/pubspec.{lock,yaml}
+    cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
 
     pushd $HOME/builddir
     flutter config --no-analytics

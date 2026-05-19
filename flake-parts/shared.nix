@@ -82,6 +82,7 @@
         flutterDeps = self'.packages.flutter-deps;
         flutterPubspec = ../pubspec.yaml;
         flutterLockfile = ../pubspec.lock;
+        flutterParsedLockfile = toNixFromYAML flutterLockfile;
 
         androidGradleDeps = self'.packages.android-gradle-deps;
 
@@ -272,6 +273,12 @@
               src = path;
             } "cat $src | yq . > $out"
           );
+        toYAMLFromJSON =
+          path:
+          pkgs.runCommand "json2yml" {
+            nativeBuildInputs = [ pkgs.yq ];
+            src = path;
+          } "yq -P $src > $out";
 
         shortSystem = builtins.head (lib.strings.splitString "-" system);
 

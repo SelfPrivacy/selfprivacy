@@ -54,11 +54,20 @@ let
       export FLUTTER_BUILD_DIRECTORY FLUTTER_NO_ANALYTICS CI
 
       mkdir "$PUB_CACHE"
-      lndir -silent "${sp.flutterDeps}" "$PUB_CACHE"
+      lndir -silent "${sp.flutterDeps}/pubcache" "$PUB_CACHE"
 
       #cp -r "${sp.cocoaIosDeps}/ios" "$HOME/"
       cp -r "${sp.cocoaIosDeps}/cocoapods" "$HOME/.cocoapods"
       chmod -R u+r "$HOME/.cocoapods"
+
+      mkdir "$HOME/builddir"
+      lndir -silent "$(pwd)" "$HOME/builddir"
+
+      pushd "$HOME/builddir"
+      cp -rL ${sp.flutterDeps}/pubcache "$PUB_CACHE"
+      rm $HOME/builddir/pubspec.{lock,yaml}
+      cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
+
 
       flutter config --no-analytics
       flutter config --enable-ios
@@ -73,6 +82,7 @@ let
       EOF
 
       flutter build "$1" --"$2" --no-codesign --no-pub
+      popd
     '';
   };
 in

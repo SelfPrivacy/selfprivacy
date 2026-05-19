@@ -73,10 +73,8 @@ Use as `nix run .#<name>`.
 | test-flutter    |      |
 | analyze-flutter |      |
 | scan-sonarqube  |      |
-| build-android   |      |
 | sign-android    |      |
 | deploy-android  |      |
-| build-macos     |      |
 | sign-macos      |      |
 | deploy-macos    |      |
 | build-ios       |      |
@@ -84,8 +82,6 @@ Use as `nix run .#<name>`.
 | deploy-ios      |      |
 
 #### Shells
-
-Precached environments bundle their corresponding dependencies and try to imitate Nix sandbox by operating in a temporary directory. Environments without cache operate in the current working directory.
 
 Use as `nix develop -i .#<name>`.
 
@@ -96,15 +92,11 @@ Use as `nix develop -i .#<name>`.
 | scan              |      |
 | sign              |      |
 | fdroid            |      |
-| linux-precached   |      |
 | linux             |      |
 | linux-flatpak     |      |
 | linux-appimage    |      |
-| android-precached |      |
 | android           |      |
-| macos-precached   |      |
 | macos             |      |
-| ios-precached     |      |
 | ios               |      |
 
 ## Chores
@@ -156,11 +148,11 @@ nix build .#macos-cocoa-deps
 nix build .#ios-cocoa-deps
 ```
 
-And write down new SRI hashes in `flake-parts/packages/{flutter,macos-cocoa,ios-cocoa}-deps.nix`
+And write down new SRI hashes in `flake-parts/packages/{flutter,macos-cocoa,ios-cocoa}-deps.nix` if needed
 
 ### To Do
 
-- [ ] Nix-native dependency resolver for Pub in non-nixpkgs builds
+- [X] Nix-native dependency resolver for Pub in non-nixpkgs builds
 - [ ] Nix-native dependency resolver for CocoaPods
 - [X] Nix-native dependency resolver for Conda/Pixi/Rattler
   - Implementation is available in `flake-parts/misc/create-conda-repo.nix`

@@ -1229,10 +1229,11 @@ packages:
   sp_cubit_form:
     dependency: "direct main"
     description:
-      name: sp_cubit_form
-      sha256: e233dd1a030a081e318f825438349d9f969d9d9b6b71e6e2440ef30f1f3a9df9
-      url: "https://git.selfprivacy.org/api/packages/SelfPrivacy/pub/"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "5e64e52c26e463fcb717f3534b09f6d180225d58"
+      url: "https://git.selfprivacy.org/SelfPrivacy/sp_cubit_form.git"
+    source: git
     version: "2.0.5"
   stack_trace:
     dependency: transitive

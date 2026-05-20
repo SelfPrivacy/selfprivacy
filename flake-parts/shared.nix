@@ -19,8 +19,7 @@
             ../ios
             ../lib
             ../linux
-            # FIXME: Add the macOS target
-            (lib.fileset.maybeMissing ../macos)
+            ../macos
             ../pubspec.lock
             ../pubspec.yaml
             ../test

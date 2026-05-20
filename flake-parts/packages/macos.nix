@@ -33,20 +33,25 @@ pkgs.stdenvNoCC.mkDerivation {
     export FLUTTER_NO_ANALYTICS="1"
     export CI="true"
 
-    mkdir $PUB_CACHE
-    lndir -silent ${sp.flutterDeps} $PUB_CACHE
-
-    mkdir $HOME/builddir
+    mkdir $HOME/builddir $PUB_CACHE
+    lndir -silent ${sp.flutterDeps}/pubcache $PUB_CACHE
     lndir -silent $src $HOME/builddir
-    rm -rf $HOME/builddir/macos $HOME/builddir/build
-    cp -r ${sp.cocoaMacosDeps}/macos $HOME/builddir/
+    rm -rf $HOME/builddir/{macos,build,pubspec.{lock,yaml}}
+    cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
+    cp -r $src/macos $HOME/builddir/
     cp -r ${sp.cocoaMacosDeps}/cocoapods $HOME/.cocoapods
-    chmod -R u+w $HOME/builddir/macos $HOME/.cocoapods
+    chmod -R a+w $HOME/builddir/macos
+    cp -r ${sp.cocoaMacosDeps}/macos/Pods $HOME/builddir/macos/
+    chmod -R a+w $HOME/builddir/macos $HOME/.cocoapods
 
     pushd $HOME/builddir
     flutter config --no-analytics
     flutter config --enable-macos-desktop
     flutter pub get --offline --enforce-lockfile
+
+    mkdir macos/scripts
+    cp ${sp.cocoaLipoScript} macos/scripts/lipo
+    patch -p1 < ${sp.cocoaMacosLipoPatch}
 
     # Build without signing (thus, without relying on /usr/bin/codesign)
     cat >> macos/Runner/Configs/Release.xcconfig << EOF

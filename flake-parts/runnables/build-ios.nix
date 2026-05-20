@@ -49,37 +49,29 @@ let
       export HOME XDG_CONFIG_HOME PUB_CACHE GEM_HOME
 
       FLUTTER_BUILD_DIRECTORY="$HOME/builddir"
-      FLUTTER_NO_ANALYTICS=1
-      CI=true
+      FLUTTER_NO_ANALYTICS="1"
+      CI="true"
       export FLUTTER_BUILD_DIRECTORY FLUTTER_NO_ANALYTICS CI
 
-      mkdir "$PUB_CACHE"
+      mkdir "$HOME/builddir" "$PUB_CACHE"
       lndir -silent "${sp.flutterDeps}/pubcache" "$PUB_CACHE"
-
-      #cp -r "${sp.cocoaIosDeps}/ios" "$HOME/"
+      lndir -silent "${sp.projectFiles}" "$HOME/builddir"
+      rm -rf "$HOME"/builddir/{ios,build,pubspec.{lock,yaml}}
+      cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} "$HOME/builddir/"
+      cp -r ${sp.projectFiles}/ios "$HOME/builddir/"
       cp -r "${sp.cocoaIosDeps}/cocoapods" "$HOME/.cocoapods"
-      chmod -R u+r "$HOME/.cocoapods"
-
-      mkdir "$HOME/builddir"
-      lndir -silent "$(pwd)" "$HOME/builddir"
+      chmod -R a+w "$HOME/builddir/ios"
+      cp -r ${sp.cocoaIosDeps}/ios/Pods "$HOME/builddir/ios/"
+      chmod -R a+w "$HOME/builddir/ios" "$HOME/.cocoapods"
 
       pushd "$HOME/builddir"
-      cp -rL ${sp.flutterDeps}/pubcache "$PUB_CACHE"
-      rm $HOME/builddir/pubspec.{lock,yaml}
-      cp -r ${sp.flutterDeps}/pubspec.{lock,yaml} $HOME/builddir/
-
-
       flutter config --no-analytics
       flutter config --enable-ios
       flutter pub get --offline --enforce-lockfile
 
-      # Build without signing (thus, without relying on /usr/bin/codesign)
-      cat >> ios/Runner/Configs/Release.xcconfig << EOF
-      CODE_SIGNING_ALLOWED=NO
-      CODE_SIGNING_REQUIRED=NO
-      CODE_SIGN_IDENTITY=
-      AD_HOC_CODE_SIGNING_ALLOWED=NO
-      EOF
+      mkdir ios/scripts
+      cp ${sp.cocoaLipoScript} ios/scripts/lipo
+      patch -p1 < ${sp.cocoaIosLipoPatch}
 
       flutter build "$1" --"$2" --no-codesign --no-pub
       popd

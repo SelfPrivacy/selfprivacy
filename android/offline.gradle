@@ -1,0 +1,26 @@
+def mavenRepo = System.getenv('MAVEN_REPO')
+
+gradle.beforeSettings { settings ->
+    settings.pluginManagement {
+        repositories {
+            maven { url mavenRepo }
+        }
+    }
+}
+
+gradle.settingsEvaluated { settings ->
+    settings.dependencyResolutionManagement {
+        repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+        repositories {
+            maven { url mavenRepo }
+        }
+    }
+}
+
+gradle.allprojects { project ->
+    project.buildscript {
+        repositories {
+            maven { url mavenRepo }
+        }
+    }
+}

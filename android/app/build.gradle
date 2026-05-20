@@ -101,3 +101,6 @@ dependencies {
   implementation 'com.github.spotbugs:spotbugs-annotations:4.8.6' // required by flutter_secure_storage
 }
 
+tasks.register("assembleProductionAll") {
+    dependsOn "assembleProductionRelease", "assembleProductionDebug"
+}

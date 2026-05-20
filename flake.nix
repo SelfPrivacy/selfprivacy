@@ -1,147 +1,67 @@
 {
   nixConfig.bash-prompt = "\[selfprivacy\]$ ";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-  inputs.systems.url = "github:nix-systems/default-linux";
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.flake-utils.inputs.systems.follows = "systems"; # only build for linux as `buildFlutterApplication` is broken on darwin
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    #nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    gradle2nix.url = "github:tadfisher/gradle2nix/v2";
+  };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
-      flake-utils,
-      ...
+      #nixpkgs-unstable,
+      flake-parts,
+      gradle2nix,
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        lib = nixpkgs.lib;
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
 
-        fromYAML =
-          path:
-          lib.importJSON (
-            pkgs.runCommand "yml2json" {
-              nativeBuildInputs = [ pkgs.yq ];
-              src = path;
-            } ''cat $src | yq . > $out''
-          );
+      imports = [
+        ./flake-parts/shared.nix
+        ./flake-parts/packages.nix
+        ./flake-parts/runnables.nix
+        ./flake-parts/shells.nix
+      ];
 
-        pubSpec = fromYAML ./pubspec.yaml;
+      perSystem =
+        {
+          self',
+          pkgs,
+          system,
+          lib,
+          sp,
+          ...
+        }:
+        {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
 
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-          config.android_sdk.accept_license = true;
-        };
+            config = {
+              allowUnfree = true;
+              android_sdk.accept_license = true;
+            };
 
-        spFlutter = pkgs.flutter335;
+            overlays = [
+              # (final: prev: {
+              #   pkgs-unstable = import nixpkgs-unstable {
+              #     inherit system;
 
-        androidComposition = pkgs.androidenv.composeAndroidPackages {
-          platformToolsVersion = "36.0.2";
-          buildToolsVersions = [ "36.0.0" ];
-          platformVersions = [
-            "36"
-            "35"
-          ];
-        };
-
-        buildDeps = with pkgs; [
-          gtk3
-          glib
-          pcre
-          util-linux
-          libselinux
-          libsepol
-          libthai
-          libdatrie
-          xorg.libXdmcp
-          xorg.libXtst
-          libxkbcommon
-          dbus
-          at-spi2-core
-          libsecret
-          jsoncpp
-          xorg.libX11
-          libepoxy
-          libgcrypt
-          libgpg-error
-        ];
-
-        nativeBuildDeps = with pkgs; [
-          spFlutter
-          spFlutter.dart
-          bash
-          curl
-          git
-          unzip
-          which
-          xz
-          cmake
-          ninja
-          pkg-config
-          wrapGAppsHook3
-          autoPatchelfHook
-          androidComposition.androidsdk
-          openjdk11_headless
-          clang
-          xdg-user-dirs
-        ];
-
-        releaseDerivation = spFlutter.buildFlutterApplication rec {
-          pname = pubSpec.name;
-          version = pubSpec.version;
-
-          autoPubspecLock = ./pubspec.lock;
-
-          src = ./.;
-
-          gitHashes = {
-            "sp_lints" = "sha256-henUl8JcN6YRSnymnVAiNjm8bmRJGPPjVhLP0EJcZk0=";
+              #     config = {
+              #       allowUnfree = true;
+              #       android_sdk.accept_license = true;
+              #     };
+              #   };
+              # })
+            ];
           };
-
-          desktopItem = pkgs.makeDesktopItem {
-            name = "${pname}";
-            exec = "@out@/bin/${pname}";
-            desktopName = "SelfPrivacy";
-          };
-
-          postInstall = ''
-            patchShebangs $out/bin/$pname
-            chmod +x $out/bin/$pname
-            wrapProgram $out/bin/$pname --set PATH ${pkgs.lib.makeBinPath [ pkgs.xdg-user-dirs ]}
-
-            mkdir -p $out/share/applications
-            cp $desktopItem/share/applications/*.desktop $out/share/applications
-            substituteInPlace $out/share/applications/*.desktop --subst-var out
-          '';
         };
-      in
-      {
-        packages = {
-          release = releaseDerivation;
-        };
-        defaultPackage = releaseDerivation;
-
-        devShell = pkgs.mkShell {
-          buildInputs = buildDeps;
-          nativeBuildInputs = nativeBuildDeps;
-
-          JAVA_HOME = "${pkgs.openjdk11_headless.home}";
-          ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
-          ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
-
-          NIX_LDFLAGS = "-rpath ${pkgs.lib.makeLibraryPath buildDeps}";
-          NIX_CFLAGS_COMPILE = "-I${pkgs.xorg.libX11}/include";
-          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildDeps;
-
-          shellHook = ''
-            export TMP=$(mktemp -d)
-            export HOME="$TMP"
-            export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-            export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
-          '';
-        };
-      }
-    );
+    };
 }

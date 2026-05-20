@@ -1,8 +1,8 @@
 app-id: org.selfprivacy.app
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
-command: selfprivacy
+command: org.selfprivacy.app
 finish-args:
   - "--share=ipc"
   - "--socket=x11"
@@ -12,37 +12,34 @@ finish-args:
   - "--own-name=org.selfprivacy.app"
   - "--device=dri"
   - "--talk-name=org.freedesktop.secrets"
+  - "--talk-name=org.freedesktop.portal.*"
 modules:
   - name: selfprivacy
     buildsystem: simple
     build-commands:
-      - cp -r * /app
-      - mkdir /app/bin
-      - ln -s /app/selfprivacy /app/bin/selfprivacy
-      - install -Dm644 logo_android.png /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.png
+      - install -Dm644 org.selfprivacy.app.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
+      - install -Dm644 org.selfprivacy.app.png /app/share/icons/hicolor/512x512/apps/org.selfprivacy.app.png
       - install -Dm644 org.selfprivacy.app.desktop /app/share/applications/org.selfprivacy.app.desktop
+      - install -Dm644 org.selfprivacy.app.metainfo.xml /app/share/metainfo/org.selfprivacy.app.metainfo.xml
+      - cp -pr * /app
     sources:
       - type: dir
-        path: build/linux/x64/release/bundle
-      - type: file
-        path: assets/images/icon/logo_android.png
-      - type: file
-        path: org.selfprivacy.app.desktop
+        path: vendor/
+
   - name: libsecret
     buildsystem: meson
     config-opts:
       - "-Dvapi=false"
       - "-Dgtk_doc=false"
     sources:
-      - type: git
-        url: https://gitlab.gnome.org/GNOME/libsecret.git
-        tag: 0.21.7
+      - type: dir
+        path: libsecret
+
   - name: libjsoncpp
     buildsystem: meson
     config-opts:
       - "--buildtype=release"
       - "--default-library=shared"
     sources:
-      - type: git
-        url: https://github.com/open-source-parsers/jsoncpp.git
-        tag: 1.9.6
+      - type: dir
+        path: libjsoncpp

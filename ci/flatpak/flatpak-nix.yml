@@ -17,7 +17,7 @@ modules:
   - name: selfprivacy
     buildsystem: simple
     build-commands:
-#      - install -Dm644 org.selfprivacy.app.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
+      - install -Dm644 org.selfprivacy.app.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
       - install -Dm644 org.selfprivacy.app.png /app/share/icons/hicolor/512x512/apps/org.selfprivacy.app.png
       - install -Dm644 org.selfprivacy.app.desktop /app/share/applications/org.selfprivacy.app.desktop
       - install -Dm644 org.selfprivacy.app.metainfo.xml /app/share/metainfo/org.selfprivacy.app.metainfo.xml

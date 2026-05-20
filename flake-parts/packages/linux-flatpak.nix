@@ -18,13 +18,14 @@ let
 in
 pkgs.stdenvNoCC.mkDerivation {
   pname = "${sp.applicationMetadata.name}-flatpak";
-  version = sp.flatpakSDK.version;
+  version = sp.applicationMetadata.version;
 
   meta = {
     platforms = [ "x86_64-linux" ];
   };
 
   nativeBuildInputs = sp.flatpakTools;
+  buildInputs = with pkgs; [ librsvg ];
 
   phases = [
     "buildPhase"
@@ -47,7 +48,7 @@ pkgs.stdenvNoCC.mkDerivation {
     cp ${sp.desktopFile} vendor/org.selfprivacy.app.desktop
     cp ${sp.appstreamFile} vendor/org.selfprivacy.app.metainfo.xml
     cp ${sp.iconPNGFile} vendor/org.selfprivacy.app.png
-    #cp ${sp.iconSVGFile} vendor/org.selfprivacy.app.svg
+    cp ${sp.iconSVGFile} vendor/org.selfprivacy.app.svg
 
     chmod -R u+w vendor/ libsecret/ libjsoncpp/
   '';

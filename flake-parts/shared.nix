@@ -105,8 +105,6 @@
           "analyze-flutter"
           "scan-sonarqube"
 
-          "build-android"
-          "build-macos"
           "build-ios"
 
           # "sign-android"
@@ -311,11 +309,6 @@
             chmod +x $out/bin/${pname}
           '';
         };
-
-        # ourGradle8111 = pkgs.fetchzip {
-        #   url = "https://services.gradle.org/distributions/gradle-8.11.1-all.zip";
-        #   hash = "sha256-vsRXjGr8fvABi8XXQuS9163fBU3hCXW576avWZ4syRk=";
-        # };
 
         ourGradle8111 = pkgs.gradle-packages.mkGradle {
           version = "8.11.1";

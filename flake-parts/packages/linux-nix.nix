@@ -8,7 +8,12 @@
 sp.ourFlutter.buildFlutterApplication {
   pname = sp.applicationMetadata.name;
   version = sp.applicationMetadata.version;
+
   src = sp.projectFiles;
+
+  gitHashes = {
+    "sp_cubit_form" = "sha256-fq3NimMBwrR4zEQOq/cW7Kn/raaIaqDgaZ5CbENhJMM=";
+  };
 
   meta = {
     platforms = [

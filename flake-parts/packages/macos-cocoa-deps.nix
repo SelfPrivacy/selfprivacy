@@ -1,8 +1,4 @@
-{
-  pkgs,
-  sp,
-  ...
-}:
+{ pkgs, sp, ... }:
 
 # Darwin packages and runnables
 pkgs.stdenvNoCC.mkDerivation {

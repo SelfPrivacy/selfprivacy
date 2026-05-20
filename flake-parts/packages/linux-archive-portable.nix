@@ -30,7 +30,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
     tar --sort=name --mtime="1970-01-01 00:00Z" --owner=0 --group=0 --numeric-owner \
         --pax-option="exthdr.name=%d/PaxHeaders/%f",delete=atime,delete=ctime \
-        -cvf "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.tar.xz" -C vendor/ .
+        -c -J -v -f "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.tar.xz" -C vendor/ .
     cp "${sp.applicationMetadata.name}-${sp.applicationMetadata.version}-portable.tar.xz" $out/
   '';
 }

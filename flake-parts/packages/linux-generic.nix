@@ -8,6 +8,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
   meta = {
     platforms = [ "x86_64-linux" ];
+    mainProgram = "org.selfprivacy.app";
   };
 
   nativeBuildInputs = sp.buildTools;
@@ -55,8 +56,4 @@ pkgs.stdenvNoCC.mkDerivation {
     mv $out/selfprivacy $out/org.selfprivacy.app
     ln -sr $out/org.selfprivacy.app $out/bin/org.selfprivacy.app
   '';
-
-  meta = {
-    mainProgram = "org.selfprivacy.app";
-  };
 }

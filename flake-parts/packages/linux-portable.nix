@@ -5,6 +5,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
   meta = {
     platforms = [ "x86_64-linux" ];
+    mainProgram = "org.selfprivacy.app";
   };
 
   nativeBuildInputs = with pkgs; [

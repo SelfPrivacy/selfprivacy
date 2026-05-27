@@ -1,0 +1,57 @@
+name: Test CI
+
+on:
+  push:
+    branches:
+      - master
+      - bttmchnd/ci-rehaul-p2
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  test-linux:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#test-flutter
+
+  test-android:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#test-flutter
+
+
+  test-macos:
+    runs-on:
+      - macos
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#test-flutter
+
+
+  test-ios:
+    runs-on:
+      - macos
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#test-flutter
+
+
+  test-windows:
+    runs-on:
+      - windows
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: |
+             flutter config --no-analytics
+             flutter config --enable-windows-desktop
+             flutter test --coverage

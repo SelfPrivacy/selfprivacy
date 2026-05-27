@@ -1,0 +1,131 @@
+name: Build CI
+
+on:
+  push:
+    branches:
+      - master
+      - bttmchnd/ci-rehaul-p2
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  # Linux targets
+  build-linux-nix:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-nix -o artifact-nix
+
+  build-linux-generic:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-generic -o artifact-generic
+
+  build-linux-portable:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-portable -o artifact-portable
+
+  build-linux-flatpak:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-flatpak -o artifact-flatpak
+
+  build-linux-appimage-generic:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-appimage-generic -o artifact-appimage-generic
+
+  build-linux-appimage-portable:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-appimage-portable -o artifact-appimage-portable
+
+  build-linux-archive-generic:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-archive-generic -o artifact-archive-generic
+
+  build-linux-archive-portable:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-archive-portable -o artifact-archive-portable
+
+  # Android targets
+  build-android-production:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#android-aab-release-production
+
+  build-android-fdroid:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#android-apk-release-fdroid
+
+  build-android-nightly:
+    runs-on:
+      - linux
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#android-apk-release-nightly
+
+
+  # Darwin targets
+  build-macos:
+    runs-on:
+      - macos
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#macos -o artifact-macos
+
+  build-ios:
+    runs-on:
+      - macos
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#build-ios -- ipa release
+
+  # Windows targets
+  build-windows:
+    runs-on:
+      - windows
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: flutter config --no-analytics
+      - run: flutter config --enable-windows-desktop
+      - run: flutter pub get --no-precompile --enforce-lockfile
+      - run: flutter build windows --release

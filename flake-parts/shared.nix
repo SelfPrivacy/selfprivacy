@@ -22,6 +22,9 @@
             ../macos
             ../pubspec.lock
             ../pubspec.yaml
+            ../nfpm.yaml
+            ../selfprivacy.desktop
+            ../selfprivacy.metainfo.xml
             ../test
           ];
         };
@@ -94,8 +97,8 @@
         flatpakManifestFile = ../ci/flatpak/flatpak-nix.yml;
         flatpakSDK = self'.packages.linux-flatpak-sdk;
 
-        desktopFile = ../org.selfprivacy.app.desktop;
-        appstreamFile = ../org.selfprivacy.app.metainfo.xml;
+        desktopFile = ../selfprivacy.desktop;
+        appstreamFile = ../selfprivacy.metainfo.xml;
         iconPNGFile = ../assets/images/icon/logo_android.png;
         iconSVGFile = ../assets/images/icon/logo.svg;
 

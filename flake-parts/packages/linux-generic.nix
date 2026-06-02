@@ -8,7 +8,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
   meta = {
     platforms = [ "x86_64-linux" ];
-    mainProgram = "org.selfprivacy.app";
+    mainProgram = "selfprivacy";
   };
 
   nativeBuildInputs = sp.buildTools;
@@ -53,7 +53,6 @@ pkgs.stdenvNoCC.mkDerivation {
       patchelf --force-rpath --set-rpath '$ORIGIN:$ORIGIN/lib:$ORIGIN/../lib:$ORIGIN/../usr/lib:/usr/lib/x86_64-linux-gnu:/app/lib' $out/lib/"$plib"
     done
 
-    mv $out/selfprivacy $out/org.selfprivacy.app
-    ln -sr $out/org.selfprivacy.app $out/bin/org.selfprivacy.app
+    ln -sr $out/selfprivacy $out/bin/selfprivacy
   '';
 }

@@ -2,7 +2,7 @@ app-id: org.selfprivacy.app
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
-command: org.selfprivacy.app
+command: selfprivacy
 finish-args:
   - "--share=ipc"
   - "--socket=x11"
@@ -17,10 +17,10 @@ modules:
   - name: selfprivacy
     buildsystem: simple
     build-commands:
-      - install -Dm644 org.selfprivacy.app.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
-      - install -Dm644 org.selfprivacy.app.png /app/share/icons/hicolor/512x512/apps/org.selfprivacy.app.png
-      - install -Dm644 org.selfprivacy.app.desktop /app/share/applications/org.selfprivacy.app.desktop
-      - install -Dm644 org.selfprivacy.app.metainfo.xml /app/share/metainfo/org.selfprivacy.app.metainfo.xml
+      - install -Dm644 selfprivacy.svg /app/share/icons/hicolor/scalable/apps/selfprivacy.svg
+      - install -Dm644 selfprivacy.png /app/share/icons/hicolor/512x512/apps/selfprivacy.png
+      - install -Dm644 selfprivacy.desktop /app/share/applications/selfprivacy.desktop
+      - install -Dm644 selfprivacy.metainfo.xml /app/share/metainfo/selfprivacy.metainfo.xml
       - cp -pr * /app
     sources:
       - type: dir

@@ -68,11 +68,9 @@ parts:
       flutter build linux --release --verbose
       cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/
       mkdir -p $CRAFT_PART_INSTALL/metainfo
-      cp org.selfprivacy.app.metainfo.xml $CRAFT_PART_INSTALL/metainfo/selfprivacy.metainfo.xml
-      sed -i 's/org\.selfprivacy\.app/selfprivacy/g' $CRAFT_PART_INSTALL/metainfo/selfprivacy.metainfo.xml
+      cp selfprivacy.metainfo.xml $CRAFT_PART_INSTALL/metainfo/selfprivacy.metainfo.xml
       mkdir -p $CRAFT_PART_INSTALL/usr/share/applications
-      cp org.selfprivacy.app.desktop $CRAFT_PART_INSTALL/usr/share/applications/selfprivacy.desktop
-      sed -i 's/org\.selfprivacy\.app/selfprivacy/g' $CRAFT_PART_INSTALL/usr/share/applications/selfprivacy.desktop
+      cp selfprivacy.desktop $CRAFT_PART_INSTALL/usr/share/applications/selfprivacy.desktop
       mkdir -p $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
       cp assets/images/icon/logo.svg $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps/selfprivacy.svg
     stage-packages:

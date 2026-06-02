@@ -72,6 +72,28 @@
               };
             }) androidCombinations
           )
+        )
+        // (
+          let
+            nfpmTypes = [
+              "rpm"
+              "deb"
+              "archlinux"
+            ];
+
+            nfpmCombinations = lib.attrsets.cartesianProduct {
+              type = nfpmTypes;
+            };
+          in
+          builtins.listToAttrs (
+            map (c: {
+              name = "linux-nfpm-${c.type}";
+              value = pkgs.callPackage ./packages/linux-nfpm.nix {
+                inherit sp;
+                nfpmType = c.type;
+              };
+            }) nfpmCombinations
+          )
         );
     };
 }

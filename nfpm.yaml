@@ -1,0 +1,49 @@
+name: selfprivacy
+arch: amd64
+version: ${VERSION}
+release: 1
+epoch: 1
+maintainer: SelfPrivacy <noreply@selfprivacy.org>
+vendor: SelfPrivacy
+homepage: https://selfprivacy.org
+license: GPL-3.0
+mtime: 2025-11-28T00:00:00Z
+
+contents:
+  - src: ./linux-portable/selfprivacy
+    dst: /opt/selfprivacy/selfprivacy
+
+  - src: /opt/selfprivacy/selfprivacy
+    dst: /usr/bin/selfprivacy
+    type: symlink
+
+  - src: ./linux-portable/data
+    dst: /opt/selfprivacy/data
+
+  - src: ./linux-portable/lib
+    dst: /opt/selfprivacy/lib
+
+  - src: assets/images/icon/logo.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/selfprivacy.svg
+
+  - src: selfprivacy.desktop
+    dst: /usr/share/applications/selfprivacy.desktop
+
+overrides:
+  deb:
+    depends:
+      - libgtk-3-0t64
+      - libsecret-1-0
+      - libjsoncpp24 | libjsoncpp25 | libjsoncpp26
+
+  rpm:
+    depends:
+      - gtk3
+      - libsecret
+      - jsoncpp
+
+  archlinux:
+    depends:
+      - gtk3
+      - libsecret
+      - jsoncpp

@@ -24,8 +24,9 @@ And Linux zoo separately:
 | AppImage | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Generic and Portable |
 | .tar.xz  | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Generic and Portable |
 | Snap     |           |          |                         |                       | Packages Generic              |
-| .deb     |           |          |                         |                       | Packages Portable             |
-| .rpm     |           |          |                         |                       | Packages Portable             |
+| DEB      | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Portable             |
+| RPM      | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Portable             |
+| Pacman   | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Portable             |
 
 [^2]: Flatpak packages aren't reproducible and deterministic by default because they store metadata about how, when, and where the package was built, even though the rest of the ecosystem is reproducible.
 

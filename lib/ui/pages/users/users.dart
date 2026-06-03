@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
@@ -23,8 +23,7 @@ class UsersPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
     Widget child;
 
     if (!isReady) {

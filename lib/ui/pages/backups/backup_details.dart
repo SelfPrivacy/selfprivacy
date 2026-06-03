@@ -5,7 +5,7 @@ import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -31,8 +31,7 @@ class BackupDetailsPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
     final BackupsState backupsState = context.watch<BackupsBloc>().state;
     final bool isBackupInitialized = backupsState.isInitialized;
     final StateType providerState = isReady && isBackupInitialized

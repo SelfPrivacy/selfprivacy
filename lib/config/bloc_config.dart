@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
@@ -46,6 +47,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ServerLogsBloc serverLogsBloc;
   late final OutdatedServerCheckerBloc outdatedServerCheckerBloc;
   late final TokensBloc tokensBloc;
+  late final AppReadinessCubit appReadinessCubit;
 
   @override
   void initState() {
@@ -67,6 +69,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
     serverLogsBloc = ServerLogsBloc();
     outdatedServerCheckerBloc = OutdatedServerCheckerBloc();
     tokensBloc = TokensBloc();
+    appReadinessCubit = AppReadinessCubit();
   }
 
   @override
@@ -89,6 +92,7 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
       BlocProvider(create: (final _) => serverLogsBloc),
       BlocProvider(create: (final _) => outdatedServerCheckerBloc),
       BlocProvider(create: (final _) => tokensBloc),
+      BlocProvider(create: (final _) => appReadinessCubit),
     ],
     child: widget.child,
   );

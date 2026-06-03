@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -45,8 +45,7 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
 
     if (!isReady) {
       return BrandHeroScreen(

@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
@@ -41,8 +42,7 @@ class _ServicesPageState extends State<ServicesPage> {
   @override
   Widget build(final BuildContext context) {
     final isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
 
     final OutdatedServerCheckerState outdatedServerCheckerState = context
         .watch<OutdatedServerCheckerBloc>()

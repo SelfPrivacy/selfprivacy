@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -9,7 +10,6 @@ import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
 import 'package:selfprivacy/ui/molecules/chips/support_level_chip.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
-import 'package:selfprivacy/utils/ui_helpers.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ServicesPageCard extends StatelessWidget {
@@ -18,12 +18,12 @@ class ServicesPageCard extends StatelessWidget {
   final Service service;
   @override
   Widget build(final BuildContext context) {
-    final isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+    final AppReadinessState appReadinessState = context
+        .watch<AppReadinessCubit>()
+        .state;
+    final isReady = appReadinessState is ServerConfigured;
 
-    final config = context.watch<ServerInstallationCubit>().state;
-    final domainName = UiHelpers.getDomainName(config);
+    final domainName = appReadinessState.domain;
 
     StateType getStatus(final ServiceStatus status) {
       switch (status) {

@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
@@ -39,15 +39,15 @@ class JobsContent extends StatelessWidget {
     return BlocBuilder<JobsCubit, JobsState>(
       builder: (final context, final state) {
         late List<Widget> widgets;
-        final ServerInstallationState installationState = context
-            .read<ServerInstallationCubit>()
+        final AppReadinessState appReadinessState = context
+            .read<AppReadinessCubit>()
             .state;
         if (state is JobsStateEmpty) {
           widgets = [
             const Gap(64),
             const _JobsEmptyContent(),
             const Gap(64),
-            if (installationState is ServerInstallationFinished)
+            if (appReadinessState is ServerConfigured)
               const _JobsEmptyActions(),
           ];
         } else if (state is JobsStateLoading) {

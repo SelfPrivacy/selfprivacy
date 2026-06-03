@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
 class DomainStringConfigItem extends StatefulWidget {
@@ -67,8 +67,7 @@ class _DomainStringConfigItemState extends State<DomainStringConfigItem> {
 
   @override
   Widget build(final BuildContext context) {
-    final String domain =
-        getIt<ResourcesModel>().serverDomain?.domainName ?? '';
+    final String domain = context.watch<AppReadinessCubit>().state.domain;
 
     return Column(
       children: [

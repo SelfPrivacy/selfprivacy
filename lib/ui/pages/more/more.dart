@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/brand_theme.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/molecules/list_items/more_menu_item.dart';
@@ -16,8 +17,7 @@ class MorePage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
 
     return Scaffold(
       appBar: Breakpoints.small.isActive(context)

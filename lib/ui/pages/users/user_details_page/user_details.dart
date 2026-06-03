@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -12,7 +13,6 @@ import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dar
 import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_tile.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/edit_user_tile.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/widgets/widgets.dart';
-import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
 class UserDetailsPage extends StatelessWidget {
@@ -22,11 +22,7 @@ class UserDetailsPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationState config = context
-        .watch<ServerInstallationCubit>()
-        .state;
-
-    final String domainName = UiHelpers.getDomainName(config);
+    final String domainName = context.watch<AppReadinessCubit>().state.domain;
 
     final User user = context.watch<UsersBloc>().state.users.firstWhere(
       (final User user) => user.login == login,

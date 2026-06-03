@@ -16,7 +16,10 @@ Future<void> getItSetup() async {
   getIt
     ..registerSingleton<NavigationService>(NavigationService())
     ..registerSingleton<ConsoleModel>(ConsoleModel())
-    ..registerSingleton<ResourcesModel>(ResourcesModel()..init())
+    ..registerSingleton<ResourcesModel>(
+      ResourcesModel()..init(),
+      dispose: (final ResourcesModel model) => model.dispose(),
+    )
     ..registerSingleton<WizardDataModel>(WizardDataModel()..init());
 
   final apiConfigModel = ApiConfigModel();

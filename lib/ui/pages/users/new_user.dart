@@ -8,9 +8,9 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/user/user_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
@@ -68,11 +68,7 @@ class NewUserScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final ServerInstallationState config = context
-        .watch<ServerInstallationCubit>()
-        .state;
-
-    final String domainName = UiHelpers.getDomainName(config);
+    final String domainName = context.watch<AppReadinessCubit>().state.domain;
     final formCubit = context.read<UserFormCubit>();
 
     return BrandHeroScreen(

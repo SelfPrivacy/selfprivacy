@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/layouts/root_scaffold_with_subroute_selector/root_scaffold_with_subroute_selector.dart';
 import 'package:selfprivacy/ui/router/root_destinations.dart';
@@ -32,8 +33,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
 
     return AutoRouter(
       builder: (final context, final child) {

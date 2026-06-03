@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
@@ -31,8 +32,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
     final BackupsState backupsState = context.watch<BackupsBloc>().state;
 
     final DnsRecordsStatus dnsStatus = context
@@ -42,8 +42,8 @@ class _ProvidersPageState extends State<ProvidersPage> {
 
     final diskStatus = context.watch<VolumesBloc>().state.diskStatus;
 
-    final ServerInstallationState appConfig = context
-        .watch<ServerInstallationCubit>()
+    final AppReadinessState appReadinessState = context
+        .watch<AppReadinessCubit>()
         .state;
 
     final OutdatedServerCheckerState outdatedServerCheckerState = context
@@ -109,9 +109,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
               state: getDnsStatus(),
               icon: BrandIcons.globe,
               title: 'domain.screen_title'.tr(),
-              subtitle: appConfig.isDomainSelected
-                  ? appConfig.serverDomain!.domainName
-                  : '',
+              subtitle: appReadinessState.domain,
               onTap: isClickable()
                   ? () => context.pushRoute(const DnsDetailsRoute())
                   : null,

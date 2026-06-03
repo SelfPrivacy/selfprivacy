@@ -2,11 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -26,11 +25,11 @@ class DnsDetailsPage extends StatefulWidget {
 class _DnsDetailsPageState extends State<DnsDetailsPage> {
   @override
   Widget build(final BuildContext context) {
-    final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
-    final String domain =
-        getIt<ResourcesModel>().serverDomain?.domainName ?? '';
+    final AppReadinessState appReadinessState = context
+        .watch<AppReadinessCubit>()
+        .state;
+    final bool isReady = appReadinessState is ServerConfigured;
+    final String domain = appReadinessState.domain;
     final DnsRecordsState dnsCubit = context.watch<DnsRecordsCubit>().state;
     final List<DesiredDnsRecord> dnsRecords = context
         .watch<DnsRecordsCubit>()

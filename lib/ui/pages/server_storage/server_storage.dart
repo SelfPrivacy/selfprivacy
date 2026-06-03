@@ -7,8 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
@@ -29,8 +29,7 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
   @override
   Widget build(final BuildContext context) {
     final bool isReady =
-        context.watch<ServerInstallationCubit>().state
-            is ServerInstallationFinished;
+        context.watch<AppReadinessCubit>().state is ServerConfigured;
 
     final DiskStatus diskStatus = context.watch<VolumesBloc>().state.diskStatus;
 

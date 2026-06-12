@@ -1,9 +1,9 @@
 part of 'server_api.dart';
 
 mixin ServicesApi on GraphQLApiMap {
-  Future<List<Service>> getAllServices() async {
+  Future<List<Service>?> getAllServices() async {
     QueryResult<Query$AllServices> response;
-    List<Service> services = [];
+    List<Service>? services;
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$AllServices();
@@ -13,11 +13,9 @@ mixin ServicesApi on GraphQLApiMap {
           error: response.exception,
         );
       }
-      services =
-          response.parsedData?.services.allServices
-              .map<Service>(Service.fromGraphQL)
-              .toList() ??
-          [];
+      services = response.parsedData?.services.allServices
+          .map<Service>(Service.fromGraphQL)
+          .toList();
     } catch (e) {
       logger('Error in GraphQL GetAllServices request: $e', error: e);
     }

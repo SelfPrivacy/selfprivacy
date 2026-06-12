@@ -37,7 +37,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
       return;
     }
 
-    final List<DnsRecord> allDnsRecords = await api.getDnsRecords();
+    final List<DnsRecord> allDnsRecords = await api.getDnsRecords() ?? [];
     final foundRecords = await validateDnsRecords(
       domain,
       extractDkimRecord(allDnsRecords)?.content ?? '',
@@ -182,7 +182,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
 
   Future<void> fix() async {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
-    final List<DnsRecord> records = await api.getDnsRecords();
+    final List<DnsRecord> records = await api.getDnsRecords() ?? [];
 
     // If there are explicit link-local ipv6 records, remove them from the list
     records.removeWhere(

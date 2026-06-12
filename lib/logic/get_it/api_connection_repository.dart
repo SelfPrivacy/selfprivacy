@@ -50,7 +50,7 @@ class ApiConnectionRepository {
 
   Timer? _timer;
 
-  StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
+  StreamSubscription<List<ServerJob>?>? _serverJobsStreamSubscription;
   DateTime? _jobsStreamDisconnectTime;
 
   Future<void> removeServerJob(final String uid) async {
@@ -444,7 +444,10 @@ class ApiConnectionRepository {
 
     _serverJobsStreamSubscription = api
         .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
-        .listen((final List<ServerJob> jobs) {
+        .listen((final List<ServerJob>? jobs) {
+          if (jobs == null) {
+            return;
+          }
           _apiData.serverJobs.data = jobs;
           _dataStream.add(_apiData);
           _jobsStreamDisconnectTime = null;

@@ -1,9 +1,9 @@
 part of 'server_api.dart';
 
 mixin UsersApi on GraphQLApiMap {
-  Future<List<User>> getAllUsers() async {
+  Future<List<User>?> getAllUsers() async {
     QueryResult<Query$AllUsers> response;
-    List<User> users = [];
+    List<User>? users;
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$AllUsers();
@@ -13,13 +13,12 @@ mixin UsersApi on GraphQLApiMap {
           error: response.exception,
         );
       }
-      users =
-          response.parsedData?.users.allUsers
-              .map<User>(User.fromGraphQL)
-              .toList() ??
-          [];
+      users = response.parsedData?.users.allUsers
+          .map<User>(User.fromGraphQL)
+          .toList();
       final rootUser = response.parsedData?.users.rootUser;
       if (rootUser != null) {
+        users ??= [];
         users.add(User.fromGraphQL(rootUser));
       }
     } catch (e) {
@@ -28,9 +27,9 @@ mixin UsersApi on GraphQLApiMap {
     return users;
   }
 
-  Future<List<String>> getAllGroups() async {
+  Future<List<String>?> getAllGroups() async {
     QueryResult<Query$AllGroups> response;
-    List<String> groups = [];
+    List<String>? groups;
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$AllGroups();
@@ -40,11 +39,9 @@ mixin UsersApi on GraphQLApiMap {
           error: response.exception,
         );
       }
-      groups =
-          response.parsedData?.groups.allGroups
-              .map<String>((final group) => group.name)
-              .toList() ??
-          [];
+      groups = response.parsedData?.groups.allGroups
+          .map<String>((final group) => group.name)
+          .toList();
     } catch (e) {
       logger('Error in GraphQL GetAllGroups request: $e', error: e);
     }

@@ -146,7 +146,7 @@ class JobsCubit extends Cubit<JobsState> {
       await Future<void>.delayed(Duration.zero);
 
       final List<DnsRecord> oldDnsRecords =
-          await getIt<ApiConnectionRepository>().api.getDnsRecords();
+          await getIt<ApiConnectionRepository>().api.getDnsRecords() ?? [];
 
       for (final ClientJob job in jobs) {
         if (job is UpdateDnsRecordsJob) {
@@ -232,9 +232,8 @@ class JobsCubit extends Cubit<JobsState> {
         JobStatusEnum.running,
       ),
     );
-    final List<DnsRecord> newDnsRecords = await getIt<ApiConnectionRepository>()
-        .api
-        .getDnsRecords();
+    final List<DnsRecord> newDnsRecords =
+        await getIt<ApiConnectionRepository>().api.getDnsRecords() ?? [];
 
     // If any of the records have a null content, we don't want to update
     // the DNS records

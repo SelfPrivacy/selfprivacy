@@ -1,9 +1,9 @@
 part of 'server_api.dart';
 
 mixin JobsApi on GraphQLApiMap {
-  Future<List<ServerJob>> getServerJobs() async {
+  Future<List<ServerJob>?> getServerJobs() async {
     QueryResult<Query$GetApiJobs> response;
-    List<ServerJob> jobsList = [];
+    List<ServerJob>? jobsList;
 
     try {
       final GraphQLClient client = await getClient();
@@ -11,11 +11,9 @@ mixin JobsApi on GraphQLApiMap {
       if (response.hasException) {
         logger(response.exception.toString());
       }
-      jobsList = jobsList =
-          response.parsedData?.jobs.getJobs
-              .map<ServerJob>(ServerJob.fromGraphQL)
-              .toList() ??
-          [];
+      jobsList = jobsList = response.parsedData?.jobs.getJobs
+          .map<ServerJob>(ServerJob.fromGraphQL)
+          .toList();
     } catch (e) {
       logger("Couldn't get server jobs", error: e);
     }
@@ -23,7 +21,7 @@ mixin JobsApi on GraphQLApiMap {
     return jobsList;
   }
 
-  Stream<List<ServerJob>> getServerJobsStream({
+  Stream<List<ServerJob>?> getServerJobsStream({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
   }) async* {
     final GraphQLClient client = await getSubscriptionClient(
@@ -31,11 +29,9 @@ mixin JobsApi on GraphQLApiMap {
     );
     final subscription = client.subscribe$JobUpdates();
     await for (final response in subscription) {
-      final jobsList =
-          response.parsedData?.jobUpdates
-              .map<ServerJob>(ServerJob.fromGraphQL)
-              .toList() ??
-          [];
+      final jobsList = response.parsedData?.jobUpdates
+          .map<ServerJob>(ServerJob.fromGraphQL)
+          .toList();
       yield jobsList;
     }
   }

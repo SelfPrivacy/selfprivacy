@@ -1,8 +1,8 @@
 part of 'server_api.dart';
 
 mixin BackupsApi on GraphQLApiMap {
-  Future<List<Backup>> getBackups() async {
-    List<Backup> backups;
+  Future<List<Backup>?> getBackups() async {
+    List<Backup>? backups;
     QueryResult<Query$AllBackupSnapshots> response;
 
     try {
@@ -11,7 +11,7 @@ mixin BackupsApi on GraphQLApiMap {
       if (response.hasException) {
         final message = response.exception.toString();
         logger(message);
-        backups = [];
+        backups = null;
       }
       final List<Backup> parsed = response.parsedData!.backup.allSnapshots
           .map(Backup.fromGraphQL)
@@ -19,7 +19,7 @@ mixin BackupsApi on GraphQLApiMap {
       backups = parsed;
     } catch (e) {
       logger("Couldn't get backups", error: e);
-      backups = [];
+      backups = null;
     }
 
     return backups;

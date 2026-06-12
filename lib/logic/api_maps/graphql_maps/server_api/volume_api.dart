@@ -1,9 +1,9 @@
 part of 'server_api.dart';
 
 mixin VolumeApi on GraphQLApiMap {
-  Future<List<ServerDiskVolume>> getServerDiskVolumes() async {
+  Future<List<ServerDiskVolume>?> getServerDiskVolumes() async {
     QueryResult<Query$GetServerDiskVolumes> response;
-    List<ServerDiskVolume> volumes = [];
+    List<ServerDiskVolume>? volumes;
 
     try {
       final GraphQLClient client = await getClient();
@@ -14,11 +14,9 @@ mixin VolumeApi on GraphQLApiMap {
           error: response.exception,
         );
       }
-      volumes =
-          response.parsedData?.storage.volumes
-              .map<ServerDiskVolume>(ServerDiskVolume.fromGraphQL)
-              .toList() ??
-          [];
+      volumes = response.parsedData?.storage.volumes
+          .map<ServerDiskVolume>(ServerDiskVolume.fromGraphQL)
+          .toList();
     } catch (e) {
       logger('Error in GraphQL GetServerDiskVolumes request: $e', error: e);
     }

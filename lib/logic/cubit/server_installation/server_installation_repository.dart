@@ -241,7 +241,7 @@ class ServerInstallationRepository {
 
     late DnsRecord record;
     try {
-      record = extractDkimRecord(await api.getDnsRecords())!;
+      record = extractDkimRecord(await api.getDnsRecords() ?? [])!;
     } catch (e) {
       logger('Failed to extract DKIM record: $e');
       rethrow;

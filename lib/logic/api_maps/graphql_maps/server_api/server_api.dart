@@ -418,8 +418,8 @@ class ServerApi extends GraphQLApiMap
     return key;
   }
 
-  Future<List<DnsRecord>> getDnsRecords() async {
-    List<DnsRecord> records = [];
+  Future<List<DnsRecord>?> getDnsRecords() async {
+    List<DnsRecord>? records;
     QueryResult<Query$GetDnsRecords> response;
 
     try {
@@ -441,8 +441,8 @@ class ServerApi extends GraphQLApiMap
     return records;
   }
 
-  Future<GenericResult<List<ApiToken>>> getApiTokens() async {
-    GenericResult<List<ApiToken>> tokens;
+  Future<GenericResult<List<ApiToken>?>> getApiTokens() async {
+    GenericResult<List<ApiToken>?> tokens;
     QueryResult<Query$GetApiTokens> response;
 
     try {
@@ -454,21 +454,21 @@ class ServerApi extends GraphQLApiMap
           'Exception in GraphQL GetApiTokens request: $message',
           error: response.exception,
         );
-        tokens = GenericResult<List<ApiToken>>(
+        tokens = GenericResult<List<ApiToken>?>(
           success: false,
-          data: [],
+          data: null,
           message: message,
         );
       }
       final List<ApiToken> parsed = response.parsedData!.api.devices
           .map(ApiToken.fromGraphQL)
           .toList();
-      tokens = GenericResult<List<ApiToken>>(success: true, data: parsed);
+      tokens = GenericResult<List<ApiToken>?>(success: true, data: parsed);
     } catch (e) {
       logger('Error in GraphQL GetApiTokens request: $e', error: e);
-      tokens = GenericResult<List<ApiToken>>(
+      tokens = GenericResult<List<ApiToken>?>(
         success: false,
-        data: [],
+        data: null,
         message: e.toString(),
       );
     }

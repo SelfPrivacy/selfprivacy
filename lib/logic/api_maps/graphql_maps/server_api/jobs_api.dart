@@ -11,7 +11,7 @@ mixin JobsApi on GraphQLApiMap {
       if (response.hasException) {
         logger(response.exception.toString());
       }
-      jobsList = jobsList = response.parsedData?.jobs.getJobs
+      jobsList = response.parsedData?.jobs.getJobs
           .map<ServerJob>(ServerJob.fromGraphQL)
           .toList();
     } catch (e) {
@@ -27,12 +27,19 @@ mixin JobsApi on GraphQLApiMap {
     final GraphQLClient client = await getSubscriptionClient(
       onConnectionLost: onConnectionLost,
     );
-    final subscription = client.subscribe$JobUpdates();
-    await for (final response in subscription) {
-      final jobsList = response.parsedData?.jobUpdates
-          .map<ServerJob>(ServerJob.fromGraphQL)
-          .toList();
-      yield jobsList;
+    try {
+      final subscription = client.subscribe$JobUpdates();
+      await for (final response in subscription) {
+        final jobsList = response.parsedData?.jobUpdates
+            .map<ServerJob>(ServerJob.fromGraphQL)
+            .toList();
+        yield jobsList;
+      }
+    } finally {
+      // Cancelling the subscription only sends SubscriptionComplete over the
+      // socket; the socket itself stays open (and auto-reconnects) until the
+      // link is disposed.
+      await (client.link as WebSocketLink).dispose();
     }
   }
 

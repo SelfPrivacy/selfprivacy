@@ -49,10 +49,17 @@ mixin LogsApi on GraphQLApiMap {
 
   Stream<ServerLogEntry> getServerLogsStream() async* {
     final GraphQLClient client = await getSubscriptionClient();
-    final subscription = client.subscribe$LogEntries();
-    await for (final response in subscription) {
-      final log = ServerLogEntry.fromGraphQL(response.parsedData!.logEntries);
-      yield log;
+    try {
+      final subscription = client.subscribe$LogEntries();
+      await for (final response in subscription) {
+        final log = ServerLogEntry.fromGraphQL(response.parsedData!.logEntries);
+        yield log;
+      }
+    } finally {
+      // Cancelling the subscription only sends SubscriptionComplete over the
+      // socket; the socket itself stays open (and auto-reconnects) until the
+      // link is disposed.
+      await (client.link as WebSocketLink).dispose();
     }
   }
 }

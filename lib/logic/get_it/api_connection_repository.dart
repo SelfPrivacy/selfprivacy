@@ -412,24 +412,12 @@ class ApiConnectionRepository {
     }
     _setStatus(ConnectionStatus.reconnecting);
 
-    final String? apiVersion = await api.getApiVersion();
-    if (apiVersion == null) {
-      _setStatus(ConnectionStatus.offline);
-      return;
-    } else {
-      _apiData.apiVersion.data = apiVersion;
-      _dataStream.add(_apiData);
-    }
+    await reload(null);
 
-    await _refetchEverything(Version.parse(apiVersion));
-
-    _setStatus(ConnectionStatus.connected);
-
-    await _connectJobsStream(apiVersion);
-
-    unawaited(_rotateTokenIfNeeded());
-
-    // Use timer to periodically check for new jobs
+    // The timer is armed even if the first reload found the server
+    // unreachable, so a cold start while offline recovers once connectivity
+    // returns.
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 10), reload);
   }
 
@@ -459,6 +447,7 @@ class ApiConnectionRepository {
     _setStatus(ConnectionStatus.nonexistent);
     _timer?.cancel();
     await _serverJobsStreamSubscription?.cancel();
+    _serverJobsStreamSubscription = null;
   }
 
   static const String wsJobsUpdatesSupportedVersion = '>=3.3.0';
@@ -507,8 +496,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> reload(final Timer? timer) async {
-    final serverDetails = getIt<ResourcesModel>().serverDetails;
-    if (serverDetails == null) {
+    if (getIt<ResourcesModel>().serverDetails == null) {
       return;
     }
 
@@ -516,12 +504,17 @@ class ApiConnectionRepository {
     if (apiVersion == null) {
       _setStatus(ConnectionStatus.offline);
       return;
-    } else {
-      _setStatus(ConnectionStatus.connected);
-      _apiData.apiVersion.data = apiVersion;
     }
+
+    _apiData.apiVersion.data = apiVersion;
     final Version version = Version.parse(apiVersion);
+    // Reconnecting an already-live stream would open a new websocket every
+    // reload; socket-level drops are handled by the client's autoReconnect.
+    if (_serverJobsStreamSubscription == null) {
+      await _connectJobsStream(apiVersion);
+    }
     await _refetchEverything(version);
+    _setStatus(ConnectionStatus.connected);
 
     // After the refetch so the rotation doesn't invalidate the token under
     // requests already in flight.
@@ -640,6 +633,8 @@ class ApiDataElement<T> {
     }
 
     lastError = null;
+    lastErrorAt = null;
+
     if (!const DeepCollectionEquality().equals(newData, _data)) {
       data = newData;
       callback();

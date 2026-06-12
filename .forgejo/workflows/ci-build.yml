@@ -13,92 +13,146 @@ jobs:
   # Linux targets
   build-linux-nix:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
-      - run: nix build .#linux-nix -o artifact-nix
+      - run: nix build .#linux-nix
 
-  build-linux-generic:
-    runs-on:
-      - linux
+  # build-linux-generic:
+  #   runs-on:
+  #     - x86
+  #     - kvm
 
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix build .#linux-generic -o artifact-generic
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#linux-generic
 
   build-linux-portable:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
-      - run: nix build .#linux-portable -o artifact-portable
+      - run: nix build .#linux-portable
 
   build-linux-flatpak:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
-      - run: nix build .#linux-flatpak -o artifact-flatpak
+      - run: nix build .#linux-flatpak
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-flatpak
+          path: result/*
 
-  build-linux-appimage-generic:
-    runs-on:
-      - linux
+  # build-linux-appimage-generic:
+  #   runs-on:
+  #     - x86
+  #     - kvm
 
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix build .#linux-appimage-generic -o artifact-appimage-generic
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#linux-appimage-generic -o artifact-appimage-generic
 
   build-linux-appimage-portable:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
-      - run: nix build .#linux-appimage-portable -o artifact-appimage-portable
+      - run: nix build .#linux-appimage-portable
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-appimage-portable
+          path: result/*
 
-  build-linux-archive-generic:
-    runs-on:
-      - linux
+  # build-linux-archive-generic:
+  #   runs-on:
+  #     - x86
+  #     - kvm
 
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix build .#linux-archive-generic -o artifact-archive-generic
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#linux-archive-generic -o artifact-archive-generic
 
   build-linux-archive-portable:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
-      - run: nix build .#linux-archive-portable -o artifact-archive-portable
+      - run: nix build .#linux-archive-portable
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-archive-portable
+          path: result/*
 
   # Android targets
   build-android-production:
     runs-on:
-      - linux
+      - x86
+      - kvm
+
+    env:
+      CI_KEYSTORE_FILE: google-keystore.jks
+      CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}
 
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#android-aab-release-production
+      - run: echo "${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}" | base64 -d > google-keystore.jks
+      - run: nix run .#sign-android-google result/*.aab
+      - uses: actions/upload-artifact@v3
+        with:
+          name: android-production-google
+          path: selfprivacy-google-signed.aab
+
 
   build-android-fdroid:
     runs-on:
-      - linux
+      - x86
+      - kvm
+
+    env:
+      CI_KEYSTORE_FILE: fdroid-keystore.jks
+      CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_FDROID }}
 
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#android-apk-release-fdroid
+      - run: echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > fdroid-keystore.jks
+      - run: nix run .#sign-android-fdroid result/*.apk
+      - uses: actions/upload-artifact@v3
+        with:
+          name: android-production-fdroid
+          path: selfprivacy-fdroid-signed.apk
 
   build-android-nightly:
     runs-on:
-      - linux
+      - x86
+      - kvm
+
+    env:
+      CI_KEYSTORE_FILE: nightly-keystore.jks
+      CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_NIGHTLY }}
 
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#android-apk-release-nightly
+      - run: echo "${{ secrets.CI_KEYSTORE_FILE_NIGHTLY }}" | base64 -d > nightly-keystore.jks
+      - run: nix run .#sign-android-nightly result/*.apk
+      - uses: actions/upload-artifact@v3
+        with:
+          name: android-production-nightly
+          path: selfprivacy-nightly-signed.apk
 
 
   # Darwin targets

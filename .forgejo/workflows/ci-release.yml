@@ -1,0 +1,124 @@
+name: Release CI
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      # Check if the release exists. If not, create it
+      - run: |
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          if [[ "$RELEASE" == "null" ]] || [[ -z "$RELEASE" ]]; then
+            curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -H "Content-Type: application/json" -d \
+              "{ \"tag_name\": \"${{ forgejo.ref_name }}\", \"name\": \"${{ forgejo.ref_name }}\" }" \
+              "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases"
+          fi
+
+
+  release-linux:
+    needs:
+      - create-release
+
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-flatpak -o artifact-flatpak
+      - run: nix build .#linux-appimage-portable -o artifact-appimage-portable
+      - run: nix build .#linux-archive-portable -o artifact-archive-portable
+      - run: nix build .#linux-nfpm-rpm -o artifact-rpm
+      - run: nix build .#linux-nfpm-deb -o artifact-deb
+      - run: nix build .#linux-nfpm-archlinux -o artifact-archlinux
+      # Collect artifacts in one directory and upload them
+      - run: |
+          mkdir ci-artifacts
+          cp artifact-*/* ci-artifacts/
+
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          for f in ci-artifacts/*; do
+            curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -F "attachment=@$f" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+          done
+
+  release-android:
+    needs:
+      - create-release
+
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#android-aab-release-production -o artifact-android-production
+      - run: nix build .#android-apk-release-fdroid -o artifact-android-fdroid
+      - run: nix build .#android-apk-release-nightly -o artifact-android-nightly
+      # Sign artifacts
+      - run: |
+          echo "${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}" | base64 -d > google-keystore.jks
+          echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > fdroid-keystore.jks
+          echo "${{ secrets.CI_KEYSTORE_FILE_NIGHTLY }}" | base64 -d > nightly-keystore.jks
+
+          CI_KEYSTORE_FILE="google-keystore.jks" CI_KEYSTORE_PASS="${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}" nix run .#sign-android-google artifact-android-production/*.aab
+          CI_KEYSTORE_FILE="fdroid-keystore.jks" CI_KEYSTORE_PASS="${{ secrets.CI_KEYSTORE_PASS_FDROID }}" nix run .#sign-android-fdroid artifact-android-fdroid/*.apk
+          CI_KEYSTORE_FILE="nightly-keystore.jks" CI_KEYSTORE_PASS="${{ secrets.CI_KEYSTORE_PASS_NIGHTLY }}" nix run .#sign-android-nightly artifact-android-nightly/*.apk
+      # Collect artifacts in one directory and upload them
+      - run: |
+          mkdir ci-artifacts
+
+          cp selfprivacy-google-signed.aab ci-artifacts/selfprivacy-production-${{ forgejo.ref_name }}.aab
+          cp selfprivacy-fdroid-signed.apk ci-artifacts/selfprivacy-fdroid-${{ forgejo.ref_name }}.apk
+          cp selfprivacy-nightly-signed.apk ci-artifacts/selfprivacy-nightly-${{ forgejo.ref_name }}.apk
+
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          for f in ci-artifacts/*; do
+            curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -F "attachment=@$f" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+          done
+
+
+  # release-macos:
+  #   runs-on:
+  #     - macos
+
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#macos -o artifact-macos
+  #     - run: >-
+  #         mkdir ci-artifacts &&
+  #         cp artifact-*/* ci-artifacts/
+
+  # release-ios:
+  #   runs-on:
+  #     - macos
+
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix run .#build-ios -- ipa release
+  # release-windows:
+  #   runs-on:
+  #     - windows
+
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: flutter config --no-analytics
+  #     - run: flutter config --enable-windows-desktop
+  #     - run: flutter pub get --no-precompile --enforce-lockfile
+  #     - run: flutter build windows --release

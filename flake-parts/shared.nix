@@ -222,6 +222,7 @@
           ++ lib.optionals stdenvNoCC.isDarwin [ ];
 
         signTools = with pkgs; [
+          ourJava
           apksigner
           fastlane
         ];
@@ -317,7 +318,6 @@
           version = "8.11.1";
           hash = "sha256-85eyhwI6zboen2/F6nLSLdY2adWe1KKJopsadu7hUcY=";
           defaultJava = ourJava;
-          enableUpdateScript = true;
         };
 
         ourGradle8111Wrapped = ourGradle8111.passthru.wrapped;

@@ -102,6 +102,14 @@ Use as `nix develop -i .#<name>`.
 
 ## Chores
 
+### Using Android Keystores in CI
+
+Create these secrets: `CI_KEYSTORE_FILE_GOOGLE`, `CI_KEYSTORE_FILE_FDROID`, `CI_KEYSTORE_FILE_NIGHTLY`. You need to convert your corresponding keystores into text using `base64 -w 0 yourkeystore.jks`. To decode it in CI, use e.g. `echo $CI_KEYSTORE_FILE_GOOGLE | base64 -d > google-keystore.jks`.
+
+They need the corresponding password secrets: `CI_KEYSTORE_PASS_GOOGLE`, `CI_KEYSTORE_PASS_FDROID`, `CI_KEYSTORE_PASS_NIGHTLY`.
+
+You need to set `$CI_KEYSTORE_FILE` and `$CI_KEYSTORE_PASS` environment variables, where `$CI_KEYSTORE_FILE` is a path relative to the root of the source code or a full path.
+
 ### Updating Buildroot Packages
 
 This is not automated, because there is no proper way to perform dependency resolution for RHEL packages without a RHEL distribution. We need exactly three programs from it: glibc, bash, and busybox — six packages in total if we count additional transitory ones. We extract them by hand and don't care about correctness, we only need to form a pseudo-rootfs.

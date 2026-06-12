@@ -12,7 +12,8 @@ on:
 jobs:
   test-linux:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
@@ -20,7 +21,8 @@ jobs:
 
   test-android:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6

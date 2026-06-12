@@ -12,7 +12,8 @@ on:
 jobs:
   analyze:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6
@@ -20,7 +21,8 @@ jobs:
 
   scan:
     runs-on:
-      - linux
+      - x86
+      - kvm
 
     steps:
       - uses: actions/checkout@v6

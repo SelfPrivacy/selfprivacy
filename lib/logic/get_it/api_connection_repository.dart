@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -604,6 +605,8 @@ class ApiDataElement<T> {
 
   T? _data;
   final String requiredApiVersion;
+  Object? lastError;
+  DateTime? lastErrorAt;
 
   final Future<T?> Function() fetchData;
 
@@ -611,21 +614,36 @@ class ApiDataElement<T> {
     final Version version,
     final Function() callback,
   ) async {
-    if (VersionConstraint.parse(requiredApiVersion).allows(version)) {
-      if (isExpired || _data == null) {
-        final newData = await fetchData();
-        if (T is List) {
-          if (Object.hashAll(newData! as Iterable<Object?>) !=
-              Object.hashAll(_data! as Iterable<Object?>)) {
-            _data = [...newData as Iterable] as T?;
-          }
-        } else {
-          if (newData.hashCode != _data.hashCode) {
-            _data = newData;
-          }
-        }
-        callback();
-      }
+    if (!VersionConstraint.parse(requiredApiVersion).allows(version)) {
+      return;
+    }
+    if (!isExpired && _data != null) {
+      return;
+    }
+
+    final T? newData;
+    try {
+      newData = await fetchData();
+    } catch (error) {
+      lastError = error;
+      lastErrorAt = DateTime.now();
+      callback();
+      return;
+    }
+
+    if (newData == null) {
+      lastError ??= const StaleDataError();
+      lastErrorAt ??= DateTime.now();
+      callback();
+      return;
+    }
+
+    lastError = null;
+    if (!const DeepCollectionEquality().equals(newData, _data)) {
+      data = newData;
+      callback();
+    } else {
+      _lastUpdated = DateTime.now();
     }
   }
 
@@ -657,4 +675,8 @@ class ApiDataElement<T> {
 
   /// Returns the last time the data was updated
   DateTime get lastUpdated => _lastUpdated;
+}
+
+class StaleDataError implements Exception {
+  const StaleDataError();
 }

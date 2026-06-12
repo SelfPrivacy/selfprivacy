@@ -401,18 +401,20 @@ class ApiConnectionRepository {
       getIt<ResourcesModel>().serverDetails;
   ServerDomain? get serverDomain => getIt<ResourcesModel>().serverDomain;
 
+  void _setStatus(final ConnectionStatus status) {
+    connectionStatus = status;
+    _connectionStatusStream.add(status);
+  }
+
   Future<void> init() async {
-    final serverDetails = getIt<ResourcesModel>().serverDetails;
-    if (serverDetails == null) {
+    if (getIt<ResourcesModel>().serverDetails == null) {
       return;
     }
-    connectionStatus = ConnectionStatus.reconnecting;
-    _connectionStatusStream.add(connectionStatus);
+    _setStatus(ConnectionStatus.reconnecting);
 
     final String? apiVersion = await api.getApiVersion();
     if (apiVersion == null) {
-      connectionStatus = ConnectionStatus.offline;
-      _connectionStatusStream.add(connectionStatus);
+      _setStatus(ConnectionStatus.offline);
       return;
     } else {
       _apiData.apiVersion.data = apiVersion;
@@ -421,8 +423,7 @@ class ApiConnectionRepository {
 
     await _refetchEverything(Version.parse(apiVersion));
 
-    connectionStatus = ConnectionStatus.connected;
-    _connectionStatusStream.add(connectionStatus);
+    _setStatus(ConnectionStatus.connected);
 
     await _connectJobsStream(apiVersion);
 
@@ -455,8 +456,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> clear() async {
-    connectionStatus = ConnectionStatus.nonexistent;
-    _connectionStatusStream.add(connectionStatus);
+    _setStatus(ConnectionStatus.nonexistent);
     _timer?.cancel();
     await _serverJobsStreamSubscription?.cancel();
   }
@@ -514,12 +514,10 @@ class ApiConnectionRepository {
 
     final String? apiVersion = await api.getApiVersion();
     if (apiVersion == null) {
-      connectionStatus = ConnectionStatus.offline;
-      _connectionStatusStream.add(connectionStatus);
+      _setStatus(ConnectionStatus.offline);
       return;
     } else {
-      connectionStatus = ConnectionStatus.connected;
-      _connectionStatusStream.add(connectionStatus);
+      _setStatus(ConnectionStatus.connected);
       _apiData.apiVersion.data = apiVersion;
     }
     final Version version = Version.parse(apiVersion);

@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/email_password_metadata.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -20,10 +21,13 @@ import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/utils/app_logger.dart';
 
 /// Repository for all API calls
 /// Stores the current state of all data from API and exposes it to Blocs.
 class ApiConnectionRepository {
+  static final _log = const AppLogger(name: 'api_connection_repository').log;
+
   Box box = Hive.box(BNames.serverInstallationBox);
   final ServerApi api = ServerApi();
 
@@ -317,13 +321,72 @@ class ApiConnectionRepository {
     }
   }
 
+  /// Rotates the device API token and persists the new one.
+  ///
+  /// The server invalidates the old token the moment it issues the new one,
+  /// so the new token must be persisted before any further requests are made.
   Future<(bool, String)> refreshDeviceToken() async {
+    final List<Server> servers = getIt<ResourcesModel>().servers;
+    if (servers.isEmpty) {
+      return (false, 'jobs.generic_error'.tr());
+    }
+    final Server server = servers.first;
+
     final GenericResult<String> result = await api.refreshDeviceApiToken();
-    _apiData.devices.invalidate();
-    if (result.success) {
-      return (true, result.data);
-    } else {
+    if (!result.success || result.data.isEmpty) {
       return (false, result.message ?? 'jobs.generic_error'.tr());
+    }
+
+    await getIt<ResourcesModel>().updateServerByDomain(
+      Server(
+        domain: server.domain,
+        hostingDetails: server.hostingDetails.copyWith(
+          apiToken: result.data,
+          apiTokenRotatedAt: DateTime.now(),
+        ),
+      ),
+    );
+    _apiData.devices.invalidate();
+
+    // The jobs websocket was authenticated with the old token; its reconnects
+    // would fail auth, so re-establish it with the new one.
+    final String? apiVersion = _apiData.apiVersion.data;
+    if (apiVersion != null) {
+      await _connectJobsStream(apiVersion);
+    }
+
+    return (true, result.message ?? 'basis.done'.tr());
+  }
+
+  static const Duration tokenRotationInterval = Duration(days: 30);
+  static const Duration _tokenRotationRetryInterval = Duration(hours: 1);
+  DateTime? _lastTokenRotationAttempt;
+
+  /// Rotates the token if it is older than [tokenRotationInterval].
+  ///
+  /// A missing timestamp counts as overdue: it covers tokens created before
+  /// rotation tracking existed and the install-time token, which is embedded
+  /// in cloud-init userdata and visible to the hosting provider account.
+  Future<void> _rotateTokenIfNeeded() async {
+    if (connectionStatus != ConnectionStatus.connected) {
+      return;
+    }
+    final DateTime now = DateTime.now();
+    if (_lastTokenRotationAttempt != null &&
+        now.difference(_lastTokenRotationAttempt!) <
+            _tokenRotationRetryInterval) {
+      return;
+    }
+    final DateTime? rotatedAt =
+        getIt<ResourcesModel>().serverDetails?.apiTokenRotatedAt;
+    if (rotatedAt != null &&
+        now.difference(rotatedAt) < tokenRotationInterval) {
+      return;
+    }
+    _lastTokenRotationAttempt = now;
+    final (bool success, String message) = await refreshDeviceToken();
+    if (!success) {
+      _log('Automatic token rotation failed: $message');
     }
   }
 
@@ -360,20 +423,31 @@ class ApiConnectionRepository {
     connectionStatus = ConnectionStatus.connected;
     _connectionStatusStream.add(connectionStatus);
 
-    if (VersionConstraint.parse(
-      wsJobsUpdatesSupportedVersion,
-    ).allows(Version.parse(apiVersion))) {
-      _serverJobsStreamSubscription = api
-          .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
-          .listen((final List<ServerJob> jobs) {
-            _apiData.serverJobs.data = jobs;
-            _dataStream.add(_apiData);
-            _jobsStreamDisconnectTime = null;
-          });
-    }
+    await _connectJobsStream(apiVersion);
+
+    unawaited(_rotateTokenIfNeeded());
 
     // Use timer to periodically check for new jobs
     _timer = Timer.periodic(const Duration(seconds: 10), reload);
+  }
+
+  Future<void> _connectJobsStream(final String apiVersion) async {
+    await _serverJobsStreamSubscription?.cancel();
+    _serverJobsStreamSubscription = null;
+
+    if (!VersionConstraint.parse(
+      wsJobsUpdatesSupportedVersion,
+    ).allows(Version.parse(apiVersion))) {
+      return;
+    }
+
+    _serverJobsStreamSubscription = api
+        .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
+        .listen((final List<ServerJob> jobs) {
+          _apiData.serverJobs.data = jobs;
+          _dataStream.add(_apiData);
+          _jobsStreamDisconnectTime = null;
+        });
   }
 
   Future<void> clear() async {
@@ -446,6 +520,10 @@ class ApiConnectionRepository {
     }
     final Version version = Version.parse(apiVersion);
     await _refetchEverything(version);
+
+    // After the refetch so the rotation doesn't invalidate the token under
+    // requests already in flight.
+    unawaited(_rotateTokenIfNeeded());
   }
 
   void emitData() {

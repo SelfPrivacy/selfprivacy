@@ -15,6 +15,7 @@ class ServerHostingDetails {
     this.serverLocation,
     this.serverType,
     this.startTime,
+    this.apiTokenRotatedAt,
   });
 
   @HiveField(0)
@@ -46,16 +47,21 @@ class ServerHostingDetails {
   @HiveField(8)
   final String? serverType;
 
+  @HiveField(9)
+  final DateTime? apiTokenRotatedAt;
+
   ServerHostingDetails copyWith({
     final DateTime? startTime,
     final String? serverLocation,
     final String? serverType,
     final String? apiToken,
+    final DateTime? apiTokenRotatedAt,
   }) => ServerHostingDetails(
     startTime: startTime ?? this.startTime,
     serverLocation: serverLocation ?? this.serverLocation,
     serverType: serverType ?? this.serverType,
     apiToken: apiToken ?? this.apiToken,
+    apiTokenRotatedAt: apiTokenRotatedAt ?? this.apiTokenRotatedAt,
     createTime: createTime,
     id: id,
     ip4: ip4,

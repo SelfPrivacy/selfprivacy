@@ -246,7 +246,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final RefreshServerApiTokenEvent event,
     final Emitter<TokensState> emit,
   ) async {
-    final (success, newToken) = await getIt<ApiConnectionRepository>()
+    final (bool success, String _) = await getIt<ApiConnectionRepository>()
         .refreshDeviceToken();
     if (!success) {
       getIt<NavigationService>().showSnackBar(
@@ -254,13 +254,6 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       );
       return;
     }
-    final Server serverDetails = state.servers.first;
-    final hostingDetails = serverDetails.hostingDetails.copyWith(
-      apiToken: newToken,
-    );
-    await getIt<ResourcesModel>().updateServerByDomain(
-      Server(hostingDetails: hostingDetails, domain: serverDetails.domain),
-    );
     getIt<NavigationService>().showSnackBar(
       'devices.refresh_token_alert.success_refresh_token'.tr(),
     );

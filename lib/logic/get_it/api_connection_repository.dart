@@ -322,11 +322,21 @@ class ApiConnectionRepository {
     }
   }
 
+  // Single-flight guard. Manual refreshes from TokensBloc and automatic
+  // rotations from `_rotateTokenIfNeeded` can arrive concurrently; without
+  // this, the second rotation would invalidate the token issued by the first.
+  Future<(bool, String)>? _rotationInFlight;
+
   /// Rotates the device API token and persists the new one.
   ///
   /// The server invalidates the old token the moment it issues the new one,
   /// so the new token must be persisted before any further requests are made.
-  Future<(bool, String)> refreshDeviceToken() async {
+  Future<(bool, String)> refreshDeviceToken() =>
+      _rotationInFlight ??= _refreshDeviceTokenImpl().whenComplete(() {
+        _rotationInFlight = null;
+      });
+
+  Future<(bool, String)> _refreshDeviceTokenImpl() async {
     final List<Server> servers = getIt<ResourcesModel>().servers;
     if (servers.isEmpty) {
       return (false, 'jobs.generic_error'.tr());
@@ -422,8 +432,9 @@ class ApiConnectionRepository {
   }
 
   Future<void> _connectJobsStream(final String apiVersion) async {
-    await _serverJobsStreamSubscription?.cancel();
+    final previous = _serverJobsStreamSubscription;
     _serverJobsStreamSubscription = null;
+    await previous?.cancel();
 
     if (!VersionConstraint.parse(
       wsJobsUpdatesSupportedVersion,
@@ -433,21 +444,35 @@ class ApiConnectionRepository {
 
     _serverJobsStreamSubscription = api
         .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
-        .listen((final List<ServerJob>? jobs) {
-          if (jobs == null) {
-            return;
-          }
-          _apiData.serverJobs.data = jobs;
-          _dataStream.add(_apiData);
-          _jobsStreamDisconnectTime = null;
-        });
+        .listen(
+          (final List<ServerJob>? jobs) {
+            if (jobs == null) {
+              return;
+            }
+            _apiData.serverJobs.data = jobs;
+            _dataStream.add(_apiData);
+            _jobsStreamDisconnectTime = null;
+          },
+          onError: (final Object error, final StackTrace stack) {
+            _log(
+              'Server jobs stream error: $error',
+              error: error,
+              stackTrace: stack,
+            );
+            _serverJobsStreamSubscription = null;
+          },
+          onDone: () {
+            _serverJobsStreamSubscription = null;
+          },
+        );
   }
 
   Future<void> clear() async {
     _setStatus(ConnectionStatus.nonexistent);
     _timer?.cancel();
-    await _serverJobsStreamSubscription?.cancel();
+    final previous = _serverJobsStreamSubscription;
     _serverJobsStreamSubscription = null;
+    await previous?.cancel();
   }
 
   static const String wsJobsUpdatesSupportedVersion = '>=3.3.0';
@@ -498,6 +523,18 @@ class ApiConnectionRepository {
   Future<void> reload(final Timer? timer) async {
     if (getIt<ResourcesModel>().serverDetails == null) {
       return;
+    }
+
+    // If a rotation is in flight, the old token is about to be invalidated;
+    // wait for the new one to land before sending requests.
+    final inflight = _rotationInFlight;
+    if (inflight != null) {
+      try {
+        await inflight;
+      } catch (_) {
+        // Surfaced to the rotation's caller; reload continues with whatever
+        // token is now persisted.
+      }
     }
 
     final String? apiVersion = await api.getApiVersion();

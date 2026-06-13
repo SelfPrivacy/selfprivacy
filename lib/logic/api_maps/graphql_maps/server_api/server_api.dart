@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';

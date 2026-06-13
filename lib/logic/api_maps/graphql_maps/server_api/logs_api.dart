@@ -47,19 +47,44 @@ mixin LogsApi on GraphQLApiMap {
     return (logsList, pageMeta);
   }
 
-  Stream<ServerLogEntry> getServerLogsStream() async* {
-    final GraphQLClient client = await getSubscriptionClient();
-    try {
-      final subscription = client.subscribe$LogEntries();
-      await for (final response in subscription) {
-        final log = ServerLogEntry.fromGraphQL(response.parsedData!.logEntries);
-        yield log;
-      }
-    } finally {
-      // Cancelling the subscription only sends SubscriptionComplete over the
-      // socket; the socket itself stays open (and auto-reconnects) until the
-      // link is disposed.
-      await (client.link as WebSocketLink).dispose();
-    }
+  // See the note on `getServerJobsStream` for why this is a manual
+  // StreamController rather than an `async*` generator.
+  Stream<ServerLogEntry> getServerLogsStream() {
+    late StreamController<ServerLogEntry> controller;
+    GraphQLClient? client;
+    StreamSubscription<QueryResult<Subscription$LogEntries>>? inner;
+
+    controller = StreamController<ServerLogEntry>(
+      onListen: () async {
+        try {
+          client = await getSubscriptionClient();
+          inner = client!.subscribe$LogEntries().listen(
+            (final response) {
+              if (controller.isClosed) return;
+              controller.add(
+                ServerLogEntry.fromGraphQL(response.parsedData!.logEntries),
+              );
+            },
+            onError: (final Object e, final StackTrace s) {
+              if (!controller.isClosed) controller.addError(e, s);
+            },
+            onDone: () {
+              if (!controller.isClosed) controller.close();
+            },
+          );
+        } catch (e, s) {
+          if (!controller.isClosed) {
+            controller.addError(e, s);
+            await controller.close();
+          }
+        }
+      },
+      onCancel: () {
+        unawaited(inner?.cancel());
+        unawaited((client?.link as WebSocketLink?)?.dispose());
+      },
+    );
+
+    return controller.stream;
   }
 }

@@ -94,24 +94,52 @@ jobs:
           done
 
 
-  # release-macos:
-  #   runs-on:
-  #     - macos
+  release-macos:
+    needs:
+      - create-release
 
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #     - run: nix build .#macos -o artifact-macos
-  #     - run: >-
-  #         mkdir ci-artifacts &&
-  #         cp artifact-*/* ci-artifacts/
+    runs-on:
+      - macos
 
-  # release-ios:
-  #   runs-on:
-  #     - macos
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
 
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #     - run: nix run .#build-ios -- ipa release
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#macos -o artifact-macos
+      - run: OLDDIR=$PWD; (cd artifact-macos && zip -r "$OLDDIR/selfprivacy-macos-unsigned-${{ forgejo.ref_name }}.zip" .)
+      - run: |
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            -F attachment="@selfprivacy-macos-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+
+  release-ios:
+    needs:
+      - create-release
+
+    runs-on:
+      - macos
+
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#build-ios -- ipa release
+      - run: zip -r "selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" Runner.xcarchive
+      - run: |
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F \
+            "attachment=@selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+
   # release-windows:
   #   runs-on:
   #     - windows

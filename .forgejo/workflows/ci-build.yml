@@ -160,17 +160,36 @@ jobs:
     runs-on:
       - macos
 
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#macos -o artifact-macos
+      - run: OLDDIR=$PWD; (cd artifact-macos && zip -r "$OLDDIR/selfprivacy-macos-${{ forgejo.ref_name }}.zip" .)
+      - uses: actions/upload-artifact@v3
+        with:
+          name: macos-release
+          path: selfprivacy-macos-${{ forgejo.ref_name }}.zip
+
 
   build-ios:
     runs-on:
       - macos
 
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
     steps:
       - uses: actions/checkout@v6
       - run: nix run .#build-ios -- ipa release
+      - run: zip -r "selfprivacy-ios-${{ forgejo.ref_name }}.zip" Runner.xcarchive
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ios-release
+          path: selfprivacy-ios-${{ forgejo.ref_name }}.zip
 
   # Windows targets
   build-windows:

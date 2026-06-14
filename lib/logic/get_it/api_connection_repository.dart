@@ -442,7 +442,15 @@ class ApiConnectionRepository {
       return;
     }
 
-    _serverJobsStreamSubscription = api
+    late final StreamSubscription<List<ServerJob>?> subscription;
+    void detach() {
+      if (identical(_serverJobsStreamSubscription, subscription)) {
+        _serverJobsStreamSubscription = null;
+      }
+      unawaited(subscription.cancel());
+    }
+
+    subscription = api
         .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
         .listen(
           (final List<ServerJob>? jobs) {
@@ -459,12 +467,11 @@ class ApiConnectionRepository {
               error: error,
               stackTrace: stack,
             );
-            _serverJobsStreamSubscription = null;
+            detach();
           },
-          onDone: () {
-            _serverJobsStreamSubscription = null;
-          },
+          onDone: detach,
         );
+    _serverJobsStreamSubscription = subscription;
   }
 
   Future<void> clear() async {

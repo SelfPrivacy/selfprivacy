@@ -46,8 +46,8 @@
 
         # FIXME: DRY these using cortesian products
 
-        sign-android-nightly = pkgs.writeShellApplication {
-          name = "sign-android-nightly-apk";
+        sign-android-standalone = pkgs.writeShellApplication {
+          name = "sign-android-standalone-apk";
           runtimeInputs = sp.signTools;
           text = ''
             JAVA_HOME="${sp.ourJava.home}"

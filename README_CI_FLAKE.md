@@ -104,9 +104,9 @@ Use as `nix develop -i .#<name>`.
 
 ### Using Android Keystores in CI
 
-Create these secrets: `CI_KEYSTORE_FILE_GOOGLE`, `CI_KEYSTORE_FILE_FDROID`, `CI_KEYSTORE_FILE_NIGHTLY`. You need to convert your corresponding keystores into text using `base64 -w 0 yourkeystore.jks`. To decode it in CI, use e.g. `echo $CI_KEYSTORE_FILE_GOOGLE | base64 -d > google-keystore.jks`.
+Create these secrets: `CI_KEYSTORE_FILE_GOOGLE`, `CI_KEYSTORE_FILE_FDROID`, `CI_KEYSTORE_FILE_STANDALONE`. You need to convert your corresponding keystores into text using `base64 -w 0 yourkeystore.jks`. To decode it in CI, use e.g. `echo $CI_KEYSTORE_FILE_GOOGLE | base64 -d > google-keystore.jks`.
 
-They need the corresponding password secrets: `CI_KEYSTORE_PASS_GOOGLE`, `CI_KEYSTORE_PASS_FDROID`, `CI_KEYSTORE_PASS_NIGHTLY`.
+They need the corresponding password secrets: `CI_KEYSTORE_PASS_GOOGLE`, `CI_KEYSTORE_PASS_FDROID`, `CI_KEYSTORE_PASS_STANDALONE`.
 
 You need to set `$CI_KEYSTORE_FILE` and `$CI_KEYSTORE_PASS` environment variables, where `$CI_KEYSTORE_FILE` is a path relative to the root of the source code or a full path.
 

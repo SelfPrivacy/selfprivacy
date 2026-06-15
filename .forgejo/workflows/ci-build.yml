@@ -96,27 +96,7 @@ jobs:
           path: result/*
 
   # Android targets
-  build-android-production:
-    runs-on:
-      - x86
-      - kvm
-
-    env:
-      CI_KEYSTORE_FILE: google-keystore.jks
-      CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}
-
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix build .#android-aab-release-production
-      - run: echo "${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}" | base64 -d > google-keystore.jks
-      - run: nix run .#sign-android-google result/*.aab
-      - uses: actions/upload-artifact@v3
-        with:
-          name: android-production-google
-          path: selfprivacy-google-signed.aab
-
-
-  build-android-fdroid:
+  build-android-nightly-fdroid:
     runs-on:
       - x86
       - kvm
@@ -127,33 +107,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - run: nix build .#android-apk-release-fdroid
-      - run: echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > fdroid-keystore.jks
+      - run: nix build .#android-apk-release-nightly
+      - run: echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > $CI_KEYSTORE_FILE
       - run: nix run .#sign-android-fdroid result/*.apk
       - uses: actions/upload-artifact@v3
         with:
-          name: android-production-fdroid
+          name: android-nightly-fdroid
           path: selfprivacy-fdroid-signed.apk
-
-  build-android-nightly:
-    runs-on:
-      - x86
-      - kvm
-
-    env:
-      CI_KEYSTORE_FILE: nightly-keystore.jks
-      CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_NIGHTLY }}
-
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix build .#android-apk-release-nightly
-      - run: echo "${{ secrets.CI_KEYSTORE_FILE_NIGHTLY }}" | base64 -d > nightly-keystore.jks
-      - run: nix run .#sign-android-nightly result/*.apk
-      - uses: actions/upload-artifact@v3
-        with:
-          name: android-production-nightly
-          path: selfprivacy-nightly-signed.apk
-
 
   # Darwin targets
   build-macos:

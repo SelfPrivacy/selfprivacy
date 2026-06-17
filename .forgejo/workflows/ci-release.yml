@@ -91,7 +91,11 @@ jobs:
             curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
               -F "attachment=@$f" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
           done
-
+      - run: |
+          eval $(ssh-agent -s)
+          echo "$CI_DEPLOYER_SSH_KEY" | tr -d '\r' | ssh-add -
+          scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null selfprivacy-fdroid-signed.apk deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-${{ forgejo.ref_name }}.apk
+          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null deployer@selfprivacy.org "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
 
   release-macos:
     needs:

@@ -114,6 +114,12 @@ jobs:
         with:
           name: android-nightly-fdroid
           path: selfprivacy-fdroid-signed.apk
+      - run: |
+          export CI_SHA="${{ forge.sha }}"
+          eval $(ssh-agent -s)
+          echo "$CI_DEPLOYER_SSH_KEY" | tr -d '\r' | ssh-add -
+          scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null selfprivacy-fdroid-signed.apk deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
+          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null deployer@selfprivacy.org "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
 
   # Darwin targets
   build-macos:

@@ -168,3 +168,15 @@ jobs:
       - run: flutter config --enable-windows-desktop
       - run: flutter pub get --no-precompile --enforce-lockfile
       - run: flutter build windows --release
+      - shell: powershell
+        run: |
+          nfpm package -f .\nfpm-win.yaml --packager msix
+          Compress-Archive -Path ".\build\windows\x64\runner\Release\*" -DestinationPath ".\selfprivacy-windows.zip" -Force
+      - uses: actions/upload-artifact@v3
+        with:
+          name: windows-zip-release
+          path: selfprivacy-windows.zip
+      - uses: actions/upload-artifact@v3
+        with:
+          name: windows-msix-release
+          path: "*.msix"

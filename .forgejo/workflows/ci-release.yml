@@ -143,13 +143,45 @@ jobs:
           curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F \
             "attachment=@selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
 
-  # release-windows:
-  #   runs-on:
-  #     - windows
+  release-windows:
+    needs:
+      - create-release
 
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #     - run: flutter config --no-analytics
-  #     - run: flutter config --enable-windows-desktop
-  #     - run: flutter pub get --no-precompile --enforce-lockfile
-  #     - run: flutter build windows --release
+    runs-on:
+      - windows
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: flutter config --no-analytics
+      - run: flutter config --enable-windows-desktop
+      - run: flutter pub get --no-precompile --enforce-lockfile
+      - run: flutter build windows --release
+      - shell: powershell
+        run: |
+          $env:VERSION = '${{ forgejo.ref_name }}'
+
+          nfpm package -f .\nfpm-win.yaml --packager msix
+          Compress-Archive -Path ".\build\windows\x64\runner\Release\*" -DestinationPath ".\selfprivacy-windows-${{ forgejo.ref_name }}.zip" -Force
+
+          $Headers = @{ Authorization = 'token ${{ secrets.FORGEJO_TOKEN }}' }
+          $Url = '${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}'
+
+          $Release = try {
+              Invoke-RestMethod -Uri $Url -Headers $Headers -ErrorAction Stop
+          } catch {
+              $null
+          }
+
+          if ($null -eq $Release) {
+              Write-Error "Could not find the release: $env:VERSION"
+              exit 1
+          }
+
+          $ReleaseId = $Release.id
+          $UploadUrl = "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$ReleaseId/assets"
+
+          $MsixFilePath = (Get-Item *.msix).FullName
+          $ZipFilePath = (Get-Item *.zip).FullName
+
+          curl.exe -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F "attachment=@$MsixFilePath" $UploadUrl
+          curl.exe -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F "attachment=@$ZipFilePath" $UploadUrl

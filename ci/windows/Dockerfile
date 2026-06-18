@@ -51,7 +51,13 @@ RUN flutter --version \
 RUN curl -L "https://github.com/Crown0815/Forgejo-runner-windows-builder/releases/download/v12.8.2/forgejo-runner-windows-amd64.exe" \
     --skip-existing -o forgejo-runner.exe
 
-RUN setx /m PATH "%PATH%;C:\tools\flutter\bin"
+# Download nFPM
+RUN curl -L "https://github.com/goreleaser/nfpm/releases/download/v2.46.3/nfpm_2.46.3_Windows_x86_64.zip" \
+    --skip-existing -o nfpm.zip \
+    && tar -xf nfpm.zip nfpm.exe \
+    && del nfpm.zip
+
+RUN setx /m PATH "%PATH%;C:\tools\flutter\bin;C:\\"
 
 USER ContainerUser
 COPY ./entrypoint.ps1 C:\\entrypoint.ps1

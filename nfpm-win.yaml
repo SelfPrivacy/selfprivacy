@@ -1,0 +1,48 @@
+name: selfprivacy
+arch: amd64
+version: ${VERSION}
+release: 1
+epoch: 1
+maintainer: SelfPrivacy <noreply@selfprivacy.org>
+vendor: SelfPrivacy
+homepage: https://selfprivacy.org
+license: GPL-3.0
+mtime: 2026-06-18T00:00:00Z
+
+contents:
+  - src: ./build/windows/x64/runner/Release/selfprivacy.exe
+    dst: ./selfprivacy.exe
+
+  - src: ./build/windows/x64/runner/Release/data
+    dst: ./data
+
+  - src: ./build/windows/x64/runner/Release/*.dll
+    dst: ./
+
+  - src: ./assets/images/icon/logo_android.png
+    dst: ./logo.png
+
+msix:
+  publisher: "CN=SelfPrivacy, O=SelfPrivacy, C=US, OID.2.25.311729368913984317654407730594956997722=1"
+
+  properties:
+    display_name: "SelfPrivacy"
+    publisher_display_name: "SelfPrivacy"
+    logo: "logo.png"
+
+  applications:
+    - id: "SelfPrivacy"
+      executable: "selfprivacy.exe"
+      entry_point: "Windows.FullTrustApplication"
+      visual_elements:
+        display_name: "SelfPrivacy"
+
+  dependencies:
+    target_device_families:
+      - name: "Windows.Desktop"
+        min_version: "10.0.17763.0"
+        max_version_tested: "10.0.22621.0"
+
+  capabilities:
+    capabilities:
+      - internetClient

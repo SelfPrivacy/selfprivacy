@@ -22,7 +22,12 @@ class HiveConfig {
     final String? storagePath = PlatformAdapter.storagePath;
     logger('set custom storage path to: "$storagePath"');
 
-    await Hive.initFlutter(storagePath);
+    // Use a custom path if available, let Flutter to decide automatically if not
+    if (storagePath != null) {
+      Hive.init(storagePath);
+    } else {
+      await Hive.initFlutter();
+    }
 
     registerAdapters();
     await decryptBoxes();

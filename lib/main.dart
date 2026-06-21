@@ -16,6 +16,7 @@ import 'package:selfprivacy/ui/router/router.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // try {

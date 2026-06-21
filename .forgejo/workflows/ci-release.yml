@@ -62,19 +62,56 @@ jobs:
       - x86
       - kvm
 
+    concurrency:
+      group: android-publish
+      cancel-in-progress: false
+
     steps:
       - uses: actions/checkout@v6
+
       - run: nix build .#android-aab-release-production -o artifact-aab
       - run: nix build .#android-apk-release-production -o artifact-apk
-      # Sign artifacts
-      - run: |
-          echo "${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}" | base64 -d > google-keystore.jks
-          echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > fdroid-keystore.jks
-          echo "${{ secrets.CI_KEYSTORE_FILE_STANDALONE }}" | base64 -d > standalone-keystore.jks
 
-          CI_KEYSTORE_FILE="google-keystore.jks" CI_KEYSTORE_PASS="${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}" nix run .#sign-android-google artifact-aab/*.aab
-          CI_KEYSTORE_FILE="fdroid-keystore.jks" CI_KEYSTORE_PASS="${{ secrets.CI_KEYSTORE_PASS_FDROID }}" nix run .#sign-android-fdroid artifact-apk/*.apk
-          CI_KEYSTORE_FILE="standalone-keystore.jks" CI_KEYSTORE_PASS="${{ secrets.CI_KEYSTORE_PASS_STANDALONE }}" nix run .#sign-android-standalone artifact-apk/*.apk
+      # Sign artifacts
+      - env:
+          CI_KEYSTORE_FILE: google-keystore.jks
+          CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}
+        run: |
+          echo "${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}" | base64 -d > $CI_KEYSTORE_FILE
+          nix run .#sign-android-google artifact-aab/*.aab
+          rm $CI_KEYSTORE_FILE
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+            echo "Keystore exists, exiting"
+            exit 1
+          fi
+
+      - env:
+          CI_KEYSTORE_FILE: fdroid-keystore.jks
+          CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_FDROID }}
+        run: |
+          echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > $CI_KEYSTORE_FILE
+          nix run .#sign-android-fdroid artifact-apk/*.apk
+          rm $CI_KEYSTORE_FILE
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+            echo "Keystore exists, exiting"
+            exit 1
+          fi
+
+      - env:
+          CI_KEYSTORE_FILE: standalone-keystore.jks
+          CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_STANDALONE }}
+        run: |
+          echo "${{ secrets.CI_KEYSTORE_FILE_STANDALONE }}" | base64 -d > $CI_KEYSTORE_FILE
+          nix run .#sign-android-standalone artifact-apk/*.apk
+          rm $CI_KEYSTORE_FILE
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+             echo "Keystore exists, exiting"
+             exit 1
+          fi
+
       # Collect artifacts in one directory and upload them
       - run: |
           mkdir ci-artifacts
@@ -91,11 +128,17 @@ jobs:
             curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
               -F "attachment=@$f" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
           done
+
       - run: |
           eval $(ssh-agent -s)
-          echo "$CI_DEPLOYER_SSH_KEY" | tr -d '\r' | ssh-add -
-          scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null selfprivacy-fdroid-signed.apk deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-${{ forgejo.ref_name }}.apk
-          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null deployer@selfprivacy.org "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
+
+          echo "${{ secrets.CI_DEPLOYER_SSH_KEY }}" | tr -d '\r' | ssh-add -
+          echo "${{ secrets.CI_DEPLOYER_KNOWN_HOSTS }}" > known_hosts
+
+          scp -oUserKnownHostsFile=known_hosts selfprivacy-fdroid-signed.apk \
+            deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-${{ forgejo.ref_name }}.apk
+          ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
+            "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
 
   release-macos:
     needs:
@@ -167,14 +210,14 @@ jobs:
           $Url = '${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}'
 
           $Release = try {
-              Invoke-RestMethod -Uri $Url -Headers $Headers -ErrorAction Stop
+            Invoke-RestMethod -Uri $Url -Headers $Headers -ErrorAction Stop
           } catch {
-              $null
+            $null
           }
 
           if ($null -eq $Release) {
-              Write-Error "Could not find the release: $env:VERSION"
-              exit 1
+            Write-Error "Could not find the release: $env:VERSION"
+            exit 1
           }
 
           $ReleaseId = $Release.id

@@ -162,6 +162,7 @@
             which
             xz
             lndir
+
           ]
           ++ lib.optionals stdenvNoCC.isLinux [
 
@@ -217,7 +218,6 @@
                 wrapGAppsHook3
                 autoPatchelfHook
                 xdg-user-dirs
-                libsecret
               ]
           ++ lib.optionals stdenvNoCC.isDarwin [ ];
 

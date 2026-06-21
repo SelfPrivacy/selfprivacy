@@ -2,7 +2,7 @@ app-id: org.selfprivacy.app
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
-command: selfprivacy
+command: org.selfprivacy.app
 finish-args:
   - "--share=ipc"
   - "--socket=x11"
@@ -13,15 +13,20 @@ finish-args:
   - "--device=dri"
   - "--talk-name=org.freedesktop.secrets"
   - "--talk-name=org.freedesktop.portal.*"
+  - "--filesystem=xdg-documents"
+  - "--filesystem=xdg-download"
 modules:
   - name: selfprivacy
     buildsystem: simple
     build-commands:
-      - install -Dm644 selfprivacy.svg /app/share/icons/hicolor/scalable/apps/selfprivacy.svg
-      - install -Dm644 selfprivacy.png /app/share/icons/hicolor/512x512/apps/selfprivacy.png
-      - install -Dm644 selfprivacy.desktop /app/share/applications/selfprivacy.desktop
-      - install -Dm644 selfprivacy.metainfo.xml /app/share/metainfo/selfprivacy.metainfo.xml
+      - install -Dm644 selfprivacy.svg /app/share/icons/hicolor/scalable/apps/org.selfprivacy.app.svg
+      - install -Dm644 selfprivacy.png /app/share/icons/hicolor/512x512/apps/org.selfprivacy.app.png
+      - install -Dm644 selfprivacy.desktop /app/share/applications/org.selfprivacy.app.desktop
+      - install -Dm644 selfprivacy.metainfo.xml /app/share/metainfo/org.selfprivacy.app.metainfo.xml
+      - sed -i 's/selfprivacy/org\.selfprivacy\.app/g' /app/share/applications/org.selfprivacy.app.desktop
+      - sed -i 's/selfprivacy/org\.selfprivacy\.app/g' /app/share/metainfo/org.selfprivacy.app.metainfo.xml
       - cp -pr * /app
+      - ln -sr /app/bin/selfprivacy /app/bin/org.selfprivacy.app
     sources:
       - type: dir
         path: vendor/

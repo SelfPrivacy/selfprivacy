@@ -101,25 +101,46 @@ jobs:
       - x86
       - kvm
 
+    concurrency:
+      group: android-publish
+      cancel-in-progress: false
+
     env:
       CI_KEYSTORE_FILE: fdroid-keystore.jks
       CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_FDROID }}
+      CI_SHA: "${{ forgejo.sha }}"
 
     steps:
       - uses: actions/checkout@v6
+
       - run: nix build .#android-apk-release-nightly
-      - run: echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > $CI_KEYSTORE_FILE
-      - run: nix run .#sign-android-fdroid result/*.apk
+
+      - run: |
+          echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > $CI_KEYSTORE_FILE
+          nix run .#sign-android-fdroid result/*.apk
+          rm $CI_KEYSTORE_FILE
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+            echo "Keystore exists, exiting"
+            exit 1
+          fi
+
       - uses: actions/upload-artifact@v3
         with:
           name: android-nightly-fdroid
           path: selfprivacy-fdroid-signed.apk
-      - run: |
-          export CI_SHA="${{ forge.sha }}"
+
+      - if: ${{ forgejo.ref_name == 'master' }}
+        run: |
           eval $(ssh-agent -s)
-          echo "$CI_DEPLOYER_SSH_KEY" | tr -d '\r' | ssh-add -
-          scp -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null selfprivacy-fdroid-signed.apk deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
-          ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null deployer@selfprivacy.org "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
+
+          echo "${{ secrets.CI_DEPLOYER_SSH_KEY }}" | tr -d '\r' | ssh-add -
+          echo "${{ secrets.CI_DEPLOYER_KNOWN_HOSTS }}" > known_hosts
+
+          scp -oUserKnownHostsFile=known_hosts selfprivacy-fdroid-signed.apk \
+            deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
+          ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
+            "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
 
   # Darwin targets
   build-macos:

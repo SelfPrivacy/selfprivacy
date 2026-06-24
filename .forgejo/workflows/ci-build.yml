@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - bttmchnd/ci-rehaul-p2
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
@@ -46,7 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#linux-flatpak
-      - uses: actions/upload-artifact@v3
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: linux-flatpak
           path: result/*
@@ -68,7 +68,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#linux-appimage-portable
-      - uses: actions/upload-artifact@v3
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: linux-appimage-portable
           path: result/*
@@ -90,7 +91,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#linux-archive-portable
-      - uses: actions/upload-artifact@v3
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: linux-archive-portable
           path: result/*
@@ -115,7 +117,8 @@ jobs:
 
       - run: nix build .#android-apk-release-nightly
 
-      - env:
+      - if: ${{ forgejo.ref_name == 'master' }}
+        env:
           KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
         run: |
           printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
@@ -127,7 +130,8 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/upload-artifact@v3
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: android-nightly-fdroid
           path: selfprivacy-fdroid-signed.apk
@@ -156,11 +160,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: nix build .#macos -o artifact-macos
-      - run: OLDDIR=$PWD; (cd artifact-macos && zip -r "$OLDDIR/selfprivacy-macos-${{ forgejo.ref_name }}.zip" .)
-      - uses: actions/upload-artifact@v3
+      - run: OLDDIR=$PWD; (cd artifact-macos && zip -r "$OLDDIR/selfprivacy-macos.zip" .)
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: macos-release
-          path: selfprivacy-macos-${{ forgejo.ref_name }}.zip
+          path: selfprivacy-macos.zip
 
 
   build-ios:
@@ -174,11 +179,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: nix run .#build-ios -- ipa release
-      - run: zip -r "selfprivacy-ios-${{ forgejo.ref_name }}.zip" Runner.xcarchive
-      - uses: actions/upload-artifact@v3
+      - run: zip -r "selfprivacy-ios.zip" Runner.xcarchive
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: ios-release
-          path: selfprivacy-ios-${{ forgejo.ref_name }}.zip
+          path: selfprivacy-ios.zip
 
   # Windows targets
   build-windows:
@@ -195,11 +201,13 @@ jobs:
         run: |
           nfpm package -f .\nfpm-win.yaml --packager msix
           Compress-Archive -Path ".\build\windows\x64\runner\Release\*" -DestinationPath ".\selfprivacy-windows.zip" -Force
-      - uses: actions/upload-artifact@v3
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: windows-zip-release
           path: selfprivacy-windows.zip
-      - uses: actions/upload-artifact@v3
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
         with:
           name: windows-msix-release
           path: "*.msix"

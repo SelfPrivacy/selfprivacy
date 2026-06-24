@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - bttmchnd/ci-rehaul-p2
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_dispatch:

@@ -22,6 +22,9 @@
             ../macos
             ../pubspec.lock
             ../pubspec.yaml
+            ../nfpm.yaml
+            ../selfprivacy.desktop
+            ../selfprivacy.metainfo.xml
             ../test
           ];
         };
@@ -94,8 +97,8 @@
         flatpakManifestFile = ../ci/flatpak/flatpak-nix.yml;
         flatpakSDK = self'.packages.linux-flatpak-sdk;
 
-        desktopFile = ../org.selfprivacy.app.desktop;
-        appstreamFile = ../org.selfprivacy.app.metainfo.xml;
+        desktopFile = ../selfprivacy.desktop;
+        appstreamFile = ../selfprivacy.metainfo.xml;
         iconPNGFile = ../assets/images/icon/logo_android.png;
         iconSVGFile = ../assets/images/icon/logo.svg;
 
@@ -159,6 +162,7 @@
             which
             xz
             lndir
+
           ]
           ++ lib.optionals stdenvNoCC.isLinux [
 
@@ -214,11 +218,11 @@
                 wrapGAppsHook3
                 autoPatchelfHook
                 xdg-user-dirs
-                libsecret
               ]
           ++ lib.optionals stdenvNoCC.isDarwin [ ];
 
         signTools = with pkgs; [
+          ourJava
           apksigner
           fastlane
         ];
@@ -291,11 +295,11 @@
 
         ourAppImageRuntime = pkgs.stdenvNoCC.mkDerivation rec {
           pname = "appimage-runtime";
-          version = "20251108";
+          version = "20260624";
 
           src = pkgs.fetchurl {
             url = "https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-x86_64";
-            hash = "sha256-okGdzkdWg5WuecAf+ppaNB3TOVgTUv8QTQc1J1Qxd+U=";
+            hash = "sha256-HMSbzx4szVk8N5rbF8n4WjbWGQiCllBN6VsdBiFa678=";
           };
 
           phases = [
@@ -314,7 +318,6 @@
           version = "8.11.1";
           hash = "sha256-85eyhwI6zboen2/F6nLSLdY2adWe1KKJopsadu7hUcY=";
           defaultJava = ourJava;
-          enableUpdateScript = true;
         };
 
         ourGradle8111Wrapped = ourGradle8111.passthru.wrapped;

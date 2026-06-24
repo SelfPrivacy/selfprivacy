@@ -1,0 +1,233 @@
+name: Release CI
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      # Check if the release exists. If not, create it
+      - run: |
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          if [[ "$RELEASE" == "null" ]] || [[ -z "$RELEASE" ]]; then
+            curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -H "Content-Type: application/json" -d \
+              "{ \"tag_name\": \"${{ forgejo.ref_name }}\", \"name\": \"${{ forgejo.ref_name }}\" }" \
+              "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases"
+          fi
+
+
+  release-linux:
+    needs:
+      - create-release
+
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-flatpak -o artifact-flatpak
+      - run: nix build .#linux-appimage-portable -o artifact-appimage-portable
+      - run: nix build .#linux-archive-portable -o artifact-archive-portable
+      - run: nix build .#linux-nfpm-rpm -o artifact-rpm
+      - run: nix build .#linux-nfpm-deb -o artifact-deb
+      - run: nix build .#linux-nfpm-archlinux -o artifact-archlinux
+      # Collect artifacts in one directory and upload them
+      - run: |
+          mkdir ci-artifacts
+          cp artifact-*/* ci-artifacts/
+
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          for f in ci-artifacts/*; do
+            curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -F "attachment=@$f" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+          done
+
+  release-android:
+    needs:
+      - create-release
+
+    runs-on:
+      - x86
+      - kvm
+
+    concurrency:
+      group: android-publish
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: nix build .#android-aab-release-production -o artifact-aab
+      - run: nix build .#android-apk-release-production -o artifact-apk
+
+      # Sign artifacts
+      - env:
+          CI_KEYSTORE_FILE: google-keystore.jks
+          CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}
+        run: |
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
+          nix run .#sign-android-google artifact-aab/*.aab
+          rm "$CI_KEYSTORE_FILE"
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+            echo "Keystore exists, exiting"
+            exit 1
+          fi
+
+      - env:
+          CI_KEYSTORE_FILE: fdroid-keystore.jks
+          CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_FDROID }}
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
+        run: |
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
+          nix run .#sign-android-fdroid artifact-apk/*.apk
+          rm "$CI_KEYSTORE_FILE"
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+            echo "Keystore exists, exiting"
+            exit 1
+          fi
+
+      - env:
+          CI_KEYSTORE_FILE: standalone-keystore.jks
+          CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_STANDALONE }}
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_STANDALONE }}
+        run: |
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
+          nix run .#sign-android-standalone artifact-apk/*.apk
+          rm "$CI_KEYSTORE_FILE"
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+             echo "Keystore exists, exiting"
+             exit 1
+          fi
+
+      # Collect artifacts in one directory and upload them
+      - run: |
+          mkdir ci-artifacts
+
+          cp selfprivacy-google-signed.aab ci-artifacts/selfprivacy-production-${{ forgejo.ref_name }}.aab
+          cp selfprivacy-fdroid-signed.apk ci-artifacts/selfprivacy-fdroid-${{ forgejo.ref_name }}.apk
+          cp selfprivacy-standalone-signed.apk ci-artifacts/selfprivacy-standalone-${{ forgejo.ref_name }}.apk
+
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          for f in ci-artifacts/*; do
+            curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -F "attachment=@$f" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+          done
+
+      - run: |
+          eval $(ssh-agent -s)
+
+          echo "${{ secrets.CI_DEPLOYER_SSH_KEY }}" | tr -d '\r' | ssh-add -
+          echo "${{ secrets.CI_DEPLOYER_KNOWN_HOSTS }}" > known_hosts
+
+          scp -oUserKnownHostsFile=known_hosts selfprivacy-fdroid-signed.apk \
+            deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-${{ forgejo.ref_name }}.apk
+          ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
+            "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
+
+  release-macos:
+    needs:
+      - create-release
+
+    runs-on:
+      - macos
+
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#macos -o artifact-macos
+      - run: OLDDIR=$PWD; (cd artifact-macos && zip -r "$OLDDIR/selfprivacy-macos-unsigned-${{ forgejo.ref_name }}.zip" .)
+      - run: |
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            -F attachment="@selfprivacy-macos-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+
+  release-ios:
+    needs:
+      - create-release
+
+    runs-on:
+      - macos
+
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#build-ios -- ipa release
+      - run: zip -r "selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" Runner.xcarchive
+      - run: |
+          RELEASE=$(curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}" || echo "null")
+          RELEASE_ID=$(echo "$RELEASE" | jq -r '.id')
+
+          curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F \
+            "attachment=@selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+
+  release-windows:
+    needs:
+      - create-release
+
+    runs-on:
+      - windows
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: flutter config --no-analytics
+      - run: flutter config --enable-windows-desktop
+      - run: flutter pub get --no-precompile --enforce-lockfile
+      - run: flutter build windows --release
+      - shell: powershell
+        run: |
+          $env:VERSION = '${{ forgejo.ref_name }}'
+
+          nfpm package -f .\nfpm-win.yaml --packager msix
+          Compress-Archive -Path ".\build\windows\x64\runner\Release\*" -DestinationPath ".\selfprivacy-windows-${{ forgejo.ref_name }}.zip" -Force
+
+          $Headers = @{ Authorization = 'token ${{ secrets.FORGEJO_TOKEN }}' }
+          $Url = '${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/tags/${{ forgejo.ref_name }}'
+
+          $Release = try {
+            Invoke-RestMethod -Uri $Url -Headers $Headers -ErrorAction Stop
+          } catch {
+            $null
+          }
+
+          if ($null -eq $Release) {
+            Write-Error "Could not find the release: $env:VERSION"
+            exit 1
+          }
+
+          $ReleaseId = $Release.id
+          $UploadUrl = "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$ReleaseId/assets"
+
+          $MsixFilePath = (Get-Item *.msix).FullName
+          $ZipFilePath = (Get-Item *.zip).FullName
+
+          curl.exe -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F "attachment=@$MsixFilePath" $UploadUrl
+          curl.exe -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F "attachment=@$ZipFilePath" $UploadUrl

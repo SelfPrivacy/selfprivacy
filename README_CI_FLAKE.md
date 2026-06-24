@@ -24,8 +24,9 @@ And Linux zoo separately:
 | AppImage | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Generic and Portable |
 | .tar.xz  | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Generic and Portable |
 | Snap     |           |          |                         |                       | Packages Generic              |
-| .deb     |           |          |                         |                       | Packages Portable             |
-| .rpm     |           |          |                         |                       | Packages Portable             |
+| DEB      | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Portable             |
+| RPM      | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Portable             |
+| Pacman   | Yes ✅    | Yes ✅   | Yes ✅                  | Yes ✅                | Packages Portable             |
 
 [^2]: Flatpak packages aren't reproducible and deterministic by default because they store metadata about how, when, and where the package was built, even though the rest of the ecosystem is reproducible.
 
@@ -100,6 +101,14 @@ Use as `nix develop -i .#<name>`.
 | ios               |      |
 
 ## Chores
+
+### Using Android Keystores in CI
+
+Create these secrets: `CI_KEYSTORE_FILE_GOOGLE`, `CI_KEYSTORE_FILE_FDROID`, `CI_KEYSTORE_FILE_STANDALONE`. You need to convert your corresponding keystores into text using `base64 -w 0 yourkeystore.jks`. To decode it in CI, use e.g. `echo $CI_KEYSTORE_FILE_GOOGLE | base64 -d > google-keystore.jks`.
+
+They need the corresponding password secrets: `CI_KEYSTORE_PASS_GOOGLE`, `CI_KEYSTORE_PASS_FDROID`, `CI_KEYSTORE_PASS_STANDALONE`.
+
+You need to set `$CI_KEYSTORE_FILE` and `$CI_KEYSTORE_PASS` environment variables, where `$CI_KEYSTORE_FILE` is a path relative to the root of the source code or a full path.
 
 ### Updating Buildroot Packages
 

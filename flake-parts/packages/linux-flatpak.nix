@@ -45,10 +45,10 @@ pkgs.stdenvNoCC.mkDerivation {
     cp -r ${libjsoncppGit} libjsoncpp
     cp -r ${libsecretGit} libsecret
     cp ${sp.flatpakManifestFile} flatpak-nix.yml
-    cp ${sp.desktopFile} vendor/org.selfprivacy.app.desktop
-    cp ${sp.appstreamFile} vendor/org.selfprivacy.app.metainfo.xml
-    cp ${sp.iconPNGFile} vendor/org.selfprivacy.app.png
-    cp ${sp.iconSVGFile} vendor/org.selfprivacy.app.svg
+    cp ${sp.desktopFile} vendor/selfprivacy.desktop
+    cp ${sp.appstreamFile} vendor/selfprivacy.metainfo.xml
+    cp ${sp.iconPNGFile} vendor/selfprivacy.png
+    cp ${sp.iconSVGFile} vendor/selfprivacy.svg
 
     chmod -R u+w vendor/ libsecret/ libjsoncpp/
   '';

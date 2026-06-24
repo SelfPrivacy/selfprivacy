@@ -42,11 +42,12 @@ let
           exit 1
       fi
 
+      OLDDIR="$PWD"
       HOME="$(mktemp -d)"
       XDG_CONFIG_HOME="$HOME/.config"
       PUB_CACHE="$HOME/pubcache"
       GEM_HOME="$HOME/gemcache"
-      export HOME XDG_CONFIG_HOME PUB_CACHE GEM_HOME
+      export OLDDIR HOME XDG_CONFIG_HOME PUB_CACHE GEM_HOME
 
       FLUTTER_BUILD_DIRECTORY="$HOME/builddir"
       FLUTTER_NO_ANALYTICS="1"
@@ -74,6 +75,8 @@ let
       patch -p1 < ${sp.cocoaIosLipoPatch}
 
       flutter build "$1" --"$2" --no-codesign --no-pub
+      cp -r build/ios/archive/Runner.xcarchive "$OLDDIR/"
+      echo "Created artifact at $OLDDIR/Runner.xcarchive"
       popd
     '';
   };

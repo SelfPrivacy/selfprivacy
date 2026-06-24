@@ -1,8 +1,8 @@
 { pkgs, sp, ... }:
 
 let
-  commitSDK = "94938f2e7cc692b9c95f64a972e92528598979ff72daf4af8b463c3d8878d7e5";
-  commitRuntime = "1937643312594be1a9f3839b7c7c14f9d8fe123653bb03f4df42fa66dd7f917c";
+  commitSDK = "43f98359f53fb32d84218462532c8db7e28f1e5246f2c185e8f695908ce98157";
+  commitRuntime = "3f0cb4a807750a19ed8a3dea96be9bf562271bd8e84137fb2d678e665b549b73";
 in
 pkgs.stdenvNoCC.mkDerivation rec {
   pname = "${sp.applicationMetadata.name}-flatpak-sdk";
@@ -16,7 +16,7 @@ pkgs.stdenvNoCC.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-E+eba/cTugIi0iR1eC+AovpBZagTf1pcAoDX3p+XesU=";
+  outputHash = "sha256-ywXEtfGnU4Z9XOOk8/psWkdHUSPLa+xYNluRjTS9uyI=";
 
   builder = pkgs.writeShellScript "fetch-flatpak-sdk" ''
     export HOME="$NIX_BUILD_TOP"

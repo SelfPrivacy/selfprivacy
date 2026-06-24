@@ -18,12 +18,12 @@ pkgs.stdenvNoCC.mkDerivation {
   buildPhase = ''
     mkdir -p AppDir
     cp -r ${sp.applicationPortable}/. AppDir/
-    cp ${sp.desktopFile} AppDir/org.selfprivacy.app.desktop
-    cp ${sp.appstreamFile} AppDir/org.selfprivacy.app.metainfo.xml
-    cp ${sp.iconSVGFile} AppDir/org.selfprivacy.app.svg
+    cp ${sp.desktopFile} AppDir/selfprivacy.desktop
+    cp ${sp.appstreamFile} AppDir/selfprivacy.metainfo.xml
+    cp ${sp.iconSVGFile} AppDir/selfprivacy.svg
     chmod -R u+rw AppDir/
 
-    ln -sr AppDir/org.selfprivacy.app AppDir/AppRun
+    ln -sr AppDir/selfprivacy AppDir/AppRun
   '';
 
   installPhase = ''

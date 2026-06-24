@@ -31,15 +31,16 @@ FROM base AS runner
 USER ContainerAdministrator
 WORKDIR "C:\\"
 
-# Allow NTFS symlinks and Git long paths support needed for Flutter
-# Simply adds Users group to the list of allowed SIDs to make symlinks
+# Grant the Users group privileges to make symlinks and have elevated rights
+# to read and modify files using NtObjectManager. Allow NTFS symlinks and Git
+# long paths support needed for Flutter
 RUN powershell -Command \
-    "secedit /export /cfg security.inf; $content = Get-Content security.inf; \
-    $content = $content -Replace '(SeCreateSymbolicLinkPrivilege\s*=\s*)(.*)', ('$1$2,' + '*S-1-5-32-545'); \
-    $content | Out-File security.inf; secedit /configure /db security.sdb /cfg security.inf; \
-    Remove-Item security.sdb, security.inf, security.jfm -ErrorAction SilentlyContinue; \
-    New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -Value 1 -PropertyType DWORD -Force; \
-    git config --system core.longpaths true"
+  "Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; \
+  Install-Module NtObjectManager -RequiredVersion 2.0.1 -Force; \
+  Import-Module NtObjectManager; \
+  Add-NtAccountRight -Sid S-1-5-32-545 -Privilege SeBackupPrivilege,SeCreateSymbolicLinkPrivilege,SeRestorePrivilege; \
+  New-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -Value 1 -PropertyType DWORD -Force; \
+  git config --system core.longpaths true"
 
 # Allow non-privileged Users to use Flutter
 RUN flutter --version \
@@ -50,32 +51,14 @@ RUN flutter --version \
 RUN curl -L "https://github.com/Crown0815/Forgejo-runner-windows-builder/releases/download/v12.8.2/forgejo-runner-windows-amd64.exe" \
     --skip-existing -o forgejo-runner.exe
 
-# A scheduled task as an utility for unprivileged users to change permissions at runtime
-RUN powershell -Command \
-    # Register a task \
-    "$action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c icacls C:\runner\config.yml /grant ''Users:F'' /t /c /q'; \
-    $principal = New-ScheduledTaskPrincipal -UserId 'ContainerAdministrator' -RunLevel Highest; \
-    Register-ScheduledTask -TaskName 'FixRunnerPermissions' -Action $action -Principal $principal; \
-    # Grant access for Users to run the task using COM \
-    $scheduler = New-Object -ComObject Schedule.Service; $scheduler.Connect(); \
-    $task = $scheduler.GetFolder('\').GetTask('FixRunnerPermissions'); \
-    $currentSddl = $task.GetSecurityDescriptor(0xF); $newSddl = $currentSddl + '(A;;0x1200a9;;;BU)'; \
-    $task.SetSecurityDescriptor($newSddl, 0)"
+# Download nFPM
+RUN curl -L "https://github.com/goreleaser/nfpm/releases/download/v2.46.3/nfpm_2.46.3_Windows_x86_64.zip" \
+    --skip-existing -o nfpm.zip \
+    && tar -xf nfpm.zip nfpm.exe \
+    && del nfpm.zip
 
-RUN setx /m PATH "%PATH%;C:\tools\flutter\bin"
+RUN setx /m PATH "%PATH%;C:\tools\flutter\bin;C:\\"
 
 USER ContainerUser
-
-ENTRYPOINT ["powershell", "-Command", \
-    "$ErrorActionPreference = 'Stop'; $timeout = 30; $elapsed = 0; \
-    # Check if config exists, throw error if not \
-    if (-not (Test-Path 'C:\\runner\\config.yml')) { throw 'Forgejo Runner config is not found!' }; \
-    # If file has Users with (F) rights, True \
-    ((Get-Acl 'C:\\runner\\config.yml').Access | Where-Object { $_.IdentityReference -like '*Users*' -and $_.FileSystemRights -eq 'FullControl' }) \
-    # If not, start the scheduled task to fix permissions \
-    -or (schtasks /run /tn 'FixRunnerPermissions'); \
-    # Wait for permissions to propagate and throw error if they don't \
-    while (-not ((Get-Acl 'C:\\runner\\config.yml').Access | Where-Object { $_.IdentityReference -like '*Users*' -and $_.FileSystemRights -eq 'FullControl' })) \
-        { if ($elapsed -ge $timeout) { throw 'Time out waiting for permissions fix' }; Start-Sleep 1; echo 'Waiting for permissions…'; $elapsed++ }; \
-    # Launch! \
-    C:\\forgejo-runner.exe daemon -c C:\\runner\\config.yml"]
+COPY ./entrypoint.ps1 C:\\entrypoint.ps1
+ENTRYPOINT ["powershell", "C:\\entrypoint.ps1"]

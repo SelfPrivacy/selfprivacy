@@ -1,0 +1,28 @@
+name: Generic CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#analyze-flutter
+
+  scan:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#scan-sonarqube

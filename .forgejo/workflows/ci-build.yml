@@ -1,0 +1,213 @@
+name: Build CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  # Linux targets
+  build-linux-nix:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-nix
+
+  # build-linux-generic:
+  #   runs-on:
+  #     - x86
+  #     - kvm
+
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#linux-generic
+
+  build-linux-portable:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-portable
+
+  build-linux-flatpak:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-flatpak
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-flatpak
+          path: result/*
+
+  # build-linux-appimage-generic:
+  #   runs-on:
+  #     - x86
+  #     - kvm
+
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#linux-appimage-generic -o artifact-appimage-generic
+
+  build-linux-appimage-portable:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-appimage-portable
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-appimage-portable
+          path: result/*
+
+  # build-linux-archive-generic:
+  #   runs-on:
+  #     - x86
+  #     - kvm
+
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - run: nix build .#linux-archive-generic -o artifact-archive-generic
+
+  build-linux-archive-portable:
+    runs-on:
+      - x86
+      - kvm
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#linux-archive-portable
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-archive-portable
+          path: result/*
+
+  # Android targets
+  build-android-nightly-fdroid:
+    runs-on:
+      - x86
+      - kvm
+
+    concurrency:
+      group: android-publish
+      cancel-in-progress: false
+
+    env:
+      CI_KEYSTORE_FILE: fdroid-keystore.jks
+      CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_FDROID }}
+      CI_SHA: "${{ forgejo.sha }}"
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: nix build .#android-apk-release-nightly
+
+      - if: ${{ forgejo.ref_name == 'master' }}
+        env:
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
+        run: |
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
+          nix run .#sign-android-fdroid result/*.apk
+          rm "$CI_KEYSTORE_FILE"
+
+          if [[ -f "$CI_KEYSTORE_FILE" ]]; then
+            echo "Keystore exists, exiting"
+            exit 1
+          fi
+
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-nightly-fdroid
+          path: selfprivacy-fdroid-signed.apk
+
+      - if: ${{ forgejo.ref_name == 'master' }}
+        run: |
+          eval $(ssh-agent -s)
+
+          echo "${{ secrets.CI_DEPLOYER_SSH_KEY }}" | tr -d '\r' | ssh-add -
+          echo "${{ secrets.CI_DEPLOYER_KNOWN_HOSTS }}" > known_hosts
+
+          scp -oUserKnownHostsFile=known_hosts selfprivacy-fdroid-signed.apk \
+            deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
+          ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
+            "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
+
+  # Darwin targets
+  build-macos:
+    runs-on:
+      - macos
+
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix build .#macos -o artifact-macos
+      - run: OLDDIR=$PWD; (cd artifact-macos && zip -r "$OLDDIR/selfprivacy-macos.zip" .)
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-release
+          path: selfprivacy-macos.zip
+
+
+  build-ios:
+    runs-on:
+      - macos
+
+    env:
+      ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
+      all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#build-ios -- ipa release
+      - run: zip -r "selfprivacy-ios.zip" Runner.xcarchive
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-release
+          path: selfprivacy-ios.zip
+
+  # Windows targets
+  build-windows:
+    runs-on:
+      - windows
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: flutter config --no-analytics
+      - run: flutter config --enable-windows-desktop
+      - run: flutter pub get --no-precompile --enforce-lockfile
+      - run: flutter build windows --release
+      - shell: powershell
+        run: |
+          nfpm package -f .\nfpm-win.yaml --packager msix
+          Compress-Archive -Path ".\build\windows\x64\runner\Release\*" -DestinationPath ".\selfprivacy-windows.zip" -Force
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-zip-release
+          path: selfprivacy-windows.zip
+      - if: ${{ forgejo.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-msix-release
+          path: "*.msix"

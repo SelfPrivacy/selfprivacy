@@ -295,11 +295,11 @@
 
         ourAppImageRuntime = pkgs.stdenvNoCC.mkDerivation rec {
           pname = "appimage-runtime";
-          version = "20251108";
+          version = "20260624";
 
           src = pkgs.fetchurl {
             url = "https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-x86_64";
-            hash = "sha256-okGdzkdWg5WuecAf+ppaNB3TOVgTUv8QTQc1J1Qxd+U=";
+            hash = "sha256-HMSbzx4szVk8N5rbF8n4WjbWGQiCllBN6VsdBiFa678=";
           };
 
           phases = [

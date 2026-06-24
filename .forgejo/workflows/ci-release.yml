@@ -76,10 +76,11 @@ jobs:
       - env:
           CI_KEYSTORE_FILE: google-keystore.jks
           CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_GOOGLE }}
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}
         run: |
-          echo "${{ secrets.CI_KEYSTORE_FILE_GOOGLE }}" | base64 -d > $CI_KEYSTORE_FILE
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
           nix run .#sign-android-google artifact-aab/*.aab
-          rm $CI_KEYSTORE_FILE
+          rm "$CI_KEYSTORE_FILE"
 
           if [[ -f "$CI_KEYSTORE_FILE" ]]; then
             echo "Keystore exists, exiting"
@@ -89,10 +90,11 @@ jobs:
       - env:
           CI_KEYSTORE_FILE: fdroid-keystore.jks
           CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_FDROID }}
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
         run: |
-          echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > $CI_KEYSTORE_FILE
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
           nix run .#sign-android-fdroid artifact-apk/*.apk
-          rm $CI_KEYSTORE_FILE
+          rm "$CI_KEYSTORE_FILE"
 
           if [[ -f "$CI_KEYSTORE_FILE" ]]; then
             echo "Keystore exists, exiting"
@@ -102,10 +104,11 @@ jobs:
       - env:
           CI_KEYSTORE_FILE: standalone-keystore.jks
           CI_KEYSTORE_PASS: ${{ secrets.CI_KEYSTORE_PASS_STANDALONE }}
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_STANDALONE }}
         run: |
-          echo "${{ secrets.CI_KEYSTORE_FILE_STANDALONE }}" | base64 -d > $CI_KEYSTORE_FILE
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
           nix run .#sign-android-standalone artifact-apk/*.apk
-          rm $CI_KEYSTORE_FILE
+          rm "$CI_KEYSTORE_FILE"
 
           if [[ -f "$CI_KEYSTORE_FILE" ]]; then
              echo "Keystore exists, exiting"

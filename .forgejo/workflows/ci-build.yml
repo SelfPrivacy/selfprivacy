@@ -115,10 +115,12 @@ jobs:
 
       - run: nix build .#android-apk-release-nightly
 
-      - run: |
-          echo "${{ secrets.CI_KEYSTORE_FILE_FDROID }}" | base64 -d > $CI_KEYSTORE_FILE
+      - env:
+          KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
+        run: |
+          printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
           nix run .#sign-android-fdroid result/*.apk
-          rm $CI_KEYSTORE_FILE
+          rm "$CI_KEYSTORE_FILE"
 
           if [[ -f "$CI_KEYSTORE_FILE" ]]; then
             echo "Keystore exists, exiting"

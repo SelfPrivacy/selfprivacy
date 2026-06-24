@@ -118,7 +118,16 @@ jobs:
       - env:
           KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
         run: |
+          # === temporary diagnostics — remove once signing works ===
+          printf '%s' "$KS_B64" | wc -c     | xargs echo 'KS_B64 length (bytes):'
+          printf '%s' "$KS_B64" | sha256sum | awk '{print "KS_B64 sha256:", $1}'
           printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
+          stat -c 'decoded size: %s bytes' "$CI_KEYSTORE_FILE"
+          sha256sum "$CI_KEYSTORE_FILE" | awk '{print "decoded sha256:", $1}'
+          printf 'decoded first 32 bytes: '
+          od -A n -t x1 -N 32 "$CI_KEYSTORE_FILE" | tr -d ' \n'; echo
+          # === end diagnostics ===
+
           nix run .#sign-android-fdroid result/*.apk
           rm "$CI_KEYSTORE_FILE"
 

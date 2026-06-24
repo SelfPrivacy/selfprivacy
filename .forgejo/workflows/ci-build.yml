@@ -113,7 +113,11 @@ jobs:
       CI_SHA: "${{ forgejo.sha }}"
 
     steps:
+      # fetch-depth: 0 so the flake's self.revCount matches a full
+      # `git rev-list --count HEAD` for the nightly versionCode.
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - run: nix build .#android-apk-release-nightly
 

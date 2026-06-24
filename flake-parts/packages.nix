@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 {
   perSystem =
     {
@@ -69,6 +69,21 @@
                 androidType = c.type;
                 androidRelease = c.release;
                 androidFlavor = c.flavor;
+                # Nightly's versionCode is `git rev-list --count HEAD`, which
+                # Nix exposes as inputs.self.revCount when the flake source is
+                # a clean git tree. On a dirty tree revCount is unset; fail
+                # loudly here rather than silently shipping versionCode = -1.
+                # Other flavors don't read this value (they use pubspec.yaml's
+                # +N), so default to "" for them.
+                versionCode =
+                  if c.flavor == "nightly" then
+                    toString (
+                      inputs.self.revCount or (throw
+                        "android-${c.type}-${c.release}-nightly: cannot evaluate inputs.self.revCount — the flake source is a dirty git tree. Commit your changes (or check out a clean ref) before building nightly artifacts."
+                      )
+                    )
+                  else
+                    "";
               };
             }) androidCombinations
           )

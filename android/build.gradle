@@ -1,5 +1,9 @@
 buildscript {
   ext.getVersionCode = { ->
+      def fromEnv = System.getenv("CI_VERSION_CODE")
+      if (fromEnv != null && !fromEnv.trim().isEmpty()) {
+        return Integer.parseInt(fromEnv.trim())
+      }
       try {
         def stdout = new ByteArrayOutputStream()
         exec {

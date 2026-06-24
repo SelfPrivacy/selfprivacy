@@ -4,12 +4,15 @@
   androidType,
   androidRelease,
   androidFlavor,
+  versionCode ? "",
   ...
 }:
 pkgs.stdenvNoCC.mkDerivation {
   name = "${sp.applicationMetadata.name}-android-${androidType}-${androidRelease}-${androidFlavor}";
   version = sp.applicationMetadata.version;
   src = sp.projectFiles;
+
+  CI_VERSION_CODE = versionCode;
 
   meta = {
     platforms = [

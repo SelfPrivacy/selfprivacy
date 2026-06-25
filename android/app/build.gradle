@@ -4,25 +4,11 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
-}
-
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+def pubspecFile = rootProject.file('../pubspec.yaml')
+def pubspecVersion = (pubspecFile.text =~ /(?m)^version:\s*(\S+)/)[0][1]
+def pubspecParts = pubspecVersion.split('\\+')
+def pubspecVersionName = pubspecParts[0]
+def pubspecVersionCode = pubspecParts.length > 1 ? pubspecParts[1].toInteger() : 1
 
 android {
     namespace 'org.selfprivacy.app'
@@ -55,8 +41,8 @@ android {
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
         compileSdkVersion 36
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode pubspecVersionCode
+        versionName pubspecVersionName
     }
 
     buildTypes {

@@ -7,7 +7,9 @@ import 'package:selfprivacy/utils/app_logger.dart';
 class SecureStorage {
   static final logger = const AppLogger(name: 'secure_storage').log;
 
-  static const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  static const FlutterSecureStorage secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(resetOnError: false),
+  );
   static String keyName = 'key';
 
   static Future<Uint8List?> getKey() async {

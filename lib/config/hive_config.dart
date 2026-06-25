@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -65,11 +66,25 @@ class HiveConfig {
   static Future<HiveAesCipher> getCipher() async {
     List<int>? key = await SecureStorage.getKey();
     if (key == null) {
+      if (await _encryptedBoxesExist()) {
+        throw PlatformException(
+          code: 'hive_key_missing_with_data',
+          message:
+              "The device's secure storage lost the encryption key that "
+              'protects this app’s data. The data is still on disk but can '
+              'no longer be decrypted.',
+        );
+      }
       key = Hive.generateSecureKey();
       await SecureStorage.setKey(key);
     }
     return HiveAesCipher(key);
   }
+
+  static Future<bool> _encryptedBoxesExist() async =>
+      await Hive.boxExists(BNames.serverInstallationBox) ||
+      await Hive.boxExists(BNames.resourcesBox) ||
+      await Hive.boxExists(BNames.wizardDataBox);
 
   static Future<void> decryptBoxes() async {
     try {

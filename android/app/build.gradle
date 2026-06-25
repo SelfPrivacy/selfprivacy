@@ -36,6 +36,12 @@ android {
         disable 'InvalidPackage'
     }
 
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     defaultConfig {
         applicationId "org.selfprivacy.app"
         minSdkVersion flutter.minSdkVersion

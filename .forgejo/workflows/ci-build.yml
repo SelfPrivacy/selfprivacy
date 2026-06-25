@@ -148,9 +148,9 @@ jobs:
           echo "${{ secrets.CI_DEPLOYER_KNOWN_HOSTS }}" > known_hosts
 
           scp -oUserKnownHostsFile=known_hosts selfprivacy-fdroid-signed.apk \
-            deployer@selfprivacy.org:/var/www/fdroid.selfprivacy.org/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
+            deployer@selfprivacy.org:/var/lib/fdroid/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
           ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
-            "cd /var/www/fdroid.selfprivacy.org && fdroid update --create-metadata"
+            /var/lib/fdroid/update.sh
 
   # Darwin targets
   build-macos:

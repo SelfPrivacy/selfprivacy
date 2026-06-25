@@ -126,7 +126,7 @@ jobs:
           KS_B64: ${{ secrets.CI_KEYSTORE_FILE_FDROID }}
         run: |
           printf '%s' "$KS_B64" | base64 -d > "$CI_KEYSTORE_FILE"
-          nix run .#sign-android-fdroid result/*.apk
+          nix run .#sign-android-nightly result/*.apk
           rm "$CI_KEYSTORE_FILE"
 
           if [[ -f "$CI_KEYSTORE_FILE" ]]; then
@@ -138,7 +138,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: android-nightly-fdroid
-          path: selfprivacy-fdroid-signed.apk
+          path: selfprivacy-nightly-signed.apk
 
       - if: ${{ forgejo.ref_name == 'master' }}
         run: |
@@ -147,7 +147,7 @@ jobs:
           echo "${{ secrets.CI_DEPLOYER_SSH_KEY }}" | tr -d '\r' | ssh-add -
           echo "${{ secrets.CI_DEPLOYER_KNOWN_HOSTS }}" > known_hosts
 
-          scp -oUserKnownHostsFile=known_hosts selfprivacy-fdroid-signed.apk \
+          scp -oUserKnownHostsFile=known_hosts selfprivacy-nightly-signed.apk \
             deployer@selfprivacy.org:/var/lib/fdroid/repo/selfprivacy-fdroid-nightly-$(date -I)-${CI_SHA:0:6}.apk
           ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
             /var/lib/fdroid/update.sh

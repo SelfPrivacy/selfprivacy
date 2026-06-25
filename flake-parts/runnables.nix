@@ -65,8 +65,30 @@
             JAVA_HOME="${sp.ourJava.home}"
             export JAVA_HOME
 
-            apksigner sign --ks "$CI_KEYSTORE_FILE" --ks-key-alias fdroid --ks-pass pass:"$CI_KEYSTORE_PASS" --key-pass pass:"$CI_KEYSTORE_PASS" --min-sdk-version 24 --out selfprivacy-fdroid-signed.apk "$1"
+            # Alias d3e165d4 is fdroidserver's per-app key for the F-Droid
+            # release flavor, derived deterministically from the keystore
+            # password + applicationId. Existing installs are signed with
+            # this cert (SHA-256 6837:6b9f:712b:cbbf:...); switching it
+            # breaks Android's upgrade check.
+            apksigner sign --ks "$CI_KEYSTORE_FILE" --ks-key-alias d3e165d4 --ks-pass pass:"$CI_KEYSTORE_PASS" --key-pass pass:"$CI_KEYSTORE_PASS" --min-sdk-version 24 --out selfprivacy-fdroid-signed.apk "$1"
             apksigner verify --print-certs selfprivacy-fdroid-signed.apk
+          '';
+        };
+
+        sign-android-nightly = pkgs.writeShellApplication {
+          name = "sign-android-nightly-apk";
+          runtimeInputs = sp.signTools;
+          text = ''
+            JAVA_HOME="${sp.ourJava.home}"
+            export JAVA_HOME
+
+            # Alias 72994518 is fdroidserver's per-app key for
+            # org.selfprivacy.app.nightly, derived deterministically from
+            # the keystore password + applicationId. Existing installs are
+            # signed with this cert (SHA-256 8119:1731:ecd9:eaae:...);
+            # switching it breaks Android's upgrade check.
+            apksigner sign --ks "$CI_KEYSTORE_FILE" --ks-key-alias 72994518 --ks-pass pass:"$CI_KEYSTORE_PASS" --key-pass pass:"$CI_KEYSTORE_PASS" --min-sdk-version 24 --out selfprivacy-nightly-signed.apk "$1"
+            apksigner verify --print-certs selfprivacy-nightly-signed.apk
           '';
         };
 

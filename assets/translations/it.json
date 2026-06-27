@@ -120,7 +120,7 @@
         "telegram_support_chat": "Caht di assistenza Telegram",
         "email_support": "Email di assistenza",
         "contribute": "Contribuisci",
-        "matrix_channel": "Canale Matrix",
+        "matrix_channel": "Canal Matrix",
         "telegram_channel": "Canale Telegram",
         "get_support": "Richiesta di assistenza",
         "matrix_support_chat": "Chat di assistenza Matrix",
@@ -328,7 +328,7 @@
         "invalid_format_ssh": "Deve rispettare il formato della chiave SSH",
         "invalid_format": "Formato non valido",
         "invalid_format_password": "La password non deve contenere spazi",
-        "root_name": "Non é possibile usare un username riservato",
+        "root_name": "Non è possibile usare un username riservato",
         "length_not_equal": "La lunghezza è [], dovrebbe essere {}",
         "required": "Richiesto",
         "already_exist": "Già esistente"
@@ -509,7 +509,7 @@
         "server_provider_unknown": "Provider del server sconosciuto",
         "add_backups_token": "Aggiungi token del provider di backup",
         "remove_backup_token_alert": {
-            "yes": "Rimovi",
+            "yes": "Rimuovi",
             "no": "Annulla",
             "title": "Rimuovere il token dell'archivio di backup?",
             "description": "Questa operazione rimuoverà solo il token di accesso dall'app. Se hai già inizializzato i backup, questi continueranno a funzionare."
@@ -792,7 +792,7 @@
         "system_theme_mode_title": "Tema predefinito di sistema",
         "system_theme_mode_description": "L'uso del tema chiaro o scuro dipende dalle impostazioni di sistema",
         "change_application_theme": "Cambia il tema dell'applicazione",
-        "language": "Lingua",
+        "language": "Langue",
         "click_to_change_locale": "Clicca per aprire l'elenco delle lingue",
         "reset_config_title": "Resetta la configurazione dell'applicazione",
         "reset_config_description": "Resetta le chiavi API e l'utente root.",

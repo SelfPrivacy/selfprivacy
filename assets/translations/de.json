@@ -345,11 +345,11 @@
             "daily_infinite": "Alle tägliche Sicherungen werden behalten",
             "weekly_infinite": "Alle wöchentliche Sicherungen werden behalten"
         },
-        "repository_removed": "Ein Sicherungsspeicher wurde erkannt. Sie möchten Sie den Speicher auf der Website des Dienstleisters vielleicht löschen.",
+        "repository_removed": "Der Sicherungsspeicher wurde abgehängt. Sie möchten den Speicher auf der Website des Dienstleisters vielleicht löschen.",
         "detach_repository": "Sicherungs-Repository aushängen",
         "detach_repository_subtitle": "Trennen Sie den Sicherungsspeicher von Ihrem Server.",
         "detach_repository_button": "Repository aushängen",
-        "detach_repository_confirm": "Sind Sie sich sicher, dass Sie das Sicherungs-Repository aushängen möchten? Ihre bestehenden Sicherungen werden beim Speicherdienstleister verbleiben, aber Sie müssen sich den Versclüsselungs-Schlüssel notieren, um diese zukünftig nutzen zu können. Bis Sie ein neues Repository initialisieren wird es Ihnen nicht möglich sein, neue Sicherungen zu erstellen oder aus bestehenden wiederherzustellen."
+        "detach_repository_confirm": "Sind Sie sich sicher, dass Sie das Sicherungs-Repository aushängen möchten? Ihre bestehenden Sicherungen werden beim Speicherdienstleister verbleiben, aber Sie müssen sich den Verschlüsselungs‑Schlüssel notieren, um diese zukünftig nutzen zu können. Bis Sie ein neues Repository initialisieren wird es Ihnen nicht möglich sein, neue Sicherungen zu erstellen oder aus bestehenden wiederherzustellen."
     },
     "storage": {
         "card_title": "Serverspeicher",
@@ -375,7 +375,7 @@
         "price": "Preis",
         "extending_volume_server_waiting": "Server-Speicher erweitert, warte 20 Sekunden…",
         "extending_volume_rebooting": "Server neustarten…",
-        "extending_volume_modal_description": "Auf {sie} um {price} pro Monat upgraden."
+        "extending_volume_modal_description": "Auf {size} um {price} pro Monat upgraden."
     },
     "not_ready_card": {
         "in_menu": "Server ist noch nicht eingerichtet. Bitte beenden Sie die Einrichtung mit dem Einrichtungsassistenten, um fortzufahren."
@@ -470,7 +470,7 @@
         "delete_ssh_key": "SSH-Schlüssel löschen für {}",
         "server_jobs": "Aufgaben auf dem Server",
         "reset_user_password": "Passwort des Benutzers zurücksetzen",
-        "change_ssh_settings": "SSH-Enstellungen ändern",
+        "change_ssh_settings": "SSH‑Einstellungen ändern",
         "ignored_due_to_failures": "Aufgrund früherer Fehler ignoriert",
         "change_auto_upgrade_settings": "Einstellungen für automatische Aktualisierungen verändern",
         "job_postponed": "Aufgabe hinzugefügt, aber Sie werden sie erst starten können nachdem die laufenden Aufgaben abgeschlossen sind",
@@ -481,10 +481,10 @@
         "start_server_upgrade": "Server-Aktualisierung starten",
         "dns_records_did_not_change": "Keine Änderungen erforderlich",
         "update_dns_records": "DNS-Einträge aktualisieren",
-        "rebuild_system": "Sustem neu erstellen",
+        "rebuild_system": "System neu erstellen",
         "change_server_timezone": "Server-Zeitzone ändern",
         "dns_records_changed": "DNS-Einträge aktualisiert",
-        "failed_to_load_dns_records": "DNS-Einträge konnten nicht aktualisiert werden"
+        "failed_to_load_dns_records": "DNS-Einträge konnten nicht geladen werden"
     },
     "initializing": {
         "locations_not_found": "Oops!",

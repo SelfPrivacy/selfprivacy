@@ -1,0 +1,59 @@
+# 0.13.7 Changelog
+
+## Changes
+
+**Features**
+
+- **Porkbun DNS provider support** ([#677](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/677), resolves [#507](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/507))
+- **Automatic server token rotation** ([#686](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/686))
+- Allow installing a server without Backblaze credentials (backups can be configured later)
+- Allow entering a new volume size manually when extending storage ([#652](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/652), resolves [#174](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/174))
+
+**Bug Fixes**
+
+- Do not silently mint a new encryption key when the existing one cannot be loaded — prevents accidental data loss ([#693](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/693))
+- Fix refetch TTL being a no-op, which caused the app to refresh everything every 10 seconds ([#686](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/686))
+- Filter out Hetzner tiers that are no longer available, and sort the list by price ([#681](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/681), resolves [#665](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/665))
+- Improve job subscription teardown ([#686](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/686))
+- Fix Hive failing to find its path on Linux, which resulted in a black screen ([#687](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/687))
+- Fix unclickable hyperlinks in Markdown instructions on Flatpak builds ([#674](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/674), resolves [#578](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/578))
+- Re-enable APK compression after the Flutter update inflated APK size to ~80 MB ([#694](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/694))
+- Report the correct app version on Flatpak and Windows builds (resolves [#503](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/503))
+
+**Refactor**
+
+- Detach non-setup layers of the UI from `ServerInstallationCubit` — a step towards retiring it as the global app status source of truth ([#685](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/685))
+- Properly dispose subscriptions when rotating the GraphQL token ([#686](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/686))
+- Fix potential cold start issues ([#686](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/686))
+- Return `null` instead of empty lists on failures so callers can distinguish "empty" from "errored" ([#686](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/686))
+
+**Build & Packaging**
+
+- **Major CI rehaul: the entire build pipeline is now driven by a Nix flake** ([#680](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/680), [#684](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/684), resolves [#498](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/498), [#383](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/383))
+- Linux: native Nix package, portable build targeting glibc 2.28, AppImage, DEB, RPM, Arch Linux, Snap, and Flatpak packages
+- Windows: ZIP and unsigned MSIX packages
+- macOS and iOS: unsigned builds produced in CI ([#682](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/682))
+- Android: signed Google Play, F-Droid, and Standalone APK/AAB releases built via gradle2nix
+- Update Flutter to 3.35 ([#664](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/664), [#671](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/671))
+- Flake maintenance and upgrades for building on current nixpkgs ([#660](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/660))
+- Reformat the project to the new styling rules
+
+* Estonian
+
+    * Dmitri B. (10)
+
+
+* French
+
+    * very late (53)
+
+
+* German
+
+    * Emanuel Loos (156)
+    * Owen (9)
+
+
+* Italian
+
+    * Genio (14)

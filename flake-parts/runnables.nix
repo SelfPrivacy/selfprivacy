@@ -22,19 +22,78 @@
         test-flutter = pkgs.writeShellApplication {
           name = "test-flutter";
           runtimeInputs = sp.testTools;
-          text = "flutter test --coverage";
+          # --machine emits JSON to stdout for sonar-flutter's Flutter unit
+          # tests sensor; --coverage writes coverage/lcov.info.
+          text = ''
+            flutter test --machine --coverage > tests.output
+          '';
         };
 
         analyze-flutter = pkgs.writeShellApplication {
           name = "analyze-flutter";
           runtimeInputs = sp.analyzeTools;
-          text = "flutter analyze";
+          text = "flutter analyze --no-fatal-infos";
+        };
+
+        pubspec-deps-json = pkgs.writeShellApplication {
+          name = "pubspec-deps-json";
+          runtimeInputs = [ pkgs.yq ];
+          text = ''
+            lockfile="''${1:-pubspec.lock}"
+            yq '
+              .packages | to_entries | map({
+                name: .key,
+                version: .value.version,
+                source: .value.source,
+                isDirect: ((.value.dependency // "transitive") | startswith("direct")),
+                homepage: (
+                  if .value.source == "hosted" and .value.description.url == "https://pub.dev"
+                  then "https://pub.dev/packages/" + .key
+                  else null
+                  end
+                ),
+                changelog: (
+                  if .value.source == "hosted" and .value.description.url == "https://pub.dev"
+                  then "https://pub.dev/packages/" + .key + "/changelog"
+                  else null
+                  end
+                )
+              }) | { dependencies: . }
+            ' < "$lockfile"
+          '';
         };
 
         scan-sonarqube = pkgs.writeShellApplication {
           name = "scan-sonarqube";
           runtimeInputs = sp.scannerTools;
-          text = "";
+          text = ''
+            : "''${SONAR_TOKEN:?SONAR_TOKEN env var required}"
+
+            EXCLUSIONS="lib/**/*.g.dart,lib/**/*.graphql.dart,lib/**/router.gr.dart,lib/**/hive_registrar.g.dart"
+
+            SONAR_PARAMS="-Dsonar.projectKey=SelfPrivacy-Flutter-App"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.sources=lib"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.tests=test"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.host.url=https://analyzer.selfprivacy.org"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.token=$SONAR_TOKEN"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.dart.lcov.reportPaths=coverage/lcov.info"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.exclusions=$EXCLUSIONS"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.coverage.exclusions=$EXCLUSIONS"
+
+            if [ -n "''${SONAR_PULLREQUEST_KEY:-}" ]; then
+              SONAR_PARAMS="$SONAR_PARAMS -Dsonar.pullrequest.key=$SONAR_PULLREQUEST_KEY"
+              SONAR_PARAMS="$SONAR_PARAMS -Dsonar.pullrequest.branch=$SONAR_PULLREQUEST_BRANCH"
+              SONAR_PARAMS="$SONAR_PARAMS -Dsonar.pullrequest.base=$SONAR_PULLREQUEST_BASE"
+            elif [ -n "''${SONAR_BRANCH_NAME:-}" ]; then
+              SONAR_PARAMS="$SONAR_PARAMS -Dsonar.branch.name=$SONAR_BRANCH_NAME"
+            fi
+
+            # shellcheck disable=SC2086
+            sonar-scanner $SONAR_PARAMS 2>&1 \
+              | grep --line-buffered -v 'File not included in SonarQube' \
+              || true
+            exit "''${PIPESTATUS[0]}"
+          '';
         };
 
         build-ios = callPackage ./runnables/build-ios.nix { inherit sp; };

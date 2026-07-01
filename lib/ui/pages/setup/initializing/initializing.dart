@@ -8,13 +8,14 @@ import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/user/ssh_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/forms/ssh_key_form.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/progress_indicators/progress_bar.dart';
 import 'package:selfprivacy/ui/atoms/timer/brand_timer.dart';
+import 'package:selfprivacy/ui/forms/ssh_key_form_view.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/ui/organisms/drawers/progress_drawer.dart';
 import 'package:selfprivacy/ui/organisms/drawers/support_drawer.dart';
@@ -481,61 +482,34 @@ class InitializingPage extends StatelessWidget {
   }
 }
 
-class AddSshKey extends StatelessWidget {
+class AddSshKey extends StatefulWidget {
   const AddSshKey(this.serverInstallationCubit, {super.key});
 
   final ServerInstallationCubit serverInstallationCubit;
-  @override
-  Widget build(final BuildContext context) => BlocProvider(
-    create: (final context) => JoblessSshFormCubit(serverInstallationCubit),
-    child: Builder(
-      builder: (final context) {
-        final formCubitState = context.watch<JoblessSshFormCubit>().state;
 
-        return BlocListener<JoblessSshFormCubit, FormCubitState>(
-          listener: (final context, final state) {
-            if (state.isSubmitted) {
-              Navigator.pop(context);
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(width: 14),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IntrinsicHeight(
-                      child: CubitFormTextField(
-                        autofocus: true,
-                        formFieldCubit: context.read<JoblessSshFormCubit>().key,
-                        decoration: InputDecoration(
-                          labelText: 'ssh.input_label'.tr(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    BrandButton.filled(
-                      onPressed: formCubitState.isSubmitting
-                          ? null
-                          : () =>
-                                context.read<JoblessSshFormCubit>().trySubmit(),
-                      title: 'ssh.create'.tr(),
-                    ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
+  @override
+  State<AddSshKey> createState() => _AddSshKeyState();
+}
+
+class _AddSshKeyState extends State<AddSshKey> {
+  late final SshKeyForm form = SshKeyForm(
+    onSubmit: (final key) async {
+      await widget.serverInstallationCubit.setCustomSshKey(key);
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    },
+  );
+
+  @override
+  void dispose() {
+    form.form.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(16, 24, 16, 38),
+    child: SshKeyFormView(sshKeyForm: form),
   );
 }

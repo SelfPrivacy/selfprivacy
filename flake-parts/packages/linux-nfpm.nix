@@ -15,7 +15,10 @@ pkgs.stdenvNoCC.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 
-  nativeBuildInputs = with pkgs; [ nfpm lndir ];
+  nativeBuildInputs = with pkgs; [
+    nfpm
+    lndir
+  ];
 
   phases = [
     "buildPhase"

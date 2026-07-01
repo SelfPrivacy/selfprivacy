@@ -78,9 +78,8 @@
                 versionCode =
                   if c.flavor == "nightly" then
                     toString (
-                      inputs.self.revCount or (throw
-                        "android-${c.type}-${c.release}-nightly: cannot evaluate inputs.self.revCount — the flake source is a dirty git tree. Commit your changes (or check out a clean ref) before building nightly artifacts."
-                      )
+                      inputs.self.revCount
+                        or (throw "android-${c.type}-${c.release}-nightly: cannot evaluate inputs.self.revCount — the flake source is a dirty git tree. Commit your changes (or check out a clean ref) before building nightly artifacts.")
                     )
                   else
                     "";

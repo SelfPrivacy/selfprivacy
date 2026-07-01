@@ -107,6 +107,7 @@
           "test-flutter"
           "analyze-flutter"
           "scan-sonarqube"
+          "pubspec-deps-json"
 
           "build-ios"
 
@@ -234,7 +235,7 @@
           ourFlutter.dart
         ];
 
-        scannerTools = with pkgs; [ sonar-scanner-cli-minimal ];
+        scannerTools = (with pkgs; [ sonar-scanner-cli ]) ++ analyzeTools;
 
         flatpakTools = with pkgs; [
           flatpak

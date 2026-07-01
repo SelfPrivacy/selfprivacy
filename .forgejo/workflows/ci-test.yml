@@ -9,25 +9,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-linux:
-    runs-on:
-      - x86
-      - kvm
-
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix run .#test-flutter
-
-  test-android:
-    runs-on:
-      - x86
-      - kvm
-
-    steps:
-      - uses: actions/checkout@v6
-      - run: nix run .#test-flutter
-
-
   test-macos:
     runs-on:
       - macos

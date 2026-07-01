@@ -69,18 +69,19 @@ Duplicates the build environments above and adds new commands that are ran in cu
 
 Use as `nix run .#<name>`.
 
-| Name            | Note |
-|-----------------|------|
-| test-flutter    |      |
-| analyze-flutter |      |
-| scan-sonarqube  |      |
-| sign-android    |      |
-| deploy-android  |      |
-| sign-macos      |      |
-| deploy-macos    |      |
-| build-ios       |      |
-| sign-ios        |      |
-| deploy-ios      |      |
+| Name              | Note                                                                          |
+|-------------------|-------------------------------------------------------------------------------|
+| test-flutter      |                                                                               |
+| analyze-flutter   |                                                                               |
+| scan-sonarqube    |                                                                               |
+| pubspec-deps-json | JSON view of a `pubspec.lock` path; consumed by the CI dependency-changes job |
+| sign-android      |                                                                               |
+| deploy-android    |                                                                               |
+| sign-macos        |                                                                               |
+| deploy-macos      |                                                                               |
+| build-ios         |                                                                               |
+| sign-ios          |                                                                               |
+| deploy-ios        |                                                                               |
 
 #### Shells
 

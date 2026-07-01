@@ -18,11 +18,300 @@ jobs:
       - uses: actions/checkout@v6
       - run: nix run .#analyze-flutter
 
-  scan:
+  tests-and-sonar:
     runs-on:
       - x86
       - kvm
 
     steps:
-      - uses: actions/checkout@v6
-      - run: nix run .#scan-sonarqube
+      - name: Checkout repository (full clone)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run tests with coverage
+        run: nix run .#test-flutter
+
+      - name: Upload results to SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        run: |
+          if [ -n "${{ github.event.pull_request.number }}" ]; then
+            export SONAR_PULLREQUEST_KEY="${{ github.event.pull_request.number }}"
+            export SONAR_PULLREQUEST_BRANCH="${{ github.head_ref }}"
+            export SONAR_PULLREQUEST_BASE="${{ github.base_ref }}"
+          elif [ "${{ github.ref_name }}" != "master" ] && [ "${{ github.ref_name }}" != "main" ]; then
+            export SONAR_BRANCH_NAME="${{ github.ref_name }}"
+          fi
+          nix run .#scan-sonarqube
+
+  sonar-quality-gate:
+    runs-on:
+      - x86
+      - kvm
+    needs:
+      - tests-and-sonar
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Wait for SonarQube analysis
+        run: sleep 10
+
+      - name: Check Quality Gate and report issues
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          SONAR_URL="https://analyzer.selfprivacy.org"
+          PROJECT_KEY="SelfPrivacy-Flutter-App"
+          PR_KEY="${PR_NUMBER}"
+
+          echo "Checking quality gate for PR #${PR_NUMBER}..."
+
+
+          QG_DETAILS=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY&pullRequest=$PR_KEY")
+          QG_STATUS=$(echo "$QG_DETAILS" | jq -r '.projectStatus.status // "UNKNOWN"')
+          echo "[DEBUG] Quality Gate Status: $QG_STATUS" >&2
+
+          echo "[DEBUG] Fetching issues for PR..." >&2
+          ISSUES=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/issues/search?components=$PROJECT_KEY&pullRequest=$PR_KEY&resolved=false&ps=100")
+          BLOCKER_COUNT=$(echo "$ISSUES" | jq '[.issues[] | select(.severity == "BLOCKER")] | length')
+          CRITICAL_COUNT=$(echo "$ISSUES" | jq '[.issues[] | select(.severity == "CRITICAL")] | length')
+          MAJOR_COUNT=$(echo "$ISSUES" | jq '[.issues[] | select(.severity == "MAJOR")] | length')
+          MINOR_COUNT=$(echo "$ISSUES" | jq '[.issues[] | select(.severity == "MINOR")] | length')
+          echo "[DEBUG] Issue counts: Blocker=$BLOCKER_COUNT, Critical=$CRITICAL_COUNT, Major=$MAJOR_COUNT, Minor=$MINOR_COUNT" >&2
+
+          echo "[DEBUG] Fetching measures for PR..." >&2
+          MEASURES=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/measures/component?component=$PROJECT_KEY&pullRequest=$PR_KEY&metricKeys=new_coverage,new_duplicated_lines_density,new_lines,new_security_hotspots,new_vulnerabilities,new_bugs,new_code_smells")
+          get_measure() {
+            echo "$MEASURES" | jq -r --arg key "$1" '.component.measures[]? | select(.metric == $key) | .period.value // empty'
+          }
+          NEW_COVERAGE=$(get_measure "new_coverage")
+          NEW_DUPLICATIONS=$(get_measure "new_duplicated_lines_density")
+          NEW_LINES=$(get_measure "new_lines")
+          NEW_VULNERABILITIES=$(get_measure "new_vulnerabilities")
+          NEW_BUGS=$(get_measure "new_bugs")
+          NEW_CODE_SMELLS=$(get_measure "new_code_smells")
+          NEW_HOTSPOTS=$(get_measure "new_security_hotspots")
+          echo "[DEBUG] Extracted measures: Coverage=$NEW_COVERAGE, Duplications=$NEW_DUPLICATIONS, Lines=$NEW_LINES, Vulnerabilities=$NEW_VULNERABILITIES, Bugs=$NEW_BUGS, CodeSmells=$NEW_CODE_SMELLS, Hotspots=$NEW_HOTSPOTS" >&2
+
+          # Set defaults if empty
+          NEW_COVERAGE=${NEW_COVERAGE:-"N/A"}
+          NEW_DUPLICATIONS=${NEW_DUPLICATIONS:-"0.0"}
+          NEW_LINES=${NEW_LINES:-"0"}
+          NEW_VULNERABILITIES=${NEW_VULNERABILITIES:-"0"}
+          NEW_BUGS=${NEW_BUGS:-"0"}
+          NEW_CODE_SMELLS=${NEW_CODE_SMELLS:-"0"}
+          NEW_HOTSPOTS=${NEW_HOTSPOTS:-"0"}
+
+          # Create comment body with a unique identifier
+          COMMENT='<!-- sonarqube-analysis-bot -->\n'
+          COMMENT="${COMMENT}## SonarQube Analysis Results\n\n"
+          COMMENT="${COMMENT}**Quality Gate:** "
+
+          if [ "$QG_STATUS" = "OK" ]; then
+            COMMENT="${COMMENT}✅ Passed\n\n"
+          else
+            COMMENT="${COMMENT}❌ Failed\n\n"
+          fi
+
+          COMMENT="${COMMENT}### New Code Metrics\n\n"
+          COMMENT="${COMMENT}| Metric | Value |\n"
+          COMMENT="${COMMENT}|--------|-------|\n"
+          COMMENT="${COMMENT}| 📊 Coverage on New Code | ${NEW_COVERAGE}% |\n"
+          COMMENT="${COMMENT}| 📏 New Lines | ${NEW_LINES} |\n"
+          COMMENT="${COMMENT}| 🔄 Duplications | ${NEW_DUPLICATIONS}% |\n"
+          COMMENT="${COMMENT}| 🐛 New Bugs | ${NEW_BUGS} |\n"
+          COMMENT="${COMMENT}| 🔐 New Vulnerabilities | ${NEW_VULNERABILITIES} |\n"
+          COMMENT="${COMMENT}| 🔥 New Security Hotspots | ${NEW_HOTSPOTS} |\n"
+          COMMENT="${COMMENT}| 💡 New Code Smells | ${NEW_CODE_SMELLS} |\n\n"
+
+          COMMENT="${COMMENT}### All Issues by Severity\n\n"
+          COMMENT="${COMMENT}- 🔴 Blocker: $BLOCKER_COUNT\n"
+          COMMENT="${COMMENT}- 🟠 Critical: $CRITICAL_COUNT\n"
+          COMMENT="${COMMENT}- 🟡 Major: $MAJOR_COUNT\n"
+          COMMENT="${COMMENT}- 🔵 Minor: $MINOR_COUNT\n\n"
+          COMMENT="${COMMENT}[View detailed report]($SONAR_URL/dashboard?id=$PROJECT_KEY&pullRequest=$PR_KEY)"
+
+
+          printf "%s\n" "$COMMENT" > /tmp/sonar-comment.txt
+
+          # Check if a comment from this bot already exists
+          echo "[DEBUG] Fetching existing PR comments from Forgejo..." >&2
+          EXISTING_COMMENTS=$(curl -s \
+            -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/issues/$PR_NUMBER/comments")
+
+
+          # Look for existing comment with our identifier using jq
+          COMMENT_ID=$(echo "$EXISTING_COMMENTS" | jq -r '.[] | select(.body | contains("sonarqube-analysis-bot")) | .id' | head -1)
+          echo "[DEBUG] Existing SonarQube comment ID: $COMMENT_ID" >&2
+
+          if [ -n "$COMMENT_ID" ]; then
+            echo "[DEBUG] Updating existing comment (ID: $COMMENT_ID)..." >&2
+            RESPONSE=$(curl -s -w "\n[DEBUG] Forgejo PATCH HTTP status: %{http_code}\n" -X PATCH \
+              -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "{\"body\":\"$(cat /tmp/sonar-comment.txt)\"}" \
+              "${{ github.api_url }}/repos/${{ github.repository }}/issues/comments/$COMMENT_ID")
+            echo "$RESPONSE" >&2
+          else
+            echo "[DEBUG] Creating new comment..." >&2
+            RESPONSE=$(curl -s -w "\n[DEBUG] Forgejo POST HTTP status: %{http_code}\n" -X POST \
+              -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "{\"body\":\"$(cat /tmp/sonar-comment.txt)\"}" \
+              "${{ github.api_url }}/repos/${{ github.repository }}/issues/$PR_NUMBER/comments")
+            echo "$RESPONSE" >&2
+          fi
+
+          # Fail the job if quality gate failed
+          if [ "$QG_STATUS" != "OK" ]; then
+            echo "Quality gate failed!"
+            exit 1
+          fi
+
+  dependency-changes:
+    runs-on:
+      - x86
+      - kvm
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
+
+      - name: Checkout PR base
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - name: Compare pubspec.lock and report dependency changes
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set +e  # Let the Python comparator decide what's a real failure
+
+          echo "[DEBUG] Generating dependency reports for base and head..." >&2
+
+          # Run head's flake against both lockfiles. base may not have the
+          # pubspec-deps-json runnable yet (e.g. on the PR that introduces
+          # it), so we always invoke head's. The "path:./head" form points
+          # nix at the head checkout's flake; lockfile args are resolved
+          # against the job's cwd.
+          nix run -L "path:./head#pubspec-deps-json" -- base/pubspec.lock > base-deps.json
+          nix run -L "path:./head#pubspec-deps-json" -- head/pubspec.lock > head-deps.json
+
+          # Generate comparison report
+          cat > /tmp/compare-deps.py << 'PYEOF'
+          import json
+          import sys
+
+          with open("base-deps.json") as f:
+              base_data = json.load(f)
+
+          with open("head-deps.json") as f:
+              head_data = json.load(f)
+
+          # Create dictionaries with full metadata
+          base_deps = {dep["name"]: dep for dep in base_data["dependencies"]}
+          head_deps = {dep["name"]: dep for dep in head_data["dependencies"]}
+
+          changes = []
+
+          # Check for version changes and removals
+          for name, base_dep in base_deps.items():
+              if name not in head_deps:
+                  changes.append(("removed", name, base_dep, None))
+              elif base_dep["version"] != head_deps[name]["version"]:
+                  changes.append(("changed", name, base_dep, head_deps[name]))
+
+          # Check for additions
+          for name, head_dep in head_deps.items():
+              if name not in base_deps:
+                  changes.append(("added", name, None, head_dep))
+
+          if not changes:
+              print("NO_CHANGES")
+              sys.exit(0)
+
+          def get_link_url(dep):
+              """Get the best URL for a dependency, prioritizing changelog over homepage."""
+              if dep is None:
+                  return None
+              # Priority: changelog first, then homepage
+              return dep.get("changelog") or dep.get("homepage")
+
+          def format_package_name(name, dep):
+              """Format package name as a link if URL is available."""
+              url = get_link_url(dep)
+              if url:
+                  return f"[`{name}`]({url})"
+              return f"`{name}`"
+
+          # Generate markdown table
+          print("<!-- pubspec-changes-bot -->")
+          print("## 📦 Pubspec Changes")
+          print()
+          print("| Package | Base Version | Head Version | Change |")
+          print("|---------|--------------|--------------|--------|")
+
+          for change_type, name, base_dep, head_dep in sorted(changes, key=lambda x: (x[0], x[1])):
+              if change_type == "added":
+                  pkg_name = format_package_name(name, head_dep)
+                  head_ver = head_dep["version"]
+                  print(f"| {pkg_name} | - | `{head_ver}` | ➕ Added |")
+              elif change_type == "removed":
+                  pkg_name = format_package_name(name, base_dep)
+                  base_ver = base_dep["version"]
+                  print(f"| {pkg_name} | `{base_ver}` | - | ➖ Removed |")
+              elif change_type == "changed":
+                  # For changed packages, prefer head metadata
+                  pkg_name = format_package_name(name, head_dep)
+                  base_ver = base_dep["version"]
+                  head_ver = head_dep["version"]
+                  print(f"| {pkg_name} | `{base_ver}` | `{head_ver}` | 🔄 Updated |")
+          PYEOF
+
+          # Run comparison script
+          python3 /tmp/compare-deps.py > /tmp/deps-comment.txt
+          COMPARISON_EXIT=$?
+
+          if [ $COMPARISON_EXIT -ne 0 ] || grep -q "NO_CHANGES" /tmp/deps-comment.txt; then
+            echo "[DEBUG] No dependency version changes detected" >&2
+            exit 0
+          fi
+
+          echo "[DEBUG] Dependency changes detected, posting comment..." >&2
+          cat /tmp/deps-comment.txt >&2
+
+          # Check if a comment from this bot already exists
+          EXISTING_COMMENTS=$(curl -s \
+            -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/issues/$PR_NUMBER/comments")
+
+          COMMENT_ID=$(echo "$EXISTING_COMMENTS" | jq -r '.[] | select(.body | contains("pubspec-changes-bot")) | .id' | head -1)
+          echo "[DEBUG] Existing pubspec comment ID: $COMMENT_ID" >&2
+
+          # Build JSON payload using jq to properly escape content
+          COMMENT_JSON=$(jq -n --rawfile body /tmp/deps-comment.txt '{body: $body}')
+
+          if [ -n "$COMMENT_ID" ]; then
+            echo "[DEBUG] Updating existing comment (ID: $COMMENT_ID)..." >&2
+            curl -s -X PATCH \
+              -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "$COMMENT_JSON" \
+              "${{ github.api_url }}/repos/${{ github.repository }}/issues/comments/$COMMENT_ID"
+          else
+            echo "[DEBUG] Creating new comment..." >&2
+            curl -s -X POST \
+              -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "$COMMENT_JSON" \
+              "${{ github.api_url }}/repos/${{ github.repository }}/issues/$PR_NUMBER/comments"
+          fi
+
+          echo "[DEBUG] Pubspec changes comment posted successfully" >&2

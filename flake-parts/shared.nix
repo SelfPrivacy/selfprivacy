@@ -99,7 +99,7 @@
 
         desktopFile = ../selfprivacy.desktop;
         appstreamFile = ../selfprivacy.metainfo.xml;
-        iconPNGFile = ../assets/images/icon/logo_android.png;
+        iconPNGFile = ../assets/images/icon/logo_512.png;
         iconSVGFile = ../assets/images/icon/logo.svg;
 
         # `nix run` applications

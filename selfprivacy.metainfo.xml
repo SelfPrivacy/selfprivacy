@@ -1,13 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>selfprivacy</id>
+
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
+  <content_rating type="oars-1.1" />
+
   <name>SelfPrivacy</name>
+  <developer id="org.selfprivacy">
+    <name>SelfPrivacy</name>
+  </developer>
+
+  <url type="bugtracker">https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues</url>
+  <url type="homepage">https://selfprivacy.org/</url>
+  <url type="contact">https://forum.selfprivacy.org/</url>
+  <url type="faq">https://selfprivacy.org/docs</url>
+  <url type="translate">https://weblate.selfprivacy.org/</url>
+  <url type="vcs-browser">https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://selfprivacy.org/images/flathub/08.png</image>
+      <caption>Home screen showing the jobs list, server, DNS, and backups configuration buttons</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://selfprivacy.org/images/flathub/09.png</image>
+      <caption>Server stats screen that shows disk and CPU usage, with a button to access the server's settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://selfprivacy.org/images/flathub/10.png</image>
+      <caption>More verbose screen that shows used disk storage per each installed service</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://selfprivacy.org/images/flathub/11.png</image>
+      <caption>Services screen to configure individual installed services</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://selfprivacy.org/images/flathub/13.png</image>
+      <caption>Service's screen to manipulate its' settings: start/restart/stop, delete, backup etc.</caption>
+    </screenshot>
+  </screenshots>
+
   <summary>SelfPrivacy app allows you to set up self-hosted services and manage them</summary>
   <description><p>SelfPrivacy is a platform on your cloud hosting that allows to deploy your own private services and control them using a mobile application.</p></description>
+
   <launchable type="desktop-id">selfprivacy.desktop</launchable>
+
   <releases>
-    <release version="0.13.7" date="2026-06-28" />
+    <release version="0.13.7" date="2026-06-28">
+      <description>
+        <p>Note: versions 0.13.5 and 0.13.6 were only published on iOS. This changelog includes changes between 0.13.4 and 0.13.7.</p>
+        <p><em>Features</em></p>
+        <ul>
+        <li><em>Porkbun DNS provider support</em> (#677, resolves #507)</li>
+        <li><em>Automatic server token rotation</em> (#686)</li>
+        <li>Allow installing a server without Backblaze credentials (backups can be configured later)</li>
+        <li>Allow entering a new volume size manually when extending storage (#652, resolves #174)</li>
+        </ul>
+        <p><em>Bug Fixes</em></p>
+        <ul>
+        <li>Do not silently mint a new encryption key when the existing one cannot be loaded — prevents accidental data loss (#693)</li>
+        <li>Fix refetch TTL being a no-op, which caused the app to refresh everything every 10 seconds (#686)</li>
+        <li>Filter out Hetzner tiers that are no longer available, and sort the list by price (#681, resolves #665)</li>
+        <li>Improve job subscription teardown (#686)</li>
+        <li>Fix Hive failing to find its path on Linux, which resulted in a black screen (#687)</li>
+        <li>Fix unclickable hyperlinks in Markdown instructions on Flatpak builds (#674, resolves #578)</li>
+        <li>Re-enable APK compression after the Flutter update inflated APK size to ~80 MB (#694)</li>
+        <li>Report the correct app version on Flatpak and Windows builds (resolves #503)</li>
+        </ul>
+        <p><em>Refactor</em></p>
+        <ul>
+        <li>Detach non-setup layers of the UI from <code>ServerInstallationCubit</code> — a step towards retiring it as the global app status source of truth (#685)</li>
+        <li>Properly dispose subscriptions when rotating the GraphQL token (#686)</li>
+        <li>Fix potential cold start issues (#686)</li>
+        <li>Return <code>null</code> instead of empty lists on failures so callers can distinguish &quot;empty&quot; from &quot;errored&quot; (#686)</li>
+        </ul>
+        <p><em>Build &amp; Packaging</em></p>
+        <ul>
+        <li><em>Major CI rehaul: the entire build pipeline is now driven by a Nix flake</em> (#680, #684, resolves #498, #383)</li>
+        <li>Linux: native Nix package, portable build targeting glibc 2.28, AppImage, DEB, RPM, Arch Linux, Snap, and Flatpak packages</li>
+        <li>Windows: ZIP and unsigned MSIX packages</li>
+        <li>macOS and iOS: unsigned builds produced in CI (#682)</li>
+        <li>Android: signed Google Play, F-Droid, and Standalone APK/AAB releases built via gradle2nix</li>
+        <li>Update Flutter to 3.35 (#664, #671)</li>
+        <li>Flake maintenance and upgrades for building on current nixpkgs (#660)</li>
+        <li>Reformat the project to the new styling rules</li>
+        </ul>
+      </description>
+    </release>
   </releases>
 </component>

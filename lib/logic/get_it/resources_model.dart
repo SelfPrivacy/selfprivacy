@@ -275,7 +275,15 @@ class WizardDataModel {
   Future<void> setServerProviderKey(final String key) async {
     _serverInstallation =
         (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
-          serverProviderKey: key,
+          serverProviderKey: () => key,
+        );
+    await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
+  }
+
+  Future<void> clearServerProviderKey() async {
+    _serverInstallation =
+        (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
+          serverProviderKey: () => null,
         );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }

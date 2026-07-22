@@ -500,6 +500,10 @@ class ServerInstallationRepository {
     );
   }
 
+  Future<void> clearServerProviderKey() async {
+    await getIt<WizardDataModel>().clearServerProviderKey();
+  }
+
   Future<void> saveServerType(final ServerType serverType) async {
     await getIt<WizardDataModel>().setServerTypeIdentifier(
       serverType.identifier,

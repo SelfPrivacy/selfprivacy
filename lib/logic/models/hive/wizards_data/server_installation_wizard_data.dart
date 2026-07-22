@@ -124,7 +124,7 @@ class ServerInstallationWizardData {
     final bool? isRecoveringServer,
     final User? rootUser,
     final ServerProviderType? serverProviderType,
-    final String? serverProviderKey,
+    final ValueGetter<String?>? serverProviderKey,
     final DnsProviderType? dnsProviderType,
     final String? dnsProviderToken,
     final String? dnsProviderTokenId,
@@ -147,7 +147,9 @@ class ServerInstallationWizardData {
     isRecoveringServer: isRecoveringServer ?? this.isRecoveringServer,
     rootUser: rootUser ?? this.rootUser,
     serverProviderType: serverProviderType ?? this.serverProviderType,
-    serverProviderKey: serverProviderKey ?? this.serverProviderKey,
+    serverProviderKey: serverProviderKey != null
+        ? serverProviderKey()
+        : this.serverProviderKey,
     dnsProviderType: dnsProviderType ?? this.dnsProviderType,
     dnsProviderToken: dnsProviderToken ?? this.dnsProviderToken,
     dnsProviderTokenId: dnsProviderTokenId ?? this.dnsProviderTokenId,

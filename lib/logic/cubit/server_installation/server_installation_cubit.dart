@@ -674,6 +674,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<void> skipSettingServerProviderKey() async {
+    await repository.clearServerProviderKey();
     emit(
       (state as ServerInstallationRecovery).copyWith(
         providerApiToken: null,

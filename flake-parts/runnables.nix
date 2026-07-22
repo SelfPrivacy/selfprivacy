@@ -163,17 +163,23 @@
           '';
         };
 
-        # deploy-android-google = pkgs.writeShellApplication {
-        #   name = "deploy-android-fdroid-apk";
-        #   runtimeInputs = [ ];
-        #   text = "";
-        # };
+        deploy-android-google = pkgs.writeShellApplication {
+          name = "deploy-android-google";
+          runtimeInputs = sp.deployTools;
+          text = ''
+            : "''${PLAY_JSON_KEY_FILE:?PLAY_JSON_KEY_FILE env var required}"
+            : "''${AAB_PATH:?AAB_PATH env var required}"
 
-        # deploy-android-fdroid = pkgs.writeShellApplication {
-        #   name = "deploy-android-fdroid-apk";
-        #   runtimeInputs = [ ];
-        #   text = "";
-        # };
+            PLAY_JSON_KEY_FILE="$(realpath "$PLAY_JSON_KEY_FILE")"
+            AAB_PATH="$(realpath "$AAB_PATH")"
+            export PLAY_JSON_KEY_FILE AAB_PATH
+
+            export FASTLANE_SKIP_UPDATE_CHECK=1
+            export FASTLANE_OPT_OUT_USAGE=1
+
+            fastlane android upload_internal
+          '';
+        };
       };
     };
 }

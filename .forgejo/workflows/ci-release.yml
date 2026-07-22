@@ -143,6 +143,21 @@ jobs:
           ssh -oUserKnownHostsFile=known_hosts deployer@selfprivacy.org \
             /var/lib/fdroid/update.sh
 
+      # Upload to the Google Play internal track
+      - env:
+          PLAY_JSON_KEY_FILE: play-key.json
+          AAB_PATH: selfprivacy-google-signed.aab
+          KEY_B64: ${{ secrets.CI_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          printf '%s' "$KEY_B64" | base64 -d > "$PLAY_JSON_KEY_FILE"
+          nix run .#deploy-android-google
+          rm "$PLAY_JSON_KEY_FILE"
+
+          if [[ -f "$PLAY_JSON_KEY_FILE" ]]; then
+            echo "Play key exists, exiting"
+            exit 1
+          fi
+
   release-macos:
     needs:
       - create-release

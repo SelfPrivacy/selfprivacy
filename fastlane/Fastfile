@@ -1,0 +1,19 @@
+default_platform(:android)
+
+platform :android do
+  desc 'Upload the signed production AAB to the Google Play internal track'
+  lane :upload_internal do
+    upload_to_play_store(
+      package_name: 'org.selfprivacy.app',
+      aab: ENV.fetch('AAB_PATH'),
+      json_key: ENV.fetch('PLAY_JSON_KEY_FILE'),
+      track: 'internal',
+      release_status: 'completed',
+      # Metadata in fastlane/metadata/android is F-Droid's copy and is stale;
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true
+    )
+  end
+end

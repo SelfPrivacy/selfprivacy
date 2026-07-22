@@ -111,11 +111,12 @@
 
           "build-ios"
 
+          "deploy-android-google"
+
           # "sign-android"
           # "sign-macos"
           # "sign-ios"
 
-          # "deploy-android"
           # "deploy-macos"
           # "deploy-ios"
         ];
@@ -226,6 +227,11 @@
           ourJava
           apksigner
           fastlane
+        ];
+
+        deployTools = with pkgs; [
+          fastlane
+          coreutils
         ];
 
         fdroidTools = with pkgs; [ fdroidserver ];

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/get_it/console_model.dart';

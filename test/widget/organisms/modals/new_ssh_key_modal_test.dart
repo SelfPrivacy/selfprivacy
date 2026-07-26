@@ -85,7 +85,9 @@ void main() {
   setUp(() {
     jobsCubit = MockJobsCubit();
     when(() => jobsCubit.state).thenReturn(JobsStateEmpty());
-    when(() => jobsCubit.stream).thenAnswer((_) => const Stream<JobsState>.empty());
+    when(
+      () => jobsCubit.stream,
+    ).thenAnswer((_) => const Stream<JobsState>.empty());
   });
 
   group('NewSshKeyModal', () {

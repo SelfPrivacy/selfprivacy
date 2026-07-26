@@ -20,8 +20,8 @@ class ServerInstallationWizardDataAdapter
     return ServerInstallationWizardData(
       hasFinalChecked: fields[0] as bool,
       isServerStarted: fields[1] as bool,
-      isServerResetedFirstTime: fields[2] as bool,
-      isServerResetedSecondTime: fields[3] as bool,
+      isCertificateVerified: fields[2] as bool,
+      isServerRebooted: fields[3] as bool,
       isLoading: fields[4] as bool,
       isRecoveringServer: fields[5] as bool,
       rootUser: fields[6] as User?,
@@ -49,9 +49,9 @@ class ServerInstallationWizardDataAdapter
       ..writeByte(1)
       ..write(obj.isServerStarted)
       ..writeByte(2)
-      ..write(obj.isServerResetedFirstTime)
+      ..write(obj.isCertificateVerified)
       ..writeByte(3)
-      ..write(obj.isServerResetedSecondTime)
+      ..write(obj.isServerRebooted)
       ..writeByte(4)
       ..write(obj.isLoading)
       ..writeByte(5)

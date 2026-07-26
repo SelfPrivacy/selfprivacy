@@ -389,22 +389,20 @@ class WizardDataModel {
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerRebootedFirstTime({
-    required final bool isRebooted,
+  Future<void> setIsCertificateVerified({
+    required final bool isVerified,
   }) async {
     _serverInstallation =
         (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
-          isServerResetedFirstTime: isRebooted,
+          isCertificateVerified: isVerified,
         );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }
 
-  Future<void> setIsServerRebootedSecondTime({
-    required final bool isRebooted,
-  }) async {
+  Future<void> setIsServerRebooted({required final bool isRebooted}) async {
     _serverInstallation =
         (_serverInstallation ?? ServerInstallationWizardData.empty()).copyWith(
-          isServerResetedSecondTime: isRebooted,
+          isServerRebooted: isRebooted,
         );
     await _box.put(BNames.serverInstallationWizardData, _serverInstallation);
   }

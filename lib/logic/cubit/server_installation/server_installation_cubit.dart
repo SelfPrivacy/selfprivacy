@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -31,10 +31,11 @@ export 'package:provider/provider.dart';
 part '../server_installation/server_installation_state.dart';
 
 class ServerInstallationCubit extends Cubit<ServerInstallationState> {
-  ServerInstallationCubit() : super(const ServerInstallationEmpty());
+  ServerInstallationCubit({final ServerInstallationRepository? repository})
+    : repository = repository ?? ServerInstallationRepository(),
+      super(const ServerInstallationEmpty());
 
-  final ServerInstallationRepository repository =
-      ServerInstallationRepository();
+  final ServerInstallationRepository repository;
 
   Timer? timer;
 
@@ -50,12 +51,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     } else if (state is ServerInstallationNotFinished) {
       if (state.progress == ServerSetupProgress.serverCreated) {
         await startServerIfDnsIsOkay(state: state);
-      } else if (state.progress == ServerSetupProgress.serverStarted) {
-        await resetServerIfServerIsOkay(state: state);
-      } else if (state.progress == ServerSetupProgress.serverResetedFirstTime) {
-        await oneMoreReset(state: state);
-      } else if (state.progress ==
-          ServerSetupProgress.serverResetedSecondTime) {
+      } else if (state.progress == ServerSetupProgress.serverStarted ||
+          state.progress == ServerSetupProgress.certificateVerified) {
+        await waitForCertificate(state: state);
+      } else if (state.progress == ServerSetupProgress.serverRebooted) {
         await finishCheckIfServerIsOkay(state: state);
       } else {
         emit(state);
@@ -351,11 +350,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       emit(newState);
       unawaited(
-        runDelayed(
-          resetServerIfServerIsOkay,
-          const Duration(seconds: 60),
-          newState,
-        ),
+        runDelayed(waitForCertificate, const Duration(seconds: 60), newState),
       );
     } else {
       final ServerInstallationNotFinished newState = dataState.copyWith(
@@ -373,7 +368,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
   }
 
-  Future<void> resetServerIfServerIsOkay({
+  Future<void> waitForCertificate({
     final ServerInstallationNotFinished? state,
   }) async {
     final ServerInstallationNotFinished dataState =
@@ -381,48 +376,35 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
-    final bool isServerWorking = await repository.isHttpServerWorking();
+    final ServerProbeResult probe = await repository.probeServer();
 
-    if (isServerWorking) {
-      const Duration pauseDuration = Duration(seconds: 30);
-      emit(
-        TimerState(
-          dataState: dataState,
-          timerStart: DateTime.now(),
-          isLoading: false,
-          duration: pauseDuration,
-        ),
+    if (probe == ServerProbeResult.reachable) {
+      await repository.saveIsCertificateVerified(certificateVerified: true);
+
+      final ServerInstallationNotFinished newState = dataState.copyWith(
+        isCertificateVerified: true,
+        isWaitingForCertificate: false,
+        isLoading: false,
       );
-      timer = Timer(pauseDuration, () async {
-        final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerRebootedFirstTime(
-          serverRebootedFirstTime: true,
-        );
-        await repository.saveServerDetails(serverDetails);
 
-        final ServerInstallationNotFinished newState = dataState.copyWith(
-          isServerResetedFirstTime: true,
-          serverDetails: serverDetails,
-          isLoading: false,
-        );
-
-        emit(newState);
-        unawaited(
-          runDelayed(oneMoreReset, const Duration(seconds: 60), newState),
-        );
-      });
-    } else {
+      emit(newState);
       unawaited(
-        runDelayed(
-          resetServerIfServerIsOkay,
-          const Duration(seconds: 60),
-          dataState,
-        ),
+        runDelayed(rebootServer, const Duration(seconds: 30), newState),
+      );
+    } else {
+      final ServerInstallationNotFinished newState = dataState.copyWith(
+        isWaitingForCertificate:
+            probe == ServerProbeResult.untrustedCertificate,
+        isLoading: false,
+      );
+      emit(newState);
+      unawaited(
+        runDelayed(waitForCertificate, const Duration(seconds: 60), newState),
       );
     }
   }
 
-  Future<void> oneMoreReset({
+  Future<void> rebootServer({
     final ServerInstallationNotFinished? state,
   }) async {
     final ServerInstallationNotFinished dataState =
@@ -430,45 +412,32 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
-    final bool isServerWorking = await repository.isHttpServerWorking();
+    final ServerHostingDetails? serverDetails = await repository.restart();
 
-    if (isServerWorking) {
-      const Duration pauseDuration = Duration(seconds: 30);
-      emit(
-        TimerState(
-          dataState: dataState,
-          timerStart: DateTime.now(),
-          isLoading: false,
-          duration: pauseDuration,
-        ),
-      );
-      timer = Timer(pauseDuration, () async {
-        final ServerHostingDetails serverDetails = await repository.restart();
-        await repository.saveIsServerRebootedSecondTime(
-          serverRebootedSecondTime: true,
-        );
-        await repository.saveServerDetails(serverDetails);
-
-        final ServerInstallationNotFinished newState = dataState.copyWith(
-          isServerResetedSecondTime: true,
-          serverDetails: serverDetails,
-          isLoading: false,
-        );
-
-        emit(newState);
-        unawaited(
-          runDelayed(
-            finishCheckIfServerIsOkay,
-            const Duration(seconds: 60),
-            newState,
-          ),
-        );
-      });
-    } else {
+    if (serverDetails == null) {
       unawaited(
-        runDelayed(oneMoreReset, const Duration(seconds: 60), dataState),
+        runDelayed(rebootServer, const Duration(seconds: 60), dataState),
       );
+      return;
     }
+
+    await repository.saveIsServerRebooted(serverRebooted: true);
+    await repository.saveServerDetails(serverDetails);
+
+    final ServerInstallationNotFinished newState = dataState.copyWith(
+      isServerRebooted: true,
+      serverDetails: serverDetails,
+      isLoading: false,
+    );
+
+    emit(newState);
+    unawaited(
+      runDelayed(
+        finishCheckIfServerIsOkay,
+        const Duration(seconds: 60),
+        newState,
+      ),
+    );
   }
 
   Future<void> finishCheckIfServerIsOkay({
@@ -480,7 +449,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit(TimerState(dataState: dataState, isLoading: true));
 
     final bool isServerWorking = await repository.isHttpServerWorking();
-    TlsOptions.verifyCertificate = true;
 
     if (isServerWorking) {
       bool dkimCreated = true;
@@ -806,12 +774,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.setDnsApiToken(credential);
 
     await repository.saveIsServerStarted(serverStarted: true);
-    await repository.saveIsServerRebootedFirstTime(
-      serverRebootedFirstTime: true,
-    );
-    await repository.saveIsServerRebootedSecondTime(
-      serverRebootedSecondTime: true,
-    );
+    await repository.saveIsCertificateVerified(certificateVerified: true);
+    await repository.saveIsServerRebooted(serverRebooted: true);
     await repository.saveIsRecoveringServer(isRecoveringServer: false);
     late final GenericResult<ServerType?>? serverType;
     if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
@@ -875,7 +839,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<void> clearAppConfig() async {
     closeTimer();
     ProvidersController.clearProviders();
-    TlsOptions.verifyCertificate = false;
+    await getIt<DeveloperSettingsModel>().clear();
+    getIt<TlsContext>().reset();
     await repository.clearAppConfig();
     emit(const ServerInstallationEmpty());
   }

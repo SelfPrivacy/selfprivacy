@@ -318,12 +318,6 @@ class BNames {
   static String isLoading = 'isLoading';
 
   /// A boolean field of [serverInstallationBox] box.
-  static String isServerResetedFirstTime = 'isServerResetedFirstTime';
-
-  /// A boolean field of [serverInstallationBox] box.
-  static String isServerResetedSecondTime = 'isServerResetedSecondTime';
-
-  /// A boolean field of [serverInstallationBox] box.
   static String isRecoveringServer = 'isRecoveringServer';
 
   /// Resources and provider tokens box,

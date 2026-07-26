@@ -397,12 +397,15 @@ class InitializingPage extends StatelessWidget {
     final state = appConfigCubit.state as TimerState;
     late int doneCount;
     late String? text;
-    if (state.isServerResetedSecondTime) {
+    if (state.isServerRebooted) {
       text = 'initializing.server_rebooted'.tr();
       doneCount = 3;
-    } else if (state.isServerResetedFirstTime) {
-      text = 'initializing.one_more_restart'.tr();
+    } else if (state.isCertificateVerified) {
+      text = 'initializing.certificate_issued'.tr();
       doneCount = 2;
+    } else if (state.isWaitingForCertificate) {
+      text = 'initializing.waiting_for_certificate'.tr();
+      doneCount = 1;
     } else if (state.isServerStarted) {
       text = 'initializing.server_started'.tr();
       doneCount = 1;

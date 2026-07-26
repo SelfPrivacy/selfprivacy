@@ -13,8 +13,8 @@ class ServerInstallationWizardData {
   const ServerInstallationWizardData({
     required this.hasFinalChecked,
     required this.isServerStarted,
-    required this.isServerResetedFirstTime,
-    required this.isServerResetedSecondTime,
+    required this.isCertificateVerified,
+    required this.isServerRebooted,
     required this.isLoading,
     required this.isRecoveringServer,
     required this.rootUser,
@@ -36,8 +36,8 @@ class ServerInstallationWizardData {
     : this(
         hasFinalChecked: false,
         isServerStarted: false,
-        isServerResetedFirstTime: false,
-        isServerResetedSecondTime: false,
+        isCertificateVerified: false,
+        isServerRebooted: false,
         isLoading: false,
         isRecoveringServer: false,
         rootUser: null,
@@ -61,9 +61,9 @@ class ServerInstallationWizardData {
   @HiveField(1)
   final bool isServerStarted;
   @HiveField(2)
-  final bool isServerResetedFirstTime;
+  final bool isCertificateVerified;
   @HiveField(3)
-  final bool isServerResetedSecondTime;
+  final bool isServerRebooted;
   @HiveField(4)
   final bool isLoading;
 
@@ -118,8 +118,8 @@ class ServerInstallationWizardData {
   ServerInstallationWizardData copyWith({
     final bool? hasFinalChecked,
     final bool? isServerStarted,
-    final bool? isServerResetedFirstTime,
-    final bool? isServerResetedSecondTime,
+    final bool? isCertificateVerified,
+    final bool? isServerRebooted,
     final bool? isLoading,
     final bool? isRecoveringServer,
     final User? rootUser,
@@ -139,10 +139,8 @@ class ServerInstallationWizardData {
   }) => ServerInstallationWizardData(
     hasFinalChecked: hasFinalChecked ?? this.hasFinalChecked,
     isServerStarted: isServerStarted ?? this.isServerStarted,
-    isServerResetedFirstTime:
-        isServerResetedFirstTime ?? this.isServerResetedFirstTime,
-    isServerResetedSecondTime:
-        isServerResetedSecondTime ?? this.isServerResetedSecondTime,
+    isCertificateVerified: isCertificateVerified ?? this.isCertificateVerified,
+    isServerRebooted: isServerRebooted ?? this.isServerRebooted,
     isLoading: isLoading ?? this.isLoading,
     isRecoveringServer: isRecoveringServer ?? this.isRecoveringServer,
     rootUser: rootUser ?? this.rootUser,

@@ -6,7 +6,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -98,7 +97,6 @@ class ServerInstallationRepository {
         );
       } else {
         // We have a server set up, so we load it
-        TlsOptions.verifyCertificate = true;
         return ServerInstallationFinished(
           providerApiToken: providerApiToken,
           serverTypeIdentificator: serverTypeIdentificator,
@@ -261,7 +259,16 @@ class ServerInstallationRepository {
     return api.isHttpServerWorking();
   }
 
-  Future<ServerHostingDetails> restart() async {
+  Future<ServerProbeResult> probeServer() {
+    final ServerApi api = ServerApi(
+      overrideDomain:
+          getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
+      isWithToken: false,
+    );
+    return api.probe();
+  }
+
+  Future<ServerHostingDetails?> restart() async {
     final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
 
     final result = await ServerApi(
@@ -272,13 +279,11 @@ class ServerInstallationRepository {
       isWithToken: true,
     ).reboot();
 
-    if (result.success && result.data != null) {
-      server.copyWith(startTime: result.data);
-    } else {
-      // getIt<NavigationService>().showSnackBar('jobs.reboot_failed'.tr());
+    if (!result.success || result.data == null) {
+      return null;
     }
 
-    return server;
+    return server.copyWith(startTime: result.data);
   }
 
   Future<ServerHostingDetails> powerOn() {
@@ -541,19 +546,19 @@ class ServerInstallationRepository {
     await getIt<WizardDataModel>().setIsServerStarted(isStarted: serverStarted);
   }
 
-  Future<void> saveIsServerRebootedFirstTime({
-    required final bool serverRebootedFirstTime,
+  Future<void> saveIsCertificateVerified({
+    required final bool certificateVerified,
   }) async {
-    await getIt<WizardDataModel>().setIsServerRebootedFirstTime(
-      isRebooted: serverRebootedFirstTime,
+    await getIt<WizardDataModel>().setIsCertificateVerified(
+      isVerified: certificateVerified,
     );
   }
 
-  Future<void> saveIsServerRebootedSecondTime({
-    required final bool serverRebootedSecondTime,
+  Future<void> saveIsServerRebooted({
+    required final bool serverRebooted,
   }) async {
-    await getIt<WizardDataModel>().setIsServerRebootedSecondTime(
-      isRebooted: serverRebootedSecondTime,
+    await getIt<WizardDataModel>().setIsServerRebooted(
+      isRebooted: serverRebooted,
     );
   }
 

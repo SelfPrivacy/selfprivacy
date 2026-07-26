@@ -9,8 +9,8 @@ abstract class ServerInstallationState extends Equatable {
     required this.rootUser,
     required this.serverDetails,
     required this.isServerStarted,
-    required this.isServerResetedFirstTime,
-    required this.isServerResetedSecondTime,
+    required this.isCertificateVerified,
+    required this.isServerRebooted,
     required this.installationDialoguePopUp,
     required this.serverLocation,
   });
@@ -24,7 +24,8 @@ abstract class ServerInstallationState extends Equatable {
     rootUser,
     serverDetails,
     isServerStarted,
-    isServerResetedFirstTime,
+    isCertificateVerified,
+    isServerRebooted,
     installationDialoguePopUp,
     serverLocation,
   ];
@@ -37,8 +38,8 @@ abstract class ServerInstallationState extends Equatable {
   final User? rootUser;
   final ServerHostingDetails? serverDetails;
   final bool isServerStarted;
-  final bool isServerResetedFirstTime;
-  final bool isServerResetedSecondTime;
+  final bool isCertificateVerified;
+  final bool isServerRebooted;
   final CallbackDialogueBranching? installationDialoguePopUp;
 
   bool get isServerProviderApiKeyFilled => providerApiToken != null;
@@ -74,8 +75,8 @@ abstract class ServerInstallationState extends Equatable {
       isPrimaryUserFilled,
       isServerCreated,
       isServerStarted,
-      isServerResetedFirstTime,
-      isServerResetedSecondTime,
+      isCertificateVerified,
+      isServerRebooted,
     ];
 
     return res;
@@ -97,11 +98,12 @@ class TimerState extends ServerInstallationNotFinished {
          rootUser: dataState.rootUser,
          serverDetails: dataState.serverDetails,
          isServerStarted: dataState.isServerStarted,
-         isServerResetedFirstTime: dataState.isServerResetedFirstTime,
-         isServerResetedSecondTime: dataState.isServerResetedSecondTime,
+         isCertificateVerified: dataState.isCertificateVerified,
+         isServerRebooted: dataState.isServerRebooted,
          dnsMatches: dataState.dnsMatches,
          installationDialoguePopUp: dataState.installationDialoguePopUp,
          customSshKey: dataState.customSshKey,
+         isWaitingForCertificate: dataState.isWaitingForCertificate,
        );
 
   final ServerInstallationNotFinished dataState;
@@ -121,18 +123,19 @@ enum ServerSetupProgress {
   userFilled,
   serverCreated,
   serverStarted,
-  serverResetedFirstTime,
-  serverResetedSecondTime,
+  certificateVerified,
+  serverRebooted,
 }
 
 class ServerInstallationNotFinished extends ServerInstallationState {
   const ServerInstallationNotFinished({
     required super.isServerStarted,
-    required super.isServerResetedFirstTime,
-    required super.isServerResetedSecondTime,
+    required super.isCertificateVerified,
+    required super.isServerRebooted,
     required this.isLoading,
     required this.dnsMatches,
     required this.customSshKey,
+    this.isWaitingForCertificate = false,
     super.providerApiToken,
     super.serverLocation,
     super.serverTypeIdentificator,
@@ -154,8 +157,8 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         serverDetails: data.serverDetails,
         rootUser: data.rootUser,
         isServerStarted: data.isServerStarted,
-        isServerResetedFirstTime: data.isServerResetedFirstTime,
-        isServerResetedSecondTime: data.isServerResetedSecondTime,
+        isCertificateVerified: data.isCertificateVerified,
+        isServerRebooted: data.isServerRebooted,
         isLoading: data.isLoading,
         dnsMatches: null,
         customSshKey: null,
@@ -165,6 +168,8 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   final bool isLoading;
   final Map<String, DnsRecordStatus>? dnsMatches;
   final String? customSshKey;
+
+  final bool isWaitingForCertificate;
 
   @override
   List<Object?> get props => [
@@ -176,7 +181,9 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     rootUser,
     serverDetails,
     isServerStarted,
-    isServerResetedFirstTime,
+    isCertificateVerified,
+    isServerRebooted,
+    isWaitingForCertificate,
     isLoading,
     dnsMatches,
     customSshKey,
@@ -192,12 +199,13 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final User? rootUser,
     final ServerHostingDetails? serverDetails,
     final bool? isServerStarted,
-    final bool? isServerResetedFirstTime,
-    final bool? isServerResetedSecondTime,
+    final bool? isCertificateVerified,
+    final bool? isServerRebooted,
     final bool? isLoading,
     final Map<String, DnsRecordStatus>? dnsMatches,
     final CallbackDialogueBranching? installationDialoguePopUp,
     final String? customSshKey,
+    final bool? isWaitingForCertificate,
   }) => ServerInstallationNotFinished(
     providerApiToken: providerApiToken ?? this.providerApiToken,
     serverLocation: serverLocation ?? this.serverLocation,
@@ -208,15 +216,15 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     rootUser: rootUser ?? this.rootUser,
     serverDetails: serverDetails ?? this.serverDetails,
     isServerStarted: isServerStarted ?? this.isServerStarted,
-    isServerResetedFirstTime:
-        isServerResetedFirstTime ?? this.isServerResetedFirstTime,
-    isServerResetedSecondTime:
-        isServerResetedSecondTime ?? this.isServerResetedSecondTime,
+    isCertificateVerified: isCertificateVerified ?? this.isCertificateVerified,
+    isServerRebooted: isServerRebooted ?? this.isServerRebooted,
     isLoading: isLoading ?? this.isLoading,
     dnsMatches: dnsMatches ?? this.dnsMatches,
     installationDialoguePopUp:
         installationDialoguePopUp ?? this.installationDialoguePopUp,
     customSshKey: customSshKey ?? this.customSshKey,
+    isWaitingForCertificate:
+        isWaitingForCertificate ?? this.isWaitingForCertificate,
   );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(
@@ -240,8 +248,8 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
         rootUser: null,
         serverDetails: null,
         isServerStarted: false,
-        isServerResetedFirstTime: false,
-        isServerResetedSecondTime: false,
+        isCertificateVerified: false,
+        isServerRebooted: false,
         isLoading: false,
         dnsMatches: null,
         installationDialoguePopUp: null,
@@ -260,8 +268,8 @@ class ServerInstallationFinished extends ServerInstallationState {
   }) : super(
          rootUser: null,
          isServerStarted: true,
-         isServerResetedFirstTime: true,
-         isServerResetedSecondTime: true,
+         isCertificateVerified: true,
+         isServerRebooted: true,
          installationDialoguePopUp: null,
        );
 
@@ -275,7 +283,7 @@ class ServerInstallationFinished extends ServerInstallationState {
     rootUser,
     serverDetails,
     isServerStarted,
-    isServerResetedFirstTime,
+    isCertificateVerified,
     installationDialoguePopUp,
   ];
 }
@@ -307,8 +315,8 @@ class ServerInstallationRecovery extends ServerInstallationState {
   }) : super(
          rootUser: null,
          isServerStarted: true,
-         isServerResetedFirstTime: true,
-         isServerResetedSecondTime: true,
+         isCertificateVerified: true,
+         isServerRebooted: true,
          installationDialoguePopUp: null,
        );
   final RecoveryStep currentStep;
@@ -324,7 +332,7 @@ class ServerInstallationRecovery extends ServerInstallationState {
     rootUser,
     serverDetails,
     isServerStarted,
-    isServerResetedFirstTime,
+    isCertificateVerified,
     currentStep,
     installationDialoguePopUp,
   ];

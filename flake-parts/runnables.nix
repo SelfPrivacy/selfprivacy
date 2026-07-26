@@ -99,9 +99,59 @@
         build-ios = callPackage ./runnables/build-ios.nix { inherit sp; };
 
         # sign-macos = null;
-        # sign-ios = null;
         # deploy-macos = null;
-        # deploy-ios = null;
+
+        sign-ios = pkgs.writeShellApplication {
+          name = "sign-ios";
+          runtimeInputs = sp.deployTools;
+          text = ''
+            : "''${MATCH_PASSWORD:?MATCH_PASSWORD env var required}"
+
+            # Auth goes separately via MATCH_GIT_BASIC_AUTHORIZATION
+            # (base64 of user:token) so no secret ends up in the logged URL
+            MATCH_GIT_URL="''${MATCH_GIT_URL:-https://git.selfprivacy.org/SelfPrivacy/fastlane-match.git}"
+            export MATCH_GIT_URL
+
+            # fastlane resolves relative paths against fastlane/, not the repo root
+            XCARCHIVE_PATH="$(realpath "''${XCARCHIVE_PATH:-Runner.xcarchive}")"
+            IPA_OUTPUT_DIR="$PWD"
+            export XCARCHIVE_PATH IPA_OUTPUT_DIR
+
+            DEVELOPER_DIR="${sp.ourXcode}/Contents/Developer"
+            export DEVELOPER_DIR
+            # security(1), codesign(1), and the xcodebuild/xcrun shims live in /usr/bin
+            export PATH="$PATH:/usr/bin"
+
+            export FASTLANE_SKIP_UPDATE_CHECK=1
+            export FASTLANE_OPT_OUT_USAGE=1
+
+            fastlane ios sign_release
+          '';
+        };
+
+        deploy-ios = pkgs.writeShellApplication {
+          name = "deploy-ios";
+          runtimeInputs = sp.deployTools;
+          text = ''
+            : "''${ASC_KEY_ID:?ASC_KEY_ID env var required}"
+            : "''${ASC_ISSUER_ID:?ASC_ISSUER_ID env var required}"
+            : "''${ASC_KEY_P8_FILE:?ASC_KEY_P8_FILE env var required}"
+
+            ASC_KEY_P8_FILE="$(realpath "$ASC_KEY_P8_FILE")"
+            IPA_PATH="$(realpath "''${IPA_PATH:-selfprivacy-ios-signed.ipa}")"
+            export ASC_KEY_P8_FILE IPA_PATH
+
+            DEVELOPER_DIR="${sp.ourXcode}/Contents/Developer"
+            export DEVELOPER_DIR
+            # fastlane's Transporter lookup goes through xcrun in /usr/bin
+            export PATH="$PATH:/usr/bin"
+
+            export FASTLANE_SKIP_UPDATE_CHECK=1
+            export FASTLANE_OPT_OUT_USAGE=1
+
+            fastlane ios upload_testflight
+          '';
+        };
 
         # FIXME: DRY these using cortesian products
 

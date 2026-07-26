@@ -3,7 +3,7 @@ name: Release CI
 on:
   push:
     tags:
-      - '*'
+      - "*"
   workflow_dispatch:
 
 jobs:
@@ -22,7 +22,6 @@ jobs:
               "{ \"tag_name\": \"${{ forgejo.ref_name }}\", \"name\": \"${{ forgejo.ref_name }}\" }" \
               "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases"
           fi
-
 
   release-linux:
     needs:
@@ -188,6 +187,10 @@ jobs:
     runs-on:
       - macos
 
+    concurrency:
+      group: ios-publish
+      cancel-in-progress: false
+
     env:
       ALL_PROXY: ${{ vars.CI_MACOS_ALL_PROXY }}
       all_proxy: ${{ vars.CI_MACOS_ALL_PROXY }}
@@ -203,6 +206,21 @@ jobs:
 
           curl -sf -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" -F \
             "attachment=@selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
+
+      - env:
+          MATCH_PASSWORD: ${{ secrets.CI_MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.CI_MATCH_GIT_BASIC_AUTHORIZATION }}
+        run: nix run .#sign-ios
+
+      - env:
+          ASC_KEY_ID: ${{ secrets.CI_ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.CI_ASC_ISSUER_ID }}
+          ASC_KEY_P8_FILE: asc-key.p8
+          KEY_B64: ${{ secrets.CI_ASC_KEY_P8 }}
+        run: |
+          printf '%s' "$KEY_B64" | base64 -d > "$ASC_KEY_P8_FILE"
+          nix run .#deploy-ios
+          rm "$ASC_KEY_P8_FILE"
 
   release-windows:
     needs:

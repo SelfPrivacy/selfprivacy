@@ -69,19 +69,19 @@ Duplicates the build environments above and adds new commands that are ran in cu
 
 Use as `nix run .#<name>`.
 
-| Name              | Note                                                                          |
-|-------------------|-------------------------------------------------------------------------------|
-| test-flutter      |                                                                               |
-| analyze-flutter   |                                                                               |
-| scan-sonarqube    |                                                                               |
-| pubspec-deps-json | JSON view of a `pubspec.lock` path; consumed by the CI dependency-changes job |
-| sign-android      |                                                                               |
-| deploy-android    |                                                                               |
-| sign-macos        |                                                                               |
-| deploy-macos      |                                                                               |
-| build-ios         |                                                                               |
-| sign-ios          |                                                                               |
-| deploy-ios        |                                                                               |
+| Name                                              | Note                                                                            |
+|---------------------------------------------------|---------------------------------------------------------------------------------|
+| test-flutter                                      | Unit tests with coverage; writes `tests.output` (JSON) and `coverage/lcov.info` |
+| analyze-flutter                                   |                                                                                 |
+| scan-sonarqube                                    | Needs `SONAR_TOKEN`                                                             |
+| pubspec-deps-json                                 | JSON view of a `pubspec.lock` path; consumed by the CI dependency-changes job   |
+| build-ios                                         | Unsigned `Runner.xcarchive` built outside the Nix sandbox                       |
+| sign-ios                                          | Re-signs the archive with match certificates, exports an App Store IPA          |
+| deploy-ios                                        | Uploads the signed IPA to TestFlight                                            |
+| sign-android-{google,fdroid,standalone,nightly}   | Signs the AAB (google) or APK (others)                                          |
+| deploy-android-google                             | Uploads the signed AAB to the Google Play internal track                        |
+| sign-macos                                        | Not implemented yet                                                             |
+| deploy-macos                                      | Not implemented yet                                                             |
 
 #### Shells
 
@@ -110,6 +110,36 @@ Create these secrets: `CI_KEYSTORE_FILE_GOOGLE`, `CI_KEYSTORE_FILE_FDROID`, `CI_
 They need the corresponding password secrets: `CI_KEYSTORE_PASS_GOOGLE`, `CI_KEYSTORE_PASS_FDROID`, `CI_KEYSTORE_PASS_STANDALONE`.
 
 You need to set `$CI_KEYSTORE_FILE` and `$CI_KEYSTORE_PASS` environment variables, where `$CI_KEYSTORE_FILE` is a path relative to the root of the source code or a full path.
+
+### Signing iOS Releases
+
+Apple signing assets (distribution certificate + App Store provisioning profile) are managed by [fastlane match](https://docs.fastlane.tools/actions/match/) and live encrypted in the `SelfPrivacy/fastlane-match` repo on our Forgejo. `nix run .#sign-ios` fetches them read-only into a throwaway keychain, re-signs the unsigned `Runner.xcarchive` produced by `build-ios`, and exports `selfprivacy-ios-signed.ipa` into the current directory.
+
+| Variable                        | How to prepare                                                                                                                                                  |
+|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `MATCH_PASSWORD`                | The passphrase match encrypts the repo contents with. Set once when the storage was created; shared via the password manager                                    |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | `printf '%s' 'user:token' \| base64 -w 0`. Passing auth as a Basic header instead of embedding it in the URL keeps the token out of fastlane's logged `git_url` |
+| `MATCH_GIT_URL`                 | Optional, defaults to the HTTPS URL of the match repo. HTTPS (not SSH) is deliberate: git-over-HTTPS honors the proxy variables, SSH does not                   |
+| `XCARCHIVE_PATH`                | Optional, defaults to `./Runner.xcarchive` — where `build-ios` puts it                                                                                          |
+
+Forgejo secrets: `CI_MATCH_PASSWORD`, `CI_MATCH_GIT_BASIC_AUTHORIZATION` (stored already base64-encoded, passed to the env as-is).
+
+Certificate renewal: Apple distribution certificates expire yearly and CI uses match in read-only mode, so it can only consume, never renew. Renew from a developer machine with write access to the match repo: `fastlane match appstore` (without `readonly`), authenticated against App Store Connect.
+
+### Deploying iOS Releases to TestFlight
+
+`nix run .#deploy-ios` uploads the signed IPA via the `ios upload_testflight` lane, authenticated with an App Store Connect API key.
+
+| Variable          | How to prepare                                                                        |
+|-------------------|---------------------------------------------------------------------------------------|
+| `ASC_KEY_ID`      | The Key ID                                                                            |
+| `ASC_ISSUER_ID`   | The Issuer ID shown at the top of the Team Keys page                                  |
+| `ASC_KEY_P8_FILE` | Path to the downloaded `.p8` file                                                     |
+| `IPA_PATH`        | Optional, defaults to `./selfprivacy-ios-signed.ipa`,  where `sign-ios` puts it       |
+
+Forgejo secrets: `CI_ASC_KEY_ID`, `CI_ASC_ISSUER_ID`, `CI_ASC_KEY_P8` (the `.p8` file encoded with `base64 -w 0`; the workflow decodes it to a file, uploads, and deletes it).
+
+TestFlight rejects any build number (`+N` in the pubspec version) it has already seen, so bump the pubspec version past both the last TestFlight and Play uploads before tagging a release. The build number is baked into the archive at build time.
 
 ### Updating Buildroot Packages
 
@@ -246,6 +276,13 @@ EOF
 ```
 
 To bypass the Flutter's quirk in copying files from Nix store, we substitute the `lipo` binary to make it run `chmod -R +w` during the build process. See the `ci/darwin/` files for that.
+
+### iOS Signing
+
+The archive is built unsigned (`CODE_SIGNING_ALLOWED=NO`) and signed afterwards by the `ios sign_release` fastlane lane, which keeps Apple credentials out of the build environment entirely. Two quirks the lane works around:
+
+- The linker still puts ad-hoc signatures on embedded frameworks, with the code signature identifier set to the bare binary name (`App`, `Flutter`) instead of the bundle identifier. `xcodebuild -exportArchive` preserves existing identifiers when re-signing, and App Store Connect then rejects the upload with "Invalid Code Signature Identifier". So the lane ad-hoc re-signs every framework *bundle* first, which re-derives the identifier from its `Info.plist`.
+- Signing identities are imported into a throwaway keychain created for the run and deleted afterwards, so CI runs don't accumulate state in (or depend on) the runner's login keychain. The keychain must be added to the search list, otherwise `codesign` won't find the identity.
 
 ### Windows
 

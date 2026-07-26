@@ -42,6 +42,14 @@ platform :ios do
         keychain_name: keychain_name,
         keychain_password: keychain_password
       )
+      frameworks = File.join(
+        ENV.fetch('XCARCHIVE_PATH'),
+        'Products/Applications/Runner.app/Frameworks/*.framework'
+      )
+      Dir.glob(frameworks).each do |framework|
+        sh('codesign', '--force', '--sign', '-', framework)
+      end
+
       build_app(
         workspace: File.expand_path('../ios/Runner.xcworkspace', __dir__),
         scheme: 'Runner',

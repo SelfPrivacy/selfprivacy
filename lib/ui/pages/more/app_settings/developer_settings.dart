@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -21,6 +20,15 @@ class DeveloperSettingsPage extends StatefulWidget {
 }
 
 class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
+  DeveloperSettingsModel get _settings => getIt<DeveloperSettingsModel>();
+
+  String? get _apiHost {
+    final String? domain =
+        getIt<ResourcesModel>().serverDomain?.domainName ??
+        getIt<WizardDataModel>().serverInstallation?.serverDomain?.domainName;
+    return domain == null ? null : 'api.$domain';
+  }
+
   @override
   Widget build(final BuildContext context) => BrandHeroScreen(
     hasBackButton: true,
@@ -33,25 +41,32 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
       SwitchListTile.adaptive(
         title: Text('developer_settings.use_staging_acme'.tr()),
         subtitle: Text('developer_settings.use_staging_acme_description'.tr()),
-        value: TlsOptions.stagingAcme,
-        onChanged: (final bool value) =>
-            setState(() => TlsOptions.stagingAcme = value),
+        value: _settings.stagingAcme,
+        onChanged: (final bool value) async {
+          await _settings.setStagingAcme(enabled: value);
+          if (mounted) {
+            setState(() {});
+          }
+        },
       ),
       SwitchListTile.adaptive(
         title: Text('developer_settings.ignore_tls'.tr()),
         subtitle: Text('developer_settings.ignore_tls_description'.tr()),
-        value: !TlsOptions.verifyCertificate,
-        onChanged: (final bool value) =>
-            setState(() => TlsOptions.verifyCertificate = !value),
+        value: _apiHost != null && _settings.unverifiedTlsHost == _apiHost,
+        onChanged: _apiHost == null
+            ? null
+            : (final bool value) => setState(
+                () => _settings.unverifiedTlsHost = value ? _apiHost : null,
+              ),
       ),
       SwitchListTile.adaptive(
         title: Text('developer_settings.allow_ssh_key_at_setup'.tr()),
         subtitle: Text(
           'developer_settings.allow_ssh_key_at_setup_description'.tr(),
         ),
-        value: TlsOptions.allowCustomSshKeyDuringSetup,
+        value: _settings.allowCustomSshKeyDuringSetup,
         onChanged: (final bool value) =>
-            setState(() => TlsOptions.allowCustomSshKeyDuringSetup = value),
+            setState(() => _settings.allowCustomSshKeyDuringSetup = value),
       ),
       SectionTitle(title: 'troubleshooting.title'.tr()),
       ListTile(

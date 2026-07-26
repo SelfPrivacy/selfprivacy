@@ -266,6 +266,9 @@ class BNames {
   /// A string field
   static String appLocale = 'appLocale';
 
+  /// A boolean field of [appSettingsBox] box.
+  static String stagingAcme = 'stagingAcme';
+
   /// Server installation box. Contains server details and provider tokens.
   static String serverInstallationBox = 'appConfig';
 

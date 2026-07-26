@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
@@ -361,7 +361,7 @@ class InitializingPage extends StatelessWidget {
                   : 'initializing.create_server'.tr(),
             ),
             const SizedBox(height: 16),
-            if (TlsOptions.allowCustomSshKeyDuringSetup)
+            if (getIt<DeveloperSettingsModel>().allowCustomSshKeyDuringSetup)
               Column(
                 children: [
                   Text('developer_settings.title'.tr()),

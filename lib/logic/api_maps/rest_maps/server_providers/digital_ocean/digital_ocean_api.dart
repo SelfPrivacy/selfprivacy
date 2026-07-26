@@ -3,9 +3,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/api_maps/tls_options.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
@@ -90,7 +90,9 @@ class DigitalOceanApi extends RestApiMap {
     required final String? customSshKey,
     required final String region,
   }) async {
-    final String stagingAcme = TlsOptions.stagingAcme ? 'true' : 'false';
+    final String stagingAcme = getIt<DeveloperSettingsModel>().stagingAcme
+        ? 'true'
+        : 'false';
     final dnsProviderType = dnsApiCredential.provider.toInfectName();
 
     int? dropletId;

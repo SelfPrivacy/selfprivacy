@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
@@ -43,6 +44,8 @@ part 'volume_api.dart';
 part 'logs_api.dart';
 part 'monitoring_api.dart';
 
+enum ServerProbeResult { unreachable, untrustedCertificate, reachable }
+
 class ServerApi extends GraphQLApiMap
     with
         VolumeApi,
@@ -71,12 +74,16 @@ class ServerApi extends GraphQLApiMap
       overrideDomain ?? getIt<ResourcesModel>().serverDomain?.domainName;
   String? overrideDomain;
 
-  Future<String?> getApiVersion() async {
+  Future<String?> getApiVersion() => _getApiVersion();
+
+  Future<String?> _getApiVersion({
+    final TlsPolicy tlsPolicy = TlsPolicy.strict,
+  }) async {
     QueryResult<Query$GetApiVersion> response;
     String? apiVersion;
 
     try {
-      final GraphQLClient client = await getClient();
+      final GraphQLClient client = await getClient(tlsPolicy: tlsPolicy);
       response = await client.query$GetApiVersion();
       if (response.hasException) {
         logger(
@@ -587,6 +594,18 @@ class ServerApi extends GraphQLApiMap
   }
 
   Future<bool> isHttpServerWorking() async => (await getApiVersion()) != null;
+
+  Future<ServerProbeResult> probe() async {
+    assert(!isWithToken, 'the readiness probe must not carry a token');
+
+    if (await _getApiVersion() != null) {
+      return ServerProbeResult.reachable;
+    }
+    if (await _getApiVersion(tlsPolicy: TlsPolicy.allowUnverified) != null) {
+      return ServerProbeResult.untrustedCertificate;
+    }
+    return ServerProbeResult.unreachable;
+  }
 
   Future<GenericResult<String>> authorizeDevice(
     final DeviceToken deviceToken,

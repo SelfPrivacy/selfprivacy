@@ -16,8 +16,12 @@ final GetIt getIt = GetIt.instance;
 
 Future<void> getItSetup() async {
   final developerSettings = DeveloperSettingsModel();
+  final tlsContext = TlsContext(developerSettings);
+  await tlsContext.loadStagingRoots();
+
   getIt
     ..registerSingleton<DeveloperSettingsModel>(developerSettings)
+    ..registerSingleton<TlsContext>(tlsContext)
     ..registerSingleton<NavigationService>(NavigationService())
     ..registerSingleton<ConsoleModel>(ConsoleModel())
     ..registerSingleton<ResourcesModel>(

@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/io_client.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/tls_options.dart';
+import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
+import 'package:web_socket_channel/io.dart';
 
 void _addConsoleLog(final ConsoleLog message) =>
     getIt.get<ConsoleModel>().log(message);
@@ -62,17 +62,18 @@ abstract class GraphQLApiMap {
   void Function(String, {Object? error, StackTrace? stackTrace}) get logger =>
       const AppLogger(name: 'graphql_map').log;
 
-  Future<GraphQLClient> getClient() async {
-    IOClient? ioClient;
-    if (TlsOptions.stagingAcme || !TlsOptions.verifyCertificate) {
-      final HttpClient httpClient = HttpClient()
-        ..badCertificateCallback = (final cert, final host, final port) => true;
-      ioClient = IOClient(httpClient);
+  Future<GraphQLClient> getClient({
+    final TlsPolicy tlsPolicy = TlsPolicy.strict,
+  }) async {
+    if (tlsPolicy == TlsPolicy.allowUnverified && isWithToken) {
+      throw StateError(
+        'Refusing to send credentials over an unverified TLS connection',
+      );
     }
 
     final httpLink = HttpLink(
-      'https://api.$rootAddress/graphql',
-      httpClient: ioClient,
+      'https://$_host/graphql',
+      httpClient: getIt<TlsContext>().clientFor(host: _host, policy: tlsPolicy),
       parser: ResponseLoggingParser(),
       defaultHeaders: {'Accept-Language': _locale},
     );
@@ -96,8 +97,12 @@ abstract class GraphQLApiMap {
   Future<GraphQLClient> getSubscriptionClient({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
   }) async {
+    final Map<String, dynamic>? headers = _token.isEmpty
+        ? null
+        : {'Authorization': 'Bearer $_token', 'Accept-Language': _locale};
+
     final WebSocketLink webSocketLink = WebSocketLink(
-      'wss://api.$rootAddress/graphql',
+      'wss://$_host/graphql',
       // Only [GraphQLProtocol.graphqlTransportWs] supports automatic pings, so we don't disconnect when nothing happens.
       subProtocol: GraphQLProtocol.graphqlTransportWs,
       config: SocketClientConfig(
@@ -106,14 +111,23 @@ abstract class GraphQLApiMap {
         initialPayload: _token.isEmpty
             ? null
             : {'Authorization': 'Bearer $_token'},
-        headers: _token.isEmpty
-            ? null
-            : {'Authorization': 'Bearer $_token', 'Accept-Language': _locale},
+        headers: headers,
+        connectFn: (final Uri uri, final Iterable<String>? protocols) async {
+          final WebSocket socket = await WebSocket.connect(
+            uri.toString(),
+            protocols: protocols,
+            headers: headers,
+            customClient: getIt<TlsContext>().httpClientFor(host: uri.host),
+          );
+          return IOWebSocketChannel(socket).forGraphQL();
+        },
       ),
     );
 
     return GraphQLClient(cache: GraphQLCache(), link: webSocketLink);
   }
+
+  String get _host => 'api.$rootAddress';
 
   String get _locale => getIt.get<ApiConfigModel>().localeCode;
 

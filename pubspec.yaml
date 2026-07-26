@@ -57,6 +57,7 @@ dependencies:
     git: https://git.selfprivacy.org/SelfPrivacy/sp_cubit_form.git
   timezone: ^0.10.1
   url_launcher: ^6.3.2
+  web_socket_channel: ^3.0.3
 #  wakelock: ^0.6.2 # TODO: Developer is not available, update later.
 
 dev_dependencies:
@@ -87,6 +88,7 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   assets:
+    - assets/certs/
     - assets/images/
     - assets/images/onboarding/
     - assets/images/logos/

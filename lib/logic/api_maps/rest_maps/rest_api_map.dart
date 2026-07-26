@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
@@ -14,15 +12,6 @@ abstract class RestApiMap {
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
     final Dio dio = Dio(customOptions ?? (await options));
     dio.interceptors.add(ConsoleInterceptor());
-    dio.httpClientAdapter = IOHttpClientAdapter(
-      createHttpClient: () {
-        final client = HttpClient()
-          ..badCertificateCallback =
-              (final X509Certificate cert, final String host, final int port) =>
-                  true;
-        return client;
-      },
-    );
 
     dio.interceptors.add(
       InterceptorsWrapper(

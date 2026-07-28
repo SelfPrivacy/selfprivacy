@@ -46,6 +46,11 @@ class TlsContext {
     final TlsPolicy policy = TlsPolicy.strict,
   }) => _isUnverified(host, policy) ? _permissiveFor(host) : _verifyingClient();
 
+  /// Wraps the shared [HttpClient] in the `http` package interface.
+  ///
+  /// Do not close the returned [IOClient]: it force-closes the wrapped
+  /// [HttpClient], which every other request in the app also uses. A caller
+  /// that closes its client, such as `HttpLink.dispose()`, needs its own.
   IOClient clientFor({
     required final String host,
     final TlsPolicy policy = TlsPolicy.strict,

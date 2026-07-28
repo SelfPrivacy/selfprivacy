@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:http/io_client.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
@@ -85,6 +86,25 @@ void main() {
     final HttpClient client = tls.httpClientFor(host: 'localhost');
 
     await expectLater(_get(client, url), throwsA(isA<HandshakeException>()));
+  });
+
+  test('verifying clients are shared rather than rebuilt per request', () {
+    expect(
+      identical(
+        tls.httpClientFor(host: 'localhost'),
+        tls.httpClientFor(host: 'example.org'),
+      ),
+      isTrue,
+    );
+  });
+
+  test('clientFor wraps the same decision for the http package', () async {
+    final IOClient client = tls.clientFor(
+      host: 'localhost',
+      policy: TlsPolicy.allowUnverified,
+    );
+
+    expect(await client.read(url), 'ok');
   });
 
   test(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -112,15 +111,13 @@ abstract class GraphQLApiMap {
             ? null
             : {'Authorization': 'Bearer $_token'},
         headers: headers,
-        connectFn: (final Uri uri, final Iterable<String>? protocols) async {
-          final WebSocket socket = await WebSocket.connect(
-            uri.toString(),
-            protocols: protocols,
-            headers: headers,
-            customClient: getIt<TlsContext>().httpClientFor(host: uri.host),
-          );
-          return IOWebSocketChannel(socket).forGraphQL();
-        },
+        connectFn: (final Uri uri, final Iterable<String>? protocols) =>
+            IOWebSocketChannel.connect(
+              uri,
+              protocols: protocols,
+              headers: headers,
+              customClient: getIt<TlsContext>().httpClientFor(host: uri.host),
+            ).forGraphQL(),
       ),
     );
 

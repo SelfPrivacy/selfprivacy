@@ -198,14 +198,14 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final ServerDomain? serverDomain,
     final User? rootUser,
     final ServerHostingDetails? serverDetails,
-    final bool? isServerStarted,
-    final bool? isCertificateVerified,
-    final bool? isServerRebooted,
-    final bool? isLoading,
+    final ValueGetter<bool>? isServerStarted,
+    final ValueGetter<bool>? isCertificateVerified,
+    final ValueGetter<bool>? isServerRebooted,
+    final ValueGetter<bool>? isLoading,
     final Map<String, DnsRecordStatus>? dnsMatches,
     final CallbackDialogueBranching? installationDialoguePopUp,
     final String? customSshKey,
-    final bool? isWaitingForCertificate,
+    final ValueGetter<bool>? isWaitingForCertificate,
   }) => ServerInstallationNotFinished(
     providerApiToken: providerApiToken ?? this.providerApiToken,
     serverLocation: serverLocation ?? this.serverLocation,
@@ -215,16 +215,23 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     serverDomain: serverDomain ?? this.serverDomain,
     rootUser: rootUser ?? this.rootUser,
     serverDetails: serverDetails ?? this.serverDetails,
-    isServerStarted: isServerStarted ?? this.isServerStarted,
-    isCertificateVerified: isCertificateVerified ?? this.isCertificateVerified,
-    isServerRebooted: isServerRebooted ?? this.isServerRebooted,
-    isLoading: isLoading ?? this.isLoading,
+    isServerStarted: isServerStarted != null
+        ? isServerStarted()
+        : this.isServerStarted,
+    isCertificateVerified: isCertificateVerified != null
+        ? isCertificateVerified()
+        : this.isCertificateVerified,
+    isServerRebooted: isServerRebooted != null
+        ? isServerRebooted()
+        : this.isServerRebooted,
+    isLoading: isLoading != null ? isLoading() : this.isLoading,
     dnsMatches: dnsMatches ?? this.dnsMatches,
     installationDialoguePopUp:
         installationDialoguePopUp ?? this.installationDialoguePopUp,
     customSshKey: customSshKey ?? this.customSshKey,
-    isWaitingForCertificate:
-        isWaitingForCertificate ?? this.isWaitingForCertificate,
+    isWaitingForCertificate: isWaitingForCertificate != null
+        ? isWaitingForCertificate()
+        : this.isWaitingForCertificate,
   );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(

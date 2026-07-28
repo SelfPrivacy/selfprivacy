@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
@@ -274,7 +275,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
-        isLoading: false,
+        isLoading: () => false,
         serverDetails: serverDetails,
         installationDialoguePopUp: null,
       ),
@@ -289,7 +290,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<void> createServerAndSetDnsRecords() async {
-    emit((state as ServerInstallationNotFinished).copyWith(isLoading: true));
+    emit(
+      (state as ServerInstallationNotFinished).copyWith(isLoading: () => true),
+    );
 
     final installationData = LaunchInstallationData(
       rootUser: state.rootUser!,
@@ -344,8 +347,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.saveIsServerStarted(serverStarted: true);
 
       final ServerInstallationNotFinished newState = dataState.copyWith(
-        isServerStarted: true,
-        isLoading: false,
+        isServerStarted: () => true,
+        isLoading: () => false,
         serverDetails: server,
       );
       emit(newState);
@@ -354,7 +357,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
     } else {
       final ServerInstallationNotFinished newState = dataState.copyWith(
-        isLoading: false,
+        isLoading: () => false,
         dnsMatches: matches,
       );
       emit(newState);
@@ -382,9 +385,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       await repository.saveIsCertificateVerified(certificateVerified: true);
 
       final ServerInstallationNotFinished newState = dataState.copyWith(
-        isCertificateVerified: true,
-        isWaitingForCertificate: false,
-        isLoading: false,
+        isCertificateVerified: () => true,
+        isWaitingForCertificate: () => false,
+        isLoading: () => false,
       );
 
       emit(newState);
@@ -393,9 +396,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
     } else {
       final ServerInstallationNotFinished newState = dataState.copyWith(
-        isWaitingForCertificate:
+        isCertificateVerified: () => false,
+        isWaitingForCertificate: () =>
             probe == ServerProbeResult.untrustedCertificate,
-        isLoading: false,
+        isLoading: () => false,
       );
       emit(newState);
       unawaited(
@@ -425,9 +429,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     await repository.saveServerDetails(serverDetails);
 
     final ServerInstallationNotFinished newState = dataState.copyWith(
-      isServerRebooted: true,
+      isServerRebooted: () => true,
       serverDetails: serverDetails,
-      isLoading: false,
+      isLoading: () => false,
     );
 
     emit(newState);
@@ -839,7 +843,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<void> clearAppConfig() async {
     closeTimer();
     ProvidersController.clearProviders();
-    await getIt<DeveloperSettingsModel>().clear();
+    getIt<DeveloperSettingsModel>().clear();
     getIt<TlsContext>().reset();
     await repository.clearAppConfig();
     emit(const ServerInstallationEmpty());

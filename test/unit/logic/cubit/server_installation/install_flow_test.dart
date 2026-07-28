@@ -11,6 +11,21 @@ import '../../../../helpers/fixtures/credential_fixtures.dart';
 
 class _MockRepository extends Mock implements ServerInstallationRepository {}
 
+ServerHostingDetails _serverDetails() => ServerHostingDetails(
+  ip4: '203.0.113.10',
+  id: 1,
+  createTime: null,
+  volume: ServerProviderVolume(
+    id: 0,
+    name: '',
+    sizeByte: 0,
+    serverId: 1,
+    linuxDevice: '',
+  ),
+  apiToken: 'api-token',
+  provider: ServerProviderType.hetzner,
+);
+
 ServerInstallationNotFinished _stateAfterServerStarted({
   final bool isCertificateVerified = false,
 }) => ServerInstallationNotFinished(
@@ -23,20 +38,7 @@ ServerInstallationNotFinished _stateAfterServerStarted({
     provider: DnsProviderType.cloudflare,
   ),
   rootUser: const User.fake(),
-  serverDetails: ServerHostingDetails(
-    ip4: '203.0.113.10',
-    id: 1,
-    createTime: null,
-    volume: ServerProviderVolume(
-      id: 0,
-      name: '',
-      sizeByte: 0,
-      serverId: 1,
-      linuxDevice: '',
-    ),
-    apiToken: 'api-token',
-    provider: ServerProviderType.hetzner,
-  ),
+  serverDetails: _serverDetails(),
   isServerStarted: true,
   isCertificateVerified: isCertificateVerified,
   isServerRebooted: false,
@@ -46,6 +48,8 @@ ServerInstallationNotFinished _stateAfterServerStarted({
 );
 
 void main() {
+  setUpAll(() => registerFallbackValue(_serverDetails()));
+
   late _MockRepository repository;
   late ServerInstallationCubit cubit;
 
@@ -58,6 +62,12 @@ void main() {
         certificateVerified: any(named: 'certificateVerified'),
       ),
     ).thenAnswer((_) async {});
+    when(
+      () => repository.saveIsServerRebooted(
+        serverRebooted: any(named: 'serverRebooted'),
+      ),
+    ).thenAnswer((_) async {});
+    when(() => repository.saveServerDetails(any())).thenAnswer((_) async {});
   });
 
   tearDown(() async {
@@ -110,6 +120,59 @@ void main() {
     ).called(1);
     expect(cubit.state.isCertificateVerified, isTrue);
   });
+
+  group('rebootServer', () {
+    ServerInstallationNotFinished afterCertificate() =>
+        _stateAfterServerStarted(isCertificateVerified: true);
+
+    test('records the reboot and keeps the returned details', () async {
+      final ServerHostingDetails rebooted = _serverDetails().copyWith(
+        startTime: DateTime.utc(2026, 7, 27, 12),
+      );
+      when(() => repository.restart()).thenAnswer((_) async => rebooted);
+
+      await cubit.rebootServer(state: afterCertificate());
+
+      verify(
+        () => repository.saveIsServerRebooted(serverRebooted: true),
+      ).called(1);
+      verify(() => repository.saveServerDetails(rebooted)).called(1);
+      expect(cubit.state.isServerRebooted, isTrue);
+    });
+
+    test('retries instead of advancing when the reboot fails', () async {
+      when(() => repository.restart()).thenAnswer((_) async => null);
+
+      await cubit.rebootServer(state: afterCertificate());
+
+      verifyNever(
+        () => repository.saveIsServerRebooted(
+          serverRebooted: any(named: 'serverRebooted'),
+        ),
+      );
+      expect(cubit.state.isServerRebooted, isFalse);
+    });
+  });
+
+  test(
+    'a self-signed retry clears a stale certificate flag, so the wizard does '
+    'not falsely claim success',
+    () async {
+      when(
+        () => repository.probeServer(),
+      ).thenAnswer((_) async => ServerProbeResult.untrustedCertificate);
+
+      await cubit.waitForCertificate(
+        state: _stateAfterServerStarted(isCertificateVerified: true),
+      );
+
+      expect(cubit.state.isCertificateVerified, isFalse);
+      expect(
+        (cubit.state as ServerInstallationNotFinished).isWaitingForCertificate,
+        isTrue,
+      );
+    },
+  );
 
   test('a persisted certificate flag is re-probed, never trusted', () async {
     // An install interrupted under the old two-reboot semantics can have this

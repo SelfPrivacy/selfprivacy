@@ -14,8 +14,7 @@ class DeveloperSettingsModel {
 
   String? unverifiedTlsHost;
 
-  Future<void> clear() async {
-    await setStagingAcme(enabled: false);
+  void clear() {
     allowCustomSshKeyDuringSetup = false;
     unverifiedTlsHost = null;
   }

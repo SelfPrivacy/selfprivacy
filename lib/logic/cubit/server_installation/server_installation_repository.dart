@@ -35,7 +35,20 @@ class ServerAuthorizationException implements Exception {
   final String message;
 }
 
+typedef ServerApiFactory =
+    ServerApi Function({
+      bool hasLogger,
+      bool isWithToken,
+      String customToken,
+      String? overrideDomain,
+    });
+
 class ServerInstallationRepository {
+  ServerInstallationRepository({final ServerApiFactory? serverApi})
+    : _serverApi = serverApi ?? ServerApi.new;
+
+  final ServerApiFactory _serverApi;
+
   Box box = Hive.box(BNames.serverInstallationBox);
 
   static final logger = const AppLogger(
@@ -230,7 +243,7 @@ class ServerInstallationRepository {
   }
 
   Future<void> createDkimRecord(final ServerDomain domain) async {
-    final ServerApi api = ServerApi(
+    final ServerApi api = _serverApi(
       overrideDomain: domain.domainName,
       customToken:
           getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
@@ -249,7 +262,7 @@ class ServerInstallationRepository {
   }
 
   Future<bool> isHttpServerWorking() {
-    final ServerApi api = ServerApi(
+    final ServerApi api = _serverApi(
       overrideDomain:
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
       customToken:
@@ -260,7 +273,7 @@ class ServerInstallationRepository {
   }
 
   Future<ServerProbeResult> probeServer() {
-    final ServerApi api = ServerApi(
+    final ServerApi api = _serverApi(
       overrideDomain:
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
       isWithToken: false,
@@ -271,7 +284,7 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails?> restart() async {
     final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
 
-    final result = await ServerApi(
+    final result = await _serverApi(
       overrideDomain:
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
       customToken:
@@ -294,7 +307,7 @@ class ServerInstallationRepository {
   Future<ServerRecoveryCapabilities> getRecoveryCapabilities(
     final ServerDomain serverDomain,
   ) async {
-    final ServerApi serverApi = ServerApi(
+    final ServerApi serverApi = _serverApi(
       isWithToken: false,
       overrideDomain: serverDomain.domainName,
     );
@@ -331,7 +344,7 @@ class ServerInstallationRepository {
     final String newDeviceKey,
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
-    final ServerApi serverApi = ServerApi(
+    final ServerApi serverApi = _serverApi(
       isWithToken: false,
       overrideDomain: serverDomain.domainName,
     );
@@ -369,7 +382,7 @@ class ServerInstallationRepository {
     final String recoveryKey,
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
-    final ServerApi serverApi = ServerApi(
+    final ServerApi serverApi = _serverApi(
       isWithToken: false,
       overrideDomain: serverDomain.domainName,
     );
@@ -404,7 +417,7 @@ class ServerInstallationRepository {
     final String apiToken,
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
-    final ServerApi serverApi = ServerApi(
+    final ServerApi serverApi = _serverApi(
       isWithToken: true,
       overrideDomain: serverDomain.domainName,
       customToken: apiToken,

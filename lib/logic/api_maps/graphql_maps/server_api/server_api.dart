@@ -596,7 +596,9 @@ class ServerApi extends GraphQLApiMap
   Future<bool> isHttpServerWorking() async => (await getApiVersion()) != null;
 
   Future<ServerProbeResult> probe() async {
-    assert(!isWithToken, 'the readiness probe must not carry a token');
+    if (isWithToken) {
+      throw StateError('the readiness probe must not carry a token');
+    }
 
     if (await _getApiVersion() != null) {
       return ServerProbeResult.reachable;

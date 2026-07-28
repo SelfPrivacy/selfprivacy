@@ -25,7 +25,7 @@ void main() {
   test('the readiness probe refuses to run on a token-bearing client', () {
     expect(
       ServerApi(isWithToken: true, overrideDomain: 'example.org').probe(),
-      throwsA(isA<AssertionError>()),
+      throwsStateError,
     );
   });
 }

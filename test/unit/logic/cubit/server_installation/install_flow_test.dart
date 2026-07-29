@@ -3,7 +3,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../../../../helpers/fixtures/credential_fixtures.dart';
@@ -30,8 +29,6 @@ ServerInstallationNotFinished _stateAfterServerStarted({
 );
 
 void main() {
-  setUpAll(() => registerFallbackValue(aServerHostingDetails()));
-
   late _MockRepository repository;
   late ServerInstallationCubit cubit;
 
@@ -49,7 +46,6 @@ void main() {
         serverRebooted: any(named: 'serverRebooted'),
       ),
     ).thenAnswer((_) async {});
-    when(() => repository.saveServerDetails(any())).thenAnswer((_) async {});
   });
 
   tearDown(() async {
@@ -107,23 +103,19 @@ void main() {
     ServerInstallationNotFinished afterCertificate() =>
         _stateAfterServerStarted(isCertificateVerified: true);
 
-    test('records the reboot and keeps the returned details', () async {
-      final ServerHostingDetails rebooted = aServerHostingDetails().copyWith(
-        startTime: DateTime.utc(2026, 7, 27, 12),
-      );
-      when(() => repository.restart()).thenAnswer((_) async => rebooted);
+    test('records the reboot once the server accepts it', () async {
+      when(() => repository.restart()).thenAnswer((_) async => true);
 
       await cubit.rebootServer(state: afterCertificate());
 
       verify(
         () => repository.saveIsServerRebooted(serverRebooted: true),
       ).called(1);
-      verify(() => repository.saveServerDetails(rebooted)).called(1);
       expect(cubit.state.isServerRebooted, isTrue);
     });
 
     test('retries instead of advancing when the reboot fails', () async {
-      when(() => repository.restart()).thenAnswer((_) async => null);
+      when(() => repository.restart()).thenAnswer((_) async => false);
 
       await cubit.rebootServer(state: afterCertificate());
 

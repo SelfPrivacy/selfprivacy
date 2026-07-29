@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 
 import '../../../../fakes/hive/in_memory_hive.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
@@ -89,34 +88,25 @@ void main() {
   });
 
   group('restart', () {
-    test('returns the server with the new start time', () async {
-      final DateTime startedAt = DateTime.utc(2026, 7, 27, 12);
+    test(
+      'succeeds on an accepted reboot, over an authenticated client',
+      () async {
+        when(() => api.reboot()).thenAnswer(
+          (_) async => GenericResult<void>(success: true, data: null),
+        );
+
+        expect(await repository.restart(), isTrue);
+        expect(lastFactoryCall['isWithToken'], isTrue);
+        expect(lastFactoryCall['customToken'], 'api-token');
+      },
+    );
+
+    test('fails when the server refuses the reboot', () async {
       when(() => api.reboot()).thenAnswer(
-        (_) async => GenericResult<DateTime?>(success: true, data: startedAt),
+        (_) async => GenericResult<void>(success: false, data: null),
       );
 
-      final ServerHostingDetails? result = await repository.restart();
-
-      expect(result, isNotNull);
-      expect(result!.startTime, startedAt);
-      expect(lastFactoryCall['isWithToken'], isTrue);
-      expect(lastFactoryCall['customToken'], 'api-token');
-    });
-
-    test('returns null when the reboot fails', () async {
-      when(() => api.reboot()).thenAnswer(
-        (_) async => GenericResult<DateTime?>(success: false, data: null),
-      );
-
-      expect(await repository.restart(), isNull);
-    });
-
-    test('returns null when the reboot reports no start time', () async {
-      when(() => api.reboot()).thenAnswer(
-        (_) async => GenericResult<DateTime?>(success: true, data: null),
-      );
-
-      expect(await repository.restart(), isNull);
+      expect(await repository.restart(), isFalse);
     });
   });
 

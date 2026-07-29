@@ -23,8 +23,7 @@ mixin ServerActionsApi on GraphQLApiMap {
     return result;
   }
 
-  Future<GenericResult<DateTime?>> reboot() async {
-    DateTime? time;
+  Future<GenericResult<void>> reboot() async {
     try {
       final GraphQLClient client = await getClient();
       final response = await client.mutate$RebootSystem();
@@ -33,20 +32,17 @@ mixin ServerActionsApi on GraphQLApiMap {
           'Exception in GraphQL Reboot request: ${response.exception}',
           error: response.exception,
         );
+        return GenericResult(data: null, success: false);
       }
-      if (response.parsedData!.system.rebootSystem.success) {
-        return GenericResult(
-          data: time,
-          success: true,
-          message: response.parsedData!.system.rebootSystem.message,
-        );
-      }
+      return GenericResult(
+        data: null,
+        success: response.parsedData!.system.rebootSystem.success,
+        message: response.parsedData!.system.rebootSystem.message,
+      );
     } catch (e) {
       logger('Error in GraphQL Reboot request: $e', error: e);
-      return GenericResult(data: time, success: false);
+      return GenericResult(data: null, success: false);
     }
-
-    return GenericResult(data: time, success: true);
   }
 
   Future<bool> pullConfigurationUpdate() async {

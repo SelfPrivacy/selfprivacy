@@ -67,7 +67,7 @@ class JobsCubit extends Cubit<JobsState> {
         ),
       );
       final rebootResult = await getIt<ApiConnectionRepository>().api.reboot();
-      if (rebootResult.success && rebootResult.data != null) {
+      if (rebootResult.success) {
         emit(
           JobsStateFinished(
             [

@@ -281,9 +281,7 @@ class ServerInstallationRepository {
     return api.probe();
   }
 
-  Future<ServerHostingDetails?> restart() async {
-    final server = getIt<WizardDataModel>().serverInstallation!.serverDetails!;
-
+  Future<bool> restart() async {
     final result = await _serverApi(
       overrideDomain:
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
@@ -292,11 +290,7 @@ class ServerInstallationRepository {
       isWithToken: true,
     ).reboot();
 
-    if (!result.success || result.data == null) {
-      return null;
-    }
-
-    return server.copyWith(startTime: result.data);
+    return result.success;
   }
 
   Future<ServerHostingDetails> powerOn() {

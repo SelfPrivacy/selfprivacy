@@ -416,9 +416,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
-    final ServerHostingDetails? serverDetails = await repository.restart();
-
-    if (serverDetails == null) {
+    if (!await repository.restart()) {
       unawaited(
         runDelayed(rebootServer, const Duration(seconds: 60), dataState),
       );
@@ -426,11 +424,9 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
 
     await repository.saveIsServerRebooted(serverRebooted: true);
-    await repository.saveServerDetails(serverDetails);
 
     final ServerInstallationNotFinished newState = dataState.copyWith(
       isServerRebooted: () => true,
-      serverDetails: serverDetails,
       isLoading: () => false,
     );
 

@@ -16,21 +16,19 @@ class HetznerServerInfo {
   );
   final int id;
   final String name;
+  @JsonKey(unknownEnumValue: ServerStatus.unknown)
   final ServerStatus status;
   final DateTime created;
+  @JsonKey(defaultValue: <int>[])
   final List<int> volumes;
 
   @JsonKey(name: 'server_type')
   final HetznerServerTypeInfo serverType;
 
-  @JsonKey(name: 'datacenter', fromJson: HetznerServerInfo.locationFromJson)
   final HetznerLocation location;
 
   @JsonKey(name: 'public_net')
   final HetznerPublicNetInfo publicNet;
-
-  static HetznerLocation locationFromJson(final Map json) =>
-      HetznerLocation.fromJson(json['location']);
 
   static HetznerServerInfo fromJson(final Map<String, dynamic> json) =>
       _$HetznerServerInfoFromJson(json);
@@ -48,7 +46,7 @@ class HetznerPublicNetInfo {
 @JsonSerializable()
 class HetznerIp4 {
   HetznerIp4({
-    required this.id,
+    this.id,
     required this.ip,
     required this.blocked,
     required this.reverseDns,
@@ -56,7 +54,7 @@ class HetznerIp4 {
   final bool blocked;
   @JsonKey(name: 'dns_ptr')
   final String reverseDns;
-  final int id;
+  final int? id;
   final String ip;
 
   static HetznerIp4 fromJson(final Map<String, dynamic> json) =>
@@ -218,6 +216,7 @@ class HetznerVolume {
   final int size;
 
   /// ID of the Server the Volume is attached to, null if it is not attached at all
+  @JsonKey(name: 'server')
   final int? serverId;
 
   /// Name of the Resource. Is unique per Project.

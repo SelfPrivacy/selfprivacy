@@ -118,7 +118,7 @@ Apple signing assets (distribution certificate + App Store provisioning profile)
 | Variable                        | How to prepare                                                                                                                                                  |
 |---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `MATCH_PASSWORD`                | The passphrase match encrypts the repo contents with. Set once when the storage was created; shared via the password manager                                    |
-| `MATCH_GIT_BASIC_AUTHORIZATION` | `printf '%s' 'user:token' \| base64 -w 0`. Passing auth as a Basic header instead of embedding it in the URL keeps the token out of fastlane's logged `git_url` |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | `printf '%s' 'user:token' \| openssl base64 -A`. Passing auth as a Basic header instead of embedding it in the URL keeps the token out of fastlane's logged `git_url` |
 | `MATCH_GIT_URL`                 | Optional, defaults to the HTTPS URL of the match repo. HTTPS (not SSH) is deliberate: git-over-HTTPS honors the proxy variables, SSH does not                   |
 | `XCARCHIVE_PATH`                | Optional, defaults to `./Runner.xcarchive` — where `build-ios` puts it                                                                                          |
 
@@ -137,7 +137,7 @@ Certificate renewal: Apple distribution certificates expire yearly and CI uses m
 | `ASC_KEY_P8_FILE` | Path to the downloaded `.p8` file                                                     |
 | `IPA_PATH`        | Optional, defaults to `./selfprivacy-ios-signed.ipa`,  where `sign-ios` puts it       |
 
-Forgejo secrets: `CI_ASC_KEY_ID`, `CI_ASC_ISSUER_ID`, `CI_ASC_KEY_P8` (the `.p8` file encoded with `base64 -w 0`; the workflow decodes it to a file, uploads, and deletes it).
+Forgejo secrets: `CI_ASC_KEY_ID`, `CI_ASC_ISSUER_ID`, `CI_ASC_KEY_P8` (the `.p8` file encoded with `openssl base64 -A -in AuthKey_XXXXXXXXXX.p8`; the workflow decodes it to a file, uploads, and deletes it).
 
 TestFlight rejects any build number (`+N` in the pubspec version) it has already seen, so bump the pubspec version past both the last TestFlight and Play uploads before tagging a release. The build number is baked into the archive at build time.
 

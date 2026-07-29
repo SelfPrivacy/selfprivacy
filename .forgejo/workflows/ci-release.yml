@@ -218,7 +218,7 @@ jobs:
           ASC_KEY_P8_FILE: asc-key.p8
           KEY_B64: ${{ secrets.CI_ASC_KEY_P8 }}
         run: |
-          printf '%s' "$KEY_B64" | base64 -d > "$ASC_KEY_P8_FILE"
+          printf '%s' "$KEY_B64" | base64 -D > "$ASC_KEY_P8_FILE"
           nix run .#deploy-ios
           rm "$ASC_KEY_P8_FILE"
 

@@ -25,6 +25,11 @@ platform :ios do
   lane :sign_release do
     keychain_name = 'selfprivacy-sign'
     keychain_password = SecureRandom.hex(16)
+    begin
+      delete_keychain(name: keychain_name)
+    rescue StandardError
+      # nothing to clean up
+    end
     create_keychain(
       name: keychain_name,
       password: keychain_password,

@@ -4,34 +4,10 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
-import 'package:selfprivacy/logic/models/hive/server.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/credential_fixtures.dart';
-
-Server _aServer({final int id = 1, final String domain = 'example.com'}) =>
-    Server(
-      hostingDetails: ServerHostingDetails(
-        ip4: '1.2.3.4',
-        id: id,
-        createTime: DateTime.utc(2026),
-        volume: ServerProviderVolume(
-          id: 1,
-          name: 'volume',
-          sizeByte: 10737418240,
-          serverId: id,
-          linuxDevice: '/dev/sdb',
-        ),
-        apiToken: 'api-token',
-        provider: ServerProviderType.hetzner,
-      ),
-      domain: ServerDomain(
-        domainName: domain,
-        provider: DnsProviderType.cloudflare,
-      ),
-    );
+import '../../../helpers/fixtures/server_fixtures.dart';
 
 BackupsCredential _aBackupsCredential({final String keyId = 'key-id'}) =>
     BackupsCredential(
@@ -194,13 +170,13 @@ void main() {
 
   group('servers, backups and bucket', () {
     test('addServer / removeServer round-trips', () async {
-      final server = _aServer();
+      final server = aServer();
       await model.addServer(server);
       expect(model.servers, hasLength(1));
 
       final reloaded = ResourcesModel()..init();
       addTearDown(reloaded.dispose);
-      expect(reloaded.servers.single.domain.domainName, 'example.com');
+      expect(reloaded.servers.single.domain.domainName, 'example.org');
 
       await model.removeServer(server);
       expect(model.servers, isEmpty);
@@ -235,7 +211,7 @@ void main() {
     test('clear empties every collection', () async {
       await model.addServerProviderToken(aServerProviderCredential());
       await model.addDnsProviderToken(aDnsProviderCredential());
-      await model.addServer(_aServer());
+      await model.addServer(aServer());
       await model.addBackupsCredential(_aBackupsCredential());
       await model.setBackblazeBucket(_aBackblazeBucket());
 

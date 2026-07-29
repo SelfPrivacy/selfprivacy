@@ -4,29 +4,15 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 import '../../../../fakes/hive/in_memory_hive.dart';
+import '../../../../helpers/fixtures/server_fixtures.dart';
 
 class _MockServerApi extends Mock implements ServerApi {}
-
-ServerHostingDetails _serverDetails() => ServerHostingDetails(
-  ip4: '203.0.113.10',
-  id: 1,
-  createTime: null,
-  volume: ServerProviderVolume(
-    id: 0,
-    name: '',
-    sizeByte: 0,
-    serverId: 1,
-    linuxDevice: '',
-  ),
-  apiToken: 'api-token',
-  provider: ServerProviderType.hetzner,
-);
 
 void main() {
   setUpAll(setUpInMemoryHive);
@@ -41,13 +27,8 @@ void main() {
     await Hive.openBox(BNames.wizardDataBox);
 
     final wizard = WizardDataModel()..init();
-    await wizard.setServerDomain(
-      ServerDomain(
-        domainName: 'example.org',
-        provider: DnsProviderType.cloudflare,
-      ),
-    );
-    await wizard.setServerDetails(_serverDetails());
+    await wizard.setServerDomain(aServerDomain());
+    await wizard.setServerDetails(aServerHostingDetails());
     getIt.registerSingleton<WizardDataModel>(wizard);
 
     api = _MockServerApi();
@@ -136,6 +117,59 @@ void main() {
       );
 
       expect(await repository.restart(), isNull);
+    });
+  });
+
+  group(
+    'the certificate and reboot gates round-trip through the wizard box',
+    () {
+      test('saveIsCertificateVerified', () async {
+        await repository.saveIsCertificateVerified(certificateVerified: true);
+
+        expect(
+          getIt<WizardDataModel>().serverInstallation!.isCertificateVerified,
+          isTrue,
+        );
+      });
+
+      test('saveIsServerRebooted', () async {
+        await repository.saveIsServerRebooted(serverRebooted: true);
+
+        expect(
+          getIt<WizardDataModel>().serverInstallation!.isServerRebooted,
+          isTrue,
+        );
+      });
+    },
+  );
+
+  group('getRecoveryCapabilities', () {
+    Future<ServerRecoveryCapabilities> capabilitiesFor(final String? version) {
+      when(() => api.getApiVersion()).thenAnswer((_) async => version);
+      return repository.getRecoveryCapabilities(aServerDomain());
+    }
+
+    test('a server that does not answer offers nothing', () async {
+      expect(await capabilitiesFor(null), ServerRecoveryCapabilities.none);
+      expect(lastFactoryCall['isWithToken'], isFalse);
+    });
+
+    test('a pre-1.2 server only offers the legacy path', () async {
+      expect(await capabilitiesFor('1.1.9'), ServerRecoveryCapabilities.legacy);
+    });
+
+    test('1.2.0 and later offer login tokens', () async {
+      expect(
+        await capabilitiesFor('1.2.0'),
+        ServerRecoveryCapabilities.loginTokens,
+      );
+    });
+
+    test('an unparseable version offers nothing', () async {
+      expect(
+        await capabilitiesFor('not-a-version'),
+        ServerRecoveryCapabilities.none,
+      );
     });
   });
 

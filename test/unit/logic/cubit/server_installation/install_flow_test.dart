@@ -4,27 +4,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../../../../helpers/fixtures/credential_fixtures.dart';
+import '../../../../helpers/fixtures/server_fixtures.dart';
 
 class _MockRepository extends Mock implements ServerInstallationRepository {}
-
-ServerHostingDetails _serverDetails() => ServerHostingDetails(
-  ip4: '203.0.113.10',
-  id: 1,
-  createTime: null,
-  volume: ServerProviderVolume(
-    id: 0,
-    name: '',
-    sizeByte: 0,
-    serverId: 1,
-    linuxDevice: '',
-  ),
-  apiToken: 'api-token',
-  provider: ServerProviderType.hetzner,
-);
 
 ServerInstallationNotFinished _stateAfterServerStarted({
   final bool isCertificateVerified = false,
@@ -33,12 +18,9 @@ ServerInstallationNotFinished _stateAfterServerStarted({
   serverTypeIdentificator: 'cx22',
   serverLocation: 'fsn1',
   dnsApiCredential: aDnsProviderCredential(),
-  serverDomain: ServerDomain(
-    domainName: 'example.org',
-    provider: DnsProviderType.cloudflare,
-  ),
+  serverDomain: aServerDomain(),
   rootUser: const User.fake(),
-  serverDetails: _serverDetails(),
+  serverDetails: aServerHostingDetails(),
   isServerStarted: true,
   isCertificateVerified: isCertificateVerified,
   isServerRebooted: false,
@@ -48,7 +30,7 @@ ServerInstallationNotFinished _stateAfterServerStarted({
 );
 
 void main() {
-  setUpAll(() => registerFallbackValue(_serverDetails()));
+  setUpAll(() => registerFallbackValue(aServerHostingDetails()));
 
   late _MockRepository repository;
   late ServerInstallationCubit cubit;
@@ -126,7 +108,7 @@ void main() {
         _stateAfterServerStarted(isCertificateVerified: true);
 
     test('records the reboot and keeps the returned details', () async {
-      final ServerHostingDetails rebooted = _serverDetails().copyWith(
+      final ServerHostingDetails rebooted = aServerHostingDetails().copyWith(
         startTime: DateTime.utc(2026, 7, 27, 12),
       );
       when(() => repository.restart()).thenAnswer((_) async => rebooted);
@@ -173,6 +155,21 @@ void main() {
       );
     },
   );
+
+  test('a rebooted server resumes at the final checks', () async {
+    when(() => repository.load()).thenAnswer(
+      (_) async => _stateAfterServerStarted(
+        isCertificateVerified: true,
+      ).copyWith(isServerRebooted: () => true),
+    );
+    when(() => repository.isHttpServerWorking()).thenAnswer((_) async => false);
+
+    await cubit.load();
+
+    verify(() => repository.isHttpServerWorking()).called(1);
+    verifyNever(() => repository.probeServer());
+    verifyNever(() => repository.restart());
+  });
 
   test('a persisted certificate flag is re-probed, never trusted', () async {
     // An install interrupted under the old two-reboot semantics can have this

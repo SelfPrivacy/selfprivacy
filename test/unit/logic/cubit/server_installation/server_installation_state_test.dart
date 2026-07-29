@@ -1,24 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 
-ServerHostingDetails _serverDetails() => ServerHostingDetails(
-  ip4: '203.0.113.10',
-  id: 1,
-  createTime: null,
-  volume: ServerProviderVolume(
-    id: 0,
-    name: '',
-    sizeByte: 0,
-    serverId: 1,
-    linuxDevice: '',
-  ),
-  apiToken: 'api-token',
-  provider: ServerProviderType.hetzner,
-);
+import '../../../../helpers/fixtures/server_fixtures.dart';
 
 ServerInstallationWizardData _wizardData({
   final bool isCertificateVerified = false,
@@ -30,11 +16,8 @@ ServerInstallationWizardData _wizardData({
   dnsProviderToken: 'dns-token',
   dnsProviderType: DnsProviderType.cloudflare,
   rootUser: const User.fake(),
-  serverDetails: _serverDetails,
-  serverDomain: () => ServerDomain(
-    domainName: 'example.org',
-    provider: DnsProviderType.cloudflare,
-  ),
+  serverDetails: aServerHostingDetails,
+  serverDomain: aServerDomain,
   isServerStarted: true,
   isCertificateVerified: isCertificateVerified,
   isServerRebooted: isServerRebooted,
@@ -89,6 +72,37 @@ void main() {
       );
     });
 
+    test('a finished installation compares by its own fields', () {
+      final finished = ServerInstallationNotFinished.fromWizardData(
+        _wizardData(isCertificateVerified: true, isServerRebooted: true),
+      ).finish();
+
+      expect(finished == finished, isTrue);
+      expect(
+        finished ==
+            ServerInstallationFinished(
+              dnsApiCredential: finished.dnsApiCredential!,
+              serverDomain: finished.serverDomain!,
+              serverDetails: finished.serverDetails!,
+              providerApiToken: 'a-different-token',
+            ),
+        isFalse,
+      );
+    });
+
+    test('recovery states compare by the step they are on', () {
+      const first = ServerInstallationRecovery(
+        currentStep: RecoveryStep.selecting,
+        recoveryCapabilities: ServerRecoveryCapabilities.loginTokens,
+      );
+      const second = ServerInstallationRecovery(
+        currentStep: RecoveryStep.recoveryKey,
+        recoveryCapabilities: ServerRecoveryCapabilities.loginTokens,
+      );
+
+      expect(first == second, isFalse);
+    });
+
     test('the waiting-for-certificate hint changes identity too', () {
       final before = ServerInstallationNotFinished.fromWizardData(
         _wizardData(),
@@ -113,6 +127,17 @@ void main() {
     expect(updated.serverDomain, state.serverDomain);
     expect(updated.rootUser, state.rootUser);
     expect(updated.isWaitingForCertificate, isFalse);
+  });
+
+  test('copyWith can walk a flag back to false', () {
+    final state = ServerInstallationNotFinished.fromWizardData(
+      _wizardData(isCertificateVerified: true),
+    );
+
+    final updated = state.copyWith(isServerStarted: () => false);
+
+    expect(updated.isServerStarted, isFalse);
+    expect(updated.isCertificateVerified, isTrue);
   });
 
   test('the waiting hint is not part of the step count', () {

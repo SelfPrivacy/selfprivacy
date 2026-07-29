@@ -11,8 +11,8 @@ import '../../../fakes/hive/in_memory_hive.dart';
 
 Future<HttpServer> _startSelfSignedServer() async {
   final SecurityContext context = SecurityContext()
-    ..useCertificateChain('test/fixtures/certs/localhost-cert.pem')
-    ..usePrivateKey('test/fixtures/certs/localhost-key.pem');
+    ..useCertificateChain('test/helpers/certs/localhost-cert.pem')
+    ..usePrivateKey('test/helpers/certs/localhost-key.pem');
 
   final HttpServer server = await HttpServer.bindSecure(
     InternetAddress.loopbackIPv4,

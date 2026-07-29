@@ -110,15 +110,15 @@
           "pubspec-deps-json"
 
           "build-ios"
+          "sign-ios"
+          "deploy-ios"
 
           "deploy-android-google"
 
           # "sign-android"
           # "sign-macos"
-          # "sign-ios"
 
           # "deploy-macos"
-          # "deploy-ios"
         ];
 
         # Named dependencies

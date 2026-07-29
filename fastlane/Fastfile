@@ -1,3 +1,5 @@
+require 'securerandom'
+
 default_platform(:android)
 
 platform :android do
@@ -14,6 +16,76 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true,
       skip_upload_changelogs: true
+    )
+  end
+end
+
+platform :ios do
+  desc 'Re-sign the unsigned Runner.xcarchive and export an App Store IPA'
+  lane :sign_release do
+    keychain_name = 'selfprivacy-sign'
+    keychain_password = SecureRandom.hex(16)
+    begin
+      delete_keychain(name: keychain_name)
+    rescue StandardError
+      # nothing to clean up
+    end
+    create_keychain(
+      name: keychain_name,
+      password: keychain_password,
+      unlock: true,
+      timeout: 0,
+      lock_when_sleeps: false,
+      add_to_search_list: true
+    )
+    begin
+      match(
+        type: 'appstore',
+        app_identifier: 'org.selfprivacy.app',
+        git_url: ENV.fetch('MATCH_GIT_URL'),
+        readonly: true,
+        keychain_name: keychain_name,
+        keychain_password: keychain_password
+      )
+      frameworks = File.join(
+        ENV.fetch('XCARCHIVE_PATH'),
+        'Products/Applications/Runner.app/Frameworks/*.framework'
+      )
+      Dir.glob(frameworks).each do |framework|
+        sh('codesign', '--force', '--sign', '-', framework)
+      end
+
+      build_app(
+        workspace: File.expand_path('../ios/Runner.xcworkspace', __dir__),
+        scheme: 'Runner',
+        skip_build_archive: true,
+        archive_path: ENV.fetch('XCARCHIVE_PATH'),
+        export_method: 'app-store',
+        export_team_id: ENV.fetch('sigh_org.selfprivacy.app_appstore_team-id'),
+        export_options: {
+          signingStyle: 'manual',
+          provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+        },
+        output_directory: ENV.fetch('IPA_OUTPUT_DIR'),
+        output_name: 'selfprivacy-ios-signed'
+      )
+    ensure
+      delete_keychain(name: keychain_name)
+    end
+  end
+
+  desc 'Upload the signed IPA to TestFlight'
+  lane :upload_testflight do
+    api_key = app_store_connect_api_key(
+      key_id: ENV.fetch('ASC_KEY_ID'),
+      issuer_id: ENV.fetch('ASC_ISSUER_ID'),
+      key_filepath: ENV.fetch('ASC_KEY_P8_FILE')
+    )
+    upload_to_testflight(
+      api_key: api_key,
+      ipa: ENV.fetch('IPA_PATH'),
+      # don't burn runner time on Apple's processing queue
+      skip_waiting_for_build_processing: true
     )
   end
 end

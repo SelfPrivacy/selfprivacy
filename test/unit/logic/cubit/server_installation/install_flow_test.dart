@@ -49,6 +49,7 @@ void main() {
   });
 
   tearDown(() async {
+    cubit.closeTimer();
     await cubit.close();
   });
 
@@ -147,6 +148,64 @@ void main() {
       );
     },
   );
+
+  group('a certificate that never arrives', () {
+    ServerInstallationNotFinished current() =>
+        cubit.state as ServerInstallationNotFinished;
+
+    // The count lives in the state, so each probe has to be handed the state
+    // the previous one produced, exactly as runDelayed does in the real loop.
+    Future<void> waitOut(final int attempts) async {
+      when(
+        () => repository.probeServer(),
+      ).thenAnswer((_) async => ServerProbeResult.untrustedCertificate);
+
+      ServerInstallationNotFinished state = _stateAfterServerStarted();
+      for (int i = 0; i < attempts; i++) {
+        await cubit.waitForCertificate(state: state);
+        state = current();
+      }
+    }
+
+    bool stalled() => current().isCertificateStalled;
+
+    test('keeps quiet while the wait is still plausible', () async {
+      await waitOut(
+        ServerInstallationCubit.certificateAttemptsBeforePrompt - 1,
+      );
+
+      expect(stalled(), isFalse);
+    });
+
+    test('eventually tells the user something is wrong', () async {
+      await waitOut(ServerInstallationCubit.certificateAttemptsBeforePrompt);
+
+      expect(stalled(), isTrue);
+    });
+
+    test('keeps probing after it has given up quietly', () async {
+      await waitOut(
+        ServerInstallationCubit.certificateAttemptsBeforePrompt + 3,
+      );
+
+      expect(stalled(), isTrue);
+      verify(
+        () => repository.probeServer(),
+      ).called(ServerInstallationCubit.certificateAttemptsBeforePrompt + 3);
+    });
+
+    test('a certificate that does arrive clears the count', () async {
+      await waitOut(ServerInstallationCubit.certificateAttemptsBeforePrompt);
+      when(
+        () => repository.probeServer(),
+      ).thenAnswer((_) async => ServerProbeResult.reachable);
+
+      await cubit.waitForCertificate(state: current());
+
+      expect(current().certificateAttempts, 0);
+      expect(stalled(), isFalse);
+    });
+  });
 
   test('a rebooted server resumes at the final checks', () async {
     when(() => repository.load()).thenAnswer(

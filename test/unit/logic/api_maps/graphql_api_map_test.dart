@@ -135,6 +135,15 @@ void main() {
       expect(await api.probe(), ServerProbeResult.unreachable);
     });
 
+    test('reboot reports failure rather than throwing', () async {
+      final ServerApi api = ServerApi(
+        isWithToken: false,
+        overrideDomain: _unresolvableDomain,
+      );
+
+      expect((await api.reboot()).success, isFalse);
+    });
+
     test('getApiVersion answers null rather than throwing', () async {
       final ServerApi api = ServerApi(
         isWithToken: false,

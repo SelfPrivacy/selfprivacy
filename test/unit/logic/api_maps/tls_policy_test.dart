@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:http/io_client.dart';
+import 'package:http/http.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
@@ -99,12 +99,30 @@ void main() {
   });
 
   test('clientFor wraps the same decision for the http package', () async {
-    final IOClient client = tls.clientFor(
+    final Client client = tls.clientFor(
       host: 'localhost',
       policy: TlsPolicy.allowUnverified,
     );
 
     expect(await client.read(url), 'ok');
+  });
+
+  test('closing a handed-out client leaves the shared one usable', () async {
+    // HttpLink.dispose() closes the client it was given, and the underlying
+    // HttpClient is shared by every other request in the app.
+    final Client disposed = tls.clientFor(
+      host: 'localhost',
+      policy: TlsPolicy.allowUnverified,
+    );
+    expect(await disposed.read(url), 'ok');
+
+    disposed.close();
+
+    final Client next = tls.clientFor(
+      host: 'localhost',
+      policy: TlsPolicy.allowUnverified,
+    );
+    expect(await next.read(url), 'ok');
   });
 
   test(

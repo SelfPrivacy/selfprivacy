@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 
 import '../../../../fakes/hive/in_memory_hive.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
@@ -62,6 +63,13 @@ void main() {
     }
   });
 
+  test('the cubit builds its own repository when none is injected', () {
+    final cubit = ServerInstallationCubit();
+    addTearDown(cubit.close);
+
+    expect(cubit.repository, isNotNull);
+  });
+
   group('probeServer', () {
     test('builds an anonymous client, so no token can leak', () async {
       when(
@@ -113,22 +121,25 @@ void main() {
   group(
     'the certificate and reboot gates round-trip through the wizard box',
     () {
+      // Reopening the box forces the generated adapter to deserialize rather
+      // than hand back the cached instance. Both fields reuse the Hive ids of
+      // the old reset flags, so this is what proves the reuse is safe.
+      Future<ServerInstallationWizardData> reload() async {
+        await Hive.box(BNames.wizardDataBox).close();
+        await Hive.openBox(BNames.wizardDataBox);
+        return (WizardDataModel()..init()).serverInstallation!;
+      }
+
       test('saveIsCertificateVerified', () async {
         await repository.saveIsCertificateVerified(certificateVerified: true);
 
-        expect(
-          getIt<WizardDataModel>().serverInstallation!.isCertificateVerified,
-          isTrue,
-        );
+        expect((await reload()).isCertificateVerified, isTrue);
       });
 
       test('saveIsServerRebooted', () async {
         await repository.saveIsServerRebooted(serverRebooted: true);
 
-        expect(
-          getIt<WizardDataModel>().serverInstallation!.isServerRebooted,
-          isTrue,
-        );
+        expect((await reload()).isServerRebooted, isTrue);
       });
     },
   );

@@ -104,6 +104,7 @@ class TimerState extends ServerInstallationNotFinished {
          installationDialoguePopUp: dataState.installationDialoguePopUp,
          customSshKey: dataState.customSshKey,
          isWaitingForCertificate: dataState.isWaitingForCertificate,
+         certificateAttempts: dataState.certificateAttempts,
        );
 
   final ServerInstallationNotFinished dataState;
@@ -136,6 +137,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     required this.dnsMatches,
     required this.customSshKey,
     this.isWaitingForCertificate = false,
+    this.certificateAttempts = 0,
     super.providerApiToken,
     super.serverLocation,
     super.serverTypeIdentificator,
@@ -171,6 +173,12 @@ class ServerInstallationNotFinished extends ServerInstallationState {
 
   final bool isWaitingForCertificate;
 
+  final int certificateAttempts;
+
+  bool get isCertificateStalled =>
+      certificateAttempts >=
+      ServerInstallationCubit.certificateAttemptsBeforePrompt;
+
   @override
   List<Object?> get props => [
     providerApiToken,
@@ -184,6 +192,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     isCertificateVerified,
     isServerRebooted,
     isWaitingForCertificate,
+    certificateAttempts,
     isLoading,
     dnsMatches,
     customSshKey,
@@ -206,6 +215,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final CallbackDialogueBranching? installationDialoguePopUp,
     final String? customSshKey,
     final ValueGetter<bool>? isWaitingForCertificate,
+    final int? certificateAttempts,
   }) => ServerInstallationNotFinished(
     providerApiToken: providerApiToken ?? this.providerApiToken,
     serverLocation: serverLocation ?? this.serverLocation,
@@ -232,6 +242,7 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     isWaitingForCertificate: isWaitingForCertificate != null
         ? isWaitingForCertificate()
         : this.isWaitingForCertificate,
+    certificateAttempts: certificateAttempts ?? this.certificateAttempts,
   );
 
   ServerInstallationFinished finish() => ServerInstallationFinished(

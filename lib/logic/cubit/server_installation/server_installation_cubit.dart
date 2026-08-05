@@ -40,6 +40,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
   Timer? timer;
 
+  static const int certificateAttemptsBeforePrompt = 15;
+
   final DiskSize initialStorage = DiskSize.fromGibibyte(10);
 
   static final logger = const AppLogger(name: 'server_installation_cubit').log;
@@ -387,6 +389,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       final ServerInstallationNotFinished newState = dataState.copyWith(
         isCertificateVerified: () => true,
         isWaitingForCertificate: () => false,
+        certificateAttempts: 0,
         isLoading: () => false,
       );
 
@@ -399,6 +402,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         isCertificateVerified: () => false,
         isWaitingForCertificate: () =>
             probe == ServerProbeResult.untrustedCertificate,
+        certificateAttempts: dataState.certificateAttempts + 1,
         isLoading: () => false,
       );
       emit(newState);

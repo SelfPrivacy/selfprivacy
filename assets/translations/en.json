@@ -562,9 +562,12 @@
         "check": "Check",
         "waiting_for_certificate": "Server is up. Waiting for Let's Encrypt to issue your security certificate. This usually takes a few minutes.",
         "certificate_issued": "Security certificate issued. Restarting the server…",
+        "certificate_stalled_title": "Still no security certificate",
+        "certificate_stalled_description": "Let's Encrypt has not issued a certificate for your domain yet. Check that your domain's DNS records point to your server, and that you have not exceeded Let's Encrypt's weekly limit for this domain. Checks continue in the background.",
+        "certificate_stalled_support": "Contact support",
         "create_master_account": "Create master account",
         "enter_username_and_password": "Enter username and strong password",
-        "checks": "Checks have been completed \n{done} out of {total}",
+        "checks": "Completed checks: \n{done} out of {total}",
         "steps": {
             "hosting": "Hosting",
             "server_type": "Server type",

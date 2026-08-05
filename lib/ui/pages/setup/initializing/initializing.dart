@@ -24,6 +24,7 @@ import 'package:selfprivacy/ui/pages/setup/initializing/dns_provider_picker.dart
 import 'package:selfprivacy/ui/pages/setup/initializing/domain_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_provider_picker.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/server_type_picker.dart';
+import 'package:selfprivacy/ui/pages/setup/initializing/stalled_certificate_card.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
@@ -458,6 +459,7 @@ class InitializingPage extends StatelessWidget {
                     );
                   }).toList(),
                 ),
+              if (state.isCertificateStalled) const StalledCertificateCard(),
               const SizedBox(height: 10),
               if (!state.isLoading)
                 Row(

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
@@ -27,10 +28,13 @@ class TlsContext {
   final Map<String, HttpClient> _permissive = {};
 
   Future<void> loadStagingRoots() async {
+    _stagingRoots.clear();
     for (final String asset in _stagingRootAssets) {
       try {
         final ByteData data = await rootBundle.load(asset);
-        _stagingRoots.add(data.buffer.asUint8List());
+        _stagingRoots.add(
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+        );
       } catch (e) {
         _log('failed to load the staging ACME root $asset', error: e);
       }
@@ -48,13 +52,13 @@ class TlsContext {
 
   /// Wraps the shared [HttpClient] in the `http` package interface.
   ///
-  /// Do not close the returned [IOClient]: it force-closes the wrapped
-  /// [HttpClient], which every other request in the app also uses. A caller
-  /// that closes its client, such as `HttpLink.dispose()`, needs its own.
-  IOClient clientFor({
+  /// The returned client ignores `close()`, because `HttpLink.dispose()` closes
+  /// the client it was given and that would force-close the [HttpClient] every
+  /// other request in the app shares. Call [reset] to release it.
+  Client clientFor({
     required final String host,
     final TlsPolicy policy = TlsPolicy.strict,
-  }) => IOClient(httpClientFor(host: host, policy: policy));
+  }) => _SharedClient(IOClient(httpClientFor(host: host, policy: policy)));
 
   HttpClient _permissiveFor(final String host) => _permissive.putIfAbsent(
     host,
@@ -79,7 +83,7 @@ class TlsContext {
     return _verifying!;
   }
 
-  SecurityContext? _stagingContext() {
+  SecurityContext _stagingContext() {
     final SecurityContext context = SecurityContext(withTrustedRoots: true);
     for (final Uint8List root in _stagingRoots) {
       try {
@@ -99,4 +103,17 @@ class TlsContext {
     }
     _permissive.clear();
   }
+}
+
+class _SharedClient extends BaseClient {
+  _SharedClient(this._inner);
+
+  final Client _inner;
+
+  @override
+  Future<StreamedResponse> send(final BaseRequest request) =>
+      _inner.send(request);
+
+  @override
+  void close() {}
 }

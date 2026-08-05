@@ -66,7 +66,7 @@ abstract class GraphQLApiMap {
   }) async {
     if (tlsPolicy == TlsPolicy.allowUnverified && isWithToken) {
       throw StateError(
-        'Refusing to send credentials over an unverified TLS connection',
+        'A token-bearing client must not opt out of certificate verification',
       );
     }
 

@@ -398,11 +398,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         runDelayed(rebootServer, const Duration(seconds: 30), newState),
       );
     } else {
+      final bool isUntrustedCertificate =
+          probe == ServerProbeResult.untrustedCertificate;
       final ServerInstallationNotFinished newState = dataState.copyWith(
         isCertificateVerified: () => false,
-        isWaitingForCertificate: () =>
-            probe == ServerProbeResult.untrustedCertificate,
-        certificateAttempts: dataState.certificateAttempts + 1,
+        isWaitingForCertificate: () => isUntrustedCertificate,
+        certificateAttempts: isUntrustedCertificate
+            ? dataState.certificateAttempts + 1
+            : dataState.certificateAttempts,
         isLoading: () => false,
       );
       emit(newState);

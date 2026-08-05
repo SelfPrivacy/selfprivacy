@@ -155,10 +155,12 @@ void main() {
 
     // The count lives in the state, so each probe has to be handed the state
     // the previous one produced, exactly as runDelayed does in the real loop.
-    Future<void> waitOut(final int attempts) async {
-      when(
-        () => repository.probeServer(),
-      ).thenAnswer((_) async => ServerProbeResult.untrustedCertificate);
+    Future<void> waitOut(
+      final int attempts, {
+      final ServerProbeResult probeResult =
+          ServerProbeResult.untrustedCertificate,
+    }) async {
+      when(() => repository.probeServer()).thenAnswer((_) async => probeResult);
 
       ServerInstallationNotFinished state = _stateAfterServerStarted();
       for (int i = 0; i < attempts; i++) {
@@ -181,6 +183,31 @@ void main() {
       await waitOut(ServerInstallationCubit.certificateAttemptsBeforePrompt);
 
       expect(stalled(), isTrue);
+    });
+
+    test('unreachable probes do not count as certificate attempts', () async {
+      await waitOut(
+        ServerInstallationCubit.certificateAttemptsBeforePrompt + 3,
+        probeResult: ServerProbeResult.unreachable,
+      );
+
+      expect(current().certificateAttempts, 0);
+      expect(stalled(), isFalse);
+    });
+
+    test('an unreachable probe hides a stalled certificate warning', () async {
+      await waitOut(ServerInstallationCubit.certificateAttemptsBeforePrompt);
+      when(
+        () => repository.probeServer(),
+      ).thenAnswer((_) async => ServerProbeResult.unreachable);
+
+      await cubit.waitForCertificate(state: current());
+
+      expect(
+        current().certificateAttempts,
+        ServerInstallationCubit.certificateAttemptsBeforePrompt,
+      );
+      expect(stalled(), isFalse);
     });
 
     test('keeps probing after it has given up quietly', () async {

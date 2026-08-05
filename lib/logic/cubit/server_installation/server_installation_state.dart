@@ -176,8 +176,9 @@ class ServerInstallationNotFinished extends ServerInstallationState {
   final int certificateAttempts;
 
   bool get isCertificateStalled =>
+      isWaitingForCertificate &&
       certificateAttempts >=
-      ServerInstallationCubit.certificateAttemptsBeforePrompt;
+          ServerInstallationCubit.certificateAttemptsBeforePrompt;
 
   @override
   List<Object?> get props => [

@@ -182,13 +182,13 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
 
   Future<void> fix() async {
     emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
-    final List<DnsRecord> records = await api.getDnsRecords() ?? [];
-
-    // If there are explicit link-local ipv6 records, remove them from the list
-    records.removeWhere(
-      (final r) =>
-          r.type == 'AAAA' && (r.content?.trim().startsWith('fe80::') ?? false),
-    );
+    final List<DnsRecord> records = await api.getDnsRecords() ?? []
+      ..removeWhere(
+        // If there are explicit link-local ipv6 records, remove them from the list
+        (final r) =>
+            r.type == 'AAAA' &&
+            (r.content?.trim().startsWith('fe80::') ?? false),
+      );
 
     // If there are no AAAA records, make empty copies of A records
     if (!records.any((final r) => r.type == 'AAAA')) {

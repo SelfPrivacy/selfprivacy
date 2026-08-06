@@ -60,16 +60,22 @@ mixin LogsApi on GraphQLApiMap {
           client = await getSubscriptionClient();
           inner = client!.subscribe$LogEntries().listen(
             (final response) {
-              if (controller.isClosed) return;
+              if (controller.isClosed) {
+                return;
+              }
               controller.add(
                 ServerLogEntry.fromGraphQL(response.parsedData!.logEntries),
               );
             },
             onError: (final Object e, final StackTrace s) {
-              if (!controller.isClosed) controller.addError(e, s);
+              if (!controller.isClosed) {
+                controller.addError(e, s);
+              }
             },
             onDone: () {
-              if (!controller.isClosed) controller.close();
+              if (!controller.isClosed) {
+                unawaited(controller.close());
+              }
             },
           );
         } catch (e, s) {

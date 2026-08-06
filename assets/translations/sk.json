@@ -254,7 +254,6 @@
         "server_created": "Server bol vytvorený. Prebieha kontrola DNS a spúšťanie servera…",
         "until_the_next_check": "Do nasledujúcej kontroly: ",
         "check": "Kontrola",
-        "one_more_restart": "Teraz dôjde k ďalšiemu reštartu na aktiváciu bezpečnostných certifikátov.",
         "connect_to_server": "Začnime so serverom.",
         "select_provider_notice": "Pod pojmom „malý server“ rozumieme server s dvoma procesorovými vláknami a dvoma gigabajtmi pamäte RAM.",
         "select_provider_countries_title": "Dostupné krajiny",

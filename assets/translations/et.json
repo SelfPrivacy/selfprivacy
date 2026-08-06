@@ -422,7 +422,6 @@
         "select_provider_notice": "\"Suhteliselt väikese\" all peame silmas masinat, millel on 2 tuuma CPU ja 2 gigabaiti muutmälu.",
         "until_the_next_check": "Kuni järgmise kontrollini: ",
         "check": "Kontrollima",
-        "one_more_restart": "Veel üks taaskäivitus turvasertifikaatide rakendamiseks.",
         "server_provider_email_unavailable": "E-post ei tööta selle teenusepakkujaga."
     },
     "developer_settings": {

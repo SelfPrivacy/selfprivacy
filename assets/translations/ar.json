@@ -88,7 +88,6 @@
         "domain_critical_error": "لم نتمكن من الوصول لهذا النطاق! انقر لمعرفة المزيد…",
         "until_the_next_check": "حتى التحقق التالي: ",
         "check": "تحقق",
-        "one_more_restart": "ستتم إعادة التشغيل مرة أخرى حتى يتم تطبيق شهادة الأمان الخاصة بك.",
         "create_master_account": "إنشاء الحساب الرئيسي",
         "checks": "جميع إجراءات التحقق قد اكتملت.\n{done} من أصل {total}",
         "select_provider_price_free": "مجاني"

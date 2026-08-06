@@ -606,7 +606,6 @@
         "server_started": "サーバーを開始しました。検証後、再起動します…",
         "create_master_account": "マスターアカウントを作成",
         "create_server": "サーバーを作成",
-        "one_more_restart": "最後にもう一度、セキュリティー証明書を適用するために再起動します。",
         "domain_critical_error": "このドメインに到達できません！タップすると詳細を表示します…",
         "select_provider_countries_text_do": "アメリカ合衆国、オランダ、シンガポール、イギリス、ドイツ、カナダ、インド、オーストラリア",
         "select_provider_notice": "「比較的小規模」という表現で、私たちは2個のCPUのコアと、2GBのRAMを備えたコンピューターのことを指しています。",

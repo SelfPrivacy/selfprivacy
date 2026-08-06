@@ -164,7 +164,6 @@
         "server_started": "Server byl spuštěn. Nyní bude ověřen a restartován…",
         "until_the_next_check": "Do příští kontroly: ",
         "check": "Podívejte se na stránky",
-        "one_more_restart": "Ještě jeden restart pro použití bezpečnostních certifikátů.",
         "create_master_account": "Vytvoření hlavního účtu",
         "loading_domain_list": "Načítání seznamu domén",
         "enter_username_and_password": "Zadejte uživatelské jméno a silné heslo",

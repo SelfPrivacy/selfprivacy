@@ -184,7 +184,6 @@
         "select_provider_email_notice": "新客户将无法使用电子邮件托管。然而，一旦完成首次付款，将解锁该功能。",
         "choose_server_type_text": "不同的资源大小支持不同的服务。别担心，您可以随时扩展您的服务器",
         "server_started": "服务器已启动。现在将进行验证并重新启动…",
-        "one_more_restart": "还需一次重启以应用您的安全证书。",
         "connect_to_server": "让我们从一个服务器开始。",
         "select_provider": "从以下列表中选择任何提供商，它们都支持 SelfPrivacy",
         "select_provider_notice": "我们所说的“相对较小”是指一个拥有 2 个 CPU 核心和 2GB RAM 的机器。",

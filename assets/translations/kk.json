@@ -405,7 +405,6 @@
         "no_connected_domains": "Қосылған домендер жоқ",
         "server_rebooted": "Сервер қайта жүктелді",
         "check": "Тексеру",
-        "one_more_restart": "Тағы бір қайта қосу",
         "create_master_account": "Бас есептік жазбаны жасау",
         "enter_username_and_password": "Пайдаланушы аты мен құпия сөзді енгізіңіз",
         "steps": {

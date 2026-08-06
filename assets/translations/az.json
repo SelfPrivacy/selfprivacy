@@ -223,7 +223,6 @@
         "no_locations_found": "Heç bir məkan tapılmadı, lütfən, hesabınızın mövcud olduğundan əmin olun",
         "choose_server_type_text": "Server resursları hansı xidmətlərin başlaya biləcəyini müəyyənləşdirir. İstənilən vaxt serveri genişləndirə bilərsiniz",
         "server_rebooted": "Server yenidən başladıldı, son yoxlamanı gözləyirik…",
-        "one_more_restart": "İndi təhlükəsizlik sertifikatlarını aktivləşdirmək üçün əlavə reboot olacaq.",
         "connect_to_server": "Serverdən başlayaq.",
         "select_provider_notice": "“Kiçik server” dedikdə biz iki prosessor xətti və iki giqabayt operativ yaddaşa malik serveri nəzərdə tuturuq.",
         "select_provider_countries_title": "Mövcud ölkələr",

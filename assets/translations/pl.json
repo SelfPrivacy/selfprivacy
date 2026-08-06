@@ -333,7 +333,6 @@
         "server_created": "Serwer został utworzony. Sprawdzane są adresy DNS i serwer uruchamia się…",
         "until_the_next_check": "Do następnej inspekcji: ",
         "check": "Sprawdź",
-        "one_more_restart": "Teraz nastąpi dodatkowe ponowne uruchomienie komputera w celu aktywacji certyfikatów bezpieczeństwa.",
         "enter_username_and_password": "Wprowadź nazwę użytkownika i złożone hasło",
         "checks": "Kontrole wykonane:\n{done} / {total}",
         "steps": {

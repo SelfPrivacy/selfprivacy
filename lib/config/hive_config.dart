@@ -269,6 +269,9 @@ class BNames {
   /// A boolean field of [appSettingsBox] box.
   static String stagingAcme = 'stagingAcme';
 
+  /// A boolean field of [appSettingsBox] box.
+  static String automaticGraphqlTokenRefresh = 'automaticGraphqlTokenRefresh';
+
   /// Server installation box. Contains server details and provider tokens.
   static String serverInstallationBox = 'appConfig';
 

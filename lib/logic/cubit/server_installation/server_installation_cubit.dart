@@ -589,6 +589,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       final newServerDetails = ServerHostingDetails(
         provider: serverProvider,
         apiToken: serverDetails.apiToken,
+        apiTokenRotatedAt: serverDetails.apiTokenRotatedAt,
         createTime: serverDetails.createTime,
         id: serverDetails.id,
         ip4: serverDetails.ip4,
@@ -732,6 +733,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
+      apiTokenRotatedAt: dataState.serverDetails!.apiTokenRotatedAt,
       provider: dataState.serverDetails!.provider,
       serverLocation: server.location,
     );

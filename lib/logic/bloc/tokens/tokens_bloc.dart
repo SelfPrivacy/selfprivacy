@@ -222,7 +222,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     );
     final Server newServerData = Server(
       domain: event.server.domain,
-      hostingDetails: ServerHostingDetails(
+      hostingDetails: event.server.hostingDetails.copyWith(
         ip4: event.providerServer.ip,
         id: event.providerServer.id,
         createTime: event.providerServer.created,
@@ -233,10 +233,8 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
           serverId: event.providerServer.id,
           linuxDevice: '',
         ),
-        apiToken: event.server.hostingDetails.apiToken,
         provider: event.serverProviderCredential.provider,
         serverLocation: event.providerServer.location,
-        serverType: event.server.hostingDetails.serverType,
       ),
     );
     await getIt<ResourcesModel>().updateServerByDomain(newServerData);

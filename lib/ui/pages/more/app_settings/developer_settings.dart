@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/list_items/token_renewal_subtitle.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
 @RoutePage()
@@ -67,6 +68,18 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         value: _settings.allowCustomSshKeyDuringSetup,
         onChanged: (final bool value) =>
             setState(() => _settings.allowCustomSshKeyDuringSetup = value),
+      ),
+      SectionTitle(title: 'developer_settings.server_connection'.tr()),
+      SwitchListTile.adaptive(
+        title: Text('developer_settings.automatic_token_renewal'.tr()),
+        subtitle: TokenRenewalSubtitle(resourcesModel: getIt<ResourcesModel>()),
+        value: _settings.automaticGraphqlTokenRefresh,
+        onChanged: (final bool value) async {
+          await _settings.setAutomaticGraphqlTokenRefresh(enabled: value);
+          if (mounted) {
+            setState(() {});
+          }
+        },
       ),
       SectionTitle(title: 'troubleshooting.title'.tr()),
       ListTile(

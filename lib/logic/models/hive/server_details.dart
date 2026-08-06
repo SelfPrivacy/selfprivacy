@@ -51,7 +51,12 @@ class ServerHostingDetails {
   final DateTime? apiTokenRotatedAt;
 
   ServerHostingDetails copyWith({
+    final String? ip4,
+    final int? id,
     final DateTime? startTime,
+    final DateTime? createTime,
+    final ServerProviderVolume? volume,
+    final ServerProviderType? provider,
     final String? serverLocation,
     final String? serverType,
     final String? apiToken,
@@ -62,11 +67,11 @@ class ServerHostingDetails {
     serverType: serverType ?? this.serverType,
     apiToken: apiToken ?? this.apiToken,
     apiTokenRotatedAt: apiTokenRotatedAt ?? this.apiTokenRotatedAt,
-    createTime: createTime,
-    id: id,
-    ip4: ip4,
-    volume: volume,
-    provider: provider,
+    createTime: createTime ?? this.createTime,
+    id: id ?? this.id,
+    ip4: ip4 ?? this.ip4,
+    volume: volume ?? this.volume,
+    provider: provider ?? this.provider,
   );
 
   @override

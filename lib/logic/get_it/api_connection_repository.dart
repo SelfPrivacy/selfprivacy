@@ -22,6 +22,7 @@ import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
 /// Repository for all API calls
@@ -369,11 +370,10 @@ class ApiConnectionRepository {
     return (true, result.message ?? 'basis.done'.tr());
   }
 
-  static const Duration tokenRotationInterval = Duration(days: 30);
   static const Duration _tokenRotationRetryInterval = Duration(hours: 1);
   DateTime? _lastTokenRotationAttempt;
 
-  /// Rotates the token if it is older than [tokenRotationInterval].
+  /// Rotates the token if it is older than [TokenRenewalSchedule.interval].
   ///
   /// A missing timestamp counts as overdue: it covers tokens created before
   /// rotation tracking existed and the install-time token, which is embedded
@@ -383,15 +383,23 @@ class ApiConnectionRepository {
       return;
     }
     final DateTime now = DateTime.now();
+    final List<Server> servers = getIt<ResourcesModel>().servers;
+    final ServerHostingDetails? details = servers.isEmpty
+        ? null
+        : servers.first.hostingDetails;
+    final schedule = TokenRenewalSchedule.fromToken(
+      token: details?.apiToken,
+      rotatedAt: details?.apiTokenRotatedAt,
+    );
+    if (!schedule.shouldRefreshAutomatically(
+      enabled: getIt<DeveloperSettingsModel>().automaticGraphqlTokenRefresh,
+      now: now,
+    )) {
+      return;
+    }
     if (_lastTokenRotationAttempt != null &&
         now.difference(_lastTokenRotationAttempt!) <
             _tokenRotationRetryInterval) {
-      return;
-    }
-    final DateTime? rotatedAt =
-        getIt<ResourcesModel>().serverDetails?.apiTokenRotatedAt;
-    if (rotatedAt != null &&
-        now.difference(rotatedAt) < tokenRotationInterval) {
       return;
     }
     _lastTokenRotationAttempt = now;

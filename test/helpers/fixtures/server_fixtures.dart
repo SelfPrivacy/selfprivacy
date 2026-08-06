@@ -23,6 +23,7 @@ ServerHostingDetails aServerHostingDetails({
   final ServerProviderType provider = ServerProviderType.hetzner,
   final DateTime? createTime,
   final DateTime? startTime,
+  final DateTime? apiTokenRotatedAt,
   final ServerProviderVolume? volume,
 }) => ServerHostingDetails(
   id: id,
@@ -31,6 +32,7 @@ ServerHostingDetails aServerHostingDetails({
   provider: provider,
   createTime: createTime,
   startTime: startTime,
+  apiTokenRotatedAt: apiTokenRotatedAt,
   volume: volume ?? aServerProviderVolume(serverId: id),
 );
 

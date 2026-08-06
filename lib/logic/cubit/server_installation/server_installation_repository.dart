@@ -43,11 +43,17 @@ typedef ServerApiFactory =
       String? overrideDomain,
     });
 
+typedef DeviceNameProvider = Future<String> Function();
+
 class ServerInstallationRepository {
-  ServerInstallationRepository({final ServerApiFactory? serverApi})
-    : _serverApi = serverApi ?? ServerApi.new;
+  ServerInstallationRepository({
+    final ServerApiFactory? serverApi,
+    final DeviceNameProvider? deviceName,
+  }) : _serverApi = serverApi ?? ServerApi.new,
+       _deviceName = deviceName ?? (() => PlatformAdapter.deviceName);
 
   final ServerApiFactory _serverApi;
+  final DeviceNameProvider _deviceName;
 
   Box box = Hive.box(BNames.serverInstallationBox);
 
@@ -344,15 +350,13 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final GenericResult<String> result = await serverApi.authorizeDevice(
-      DeviceToken(
-        device: await PlatformAdapter.deviceName,
-        token: newDeviceKey,
-      ),
+      DeviceToken(device: await _deviceName(), token: newDeviceKey),
     );
 
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
+        apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
           id: 0,
           name: '',
@@ -382,12 +386,13 @@ class ServerInstallationRepository {
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final GenericResult<String> result = await serverApi.useRecoveryToken(
-      DeviceToken(device: await PlatformAdapter.deviceName, token: recoveryKey),
+      DeviceToken(device: await _deviceName(), token: recoveryKey),
     );
 
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
+        apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
           id: 0,
           name: '',
@@ -443,15 +448,13 @@ class ServerInstallationRepository {
     final GenericResult<String> deviceAuthKey = await serverApi
         .createDeviceToken();
     final GenericResult<String> result = await serverApi.authorizeDevice(
-      DeviceToken(
-        device: await PlatformAdapter.deviceName,
-        token: deviceAuthKey.data,
-      ),
+      DeviceToken(device: await _deviceName(), token: deviceAuthKey.data),
     );
 
     if (result.success) {
       return ServerHostingDetails(
         apiToken: result.data,
+        apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
           id: 0,
           name: '',

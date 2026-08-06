@@ -10,6 +10,12 @@ class DeveloperSettingsModel {
   Future<void> setStagingAcme({required final bool enabled}) =>
       _box.put(BNames.stagingAcme, enabled);
 
+  bool get automaticGraphqlTokenRefresh =>
+      _box.get(BNames.automaticGraphqlTokenRefresh, defaultValue: true) as bool;
+
+  Future<void> setAutomaticGraphqlTokenRefresh({required final bool enabled}) =>
+      _box.put(BNames.automaticGraphqlTokenRefresh, enabled);
+
   bool allowCustomSshKeyDuringSetup = false;
 
   String? unverifiedTlsHost;

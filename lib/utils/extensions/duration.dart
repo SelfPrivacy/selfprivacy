@@ -17,8 +17,18 @@ extension DurationFormatter on Duration {
     return '$designator${segments.first}:${segments.last}';
   }
 
-  String toPrettyString(final Locale locale) =>
-      prettyDuration(this, locale: getDurationLocale(locale));
+  String toPrettyString(
+    final Locale locale, {
+    final DurationTersity tersity = DurationTersity.second,
+    final DurationTersity upperTersity = DurationTersity.week,
+    final int maxUnits = 0,
+  }) => prettyDuration(
+    this,
+    locale: getDurationLocale(locale),
+    tersity: tersity,
+    upperTersity: upperTersity,
+    maxUnits: maxUnits,
+  );
 }
 
 DurationLocale getDurationLocale(final Locale locale) =>

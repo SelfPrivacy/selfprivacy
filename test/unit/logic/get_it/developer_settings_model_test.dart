@@ -32,6 +32,16 @@ void main() {
     expect(DeveloperSettingsModel().stagingAcme, isTrue);
   });
 
+  test('automatic GraphQL token refresh defaults to on', () {
+    expect(settings.automaticGraphqlTokenRefresh, isTrue);
+  });
+
+  test('automatic GraphQL token refresh survives a restart', () async {
+    await settings.setAutomaticGraphqlTokenRefresh(enabled: false);
+
+    expect(DeveloperSettingsModel().automaticGraphqlTokenRefresh, isFalse);
+  });
+
   test('the TLS override is never persisted', () {
     settings.unverifiedTlsHost = 'api.example.org';
 

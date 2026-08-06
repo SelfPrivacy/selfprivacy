@@ -7,15 +7,29 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
+import 'package:selfprivacy/logic/models/json/device_token.dart';
 
 import '../../../../fakes/hive/in_memory_hive.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
 
 class _MockServerApi extends Mock implements ServerApi {}
 
+class _FixedIpRepository extends ServerInstallationRepository {
+  _FixedIpRepository({required super.serverApi, required super.deviceName});
+
+  @override
+  Future<String> getServerIpFromDomain(final ServerDomain serverDomain) async =>
+      '203.0.113.10';
+}
+
 void main() {
-  setUpAll(setUpInMemoryHive);
+  setUpAll(() async {
+    registerFallbackValue(DeviceToken(device: 'device', token: 'token'));
+    await setUpInMemoryHive();
+  });
   tearDownAll(tearDownInMemoryHive);
 
   late _MockServerApi api;
@@ -33,7 +47,8 @@ void main() {
 
     api = _MockServerApi();
     lastFactoryCall = {};
-    repository = ServerInstallationRepository(
+    repository = _FixedIpRepository(
+      deviceName: () async => 'Test device',
       serverApi:
           ({
             final bool hasLogger = false,
@@ -171,6 +186,79 @@ void main() {
         await capabilitiesFor('not-a-version'),
         ServerRecoveryCapabilities.none,
       );
+    });
+  });
+
+  group('recovery token age', () {
+    Future<void> expectFresh(
+      final Future<ServerHostingDetails> Function() authorize,
+    ) async {
+      final before = DateTime.now();
+      final details = await authorize();
+      final after = DateTime.now();
+
+      expect(details.apiToken, 'fresh-token');
+      expect(details.apiTokenRotatedAt, isNotNull);
+      expect(details.apiTokenRotatedAt!.isBefore(before), isFalse);
+      expect(details.apiTokenRotatedAt!.isAfter(after), isFalse);
+    }
+
+    test('a new-device key produces a fresh token', () async {
+      when(() => api.authorizeDevice(any())).thenAnswer(
+        (_) async => GenericResult(success: true, data: 'fresh-token'),
+      );
+
+      await expectFresh(
+        () => repository.authorizeByNewDeviceKey(
+          aServerDomain(),
+          'new-device-key',
+          ServerRecoveryCapabilities.loginTokens,
+        ),
+      );
+    });
+
+    test('a recovery key produces a fresh token', () async {
+      when(() => api.useRecoveryToken(any())).thenAnswer(
+        (_) async => GenericResult(success: true, data: 'fresh-token'),
+      );
+
+      await expectFresh(
+        () => repository.authorizeByRecoveryKey(
+          aServerDomain(),
+          'recovery-key',
+          ServerRecoveryCapabilities.loginTokens,
+        ),
+      );
+    });
+
+    test('a current API token is exchanged for a fresh device token', () async {
+      when(() => api.createDeviceToken()).thenAnswer(
+        (_) async => GenericResult(success: true, data: 'device-key'),
+      );
+      when(() => api.authorizeDevice(any())).thenAnswer(
+        (_) async => GenericResult(success: true, data: 'fresh-token'),
+      );
+
+      await expectFresh(
+        () => repository.authorizeByApiToken(
+          aServerDomain(),
+          'api-token',
+          ServerRecoveryCapabilities.loginTokens,
+        ),
+      );
+    });
+
+    test('a legacy supplied token keeps an unknown age', () async {
+      when(() => api.isHttpServerWorking()).thenAnswer((_) async => true);
+
+      final details = await repository.authorizeByApiToken(
+        aServerDomain(),
+        'legacy-token',
+        ServerRecoveryCapabilities.legacy,
+      );
+
+      expect(details.apiToken, 'legacy-token');
+      expect(details.apiTokenRotatedAt, isNull);
     });
   });
 

@@ -11,6 +11,7 @@ platform :android do
       json_key: ENV.fetch('PLAY_JSON_KEY_FILE'),
       track: 'internal',
       release_status: 'completed',
+      skip_upload_apk: true,
       # Metadata in fastlane/metadata/android is F-Droid's copy and is stale;
       skip_upload_metadata: true,
       skip_upload_images: true,
@@ -70,7 +71,10 @@ platform :ios do
         output_name: 'selfprivacy-ios-signed'
       )
     ensure
-      delete_keychain(name: keychain_name)
+      begin
+        delete_keychain(name: keychain_name)
+      rescue StandardError
+      end
     end
   end
 

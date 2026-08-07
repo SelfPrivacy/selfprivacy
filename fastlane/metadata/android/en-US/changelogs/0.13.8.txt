@@ -1,0 +1,23 @@
+# 0.13.8 Changelog
+
+## Changes
+
+**Features**
+
+- **Wait for a trusted TLS certificate before completing server setup, and show a warning when certificate issuance stalls** ([#706](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/706))
+- Allow developers to turn off automatic GraphQL token refresh ([#707](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/707))
+
+**Bug Fixes**
+
+- Verify TLS certificates for REST API connections ([#706](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/706))
+- Fix parsing newer Hetzner API responses ([#706](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/706))
+- Do not attach a server-provider key during recovery when it was explicitly skipped ([#703](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/703))
+
+**Refactor**
+
+- Begin migrating SSH-key forms to the new form system ([#699](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/699), [#702](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/702))
+
+**Build & Packaging**
+
+- Prepare Flatpak metadata for Flathub publication ([#701](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/701))
+- Automate Google Play and TestFlight release uploads ([#704](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/704), [#705](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/705))

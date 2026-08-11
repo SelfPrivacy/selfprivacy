@@ -1,92 +1,70 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/backblaze_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/forms/backblaze_form.dart';
+import 'package:selfprivacy/logic/forms/credential_checks/backblaze_credential_check.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/ui/forms/backblaze_form_view.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
-class AddBackupsTokenPage extends StatelessWidget {
+class AddBackupsTokenPage extends StatefulWidget {
   const AddBackupsTokenPage({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    void setBackupsProviderKey(
-      final String keyId,
-      final String applicationKey,
-    ) {
+  State<AddBackupsTokenPage> createState() => _AddBackupsTokenPageState();
+}
+
+class _AddBackupsTokenPageState extends State<AddBackupsTokenPage> {
+  late final BackblazeForm backblazeForm = BackblazeForm(
+    validateCredentials: checkBackblazeCredentials,
+    onSubmit: (final credentials) async {
       context.read<TokensBloc>().add(
         AddBackupsProviderCredential(
           BackupsCredential(
-            keyId: keyId,
-            applicationKey: applicationKey,
+            keyId: credentials.keyId,
+            applicationKey: credentials.applicationKey,
             provider: BackupsProviderType.backblaze,
           ),
         ),
       );
-      context.maybePop();
-    }
+      await context.maybePop();
+    },
+  );
 
-    return BlocProvider(
-      create: (final context) => BackblazeFormCubit(setBackupsProviderKey),
-      child: Builder(
-        builder: (final context) {
-          final formCubitState = context.watch<BackblazeFormCubit>().state;
-          return BrandHeroScreen(
-            heroTitle: 'initializing.connect_to_server_provider'.tr(
-              namedArgs: {'provider': 'Backblaze'},
-            ),
-            hasBackButton: true,
-            ignoreBreakpoints: true,
-            hasSupportDrawer: true,
-            hasFlashButton: false,
-            children: [
-              CubitFormTextField(
-                autofocus: true,
-                formFieldCubit: context.read<BackblazeFormCubit>().keyId,
-                scrollPadding: const EdgeInsets.only(bottom: 70),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'KeyID',
-                ),
-              ),
-              const SizedBox(height: 16),
-              CubitFormTextField(
-                formFieldCubit: context
-                    .read<BackblazeFormCubit>()
-                    .applicationKey,
-                scrollPadding: const EdgeInsets.only(bottom: 70),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Master Application Key',
-                ),
-              ),
-              const SizedBox(height: 16),
-              BrandButton.filled(
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<BackblazeFormCubit>().trySubmit(),
-                title: 'basis.connect'.tr(),
-              ),
-              const SizedBox(height: 16),
-              BrandButton.text(
-                onPressed: () {
-                  context.read<SupportSystemCubit>().showArticle(
-                    article: 'how_backblaze',
-                    context: context,
-                  );
-                  Scaffold.of(context).openEndDrawer();
-                },
-                title: 'initializing.how'.tr(),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+  @override
+  void dispose() {
+    backblazeForm.dispose();
+    super.dispose();
   }
+
+  @override
+  Widget build(final BuildContext context) => BrandHeroScreen(
+    heroTitle: 'initializing.connect_to_server_provider'.tr(
+      namedArgs: {'provider': 'Backblaze'},
+    ),
+    hasBackButton: true,
+    ignoreBreakpoints: true,
+    hasSupportDrawer: true,
+    hasFlashButton: false,
+    children: [
+      BackblazeFormView(backblazeForm: backblazeForm),
+      const Gap(16),
+      BrandButton.text(
+        onPressed: () {
+          context.read<SupportSystemCubit>().showArticle(
+            article: 'how_backblaze',
+            context: context,
+          );
+          Scaffold.of(context).openEndDrawer();
+        },
+        title: 'initializing.how'.tr(),
+      ),
+    ],
+  );
 }

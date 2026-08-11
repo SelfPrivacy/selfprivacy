@@ -95,6 +95,11 @@ class User extends Equatable {
     isFoundOnServer,
     note,
     type,
+    email,
+    displayName,
+    directmemberof,
+    memberof,
+    emailPasswordMetadata,
   ];
 
   Color get color => stringToColor(login);

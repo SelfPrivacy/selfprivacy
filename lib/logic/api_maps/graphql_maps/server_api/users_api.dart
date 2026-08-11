@@ -89,13 +89,12 @@ mixin UsersApi on GraphQLApiMap {
       );
       final mutation = Options$Mutation$CreateUser(variables: variables);
       final response = await client.mutate$CreateUser(mutation);
+      final parsed = response.parsedData?.users.createUser;
       return GenericResult(
-        success: true,
-        code: response.parsedData?.users.createUser.code ?? 500,
-        message: response.parsedData?.users.createUser.message,
-        data: response.parsedData?.users.createUser.user != null
-            ? User.fromGraphQL(response.parsedData!.users.createUser.user!)
-            : null,
+        success: parsed?.success ?? false,
+        code: parsed?.code ?? 500,
+        message: parsed?.message,
+        data: parsed?.user != null ? User.fromGraphQL(parsed!.user!) : null,
       );
     } catch (e) {
       logger('Error in GraphQL CreateUser request: $e', error: e);
@@ -124,13 +123,12 @@ mixin UsersApi on GraphQLApiMap {
       );
       final mutation = Options$Mutation$UpdateUser(variables: variables);
       final response = await client.mutate$UpdateUser(mutation);
+      final parsed = response.parsedData?.users.updateUser;
       return GenericResult(
-        success: true,
-        code: response.parsedData?.users.updateUser.code ?? 500,
-        message: response.parsedData?.users.updateUser.message,
-        data: response.parsedData?.users.updateUser.user != null
-            ? User.fromGraphQL(response.parsedData!.users.updateUser.user!)
-            : null,
+        success: parsed?.success ?? false,
+        code: parsed?.code ?? 500,
+        message: parsed?.message,
+        data: parsed?.user != null ? User.fromGraphQL(parsed!.user!) : null,
       );
     } catch (e) {
       logger('Error in GraphQL UpdateUser request: $e', error: e);
@@ -149,11 +147,12 @@ mixin UsersApi on GraphQLApiMap {
       final variables = Variables$Mutation$DeleteUser(username: username);
       final mutation = Options$Mutation$DeleteUser(variables: variables);
       final response = await client.mutate$DeleteUser(mutation);
+      final parsed = response.parsedData?.users.deleteUser;
       return GenericResult(
-        data: response.parsedData?.users.deleteUser.success ?? false,
-        success: true,
-        code: response.parsedData?.users.deleteUser.code ?? 500,
-        message: response.parsedData?.users.deleteUser.message,
+        data: parsed?.success ?? false,
+        success: parsed?.success ?? false,
+        code: parsed?.code ?? 500,
+        message: parsed?.message,
       );
     } catch (e) {
       logger('Error in GraphQL DeleteUser request: $e', error: e);
@@ -177,13 +176,12 @@ mixin UsersApi on GraphQLApiMap {
       );
       final mutation = Options$Mutation$AddSshKey(variables: variables);
       final response = await client.mutate$AddSshKey(mutation);
+      final parsed = response.parsedData?.users.addSshKey;
       return GenericResult(
-        success: true,
-        code: response.parsedData?.users.addSshKey.code ?? 500,
-        message: response.parsedData?.users.addSshKey.message,
-        data: response.parsedData?.users.addSshKey.user != null
-            ? User.fromGraphQL(response.parsedData!.users.addSshKey.user!)
-            : null,
+        success: parsed?.success ?? false,
+        code: parsed?.code ?? 500,
+        message: parsed?.message,
+        data: parsed?.user != null ? User.fromGraphQL(parsed!.user!) : null,
       );
     } catch (e) {
       logger('Error in GraphQL AddSshKey request: $e', error: e);

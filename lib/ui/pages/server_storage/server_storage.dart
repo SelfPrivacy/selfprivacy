@@ -121,15 +121,17 @@ class ServerStorageSection extends StatelessWidget {
         child: ServerStorageListItem(volume: volume),
       ),
       const Gap(16),
-      ...services.map(
-        (final service) => ServerConsumptionListTile(
-          service: service,
-          volume: volume,
-          onTap: () async {
-            await context.pushRoute(ServiceRoute(serviceId: service.id));
-          },
-        ),
-      ),
+      ...services
+          .where((final service) => service.isInstalled)
+          .map(
+            (final service) => ServerConsumptionListTile(
+              service: service,
+              volume: volume,
+              onTap: () async {
+                await context.pushRoute(ServiceRoute(serviceId: service.id));
+              },
+            ),
+          ),
       if (volume.isResizable) ...[
         const Gap(16),
         Padding(

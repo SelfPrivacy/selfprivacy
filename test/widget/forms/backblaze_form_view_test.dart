@@ -82,6 +82,30 @@ void main() {
       expect(_submitButton(tester).onPressed, isNotNull);
     });
 
+    testWidgets('translates and suppresses a duplicate provider detail', (
+      final tester,
+    ) async {
+      final form = BackblazeForm(
+        validateCredentials: (final _) async =>
+            const CredentialValidationRejected(
+              providerMessage: 'initializing.backblaze_bad_key_error',
+            ),
+        onSubmit: (final _) async {},
+      );
+      addTearDown(form.dispose);
+      await pumpForTest(tester, BackblazeFormView(backblazeForm: form));
+      await _fill(tester);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Connect'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Backblaze storage information is invalid'),
+        findsOneWidget,
+      );
+      expect(find.text('initializing.backblaze_bad_key_error'), findsNothing);
+    });
+
     testWidgets('disables fields during a check and permits retry afterward', (
       final tester,
     ) async {

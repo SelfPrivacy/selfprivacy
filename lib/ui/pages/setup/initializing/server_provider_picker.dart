@@ -1,26 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/forms/credential_checks/server_provider_credential_check.dart';
+import 'package:selfprivacy/logic/forms/server_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
+import 'package:selfprivacy/ui/forms/server_provider_form_view.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
 import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/utils/launch_url.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class ServerProviderPicker extends StatefulWidget {
   const ServerProviderPicker({
-    required this.formCubit,
     required this.serverInstallationCubit,
     super.key,
   });
 
-  final ServerProviderFormCubit formCubit;
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
@@ -28,7 +27,24 @@ class ServerProviderPicker extends StatefulWidget {
 }
 
 class _ServerProviderPickerState extends State<ServerProviderPicker> {
+  late final ServerProviderForm serverProviderForm;
   ServerProviderType selectedProvider = ServerProviderType.unknown;
+
+  @override
+  void initState() {
+    super.initState();
+    serverProviderForm = ServerProviderForm(
+      validateCredential: (final credential) =>
+          checkServerProviderCredential(selectedProvider, credential),
+      onSubmit: widget.serverInstallationCubit.setServerProviderKey,
+    );
+  }
+
+  @override
+  void dispose() {
+    serverProviderForm.dispose();
+    super.dispose();
+  }
 
   void setProvider(final ServerProviderType provider) {
     setState(() {
@@ -47,7 +63,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
 
       case ServerProviderType.hetzner:
         return ProviderInputDataPage(
-          providerCubit: widget.formCubit,
+          serverProviderForm: serverProviderForm,
           providerInfo: ProviderPageInfo(
             providerType: ServerProviderType.hetzner,
             pathToHow: 'how_hetzner',
@@ -57,7 +73,7 @@ class _ServerProviderPickerState extends State<ServerProviderPicker> {
 
       case ServerProviderType.digitalOcean:
         return ProviderInputDataPage(
-          providerCubit: widget.formCubit,
+          serverProviderForm: serverProviderForm,
           providerInfo: ProviderPageInfo(
             providerType: ServerProviderType.digitalOcean,
             pathToHow: 'how_digital_ocean',
@@ -86,12 +102,12 @@ class ProviderPageInfo {
 class ProviderInputDataPage extends StatelessWidget {
   const ProviderInputDataPage({
     required this.providerInfo,
-    required this.providerCubit,
+    required this.serverProviderForm,
     super.key,
   });
 
   final ProviderPageInfo providerInfo;
-  final ServerProviderFormCubit providerCubit;
+  final ServerProviderForm serverProviderForm;
 
   @override
   Widget build(final BuildContext context) => ResponsiveLayoutWithInfobox(
@@ -114,18 +130,10 @@ class ProviderInputDataPage extends StatelessWidget {
     primaryColumn: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CubitFormTextField(
-          autofocus: true,
-          formFieldCubit: providerCubit.apiKey,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Provider API Token',
-          ),
-        ),
-        const SizedBox(height: 32),
-        BrandButton.filled(
-          child: Text('basis.connect'.tr()),
-          onPressed: providerCubit.trySubmit,
+        ServerProviderFormView(
+          serverProviderForm: serverProviderForm,
+          fieldLabel: 'Provider API Token',
+          submitLabel: 'basis.connect'.tr(),
         ),
         const SizedBox(height: 10),
         BrandOutlinedButton(

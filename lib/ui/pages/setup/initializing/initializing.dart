@@ -7,7 +7,6 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/server_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/forms/ssh_key_form.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -209,28 +208,11 @@ class InitializingPage extends StatelessWidget {
 
   Widget _stepServerProviderToken(
     final ServerInstallationCubit serverInstallationCubit,
-  ) => BlocProvider(
-    create: (final context) => ServerProviderFormCubit(serverInstallationCubit),
-    child: Builder(
-      builder: (final context) {
-        final providerCubit = context.watch<ServerProviderFormCubit>();
-        return ServerProviderPicker(
-          formCubit: providerCubit,
-          serverInstallationCubit: serverInstallationCubit,
-        );
-      },
-    ),
-  );
+  ) => ServerProviderPicker(serverInstallationCubit: serverInstallationCubit);
 
   Widget _stepServerType(
     final ServerInstallationCubit serverInstallationCubit,
-  ) => BlocProvider(
-    create: (final context) => ServerProviderFormCubit(serverInstallationCubit),
-    child: Builder(
-      builder: (final context) =>
-          ServerTypePicker(serverInstallationCubit: serverInstallationCubit),
-    ),
-  );
+  ) => ServerTypePicker(serverInstallationCubit: serverInstallationCubit);
 
   Widget _stepDnsProviderToken(
     final ServerInstallationCubit initializingCubit,

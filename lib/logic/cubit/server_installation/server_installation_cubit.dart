@@ -85,29 +85,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  Future<bool?> isServerProviderApiTokenValid(
-    final String providerToken,
-  ) async {
-    final GenericResult<bool> apiResponse = await ProvidersController
-        .currentServerProvider!
-        .tryInitApiByToken(providerToken);
-
-    if (!apiResponse.success) {
-      getIt<NavigationService>().showSnackBar(
-        apiResponse.message ?? 'initializing.could_not_connect'.tr(),
-      );
-      return null;
-    }
-
-    if (!apiResponse.data) {
-      getIt<NavigationService>().showSnackBar(
-        (apiResponse.message ?? 'initializing.provider_bad_key_error').tr(),
-      );
-    }
-
-    return apiResponse.data;
-  }
-
   Future<bool?> isDnsProviderApiTokenValid(
     final DnsProviderCredential providerToken,
   ) async {

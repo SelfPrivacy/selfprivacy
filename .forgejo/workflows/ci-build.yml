@@ -12,8 +12,7 @@ jobs:
   # Linux targets
   build-linux-nix:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - uses: actions/checkout@v6
@@ -30,8 +29,7 @@ jobs:
 
   build-linux-portable:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - uses: actions/checkout@v6
@@ -39,8 +37,7 @@ jobs:
 
   build-linux-flatpak:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - uses: actions/checkout@v6
@@ -62,8 +59,7 @@ jobs:
 
   build-linux-appimage-portable:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - uses: actions/checkout@v6
@@ -85,8 +81,7 @@ jobs:
 
   build-linux-archive-portable:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - uses: actions/checkout@v6
@@ -100,8 +95,7 @@ jobs:
   # Android targets
   build-android-nightly-fdroid:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     concurrency:
       group: android-publish

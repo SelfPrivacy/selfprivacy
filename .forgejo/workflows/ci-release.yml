@@ -9,8 +9,7 @@ on:
 jobs:
   create-release:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       # Check if the release exists. If not, create it
@@ -28,7 +27,7 @@ jobs:
       - create-release
 
     runs-on:
-      - x86
+      - x64
       - kvm
 
     steps:
@@ -58,7 +57,7 @@ jobs:
       - create-release
 
     runs-on:
-      - x86
+      - x64
       - kvm
 
     concurrency:

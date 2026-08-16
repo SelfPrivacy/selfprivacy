@@ -11,8 +11,7 @@ on:
 jobs:
   analyze:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - uses: actions/checkout@v6
@@ -20,8 +19,7 @@ jobs:
 
   tests-and-sonar:
     runs-on:
-      - x86
-      - kvm
+      - x64
 
     steps:
       - name: Checkout repository (full clone)
@@ -47,8 +45,7 @@ jobs:
 
   sonar-quality-gate:
     runs-on:
-      - x86
-      - kvm
+      - x64
     needs:
       - tests-and-sonar
     if: ${{ github.event_name == 'pull_request' }}
@@ -172,8 +169,7 @@ jobs:
 
   dependency-changes:
     runs-on:
-      - x86
-      - kvm
+      - x64
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Checkout PR head

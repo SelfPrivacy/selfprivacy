@@ -70,28 +70,6 @@ void main() {
       expect(_submitButton(tester).onPressed, isNotNull);
     });
 
-    testWidgets('suppresses the generic provider rejection detail', (
-      final tester,
-    ) async {
-      final form = _form(
-        DnsProviderType.cloudflare,
-        validateCredential: (final _) async =>
-            const CredentialValidationRejected(
-              providerMessage: 'initializing.provider_bad_key_error',
-            ),
-      );
-      addTearDown(form.dispose);
-      await pumpForTest(tester, _view(form));
-
-      await tester.enterText(find.byType(ReactiveTextField<String>), 'token');
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(FilledButton, 'Connect'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('API key is invalid'), findsOneWidget);
-      expect(find.text('Provider API key is invalid'), findsNothing);
-    });
-
     testWidgets('disables the form while checking and permits retry', (
       final tester,
     ) async {

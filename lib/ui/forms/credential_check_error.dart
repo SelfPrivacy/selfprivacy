@@ -21,6 +21,9 @@ class CredentialCheckError extends StatelessWidget {
         'initializing.could_not_connect'.tr(),
     };
     final providerMessage = switch (failure.providerMessage) {
+      _genericProviderBadKeyError
+          when failure is CredentialValidationRejected =>
+        null,
       final message? when message.startsWith('initializing.') => message.tr(),
       final message? => message,
       null => null,
@@ -39,3 +42,5 @@ class CredentialCheckError extends StatelessWidget {
     );
   }
 }
+
+const _genericProviderBadKeyError = 'initializing.provider_bad_key_error';

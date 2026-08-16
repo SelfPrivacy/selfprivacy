@@ -1,14 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/dns_provider_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
+import 'package:selfprivacy/logic/forms/credential_checks/dns_provider_credential_check.dart';
+import 'package:selfprivacy/logic/forms/dns_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
+import 'package:selfprivacy/ui/forms/dns_provider_form_view.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DnsProviderPicker extends StatefulWidget {
@@ -84,7 +85,7 @@ class ProviderPageInfo {
   final DnsProviderType providerType;
 }
 
-class ProviderInputDataPage extends StatelessWidget {
+class ProviderInputDataPage extends StatefulWidget {
   const ProviderInputDataPage({
     required this.providerInfo,
     required this.serverInstallationCubit,
@@ -95,100 +96,56 @@ class ProviderInputDataPage extends StatelessWidget {
   final ServerInstallationCubit serverInstallationCubit;
 
   @override
-  Widget build(final BuildContext context) => BlocProvider(
-    create: (final context) => DnsProviderFormCubit(
-      serverInstallationCubit,
-      providerInfo.providerType,
-    ),
-    child: Builder(
-      builder: (final context) {
-        final formCubit = context.watch<DnsProviderFormCubit>();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'initializing.connect_to_dns'.tr(),
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'initializing.connect_to_server_provider_text'.tr(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 32),
-            if (providerInfo
-                .providerType
-                .requiredCredentials
-                .requiresTokenId) ...[
-              CubitFormTextField(
-                formFieldCubit: formCubit.tokenId,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Provider API Token ID',
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
-            CubitFormTextField(
-              formFieldCubit: formCubit.token,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Provider API Token',
-              ),
-            ),
-            if (providerInfo.providerType.requiredCredentials.requiresUrl) ...[
-              const SizedBox(height: 16),
-              CubitFormTextField(
-                formFieldCubit: formCubit.url,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Provider API URL',
-                ),
-              ),
-            ],
-            if (providerInfo
-                .providerType
-                .requiredCredentials
-                .requiresTenant) ...[
-              const SizedBox(height: 16),
-              CubitFormTextField(
-                formFieldCubit: formCubit.tenant,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Provider API Tenant',
-                ),
-              ),
-            ],
-            if (providerInfo
-                .providerType
-                .requiredCredentials
-                .requiresSecondaryToken) ...[
-              const SizedBox(height: 16),
-              CubitFormTextField(
-                formFieldCubit: formCubit.secondaryToken,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Provider API Secondary Token',
-                ),
-              ),
-            ],
-            const SizedBox(height: 32),
-            BrandButton.filled(
-              title: 'basis.connect'.tr(),
-              onPressed: formCubit.trySubmit,
-            ),
-            const SizedBox(height: 10),
-            BrandOutlinedButton(
-              child: Text('initializing.how'.tr()),
-              onPressed: () => context.read<SupportSystemCubit>().showArticle(
-                article: providerInfo.pathToHow,
-                context: context,
-              ),
-            ),
-          ],
-        );
-      },
-    ),
+  State<ProviderInputDataPage> createState() => _ProviderInputDataPageState();
+}
+
+class _ProviderInputDataPageState extends State<ProviderInputDataPage> {
+  late final DnsProviderForm dnsProviderForm;
+
+  @override
+  void initState() {
+    super.initState();
+    dnsProviderForm = DnsProviderForm(
+      providerType: widget.providerInfo.providerType,
+      validateCredential: checkDnsProviderCredential,
+      onSubmit: widget.serverInstallationCubit.setDnsApiCredential,
+    );
+  }
+
+  @override
+  void dispose() {
+    dnsProviderForm.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'initializing.connect_to_dns'.tr(),
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      const SizedBox(height: 16),
+      Text(
+        'initializing.connect_to_server_provider_text'.tr(),
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 32),
+      DnsProviderFormView(
+        dnsProviderForm: dnsProviderForm,
+        tokenLabel: 'Provider API Token',
+        submitLabel: 'basis.connect'.tr(),
+      ),
+      const SizedBox(height: 10),
+      BrandOutlinedButton(
+        child: Text('initializing.how'.tr()),
+        onPressed: () => context.read<SupportSystemCubit>().showArticle(
+          article: widget.providerInfo.pathToHow,
+          context: context,
+        ),
+      ),
+    ],
   );
 }
 

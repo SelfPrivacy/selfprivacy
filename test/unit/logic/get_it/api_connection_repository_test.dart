@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
@@ -80,5 +81,28 @@ void main() {
     await repository.reload(null);
 
     expect(repository.refreshCount, 1);
+  });
+
+  test('an updated user is published to data listeners', () async {
+    const originalUser = User.fake(login: 'user', displayName: 'Alex');
+    const updatedUser = User.fake(login: 'user', displayName: 'Luna');
+    repository.apiData.users.data = [originalUser];
+    when(
+      () => api.updateUser('user', 'Luna', const ['sp.full_users']),
+    ).thenAnswer(
+      (_) async => GenericResult<User?>(success: true, data: updatedUser),
+    );
+    final emittedData = repository.dataStream.first;
+
+    final result = await repository.updateUser(
+      const User.fake(
+        login: 'user',
+        displayName: 'Luna',
+        directmemberof: ['sp.full_users'],
+      ),
+    );
+
+    expect(result.$1, isTrue);
+    expect((await emittedData).users.data, [updatedUser]);
   });
 }

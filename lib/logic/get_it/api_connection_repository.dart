@@ -137,6 +137,7 @@ class ApiConnectionRepository {
     );
     loadedUsers[index] = result.data!;
     _apiData.users.invalidate();
+    emitData();
 
     return (true, result.message ?? 'basis.done'.tr());
   }

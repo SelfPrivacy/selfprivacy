@@ -95,6 +95,10 @@ class _NewUserPageState extends State<NewUserPage> {
     if (message.isNotEmpty) {
       getIt<NavigationService>().showSnackBar(message.tr());
     }
+    if (widget.user != null) {
+      context.router.pop();
+      return;
+    }
     await context.router.replace(UserDetailsRoute(login: user.login));
   }
 }

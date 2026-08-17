@@ -274,7 +274,7 @@
         "details_title": "Dane użytkownika"
     },
     "validations": {
-        "length_longer": "Długość ciągu znaków [] musi być mniejsza lub równa {}",
+        "length_longer": "Długość ciągu znaków {actualLength} musi być mniejsza lub równa {maxLength}",
         "length_not_equal": "Długość jest [], ależ powinna być {}",
         "already_exist": "Już jest",
         "invalid_format": "Nieprwidłowy format",

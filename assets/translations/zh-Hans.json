@@ -352,7 +352,7 @@
         "invalid_format_ssh": "必须遵循 SSH 密钥格式",
         "root_name": "不能是 'root'",
         "length_not_equal": "长度为 []，应为 {}",
-        "length_longer": "长度为 []，应小于或等于 {}"
+        "length_longer": "长度为 {actualLength}，应小于或等于 {maxLength}"
     },
     "devices": {
         "main_screen": {

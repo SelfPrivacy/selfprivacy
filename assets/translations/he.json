@@ -546,7 +546,7 @@
         "invalid_format_ssh": "חייב לעקוב אחר תבנית מפתח ה־SSH",
         "root_name": "לא יכול להיות ‚root’ (משתמש העל)",
         "length_not_equal": "האורך הוא [], אמור להיות {}",
-        "length_longer": "האורך הוא [], אמור להיות קצר או שווה ל־{}"
+        "length_longer": "האורך הוא {actualLength}, אמור להיות קצר או שווה ל־{maxLength}"
     },
     "developer_settings": {
         "cubit_statuses": "מצבי טעינת Cubit",

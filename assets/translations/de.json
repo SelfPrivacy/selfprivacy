@@ -570,7 +570,7 @@
         "invalid_format_password": "Das Passwort darf keine Leerzeichen enthalten",
         "invalid_format_ssh": "Muss dem SSH-Schlüsselformat entsprechen",
         "root_name": "Benutzername darf nicht root sein",
-        "length_longer": "Länge ist [], sollte kürzer oder gleich {} sein"
+        "length_longer": "Länge ist {actualLength}, sollte kürzer oder gleich {maxLength} sein"
     },
     "users": {
         "could_not_create_user": "Benutzer konnte nicht erstellt werden",

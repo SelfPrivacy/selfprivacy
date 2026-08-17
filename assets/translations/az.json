@@ -409,7 +409,7 @@
         "invalid_format_password": "İçərisində boş simvol olmamalıdır",
         "invalid_format_ssh": "SSH açar formatına əməl edilməlidir",
         "root_name": "İstifadəçi adı 'root' ola bilməz",
-        "length_longer": "[] sətirinin uzunluğu {}-dən kiçik və ya ona bərabər olmalıdır"
+        "length_longer": "{actualLength} sətirinin uzunluğu {maxLength}-dən kiçik və ya ona bərabər olmalıdır"
     },
     "not_ready_card": {
         "in_menu": "Server hələ konfiqurasiya edilməyib, əlaqə sihirbazından istifadə edin."

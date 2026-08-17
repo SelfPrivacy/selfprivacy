@@ -1,6 +1,6 @@
 {
     "validations": {
-        "length_longer": "Dĺžka je [], mala by byť kratšia alebo rovná {}",
+        "length_longer": "Dĺžka je {actualLength}, mala by byť kratšia alebo rovná {maxLength}",
         "required": "Požadované pole",
         "already_exist": "Už existuje",
         "invalid_format": "Nesprávny formát",

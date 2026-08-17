@@ -511,7 +511,7 @@
         "invalid_format_ssh": "SSH鍵の形式に従う必要があります",
         "root_name": "「root」は指定できません",
         "length_not_equal": "長さは[]ですが、{}のはずです",
-        "length_longer": "長さは[]ですが、{}と等しいか、それよりも短いはずです"
+        "length_longer": "長さは{actualLength}ですが、{maxLength}と等しいか、それよりも短いはずです"
     },
     "server": {
         "card_title": "サーバー",

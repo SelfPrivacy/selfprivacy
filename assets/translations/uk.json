@@ -576,7 +576,7 @@
         "already_exist": "Вже існує",
         "invalid_format": "Неприпустимий формат",
         "invalid_format_password": "Пароль не має містити пробілів",
-        "length_longer": "Довжина [] повинна бути коротшою або дорівнює {}",
+        "length_longer": "Довжина {actualLength} повинна бути коротшою або дорівнює {maxLength}",
         "invalid_format_ssh": "Повинен відповідати формату ключа SSH",
         "root_name": "Не може бути 'root'",
         "length_not_equal": "Довжина [], має бути {}"

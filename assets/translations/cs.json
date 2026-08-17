@@ -409,7 +409,7 @@
         "invalid_format_password": "Heslo nesmí obsahovat mezery",
         "invalid_format_ssh": "Musí dodržovat formát klíče SSH",
         "length_not_equal": "Délka je [], mělo by být {}",
-        "length_longer": "Délka řetězce [] musí být menší nebo rovna {}"
+        "length_longer": "Délka řetězce {actualLength} musí být menší nebo rovna {maxLength}"
     },
     "modals": {
         "dns_removal_error": "Nepodařilo se odstranit záznamy DNS.",

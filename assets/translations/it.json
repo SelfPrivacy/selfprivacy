@@ -324,7 +324,7 @@
         "swap_usage": "Utilizzo swap"
     },
     "validations": {
-        "length_longer": "La lunghezza è [], deve essere minore o uguale a {}",
+        "length_longer": "La lunghezza è {actualLength}, deve essere minore o uguale a {maxLength}",
         "invalid_format_ssh": "Deve rispettare il formato della chiave SSH",
         "invalid_format": "Formato non valido",
         "invalid_format_password": "La password non deve contenere spazi",

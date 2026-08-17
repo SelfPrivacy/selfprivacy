@@ -726,7 +726,7 @@
         "invalid_format_ssh": "Peab järgima SSH võtme formaati",
         "root_name": "Broneeritud kasutajanime ei saa kasutada",
         "length_not_equal": "Pikkus on [], peaks olema {}",
-        "length_longer": "Pikkus on [], peaks olema lühem või võrdne kui {}"
+        "length_longer": "Pikkus on {actualLength}, peaks olema lühem või võrdne kui {maxLength}"
     },
     "support": {
         "title": "SelfPrivacy tugi"

@@ -591,7 +591,7 @@
         "root_name": "Root атауы",
         "required": "Міндетті",
         "length_not_equal": "Ұзындығы тең емес",
-        "length_longer": "Ұзындығы ұзақ"
+        "length_longer": "Ұзындығы {actualLength}, {maxLength}-ден аспауы керек"
     },
     "countries": {
         "germany": "Германия",

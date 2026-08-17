@@ -206,7 +206,7 @@
         "invalid_format_password": "يجب ألّا تحتوي كلمة المرور على مسافات",
         "invalid_format_ssh": "عليك اتباع صيغة مفتاح SSH",
         "root_name": "لا يجب أن يكون \"جذر\" (root)",
-        "length_longer": "الطول []، يجب أن يكون أقصر من أو يساوي {}"
+        "length_longer": "الطول {actualLength}، يجب أن يكون أقصر من أو يساوي {maxLength}"
     },
     "developer_settings": {
         "subtitle": "هذه الإعدادات مخصصة لتصحيح الأخطاء فقط، فلا تقم بتغييرها إلا إذا كنت تعرف ما تفعله.",

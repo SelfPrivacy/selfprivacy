@@ -95,7 +95,7 @@ jobs:
   # Android targets
   build-android-nightly-fdroid:
     runs-on:
-      - x64
+      - kvm
 
     concurrency:
       group: android-publish

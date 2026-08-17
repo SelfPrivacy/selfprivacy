@@ -27,7 +27,6 @@ jobs:
       - create-release
 
     runs-on:
-      - x64
       - kvm
 
     steps:
@@ -57,7 +56,6 @@ jobs:
       - create-release
 
     runs-on:
-      - x64
       - kvm
 
     concurrency:

@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
 import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/root_user_form_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/forms/ssh_key_form.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -28,7 +27,6 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_routing.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/breakpoints.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class InitializingPage extends StatelessWidget {
@@ -48,7 +46,6 @@ class InitializingPage extends StatelessWidget {
           () => _stepServerType(cubit),
           () => _stepDnsProviderToken(cubit),
           () => _stepDomain(cubit),
-          () => _stepUser(cubit),
           () => _stepServer(cubit),
           () => _stepCheck(cubit),
           () => _stepCheck(cubit),
@@ -62,7 +59,6 @@ class InitializingPage extends StatelessWidget {
         'initializing.steps.server_type',
         'initializing.steps.dns_provider',
         'initializing.steps.domain',
-        'initializing.steps.master_account',
         'initializing.steps.server',
         'initializing.steps.dns_setup',
         'initializing.steps.nixos_installation',
@@ -227,89 +223,6 @@ class InitializingPage extends StatelessWidget {
         },
         child: const DomainPicker(),
       );
-
-  Widget _stepUser(
-    final ServerInstallationCubit initializingCubit,
-  ) => BlocProvider(
-    create: (final context) =>
-        RootUserFormCubit(initializingCubit, FieldCubitFactory(context)),
-    child: Builder(
-      builder: (final context) {
-        final formCubitState = context.watch<RootUserFormCubit>().state;
-
-        return ResponsiveLayoutWithInfobox(
-          topChild: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'initializing.create_master_account'.tr(),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'initializing.enter_username_and_password'.tr(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-          primaryColumn: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (formCubitState.isErrorShown) const SizedBox(height: 16),
-              if (formCubitState.isErrorShown)
-                Text(
-                  'users.username_rule'.tr(),
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              const SizedBox(height: 32),
-              CubitFormTextField(
-                autofocus: true,
-                formFieldCubit: context.read<RootUserFormCubit>().userName,
-                textAlign: TextAlign.center,
-                scrollPadding: const EdgeInsets.only(bottom: 70),
-                decoration: InputDecoration(hintText: 'basis.username'.tr()),
-              ),
-              const SizedBox(height: 16),
-              BlocBuilder<FieldCubit<bool>, FieldCubitState<bool>>(
-                bloc: context.read<RootUserFormCubit>().isVisible,
-                builder: (final context, final state) {
-                  final bool isVisible = state.value;
-                  return CubitFormTextField(
-                    obscureText: !isVisible,
-                    formFieldCubit: context.read<RootUserFormCubit>().password,
-                    textAlign: TextAlign.center,
-                    scrollPadding: const EdgeInsets.only(bottom: 70),
-                    decoration: InputDecoration(
-                      hintText: 'basis.password'.tr(),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          isVisible ? Icons.visibility : Icons.visibility_off,
-                        ),
-                        onPressed: () => context
-                            .read<RootUserFormCubit>()
-                            .isVisible
-                            .setValue(!isVisible),
-                      ),
-                      suffixIconConstraints: const BoxConstraints(minWidth: 60),
-                      prefixIconConstraints: const BoxConstraints(maxWidth: 60),
-                      prefixIcon: Container(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 32),
-              BrandButton.filled(
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<RootUserFormCubit>().trySubmit(),
-                title: 'basis.connect'.tr(),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
 
   Widget _stepServer(final ServerInstallationCubit appConfigCubit) {
     final bool isLoading =

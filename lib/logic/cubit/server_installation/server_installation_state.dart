@@ -6,7 +6,6 @@ abstract class ServerInstallationState extends Equatable {
     required this.serverTypeIdentificator,
     required this.dnsApiCredential,
     required this.serverDomain,
-    required this.rootUser,
     required this.serverDetails,
     required this.isServerStarted,
     required this.isCertificateVerified,
@@ -21,7 +20,6 @@ abstract class ServerInstallationState extends Equatable {
     serverTypeIdentificator,
     dnsApiCredential,
     serverDomain,
-    rootUser,
     serverDetails,
     isServerStarted,
     isCertificateVerified,
@@ -35,7 +33,6 @@ abstract class ServerInstallationState extends Equatable {
   final String? serverTypeIdentificator;
   final String? serverLocation;
   final ServerDomain? serverDomain;
-  final User? rootUser;
   final ServerHostingDetails? serverDetails;
   final bool isServerStarted;
   final bool isCertificateVerified;
@@ -46,7 +43,6 @@ abstract class ServerInstallationState extends Equatable {
   bool get isServerTypeFilled => serverTypeIdentificator != null;
   bool get isDnsProviderFilled => dnsApiCredential != null;
   bool get isDomainSelected => serverDomain != null;
-  bool get isPrimaryUserFilled => rootUser != null;
   bool get isServerCreated => serverDetails != null;
 
   bool get isFullyInitialized =>
@@ -59,7 +55,7 @@ abstract class ServerInstallationState extends Equatable {
   int get progressBar {
     if (progress.index < 5) {
       return progress.index;
-    } else if (progress.index < 9) {
+    } else if (progress.index < 8) {
       return 5;
     } else {
       return 6;
@@ -72,7 +68,6 @@ abstract class ServerInstallationState extends Equatable {
       isServerTypeFilled,
       isDnsProviderFilled,
       isDomainSelected,
-      isPrimaryUserFilled,
       isServerCreated,
       isServerStarted,
       isCertificateVerified,
@@ -95,7 +90,6 @@ class TimerState extends ServerInstallationNotFinished {
          serverLocation: dataState.serverLocation,
          dnsApiCredential: dataState.dnsApiCredential,
          serverDomain: dataState.serverDomain,
-         rootUser: dataState.rootUser,
          serverDetails: dataState.serverDetails,
          isServerStarted: dataState.isServerStarted,
          isCertificateVerified: dataState.isCertificateVerified,
@@ -121,7 +115,6 @@ enum ServerSetupProgress {
   serverTypeFilled,
   dnsProviderFilled,
   domainFilled,
-  userFilled,
   serverCreated,
   serverStarted,
   certificateVerified,
@@ -143,7 +136,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     super.serverTypeIdentificator,
     super.dnsApiCredential,
     super.serverDomain,
-    super.rootUser,
     super.serverDetails,
     super.installationDialoguePopUp,
   });
@@ -157,7 +149,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         serverTypeIdentificator: data.serverTypeIdentifier,
         serverLocation: data.serverLocation,
         serverDetails: data.serverDetails,
-        rootUser: data.rootUser,
         isServerStarted: data.isServerStarted,
         isCertificateVerified: data.isCertificateVerified,
         isServerRebooted: data.isServerRebooted,
@@ -187,7 +178,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     serverLocation,
     dnsApiCredential,
     serverDomain,
-    rootUser,
     serverDetails,
     isServerStarted,
     isCertificateVerified,
@@ -206,7 +196,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
     final String? serverTypeIdentificator,
     final DnsProviderCredential? dnsApiCredential,
     final ServerDomain? serverDomain,
-    final User? rootUser,
     final ServerHostingDetails? serverDetails,
     final ValueGetter<bool>? isServerStarted,
     final ValueGetter<bool>? isCertificateVerified,
@@ -224,7 +213,6 @@ class ServerInstallationNotFinished extends ServerInstallationState {
         serverTypeIdentificator ?? this.serverTypeIdentificator,
     dnsApiCredential: dnsApiCredential ?? this.dnsApiCredential,
     serverDomain: serverDomain ?? this.serverDomain,
-    rootUser: rootUser ?? this.rootUser,
     serverDetails: serverDetails ?? this.serverDetails,
     isServerStarted: isServerStarted != null
         ? isServerStarted()
@@ -264,7 +252,6 @@ class ServerInstallationEmpty extends ServerInstallationNotFinished {
         serverTypeIdentificator: null,
         dnsApiCredential: null,
         serverDomain: null,
-        rootUser: null,
         serverDetails: null,
         isServerStarted: false,
         isCertificateVerified: false,
@@ -285,7 +272,6 @@ class ServerInstallationFinished extends ServerInstallationState {
     super.serverTypeIdentificator,
     super.serverLocation,
   }) : super(
-         rootUser: null,
          isServerStarted: true,
          isCertificateVerified: true,
          isServerRebooted: true,
@@ -299,7 +285,6 @@ class ServerInstallationFinished extends ServerInstallationState {
     serverLocation,
     dnsApiCredential,
     serverDomain,
-    rootUser,
     serverDetails,
     isServerStarted,
     isCertificateVerified,
@@ -332,7 +317,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     super.serverDomain,
     super.serverDetails,
   }) : super(
-         rootUser: null,
          isServerStarted: true,
          isCertificateVerified: true,
          isServerRebooted: true,
@@ -348,7 +332,6 @@ class ServerInstallationRecovery extends ServerInstallationState {
     serverLocation,
     dnsApiCredential,
     serverDomain,
-    rootUser,
     serverDetails,
     isServerStarted,
     isCertificateVerified,

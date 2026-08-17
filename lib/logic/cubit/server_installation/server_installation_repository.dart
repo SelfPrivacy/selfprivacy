@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 import 'package:selfprivacy/logic/models/json/device_token.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -570,10 +569,6 @@ class ServerInstallationRepository {
     await getIt<WizardDataModel>().setIsServerRebooted(
       isRebooted: serverRebooted,
     );
-  }
-
-  Future<void> saveRootUser(final User rootUser) async {
-    await getIt<WizardDataModel>().setRootUser(rootUser);
   }
 
   Future<void> saveIsRecoveringServer({

@@ -14,7 +14,6 @@ import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/price.dart';
@@ -201,11 +200,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
   }
 
-  Future<void> setRootUser(final User rootUser) async {
-    await repository.saveRootUser(rootUser);
-    emit((state as ServerInstallationNotFinished).copyWith(rootUser: rootUser));
-  }
-
   Future<void> onCreateServerSuccess(
     final ServerHostingDetails serverDetails,
   ) async {
@@ -251,7 +245,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     );
 
     final installationData = LaunchInstallationData(
-      rootUser: state.rootUser!,
       dnsApiCredential: state.dnsApiCredential!,
       serverDomain: state.serverDomain!,
       serverTypeId: state.serverTypeIdentificator!,

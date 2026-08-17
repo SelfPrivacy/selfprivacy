@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_dynamic_calls
 
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner_api.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
@@ -190,15 +188,10 @@ class HetznerServerProvider extends ServerProvider {
 
     final serverResult = await _adapter.api().createServer(
       dnsApiCredential: installationData.dnsApiCredential,
-      rootUser: installationData.rootUser,
       domainName: installationData.serverDomain.domainName,
       serverType: installationData.serverTypeId,
       hostName: hostname,
       volumeId: volume.id,
-      base64Password: base64.encode(
-        utf8.encode(installationData.rootUser.password ?? 'PASS'),
-      ),
-      databasePassword: StringGenerators.dbPassword(),
       serverApiToken: serverApiToken,
       customSshKey: installationData.customSshKey,
       region: installationData.location,

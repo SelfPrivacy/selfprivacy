@@ -53,24 +53,6 @@ class FieldCubitFactory {
     );
   }
 
-  /// A common user password field.
-  ///
-  /// - Must fail on the regural expression of invalid matches: [\n\r\s]+
-  /// - Must not be empty
-  FieldCubit<String> createUserPasswordField() {
-    final RegExp passwordForbiddenRegExp = RegExp(r'[\n\r\s]+');
-    return FieldCubit(
-      initalValue: '',
-      validations: [
-        RequiredStringValidation('validations.required'.tr()),
-        ValidationModel<String>(
-          passwordForbiddenRegExp.hasMatch,
-          'validations.invalid_format_password'.tr(),
-        ),
-      ],
-    );
-  }
-
   FieldCubit<String> createRequiredStringField() => FieldCubit(
     initalValue: '',
     validations: [RequiredStringValidation('validations.required'.tr())],

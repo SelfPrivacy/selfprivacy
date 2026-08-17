@@ -7,7 +7,6 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -81,9 +80,6 @@ class DigitalOceanApi extends RestApiMap {
   Future<GenericResult<int?>> createServer({
     required final DnsProviderCredential dnsApiCredential,
     required final String serverApiToken,
-    required final User rootUser,
-    required final String base64Password,
-    required final String databasePassword,
     required final String domainName,
     required final String hostName,
     required final String serverType,
@@ -107,9 +103,9 @@ class DigitalOceanApi extends RestApiMap {
             '#cloud-config\n'
             'runcmd:\n'
             '- curl https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-infect/raw/branch/master/nixos-infect | '
-            "API_TOKEN=$serverApiToken ENCODED_PASSWORD='$base64Password' "
+            'API_TOKEN=$serverApiToken '
             "DNS_PROVIDER_TOKEN=${dnsApiCredential.token} DNS_PROVIDER_TYPE=$dnsProviderType DOMAIN='$domainName' "
-            "HOSTNAME=$hostName LUSER='${rootUser.login}' PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
+            "HOSTNAME=$hostName PROVIDER=$infectProviderName STAGING_ACME='$stagingAcme' "
             "${customSshKey != null ? "SSH_AUTHORIZED_KEY='$customSshKey'" : ""} "
             "${dnsApiCredential.tokenId != null ? "DNS_PROVIDER_TOKEN_ID=${dnsApiCredential.tokenId}" : ""} "
             "${dnsApiCredential.url != null ? "DNS_PROVIDER_URL=${dnsApiCredential.url}" : ""} "

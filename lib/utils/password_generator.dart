@@ -97,14 +97,6 @@ class StringGenerators {
   static StringGeneratorFunction simpleId = () =>
       getRandomString(5, hasLowercaseLetters: true);
 
-  static StringGeneratorFunction dbPassword = () => getRandomString(
-    40,
-    hasLowercaseLetters: true,
-    hasUppercaseLetters: true,
-    hasNumbers: true,
-    hasSymbols: true,
-  );
-
   static StringGeneratorFunction storageName = () => getRandomString(
     6,
     hasLowercaseLetters: true,

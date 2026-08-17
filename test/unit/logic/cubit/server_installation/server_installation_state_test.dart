@@ -50,6 +50,22 @@ void main() {
       expect(state.progressBar, 6);
       expect(state.isFullyInitialized, isTrue);
     });
+
+    test('a legacy root user does not add an installation step', () {
+      final state = ServerInstallationNotFinished.fromWizardData(
+        ServerInstallationWizardData.empty().copyWith(
+          serverProviderKey: () => 'srv-token',
+          serverTypeIdentifier: 'cx22',
+          serverLocation: 'fsn1',
+          dnsProviderToken: 'dns-token',
+          dnsProviderType: DnsProviderType.cloudflare,
+          rootUser: const User.fake(),
+          serverDomain: aServerDomain,
+        ),
+      );
+
+      expect(state.progress, ServerSetupProgress.domainFilled);
+    });
   });
 
   group('equality', () {
@@ -125,7 +141,6 @@ void main() {
     expect(updated.isCertificateVerified, isTrue);
     expect(updated.isServerStarted, isTrue);
     expect(updated.serverDomain, state.serverDomain);
-    expect(updated.rootUser, state.rootUser);
     expect(updated.isWaitingForCertificate, isFalse);
   });
 

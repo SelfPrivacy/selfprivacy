@@ -3,7 +3,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
 
 import '../../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
@@ -18,7 +17,6 @@ ServerInstallationNotFinished _stateAfterServerStarted({
   serverLocation: 'fsn1',
   dnsApiCredential: aDnsProviderCredential(),
   serverDomain: aServerDomain(),
-  rootUser: const User.fake(),
   serverDetails: aServerHostingDetails(),
   isServerStarted: true,
   isCertificateVerified: isCertificateVerified,

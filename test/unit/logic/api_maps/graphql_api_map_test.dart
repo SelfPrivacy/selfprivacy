@@ -6,6 +6,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/forms/checks/recovery_domain_check.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
@@ -151,6 +152,10 @@ void main() {
       );
 
       expect(await api.getApiVersion(), isNull);
+    });
+
+    test('a recovery-domain check rejects an unreachable domain', () async {
+      expect(await checkRecoveryDomain(_unresolvableDomain), isFalse);
     });
   });
 }

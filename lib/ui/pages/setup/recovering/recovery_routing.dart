@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_domain_form_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
-import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
+import 'package:selfprivacy/logic/forms/checks/recovery_domain_check.dart';
+import 'package:selfprivacy/logic/forms/recovery_domain_form.dart';
+import 'package:selfprivacy/ui/forms/recovery_domain_form_view.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recover_by_new_device_key.dart';
@@ -15,7 +16,6 @@ import 'package:selfprivacy/ui/pages/setup/recovering/recovery_confirm_server.da
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_method_select.dart';
 import 'package:selfprivacy/ui/pages/setup/recovering/recovery_server_provider_connected.dart';
 import 'package:selfprivacy/utils/route_transitions/basic.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class RecoveryRoutingPage extends StatelessWidget {
@@ -67,71 +67,56 @@ class RecoveryRoutingPage extends StatelessWidget {
   }
 }
 
-class SelectDomainToRecover extends StatelessWidget {
+class SelectDomainToRecover extends StatefulWidget {
   const SelectDomainToRecover({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    final serverInstallation = context.watch<ServerInstallationCubit>();
+  State<SelectDomainToRecover> createState() => _SelectDomainToRecoverState();
+}
 
-    return BlocProvider(
-      create: (final context) => RecoveryDomainFormCubit(
-        serverInstallation,
-        FieldCubitFactory(context),
-      ),
-      child: Builder(
-        builder: (final context) {
-          final formCubitState = context.watch<RecoveryDomainFormCubit>().state;
+class _SelectDomainToRecoverState extends State<SelectDomainToRecover> {
+  late final RecoveryDomainForm _form;
 
-          return BlocListener<ServerInstallationCubit, ServerInstallationState>(
-            listener: (final context, final state) {
-              if (state is ServerInstallationRecovery) {
-                if (state.currentStep == RecoveryStep.selecting) {
-                  if (state.recoveryCapabilities ==
-                      ServerRecoveryCapabilities.none) {
-                    context.read<RecoveryDomainFormCubit>().setCustomError(
-                      'recovering.domain_recover_error'.tr(),
-                    );
-                  }
-                }
-              }
-            },
-            child: BrandHeroScreen(
-              heroTitle: 'recovering.recovery_main_header'.tr(),
-              heroSubtitle: 'recovering.domain_recovery_description'.tr(),
-              hasBackButton: true,
-              hasFlashButton: false,
-              ignoreBreakpoints: true,
-              onBackButtonPressed: () async {
-                await Navigator.of(context).pushAndRemoveUntil(
-                  materialRoute(const RootPage()),
-                  (final predicate) => false,
-                );
-              },
-              children: [
-                CubitFormTextField(
-                  autofocus: true,
-                  formFieldCubit: context
-                      .read<RecoveryDomainFormCubit>()
-                      .serverDomainField,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: 'recovering.domain_recover_placeholder'.tr(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                BrandButton.filled(
-                  onPressed: formCubitState.isSubmitting
-                      ? null
-                      : () =>
-                            context.read<RecoveryDomainFormCubit>().trySubmit(),
-                  child: Text('basis.continue'.tr()),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+  @override
+  void initState() {
+    super.initState();
+    _form = RecoveryDomainForm(
+      validateDomain: checkRecoveryDomain,
+      onSubmit: context
+          .read<ServerInstallationCubit>()
+          .submitDomainForAccessRecovery,
     );
   }
+
+  @override
+  void dispose() {
+    _form.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) =>
+      BlocListener<ServerInstallationCubit, ServerInstallationState>(
+        listener: (final context, final state) {
+          if (state is ServerInstallationRecovery &&
+              state.currentStep == RecoveryStep.selecting &&
+              state.recoveryCapabilities == ServerRecoveryCapabilities.none) {
+            _form.showDomainNotFoundError();
+          }
+        },
+        child: BrandHeroScreen(
+          heroTitle: 'recovering.recovery_main_header'.tr(),
+          heroSubtitle: 'recovering.domain_recovery_description'.tr(),
+          hasBackButton: true,
+          hasFlashButton: false,
+          ignoreBreakpoints: true,
+          onBackButtonPressed: () async {
+            await Navigator.of(context).pushAndRemoveUntil(
+              materialRoute(const RootPage()),
+              (final predicate) => false,
+            );
+          },
+          children: [RecoveryDomainFormView(recoveryDomainForm: _form)],
+        ),
+      );
 }

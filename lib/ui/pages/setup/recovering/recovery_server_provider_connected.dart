@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/server_provider_credential_check.dart';
+import 'package:selfprivacy/logic/forms/checks/server_provider_credential_check.dart';
 import 'package:selfprivacy/logic/forms/server_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';

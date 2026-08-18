@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/server_provider_credential_check.dart';
+import 'package:selfprivacy/logic/forms/checks/server_provider_credential_check.dart';
 import 'package:selfprivacy/logic/forms/server_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';

@@ -1,4 +1,4 @@
-import 'package:selfprivacy/logic/forms/credential_checks/credential_validation_result.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';

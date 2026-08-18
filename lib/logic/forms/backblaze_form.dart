@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_check_state.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_validation_result.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
 typedef BackblazeCredentials = ({String keyId, String applicationKey});

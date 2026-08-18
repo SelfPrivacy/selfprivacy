@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/dns_provider_credential_check.dart';
+import 'package:selfprivacy/logic/forms/checks/dns_provider_credential_check.dart';
 import 'package:selfprivacy/logic/forms/dns_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';

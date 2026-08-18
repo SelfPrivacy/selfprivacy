@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/logic/forms/backblaze_form.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_check_state.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_validation_result.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 
 const _credentials = (keyId: ' key-id ', applicationKey: ' application-key ');
 

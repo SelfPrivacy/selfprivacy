@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/forms/backblaze_form.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/backblaze_credential_check.dart';
+import 'package:selfprivacy/logic/forms/checks/backblaze_credential_check.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/forms/backblaze_form_view.dart';

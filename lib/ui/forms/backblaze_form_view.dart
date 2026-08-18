@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/logic/forms/backblaze_form.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_check_state.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/forms/credential_check_error.dart';
 

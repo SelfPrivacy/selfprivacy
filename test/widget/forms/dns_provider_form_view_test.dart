@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_validation_result.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 import 'package:selfprivacy/logic/forms/dns_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/ui/forms/dns_provider_form_view.dart';

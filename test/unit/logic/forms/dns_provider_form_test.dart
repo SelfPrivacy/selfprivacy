@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_check_state.dart';
-import 'package:selfprivacy/logic/forms/credential_checks/credential_validation_result.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 import 'package:selfprivacy/logic/forms/dns_provider_form.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';

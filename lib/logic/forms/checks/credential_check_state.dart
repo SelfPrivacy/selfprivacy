@@ -1,4 +1,4 @@
-import 'package:selfprivacy/logic/forms/credential_checks/credential_validation_result.dart';
+import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 
 sealed class CredentialCheckState {
   const CredentialCheckState();

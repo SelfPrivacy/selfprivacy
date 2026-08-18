@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/forms/factories/field_cubit_factory.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/recovering/recovery_device_form_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/forms/recovery_device_form.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/markdown/brand_md.dart';
+import 'package:selfprivacy/ui/forms/recovery_device_form_view.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 class RecoverByOldTokenInstruction extends StatelessWidget {
   @override
@@ -48,54 +48,40 @@ class RecoverByOldTokenInstruction extends StatelessWidget {
   final String instructionFilename;
 }
 
-class RecoverByOldToken extends StatelessWidget {
+class RecoverByOldToken extends StatefulWidget {
   const RecoverByOldToken({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    final ServerInstallationCubit appConfig = context
-        .watch<ServerInstallationCubit>();
+  State<RecoverByOldToken> createState() => _RecoverByOldTokenState();
+}
 
-    return BlocProvider(
-      create: (final context) => RecoveryDeviceFormCubit(
-        appConfig,
-        FieldCubitFactory(context),
-        ServerRecoveryMethods.oldToken,
-      ),
-      child: Builder(
-        builder: (final context) {
-          final FormCubitState formCubitState = context
-              .watch<RecoveryDeviceFormCubit>()
-              .state;
+class _RecoverByOldTokenState extends State<RecoverByOldToken> {
+  late final RecoveryDeviceForm _form;
 
-          return BrandHeroScreen(
-            heroTitle: 'recovering.recovery_main_header'.tr(),
-            heroSubtitle: 'recovering.method_device_input_description'.tr(),
-            hasBackButton: true,
-            hasFlashButton: false,
-            ignoreBreakpoints: true,
-            children: [
-              CubitFormTextField(
-                autofocus: true,
-                formFieldCubit: context
-                    .read<RecoveryDeviceFormCubit>()
-                    .tokenField,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: 'recovering.method_device_input_placeholder'.tr(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              BrandButton.filled(
-                onPressed: formCubitState.isSubmitting
-                    ? null
-                    : () => context.read<RecoveryDeviceFormCubit>().trySubmit(),
-                child: Text('basis.continue'.tr()),
-              ),
-            ],
-          );
-        },
-      ),
+  @override
+  void initState() {
+    super.initState();
+    _form = RecoveryDeviceForm(
+      tokenType: RecoveryDeviceTokenType.oldToken,
+      onSubmit: (final token) => context
+          .read<ServerInstallationCubit>()
+          .tryToRecover(token, ServerRecoveryMethods.oldToken),
     );
   }
+
+  @override
+  void dispose() {
+    _form.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) => BrandHeroScreen(
+    heroTitle: 'recovering.recovery_main_header'.tr(),
+    heroSubtitle: 'recovering.method_device_input_description'.tr(),
+    hasBackButton: true,
+    hasFlashButton: false,
+    ignoreBreakpoints: true,
+    children: [RecoveryDeviceFormView(recoveryDeviceForm: _form)],
+  );
 }

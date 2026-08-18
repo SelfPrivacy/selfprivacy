@@ -12,6 +12,7 @@ dependencies:
   animations: ^2.2.0
   auto_route: ^11.1.0
   auto_size_text: ^3.0.0
+  bip39_mnemonic: ^4.1.0
   bloc_concurrency: ^0.3.0
   collection: ^1.18.0
   crypt: ^4.3.1

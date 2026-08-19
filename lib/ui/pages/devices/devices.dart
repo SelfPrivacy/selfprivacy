@@ -10,7 +10,6 @@ import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/fake_data.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class DevicesPage extends StatefulWidget {

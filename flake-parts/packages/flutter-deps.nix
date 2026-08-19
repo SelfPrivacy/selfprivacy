@@ -16,10 +16,6 @@ sp.ourFlutter.buildFlutterApplication {
 
   src = sp.projectFiles;
 
-  gitHashes = {
-    "sp_cubit_form" = "sha256-fq3NimMBwrR4zEQOq/cW7Kn/raaIaqDgaZ5CbENhJMM=";
-  };
-
   pubspecLock = sp.toNixFromYAML sp.flutterLockfile;
 
   dontBuild = true;

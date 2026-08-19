@@ -5,7 +5,6 @@ import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/organisms/displays/key_display.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 @RoutePage()
 class NewDevicePage extends StatelessWidget {

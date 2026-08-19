@@ -11,10 +11,6 @@ sp.ourFlutter.buildFlutterApplication {
 
   src = sp.projectFiles;
 
-  gitHashes = {
-    "sp_cubit_form" = "sha256-fq3NimMBwrR4zEQOq/cW7Kn/raaIaqDgaZ5CbENhJMM=";
-  };
-
   meta = {
     platforms = [
       "x86_64-linux"
@@ -23,10 +19,6 @@ sp.ourFlutter.buildFlutterApplication {
   };
 
   autoPubspecLock = sp.flutterLockfile;
-
-  gitHashes = {
-    "sp_lints" = "sha256-henUl8JcN6YRSnymnVAiNjm8bmRJGPPjVhLP0EJcZk0=";
-  };
 
   desktopItem = pkgs.makeDesktopItem {
     name = "${sp.applicationMetadata.name}";

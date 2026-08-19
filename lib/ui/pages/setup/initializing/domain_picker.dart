@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/cubit/forms/setup/initializing/domain_setup_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/domain_setup_cubit.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
 import 'package:selfprivacy/ui/layouts/responsive_layout_with_infobox.dart';
-import 'package:sp_cubit_form/sp_cubit_form.dart';
 
 void _showDomainAccessDeniedDialog(
   final BuildContext context,

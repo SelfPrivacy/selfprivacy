@@ -157,7 +157,7 @@ class DigitalOceanApi extends RestApiMap {
         options: Options(
           followRedirects: false,
           validateStatus: (final status) =>
-              status != null && (status >= 200 || status == 401),
+              status == HttpStatus.ok || status == HttpStatus.unauthorized,
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
@@ -180,8 +180,6 @@ class DigitalOceanApi extends RestApiMap {
     } else if (response.statusCode == HttpStatus.unauthorized) {
       message = 'initializing.provider_bad_key_error';
       isValid = false;
-    } else {
-      throw Exception('code: ${response.statusCode}');
     }
 
     return GenericResult(data: isValid, success: true, message: message);

@@ -375,14 +375,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<bool>> tryInitApiByToken(final String token) async {
+  Future<GenericResult<bool>> tryInitApiByToken(final String token) {
     final api = _adapter.api(getInitialized: false);
-    final result = await api.isApiTokenValid(token);
-    if (!result.data || !result.success) {
-      return result;
-    }
-
-    return result;
+    return api.isApiTokenValid(token);
   }
 
   @override

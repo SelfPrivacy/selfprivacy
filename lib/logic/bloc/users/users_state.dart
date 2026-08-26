@@ -75,3 +75,10 @@ class UsersLoaded extends UsersState {
   @override
   List<Object> get props => [_hashCode];
 }
+
+class UsersError extends UsersState {
+  UsersError() : super(users: const []);
+
+  @override
+  List<Object> get props => [_hashCode];
+}

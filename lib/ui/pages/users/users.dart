@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_c
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_outdated_card.dart';
@@ -48,8 +49,11 @@ class UsersPage extends StatelessWidget {
             7,
             (final int index) => const User.fake(),
           );
-          if (users.isEmpty && !isLoading) {
+          if (state is UsersError) {
             return const _UsersNotLoaded();
+          }
+          if (users.isEmpty && state is UsersLoaded) {
+            return const _NoUsers();
           }
           return RefreshIndicator(
             onRefresh: () async {
@@ -158,6 +162,33 @@ class _UsersNotLoaded extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    ),
+  );
+}
+
+class _NoUsers extends StatelessWidget {
+  const _NoUsers();
+
+  @override
+  Widget build(final BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          EmptyPagePlaceholder(
+            title: 'users.nobody_here'.tr(),
+            iconData: BrandIcons.users,
+          ),
+          const SizedBox(height: 16),
+          BrandButton.filled(
+            onPressed: () async {
+              await context.pushRoute(NewUserRoute());
+            },
+            title: 'users.add_new_user'.tr(),
+          ),
+        ],
       ),
     ),
   );

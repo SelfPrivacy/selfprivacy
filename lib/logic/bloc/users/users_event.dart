@@ -13,6 +13,13 @@ class UsersListChanged extends UsersEvent {
   List<Object> get props => [users];
 }
 
+class UsersLoadFailed extends UsersEvent {
+  const UsersLoadFailed();
+
+  @override
+  List<Object> get props => [];
+}
+
 class UsersListRefresh extends UsersEvent {
   const UsersListRefresh();
 

@@ -12,6 +12,7 @@ part 'users_state.dart';
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc() : super(UsersInitial()) {
     on<UsersListChanged>(_updateList, transformer: sequential());
+    on<UsersLoadFailed>(_loadFailed, transformer: sequential());
     on<UsersListRefresh>(_reload, transformer: droppable());
     on<UsersConnectionStatusChanged>(
       _mapConnectionStatusChangedToState,
@@ -27,7 +28,12 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     _apiDataSubscription = apiConnectionRepository.dataStream.listen((
       final ApiData apiData,
     ) {
-      add(UsersListChanged(apiData.users.data ?? []));
+      final users = apiData.users;
+      if (users.data != null) {
+        add(UsersListChanged(users.data!));
+      } else if (users.lastError != null) {
+        add(const UsersLoadFailed());
+      }
     });
   }
 
@@ -35,12 +41,15 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     final UsersListChanged event,
     final Emitter<UsersState> emit,
   ) async {
-    if (event.users.isEmpty) {
-      emit(UsersInitial());
-      return;
-    }
     final newState = UsersLoaded(users: event.users);
     emit(newState);
+  }
+
+  Future<void> _loadFailed(
+    final UsersLoadFailed event,
+    final Emitter<UsersState> emit,
+  ) async {
+    emit(UsersError());
   }
 
   Future<void> refresh() async {

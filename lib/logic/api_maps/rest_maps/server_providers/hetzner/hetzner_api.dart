@@ -454,7 +454,7 @@ class HetznerApi extends RestApiMap {
       client.close();
     }
 
-    return GenericResult(success: false, data: success);
+    return GenericResult(success: success, data: success);
   }
 
   Future<GenericResult<bool>> attachVolume(
@@ -480,7 +480,7 @@ class HetznerApi extends RestApiMap {
 
     return GenericResult(
       data: success,
-      success: true,
+      success: success,
       code: attachVolumeResponse?.statusCode,
       message: attachVolumeResponse?.statusMessage,
     );

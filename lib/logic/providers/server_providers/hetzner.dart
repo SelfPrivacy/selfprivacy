@@ -102,7 +102,7 @@ class HetznerServerProvider extends ServerProvider {
 
     final List<HetznerServerInfo> hetznerServers = result.data;
     for (final hetznerServer in hetznerServers) {
-      if (hetznerServer.publicNet.ipv4 != null ||
+      if (hetznerServer.publicNet.ipv4 != null &&
           hetznerServer.id == serverId) {
         server = hetznerServer;
         break;

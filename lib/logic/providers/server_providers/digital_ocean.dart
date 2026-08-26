@@ -160,7 +160,7 @@ class DigitalOceanServerProvider extends ServerProvider {
   Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
     final LaunchInstallationData installationData,
   ) async {
-    ServerHostingDetails? serverDetails;
+    late final ServerHostingDetails serverDetails;
     final serverApiToken = StringGenerators.apiToken();
     final hostname = getHostnameFromDomain(
       installationData.serverDomain.domainName,
@@ -241,6 +241,10 @@ class DigitalOceanServerProvider extends ServerProvider {
         region: installationData.location,
       )).data;
 
+      if (!attachedVolume) {
+        throw StateError('DigitalOcean volume attachment failed.');
+      }
+
       String? ipv4;
       int attempts = 0;
       while (attempts < 10 && ipv4 == null) {
@@ -255,16 +259,20 @@ class DigitalOceanServerProvider extends ServerProvider {
         ++attempts;
       }
 
-      if (attachedVolume && ipv4 != null) {
-        serverDetails = ServerHostingDetails(
-          id: dropletId,
-          ip4: ipv4,
-          createTime: DateTime.now(),
-          volume: newVolume,
-          apiToken: serverApiToken,
-          provider: ServerProviderType.digitalOcean,
+      if (ipv4 == null) {
+        throw StateError(
+          'Timed out while waiting for the DigitalOcean droplet IPv4 address.',
         );
       }
+
+      serverDetails = ServerHostingDetails(
+        id: dropletId,
+        ip4: ipv4,
+        createTime: DateTime.now(),
+        volume: newVolume,
+        apiToken: serverApiToken,
+        provider: ServerProviderType.digitalOcean,
+      );
     } catch (e) {
       return GenericResult(
         success: false,
@@ -289,7 +297,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    await installationData.successCallback(serverDetails!);
+    await installationData.successCallback(serverDetails);
     return GenericResult(success: true, data: null);
   }
 

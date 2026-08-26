@@ -99,12 +99,21 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final List rawServers = result.data;
     for (final rawServer in rawServers) {
+      if (rawServer['id'] != serverId) {
+        continue;
+      }
+
       if (rawServer['networks']['v4'].isNotEmpty) {
         for (final v4 in rawServer['networks']['v4']) {
           if (v4['type'].toString() == 'public') {
             server = rawServer;
+            break;
           }
         }
+      }
+
+      if (server != null) {
+        break;
       }
     }
 

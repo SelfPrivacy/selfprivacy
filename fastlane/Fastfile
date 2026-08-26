@@ -1,3 +1,4 @@
+require 'etc'
 require 'securerandom'
 
 default_platform(:android)
@@ -24,13 +25,9 @@ end
 platform :ios do
   desc 'Re-sign the unsigned Runner.xcarchive and export an App Store IPA'
   lane :sign_release do
-    keychain_name = 'selfprivacy-sign'
+    ENV['HOME'] = Etc.getpwuid(Process.uid).dir
+    keychain_name = "selfprivacy-sign-#{SecureRandom.uuid}"
     keychain_password = SecureRandom.hex(16)
-    begin
-      delete_keychain(name: keychain_name)
-    rescue StandardError
-      # nothing to clean up
-    end
     create_keychain(
       name: keychain_name,
       password: keychain_password,

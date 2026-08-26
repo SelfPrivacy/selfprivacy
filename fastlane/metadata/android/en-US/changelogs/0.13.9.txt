@@ -1,0 +1,24 @@
+# 0.13.9 Changelog
+
+## Changes
+
+**Features**
+
+- **Simplify server setup by removing the primary-user configuration step** ([#717](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/717))
+
+**Bug Fixes**
+
+- Refresh user data correctly after account details or group membership change, and report failed user operations instead of treating them as successful ([#711](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/711))
+- Hide services that are not installed from the Server Storage screen ([#714](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/714), resolves [#646](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/646))
+- Return to the existing user details screen after editing a user instead of opening a duplicate screen ([#718](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/718))
+- Show the empty-users state instead of a network error when the server has no users ([#723](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/723))
+
+**Refactor**
+
+- Migrate Backblaze, server-provider, and DNS-provider credential forms to the new form system ([#710](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/710), [#713](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/713), [#715](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/715))
+- Migrate user-management and server-recovery forms to the new form system ([#718](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/718), [#720](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/720), [#721](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/721))
+- Remove the legacy form system after completing the migration ([#722](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/722))
+
+**Build & Packaging**
+
+- Make iOS signing more reliable by using a unique temporary keychain for each release job ([#724](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/724))

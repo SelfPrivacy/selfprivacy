@@ -62,6 +62,7 @@ platform :ios do
         export_team_id: ENV.fetch('sigh_org.selfprivacy.app_appstore_team-id'),
         export_options: {
           signingStyle: 'manual',
+          signingCertificate: ENV.fetch('sigh_org.selfprivacy.app_appstore_certificate-name'),
           provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
         },
         output_directory: ENV.fetch('IPA_OUTPUT_DIR'),

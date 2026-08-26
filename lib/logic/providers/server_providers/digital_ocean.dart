@@ -208,7 +208,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     );
 
     if (!serverResult.success || serverResult.data == null) {
-      GenericResult(
+      return GenericResult(
         data: CallbackDialogueBranching(
           choices: [
             CallbackDialogueChoice(

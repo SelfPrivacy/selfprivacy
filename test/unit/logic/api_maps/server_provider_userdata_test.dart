@@ -9,24 +9,6 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/he
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/credential_fixtures.dart';
 
-class _RecordingHetznerApi extends HetznerApi {
-  _RecordingHetznerApi(this.client) : super(token: 'provider-token');
-
-  final Dio client;
-
-  @override
-  Future<Dio> getClient({final BaseOptions? customOptions}) async => client;
-}
-
-class _RecordingDigitalOceanApi extends DigitalOceanApi {
-  _RecordingDigitalOceanApi(this.client) : super(token: 'provider-token');
-
-  final Dio client;
-
-  @override
-  Future<Dio> getClient({final BaseOptions? customOptions}) async => client;
-}
-
 Dio _recordingClient(final void Function(RequestOptions) record) {
   final client = Dio();
   client.interceptors.add(
@@ -70,8 +52,9 @@ void main() {
 
   test('Hetzner userdata omits the legacy Unix-user arguments', () async {
     late RequestOptions request;
-    final api = _RecordingHetznerApi(
-      _recordingClient((final options) {
+    final api = HetznerApi(
+      token: 'provider-token',
+      clientFactory: (_) => _recordingClient((final options) {
         request = options;
       }),
     );
@@ -96,8 +79,9 @@ void main() {
 
   test('Hetzner userdata retains an optional root SSH key', () async {
     late RequestOptions request;
-    final api = _RecordingHetznerApi(
-      _recordingClient((final options) {
+    final api = HetznerApi(
+      token: 'provider-token',
+      clientFactory: (_) => _recordingClient((final options) {
         request = options;
       }),
     );
@@ -120,8 +104,9 @@ void main() {
 
   test('DigitalOcean userdata omits the legacy Unix-user arguments', () async {
     late RequestOptions request;
-    final api = _RecordingDigitalOceanApi(
-      _recordingClient((final options) {
+    final api = DigitalOceanApi(
+      token: 'provider-token',
+      clientFactory: (_) => _recordingClient((final options) {
         request = options;
       }),
     );
@@ -145,8 +130,9 @@ void main() {
 
   test('DigitalOcean userdata retains an optional root SSH key', () async {
     late RequestOptions request;
-    final api = _RecordingDigitalOceanApi(
-      _recordingClient((final options) {
+    final api = DigitalOceanApi(
+      token: 'provider-token',
+      clientFactory: (_) => _recordingClient((final options) {
         request = options;
       }),
     );

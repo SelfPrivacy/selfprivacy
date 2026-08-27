@@ -15,6 +15,7 @@ class PorkbunApi extends RestApiMap {
     this.tokenId = '',
     this.hasLogger = false,
     this.isWithToken = true,
+    super.clientFactory,
   }) : assert(
          !isWithToken || (token.isNotEmpty && tokenId.isNotEmpty),
          'Porkbun API requires both token and tokenId to be set when isWithToken is true.',

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner_api.dart';
@@ -42,24 +43,6 @@ class _StubHttpClientAdapter implements HttpClientAdapter {
 
   @override
   void close({final bool force = false}) {}
-}
-
-class _TestHetznerApi extends HetznerApi {
-  _TestHetznerApi(this.client) : super(isWithToken: false);
-
-  final Dio client;
-
-  @override
-  Future<Dio> getClient({final BaseOptions? customOptions}) async => client;
-}
-
-class _TestDigitalOceanApi extends DigitalOceanApi {
-  _TestDigitalOceanApi(this.client) : super(isWithToken: false);
-
-  final Dio client;
-
-  @override
-  Future<Dio> getClient({final BaseOptions? customOptions}) async => client;
 }
 
 void _runTokenValidationTests({
@@ -126,12 +109,20 @@ void _runTokenValidationTests({
 }
 
 void main() {
+  setUp(() {
+    getIt.registerSingleton<ConsoleModel>(ConsoleModel());
+  });
+
+  tearDown(() async {
+    await getIt.reset();
+  });
+
   _runTokenValidationTests(
     providerName: 'Hetzner',
     rootAddress: 'https://api.hetzner.cloud/v1',
     endpoint: '/servers',
     createValidator: (final client) {
-      final api = _TestHetznerApi(client);
+      final api = HetznerApi(isWithToken: false, clientFactory: (_) => client);
       return api.isApiTokenValid;
     },
   );
@@ -141,7 +132,10 @@ void main() {
     rootAddress: 'https://api.digitalocean.com/v2',
     endpoint: '/account',
     createValidator: (final client) {
-      final api = _TestDigitalOceanApi(client);
+      final api = DigitalOceanApi(
+        isWithToken: false,
+        clientFactory: (_) => client,
+      );
       return api.isApiTokenValid;
     },
   );

@@ -14,6 +14,7 @@ class DesecApi extends RestApiMap {
     this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
+    super.clientFactory,
   }) : assert(
          !isWithToken || token.isNotEmpty,
          'Desec API requires a token to be set when isWithToken is true.',

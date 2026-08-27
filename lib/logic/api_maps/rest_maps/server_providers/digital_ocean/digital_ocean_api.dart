@@ -16,6 +16,7 @@ class DigitalOceanApi extends RestApiMap {
     this.token = '',
     this.hasLogger = true,
     this.isWithToken = true,
+    super.clientFactory,
   }) : assert(
          !isWithToken || token.isNotEmpty,
          'DigitalOcean API requires a token to be set when isWithToken is true.',

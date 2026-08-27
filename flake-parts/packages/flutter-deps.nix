@@ -18,6 +18,10 @@ sp.ourFlutter.buildFlutterApplication {
 
   pubspecLock = sp.toNixFromYAML sp.flutterLockfile;
 
+  gitHashes = {
+    sp_vcr = "sha256-n6yUpYglxB181UIkF6gc9NqsfC+ZOUeOEXPrNufFdLQ=";
+  };
+
   dontBuild = true;
 
   installPhase = ''
@@ -63,8 +67,17 @@ sp.ourFlutter.buildFlutterApplication {
           del(.packages[\"$name\"].description.url)
         " pubspec.lock
 
-        yq -i "del(.dependencies[\"$name\"].git) | .dependencies[\"$name\"].path = \"$rootPath\" " pubspec.yaml
-    done
+        if yq -e ".dependencies[\"$name\"] != null" pubspec.yaml > /dev/null; then
+          section="dependencies"
+        elif yq -e ".dev_dependencies[\"$name\"] != null" pubspec.yaml > /dev/null; then
+          section="dev_dependencies"
+        else
+          echo "Git dependency '$name' is not declared in pubspec.yaml" >&2
+          exit 1
+        fi
+
+        yq -i ".[\"$section\"][\"$name\"] = {\"path\": \"$rootPath\"}" pubspec.yaml
+      done
 
     cp pubspec.lock pubspec.yaml $out/
 

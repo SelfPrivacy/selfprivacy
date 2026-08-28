@@ -29,6 +29,45 @@
           '';
         };
 
+        record-vcr = pkgs.writeShellApplication {
+          name = "record-vcr";
+          runtimeInputs = sp.testTools;
+          text = ''
+            load_vcr_credential() {
+              local name="$1"
+              local value
+
+              if [ -n "''${!name:-}" ]; then
+                return
+              fi
+
+              if [ -t 0 ]; then
+                read -r -s -p "$name: " value
+                printf '\n' >&2
+                if [ -n "$value" ]; then
+                  export "$name=$value"
+                fi
+              fi
+            }
+
+            for name in \
+              HETZNER_API_TOKEN \
+              DIGITAL_OCEAN_API_TOKEN \
+              CLOUDFLARE_API_TOKEN \
+              DESEC_API_TOKEN \
+              PORKBUN_API_KEY \
+              PORKBUN_SECRET_API_KEY \
+              BACKBLAZE_APPLICATION_KEY_ID \
+              BACKBLAZE_APPLICATION_KEY
+            do
+              load_vcr_credential "$name"
+            done
+
+            export VCR_MODE=record
+            flutter test "$@"
+          '';
+        };
+
         analyze-flutter = pkgs.writeShellApplication {
           name = "analyze-flutter";
           runtimeInputs = sp.analyzeTools;

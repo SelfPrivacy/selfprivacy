@@ -184,6 +184,23 @@ void main() {
     expect(rawCassette, contains('response-safe'));
   });
 
+  test('censors response cookies in raw cassettes', () async {
+    final rawCassette = await _recordInteraction(
+      directory: temporaryDirectory,
+      cassetteName: 'response_cookie',
+      policy: const CensorPolicy(),
+      requestBody: <String, String>{'safe': 'request-safe'},
+      responseBody: <String, String>{'safe': 'response-safe'},
+      responseHeaders: <String, String>{
+        'Set-Cookie': 'session=response-cookie-secret',
+      },
+    );
+
+    expect(rawCassette, isNot(contains('response-cookie-secret')));
+    expect(rawCassette, contains('******'));
+    expect(rawCassette, contains('response-safe'));
+  });
+
   test('creates independent Censors instances for provider harnesses', () {
     final porkbun = providerCensors(porkbunCensorPolicy)
       ..censorHeaderElementsByKeys(<String>['X-Test-Only']);
@@ -208,6 +225,7 @@ Future<String> _recordInteraction({
   required final Map<String, String> requestBody,
   required final Map<String, String> responseBody,
   final Map<String, String> headers = const <String, String>{},
+  final Map<String, String> responseHeaders = const <String, String>{},
 }) async {
   final cassette = Cassette(directory.path, cassetteName);
   final vcr =
@@ -215,7 +233,10 @@ Future<String> _recordInteraction({
         ..insert(cassette)
         ..record();
   final dio = Dio()
-    ..httpClientAdapter = _ResponseAdapter(jsonEncode(responseBody));
+    ..httpClientAdapter = _ResponseAdapter(
+      jsonEncode(responseBody),
+      responseHeaders,
+    );
   vcr.attach(dio);
 
   try {
@@ -236,9 +257,10 @@ Future<String> _recordInteraction({
 }
 
 class _ResponseAdapter implements HttpClientAdapter {
-  _ResponseAdapter(this.responseBody);
+  _ResponseAdapter(this.responseBody, this.responseHeaders);
 
   final String responseBody;
+  final Map<String, String> responseHeaders;
 
   @override
   Future<ResponseBody> fetch(
@@ -252,6 +274,8 @@ class _ResponseAdapter implements HttpClientAdapter {
       HttpStatus.ok,
       headers: <String, List<String>>{
         Headers.contentTypeHeader: <String>[Headers.jsonContentType],
+        for (final entry in responseHeaders.entries)
+          entry.key: <String>[entry.value],
       },
     );
   }

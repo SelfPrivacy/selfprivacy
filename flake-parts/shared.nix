@@ -105,6 +105,7 @@
         # `nix run` applications
         runnables = [
           "test-flutter"
+          "record-vcr"
           "analyze-flutter"
           "scan-sonarqube"
           "pubspec-deps-json"

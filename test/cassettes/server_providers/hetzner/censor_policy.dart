@@ -1,7 +1,7 @@
 import 'package:sp_vcr/sp_vcr.dart';
 
 const CensorPolicy hetznerCensorPolicy = CensorPolicy(
-  headerKeys: <String>['Authorization'],
+  headerKeys: <String>['Authorization', 'x-correlation-id'],
   jsonBodyKeys: <String>[
     'API_TOKEN',
     'DNS_PROVIDER_TOKEN',

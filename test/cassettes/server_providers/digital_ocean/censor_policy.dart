@@ -1,7 +1,7 @@
 import 'package:sp_vcr/sp_vcr.dart';
 
 const CensorPolicy digitalOceanServerCensorPolicy = CensorPolicy(
-  headerKeys: <String>['Authorization'],
+  headerKeys: <String>['Authorization', 'cf-ray', 'x-request-id'],
   jsonBodyKeys: <String>[
     'API_TOKEN',
     'DNS_PROVIDER_TOKEN',

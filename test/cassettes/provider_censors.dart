@@ -1,4 +1,6 @@
 import 'package:sp_vcr/sp_vcr.dart';
 
 Censors providerCensors(final CensorPolicy policy) =>
-    Censors.defaultCredentialCensors..withPolicy(policy);
+    Censors.defaultCredentialCensors
+      ..censorHeaderElementsByKeys(<String>['Set-Cookie'])
+      ..withPolicy(policy);

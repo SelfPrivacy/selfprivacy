@@ -19,6 +19,7 @@ sp.ourFlutter.buildFlutterApplication {
   };
 
   autoPubspecLock = sp.flutterLockfile;
+  gitHashes = sp.flutterGitHashes;
 
   desktopItem = pkgs.makeDesktopItem {
     name = "${sp.applicationMetadata.name}";

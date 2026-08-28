@@ -18,9 +18,7 @@ sp.ourFlutter.buildFlutterApplication {
 
   pubspecLock = sp.toNixFromYAML sp.flutterLockfile;
 
-  gitHashes = {
-    sp_vcr = "sha256-n6yUpYglxB181UIkF6gc9NqsfC+ZOUeOEXPrNufFdLQ=";
-  };
+  gitHashes = sp.flutterGitHashes;
 
   dontBuild = true;
 

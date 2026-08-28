@@ -85,6 +85,9 @@
         flutterPubspec = ../pubspec.yaml;
         flutterLockfile = ../pubspec.lock;
         flutterParsedLockfile = toNixFromYAML flutterLockfile;
+        flutterGitHashes = {
+          sp_vcr = "sha256-n6yUpYglxB181UIkF6gc9NqsfC+ZOUeOEXPrNufFdLQ=";
+        };
 
         androidGradleDeps = self'.packages.android-gradle-deps;
 

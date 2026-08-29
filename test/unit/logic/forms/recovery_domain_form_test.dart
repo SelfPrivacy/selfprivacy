@@ -83,9 +83,10 @@ void main() {
         );
         addTearDown(form.dispose);
         final control = form.form.control(RecoveryDomainForm.domainControlName)
-        ..value = 'example.com';
-        form..showDomainNotFoundError()
-        ..clearDomainNotFoundError();
+          ..value = 'example.com';
+        form
+          ..showDomainNotFoundError()
+          ..clearDomainNotFoundError();
         final firstSubmit = form.submit();
         final secondSubmit = form.submit();
 
@@ -120,7 +121,7 @@ void main() {
       );
       addTearDown(form.dispose);
       final control = form.form.control(RecoveryDomainForm.domainControlName)
-      ..value = 'example.com';
+        ..value = 'example.com';
 
       final submit = form.submit();
       await Future<void>.delayed(Duration.zero);

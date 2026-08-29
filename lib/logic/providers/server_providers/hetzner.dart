@@ -241,8 +241,8 @@ class HetznerServerProvider extends ServerProvider {
             title: 'modals.already_exists'.tr(),
           ),
           success: false,
-          message: volumeResult.message,
-          code: volumeResult.code,
+          message: serverResult.message,
+          code: serverResult.code,
         );
       } else {
         return GenericResult(
@@ -265,12 +265,12 @@ class HetznerServerProvider extends ServerProvider {
               ),
             ],
             description:
-                volumeResult.message ?? 'recovering.generic_error'.tr(),
+                serverResult.message ?? 'recovering.generic_error'.tr(),
             title: 'modals.unexpected_error'.tr(),
           ),
           success: false,
-          message: volumeResult.message,
-          code: volumeResult.code,
+          message: serverResult.message,
+          code: serverResult.code,
         );
       }
     }
@@ -328,12 +328,13 @@ class HetznerServerProvider extends ServerProvider {
               },
             ),
           ],
-          description: volumeResult.message ?? 'recovering.generic_error'.tr(),
+          description:
+              createDnsResult.message ?? 'recovering.generic_error'.tr(),
           title: 'modals.unexpected_error'.tr(),
         ),
         success: false,
-        message: volumeResult.message,
-        code: volumeResult.code,
+        message: createDnsResult.message,
+        code: createDnsResult.code,
       );
     }
 

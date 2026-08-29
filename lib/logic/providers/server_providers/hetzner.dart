@@ -719,6 +719,9 @@ class HetznerServerProvider extends ServerProvider {
       final HetznerVolume volume = volumes.firstWhere(
         (final volume) => server.volumes.contains(volume.id),
       );
+      final HetznerPriceInfo serverPrice = server.serverType.prices.firstWhere(
+        (final price) => price.location == server.location.name,
+      );
 
       metadata = [
         ServerMetadataEntity(
@@ -746,7 +749,7 @@ class HetznerServerProvider extends ServerProvider {
           trId: 'server.monthly_cost',
           value:
               // TODO(NaiJi): Make more descriptive
-              '${server.serverType.prices[1].monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} + ${pricePerIp.value.toStringAsFixed(2)} ${currency.shortcode}',
+              '${serverPrice.monthly.toStringAsFixed(2)} + ${(volume.size * pricePerGb.value).toStringAsFixed(2)} + ${pricePerIp.value.toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

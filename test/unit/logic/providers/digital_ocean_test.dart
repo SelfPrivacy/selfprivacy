@@ -77,33 +77,33 @@ void main() {
     await getIt.reset();
   });
 
-  testWidgets('createVolume converts DigitalOcean GiB to bytes', (
-    final tester,
-  ) async {
-    final clients = _DigitalOceanVolumeClientFactory();
-    final provider = ServerProviderFactory.createServerProviderInterface(
-      ServerProviderSettings(
-        provider: ServerProviderType.digitalOcean,
-        token: 'provider-token',
-        isAuthorized: true,
-      ),
-      clientFactory: clients.call,
-    );
+  group('createVolume', () {
+    testWidgets('converts DigitalOcean GiB to bytes', (final tester) async {
+      final clients = _DigitalOceanVolumeClientFactory();
+      final provider = ServerProviderFactory.createServerProviderInterface(
+        ServerProviderSettings(
+          provider: ServerProviderType.digitalOcean,
+          token: 'provider-token',
+          isAuthorized: true,
+        ),
+        clientFactory: clients.call,
+      );
 
-    final resultFuture = provider.createVolume(10, 'nyc1');
+      final resultFuture = provider.createVolume(10, 'nyc1');
 
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 6));
-    final result = await resultFuture;
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 6));
+      final result = await resultFuture;
 
-    expect(result.success, isTrue);
-    expect(result.data, isNotNull);
-    expect(result.data!.sizeByte, 10 * 1024 * 1024 * 1024);
+      expect(result.success, isTrue);
+      expect(result.data, isNotNull);
+      expect(result.data!.sizeByte, 10 * 1024 * 1024 * 1024);
 
-    final createRequest = clients.requests.singleWhere(
-      (final request) => request.method == 'POST',
-    );
-    final requestData = createRequest.data as Map<String, dynamic>;
-    expect(requestData['size_gigabytes'], 10);
+      final createRequest = clients.requests.singleWhere(
+        (final request) => request.method == 'POST',
+      );
+      final requestData = createRequest.data as Map<String, dynamic>;
+      expect(requestData['size_gigabytes'], 10);
+    });
   });
 }

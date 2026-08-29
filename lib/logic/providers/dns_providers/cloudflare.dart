@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/cloudflare/cloudflare_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/cloudflare/cloudflare_dns_info.dart';
@@ -9,24 +10,37 @@ class ApiAdapter {
   ApiAdapter({
     final bool isWithToken = true,
     final String? token,
+    this.clientFactory,
     this.cachedDomain = '',
     this.cachedZoneId = '',
-  }) : _api = CloudflareApi(isWithToken: isWithToken, token: token ?? '');
+  }) : _api = CloudflareApi(
+         isWithToken: isWithToken,
+         token: token ?? '',
+         clientFactory: clientFactory,
+       );
 
-  CloudflareApi api({final bool getInitialized = true}) =>
-      getInitialized ? _api : CloudflareApi(isWithToken: false);
+  CloudflareApi api({final bool getInitialized = true}) => getInitialized
+      ? _api
+      : CloudflareApi(isWithToken: false, clientFactory: clientFactory);
 
   final CloudflareApi _api;
+  final RestApiClientFactory? clientFactory;
   final String cachedZoneId;
   final String cachedDomain;
 }
 
 class CloudflareDnsProvider extends DnsProvider {
-  CloudflareDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
+  CloudflareDnsProvider({final RestApiClientFactory? clientFactory})
+    : _adapter = ApiAdapter(isWithToken: false, clientFactory: clientFactory);
   CloudflareDnsProvider.load({
     required final bool isAuthorized,
     final String? token,
-  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+    final RestApiClientFactory? clientFactory,
+  }) : _adapter = ApiAdapter(
+         isWithToken: isAuthorized,
+         token: token,
+         clientFactory: clientFactory,
+       );
 
   ApiAdapter _adapter;
 
@@ -285,6 +299,7 @@ class CloudflareDnsProvider extends DnsProvider {
     _adapter = ApiAdapter(
       isWithToken: true,
       token: _adapter.api().token,
+      clientFactory: _adapter.clientFactory,
       cachedDomain: domain,
       cachedZoneId: getZoneIdResult.data!,
     );

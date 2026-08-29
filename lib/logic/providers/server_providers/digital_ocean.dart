@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_dynamic_calls
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -19,21 +20,36 @@ import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
-  ApiAdapter({final bool isWithToken = true, final String? token})
-    : _api = DigitalOceanApi(isWithToken: isWithToken, token: token ?? '');
+  ApiAdapter({
+    final bool isWithToken = true,
+    final String? token,
+    this.clientFactory,
+  }) : _api = DigitalOceanApi(
+         isWithToken: isWithToken,
+         token: token ?? '',
+         clientFactory: clientFactory,
+       );
 
-  DigitalOceanApi api({final bool getInitialized = true}) =>
-      getInitialized ? _api : DigitalOceanApi(isWithToken: false);
+  DigitalOceanApi api({final bool getInitialized = true}) => getInitialized
+      ? _api
+      : DigitalOceanApi(isWithToken: false, clientFactory: clientFactory);
 
   final DigitalOceanApi _api;
+  final RestApiClientFactory? clientFactory;
 }
 
 class DigitalOceanServerProvider extends ServerProvider {
-  DigitalOceanServerProvider() : _adapter = ApiAdapter(isWithToken: false);
+  DigitalOceanServerProvider({final RestApiClientFactory? clientFactory})
+    : _adapter = ApiAdapter(isWithToken: false, clientFactory: clientFactory);
   DigitalOceanServerProvider.load({
     required final bool isAuthorized,
     final String? token,
-  }) : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+    final RestApiClientFactory? clientFactory,
+  }) : _adapter = ApiAdapter(
+         isWithToken: isAuthorized,
+         token: token,
+         clientFactory: clientFactory,
+       );
 
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);

@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desec/desec_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec/desec_dns_info.dart';
@@ -6,19 +7,36 @@ import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 class ApiAdapter {
-  ApiAdapter({final bool isWithToken = true, final String? token})
-    : _api = DesecApi(isWithToken: isWithToken, token: token ?? '');
+  ApiAdapter({
+    final bool isWithToken = true,
+    final String? token,
+    this.clientFactory,
+  }) : _api = DesecApi(
+         isWithToken: isWithToken,
+         token: token ?? '',
+         clientFactory: clientFactory,
+       );
 
-  DesecApi api({final bool getInitialized = true}) =>
-      getInitialized ? _api : DesecApi(isWithToken: false);
+  DesecApi api({final bool getInitialized = true}) => getInitialized
+      ? _api
+      : DesecApi(isWithToken: false, clientFactory: clientFactory);
 
   final DesecApi _api;
+  final RestApiClientFactory? clientFactory;
 }
 
 class DesecDnsProvider extends DnsProvider {
-  DesecDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
-  DesecDnsProvider.load({required final bool isAuthorized, final String? token})
-    : _adapter = ApiAdapter(isWithToken: isAuthorized, token: token);
+  DesecDnsProvider({final RestApiClientFactory? clientFactory})
+    : _adapter = ApiAdapter(isWithToken: false, clientFactory: clientFactory);
+  DesecDnsProvider.load({
+    required final bool isAuthorized,
+    final String? token,
+    final RestApiClientFactory? clientFactory,
+  }) : _adapter = ApiAdapter(
+         isWithToken: isAuthorized,
+         token: token,
+         clientFactory: clientFactory,
+       );
 
   final ApiAdapter _adapter;
 

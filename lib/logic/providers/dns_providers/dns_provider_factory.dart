@@ -1,3 +1,4 @@
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/cloudflare.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/desec.dart';
@@ -13,38 +14,43 @@ class UnknownProviderException implements Exception {
 
 class DnsProviderFactory {
   static DnsProvider createDnsProviderInterface(
-    final DnsProviderSettings settings,
-  ) {
+    final DnsProviderSettings settings, {
+    final RestApiClientFactory? clientFactory,
+  }) {
     switch (settings.provider) {
       case DnsProviderType.cloudflare:
         return settings.isAuthorized
             ? CloudflareDnsProvider.load(
                 isAuthorized: settings.isAuthorized,
                 token: settings.token,
+                clientFactory: clientFactory,
               )
-            : CloudflareDnsProvider();
+            : CloudflareDnsProvider(clientFactory: clientFactory);
       case DnsProviderType.digitalOcean:
         return settings.isAuthorized
             ? DigitalOceanDnsProvider.load(
                 isAuthorized: settings.isAuthorized,
                 token: settings.token,
+                clientFactory: clientFactory,
               )
-            : DigitalOceanDnsProvider();
+            : DigitalOceanDnsProvider(clientFactory: clientFactory);
       case DnsProviderType.desec:
         return settings.isAuthorized
             ? DesecDnsProvider.load(
                 isAuthorized: settings.isAuthorized,
                 token: settings.token,
+                clientFactory: clientFactory,
               )
-            : DesecDnsProvider();
+            : DesecDnsProvider(clientFactory: clientFactory);
       case DnsProviderType.porkbun:
         return settings.isAuthorized
             ? PorkbunDnsProvider.load(
                 isAuthorized: settings.isAuthorized,
                 token: settings.token,
                 tokenId: settings.tokenId,
+                clientFactory: clientFactory,
               )
-            : PorkbunDnsProvider();
+            : PorkbunDnsProvider(clientFactory: clientFactory);
       case DnsProviderType.unknown:
         throw UnknownProviderException('Unknown server provider');
     }

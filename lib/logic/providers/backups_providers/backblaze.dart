@@ -1,27 +1,39 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/backblaze.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 
 class ApiAdapter {
-  ApiAdapter({final String? token, final String? tokenId})
+  ApiAdapter({final String? token, final String? tokenId, this.clientFactory})
     : _api = BackblazeApi(
         isWithToken: true,
         token: token ?? '',
         tokenId: tokenId ?? '',
+        clientFactory: clientFactory,
       );
 
-  BackblazeApi api({final bool getInitialized = true}) =>
-      getInitialized ? _api : BackblazeApi(isWithToken: false);
+  BackblazeApi api({final bool getInitialized = true}) => getInitialized
+      ? _api
+      : BackblazeApi(isWithToken: false, clientFactory: clientFactory);
 
   final BackblazeApi _api;
+  final RestApiClientFactory? clientFactory;
 }
 
 class BackblazeBackupsProvider extends BackupsProvider {
-  BackblazeBackupsProvider() : _adapter = ApiAdapter();
-  BackblazeBackupsProvider.load({final String? token, final String? tokenId})
-    : _adapter = ApiAdapter(token: token, tokenId: tokenId);
+  BackblazeBackupsProvider({final RestApiClientFactory? clientFactory})
+    : _adapter = ApiAdapter(clientFactory: clientFactory);
+  BackblazeBackupsProvider.load({
+    final String? token,
+    final String? tokenId,
+    final RestApiClientFactory? clientFactory,
+  }) : _adapter = ApiAdapter(
+         token: token,
+         tokenId: tokenId,
+         clientFactory: clientFactory,
+       );
 
   final ApiAdapter _adapter;
 

@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/porkbun/porkbun_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/porkbun/porkbun_dns_info.dart';
@@ -10,28 +11,35 @@ class ApiAdapter {
     final bool isWithToken = true,
     final String? token,
     final String? tokenId,
+    this.clientFactory,
   }) : _api = PorkbunApi(
          isWithToken: isWithToken,
          token: token ?? '',
          tokenId: tokenId ?? '',
+         clientFactory: clientFactory,
        );
 
-  PorkbunApi api({final bool getInitialized = true}) =>
-      getInitialized ? _api : PorkbunApi(isWithToken: false);
+  PorkbunApi api({final bool getInitialized = true}) => getInitialized
+      ? _api
+      : PorkbunApi(isWithToken: false, clientFactory: clientFactory);
 
   final PorkbunApi _api;
+  final RestApiClientFactory? clientFactory;
 }
 
 class PorkbunDnsProvider extends DnsProvider {
-  PorkbunDnsProvider() : _adapter = ApiAdapter(isWithToken: false);
+  PorkbunDnsProvider({final RestApiClientFactory? clientFactory})
+    : _adapter = ApiAdapter(isWithToken: false, clientFactory: clientFactory);
   PorkbunDnsProvider.load({
     required final bool isAuthorized,
     final String? token,
     final String? tokenId,
+    final RestApiClientFactory? clientFactory,
   }) : _adapter = ApiAdapter(
          isWithToken: isAuthorized,
          token: token,
          tokenId: tokenId,
+         clientFactory: clientFactory,
        );
 
   final ApiAdapter _adapter;

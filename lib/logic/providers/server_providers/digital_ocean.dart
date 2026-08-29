@@ -594,7 +594,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     volume = ServerProviderVolume(
       id: getVolumesResult.data.length,
       name: volumeName,
-      sizeByte: result.data!.sizeGigabytes,
+      sizeByte: result.data!.sizeGigabytes * 1024 * 1024 * 1024,
       serverId: null,
       linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
       uuid: result.data!.id,

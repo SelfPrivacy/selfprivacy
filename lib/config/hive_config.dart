@@ -165,7 +165,7 @@ class HiveConfig {
 
       if (serverProviderKey != null && serverProvider.isSpecified) {
         final ServerProviderCredential serverProviderCredential =
-            ServerProviderCredential(
+            ServerProviderCredential.create(
               tokenId: null,
               token: serverProviderKey,
               provider: serverProvider!,
@@ -211,7 +211,7 @@ class HiveConfig {
 
       if (dnsProviderKey != null && dnsProvider.isSpecified) {
         final DnsProviderCredential dnsProviderCredential =
-            DnsProviderCredential(
+            DnsProviderCredential.create(
               token: dnsProviderKey,
               provider: dnsProvider!,
               associatedDomainNames: [

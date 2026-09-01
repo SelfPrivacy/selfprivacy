@@ -17,6 +17,7 @@ class DnsProviderCredentialAdapter extends TypeAdapter<DnsProviderCredential> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DnsProviderCredential(
+      uuid: fields[7] == null ? '' : fields[7] as String,
       token: fields[1] as String,
       provider: fields[2] as DnsProviderType,
       associatedDomainNames: (fields[3] as List).cast<String>(),
@@ -30,7 +31,7 @@ class DnsProviderCredentialAdapter extends TypeAdapter<DnsProviderCredential> {
   @override
   void write(BinaryWriter writer, DnsProviderCredential obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.tokenId)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class DnsProviderCredentialAdapter extends TypeAdapter<DnsProviderCredential> {
       ..writeByte(5)
       ..write(obj.tenant)
       ..writeByte(6)
-      ..write(obj.secondaryToken);
+      ..write(obj.secondaryToken)
+      ..writeByte(7)
+      ..write(obj.uuid);
   }
 
   @override

@@ -113,7 +113,9 @@ class ResourcesModel {
   Future<void> removeServerProviderToken(
     final ServerProviderCredential token,
   ) async {
-    _serverProviderTokens.remove(token);
+    _serverProviderTokens.removeWhere(
+      (final storedCredential) => storedCredential.uuid == token.uuid,
+    );
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
     await _box.flush();
     _statusStreamController.add(const ChangedServerProviderCredentials());
@@ -152,7 +154,9 @@ class ResourcesModel {
   Future<void> removeDnsProviderToken(
     final DnsProviderCredential credential,
   ) async {
-    _dnsProviderTokens.remove(credential);
+    _dnsProviderTokens.removeWhere(
+      (final storedCredential) => storedCredential.uuid == credential.uuid,
+    );
     await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
     await _box.flush();
     _statusStreamController.add(const ChangedDnsProviderCredentials());
@@ -168,7 +172,9 @@ class ResourcesModel {
   Future<void> removeBackupsCredential(
     final BackupsCredential credential,
   ) async {
-    _backupsCredentials.remove(credential);
+    _backupsCredentials.removeWhere(
+      (final storedCredential) => storedCredential.uuid == credential.uuid,
+    );
     await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
     await _box.flush();
     _statusStreamController.add(const ChangedBackupsCredentials());

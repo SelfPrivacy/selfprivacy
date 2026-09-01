@@ -26,7 +26,7 @@ class _AddBackupsTokenPageState extends State<AddBackupsTokenPage> {
     onSubmit: (final credentials) async {
       context.read<TokensBloc>().add(
         AddBackupsProviderCredential(
-          BackupsCredential(
+          BackupsCredential.create(
             keyId: credentials.keyId,
             applicationKey: credentials.applicationKey,
             provider: BackupsProviderType.backblaze,

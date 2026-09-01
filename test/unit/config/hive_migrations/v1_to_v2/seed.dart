@@ -41,6 +41,7 @@ Future<void> seedV1Layout() async {
     provider: DnsProviderType.cloudflare,
   );
   final BackupsCredential backupsCredential = BackupsCredential(
+    uuid: '',
     keyId: 'backblaze-key-id',
     applicationKey: 'backblaze-application-key',
     provider: BackupsProviderType.backblaze,

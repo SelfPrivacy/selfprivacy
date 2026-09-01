@@ -17,6 +17,7 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return BackupsCredential(
+      uuid: fields[3] == null ? '' : fields[3] as String,
       keyId: fields[0] as String,
       applicationKey: fields[1] as String,
       provider: fields[2] == null
@@ -28,13 +29,15 @@ class BackupsCredentialAdapter extends TypeAdapter<BackupsCredential> {
   @override
   void write(BinaryWriter writer, BackupsCredential obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.keyId)
       ..writeByte(1)
       ..write(obj.applicationKey)
       ..writeByte(2)
-      ..write(obj.provider);
+      ..write(obj.provider)
+      ..writeByte(3)
+      ..write(obj.uuid);
   }
 
   @override

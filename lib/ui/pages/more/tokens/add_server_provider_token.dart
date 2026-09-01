@@ -45,7 +45,7 @@ class _AddServerProviderTokenPageState
   }
 
   Future<void> _setServerProviderKey(final String key) async {
-    final newCredential = ServerProviderCredential(
+    final newCredential = ServerProviderCredential.create(
       token: key,
       provider: widget.server.hostingDetails.provider,
       tokenId: null,

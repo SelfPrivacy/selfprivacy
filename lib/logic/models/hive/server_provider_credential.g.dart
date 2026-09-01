@@ -18,6 +18,7 @@ class ServerProviderCredentialAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ServerProviderCredential(
+      uuid: fields[4] == null ? '' : fields[4] as String,
       tokenId: fields[0] as String?,
       token: fields[1] as String,
       provider: fields[2] as ServerProviderType,
@@ -28,7 +29,7 @@ class ServerProviderCredentialAdapter
   @override
   void write(BinaryWriter writer, ServerProviderCredential obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.tokenId)
       ..writeByte(1)
@@ -36,7 +37,9 @@ class ServerProviderCredentialAdapter
       ..writeByte(2)
       ..write(obj.provider)
       ..writeByte(3)
-      ..write(obj.associatedServerIds);
+      ..write(obj.associatedServerIds)
+      ..writeByte(4)
+      ..write(obj.uuid);
   }
 
   @override

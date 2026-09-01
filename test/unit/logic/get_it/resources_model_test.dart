@@ -3,18 +3,10 @@ import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
-import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
-
-BackupsCredential _aBackupsCredential({final String keyId = 'key-id'}) =>
-    BackupsCredential(
-      keyId: keyId,
-      applicationKey: 'application-key',
-      provider: BackupsProviderType.backblaze,
-    );
 
 BackblazeBucket _aBackblazeBucket() => BackblazeBucket(
   bucketId: 'bucket-id',
@@ -55,6 +47,10 @@ void main() {
 
       final reloaded = ResourcesModel()..init();
       addTearDown(reloaded.dispose);
+      expect(
+        reloaded.serverProviderCredentials.single.uuid,
+        'server-credential-uuid',
+      );
       expect(
         reloaded.serverProviderCredentials.map((final c) => c.token),
         contains('srv-a'),
@@ -98,10 +94,16 @@ void main() {
     });
 
     test('removeServerProviderToken drops the credential', () async {
-      final credential = aServerProviderCredential(token: 'srv-a');
-      await model.addServerProviderToken(credential);
+      await model.addServerProviderToken(
+        aServerProviderCredential(uuid: 'server-credential-a', token: 'srv-a'),
+      );
 
-      await model.removeServerProviderToken(credential);
+      await model.removeServerProviderToken(
+        aServerProviderCredential(
+          uuid: 'server-credential-a',
+          token: 'changed-token',
+        ),
+      );
 
       expect(model.serverProviderCredentials, isEmpty);
     });
@@ -113,6 +115,10 @@ void main() {
 
       final reloaded = ResourcesModel()..init();
       addTearDown(reloaded.dispose);
+      expect(
+        reloaded.dnsProviderCredentials.single.uuid,
+        'dns-credential-uuid',
+      );
       expect(
         reloaded.dnsProviderCredentials.map((final c) => c.token),
         contains('dns-a'),
@@ -159,10 +165,16 @@ void main() {
     );
 
     test('removeDnsProviderToken drops the credential', () async {
-      final credential = aDnsProviderCredential(token: 'dns-a');
-      await model.addDnsProviderToken(credential);
+      await model.addDnsProviderToken(
+        aDnsProviderCredential(uuid: 'dns-credential-a', token: 'dns-a'),
+      );
 
-      await model.removeDnsProviderToken(credential);
+      await model.removeDnsProviderToken(
+        aDnsProviderCredential(
+          uuid: 'dns-credential-a',
+          token: 'changed-token',
+        ),
+      );
 
       expect(model.dnsProviderCredentials, isEmpty);
     });
@@ -209,11 +221,20 @@ void main() {
     test(
       'addBackupsCredential / removeBackupsCredential round-trips',
       () async {
-        final credential = _aBackupsCredential();
+        final credential = aBackupsCredential(uuid: 'backups-credential-a');
         await model.addBackupsCredential(credential);
         expect(model.backupsCredentials, hasLength(1));
 
-        await model.removeBackupsCredential(credential);
+        final reloaded = ResourcesModel()..init();
+        addTearDown(reloaded.dispose);
+        expect(reloaded.backupsCredentials.single.uuid, 'backups-credential-a');
+
+        await model.removeBackupsCredential(
+          aBackupsCredential(
+            uuid: 'backups-credential-a',
+            keyId: 'changed-key-id',
+          ),
+        );
         expect(model.backupsCredentials, isEmpty);
       },
     );
@@ -236,7 +257,7 @@ void main() {
       await model.addServerProviderToken(aServerProviderCredential());
       await model.addDnsProviderToken(aDnsProviderCredential());
       await model.addServer(aServer());
-      await model.addBackupsCredential(_aBackupsCredential());
+      await model.addBackupsCredential(aBackupsCredential());
       await model.setBackblazeBucket(_aBackblazeBucket());
 
       await model.clear();

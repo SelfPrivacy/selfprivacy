@@ -75,7 +75,7 @@ class DnsProviderForm {
   ValueListenable<CredentialCheckState> get credentialCheckState =>
       _credentialCheckState;
 
-  DnsProviderCredential get credential => DnsProviderCredential(
+  DnsProviderCredential get credential => DnsProviderCredential.create(
     provider: providerType,
     token: _credentials.token,
     tokenId: _credentials.tokenId,

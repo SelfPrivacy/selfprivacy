@@ -496,7 +496,7 @@ class ServerInstallationRepository {
   Future<void> saveServerProviderKey(final String key) async {
     await getIt<WizardDataModel>().setServerProviderKey(key);
     await getIt<ResourcesModel>().addServerProviderToken(
-      ServerProviderCredential(
+      ServerProviderCredential.create(
         tokenId: null,
         token: key,
         provider:

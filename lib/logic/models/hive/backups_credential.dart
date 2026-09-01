@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/schema.graphql.dart';
+import 'package:uuid/uuid.dart';
 
 part 'backups_credential.g.dart';
 
@@ -9,10 +10,25 @@ part 'backups_credential.g.dart';
 @HiveType(typeId: 4)
 class BackupsCredential {
   BackupsCredential({
+    required this.uuid,
     required this.keyId,
     required this.applicationKey,
     required this.provider,
   });
+
+  factory BackupsCredential.create({
+    required final String keyId,
+    required final String applicationKey,
+    required final BackupsProviderType provider,
+  }) => BackupsCredential(
+    uuid: const Uuid().v4(),
+    keyId: keyId,
+    applicationKey: applicationKey,
+    provider: provider,
+  );
+
+  @HiveField(3, defaultValue: '')
+  final String uuid;
 
   @HiveField(0)
   final String keyId;

@@ -93,7 +93,7 @@ class ServerInstallationWizardData {
 
   DnsProviderCredential? get dnsProviderCredential => dnsProviderToken == null
       ? null
-      : DnsProviderCredential(
+      : DnsProviderCredential.create(
           token: dnsProviderToken ?? '',
           provider: dnsProviderType ?? DnsProviderType.unknown,
           associatedDomainNames: [],

@@ -94,17 +94,20 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
   Future<TokenStatus> _validateServerProviderToken(
     final ServerProviderCredential credential,
   ) async {
+    final bearerToken = credential.bearerToken;
+    if (bearerToken == null) {
+      return TokenStatus.invalid;
+    }
     final ServerProviderSettings settings = ServerProviderSettings(
       provider: credential.provider,
-      token: credential.token,
-      isAuthorized: true,
+      credentials: credential.credentials,
     );
     final serverProvider = ServerProviderFactory.createServerProviderInterface(
       settings,
     );
     // First, we check if the token works at all
     final basicInitCheckResult = await serverProvider.tryInitApiByToken(
-      credential.token,
+      bearerToken,
     );
     if (!basicInitCheckResult.data) {
       return TokenStatus.invalid;
@@ -186,8 +189,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
 
     final ServerProviderSettings settings = ServerProviderSettings(
       provider: event.serverProviderCredential.provider,
-      token: event.serverProviderCredential.token,
-      isAuthorized: true,
+      credentials: event.serverProviderCredential.credentials,
     );
     ProvidersController.initServerProvider(settings);
   }
@@ -221,9 +223,9 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final ServerSelectedForProviderToken event,
     final Emitter<TokensState> emit,
   ) async {
-    await getIt<ResourcesModel>().associateServerWithToken(
+    await getIt<ResourcesModel>().associateServerWithCredential(
       event.server.uuid,
-      event.serverProviderCredential.token,
+      event.serverProviderCredential.uuid,
     );
     final Server newServerData = Server(
       uuid: event.server.uuid,

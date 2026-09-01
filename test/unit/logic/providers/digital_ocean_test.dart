@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
@@ -104,8 +105,7 @@ void main() {
       final provider = ServerProviderFactory.createServerProviderInterface(
         ServerProviderSettings(
           provider: ServerProviderType.digitalOcean,
-          token: 'provider-token',
-          isAuthorized: true,
+          credentials: const BearerTokenCredential(token: 'provider-token'),
         ),
         clientFactory: clients.call,
       );
@@ -133,8 +133,7 @@ void main() {
     final provider = ServerProviderFactory.createServerProviderInterface(
       ServerProviderSettings(
         provider: ServerProviderType.digitalOcean,
-        token: 'provider-token',
-        isAuthorized: true,
+        credentials: const BearerTokenCredential(token: 'provider-token'),
       ),
       clientFactory: clients.call,
     );

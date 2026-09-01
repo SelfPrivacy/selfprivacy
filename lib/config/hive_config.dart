@@ -3,6 +3,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -44,6 +45,7 @@ class HiveConfig {
         ..registerAdapter(BackupsCredentialAdapter())
         ..registerAdapter(ServerProviderVolumeAdapter())
         ..registerAdapter(BackblazeBucketAdapter())
+        ..registerAdapter(BearerTokenCredentialAdapter())
         ..registerAdapter(ServerProviderCredentialAdapter())
         ..registerAdapter(DnsProviderCredentialAdapter())
         ..registerAdapter(ServerAdapter())
@@ -167,7 +169,7 @@ class HiveConfig {
         final ServerProviderCredential serverProviderCredential =
             ServerProviderCredential.create(
               tokenId: null,
-              token: serverProviderKey,
+              credentials: BearerTokenCredential(token: serverProviderKey),
               provider: serverProvider!,
               associatedServerUuids: [],
               legacyAssociatedServerIds: [

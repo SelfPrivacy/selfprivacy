@@ -67,7 +67,7 @@ void main() {
 
       expect(wizard.serverInstallation?.serverProviderKey, isNull);
       expect(
-        resources.serverProviderCredentials.map((final c) => c.token),
+        resources.serverProviderCredentials.map((final c) => c.bearerToken),
         contains('keep-me'),
       );
     },

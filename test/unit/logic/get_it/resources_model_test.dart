@@ -41,7 +41,7 @@ void main() {
       );
 
       expect(
-        model.serverProviderCredentials.map((final c) => c.token),
+        model.serverProviderCredentials.map((final c) => c.bearerToken),
         contains('srv-a'),
       );
 
@@ -52,7 +52,7 @@ void main() {
         'server-credential-uuid',
       );
       expect(
-        reloaded.serverProviderCredentials.map((final c) => c.token),
+        reloaded.serverProviderCredentials.map((final c) => c.bearerToken),
         contains('srv-a'),
       );
     });
@@ -66,29 +66,35 @@ void main() {
       await expectation;
     });
 
-    test('associateServerWithToken links the server and persists it', () async {
-      await model.addServerProviderToken(
-        aServerProviderCredential(token: 'srv-a'),
-      );
+    test(
+      'associateServerWithCredential links the server and persists it',
+      () async {
+        await model.addServerProviderToken(
+          aServerProviderCredential(token: 'srv-a'),
+        );
 
-      await model.associateServerWithToken('server-a', 'srv-a');
+        await model.associateServerWithCredential(
+          'server-a',
+          'server-credential-uuid',
+        );
 
-      expect(
-        model.serverProviderCredentials.single.associatedServerUuids,
-        contains('server-a'),
-      );
+        expect(
+          model.serverProviderCredentials.single.associatedServerUuids,
+          contains('server-a'),
+        );
 
-      final reloaded = ResourcesModel()..init();
-      addTearDown(reloaded.dispose);
-      expect(
-        reloaded.serverProviderCredentials.single.associatedServerUuids,
-        contains('server-a'),
-      );
-    });
+        final reloaded = ResourcesModel()..init();
+        addTearDown(reloaded.dispose);
+        expect(
+          reloaded.serverProviderCredentials.single.associatedServerUuids,
+          contains('server-a'),
+        );
+      },
+    );
 
-    test('associateServerWithToken throws when the token is unknown', () async {
+    test('associateServerWithCredential throws for an unknown UUID', () async {
       await expectLater(
-        model.associateServerWithToken('server-a', 'missing'),
+        model.associateServerWithCredential('server-a', 'missing'),
         throwsStateError,
       );
     });

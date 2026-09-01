@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/digital_ocean.dart';
@@ -17,21 +18,22 @@ class ServerProviderFactory {
   }) {
     switch (settings.provider) {
       case ServerProviderType.hetzner:
-        return settings.isAuthorized
-            ? HetznerServerProvider.load(
-                isAuthorized: settings.isAuthorized,
-                token: settings.token,
-                clientFactory: clientFactory,
-              )
-            : HetznerServerProvider(clientFactory: clientFactory);
+        return switch (settings.credentials) {
+          null => HetznerServerProvider(clientFactory: clientFactory),
+          BearerTokenCredential(:final token) => HetznerServerProvider.load(
+            token: token,
+            clientFactory: clientFactory,
+          ),
+        };
       case ServerProviderType.digitalOcean:
-        return settings.isAuthorized
-            ? DigitalOceanServerProvider.load(
-                isAuthorized: settings.isAuthorized,
-                token: settings.token,
-                clientFactory: clientFactory,
-              )
-            : DigitalOceanServerProvider(clientFactory: clientFactory);
+        return switch (settings.credentials) {
+          null => DigitalOceanServerProvider(clientFactory: clientFactory),
+          BearerTokenCredential(:final token) =>
+            DigitalOceanServerProvider.load(
+              token: token,
+              clientFactory: clientFactory,
+            ),
+        };
       case ServerProviderType.unknown:
         throw UnknownProviderException('Unknown server provider');
     }

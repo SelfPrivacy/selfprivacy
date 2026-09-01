@@ -10,6 +10,7 @@
 8. DnsProviderCredential
 9. Server
 10. EmailPasswordMetadata
+11. BearerTokenCredential
 
 ## Wizards store
 60. ServerInstallationWizardData

@@ -1,17 +1,15 @@
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 class ServerProviderSettings {
-  ServerProviderSettings({
-    required this.provider,
-    this.token,
-    this.isAuthorized = false,
-  });
+  ServerProviderSettings({required this.provider, this.credentials});
 
-  final bool isAuthorized;
   final ServerProviderType provider;
-  final String? token;
+  final ProviderCredentials? credentials;
+
+  bool get isAuthorized => credentials != null;
 }
 
 class DnsProviderSettings {

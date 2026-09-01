@@ -70,7 +70,8 @@ class ResourcesModel {
   ServerHostingDetails? get serverDetails =>
       _servers.firstOrNull?.hostingDetails;
   @Deprecated('Compatibility getter')
-  String? get serverProviderKey => _serverProviderTokens.firstOrNull?.token;
+  String? get serverProviderKey =>
+      _serverProviderTokens.firstOrNull?.bearerToken;
   @Deprecated('Compatibility getter')
   String? get serverLocation =>
       _servers.firstOrNull?.hostingDetails.serverLocation;
@@ -97,12 +98,12 @@ class ResourcesModel {
     _statusStreamController.add(const ChangedServerProviderCredentials());
   }
 
-  Future<void> associateServerWithToken(
+  Future<void> associateServerWithCredential(
     final String serverUuid,
-    final String token,
+    final String credentialUuid,
   ) async {
     _serverProviderTokens
-        .firstWhere((final credential) => credential.token == token)
+        .firstWhere((final credential) => credential.uuid == credentialUuid)
         .associatedServerUuids
         .add(serverUuid);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);

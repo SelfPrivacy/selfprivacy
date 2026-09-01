@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
@@ -330,7 +331,16 @@ extension on TokenStatus {
 }
 
 extension on ServerProviderCredential {
-  String get tokenPrefix => tokenId ?? token.substring(0, 8);
+  String get tokenPrefix =>
+      tokenId ??
+      switch (credentials) {
+        BearerTokenCredential(:final token) => token.safeTokenPrefix,
+        null => legacyToken?.safeTokenPrefix ?? '********',
+      };
+}
+
+extension on String {
+  String get safeTokenPrefix => length > 8 ? substring(0, 8) : '********';
 }
 
 extension on DnsProviderCredential {

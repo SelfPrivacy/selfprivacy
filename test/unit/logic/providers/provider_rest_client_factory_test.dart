@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
@@ -87,6 +88,20 @@ void main() {
     await getIt.reset();
   });
 
+  test('server provider authorization is derived from credentials', () {
+    expect(
+      ServerProviderSettings(provider: ServerProviderType.hetzner).isAuthorized,
+      isFalse,
+    );
+    expect(
+      ServerProviderSettings(
+        provider: ServerProviderType.hetzner,
+        credentials: const BearerTokenCredential(token: 'token'),
+      ).isAuthorized,
+      isTrue,
+    );
+  });
+
   for (final testCase in [
     (
       name: 'Hetzner',
@@ -111,8 +126,7 @@ void main() {
             ServerProviderFactory.createServerProviderInterface(
               ServerProviderSettings(
                 provider: testCase.type,
-                token: 'loaded-token',
-                isAuthorized: true,
+                credentials: const BearerTokenCredential(token: 'loaded-token'),
               ),
               clientFactory: clients.call,
             );

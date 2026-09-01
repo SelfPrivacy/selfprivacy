@@ -4,6 +4,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
@@ -304,8 +305,7 @@ ServerProvider _provider(final _FailureStage failureStage) =>
     ServerProviderFactory.createServerProviderInterface(
       ServerProviderSettings(
         provider: ServerProviderType.hetzner,
-        token: 'provider-token',
-        isAuthorized: true,
+        credentials: const BearerTokenCredential(token: 'provider-token'),
       ),
       clientFactory: _HetznerInstallationClientFactory(failureStage).call,
     );
@@ -395,8 +395,7 @@ void main() {
       final provider = ServerProviderFactory.createServerProviderInterface(
         ServerProviderSettings(
           provider: ServerProviderType.hetzner,
-          token: 'provider-token',
-          isAuthorized: true,
+          credentials: const BearerTokenCredential(token: 'provider-token'),
         ),
         clientFactory: clients.call,
       );
@@ -421,8 +420,7 @@ void main() {
     final provider = ServerProviderFactory.createServerProviderInterface(
       ServerProviderSettings(
         provider: ServerProviderType.hetzner,
-        token: 'provider-token',
-        isAuthorized: true,
+        credentials: const BearerTokenCredential(token: 'provider-token'),
       ),
       clientFactory: clients.call,
     );

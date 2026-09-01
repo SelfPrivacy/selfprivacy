@@ -4,6 +4,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
@@ -219,8 +220,7 @@ ServerProvider _provider(
 ) => ServerProviderFactory.createServerProviderInterface(
   ServerProviderSettings(
     provider: type,
-    token: 'provider-token',
-    isAuthorized: true,
+    credentials: const BearerTokenCredential(token: 'provider-token'),
   ),
   clientFactory: clientFactory,
 );

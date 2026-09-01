@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -83,8 +84,9 @@ class ServerInstallationRepository {
       ProvidersController.initServerProvider(
         ServerProviderSettings(
           provider: serverProvider ?? serverDetails!.provider,
-          isAuthorized: providerApiToken != null,
-          token: providerApiToken,
+          credentials: providerApiToken == null
+              ? null
+              : BearerTokenCredential(token: providerApiToken),
         ),
       );
     }
@@ -132,8 +134,9 @@ class ServerInstallationRepository {
       ProvidersController.initServerProvider(
         ServerProviderSettings(
           provider: wizardData.serverProviderType!,
-          isAuthorized: wizardData.serverProviderKey != null,
-          token: wizardData.serverProviderKey,
+          credentials: wizardData.serverProviderKey == null
+              ? null
+              : BearerTokenCredential(token: wizardData.serverProviderKey!),
         ),
       );
     }
@@ -502,7 +505,7 @@ class ServerInstallationRepository {
     await getIt<ResourcesModel>().addServerProviderToken(
       ServerProviderCredential.create(
         tokenId: null,
-        token: key,
+        credentials: BearerTokenCredential(token: key),
         provider:
             getIt<WizardDataModel>().serverInstallation!.serverProviderType!,
         associatedServerUuids: [],
@@ -512,8 +515,7 @@ class ServerInstallationRepository {
       ServerProviderSettings(
         provider:
             getIt<WizardDataModel>().serverInstallation!.serverProviderType!,
-        token: key,
-        isAuthorized: true,
+        credentials: BearerTokenCredential(token: key),
       ),
     );
   }
@@ -598,9 +600,15 @@ class ServerInstallationRepository {
     );
     await getIt<ResourcesModel>().addServer(server);
     if (wizardData.serverProviderKey != null) {
-      await getIt<ResourcesModel>().associateServerWithToken(
+      final serverProviderCredential = getIt<ResourcesModel>()
+          .serverProviderCredentials
+          .firstWhere(
+            (final credential) =>
+                credential.bearerToken == wizardData.serverProviderKey,
+          );
+      await getIt<ResourcesModel>().associateServerWithCredential(
         server.uuid,
-        wizardData.serverProviderKey!,
+        serverProviderCredential.uuid,
       );
     }
     if (wizardData.dnsProviderToken != null) {

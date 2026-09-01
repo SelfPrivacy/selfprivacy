@@ -1,5 +1,6 @@
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
@@ -14,7 +15,7 @@ ServerProviderCredential aServerProviderCredential({
 }) => ServerProviderCredential(
   uuid: uuid,
   tokenId: tokenId,
-  token: token,
+  credentials: BearerTokenCredential(token: token),
   provider: provider,
   associatedServerUuids: [...associatedServerUuids],
   legacyAssociatedServerIds: [...legacyAssociatedServerIds],

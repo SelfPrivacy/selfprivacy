@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/forms/checks/server_provider_credential_check.dart';
 import 'package:selfprivacy/logic/forms/server_provider_form.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
@@ -46,7 +47,7 @@ class _AddServerProviderTokenPageState
 
   Future<void> _setServerProviderKey(final String key) async {
     final newCredential = ServerProviderCredential.create(
-      token: key,
+      credentials: BearerTokenCredential(token: key),
       provider: widget.server.hostingDetails.provider,
       tokenId: null,
       associatedServerUuids: [],

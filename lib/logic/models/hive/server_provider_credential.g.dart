@@ -20,11 +20,12 @@ class ServerProviderCredentialAdapter
     return ServerProviderCredential(
       uuid: fields[4] == null ? '' : fields[4] as String,
       tokenId: fields[0] as String?,
-      token: fields[1] as String,
+      credentials: fields[6] as ProviderCredentials?,
       provider: fields[2] as ServerProviderType,
       associatedServerUuids: fields[5] == null
           ? []
           : (fields[5] as List).cast<String>(),
+      legacyToken: fields[1] as String?,
       legacyAssociatedServerIds: fields[3] == null
           ? const []
           : (fields[3] as List).cast<int>(),
@@ -34,11 +35,11 @@ class ServerProviderCredentialAdapter
   @override
   void write(BinaryWriter writer, ServerProviderCredential obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.tokenId)
       ..writeByte(1)
-      ..write(obj.token)
+      ..write(obj.legacyToken)
       ..writeByte(2)
       ..write(obj.provider)
       ..writeByte(3)
@@ -46,7 +47,9 @@ class ServerProviderCredentialAdapter
       ..writeByte(4)
       ..write(obj.uuid)
       ..writeByte(5)
-      ..write(obj.associatedServerUuids);
+      ..write(obj.associatedServerUuids)
+      ..writeByte(6)
+      ..write(obj.credentials);
   }
 
   @override

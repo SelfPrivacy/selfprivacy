@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -37,7 +38,14 @@ void main() {
         );
     expect(serverCredentials, hasLength(1));
     expect(serverCredentials.single.tokenId, isNull);
-    expect(serverCredentials.single.token, v1ServerToken);
+    expect(
+      serverCredentials.single.credentials,
+      isA<BearerTokenCredential>().having(
+        (final credential) => credential.token,
+        'token',
+        v1ServerToken,
+      ),
+    );
     expect(serverCredentials.single.provider, ServerProviderType.hetzner);
     expect(serverCredentials.single.legacyAssociatedServerIds, <int>[
       v1ServerId,

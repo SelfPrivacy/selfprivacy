@@ -1,4 +1,5 @@
 import 'package:hive_ce/hive.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,22 +11,23 @@ class ServerProviderCredential {
   ServerProviderCredential({
     required this.uuid,
     required this.tokenId,
-    required this.token,
+    required this.credentials,
     required this.provider,
     required this.associatedServerUuids,
+    this.legacyToken,
     this.legacyAssociatedServerIds = const [],
   });
 
   factory ServerProviderCredential.create({
     required final String? tokenId,
-    required final String token,
+    required final ProviderCredentials credentials,
     required final ServerProviderType provider,
     required final List<String> associatedServerUuids,
     final List<int> legacyAssociatedServerIds = const [],
   }) => ServerProviderCredential(
     uuid: const Uuid().v4(),
     tokenId: tokenId,
-    token: token,
+    credentials: credentials,
     provider: provider,
     associatedServerUuids: associatedServerUuids,
     legacyAssociatedServerIds: legacyAssociatedServerIds,
@@ -38,7 +40,7 @@ class ServerProviderCredential {
   final String? tokenId;
 
   @HiveField(1)
-  final String token;
+  final String? legacyToken;
 
   @HiveField(2)
   final ServerProviderType provider;
@@ -48,4 +50,12 @@ class ServerProviderCredential {
 
   @HiveField(5, defaultValue: <String>[])
   final List<String> associatedServerUuids;
+
+  @HiveField(6, defaultValue: null)
+  final ProviderCredentials? credentials;
+
+  String? get bearerToken => switch (credentials) {
+    BearerTokenCredential(:final token) => token,
+    null => legacyToken,
+  };
 }

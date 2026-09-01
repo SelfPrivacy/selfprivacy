@@ -43,11 +43,10 @@ class DigitalOceanServerProvider extends ServerProvider {
   DigitalOceanServerProvider({final RestApiClientFactory? clientFactory})
     : _adapter = ApiAdapter(isWithToken: false, clientFactory: clientFactory);
   DigitalOceanServerProvider.load({
-    required final bool isAuthorized,
-    final String? token,
+    required final String token,
     final RestApiClientFactory? clientFactory,
   }) : _adapter = ApiAdapter(
-         isWithToken: isAuthorized,
+         isWithToken: true,
          token: token,
          clientFactory: clientFactory,
        );

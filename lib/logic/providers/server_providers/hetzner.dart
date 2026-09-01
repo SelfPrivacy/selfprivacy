@@ -43,11 +43,10 @@ class HetznerServerProvider extends ServerProvider {
   HetznerServerProvider({final RestApiClientFactory? clientFactory})
     : _adapter = ApiAdapter(isWithToken: false, clientFactory: clientFactory);
   HetznerServerProvider.load({
-    required final bool isAuthorized,
-    final String? token,
+    required final String token,
     final RestApiClientFactory? clientFactory,
   }) : _adapter = ApiAdapter(
-         isWithToken: isAuthorized,
+         isWithToken: true,
          token: token,
          clientFactory: clientFactory,
        );

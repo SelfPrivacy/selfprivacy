@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/email_password_metadata.dart';
+import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -19,6 +20,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(BackblazeBucketAdapter());
     registerAdapter(BackupsCredentialAdapter());
     registerAdapter(BackupsProviderTypeAdapter());
+    registerAdapter(BearerTokenCredentialAdapter());
     registerAdapter(DnsProviderCredentialAdapter());
     registerAdapter(DnsProviderTypeAdapter());
     registerAdapter(EmailPasswordMetadataAdapter());
@@ -39,6 +41,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(BackblazeBucketAdapter());
     registerAdapter(BackupsCredentialAdapter());
     registerAdapter(BackupsProviderTypeAdapter());
+    registerAdapter(BearerTokenCredentialAdapter());
     registerAdapter(DnsProviderCredentialAdapter());
     registerAdapter(DnsProviderTypeAdapter());
     registerAdapter(EmailPasswordMetadataAdapter());

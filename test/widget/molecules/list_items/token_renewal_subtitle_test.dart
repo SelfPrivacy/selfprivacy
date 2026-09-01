@@ -102,7 +102,7 @@ void main() {
     expect(find.text('Token renewal was due 1 day ago.'), findsOneWidget);
 
     await tester.runAsync(
-      () => resourcesModel.updateServerByDomain(
+      () => resourcesModel.updateServerByUuid(
         aServer(
           domain: server.domain,
           hostingDetails: server.hostingDetails.copyWith(

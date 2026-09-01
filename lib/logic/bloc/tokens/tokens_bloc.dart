@@ -221,6 +221,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       event.serverProviderCredential.token,
     );
     final Server newServerData = Server(
+      uuid: event.server.uuid,
       domain: event.server.domain,
       hostingDetails: event.server.hostingDetails.copyWith(
         ip4: event.providerServer.ip,
@@ -237,7 +238,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
         serverLocation: event.providerServer.location,
       ),
     );
-    await getIt<ResourcesModel>().updateServerByDomain(newServerData);
+    await getIt<ResourcesModel>().updateServerByUuid(newServerData);
   }
 
   Future<void> refreshServerApiToken(

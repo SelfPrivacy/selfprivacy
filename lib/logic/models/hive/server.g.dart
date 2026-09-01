@@ -17,6 +17,7 @@ class ServerAdapter extends TypeAdapter<Server> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Server(
+      uuid: fields[2] == null ? '' : fields[2] as String,
       hostingDetails: fields[0] as ServerHostingDetails,
       domain: fields[1] as ServerDomain,
     );
@@ -25,11 +26,13 @@ class ServerAdapter extends TypeAdapter<Server> {
   @override
   void write(BinaryWriter writer, Server obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.hostingDetails)
       ..writeByte(1)
-      ..write(obj.domain);
+      ..write(obj.domain)
+      ..writeByte(2)
+      ..write(obj.uuid);
   }
 
   @override

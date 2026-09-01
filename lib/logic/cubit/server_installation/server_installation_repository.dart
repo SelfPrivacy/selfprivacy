@@ -589,7 +589,7 @@ class ServerInstallationRepository {
     final ServerInstallationWizardData wizardData =
         getIt<WizardDataModel>().serverInstallation!;
     await getIt<ResourcesModel>().addServer(
-      Server(
+      Server.create(
         hostingDetails: wizardData.serverDetails!,
         domain: wizardData.serverDomain!,
       ),

@@ -169,18 +169,42 @@ void main() {
   });
 
   group('servers, backups and bucket', () {
-    test('addServer / removeServer round-trips', () async {
-      final server = aServer();
+    test('addServer and removeServer use the server UUID', () async {
+      final server = aServer(uuid: 'server-a');
       await model.addServer(server);
       expect(model.servers, hasLength(1));
 
       final reloaded = ResourcesModel()..init();
       addTearDown(reloaded.dispose);
+      expect(reloaded.servers.single.uuid, 'server-a');
       expect(reloaded.servers.single.domain.domainName, 'example.org');
 
-      await model.removeServer(server);
+      await model.removeServer(
+        aServer(
+          uuid: 'server-a',
+          domain: aServerDomain(domainName: 'new.test'),
+        ),
+      );
       expect(model.servers, isEmpty);
     });
+
+    test(
+      'updateServerByUuid preserves identity when the domain changes',
+      () async {
+        await model.addServer(aServer(uuid: 'server-a'));
+
+        await model.updateServerByUuid(
+          aServer(
+            uuid: 'server-a',
+            domain: aServerDomain(domainName: 'updated.example.org'),
+          ),
+        );
+
+        expect(model.servers, hasLength(1));
+        expect(model.servers.single.uuid, 'server-a');
+        expect(model.servers.single.domain.domainName, 'updated.example.org');
+      },
+    );
 
     test(
       'addBackupsCredential / removeBackupsCredential round-trips',

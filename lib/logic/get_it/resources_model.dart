@@ -182,15 +182,17 @@ class ResourcesModel {
   }
 
   Future<void> removeServer(final Server server) async {
-    _servers.remove(server);
+    _servers.removeWhere(
+      (final storedServer) => storedServer.uuid == server.uuid,
+    );
     await _box.put(BNames.servers, _servers);
     await _box.flush();
     _statusStreamController.add(const ChangedServers());
   }
 
-  Future<void> updateServerByDomain(final Server server) async {
+  Future<void> updateServerByUuid(final Server server) async {
     final index = _servers.indexWhere(
-      (final s) => s.domain.domainName == server.domain.domainName,
+      (final storedServer) => storedServer.uuid == server.uuid,
     );
     if (index != -1) {
       _servers[index] = server;

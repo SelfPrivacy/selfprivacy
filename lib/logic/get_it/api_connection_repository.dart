@@ -350,8 +350,9 @@ class ApiConnectionRepository {
       return (false, result.message ?? 'jobs.generic_error'.tr());
     }
 
-    await getIt<ResourcesModel>().updateServerByDomain(
+    await getIt<ResourcesModel>().updateServerByUuid(
       Server(
+        uuid: server.uuid,
         domain: server.domain,
         hostingDetails: server.hostingDetails.copyWith(
           apiToken: result.data,

@@ -42,9 +42,11 @@ ServerDomain aServerDomain({
 }) => ServerDomain(domainName: domainName, provider: provider);
 
 Server aServer({
+  final String uuid = 'server-uuid',
   final ServerHostingDetails? hostingDetails,
   final ServerDomain? domain,
 }) => Server(
+  uuid: uuid,
   hostingDetails: hostingDetails ?? aServerHostingDetails(),
   domain: domain ?? aServerDomain(),
 );

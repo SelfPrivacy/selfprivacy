@@ -191,7 +191,7 @@ class HiveConfig {
 
       if (serverDetails != null && serverDomain != null) {
         await resourcesBox.put(BNames.servers, [
-          Server(
+          Server.create(
             domain: serverDomain,
             hostingDetails: serverDetails.copyWith(
               serverLocation: serverLocation,

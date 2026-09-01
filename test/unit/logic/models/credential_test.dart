@@ -13,7 +13,7 @@ void main() {
         tokenId: null,
         token: 'server-token',
         provider: ServerProviderType.hetzner,
-        associatedServerIds: [],
+        associatedServerUuids: [],
       ).uuid,
       DnsProviderCredential.create(
         token: 'dns-token',

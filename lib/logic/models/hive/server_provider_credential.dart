@@ -12,20 +12,23 @@ class ServerProviderCredential {
     required this.tokenId,
     required this.token,
     required this.provider,
-    required this.associatedServerIds,
+    required this.associatedServerUuids,
+    this.legacyAssociatedServerIds = const [],
   });
 
   factory ServerProviderCredential.create({
     required final String? tokenId,
     required final String token,
     required final ServerProviderType provider,
-    required final List<int> associatedServerIds,
+    required final List<String> associatedServerUuids,
+    final List<int> legacyAssociatedServerIds = const [],
   }) => ServerProviderCredential(
     uuid: const Uuid().v4(),
     tokenId: tokenId,
     token: token,
     provider: provider,
-    associatedServerIds: associatedServerIds,
+    associatedServerUuids: associatedServerUuids,
+    legacyAssociatedServerIds: legacyAssociatedServerIds,
   );
 
   @HiveField(4, defaultValue: '')
@@ -41,5 +44,8 @@ class ServerProviderCredential {
   final ServerProviderType provider;
 
   @HiveField(3)
-  final List<int> associatedServerIds;
+  final List<int> legacyAssociatedServerIds;
+
+  @HiveField(5, defaultValue: <String>[])
+  final List<String> associatedServerUuids;
 }

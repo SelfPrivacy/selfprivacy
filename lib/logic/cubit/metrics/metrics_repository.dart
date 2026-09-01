@@ -141,9 +141,12 @@ class MetricsRepository {
         start = end.subtract(const Duration(days: 15));
     }
 
-    final serverId = getIt<ResourcesModel>().serverDetails!.id;
+    final providerId = getIt<ResourcesModel>().serverDetails!.providerId;
+    if (providerId == null) {
+      throw MetricsUnsupportedException('Server provider ID is null');
+    }
     final result = await ProvidersController.currentServerProvider!.getMetrics(
-      serverId,
+      providerId,
       start,
       end,
     );

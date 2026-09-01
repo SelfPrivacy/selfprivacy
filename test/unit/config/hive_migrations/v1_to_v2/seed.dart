@@ -22,14 +22,16 @@ Future<void> seedV1Layout() async {
     id: 84,
     name: 'migration-volume',
     sizeByte: 10 * 1024 * 1024 * 1024,
-    serverId: v1ServerId,
+    serverId: null,
+    legacyServerId: v1ServerId,
     linuxDevice: '/dev/disk/by-id/migration-volume',
     uuid: 'volume-uuid',
     location: v1ServerLocation,
   );
   final ServerHostingDetails serverDetails = ServerHostingDetails(
     ip4: '203.0.113.42',
-    id: v1ServerId,
+    providerId: null,
+    legacyProviderId: v1ServerId,
     createTime: DateTime.utc(2024, 6, 26),
     startTime: DateTime.utc(2024, 6, 26, 1),
     volume: volume,

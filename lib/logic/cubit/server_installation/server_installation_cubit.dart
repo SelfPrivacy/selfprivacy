@@ -538,7 +538,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         apiToken: serverDetails.apiToken,
         apiTokenRotatedAt: serverDetails.apiTokenRotatedAt,
         createTime: serverDetails.createTime,
-        id: serverDetails.id,
+        providerId: serverDetails.providerId,
         ip4: serverDetails.ip4,
         volume: serverDetails.volume,
         startTime: serverDetails.startTime,
@@ -670,13 +670,13 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     }
     final ServerHostingDetails serverDetails = ServerHostingDetails(
       ip4: server.ip,
-      id: server.id,
+      providerId: server.providerId,
       createTime: server.created,
       volume: ServerProviderVolume(
         id: 0,
         name: 'recovered_volume',
         sizeByte: 0,
-        serverId: server.id,
+        serverId: server.providerId,
         linuxDevice: '',
       ),
       apiToken: dataState.serverDetails!.apiToken,
@@ -736,7 +736,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     late final GenericResult<ServerType?>? serverType;
     if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
       serverType = await ProvidersController.currentServerProvider
-          ?.getServerType(state.serverDetails!.id);
+          ?.getServerType(state.serverDetails!.providerId!);
       if (serverType != null) {
         await repository.saveServerType(serverType.data!);
       }

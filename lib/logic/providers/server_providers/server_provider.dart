@@ -31,7 +31,7 @@ abstract class ServerProvider {
   /// Returns actual [ServerType] of the
   /// requested server entry assigned
   /// to the authorized user.
-  Future<GenericResult<ServerType?>> getServerType(final int serverId);
+  Future<GenericResult<ServerType?>> getServerType(final String providerId);
 
   /// Tries to launch installation of SelfPrivacy on
   /// the requested server entry for the authorized account.
@@ -78,13 +78,13 @@ abstract class ServerProvider {
   ///
   /// If success, returns [DateTime] of when the server
   /// answered the request.
-  Future<GenericResult<DateTime?>> powerOn(final int serverId);
+  Future<GenericResult<DateTime?>> powerOn(final String providerId);
 
   /// Tries to restart the requested accessible machine.
   ///
   /// If success, returns [DateTime] of when the server
   /// answered the request.
-  Future<GenericResult<DateTime?>> restart(final int serverId);
+  Future<GenericResult<DateTime?>> restart(final String providerId);
 
   /// Returns [Price] information map of all additional resources, excluding
   /// main server type pricing
@@ -120,7 +120,7 @@ abstract class ServerProvider {
   /// to an accessible machine by the provided identificator.
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
-    final int serverId,
+    final String providerId,
   );
 
   /// Tries to attach the requested accessible [ServerProviderVolume]
@@ -130,14 +130,14 @@ abstract class ServerProvider {
   /// Returns metadata of an accessible machine by the provided identificator
   /// to show on ServerDetailsScreen.
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
-    final int serverId,
+    final String providerId,
     final String location,
   );
 
   /// Returns information about cpu and bandwidth load within the provided
   /// time period of the requested accessible machine.
   Future<GenericResult<ServerMetrics?>> getMetrics(
-    final int serverId,
+    final String providerId,
     final DateTime start,
     final DateTime end,
   );

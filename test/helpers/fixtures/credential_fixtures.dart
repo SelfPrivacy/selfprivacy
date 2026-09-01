@@ -9,13 +9,15 @@ ServerProviderCredential aServerProviderCredential({
   final String token = 'srv-token',
   final ServerProviderType provider = ServerProviderType.hetzner,
   final String? tokenId,
-  final List<int> associatedServerIds = const [],
+  final List<String> associatedServerUuids = const [],
+  final List<int> legacyAssociatedServerIds = const [],
 }) => ServerProviderCredential(
   uuid: uuid,
   tokenId: tokenId,
   token: token,
   provider: provider,
-  associatedServerIds: [...associatedServerIds],
+  associatedServerUuids: [...associatedServerUuids],
+  legacyAssociatedServerIds: [...legacyAssociatedServerIds],
 );
 
 DnsProviderCredential aDnsProviderCredential({

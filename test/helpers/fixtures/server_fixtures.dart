@@ -6,7 +6,7 @@ ServerProviderVolume aServerProviderVolume({
   final int id = 0,
   final String name = '',
   final int sizeByte = 0,
-  final int serverId = 1,
+  final String serverId = '1',
   final String linuxDevice = '',
 }) => ServerProviderVolume(
   id: id,
@@ -17,7 +17,7 @@ ServerProviderVolume aServerProviderVolume({
 );
 
 ServerHostingDetails aServerHostingDetails({
-  final int id = 1,
+  final String? providerId = '1',
   final String ip4 = '203.0.113.10',
   final String apiToken = 'api-token',
   final ServerProviderType provider = ServerProviderType.hetzner,
@@ -26,14 +26,14 @@ ServerHostingDetails aServerHostingDetails({
   final DateTime? apiTokenRotatedAt,
   final ServerProviderVolume? volume,
 }) => ServerHostingDetails(
-  id: id,
+  providerId: providerId,
   ip4: ip4,
   apiToken: apiToken,
   provider: provider,
   createTime: createTime,
   startTime: startTime,
   apiTokenRotatedAt: apiTokenRotatedAt,
-  volume: volume ?? aServerProviderVolume(serverId: id),
+  volume: volume ?? aServerProviderVolume(serverId: providerId ?? ''),
 );
 
 ServerDomain aServerDomain({

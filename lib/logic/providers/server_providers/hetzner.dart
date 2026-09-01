@@ -86,7 +86,7 @@ class HetznerServerProvider extends ServerProvider {
       ServerBasicInfo? server;
       try {
         server = ServerBasicInfo(
-          id: hetznerServer.id,
+          providerId: hetznerServer.id.toString(),
           name: hetznerServer.name,
           ip: hetznerServer.publicNet.ipv4!.ip,
           reverseDns: hetznerServer.publicNet.ipv4!.reverseDns,
@@ -104,7 +104,9 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerType?>> getServerType(final int serverId) async {
+  Future<GenericResult<ServerType?>> getServerType(
+    final String providerId,
+  ) async {
     ServerType? serverType;
     HetznerServerInfo? server;
     final result = await _adapter.api().getServers();
@@ -120,7 +122,7 @@ class HetznerServerProvider extends ServerProvider {
     final List<HetznerServerInfo> hetznerServers = result.data;
     for (final hetznerServer in hetznerServers) {
       if (hetznerServer.publicNet.ipv4 != null &&
-          hetznerServer.id == serverId) {
+          hetznerServer.id.toString() == providerId) {
         server = hetznerServer;
         break;
       }
@@ -302,14 +304,14 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     final serverDetails = ServerHostingDetails(
-      id: serverResult.data!.id,
+      providerId: serverResult.data!.id.toString(),
       ip4: serverResult.data!.publicNet.ipv4!.ip,
       createTime: DateTime.now(),
       volume: ServerProviderVolume(
         id: volume.id,
         name: volume.name,
         sizeByte: volume.size * 1024 * 1024 * 1024,
-        serverId: volume.serverId,
+        serverId: volume.serverId?.toString(),
         linuxDevice: volume.linuxDevice,
       ),
       apiToken: serverApiToken,
@@ -319,7 +321,7 @@ class HetznerServerProvider extends ServerProvider {
     cachedCoreAmount = serverResult.data!.serverType.cores;
 
     final createDnsResult = await _adapter.api().createReverseDns(
-      serverId: serverDetails.id,
+      serverId: serverResult.data!.id,
       ip4: serverDetails.ip4,
       dnsPtr: installationData.serverDomain.domainName,
     );
@@ -534,9 +536,9 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<DateTime?>> powerOn(final int serverId) async {
+  Future<GenericResult<DateTime?>> powerOn(final String providerId) async {
     DateTime? timestamp;
-    final result = await _adapter.api().powerOn(serverId);
+    final result = await _adapter.api().powerOn(int.parse(providerId));
     if (!result.success) {
       return GenericResult(
         success: false,
@@ -552,9 +554,9 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<DateTime?>> restart(final int serverId) async {
+  Future<GenericResult<DateTime?>> restart(final String providerId) async {
     DateTime? timestamp;
-    final result = await _adapter.api().restart(serverId);
+    final result = await _adapter.api().restart(int.parse(providerId));
     if (!result.success) {
       return GenericResult(
         success: false,
@@ -625,7 +627,7 @@ class HetznerServerProvider extends ServerProvider {
           id: volumeId,
           name: volumeName,
           sizeByte: volumeSize,
-          serverId: volumeServer,
+          serverId: volumeServer?.toString(),
           linuxDevice: volumeDevice,
           location: volumeLocation,
         );
@@ -668,7 +670,7 @@ class HetznerServerProvider extends ServerProvider {
         id: result.data!.id,
         name: result.data!.name,
         sizeByte: result.data!.size * 1024 * 1024 * 1024,
-        serverId: result.data!.serverId,
+        serverId: result.data!.serverId?.toString(),
         linuxDevice: result.data!.linuxDevice,
       );
     } catch (e) {
@@ -704,7 +706,7 @@ class HetznerServerProvider extends ServerProvider {
     HetznerVolume(
       volume.id,
       volume.sizeByte,
-      volume.serverId,
+      int.tryParse(volume.serverId ?? ''),
       volume.name,
       volume.linuxDevice,
       HetznerLocation.empty(),
@@ -715,17 +717,17 @@ class HetznerServerProvider extends ServerProvider {
   @override
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
-    final int serverId,
+    final String providerId,
   ) => _adapter.api().attachVolume(
     HetznerVolume(
       volume.id,
       volume.sizeByte,
-      volume.serverId,
+      int.tryParse(volume.serverId ?? ''),
       volume.name,
       volume.linuxDevice,
       HetznerLocation.empty(),
     ),
-    serverId,
+    int.parse(providerId),
   );
 
   @override
@@ -734,7 +736,7 @@ class HetznerServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
-    final int serverId,
+    final String providerId,
     final String location,
   ) async {
     List<ServerMetadataEntity> metadata = [];
@@ -773,7 +775,7 @@ class HetznerServerProvider extends ServerProvider {
       final Price pricePerGb = resultPricePerGb.data!.perVolumeGb;
       final Price pricePerIp = resultPricePerGb.data!.perPublicIpv4;
       final HetznerServerInfo server = servers.firstWhere(
-        (final server) => server.id == serverId,
+        (final server) => server.id.toString() == providerId,
       );
       final HetznerVolume volume = volumes.firstWhere(
         (final volume) => server.volumes.contains(volume.id),
@@ -830,7 +832,7 @@ class HetznerServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<ServerMetrics?>> getMetrics(
-    final int serverId,
+    final String providerId,
     final DateTime start,
     final DateTime end,
   ) async {
@@ -858,7 +860,7 @@ class HetznerServerProvider extends ServerProvider {
       }
 
       for (final server in serversResult.data) {
-        if (server.id == serverId) {
+        if (server.id.toString() == providerId) {
           cachedCoreAmount = server.serverType.cores;
         }
       }
@@ -886,7 +888,7 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     final cpuResult = await _adapter.api().getMetrics(
-      serverId,
+      int.parse(providerId),
       start,
       end,
       'cpu',
@@ -902,7 +904,7 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     final netResult = await _adapter.api().getMetrics(
-      serverId,
+      int.parse(providerId),
       start,
       end,
       'network',

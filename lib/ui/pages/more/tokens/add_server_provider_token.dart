@@ -49,7 +49,7 @@ class _AddServerProviderTokenPageState
       token: key,
       provider: widget.server.hostingDetails.provider,
       tokenId: null,
-      associatedServerIds: [],
+      associatedServerUuids: [],
     );
     context.read<TokensBloc>().add(AddServerProviderToken(newCredential));
     setState(() {

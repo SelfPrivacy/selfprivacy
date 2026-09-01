@@ -110,10 +110,15 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       return TokenStatus.invalid;
     }
     // Now, if there are associated servers, check if we have access to them
-    if (credential.associatedServerIds.isNotEmpty) {
+    if (credential.associatedServerUuids.isNotEmpty) {
       final servers = (await serverProvider.getServers()).data;
-      for (final serverId in credential.associatedServerIds) {
-        if (!servers.any((final server) => server.id == serverId)) {
+      for (final serverUuid in credential.associatedServerUuids) {
+        final localServer = getIt<ResourcesModel>().servers
+            .where((final server) => server.uuid == serverUuid)
+            .firstOrNull;
+        final providerId = localServer?.hostingDetails.providerId;
+        if (providerId == null ||
+            !servers.any((final server) => server.providerId == providerId)) {
           return TokenStatus.noAccess;
         }
       }
@@ -217,7 +222,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final Emitter<TokensState> emit,
   ) async {
     await getIt<ResourcesModel>().associateServerWithToken(
-      event.providerServer.id,
+      event.server.uuid,
       event.serverProviderCredential.token,
     );
     final Server newServerData = Server(
@@ -225,13 +230,13 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       domain: event.server.domain,
       hostingDetails: event.server.hostingDetails.copyWith(
         ip4: event.providerServer.ip,
-        id: event.providerServer.id,
+        providerId: event.providerServer.providerId,
         createTime: event.providerServer.created,
         volume: ServerProviderVolume(
           id: 0,
           name: 'recovered_volume',
           sizeByte: 0,
-          serverId: event.providerServer.id,
+          serverId: event.providerServer.providerId,
           linuxDevice: '',
         ),
         provider: event.serverProviderCredential.provider,

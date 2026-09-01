@@ -98,13 +98,13 @@ class ResourcesModel {
   }
 
   Future<void> associateServerWithToken(
-    final int serverId,
+    final String serverUuid,
     final String token,
   ) async {
     _serverProviderTokens
         .firstWhere((final credential) => credential.token == token)
-        .associatedServerIds
-        .add(serverId);
+        .associatedServerUuids
+        .add(serverUuid);
     await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
     await _box.flush();
     _statusStreamController.add(const ChangedServerProviderCredentials());

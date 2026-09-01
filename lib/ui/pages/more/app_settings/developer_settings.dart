@@ -153,7 +153,9 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
                   children: [
                     ListTile(
                       title: Text('server.server_id'.tr()),
-                      subtitle: Text(server.hostingDetails.id.toString()),
+                      subtitle: Text(
+                        server.hostingDetails.providerId ?? 'manual',
+                      ),
                     ),
                     ListTile(
                       title: Text('server.location'.tr()),

@@ -26,16 +26,14 @@ sealed class TokensState extends Equatable {
               (
                 final TokenStatusWrapper<ServerProviderCredential>
                 serverProviderCredential,
-              ) => !serverProviderCredential.data.associatedServerIds.contains(
-                server.hostingDetails.id,
-              ),
+              ) => !serverProviderCredential.data.associatedServerUuids
+                  .contains(server.uuid),
             ),
       )
       .toList();
 
-  Server getServerById(final int serverId) => servers.firstWhere(
-    (final Server server) => server.hostingDetails.id == serverId,
-  );
+  Server getServerByUuid(final String serverUuid) =>
+      servers.firstWhere((final Server server) => server.uuid == serverUuid);
 
   List<ServerProviderCredential> get _serverProviderCredentials =>
       getIt<ResourcesModel>().serverProviderCredentials;

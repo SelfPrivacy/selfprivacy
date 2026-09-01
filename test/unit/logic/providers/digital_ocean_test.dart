@@ -37,6 +37,16 @@ class _DigitalOceanVolumeClientFactory {
                       },
                     ),
                   );
+                case ('GET', '/droplets'):
+                  handler.resolve(
+                    _response(
+                      request,
+                      statusCode: 200,
+                      data: {
+                        'droplets': [_droplet()],
+                      },
+                    ),
+                  );
                 default:
                   handler.reject(
                     DioException(
@@ -65,6 +75,17 @@ class _DigitalOceanVolumeClientFactory {
     'size_gigabytes': 10,
     'droplet_ids': <int>[],
     'region': {'slug': 'nyc1', 'name': 'New York 1'},
+  };
+
+  Map<String, dynamic> _droplet() => {
+    'id': 7,
+    'name': 'selfprivacy-server',
+    'networks': {
+      'v4': [
+        {'type': 'public', 'ip_address': '135.181.45.111'},
+      ],
+    },
+    'region': {'slug': 'nyc1'},
   };
 }
 
@@ -105,5 +126,22 @@ void main() {
       final requestData = createRequest.data as Map<String, dynamic>;
       expect(requestData['size_gigabytes'], 10);
     });
+  });
+
+  test('getServers exposes provider IDs as strings', () async {
+    final clients = _DigitalOceanVolumeClientFactory();
+    final provider = ServerProviderFactory.createServerProviderInterface(
+      ServerProviderSettings(
+        provider: ServerProviderType.digitalOcean,
+        token: 'provider-token',
+        isAuthorized: true,
+      ),
+      clientFactory: clients.call,
+    );
+
+    final result = await provider.getServers();
+
+    expect(result.success, isTrue);
+    expect(result.data.single.providerId, '7');
   });
 }

@@ -143,7 +143,7 @@ class _HetznerInstallationClientFactory {
     'public_net': {
       'ipv4': {
         'id': 8,
-        'ip': '203.0.113.10',
+        'ip': '135.181.45.111',
         'blocked': false,
         'dns_ptr': 'example.org',
       },
@@ -235,7 +235,7 @@ class _HetznerMetadataClientFactory {
     'public_net': {
       'ipv4': {
         'id': 8,
-        'ip': '203.0.113.10',
+        'ip': '135.181.45.111',
         'blocked': false,
         'dns_ptr': 'example.org',
       },
@@ -401,7 +401,7 @@ void main() {
         clientFactory: clients.call,
       );
 
-      final result = await provider.getMetadata(7, 'fsn1');
+      final result = await provider.getMetadata('7', 'fsn1');
 
       expect(result.success, isTrue);
       final cost = result.data.singleWhere(
@@ -414,5 +414,22 @@ void main() {
         '/pricing',
       ]);
     });
+  });
+
+  test('getServers exposes provider IDs as strings', () async {
+    final clients = _HetznerMetadataClientFactory();
+    final provider = ServerProviderFactory.createServerProviderInterface(
+      ServerProviderSettings(
+        provider: ServerProviderType.hetzner,
+        token: 'provider-token',
+        isAuthorized: true,
+      ),
+      clientFactory: clients.call,
+    );
+
+    final result = await provider.getServers();
+
+    expect(result.success, isTrue);
+    expect(result.data.single.providerId, '7');
   });
 }

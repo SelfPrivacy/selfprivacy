@@ -1,13 +1,13 @@
 class ServerBasicInfo {
   ServerBasicInfo({
-    required this.id,
+    required this.providerId,
     required this.name,
     required this.reverseDns,
     required this.ip,
     required this.created,
     required this.location,
   });
-  final int id;
+  final String providerId;
   final String name;
   final String reverseDns;
   final String ip;
@@ -17,7 +17,7 @@ class ServerBasicInfo {
 
 class ServerBasicInfoWithValidators extends ServerBasicInfo {
   ServerBasicInfoWithValidators({
-    required super.id,
+    required super.providerId,
     required super.name,
     required super.reverseDns,
     required super.ip,
@@ -32,7 +32,7 @@ class ServerBasicInfoWithValidators extends ServerBasicInfo {
     required final isIpValid,
     required final isReverseDnsValid,
   }) : this(
-         id: serverBasicInfo.id,
+         providerId: serverBasicInfo.providerId,
          name: serverBasicInfo.name,
          reverseDns: serverBasicInfo.reverseDns,
          ip: serverBasicInfo.ip,

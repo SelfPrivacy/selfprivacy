@@ -55,9 +55,12 @@ class ServerDetailsCubit
     final dnsProviderApi = ProvidersController.currentDnsProvider;
     if (server.hostingDetails.serverLocation != null &&
         (serverProviderApi?.isAuthorized ?? false)) {
-      final serverId = server.hostingDetails.id;
+      final providerId = server.hostingDetails.providerId;
+      if (providerId == null) {
+        return data;
+      }
       final metadataResult = await serverProviderApi?.getMetadata(
-        serverId,
+        providerId,
         server.hostingDetails.serverLocation!,
       );
 

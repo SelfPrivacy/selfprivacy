@@ -169,8 +169,10 @@ class HiveConfig {
               tokenId: null,
               token: serverProviderKey,
               provider: serverProvider!,
-              associatedServerIds: [
-                if (serverDetails != null) serverDetails.id,
+              associatedServerUuids: [],
+              legacyAssociatedServerIds: [
+                if (serverDetails?.legacyProviderId != null)
+                  serverDetails!.legacyProviderId!,
               ],
             );
 

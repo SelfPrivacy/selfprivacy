@@ -39,7 +39,10 @@ void main() {
     expect(serverCredentials.single.tokenId, isNull);
     expect(serverCredentials.single.token, v1ServerToken);
     expect(serverCredentials.single.provider, ServerProviderType.hetzner);
-    expect(serverCredentials.single.associatedServerIds, <int>[v1ServerId]);
+    expect(serverCredentials.single.legacyAssociatedServerIds, <int>[
+      v1ServerId,
+    ]);
+    expect(serverCredentials.single.associatedServerUuids, isEmpty);
 
     final List<Server> servers = List<Server>.from(
       resourcesBox.get(BNames.servers) as List<dynamic>,
@@ -47,7 +50,8 @@ void main() {
     expect(servers, hasLength(1));
     expect(servers.single.domain.domainName, v1DomainName);
     expect(servers.single.domain.provider, DnsProviderType.cloudflare);
-    expect(servers.single.hostingDetails.id, v1ServerId);
+    expect(servers.single.hostingDetails.legacyProviderId, v1ServerId);
+    expect(servers.single.hostingDetails.providerId, isNull);
     expect(servers.single.hostingDetails.ip4, '203.0.113.42');
     expect(servers.single.hostingDetails.apiToken, 'server-api-token');
     expect(servers.single.hostingDetails.provider, ServerProviderType.hetzner);
@@ -55,6 +59,8 @@ void main() {
     expect(servers.single.hostingDetails.serverType, v1ServerType);
     expect(servers.single.hostingDetails.volume.id, 84);
     expect(servers.single.hostingDetails.volume.uuid, 'volume-uuid');
+    expect(servers.single.hostingDetails.volume.legacyServerId, v1ServerId);
+    expect(servers.single.hostingDetails.volume.serverId, isNull);
 
     final List<DnsProviderCredential> dnsCredentials =
         List<DnsProviderCredential>.from(

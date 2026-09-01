@@ -88,7 +88,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       }
 
       return ServerBasicInfo(
-        id: server['id'],
+        providerId: server['id'].toString(),
         reverseDns: server['name'],
         created: DateTime.now(),
         ip: ipv4,
@@ -101,7 +101,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerType?>> getServerType(final int serverId) async {
+  Future<GenericResult<ServerType?>> getServerType(
+    final String providerId,
+  ) async {
     ServerType? serverType;
     dynamic server;
     final result = await _adapter.api().getServers();
@@ -116,7 +118,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final List rawServers = result.data;
     for (final rawServer in rawServers) {
-      if (rawServer['id'] != serverId) {
+      if (rawServer['id'].toString() != providerId) {
         continue;
       }
 
@@ -322,7 +324,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       }
 
       serverDetails = ServerHostingDetails(
-        id: dropletId,
+        providerId: dropletId.toString(),
         ip4: ipv4,
         createTime: DateTime.now(),
         volume: newVolume,
@@ -398,7 +400,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       final volumes = await getVolumes();
       final ServerProviderVolume volumeToRemove;
       volumeToRemove = volumes.data.firstWhere(
-        (final el) => el.serverId == foundServer!.id,
+        (final el) => el.serverId == foundServer!.providerId,
       );
 
       if (volumeToRemove.location == null) {
@@ -407,14 +409,14 @@ class DigitalOceanServerProvider extends ServerProvider {
 
       await _adapter.api().detachVolume(
         name: volumeToRemove.name,
-        serverId: volumeToRemove.serverId!,
+        serverId: int.parse(volumeToRemove.serverId!),
         region: volumeToRemove.location!,
       );
 
       await Future.delayed(const Duration(seconds: 10));
       final List<Future> laterFutures = <Future>[
         _adapter.api().deleteVolume(volumeToRemove.uuid!),
-        _adapter.api().deleteServer(foundServer!.id),
+        _adapter.api().deleteServer(int.parse(foundServer!.providerId)),
       ];
 
       await Future.wait(laterFutures);
@@ -521,9 +523,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<DateTime?>> powerOn(final int serverId) async {
+  Future<GenericResult<DateTime?>> powerOn(final String providerId) async {
     DateTime? timestamp;
-    final result = await _adapter.api().powerOn(serverId);
+    final result = await _adapter.api().powerOn(int.parse(providerId));
     if (!result.success) {
       return GenericResult(
         success: false,
@@ -539,9 +541,9 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<DateTime?>> restart(final int serverId) async {
+  Future<GenericResult<DateTime?>> restart(final String providerId) async {
     DateTime? timestamp;
-    final result = await _adapter.api().restart(serverId);
+    final result = await _adapter.api().restart(int.parse(providerId));
     if (!result.success) {
       return GenericResult(
         success: false,
@@ -598,7 +600,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
           serverId:
               (rawVolume.dropletIds != null && rawVolume.dropletIds!.isNotEmpty)
-              ? rawVolume.dropletIds![0]
+              ? rawVolume.dropletIds![0].toString()
               : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
           uuid: rawVolume.id,
@@ -693,10 +695,10 @@ class DigitalOceanServerProvider extends ServerProvider {
   @override
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
-    final int serverId,
+    final String providerId,
   ) => _adapter.api().attachVolume(
     name: volume.name,
-    serverId: serverId,
+    serverId: int.parse(providerId),
     region: volume.location!,
   );
 
@@ -704,7 +706,7 @@ class DigitalOceanServerProvider extends ServerProvider {
   Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
       _adapter.api().detachVolume(
         name: volume.name,
-        serverId: volume.serverId!,
+        serverId: int.parse(volume.serverId!),
         region: volume.location!,
       );
 
@@ -724,7 +726,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(
-    final int serverId,
+    final String providerId,
     final String location,
   ) async {
     List<ServerMetadataEntity> metadata = [];
@@ -761,7 +763,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     try {
       final Price pricePerGb = resultPricePerGb.data!.perVolumeGb;
       final droplet = servers.firstWhere(
-        (final server) => server['id'] == serverId,
+        (final server) => server['id'].toString() == providerId,
       );
 
       final volume = volumes.firstWhere(
@@ -855,7 +857,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<ServerMetrics?>> getMetrics(
-    final int serverId,
+    final String providerId,
     final DateTime start,
     final DateTime end,
   ) async {
@@ -863,7 +865,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     const int step = 15;
     final inboundResult = await _adapter.api().getMetricsBandwidth(
-      serverId: serverId,
+      serverId: int.parse(providerId),
       start: start,
       end: end,
       isInbound: true,
@@ -879,7 +881,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final outboundResult = await _adapter.api().getMetricsBandwidth(
-      serverId: serverId,
+      serverId: int.parse(providerId),
       start: start,
       end: end,
       isInbound: false,
@@ -894,7 +896,11 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final cpuResult = await _adapter.api().getMetricsCpu(serverId, start, end);
+    final cpuResult = await _adapter.api().getMetricsCpu(
+      int.parse(providerId),
+      start,
+      end,
+    );
 
     if (cpuResult.data.isEmpty || !cpuResult.success) {
       return GenericResult(

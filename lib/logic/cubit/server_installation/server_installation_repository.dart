@@ -205,8 +205,12 @@ class ServerInstallationRepository {
   Future<ServerHostingDetails> startServer(
     final ServerHostingDetails server,
   ) async {
+    final providerId = server.providerId;
+    if (providerId == null) {
+      return server;
+    }
     final result = await ProvidersController.currentServerProvider!.powerOn(
-      server.id,
+      providerId,
     );
 
     if (result.success && result.data != null) {
@@ -360,11 +364,11 @@ class ServerInstallationRepository {
           id: 0,
           name: '',
           sizeByte: 0,
-          serverId: 0,
+          serverId: null,
           linuxDevice: '',
         ),
         provider: ServerProviderType.unknown,
-        id: 0,
+        providerId: null,
         ip4: serverIp,
         startTime: null,
         createTime: null,
@@ -396,11 +400,11 @@ class ServerInstallationRepository {
           id: 0,
           name: '',
           sizeByte: 0,
-          serverId: 0,
+          serverId: null,
           linuxDevice: '',
         ),
         provider: ServerProviderType.unknown,
-        id: 0,
+        providerId: null,
         ip4: serverIp,
         startTime: null,
         createTime: null,
@@ -428,12 +432,12 @@ class ServerInstallationRepository {
           volume: ServerProviderVolume(
             id: 0,
             name: '',
-            serverId: 0,
+            serverId: null,
             sizeByte: 0,
             linuxDevice: '',
           ),
           provider: ServerProviderType.unknown,
-          id: 0,
+          providerId: null,
           ip4: serverIp,
           startTime: null,
           createTime: null,
@@ -458,11 +462,11 @@ class ServerInstallationRepository {
           id: 0,
           name: '',
           sizeByte: 0,
-          serverId: 0,
+          serverId: null,
           linuxDevice: '',
         ),
         provider: ServerProviderType.unknown,
-        id: 0,
+        providerId: null,
         ip4: serverIp,
         startTime: null,
         createTime: null,
@@ -501,7 +505,7 @@ class ServerInstallationRepository {
         token: key,
         provider:
             getIt<WizardDataModel>().serverInstallation!.serverProviderType!,
-        associatedServerIds: [],
+        associatedServerUuids: [],
       ),
     );
     ProvidersController.initServerProvider(
@@ -588,15 +592,14 @@ class ServerInstallationRepository {
     await getIt<WizardDataModel>().moveServerTypeToServerDetails();
     final ServerInstallationWizardData wizardData =
         getIt<WizardDataModel>().serverInstallation!;
-    await getIt<ResourcesModel>().addServer(
-      Server.create(
-        hostingDetails: wizardData.serverDetails!,
-        domain: wizardData.serverDomain!,
-      ),
+    final server = Server.create(
+      hostingDetails: wizardData.serverDetails!,
+      domain: wizardData.serverDomain!,
     );
+    await getIt<ResourcesModel>().addServer(server);
     if (wizardData.serverProviderKey != null) {
       await getIt<ResourcesModel>().associateServerWithToken(
-        wizardData.serverDetails!.id,
+        server.uuid,
         wizardData.serverProviderKey!,
       );
     }

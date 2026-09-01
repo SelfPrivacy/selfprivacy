@@ -18,13 +18,14 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
     };
     return ServerHostingDetails(
       ip4: fields[0] as String,
-      id: (fields[1] as num).toInt(),
+      providerId: fields[10] as String?,
       createTime: fields[3] as DateTime?,
       volume: fields[4] as ServerProviderVolume,
       apiToken: fields[5] as String,
       provider: fields[6] == null
           ? ServerProviderType.hetzner
           : fields[6] as ServerProviderType,
+      legacyProviderId: (fields[1] as num?)?.toInt(),
       serverLocation: fields[7] as String?,
       serverType: fields[8] as String?,
       startTime: fields[2] as DateTime?,
@@ -35,11 +36,11 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
   @override
   void write(BinaryWriter writer, ServerHostingDetails obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.ip4)
       ..writeByte(1)
-      ..write(obj.id)
+      ..write(obj.legacyProviderId)
       ..writeByte(2)
       ..write(obj.startTime)
       ..writeByte(3)
@@ -55,7 +56,9 @@ class ServerHostingDetailsAdapter extends TypeAdapter<ServerHostingDetails> {
       ..writeByte(8)
       ..write(obj.serverType)
       ..writeByte(9)
-      ..write(obj.apiTokenRotatedAt);
+      ..write(obj.apiTokenRotatedAt)
+      ..writeByte(10)
+      ..write(obj.providerId);
   }
 
   @override
@@ -83,8 +86,9 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       id: (fields[1] as num).toInt(),
       name: fields[2] as String,
       sizeByte: fields[3] == null ? 10737418240 : (fields[3] as num).toInt(),
-      serverId: (fields[4] as num?)?.toInt(),
+      serverId: fields[8] as String?,
       linuxDevice: fields[5] as String?,
+      legacyServerId: (fields[4] as num?)?.toInt(),
       uuid: fields[6] as String?,
       location: fields[7] as String?,
     );
@@ -93,7 +97,7 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
   @override
   void write(BinaryWriter writer, ServerProviderVolume obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(1)
       ..write(obj.id)
       ..writeByte(2)
@@ -101,13 +105,15 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       ..writeByte(3)
       ..write(obj.sizeByte)
       ..writeByte(4)
-      ..write(obj.serverId)
+      ..write(obj.legacyServerId)
       ..writeByte(5)
       ..write(obj.linuxDevice)
       ..writeByte(6)
       ..write(obj.uuid)
       ..writeByte(7)
-      ..write(obj.location);
+      ..write(obj.location)
+      ..writeByte(8)
+      ..write(obj.serverId);
   }
 
   @override

@@ -71,24 +71,24 @@ void main() {
         aServerProviderCredential(token: 'srv-a'),
       );
 
-      await model.associateServerWithToken(42, 'srv-a');
+      await model.associateServerWithToken('server-a', 'srv-a');
 
       expect(
-        model.serverProviderCredentials.single.associatedServerIds,
-        contains(42),
+        model.serverProviderCredentials.single.associatedServerUuids,
+        contains('server-a'),
       );
 
       final reloaded = ResourcesModel()..init();
       addTearDown(reloaded.dispose);
       expect(
-        reloaded.serverProviderCredentials.single.associatedServerIds,
-        contains(42),
+        reloaded.serverProviderCredentials.single.associatedServerUuids,
+        contains('server-a'),
       );
     });
 
     test('associateServerWithToken throws when the token is unknown', () async {
       await expectLater(
-        model.associateServerWithToken(1, 'missing'),
+        model.associateServerWithToken('server-a', 'missing'),
         throwsStateError,
       );
     });

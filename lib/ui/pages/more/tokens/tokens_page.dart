@@ -157,15 +157,15 @@ class _ServerProviderListItem extends StatelessWidget {
   String getSubtitle(final BuildContext context) {
     String subtitle = '';
     subtitle += serverProviderCredential.status.statusText;
-    if (serverProviderCredential.data.associatedServerIds.isNotEmpty) {
+    if (serverProviderCredential.data.associatedServerUuids.isNotEmpty) {
       final String serverDomains = serverProviderCredential
           .data
-          .associatedServerIds
+          .associatedServerUuids
           .map(
-            (final int serverId) => context
+            (final String serverUuid) => context
                 .read<TokensBloc>()
                 .state
-                .getServerById(serverId)
+                .getServerByUuid(serverUuid)
                 .domain
                 .domainName,
           )

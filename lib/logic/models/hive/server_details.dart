@@ -7,11 +7,12 @@ part 'server_details.g.dart';
 class ServerHostingDetails {
   ServerHostingDetails({
     required this.ip4,
-    required this.id,
+    required this.providerId,
     required this.createTime,
     required this.volume,
     required this.apiToken,
     required this.provider,
+    this.legacyProviderId,
     this.serverLocation,
     this.serverType,
     this.startTime,
@@ -22,7 +23,7 @@ class ServerHostingDetails {
   final String ip4;
 
   @HiveField(1)
-  final int id;
+  final int? legacyProviderId;
 
   // TODO(inex): Check if it is still needed
   @HiveField(2)
@@ -50,9 +51,12 @@ class ServerHostingDetails {
   @HiveField(9)
   final DateTime? apiTokenRotatedAt;
 
+  @HiveField(10, defaultValue: null)
+  final String? providerId;
+
   ServerHostingDetails copyWith({
     final String? ip4,
-    final int? id,
+    final String? providerId,
     final DateTime? startTime,
     final DateTime? createTime,
     final ServerProviderVolume? volume,
@@ -68,14 +72,15 @@ class ServerHostingDetails {
     apiToken: apiToken ?? this.apiToken,
     apiTokenRotatedAt: apiTokenRotatedAt ?? this.apiTokenRotatedAt,
     createTime: createTime ?? this.createTime,
-    id: id ?? this.id,
+    providerId: providerId ?? this.providerId,
+    legacyProviderId: legacyProviderId,
     ip4: ip4 ?? this.ip4,
     volume: volume ?? this.volume,
     provider: provider ?? this.provider,
   );
 
   @override
-  String toString() => id.toString();
+  String toString() => providerId ?? '';
 }
 
 @HiveType(typeId: 5)
@@ -86,6 +91,7 @@ class ServerProviderVolume {
     required this.sizeByte,
     required this.serverId,
     required this.linuxDevice,
+    this.legacyServerId,
     this.uuid,
     this.location,
   });
@@ -97,13 +103,15 @@ class ServerProviderVolume {
   @HiveField(3, defaultValue: 10737418240) // 10 Gb
   int sizeByte;
   @HiveField(4, defaultValue: null)
-  int? serverId;
+  int? legacyServerId;
   @HiveField(5, defaultValue: null)
   String? linuxDevice;
   @HiveField(6, defaultValue: null)
   String? uuid;
   @HiveField(7, defaultValue: null)
   String? location;
+  @HiveField(8, defaultValue: null)
+  String? serverId;
 }
 
 @HiveType(typeId: 101)

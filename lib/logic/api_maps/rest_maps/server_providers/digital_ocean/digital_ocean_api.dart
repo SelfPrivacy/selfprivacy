@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
@@ -78,7 +79,7 @@ class DigitalOceanApi extends RestApiMap {
     return GenericResult(success: true, data: servers);
   }
 
-  Future<GenericResult<int?>> createServer({
+  Future<ResourceCreationResult<int>> createServer({
     required final DnsProviderCredential dnsApiCredential,
     required final String serverApiToken,
     required final String domainName,
@@ -93,6 +94,7 @@ class DigitalOceanApi extends RestApiMap {
     final dnsProviderType = dnsApiCredential.provider.toInfectName();
 
     int? dropletId;
+    String? rawDropletId;
     Response? serverCreateResponse;
     final Dio client = await getClient();
     try {
@@ -117,17 +119,35 @@ class DigitalOceanApi extends RestApiMap {
       };
       logger('Decoded data: $data');
       serverCreateResponse = await client.post('/droplets', data: data);
-      dropletId = serverCreateResponse.data['droplet']['id'];
+      final rawId = serverCreateResponse.data['droplet']?['id'];
+      if (rawId is int) {
+        dropletId = rawId;
+        rawDropletId = rawId.toString();
+      }
     } catch (e) {
       logger('Error while creating droplet: $e', error: e);
-      return GenericResult(success: false, data: null, message: e.toString());
+      if (e is DioException) {
+        serverCreateResponse ??= e.response;
+      }
+      return ResourceCreationResult(
+        success: false,
+        data: null,
+        wasCreated: _isSuccessfulCreateResponse(serverCreateResponse),
+        resourceId: rawDropletId,
+        code: serverCreateResponse?.statusCode,
+        message: e.toString(),
+      );
     } finally {
       close(client);
     }
 
-    return GenericResult(
+    return ResourceCreationResult(
       data: dropletId,
-      success: true,
+      success:
+          _isSuccessfulCreateResponse(serverCreateResponse) &&
+          dropletId != null,
+      wasCreated: _isSuccessfulCreateResponse(serverCreateResponse),
+      resourceId: rawDropletId,
       code: serverCreateResponse.statusCode,
       message: serverCreateResponse.statusMessage,
     );
@@ -286,11 +306,12 @@ class DigitalOceanApi extends RestApiMap {
     return GenericResult(data: volumes, success: true);
   }
 
-  Future<GenericResult<DigitalOceanVolume?>> createVolume({
+  Future<ResourceCreationResult<DigitalOceanVolume>> createVolume({
     required final int gb,
     required final String region,
   }) async {
     DigitalOceanVolume? volume;
+    String? volumeId;
     Response? createVolumeResponse;
     final Dio client = await getClient();
     try {
@@ -306,20 +327,42 @@ class DigitalOceanApi extends RestApiMap {
           'filesystem_type': 'ext4',
         },
       );
-      volume = DigitalOceanVolume.fromJson(createVolumeResponse.data['volume']);
+      final rawVolume = createVolumeResponse.data['volume'];
+      final rawVolumeId = rawVolume?['id'];
+      if (rawVolumeId is String) {
+        volumeId = rawVolumeId;
+      }
+      volume = DigitalOceanVolume.fromJson(rawVolume);
     } catch (e) {
       logger('Error while creating volume: $e', error: e);
-      return GenericResult(data: null, success: false, message: e.toString());
+      if (e is DioException) {
+        createVolumeResponse ??= e.response;
+      }
+      return ResourceCreationResult(
+        data: null,
+        success: false,
+        wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+        resourceId: volumeId,
+        code: createVolumeResponse?.statusCode,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return GenericResult(
+    return ResourceCreationResult(
       data: volume,
-      success: true,
+      success: _isSuccessfulCreateResponse(createVolumeResponse),
+      wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+      resourceId: volumeId,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
+  }
+
+  bool _isSuccessfulCreateResponse(final Response? response) {
+    final statusCode = response?.statusCode;
+    return statusCode != null && statusCode >= 200 && statusCode < 300;
   }
 
   Future<GenericResult<bool>> attachVolume({

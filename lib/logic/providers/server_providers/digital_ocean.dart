@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/server_providers/resource_creation_dialog.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
@@ -232,6 +233,18 @@ class DigitalOceanServerProvider extends ServerProvider {
       region: installationData.location,
     );
 
+    if (serverResult.wasCreated && !serverResult.success) {
+      return unreadableCreationResult(
+        installationData: installationData,
+        resourceId: serverResult.resourceId,
+        cleanup: () => _deleteDigitalOceanResources(
+          serverId: int.tryParse(serverResult.resourceId ?? ''),
+        ),
+        message: serverResult.message,
+        code: serverResult.code,
+      );
+    }
+
     if (!serverResult.success || serverResult.data == null) {
       return GenericResult(
         data: CallbackDialogueBranching(
@@ -256,10 +269,28 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     try {
       final int dropletId = serverResult.data!;
-      final newVolume = (await createVolume(
+      final volumeResult = await createVolume(
         installationData.storageSize.gibibyte.toInt(),
         installationData.location,
-      )).data;
+      );
+      if (volumeResult.wasCreated && !volumeResult.success) {
+        return unreadableCreationResult(
+          installationData: installationData,
+          resourceId: volumeResult.resourceId,
+          cleanup: () => _deleteDigitalOceanResources(
+            serverId: dropletId,
+            volumeId: volumeResult.resourceId,
+          ),
+          message: volumeResult.message,
+          code: volumeResult.code,
+        );
+      }
+      if (!volumeResult.success || volumeResult.data == null) {
+        throw StateError(
+          volumeResult.message ?? 'DigitalOcean volume creation failed.',
+        );
+      }
+      final newVolume = volumeResult.data;
       final bool attachedVolume = (await _adapter.api().attachVolume(
         name: newVolume!.name,
         serverId: dropletId,
@@ -324,6 +355,28 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     await installationData.successCallback(serverDetails);
     return GenericResult(success: true, data: null);
+  }
+
+  Future<GenericResult<void>> _deleteDigitalOceanResources({
+    final int? serverId,
+    final String? volumeId,
+  }) async {
+    final results = <GenericResult>[];
+    if (volumeId != null) {
+      results.add(await _adapter.api().deleteVolume(volumeId));
+    }
+    if (serverId != null) {
+      results.add(await _adapter.api().deleteServer(serverId));
+    }
+
+    final failedResults = results.where((final result) => !result.success);
+    final failed = failedResults.isEmpty ? null : failedResults.first;
+    return GenericResult(
+      success: results.isNotEmpty && failed == null,
+      data: null,
+      message: failed?.message,
+      code: failed?.code,
+    );
   }
 
   @override
@@ -562,7 +615,7 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerProviderVolume?>> createVolume(
+  Future<ResourceCreationResult<ServerProviderVolume>> createVolume(
     final int gb,
     final String location,
   ) async {
@@ -571,9 +624,11 @@ class DigitalOceanServerProvider extends ServerProvider {
     final result = await _adapter.api().createVolume(gb: gb, region: location);
 
     if (!result.success || result.data == null) {
-      return GenericResult(
+      return ResourceCreationResult(
         data: null,
         success: false,
+        wasCreated: result.wasCreated,
+        resourceId: result.resourceId,
         code: result.code,
         message: result.message,
       );
@@ -582,11 +637,13 @@ class DigitalOceanServerProvider extends ServerProvider {
     final getVolumesResult = await _adapter.api().getVolumes();
 
     if (!getVolumesResult.success || getVolumesResult.data.isEmpty) {
-      return GenericResult(
+      return ResourceCreationResult(
         data: null,
         success: false,
-        code: result.code,
-        message: result.message,
+        wasCreated: result.wasCreated,
+        resourceId: result.resourceId,
+        code: getVolumesResult.code,
+        message: getVolumesResult.message,
       );
     }
 
@@ -600,7 +657,12 @@ class DigitalOceanServerProvider extends ServerProvider {
       uuid: result.data!.id,
     );
 
-    return GenericResult(data: volume, success: true);
+    return ResourceCreationResult(
+      data: volume,
+      success: true,
+      wasCreated: result.wasCreated,
+      resourceId: result.resourceId,
+    );
   }
 
   Future<GenericResult<ServerProviderVolume?>> getVolume(

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -80,7 +81,7 @@ class HetznerApi extends RestApiMap {
     return GenericResult(data: servers, success: true);
   }
 
-  Future<GenericResult<HetznerServerInfo?>> createServer({
+  Future<ResourceCreationResult<HetznerServerInfo>> createServer({
     required final DnsProviderCredential dnsApiCredential,
     required final String serverApiToken,
     required final String domainName,
@@ -97,7 +98,9 @@ class HetznerApi extends RestApiMap {
 
     Response? serverCreateResponse;
     HetznerServerInfo? serverInfo;
+    String? serverId;
     DioException? hetznerError;
+    Object? parsingError;
     bool success = false;
 
     final Dio client = await getClient();
@@ -129,10 +132,13 @@ class HetznerApi extends RestApiMap {
       logger('Creating server with data: $data');
 
       serverCreateResponse = await client.post('/servers', data: data);
-      serverInfo = HetznerServerInfo.fromJson(
-        serverCreateResponse.data['server'],
-      );
-      success = true;
+      final rawServer = serverCreateResponse.data['server'];
+      final rawServerId = rawServer?['id'];
+      if (rawServerId is int) {
+        serverId = rawServerId.toString();
+      }
+      serverInfo = HetznerServerInfo.fromJson(rawServer);
+      success = _isSuccessfulCreateResponse(serverCreateResponse);
     } on DioException catch (e) {
       logger(
         'Error while creating server: ${e.message} - ${e.response?.data}',
@@ -141,19 +147,25 @@ class HetznerApi extends RestApiMap {
       hetznerError = e;
     } catch (e) {
       logger('Error while creating server: $e', error: e);
+      parsingError = e;
     } finally {
       close(client);
     }
 
     String? apiResultMessage = serverCreateResponse?.statusMessage;
-    if (hetznerError != null &&
-        hetznerError.response!.data['error']['code'] == 'uniqueness_error') {
+    if (hetznerError?.response?.data?['error']?['code'] == 'uniqueness_error') {
       apiResultMessage = 'uniqueness_error';
     }
 
-    return GenericResult(
+    final wasCreated = _isSuccessfulCreateResponse(serverCreateResponse);
+    if (wasCreated && parsingError != null) {
+      apiResultMessage = parsingError.toString();
+    }
+    return ResourceCreationResult(
       data: serverInfo,
-      success: success && hetznerError == null,
+      success: success && hetznerError == null && serverInfo != null,
+      wasCreated: wasCreated,
+      resourceId: serverId,
       code:
           serverCreateResponse?.statusCode ??
           hetznerError?.response?.statusCode,
@@ -371,12 +383,13 @@ class HetznerApi extends RestApiMap {
     );
   }
 
-  Future<GenericResult<HetznerVolume?>> createVolume({
+  Future<ResourceCreationResult<HetznerVolume>> createVolume({
     required final int gb,
     required final String region,
   }) async {
     Response? createVolumeResponse;
     HetznerVolume? volume;
+    String? volumeId;
     final Dio client = await getClient();
     try {
       createVolumeResponse = await client.post(
@@ -390,20 +403,42 @@ class HetznerApi extends RestApiMap {
           'format': 'ext4',
         },
       );
-      volume = HetznerVolume.fromJson(createVolumeResponse.data['volume']);
+      final rawVolume = createVolumeResponse.data['volume'];
+      final rawVolumeId = rawVolume?['id'];
+      if (rawVolumeId is int) {
+        volumeId = rawVolumeId.toString();
+      }
+      volume = HetznerVolume.fromJson(rawVolume);
     } catch (e) {
       logger('Error while creating volume: $e');
-      return GenericResult(data: null, success: false, message: e.toString());
+      if (e is DioException) {
+        createVolumeResponse ??= e.response;
+      }
+      return ResourceCreationResult(
+        data: null,
+        success: false,
+        wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+        resourceId: volumeId,
+        code: createVolumeResponse?.statusCode,
+        message: e.toString(),
+      );
     } finally {
       client.close();
     }
 
-    return GenericResult(
+    return ResourceCreationResult(
       data: volume,
-      success: true,
+      success: _isSuccessfulCreateResponse(createVolumeResponse),
+      wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+      resourceId: volumeId,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
+  }
+
+  bool _isSuccessfulCreateResponse(final Response? response) {
+    final statusCode = response?.statusCode;
+    return statusCode != null && statusCode >= 200 && statusCode < 300;
   }
 
   Future<GenericResult<bool>> deleteVolume(final int volumeId) async {

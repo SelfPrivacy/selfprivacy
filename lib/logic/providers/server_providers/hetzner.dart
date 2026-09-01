@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/server_providers/resource_creation_dialog.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
@@ -173,6 +174,18 @@ class HetznerServerProvider extends ServerProvider {
       region: installationData.location,
     );
 
+    if (volumeResult.wasCreated && !volumeResult.success) {
+      return unreadableCreationResult(
+        installationData: installationData,
+        resourceId: volumeResult.resourceId,
+        cleanup: () => _deleteHetznerResources(
+          volumeId: int.tryParse(volumeResult.resourceId ?? ''),
+        ),
+        message: volumeResult.message,
+        code: volumeResult.code,
+      );
+    }
+
     if (!volumeResult.success || volumeResult.data == null) {
       return GenericResult(
         data: CallbackDialogueBranching(
@@ -212,6 +225,19 @@ class HetznerServerProvider extends ServerProvider {
       customSshKey: installationData.customSshKey,
       region: installationData.location,
     );
+
+    if (serverResult.wasCreated && !serverResult.success) {
+      return unreadableCreationResult(
+        installationData: installationData,
+        resourceId: serverResult.resourceId,
+        cleanup: () => _deleteHetznerResources(
+          serverId: int.tryParse(serverResult.resourceId ?? ''),
+          volumeId: volume.id,
+        ),
+        message: serverResult.message,
+        code: serverResult.code,
+      );
+    }
 
     if (!serverResult.success || serverResult.data == null) {
       await _adapter.api().deleteVolume(volume.id);
@@ -340,6 +366,29 @@ class HetznerServerProvider extends ServerProvider {
 
     await installationData.successCallback(serverDetails);
     return GenericResult(success: true, data: null);
+  }
+
+  Future<GenericResult<void>> _deleteHetznerResources({
+    final int? serverId,
+    final int? volumeId,
+  }) async {
+    final results = <GenericResult>[];
+
+    if (serverId != null) {
+      results.add(await _adapter.api().deleteServer(serverId: serverId));
+    }
+    if (volumeId != null) {
+      results.add(await _adapter.api().deleteVolume(volumeId));
+    }
+
+    final failedResults = results.where((final result) => !result.success);
+    final failed = failedResults.isEmpty ? null : failedResults.first;
+    return GenericResult(
+      success: results.isNotEmpty && failed == null,
+      data: null,
+      message: failed?.message,
+      code: failed?.code,
+    );
   }
 
   @override
@@ -595,7 +644,7 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<ServerProviderVolume?>> createVolume(
+  Future<ResourceCreationResult<ServerProviderVolume>> createVolume(
     final int gb,
     final String location,
   ) async {
@@ -604,9 +653,11 @@ class HetznerServerProvider extends ServerProvider {
     final result = await _adapter.api().createVolume(gb: gb, region: location);
 
     if (!result.success || result.data == null) {
-      return GenericResult(
+      return ResourceCreationResult(
         data: null,
         success: false,
+        wasCreated: result.wasCreated,
+        resourceId: result.resourceId,
         message: result.message,
         code: result.code,
       );
@@ -622,12 +673,20 @@ class HetznerServerProvider extends ServerProvider {
       );
     } catch (e) {
       logger(e.toString());
-      return GenericResult(data: null, success: false, message: e.toString());
+      return ResourceCreationResult(
+        data: null,
+        success: false,
+        wasCreated: result.wasCreated,
+        resourceId: result.resourceId,
+        message: e.toString(),
+      );
     }
 
-    return GenericResult(
+    return ResourceCreationResult(
       data: volume,
       success: true,
+      wasCreated: result.wasCreated,
+      resourceId: result.resourceId,
       code: result.code,
       message: result.message,
     );

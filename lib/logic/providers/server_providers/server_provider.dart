@@ -1,4 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -11,6 +12,7 @@ import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
+export 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
 export 'package:selfprivacy/logic/models/launch_installation_data.dart';
 
 abstract class ServerProvider {
@@ -99,7 +101,7 @@ abstract class ServerProvider {
   /// Tries to create an empty unattached [ServerProviderVolume].
   ///
   /// If success, returns this volume information.
-  Future<GenericResult<ServerProviderVolume?>> createVolume(
+  Future<ResourceCreationResult<ServerProviderVolume>> createVolume(
     final int gb,
     final String location,
   );

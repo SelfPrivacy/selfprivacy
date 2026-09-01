@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/pagination.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -64,13 +65,12 @@ class HetznerApi extends RestApiMap {
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/servers');
-      servers = response.data!['servers']
-          .map<HetznerServerInfo>(
-            // ignore: unnecessary_lambdas
-            (final e) => HetznerServerInfo.fromJson(e),
-          )
-          .toList();
+      servers = await _getAllPages(
+        client: client,
+        path: '/servers',
+        resourceKey: 'servers',
+        parseItem: HetznerServerInfo.fromJson,
+      );
     } catch (e) {
       logger('Error while fetching servers: $e');
       return GenericResult(success: false, data: [], message: e.toString());
@@ -250,14 +250,16 @@ class HetznerApi extends RestApiMap {
   }
 
   Future<GenericResult<List<HetznerLocation>>> getAvailableLocations() async {
-    final List<HetznerLocation> locations = [];
+    List<HetznerLocation> locations = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/locations');
-      for (final location in response.data!['locations']) {
-        locations.add(HetznerLocation.fromJson(location));
-      }
+      locations = await _getAllPages(
+        client: client,
+        path: '/locations',
+        resourceKey: 'locations',
+        parseItem: HetznerLocation.fromJson,
+      );
     } catch (e) {
       logger('Error while fetching locations: $e');
       return GenericResult(success: false, data: [], message: e.toString());
@@ -270,14 +272,16 @@ class HetznerApi extends RestApiMap {
 
   Future<GenericResult<List<HetznerServerTypeInfo>>>
   getAvailableServerTypes() async {
-    final List<HetznerServerTypeInfo> types = [];
+    List<HetznerServerTypeInfo> types = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/server_types');
-      for (final type in response.data!['server_types']) {
-        types.add(HetznerServerTypeInfo.fromJson(type));
-      }
+      types = await _getAllPages(
+        client: client,
+        path: '/server_types',
+        resourceKey: 'server_types',
+        parseItem: HetznerServerTypeInfo.fromJson,
+      );
     } catch (e) {
       logger('Error while fetching server types: $e');
       return GenericResult(data: [], success: false, message: e.toString());
@@ -359,15 +363,18 @@ class HetznerApi extends RestApiMap {
   }
 
   Future<GenericResult<List<HetznerVolume>>> getVolumes() async {
-    final List<HetznerVolume> volumes = [];
+    List<HetznerVolume> volumes = [];
 
     Response? getVolumesResponse;
     final Dio client = await getClient();
     try {
-      getVolumesResponse = await client.get('/volumes');
-      for (final volume in getVolumesResponse.data['volumes']) {
-        volumes.add(HetznerVolume.fromJson(volume));
-      }
+      volumes = await _getAllPages(
+        client: client,
+        path: '/volumes',
+        resourceKey: 'volumes',
+        parseItem: HetznerVolume.fromJson,
+        onResponse: (final response) => getVolumesResponse = response,
+      );
     } catch (e) {
       logger('Error while fetching volumes: $e');
       return GenericResult(data: [], success: false, message: e.toString());
@@ -378,9 +385,48 @@ class HetznerApi extends RestApiMap {
     return GenericResult(
       data: volumes,
       success: true,
-      code: getVolumesResponse.statusCode,
-      message: getVolumesResponse.statusMessage,
+      code: getVolumesResponse?.statusCode,
+      message: getVolumesResponse?.statusMessage,
     );
+  }
+
+  Future<List<T>> _getAllPages<T>({
+    required final Dio client,
+    required final String path,
+    required final String resourceKey,
+    required final T Function(Map<String, dynamic>) parseItem,
+    final void Function(Response<dynamic>)? onResponse,
+  }) => getAllPages((final page) async {
+    final response = await client.get<dynamic>(
+      path,
+      queryParameters: {'page': page, 'per_page': 50},
+    );
+    onResponse?.call(response);
+    final data = response.data as Map<String, dynamic>;
+    final rawItems = data[resourceKey] as List<dynamic>;
+    return PaginatedPage(
+      items: rawItems
+          .map((final item) => parseItem(item as Map<String, dynamic>))
+          .toList(),
+      nextPage: _getNextPage(data),
+    );
+  });
+
+  int? _getNextPage(final Map<String, dynamic> data) {
+    final rawMeta = data['meta'];
+    if (rawMeta == null) {
+      return null;
+    }
+    final meta = rawMeta as Map<String, dynamic>;
+    final pagination = meta['pagination'] as Map<String, dynamic>;
+    final nextPage = pagination['next_page'];
+    if (nextPage == null) {
+      return null;
+    }
+    if (nextPage is! int) {
+      throw const FormatException('Hetzner returned an invalid next page.');
+    }
+    return nextPage;
   }
 
   Future<ResourceCreationResult<HetznerVolume>> createVolume({

@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/pagination.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
@@ -63,8 +64,12 @@ class DigitalOceanApi extends RestApiMap {
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/droplets');
-      servers = response.data['droplets'];
+      servers = await _getAllPages<dynamic>(
+        client: client,
+        path: '/droplets',
+        resourceKey: 'droplets',
+        parseItem: (final item) => item,
+      );
     } catch (e) {
       logger('Error while fetching droplets: $e', error: e);
       return GenericResult(
@@ -208,15 +213,16 @@ class DigitalOceanApi extends RestApiMap {
 
   Future<GenericResult<List<DigitalOceanLocation>>>
   getAvailableLocations() async {
-    final List<DigitalOceanLocation> locations = [];
+    List<DigitalOceanLocation> locations = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/regions');
-
-      for (final region in response.data!['regions']) {
-        locations.add(DigitalOceanLocation.fromJson(region));
-      }
+      locations = await _getAllPages(
+        client: client,
+        path: '/regions',
+        resourceKey: 'regions',
+        parseItem: DigitalOceanLocation.fromJson,
+      );
     } catch (e) {
       logger('Error while fetching regions: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
@@ -229,14 +235,16 @@ class DigitalOceanApi extends RestApiMap {
 
   Future<GenericResult<List<DigitalOceanServerType>>>
   getAvailableServerTypes() async {
-    final List<DigitalOceanServerType> types = [];
+    List<DigitalOceanServerType> types = [];
 
     final Dio client = await getClient();
     try {
-      final Response response = await client.get('/sizes');
-      for (final size in response.data!['sizes']) {
-        types.add(DigitalOceanServerType.fromJson(size));
-      }
+      types = await _getAllPages(
+        client: client,
+        path: '/sizes',
+        resourceKey: 'sizes',
+        parseItem: DigitalOceanServerType.fromJson,
+      );
     } catch (e) {
       logger('Error while fetching sizes: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
@@ -284,18 +292,17 @@ class DigitalOceanApi extends RestApiMap {
   Future<GenericResult<List<DigitalOceanVolume>>> getVolumes({
     final String? status,
   }) async {
-    final List<DigitalOceanVolume> volumes = [];
+    List<DigitalOceanVolume> volumes = [];
 
-    Response? getVolumesResponse;
     final Dio client = await getClient();
     try {
-      getVolumesResponse = await client.get(
-        '/volumes',
+      volumes = await _getAllPages(
+        client: client,
+        path: '/volumes',
+        resourceKey: 'volumes',
+        parseItem: DigitalOceanVolume.fromJson,
         queryParameters: {'status': status},
       );
-      for (final volume in getVolumesResponse.data['volumes']) {
-        volumes.add(DigitalOceanVolume.fromJson(volume));
-      }
     } catch (e) {
       logger('Error while fetching volumes: $e', error: e);
       return GenericResult(data: [], success: false, message: e.toString());
@@ -304,6 +311,58 @@ class DigitalOceanApi extends RestApiMap {
     }
 
     return GenericResult(data: volumes, success: true);
+  }
+
+  Future<List<T>> _getAllPages<T>({
+    required final Dio client,
+    required final String path,
+    required final String resourceKey,
+    required final T Function(Map<String, dynamic>) parseItem,
+    final Map<String, dynamic>? queryParameters,
+  }) => getAllPages((final page) async {
+    final response = await client.get<dynamic>(
+      path,
+      queryParameters: {...?queryParameters, 'page': page, 'per_page': 200},
+    );
+    final data = response.data as Map<String, dynamic>;
+    final rawItems = data[resourceKey] as List<dynamic>;
+    return PaginatedPage(
+      items: rawItems
+          .map((final item) => parseItem(item as Map<String, dynamic>))
+          .toList(),
+      nextPage: _getNextPage(data),
+    );
+  });
+
+  int? _getNextPage(final Map<String, dynamic> data) {
+    final rawLinks = data['links'];
+    if (rawLinks == null) {
+      return null;
+    }
+    final links = rawLinks as Map<String, dynamic>;
+    final rawPages = links['pages'];
+    if (rawPages == null) {
+      return null;
+    }
+    final pages = rawPages as Map<String, dynamic>;
+    final next = pages['next'];
+    if (next == null) {
+      return null;
+    }
+    if (next is! String) {
+      throw const FormatException(
+        'DigitalOcean returned an invalid next page.',
+      );
+    }
+    final nextPage = int.tryParse(
+      Uri.parse(next).queryParameters['page'] ?? '',
+    );
+    if (nextPage == null) {
+      throw const FormatException(
+        'DigitalOcean returned an invalid next page.',
+      );
+    }
+    return nextPage;
   }
 
   Future<ResourceCreationResult<DigitalOceanVolume>> createVolume({

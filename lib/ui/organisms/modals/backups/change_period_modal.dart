@@ -55,7 +55,7 @@ class _ChangeAutobackupsPeriodModalState
         ),
         const SizedBox(height: 16),
         // Select all services tile
-        RadioGroup<Duration>(
+        RadioGroup<Duration?>(
           groupValue: selectedPeriod,
           onChanged: (final Duration? value) {
             setState(() {

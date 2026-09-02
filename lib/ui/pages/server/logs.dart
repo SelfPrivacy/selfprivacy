@@ -54,7 +54,7 @@ class _ServerLogsPageState extends State<ServerLogsPage> {
       padding: EdgeInsets.zero,
       children: [
         DrawerHeader(child: Text('server.filter_by_systemd_unit'.tr())),
-        RadioGroup<String>(
+        RadioGroup<String?>(
           groupValue: _selectedSystemdUnit,
           onChanged: (final value) {
             setState(() {
@@ -64,9 +64,12 @@ class _ServerLogsPageState extends State<ServerLogsPage> {
           child: Column(
             children: [
               // a tile to reset filter
-              RadioListTile(title: Text('server.all_units'.tr()), value: null),
+              RadioListTile<String?>(
+                title: Text('server.all_units'.tr()),
+                value: null,
+              ),
               for (final unit in systemdUnits.sorted())
-                RadioListTile(title: Text(unit), value: unit),
+                RadioListTile<String?>(title: Text(unit), value: unit),
             ],
           ),
         ),

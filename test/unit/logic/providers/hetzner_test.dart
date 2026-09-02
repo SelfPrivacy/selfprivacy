@@ -174,8 +174,8 @@ class _HetznerMetadataClientFactory {
             ) {
               requests.add(request);
 
-              switch (request.path) {
-                case '/servers':
+              switch ((request.method, request.path)) {
+                case ('GET', '/servers'):
                   handler.resolve(
                     _response(
                       request,
@@ -184,7 +184,7 @@ class _HetznerMetadataClientFactory {
                       },
                     ),
                   );
-                case '/volumes':
+                case ('GET', '/volumes'):
                   handler.resolve(
                     _response(
                       request,
@@ -193,9 +193,37 @@ class _HetznerMetadataClientFactory {
                       },
                     ),
                   );
-                case '/pricing':
+                case ('GET', '/pricing'):
                   handler.resolve(
                     _response(request, data: {'pricing': _pricing()}),
+                  );
+                case ('POST', '/servers/7/actions/poweron'):
+                case ('POST', '/servers/7/actions/reset'):
+                  handler.resolve(_response(request, data: const {}));
+                case ('POST', '/volumes'):
+                  handler.resolve(
+                    _response(request, data: {'volume': _volume()}),
+                  );
+                case ('POST', '/volumes/41/actions/attach'):
+                case ('POST', '/volumes/41/actions/resize'):
+                  handler.resolve(
+                    _response(
+                      request,
+                      data: {
+                        'action': {'status': 'running'},
+                      },
+                    ),
+                  );
+                case ('GET', '/servers/7/metrics'):
+                  handler.resolve(
+                    _response(
+                      request,
+                      data: {
+                        'metrics': _metrics(
+                          request.queryParameters['type'] as String,
+                        ),
+                      },
+                    ),
                   );
                 default:
                   handler.reject(
@@ -270,6 +298,32 @@ class _HetznerMetadataClientFactory {
     ],
   };
 
+  Map<String, dynamic> _metrics(final String type) => {
+    'start': '2026-01-01T00:00:00Z',
+    'end': '2026-01-01T00:05:00Z',
+    'step': 60,
+    'time_series': type == 'cpu'
+        ? {
+            'cpu': {
+              'values': [
+                [1, '2.0'],
+              ],
+            },
+          }
+        : {
+            'network.0.bandwidth.in': {
+              'values': [
+                [1, '2.0'],
+              ],
+            },
+            'network.0.bandwidth.out': {
+              'values': [
+                [1, '3.0'],
+              ],
+            },
+          },
+  };
+
   Map<String, dynamic> _price({
     required final String location,
     required final String monthly,
@@ -308,6 +362,15 @@ ServerProvider _provider(final _FailureStage failureStage) =>
         credentials: const BearerTokenCredential(token: 'provider-token'),
       ),
       clientFactory: _HetznerInstallationClientFactory(failureStage).call,
+    );
+
+ServerProvider _metadataProvider(final _HetznerMetadataClientFactory clients) =>
+    ServerProviderFactory.createServerProviderInterface(
+      ServerProviderSettings(
+        provider: ServerProviderType.hetzner,
+        credentials: const BearerTokenCredential(token: 'provider-token'),
+      ),
+      clientFactory: clients.call,
     );
 
 void main() {
@@ -392,13 +455,7 @@ void main() {
   group('getMetadata', () {
     test('selects the server price by location', () async {
       final clients = _HetznerMetadataClientFactory();
-      final provider = ServerProviderFactory.createServerProviderInterface(
-        ServerProviderSettings(
-          provider: ServerProviderType.hetzner,
-          credentials: const BearerTokenCredential(token: 'provider-token'),
-        ),
-        clientFactory: clients.call,
-      );
+      final provider = _metadataProvider(clients);
 
       final result = await provider.getMetadata('7', 'fsn1');
 
@@ -417,17 +474,82 @@ void main() {
 
   test('getServers exposes provider IDs as strings', () async {
     final clients = _HetznerMetadataClientFactory();
-    final provider = ServerProviderFactory.createServerProviderInterface(
-      ServerProviderSettings(
-        provider: ServerProviderType.hetzner,
-        credentials: const BearerTokenCredential(token: 'provider-token'),
-      ),
-      clientFactory: clients.call,
-    );
+    final provider = _metadataProvider(clients);
 
     final result = await provider.getServers();
 
     expect(result.success, isTrue);
     expect(result.data.single.providerId, '7');
+  });
+
+  test('getServerType matches the string provider ID', () async {
+    final clients = _HetznerMetadataClientFactory();
+
+    final result = await _metadataProvider(clients).getServerType('7');
+
+    expect(result.success, isTrue);
+    expect(result.data?.identifier, 'cpx22');
+  });
+
+  test('power actions convert the string provider ID for the API', () async {
+    final clients = _HetznerMetadataClientFactory();
+    final provider = _metadataProvider(clients);
+
+    final powerOnResult = await provider.powerOn('7');
+    final restartResult = await provider.restart('7');
+
+    expect(powerOnResult.success, isTrue);
+    expect(restartResult.success, isTrue);
+    expect(clients.requests.map((final request) => request.path), [
+      '/servers/7/actions/poweron',
+      '/servers/7/actions/reset',
+    ]);
+  });
+
+  test('volume reads and creation expose associated IDs as strings', () async {
+    final clients = _HetznerMetadataClientFactory();
+    final provider = _metadataProvider(clients);
+
+    final volumesResult = await provider.getVolumes();
+    final creationResult = await provider.createVolume(10, 'fsn1');
+
+    expect(volumesResult.data.single.serverId, '7');
+    expect(creationResult.success, isTrue);
+    expect(creationResult.data?.serverId, '7');
+  });
+
+  test('volume mutations convert server IDs at the API boundary', () async {
+    final clients = _HetznerMetadataClientFactory();
+    final provider = _metadataProvider(clients);
+    final volume = (await provider.getVolumes()).data.single;
+
+    final resizeResult = await provider.resizeVolume(
+      volume,
+      DiskSize.fromGibibyte(20),
+    );
+    final attachResult = await provider.attachVolume(volume, '7');
+
+    expect(resizeResult.success, isTrue);
+    expect(attachResult.success, isTrue);
+    final attachRequest = clients.requests.singleWhere(
+      (final request) => request.path == '/volumes/41/actions/attach',
+    );
+    expect((attachRequest.data as Map<String, dynamic>)['server'], 7);
+  });
+
+  test('metrics convert the string provider ID for every API call', () async {
+    final clients = _HetznerMetadataClientFactory();
+    final start = DateTime.utc(2026, 1, 1);
+    final end = start.add(const Duration(minutes: 5));
+
+    final result = await _metadataProvider(clients).getMetrics('7', start, end);
+
+    expect(result.success, isTrue);
+    expect(
+      clients.requests
+          .where((final request) => request.path == '/servers/7/metrics')
+          .map((final request) => request.queryParameters['type']),
+      ['cpu', 'network'],
+    );
   });
 }

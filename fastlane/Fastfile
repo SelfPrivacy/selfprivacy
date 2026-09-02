@@ -65,6 +65,20 @@ platform :ios do
       keychain_name: keychain_name,
       keychain_password: keychain_password
     )
+    partition_list_set = system(
+      'security',
+      'set-key-partition-list',
+      '-S',
+      'apple-tool:,apple:,codesign:',
+      '-s',
+      '-k',
+      keychain_password,
+      keychain_path,
+      out: File::NULL
+    )
+    unless partition_list_set
+      UI.user_error!("Could not grant codesign access to the private key in #{keychain_path}")
+    end
     certificate_name = ENV.fetch('sigh_org.selfprivacy.app_appstore_certificate-name')
     identity_output = sh(
       'security',

@@ -1,0 +1,38 @@
+{
+  "droplets": [
+    {
+      "id": 7,
+      "name": "selfprivacy-server",
+      "memory": 1024,
+      "vcpus": 1,
+      "disk": 25,
+      "locked": false,
+      "status": "active",
+      "created_at": "2026-09-02T12:00:00Z",
+      "networks": {
+        "v4": [
+          {
+            "ip_address": "135.181.45.111",
+            "netmask": "255.255.240.0",
+            "gateway": "135.181.32.1",
+            "type": "public"
+          }
+        ],
+        "v6": []
+      },
+      "region": {"name": "New York 1", "slug": "nyc1"},
+      "size": {
+        "slug": "s-1vcpu-1gb",
+        "memory": 1024,
+        "vcpus": 1,
+        "disk": 25,
+        "price_monthly": 6.0,
+        "regions": ["nyc1"],
+        "description": "Basic"
+      },
+      "volume_ids": ["7724db7c-e098-11e5-b522-000f53304e51"]
+    }
+  ],
+  "links": {"pages": {}},
+  "meta": {"total": 1}
+}

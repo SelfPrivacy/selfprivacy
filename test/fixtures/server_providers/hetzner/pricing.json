@@ -1,0 +1,21 @@
+{
+  "pricing": {
+    "currency": "EUR",
+    "vat_rate": "19.00",
+    "volume": {
+      "price_per_gb_month": {"net": "0.0840", "gross": "0.1000"}
+    },
+    "primary_ips": [
+      {
+        "type": "ipv4",
+        "prices": [
+          {
+            "location": "fsn1",
+            "price_hourly": {"net": "0.0007", "gross": "0.0008"},
+            "price_monthly": {"net": "0.4200", "gross": "0.5000"}
+          }
+        ]
+      }
+    ]
+  }
+}

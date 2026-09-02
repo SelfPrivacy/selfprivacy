@@ -1,0 +1,128 @@
+{
+  "server_types": [
+    {
+      "id": 4,
+      "name": "cpx22",
+      "description": "CPX 22",
+      "cores": 2,
+      "memory": 4.0,
+      "disk": 80,
+      "deprecated": null,
+      "prices": [
+        {
+          "location": "fsn1",
+          "price_hourly": {"net": "0.0050", "gross": "0.00595"},
+          "price_monthly": {"net": "3.0000", "gross": "3.5700"}
+        }
+      ],
+      "storage_type": "local",
+      "cpu_type": "shared",
+      "architecture": "x86",
+      "locations": [
+        {"name": "fsn1", "deprecation": null, "available": true}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "cpx32",
+      "description": "CPX 32",
+      "cores": 4,
+      "memory": 8.0,
+      "disk": 160,
+      "deprecated": null,
+      "prices": [
+        {
+          "location": "fsn1",
+          "price_hourly": {"net": "0.0100", "gross": "0.01190"},
+          "price_monthly": {"net": "6.0000", "gross": "7.1400"}
+        }
+      ],
+      "storage_type": "local",
+      "cpu_type": "shared",
+      "architecture": "x86",
+      "locations": [
+        {"name": "fsn1", "deprecation": null, "available": true}
+      ]
+    },
+    {
+      "id": 45,
+      "name": "cax21",
+      "description": "CAX 21",
+      "cores": 4,
+      "memory": 8.0,
+      "disk": 80,
+      "deprecated": null,
+      "prices": [
+        {
+          "location": "fsn1",
+          "price_hourly": {"net": "0.0080", "gross": "0.00952"},
+          "price_monthly": {"net": "4.5000", "gross": "5.3550"}
+        }
+      ],
+      "storage_type": "local",
+      "cpu_type": "shared",
+      "architecture": "arm",
+      "locations": [
+        {"name": "fsn1", "deprecation": null, "available": true}
+      ]
+    },
+    {
+      "id": 6,
+      "name": "cpx42",
+      "description": "CPX 42",
+      "cores": 8,
+      "memory": 16.0,
+      "disk": 240,
+      "deprecated": null,
+      "prices": [
+        {
+          "location": "fsn1",
+          "price_hourly": {"net": "0.0200", "gross": "0.02380"},
+          "price_monthly": {"net": "12.0000", "gross": "14.2800"}
+        }
+      ],
+      "storage_type": "local",
+      "cpu_type": "shared",
+      "architecture": "x86",
+      "locations": [
+        {
+          "name": "fsn1",
+          "deprecation": {"announced": "2026-01-01T00:00:00Z"},
+          "available": true
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "cpx52",
+      "description": "CPX 52",
+      "cores": 16,
+      "memory": 32.0,
+      "disk": 360,
+      "deprecated": null,
+      "prices": [
+        {
+          "location": "fsn1",
+          "price_hourly": {"net": "0.0400", "gross": "0.04760"},
+          "price_monthly": {"net": "24.0000", "gross": "28.5600"}
+        }
+      ],
+      "storage_type": "local",
+      "cpu_type": "shared",
+      "architecture": "x86",
+      "locations": [
+        {"name": "fsn1", "deprecation": null, "available": false}
+      ]
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "per_page": 50,
+      "previous_page": null,
+      "next_page": null,
+      "last_page": 1,
+      "total_entries": 5
+    }
+  }
+}

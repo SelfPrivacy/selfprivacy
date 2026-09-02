@@ -7,7 +7,9 @@ import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
-class _DigitalOceanVolumeClientFactory {
+import '../../../helpers/fixtures/json_fixture.dart';
+
+class _DigitalOceanClientFactory {
   final List<RequestOptions> requests = [];
 
   Dio call(final BaseOptions options) => Dio(options)
@@ -26,7 +28,12 @@ class _DigitalOceanVolumeClientFactory {
                     _response(
                       request,
                       statusCode: 201,
-                      data: {'volume': _volume()},
+                      data: {
+                        'volume': loadJsonFixtureItem(
+                          'server_providers/digital_ocean/volumes.json',
+                          'volumes',
+                        ),
+                      },
                     ),
                   );
                 case ('GET', '/volumes'):
@@ -34,9 +41,19 @@ class _DigitalOceanVolumeClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: {
-                        'volumes': [_volume()],
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/digital_ocean/volumes.json',
+                      ),
+                    ),
+                  );
+                case ('GET', '/sizes'):
+                  handler.resolve(
+                    _response(
+                      request,
+                      statusCode: 200,
+                      data: loadJsonFixture(
+                        'server_providers/digital_ocean/sizes.json',
+                      ),
                     ),
                   );
                 case ('GET', '/droplets'):
@@ -44,9 +61,9 @@ class _DigitalOceanVolumeClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: {
-                        'droplets': [_droplet()],
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/digital_ocean/droplets.json',
+                      ),
                     ),
                   );
                 case ('GET', '/regions'):
@@ -54,11 +71,9 @@ class _DigitalOceanVolumeClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: {
-                        'regions': [
-                          {'slug': 'nyc1', 'name': 'New York 1'},
-                        ],
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/digital_ocean/regions.json',
+                      ),
                     ),
                   );
                 case ('POST', '/droplets/7/actions'):
@@ -77,17 +92,9 @@ class _DigitalOceanVolumeClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: {
-                        'data': {
-                          'result': [
-                            {
-                              'values': [
-                                [1, '2.0'],
-                              ],
-                            },
-                          ],
-                        },
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/digital_ocean/metrics_bandwidth_${request.queryParameters['direction']}.json',
+                      ),
                     ),
                   );
                 case ('GET', '/monitoring/metrics/droplet/cpu'):
@@ -95,27 +102,15 @@ class _DigitalOceanVolumeClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: {
-                        'data': {
-                          'result': [
-                            {
-                              'metric': {'mode': 'idle'},
-                              'values': [
-                                [1, '1.0'],
-                              ],
-                            },
-                            {
-                              'metric': {'mode': 'user'},
-                              'values': [
-                                [1, '3.0'],
-                              ],
-                            },
-                          ],
-                        },
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/digital_ocean/metrics_cpu.json',
+                      ),
                     ),
                   );
-                case ('DELETE', '/volumes/volume-id'):
+                case (
+                  'DELETE',
+                  '/volumes/7724db7c-e098-11e5-b522-000f53304e51',
+                ):
                 case ('DELETE', '/droplets/7'):
                   handler.resolve(
                     _response(request, statusCode: 204, data: const {}),
@@ -141,41 +136,9 @@ class _DigitalOceanVolumeClientFactory {
     statusCode: statusCode,
     data: data,
   );
-
-  Map<String, dynamic> _volume() => {
-    'id': 'volume-id',
-    'name': 'selfprivacy-volume',
-    'size_gigabytes': 10,
-    'droplet_ids': <int>[7],
-    'region': {'slug': 'nyc1', 'name': 'New York 1'},
-  };
-
-  Map<String, dynamic> _droplet() => {
-    'id': 7,
-    'name': 'selfprivacy-server',
-    'networks': {
-      'v4': [
-        {'type': 'public', 'ip_address': '135.181.45.111'},
-      ],
-    },
-    'region': {'slug': 'nyc1'},
-    'volume_ids': ['volume-id'],
-    'status': 'active',
-    'vcpus': 1,
-    'memory': 1024,
-    'size': {
-      'regions': ['nyc1'],
-      'memory': 1024.0,
-      'description': 'Basic',
-      'disk': 25,
-      'price_monthly': 6.0,
-      'slug': 's-1vcpu-1gb',
-      'vcpus': 1,
-    },
-  };
 }
 
-ServerProvider _provider(final _DigitalOceanVolumeClientFactory clients) =>
+ServerProvider _provider(final _DigitalOceanClientFactory clients) =>
     ServerProviderFactory.createServerProviderInterface(
       ServerProviderSettings(
         provider: ServerProviderType.digitalOcean,
@@ -195,7 +158,7 @@ void main() {
 
   group('createVolume', () {
     testWidgets('converts DigitalOcean GiB to bytes', (final tester) async {
-      final clients = _DigitalOceanVolumeClientFactory();
+      final clients = _DigitalOceanClientFactory();
       final provider = _provider(clients);
 
       final resultFuture = provider.createVolume(10, 'nyc1');
@@ -217,7 +180,7 @@ void main() {
   });
 
   test('getServers exposes provider IDs as strings', () async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
     final provider = _provider(clients);
 
     final result = await provider.getServers();
@@ -227,7 +190,7 @@ void main() {
   });
 
   test('getServerType matches the string provider ID', () async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
 
     final result = await _provider(clients).getServerType('7');
 
@@ -236,7 +199,7 @@ void main() {
   });
 
   test('power actions convert the string provider ID for the API', () async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
     final provider = _provider(clients);
 
     final powerOnResult = await provider.powerOn('7');
@@ -256,7 +219,7 @@ void main() {
   });
 
   test('volume operations convert server IDs at the API boundary', () async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
     final provider = _provider(clients);
 
     final volumesResult = await provider.getVolumes();
@@ -265,6 +228,11 @@ void main() {
     final detachResult = await provider.detachVolume(volume);
 
     expect(volume.serverId, '7');
+    expect(volume.uuid, '7724db7c-e098-11e5-b522-000f53304e51');
+    expect(volume.name, 'selfprivacy-volume');
+    expect(volume.sizeByte, 10 * 1024 * 1024 * 1024);
+    expect(volume.linuxDevice, 'scsi-0DO_Volume_selfprivacy-volume');
+    expect(volume.location, 'nyc1');
     expect(attachResult.success, isTrue);
     expect(detachResult.success, isTrue);
     final actionRequests = clients.requests.where(
@@ -279,7 +247,7 @@ void main() {
   });
 
   test('metadata selects a droplet by its string provider ID', () async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
 
     final result = await _provider(clients).getMetadata('7', 'nyc1');
 
@@ -288,7 +256,7 @@ void main() {
   });
 
   test('metrics convert the string provider ID for every API call', () async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
     final start = DateTime.utc(2026, 1, 1);
     final end = start.add(const Duration(minutes: 5));
 
@@ -307,7 +275,7 @@ void main() {
   testWidgets('deleteServer converts associated resource IDs', (
     final tester,
   ) async {
-    final clients = _DigitalOceanVolumeClientFactory();
+    final clients = _DigitalOceanClientFactory();
     final resultFuture = _provider(
       clients,
     ).deleteServer('selfprivacy-server.example.org');
@@ -321,7 +289,29 @@ void main() {
       clients.requests
           .where((final request) => request.method == 'DELETE')
           .map((final request) => request.path),
-      ['/volumes/volume-id', '/droplets/7'],
+      ['/volumes/7724db7c-e098-11e5-b522-000f53304e51', '/droplets/7'],
     );
+  });
+
+  test('maps available server types for a location', () async {
+    final clients = _DigitalOceanClientFactory();
+    final provider = _provider(clients);
+    final locations = await provider.getAvailableLocations();
+
+    final result = await provider.getServerTypes(
+      location: locations.data.single,
+    );
+
+    expect(result.success, isTrue);
+    expect(result.data, hasLength(1));
+    final serverType = result.data.single;
+    expect(serverType.identifier, 's-1vcpu-2gb');
+    expect(serverType.title, 'Basic');
+    expect(serverType.ram, 2);
+    expect(serverType.cores, 1);
+    expect(serverType.disk.byte, 50 * 1024 * 1024 * 1024);
+    expect(serverType.price.value, 12);
+    expect(serverType.price.currency.shortcode, 'USD');
+    expect(serverType.location.identifier, 'nyc1');
   });
 }

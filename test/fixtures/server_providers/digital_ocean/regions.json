@@ -1,0 +1,13 @@
+{
+  "regions": [
+    {
+      "name": "New York 1",
+      "slug": "nyc1",
+      "features": ["backups", "ipv6", "metadata", "install_agent"],
+      "available": true,
+      "sizes": ["s-1vcpu-1gb", "s-1vcpu-2gb"]
+    }
+  ],
+  "links": {"pages": {}},
+  "meta": {"total": 1}
+}

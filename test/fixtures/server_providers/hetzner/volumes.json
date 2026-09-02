@@ -1,0 +1,32 @@
+{
+  "volumes": [
+    {
+      "id": 41,
+      "name": "selfprivacy-volume",
+      "server": 7,
+      "location": {
+        "id": 1,
+        "name": "fsn1",
+        "description": "Falkenstein DC Park 1",
+        "country": "DE",
+        "city": "Falkenstein",
+        "network_zone": "eu-central"
+      },
+      "size": 10,
+      "protection": {"delete": false},
+      "labels": {"project": "selfprivacy"},
+      "linux_device": "/dev/disk/by-id/scsi-0HC_Volume_41",
+      "created": "2026-09-02T12:00:00Z"
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "per_page": 50,
+      "previous_page": null,
+      "next_page": null,
+      "last_page": 1,
+      "total_entries": 1
+    }
+  }
+}

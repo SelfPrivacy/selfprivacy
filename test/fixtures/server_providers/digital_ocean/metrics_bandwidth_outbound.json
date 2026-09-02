@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "matrix",
+    "result": [
+      {
+        "metric": {
+          "direction": "outbound",
+          "host_id": "7",
+          "interface": "public"
+        },
+        "values": [
+          [1634052360, "0.008300225045132679"],
+          [1634052480, "0.007542977838649528"]
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "servers": [
+    {
+      "id": 7,
+      "name": "selfprivacy-server",
+      "status": "running",
+      "created": "2026-09-02T12:00:00Z",
+      "server_type": {
+        "id": 4,
+        "name": "cpx22",
+        "description": "CPX 22",
+        "cores": 2,
+        "memory": 4.0,
+        "disk": 80,
+        "prices": [
+          {
+            "location": "fsn1",
+            "price_hourly": {"net": "0.0050", "gross": "0.00595"},
+            "price_monthly": {"net": "2.9328", "gross": "3.4900"}
+          },
+          {
+            "location": "ash",
+            "price_hourly": {"net": "0.0100", "gross": "0.01190"},
+            "price_monthly": {"net": "84.0252", "gross": "99.9900"}
+          }
+        ],
+        "architecture": "x86",
+        "locations": [
+          {"name": "fsn1", "deprecation": null, "available": true}
+        ]
+      },
+      "location": {
+        "id": 1,
+        "name": "fsn1",
+        "description": "Falkenstein DC Park 1",
+        "country": "DE",
+        "city": "Falkenstein",
+        "network_zone": "eu-central"
+      },
+      "public_net": {
+        "ipv4": {
+          "id": 8,
+          "ip": "135.181.45.111",
+          "blocked": false,
+          "dns_ptr": "example.org"
+        }
+      },
+      "volumes": [41]
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "per_page": 50,
+      "previous_page": null,
+      "next_page": null,
+      "last_page": 1,
+      "total_entries": 1
+    }
+  }
+}

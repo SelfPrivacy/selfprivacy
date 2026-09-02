@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "matrix",
+    "result": [
+      {
+        "metric": {"host_id": "7", "mode": "idle"},
+        "values": [[1634052360, "75.0"], [1634052480, "60.0"]]
+      },
+      {
+        "metric": {"host_id": "7", "mode": "user"},
+        "values": [[1634052360, "20.0"], [1634052480, "30.0"]]
+      },
+      {
+        "metric": {"host_id": "7", "mode": "system"},
+        "values": [[1634052360, "5.0"], [1634052480, "10.0"]]
+      }
+    ]
+  }
+}

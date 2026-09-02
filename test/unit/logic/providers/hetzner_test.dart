@@ -7,12 +7,14 @@ import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
+import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/credential_fixtures.dart';
+import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 
 enum _FailureStage { server, uniqueness, reverseDns }
@@ -37,7 +39,12 @@ class _HetznerInstallationClientFactory {
                       request,
                       statusCode: 201,
                       statusMessage: 'volume-created',
-                      data: {'volume': _volume()},
+                      data: {
+                        'volume': loadJsonFixtureItem(
+                          'server_providers/hetzner/volumes.json',
+                          'volumes',
+                        ),
+                      },
                     ),
                   );
                 case ('DELETE', '/volumes/41'):
@@ -98,7 +105,12 @@ class _HetznerInstallationClientFactory {
             request,
             statusCode: 201,
             statusMessage: 'server-created',
-            data: {'server': _server()},
+            data: {
+              'server': loadJsonFixtureItem(
+                'server_providers/hetzner/servers.json',
+                'servers',
+              ),
+            },
           ),
         );
     }
@@ -115,50 +127,6 @@ class _HetznerInstallationClientFactory {
     statusMessage: statusMessage,
     data: data,
   );
-
-  Map<String, dynamic> _volume() => {
-    'id': 41,
-    'size': 10,
-    'server': null,
-    'name': 'selfprivacy-volume',
-    'linux_device': null,
-    'location': _location(),
-  };
-
-  Map<String, dynamic> _server() => {
-    'id': 7,
-    'name': 'example',
-    'status': 'initializing',
-    'created': '2026-08-29T12:00:00Z',
-    'server_type': {
-      'name': 'cpx12',
-      'description': 'CPX 12',
-      'architecture': 'x86',
-      'cores': 1,
-      'memory': 2,
-      'disk': 40,
-      'prices': <Object>[],
-      'locations': <Object>[],
-    },
-    'location': _location(),
-    'public_net': {
-      'ipv4': {
-        'id': 8,
-        'ip': '135.181.45.111',
-        'blocked': false,
-        'dns_ptr': 'example.org',
-      },
-    },
-    'volumes': [41],
-  };
-
-  Map<String, dynamic> _location() => {
-    'name': 'fsn1',
-    'country': 'DE',
-    'city': 'Falkenstein',
-    'description': 'Falkenstein DC Park 1',
-    'network_zone': 'eu-central',
-  };
 }
 
 class _HetznerMetadataClientFactory {
@@ -179,30 +147,52 @@ class _HetznerMetadataClientFactory {
                   handler.resolve(
                     _response(
                       request,
-                      data: {
-                        'servers': [_server()],
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/hetzner/servers.json',
+                      ),
                     ),
                   );
                 case ('GET', '/volumes'):
                   handler.resolve(
                     _response(
                       request,
-                      data: {
-                        'volumes': [_volume()],
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/hetzner/volumes.json',
+                      ),
+                    ),
+                  );
+                case ('GET', '/server_types'):
+                  handler.resolve(
+                    _response(
+                      request,
+                      data: loadJsonFixture(
+                        'server_providers/hetzner/server_types.json',
+                      ),
                     ),
                   );
                 case ('GET', '/pricing'):
                   handler.resolve(
-                    _response(request, data: {'pricing': _pricing()}),
+                    _response(
+                      request,
+                      data: loadJsonFixture(
+                        'server_providers/hetzner/pricing.json',
+                      ),
+                    ),
                   );
                 case ('POST', '/servers/7/actions/poweron'):
                 case ('POST', '/servers/7/actions/reset'):
                   handler.resolve(_response(request, data: const {}));
                 case ('POST', '/volumes'):
                   handler.resolve(
-                    _response(request, data: {'volume': _volume()}),
+                    _response(
+                      request,
+                      data: {
+                        'volume': loadJsonFixtureItem(
+                          'server_providers/hetzner/volumes.json',
+                          'volumes',
+                        ),
+                      },
+                    ),
                   );
                 case ('POST', '/volumes/41/actions/attach'):
                 case ('POST', '/volumes/41/actions/resize'):
@@ -218,11 +208,9 @@ class _HetznerMetadataClientFactory {
                   handler.resolve(
                     _response(
                       request,
-                      data: {
-                        'metrics': _metrics(
-                          request.queryParameters['type'] as String,
-                        ),
-                      },
+                      data: loadJsonFixture(
+                        'server_providers/hetzner/metrics_${request.queryParameters['type']}.json',
+                      ),
                     ),
                   );
                 default:
@@ -241,105 +229,6 @@ class _HetznerMetadataClientFactory {
     final RequestOptions request, {
     required final Object data,
   }) => Response<dynamic>(requestOptions: request, statusCode: 200, data: data);
-
-  Map<String, dynamic> _server() => {
-    'id': 7,
-    'name': 'selfprivacy-server',
-    'status': 'running',
-    'created': '2026-08-29T12:00:00Z',
-    'server_type': {
-      'name': 'cpx22',
-      'description': 'CPX 22',
-      'architecture': 'x86',
-      'cores': 2,
-      'memory': 4,
-      'disk': 40,
-      'prices': [
-        _price(location: 'fsn1', monthly: '3.49'),
-        _price(location: 'ash', monthly: '99.99'),
-      ],
-      'locations': <Object>[],
-    },
-    'location': _location(),
-    'public_net': {
-      'ipv4': {
-        'id': 8,
-        'ip': '135.181.45.111',
-        'blocked': false,
-        'dns_ptr': 'example.org',
-      },
-    },
-    'volumes': [41],
-  };
-
-  Map<String, dynamic> _volume() => {
-    'id': 41,
-    'size': 10,
-    'server': 7,
-    'name': 'selfprivacy-volume',
-    'linux_device': '/dev/disk/by-id/scsi-0HC_Volume_41',
-    'location': _location(),
-  };
-
-  Map<String, dynamic> _pricing() => {
-    'volume': {
-      'price_per_gb_month': {'gross': '0.10'},
-    },
-    'primary_ips': [
-      {
-        'type': 'ipv4',
-        'prices': [
-          {
-            'location': 'fsn1',
-            'price_monthly': {'gross': '0.50'},
-          },
-        ],
-      },
-    ],
-  };
-
-  Map<String, dynamic> _metrics(final String type) => {
-    'start': '2026-01-01T00:00:00Z',
-    'end': '2026-01-01T00:05:00Z',
-    'step': 60,
-    'time_series': type == 'cpu'
-        ? {
-            'cpu': {
-              'values': [
-                [1, '2.0'],
-              ],
-            },
-          }
-        : {
-            'network.0.bandwidth.in': {
-              'values': [
-                [1, '2.0'],
-              ],
-            },
-            'network.0.bandwidth.out': {
-              'values': [
-                [1, '3.0'],
-              ],
-            },
-          },
-  };
-
-  Map<String, dynamic> _price({
-    required final String location,
-    required final String monthly,
-  }) => {
-    'location': location,
-    'price_hourly': {'gross': '0.01'},
-    'price_monthly': {'gross': monthly},
-  };
-
-  Map<String, dynamic> _location() => {
-    'name': 'fsn1',
-    'country': 'DE',
-    'city': 'Falkenstein',
-    'description': 'Falkenstein DC Park 1',
-    'network_zone': 'eu-central',
-  };
 }
 
 LaunchInstallationData _installationData({
@@ -513,9 +402,42 @@ void main() {
     final volumesResult = await provider.getVolumes();
     final creationResult = await provider.createVolume(10, 'fsn1');
 
-    expect(volumesResult.data.single.serverId, '7');
+    final volume = volumesResult.data.single;
+    expect(volume.id, 41);
+    expect(volume.name, 'selfprivacy-volume');
+    expect(volume.sizeByte, 10 * 1024 * 1024 * 1024);
+    expect(volume.serverId, '7');
+    expect(volume.linuxDevice, '/dev/disk/by-id/scsi-0HC_Volume_41');
+    expect(volume.location, 'fsn1');
     expect(creationResult.success, isTrue);
     expect(creationResult.data?.serverId, '7');
+  });
+
+  test('maps and sorts available server types for a location', () async {
+    final clients = _HetznerMetadataClientFactory();
+    final provider = _metadataProvider(clients);
+
+    final result = await provider.getServerTypes(
+      location: ServerProviderLocation(
+        title: 'Falkenstein',
+        identifier: 'fsn1',
+        countryDisplayKey: 'countries.germany',
+      ),
+    );
+
+    expect(result.success, isTrue);
+    expect(result.data.map((final serverType) => serverType.identifier), [
+      'cpx22',
+      'cpx32',
+    ]);
+    final serverType = result.data.first;
+    expect(serverType.title, 'CPX 22');
+    expect(serverType.ram, 4);
+    expect(serverType.cores, 2);
+    expect(serverType.disk.byte, 80 * 1024 * 1024 * 1024);
+    expect(serverType.price.value, 3.57);
+    expect(serverType.price.currency.shortcode, 'EUR');
+    expect(serverType.location.identifier, 'fsn1');
   });
 
   test('volume mutations convert server IDs at the API boundary', () async {

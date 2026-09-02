@@ -1,0 +1,28 @@
+{
+  "volumes": [
+    {
+      "id": "7724db7c-e098-11e5-b522-000f53304e51",
+      "region": {
+        "name": "New York 1",
+        "slug": "nyc1",
+        "features": ["backups", "ipv6", "metadata", "install_agent"],
+        "available": true,
+        "sizes": ["s-1vcpu-1gb", "s-1vcpu-2gb"]
+      },
+      "droplet_ids": [7],
+      "name": "selfprivacy-volume",
+      "description": "Block store for SelfPrivacy data",
+      "size_gigabytes": 10,
+      "created_at": "2026-09-02T12:00:00Z",
+      "filesystem_type": "ext4",
+      "filesystem_label": "selfprivacy",
+      "tags": ["selfprivacy"]
+    }
+  ],
+  "links": {
+    "pages": {}
+  },
+  "meta": {
+    "total": 1
+  }
+}

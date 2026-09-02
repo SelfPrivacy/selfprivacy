@@ -13,6 +13,21 @@ Future<void> setUpInMemoryHive() async {
   }
 }
 
+Future<void> setUpHiveFromFixture(final String fixturePath) async {
+  _hiveTempDir = await Directory.systemTemp.createTemp('sp_hive_test_');
+  final fixtureDirectory = Directory(fixturePath);
+  await for (final entity in fixtureDirectory.list()) {
+    if (entity is File) {
+      final fileName = entity.uri.pathSegments.last;
+      await entity.copy('${_hiveTempDir!.path}/$fileName');
+    }
+  }
+  Hive.init(_hiveTempDir!.path);
+  if (!Hive.isAdapterRegistered(7)) {
+    HiveConfig.registerAdapters();
+  }
+}
+
 Future<void> tearDownInMemoryHive() async {
   await Hive.deleteFromDisk();
   final Directory? dir = _hiveTempDir;

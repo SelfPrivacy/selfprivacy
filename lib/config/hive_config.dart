@@ -13,12 +13,13 @@ import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_w
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class HiveConfig {
   static final logger = const AppLogger(name: 'hive_config').log;
 
   /// bump on schema changes
-  static const version = 2;
+  static const version = 3;
 
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
@@ -86,7 +87,8 @@ class HiveConfig {
   static Future<bool> _encryptedBoxesExist() async =>
       await Hive.boxExists(BNames.serverInstallationBox) ||
       await Hive.boxExists(BNames.resourcesBox) ||
-      await Hive.boxExists(BNames.wizardDataBox);
+      await Hive.boxExists(BNames.wizardDataBox) ||
+      await Hive.boxExists(BNames.wizardRunsBox);
 
   static Future<void> decryptBoxes() async {
     try {
@@ -99,6 +101,7 @@ class HiveConfig {
       );
       await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
       await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
+      await Hive.openBox(BNames.wizardRunsBox, encryptionCipher: cipher);
       logger('successfully decrypted boxes');
     } catch (error, stackTrace) {
       logger(
@@ -129,9 +132,9 @@ class HiveConfig {
         if (savedVersion < 2) {
           await migrateFrom1To2();
         }
-
-        /// add new migrations here, like:
-        /// if (version < 3) {...}, etc.
+        if (savedVersion < 3) {
+          await migrateFrom2To3(localSettingsBox);
+        }
       }
 
       /// update saved version after successfull migrations
@@ -248,6 +251,141 @@ class HiveConfig {
     }
     logger('successfully migrated db from 1 to 2 version');
   }
+
+  static Future<void> migrateFrom2To3(
+    final Box<dynamic> localSettingsBox,
+  ) async {
+    final Box<dynamic> resourcesBox = Hive.box(BNames.resourcesBox);
+    final servers = List<Server>.from(
+      resourcesBox.get(BNames.servers, defaultValue: <Server>[])
+          as List<dynamic>,
+    );
+    final legacyServerUuids = <int, String>{};
+    final migratedServers = servers.map((final server) {
+      final serverUuid = server.uuid.isEmpty ? const Uuid().v4() : server.uuid;
+      final hostingDetails = server.hostingDetails;
+      final legacyProviderId =
+          hostingDetails.legacyProviderId ??
+          int.tryParse(hostingDetails.providerId ?? '');
+      if (legacyProviderId != null) {
+        legacyServerUuids[legacyProviderId] = serverUuid;
+      }
+      final volume = hostingDetails.volume;
+      return Server(
+        uuid: serverUuid,
+        domain: server.domain,
+        hostingDetails: ServerHostingDetails(
+          ip4: hostingDetails.ip4,
+          providerId: hostingDetails.providerId ?? legacyProviderId?.toString(),
+          createTime: hostingDetails.createTime,
+          volume: ServerProviderVolume(
+            id: volume.id,
+            name: volume.name,
+            sizeByte: volume.sizeByte,
+            serverId: volume.serverId ?? volume.legacyServerId?.toString(),
+            linuxDevice: volume.linuxDevice,
+            uuid: volume.uuid,
+            location: volume.location,
+          ),
+          apiToken: hostingDetails.apiToken,
+          provider: hostingDetails.provider,
+          serverLocation: hostingDetails.serverLocation,
+          serverType: hostingDetails.serverType,
+          startTime: hostingDetails.startTime,
+          apiTokenRotatedAt: hostingDetails.apiTokenRotatedAt,
+        ),
+      );
+    }).toList();
+    await resourcesBox.put(BNames.servers, migratedServers);
+
+    final serverCredentials = List<ServerProviderCredential>.from(
+      resourcesBox.get(
+            BNames.serverProviderTokens,
+            defaultValue: <ServerProviderCredential>[],
+          )
+          as List<dynamic>,
+    );
+    final migratedServerCredentials = serverCredentials.map((final credential) {
+      final associatedServerUuids = <String>{
+        ...credential.associatedServerUuids,
+        for (final legacyId in credential.legacyAssociatedServerIds)
+          ?legacyServerUuids[legacyId],
+      }.toList();
+      return ServerProviderCredential(
+        uuid: credential.uuid.isEmpty ? const Uuid().v4() : credential.uuid,
+        tokenId: credential.tokenId,
+        credentials:
+            credential.credentials ??
+            switch (credential.legacyToken) {
+              final token? => BearerTokenCredential(token: token),
+              null => null,
+            },
+        provider: credential.provider,
+        associatedServerUuids: associatedServerUuids,
+      );
+    }).toList();
+    await resourcesBox.put(
+      BNames.serverProviderTokens,
+      migratedServerCredentials,
+    );
+
+    final dnsCredentials = List<DnsProviderCredential>.from(
+      resourcesBox.get(
+            BNames.dnsProviderTokens,
+            defaultValue: <DnsProviderCredential>[],
+          )
+          as List<dynamic>,
+    );
+    await resourcesBox.put(
+      BNames.dnsProviderTokens,
+      dnsCredentials.map((final credential) {
+        if (credential.uuid.isNotEmpty) {
+          return credential;
+        }
+        return DnsProviderCredential(
+          uuid: const Uuid().v4(),
+          token: credential.token,
+          provider: credential.provider,
+          associatedDomainNames: credential.associatedDomainNames,
+          tokenId: credential.tokenId,
+          url: credential.url,
+          tenant: credential.tenant,
+          secondaryToken: credential.secondaryToken,
+        );
+      }).toList(),
+    );
+
+    final backupsCredentials = List<BackupsCredential>.from(
+      resourcesBox.get(
+            BNames.backupsProviderTokens,
+            defaultValue: <BackupsCredential>[],
+          )
+          as List<dynamic>,
+    );
+    await resourcesBox.put(
+      BNames.backupsProviderTokens,
+      backupsCredentials.map((final credential) {
+        if (credential.uuid.isNotEmpty) {
+          return credential;
+        }
+        return BackupsCredential(
+          uuid: const Uuid().v4(),
+          keyId: credential.keyId,
+          applicationKey: credential.applicationKey,
+          provider: credential.provider,
+        );
+      }).toList(),
+    );
+
+    if (localSettingsBox.get(BNames.activeServerUuid) == null &&
+        migratedServers.isNotEmpty) {
+      await localSettingsBox.put(
+        BNames.activeServerUuid,
+        migratedServers.first.uuid,
+      );
+    }
+    logger('successfully migrated db from 2 to 3 version');
+  }
 }
 
 /// Mappings for the different boxes and their keys
@@ -275,6 +413,9 @@ class BNames {
 
   /// A boolean field of [appSettingsBox] box.
   static String automaticGraphqlTokenRefresh = 'automaticGraphqlTokenRefresh';
+
+  /// A server UUID field of [appSettingsBox] box.
+  static String activeServerUuid = 'activeServerUuid';
 
   /// Server installation box. Contains server details and provider tokens.
   static String serverInstallationBox = 'appConfig';
@@ -347,4 +488,7 @@ class BNames {
 
   /// Server installation wizard data of [wizardDataBox] box.
   static String serverInstallationWizardData = 'serverInstallationWizardData';
+
+  /// Wizard run scratch data, keyed by run UUID.
+  static String wizardRunsBox = 'wizardRunsBox';
 }

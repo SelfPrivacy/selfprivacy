@@ -1,0 +1,10 @@
+{
+  "v1": {
+    "revision": "16d1c8a9186b372f7e34057f58f42538ff6c44e4",
+    "description": "Legacy appConfig schema immediately before resourcesBox was introduced"
+  },
+  "v2": {
+    "revision": "1814d4ded54321da315db1d6652d48e3a33dd3bc",
+    "description": "Hive schema version 2 immediately before UUID and string provider ID changes"
+  }
+}

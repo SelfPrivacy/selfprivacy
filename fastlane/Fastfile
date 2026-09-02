@@ -74,7 +74,11 @@ platform :ios do
       'codesigning',
       keychain_path
     )
-    unless identity_output.include?(certificate_name)
+    identity_line = identity_output.lines.find do |line|
+      line.include?(certificate_name)
+    end
+    certificate_sha1 = identity_line&.match(/\b[0-9A-F]{40}\b/)&.to_s
+    if certificate_sha1.nil?
       UI.user_error!("The signing certificate is not a valid identity in #{keychain_path}")
     end
     frameworks = File.join(
@@ -82,7 +86,15 @@ platform :ios do
       'Products/Applications/Runner.app/Frameworks/*.framework'
     )
     Dir.glob(frameworks).each do |framework|
-      sh('codesign', '--force', '--sign', '-', framework)
+      sh(
+        'codesign',
+        '--force',
+        '--sign',
+        certificate_sha1,
+        '--keychain',
+        keychain_path,
+        framework
+      )
     end
 
     build_app(
@@ -94,7 +106,7 @@ platform :ios do
       export_team_id: ENV.fetch('sigh_org.selfprivacy.app_appstore_team-id'),
       export_options: {
         signingStyle: 'manual',
-        signingCertificate: certificate_name,
+        signingCertificate: 'Apple Distribution',
         provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
       },
       output_directory: ENV.fetch('IPA_OUTPUT_DIR'),

@@ -16,13 +16,19 @@ import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_f
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 part 'tokens_event.dart';
 part 'tokens_state.dart';
 
 class TokensBloc extends Bloc<TokensEvent, TokensState> {
-  TokensBloc() : super(const TokensInitial()) {
+  TokensBloc({
+    final ServerProvider Function(ServerProviderSettings)? createServerProvider,
+  }) : _createServerProvider =
+           createServerProvider ??
+           ServerProviderFactory.createServerProviderInterface,
+       super(const TokensInitial()) {
     on<RevalidateTokens>(validateTokens, transformer: droppable());
     on<AddServerProviderToken>(addServerProviderCredential);
     on<AddBackupsProviderCredential>(addBackupsProviderCredential);
@@ -102,9 +108,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
       provider: credential.provider,
       credentials: credential.credentials,
     );
-    final serverProvider = ServerProviderFactory.createServerProviderInterface(
-      settings,
-    );
+    final serverProvider = _createServerProvider(settings);
     // First, we check if the token works at all
     final basicInitCheckResult = await serverProvider.tryInitApiByToken(
       bearerToken,
@@ -272,4 +276,5 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
   }
 
   late StreamSubscription _resourcesModelSubscription;
+  final ServerProvider Function(ServerProviderSettings) _createServerProvider;
 }

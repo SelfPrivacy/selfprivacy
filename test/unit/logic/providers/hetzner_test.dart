@@ -459,7 +459,7 @@ void main() {
     expect((attachRequest.data as Map<String, dynamic>)['server'], 7);
   });
 
-  test('metrics convert the string provider ID for every API call', () async {
+  test('maps normalized metrics and uses the provider ID', () async {
     final clients = _HetznerMetadataClientFactory();
     final start = DateTime.utc(2026, 1, 1);
     final end = start.add(const Duration(minutes: 5));
@@ -467,6 +467,20 @@ void main() {
     final result = await _metadataProvider(clients).getMetrics('7', start, end);
 
     expect(result.success, isTrue);
+    final metrics = result.data!;
+    expect(metrics.start, start);
+    expect(metrics.end, end);
+    expect(metrics.stepsInSecond, 60);
+    expect(metrics.cpu.map((final point) => point.secondsSinceEpoch), [
+      1767225600,
+      1767225660,
+    ]);
+    expect(metrics.cpu.map((final point) => point.value), [20, 30]);
+    expect(metrics.bandwidthIn.map((final point) => point.value), [2048, 4096]);
+    expect(metrics.bandwidthOut.map((final point) => point.value), [
+      1024,
+      3072,
+    ]);
     expect(
       clients.requests
           .where((final request) => request.path == '/servers/7/metrics')

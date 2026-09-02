@@ -255,7 +255,7 @@ void main() {
     expect(result.data, isNotEmpty);
   });
 
-  test('metrics convert the string provider ID for every API call', () async {
+  test('maps normalized metrics and uses the provider ID', () async {
     final clients = _DigitalOceanClientFactory();
     final start = DateTime.utc(2026, 1, 1);
     final end = start.add(const Duration(minutes: 5));
@@ -263,6 +263,23 @@ void main() {
     final result = await _provider(clients).getMetrics('7', start, end);
 
     expect(result.success, isTrue);
+    final metrics = result.data!;
+    expect(metrics.start, start);
+    expect(metrics.end, end);
+    expect(metrics.stepsInSecond, 15);
+    expect(metrics.cpu.map((final point) => point.secondsSinceEpoch), [
+      1634052360,
+      1634052480,
+    ]);
+    expect(metrics.cpu.map((final point) => point.value), [25, 40]);
+    expect(
+      metrics.bandwidthIn.first.value,
+      closeTo(2075.0562612831696, 0.0000001),
+    );
+    expect(
+      metrics.bandwidthOut.first.value,
+      closeTo(1037.5281306415848, 0.0000001),
+    );
     final metricRequests = clients.requests.where(
       (final request) => request.path.startsWith('/monitoring/metrics/'),
     );

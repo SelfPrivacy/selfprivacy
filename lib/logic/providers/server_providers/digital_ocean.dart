@@ -833,8 +833,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       double? currentMetricIdle;
       for (final rawProcStat in rawProcStatMetrics) {
         final String rawProcValue = rawProcStat['values'][i][1];
-        // Converting MBit into bit
-        final double procValue = double.parse(rawProcValue) * 1000000;
+        final double procValue = double.parse(rawProcValue);
         currentMetricLoad += procValue;
         if (currentMetricIdle == null &&
             rawProcStat['metric']['mode'] == 'idle') {
@@ -863,6 +862,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     ServerMetrics? metrics;
 
     const int step = 15;
+    const int bytesPerSecondPerMegabit = 1000000 ~/ 8;
     final inboundResult = await _adapter.api().getMetricsBandwidth(
       serverId: int.parse(providerId),
       start: start,
@@ -913,12 +913,18 @@ class DigitalOceanServerProvider extends ServerProvider {
     metrics = ServerMetrics(
       bandwidthIn: inboundResult.data
           .map(
-            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+            (final el) => TimeSeriesData(
+              el[0],
+              double.parse(el[1]) * bytesPerSecondPerMegabit,
+            ),
           )
           .toList(),
       bandwidthOut: outboundResult.data
           .map(
-            (final el) => TimeSeriesData(el[0], double.parse(el[1]) * 100000),
+            (final el) => TimeSeriesData(
+              el[0],
+              double.parse(el[1]) * bytesPerSecondPerMegabit,
+            ),
           )
           .toList(),
       cpu: calculateCpuLoadMetrics(cpuResult.data),

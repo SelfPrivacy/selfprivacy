@@ -1,0 +1,19 @@
+# 0.13.10 Changelog
+
+## Changes
+
+**Bug Fixes**
+
+- **Load complete server-provider results when the provider API paginates them** ([#734](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/734))
+- **Avoid creating duplicate billed resources when a provider returns an incomplete creation response** ([#733](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/733))
+- Return the server type for the selected server instead of another server in Hetzner and DigitalOcean ([#728](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/728))
+- Show provider availability errors instead of treating a valid Hetzner or DigitalOcean token as invalid ([#730](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/730))
+- Report failed Hetzner volume attach and detach operations ([#729](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/729))
+- Stop the installation cleanly if DigitalOcean cannot create the server or assign it an IPv4 address ([#725](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/725), [#726](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/726))
+- Calculate Hetzner server prices for the selected location ([#732](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/732))
+- Create DigitalOcean volumes with the requested size ([#732](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/732))
+- Show errors that occur while creating a Hetzner server ([#732](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/732))
+
+**Build & Packaging**
+
+- Make iOS release signing use the correct provisioning profile ([#727](https://git.selfprivacy.org/SelfPrivacy/selfprivacy.org.app/issues/727))

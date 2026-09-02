@@ -17,7 +17,7 @@ pkgs.stdenvNoCC.mkDerivation {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-hnF4N4GI0FsWh/b+v/4Pzozm/Yy41JB3ws24YGKrGFk=";
+  outputHash = "sha256-pu5ftotIg/vonoWRw3mmU3iaNC09YZNGMgspGcAOE+I=";
 
   phases = [
     "buildPhase"

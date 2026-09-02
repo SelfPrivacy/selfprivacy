@@ -144,7 +144,6 @@
           name = "sign-ios";
           runtimeInputs = sp.deployTools;
           text = ''
-            : "''${IOS_KEYCHAIN_PASSWORD:?IOS_KEYCHAIN_PASSWORD env var required}"
             : "''${MATCH_PASSWORD:?MATCH_PASSWORD env var required}"
 
             # Auth goes separately via MATCH_GIT_BASIC_AUTHORIZATION

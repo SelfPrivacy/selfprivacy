@@ -1,4 +1,5 @@
 require 'etc'
+require 'securerandom'
 
 default_platform(:android)
 
@@ -25,107 +26,59 @@ platform :ios do
   desc 'Re-sign the unsigned Runner.xcarchive and export an App Store IPA'
   lane :sign_release do
     ENV['HOME'] = Etc.getpwuid(Process.uid).dir
-    keychain_name = 'selfprivacy-sign-ci'
-    keychain_password = ENV.fetch('IOS_KEYCHAIN_PASSWORD')
+    keychain_name = "selfprivacy-sign-#{SecureRandom.uuid}"
+    keychain_password = SecureRandom.hex(16)
     keychain_path = File.join(
       ENV.fetch('HOME'),
       'Library/Keychains',
       "#{keychain_name}-db"
     )
-    create_keychain(
-      name: keychain_name,
-      password: keychain_password,
-      unlock: true,
-      timeout: 0,
-      lock_when_sleeps: false,
-      add_to_search_list: false
-    )
-    sh(
-      'security',
-      'list-keychains',
-      '-d',
-      'user',
-      '-s',
-      keychain_path,
-      '/Library/Keychains/System.keychain'
-    )
-    sh(
-      'security',
-      'default-keychain',
-      '-d',
-      'user',
-      '-s',
-      keychain_path
-    )
-    match(
-      type: 'appstore',
-      app_identifier: 'org.selfprivacy.app',
-      git_url: ENV.fetch('MATCH_GIT_URL'),
-      readonly: true,
-      keychain_name: keychain_name,
-      keychain_password: keychain_password
-    )
-    partition_list_set = system(
-      'security',
-      'set-key-partition-list',
-      '-S',
-      'apple-tool:,apple:,codesign:',
-      '-s',
-      '-k',
-      keychain_password,
-      keychain_path,
-      out: File::NULL
-    )
-    unless partition_list_set
-      UI.user_error!("Could not grant codesign access to the private key in #{keychain_path}")
-    end
-    certificate_name = ENV.fetch('sigh_org.selfprivacy.app_appstore_certificate-name')
-    identity_output = sh(
-      'security',
-      'find-identity',
-      '-v',
-      '-p',
-      'codesigning',
-      keychain_path
-    )
-    identity_line = identity_output.lines.find do |line|
-      line.include?(certificate_name)
-    end
-    certificate_sha1 = identity_line&.match(/\b[0-9A-F]{40}\b/)&.to_s
-    if certificate_sha1.nil?
-      UI.user_error!("The signing certificate is not a valid identity in #{keychain_path}")
-    end
-    frameworks = File.join(
-      ENV.fetch('XCARCHIVE_PATH'),
-      'Products/Applications/Runner.app/Frameworks/*.framework'
-    )
-    Dir.glob(frameworks).each do |framework|
-      sh(
-        'codesign',
-        '--force',
-        '--sign',
-        certificate_sha1,
-        '--keychain',
-        keychain_path,
-        framework
+    begin
+      create_keychain(
+        name: keychain_name,
+        password: keychain_password,
+        unlock: true,
+        timeout: 0,
+        lock_when_sleeps: false,
+        add_to_search_list: true
       )
-    end
+      match(
+        type: 'appstore',
+        app_identifier: 'org.selfprivacy.app',
+        git_url: ENV.fetch('MATCH_GIT_URL'),
+        readonly: true,
+        keychain_name: keychain_name,
+        keychain_password: keychain_password
+      )
+      frameworks = File.join(
+        ENV.fetch('XCARCHIVE_PATH'),
+        'Products/Applications/Runner.app/Frameworks/*.framework'
+      )
+      Dir.glob(frameworks).each do |framework|
+        sh('codesign', '--force', '--sign', '-', framework)
+      end
 
-    build_app(
-      workspace: File.expand_path('../ios/Runner.xcworkspace', __dir__),
-      scheme: 'Runner',
-      skip_build_archive: true,
-      archive_path: ENV.fetch('XCARCHIVE_PATH'),
-      export_method: 'app-store',
-      export_team_id: ENV.fetch('sigh_org.selfprivacy.app_appstore_team-id'),
-      export_options: {
-        signingStyle: 'manual',
-        signingCertificate: 'Apple Distribution',
-        provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
-      },
-      output_directory: ENV.fetch('IPA_OUTPUT_DIR'),
-      output_name: 'selfprivacy-ios-signed'
-    )
+      build_app(
+        workspace: File.expand_path('../ios/Runner.xcworkspace', __dir__),
+        scheme: 'Runner',
+        skip_build_archive: true,
+        archive_path: ENV.fetch('XCARCHIVE_PATH'),
+        export_method: 'app-store',
+        export_team_id: ENV.fetch('sigh_org.selfprivacy.app_appstore_team-id'),
+        export_options: {
+          signingStyle: 'manual',
+          signingCertificate: 'Apple Distribution',
+          provisioningProfiles: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+        },
+        output_directory: ENV.fetch('IPA_OUTPUT_DIR'),
+        output_name: 'selfprivacy-ios-signed'
+      )
+    ensure
+      begin
+        sh('security', 'delete-keychain', keychain_path)
+      rescue StandardError
+      end
+    end
   end
 
   desc 'Upload the signed IPA to TestFlight'

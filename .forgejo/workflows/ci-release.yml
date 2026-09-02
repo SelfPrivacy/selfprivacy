@@ -205,6 +205,7 @@ jobs:
             "attachment=@selfprivacy-ios-unsigned-${{ forgejo.ref_name }}.zip" "${{ forgejo.api_url }}/repos/${{ forgejo.repository }}/releases/$RELEASE_ID/assets"
 
       - env:
+          IOS_KEYCHAIN_PASSWORD: ${{ secrets.CI_IOS_KEYCHAIN_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.CI_MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.CI_MATCH_GIT_BASIC_AUTHORIZATION }}
         run: nix run .#sign-ios

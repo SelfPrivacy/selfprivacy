@@ -1,0 +1,26 @@
+name: Test iOS signing
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - .forgejo/workflows/ci-ios-sign-test.yml
+      - .forgejo/workflows/ci-release.yml
+      - fastlane/Fastfile
+      - flake-parts/runnables.nix
+
+jobs:
+  sign-ios:
+    if: ${{ forgejo.event.pull_request.head.repo.full_name == forgejo.repository }}
+
+    runs-on:
+      - macos
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix run .#build-ios -- ipa release
+      - env:
+          IOS_KEYCHAIN_PASSWORD: ${{ secrets.CI_IOS_KEYCHAIN_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.CI_MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.CI_MATCH_GIT_BASIC_AUTHORIZATION }}
+        run: nix run .#sign-ios

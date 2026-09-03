@@ -1,60 +1,9 @@
-import 'dart:convert';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
-import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:web_socket_channel/io.dart';
-
-void _addConsoleLog(final ConsoleLog message) =>
-    getIt.get<ConsoleModel>().log(message);
-
-class RequestLoggingLink extends Link {
-  @override
-  Stream<Response> request(
-    final Request request, [
-    final NextLink? forward,
-  ]) async* {
-    _addConsoleLog(
-      GraphQlRequestConsoleLog(
-        // context: request.context,
-        operationType: request.type.name,
-        operation: request.operation,
-        variables: request.variables,
-      ),
-    );
-    yield* forward!(request);
-  }
-}
-
-class ResponseLoggingParser extends ResponseParser {
-  @override
-  Response parseResponse(final Map<String, dynamic> body) {
-    final response = super.parseResponse(body);
-    _addConsoleLog(
-      GraphQlResponseConsoleLog(
-        // context: response.context,
-        data: response.data,
-        errors: response.errors,
-        rawResponse: jsonEncode(response.response),
-      ),
-    );
-    return response;
-  }
-
-  @override
-  GraphQLError parseError(final Map<String, dynamic> error) {
-    final graphQlError = super.parseError(error);
-    _addConsoleLog(
-      ManualConsoleLog.warning(
-        customTitle: 'GraphQL Error',
-        content: graphQlError.toString(),
-      ),
-    );
-    return graphQlError;
-  }
-}
 
 abstract class GraphQLApiMap {
   void Function(String, {Object? error, StackTrace? stackTrace}) get logger =>

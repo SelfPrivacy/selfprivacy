@@ -99,7 +99,7 @@ class DigitalOceanServerType {
     this.vcpus,
   );
 
-  final List<String> regions;
+  final List<String>? regions;
   final double memory;
   final String slug;
   final String description;

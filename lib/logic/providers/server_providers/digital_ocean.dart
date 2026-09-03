@@ -57,6 +57,8 @@ class DigitalOceanServerProvider extends ServerProvider {
   final Currency currency = Currency.fromType(CurrencyType.usd);
 
   static final logger = const AppLogger(name: 'digital_ocean').log;
+  static const _missingSizeRegionsMessageKey =
+      'initializing.digital_ocean_regions_permission_error';
 
   @override
   bool get isAuthorized => _adapter.api().isWithToken;
@@ -145,22 +147,12 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     final List rawServers = result.data;
     for (final rawServer in rawServers) {
-      if (rawServer['id'].toString() != providerId) {
+      if (rawServer['id'].toString() != providerId ||
+          _publicIpv4(rawServer) == null) {
         continue;
       }
-
-      if (rawServer['networks']['v4'].isNotEmpty) {
-        for (final v4 in rawServer['networks']['v4']) {
-          if (v4['type'].toString() == 'public') {
-            server = rawServer;
-            break;
-          }
-        }
-      }
-
-      if (server != null) {
-        break;
-      }
+      server = rawServer;
+      break;
     }
 
     if (server == null) {
@@ -194,7 +186,15 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     ServerType? type;
     final rawSize = DigitalOceanServerType.fromJson(server['size']);
-    for (final rawRegion in rawSize.regions) {
+    final regions = rawSize.regions;
+    if (regions == null) {
+      return GenericResult(
+        success: false,
+        data: serverType,
+        message: _missingSizeRegionsMessageKey,
+      );
+    }
+    for (final rawRegion in regions) {
       if (rawRegion == server['region']['slug']) {
         type = ServerType(
           title: rawSize.description,
@@ -488,7 +488,7 @@ class DigitalOceanServerProvider extends ServerProvider {
         success: result.success,
         data: locations,
         code: result.code,
-        message: result.message,
+        message: serverProviderConnectionErrorMessageKey,
       );
     }
 
@@ -523,13 +523,21 @@ class DigitalOceanServerProvider extends ServerProvider {
         success: result.success,
         data: types,
         code: result.code,
-        message: result.message,
+        message: serverProviderConnectionErrorMessageKey,
       );
     }
 
     final List<DigitalOceanServerType> rawSizes = result.data;
     for (final rawSize in rawSizes) {
-      for (final rawRegion in rawSize.regions) {
+      final regions = rawSize.regions;
+      if (regions == null) {
+        return GenericResult(
+          success: false,
+          data: [],
+          message: _missingSizeRegionsMessageKey,
+        );
+      }
+      for (final rawRegion in regions) {
         if (rawRegion == location.identifier && rawSize.memory > 1024) {
           types.add(
             ServerType(

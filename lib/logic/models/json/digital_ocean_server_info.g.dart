@@ -41,7 +41,7 @@ Map<String, dynamic> _$DigitalOceanLocationToJson(
 DigitalOceanServerType _$DigitalOceanServerTypeFromJson(
   Map<String, dynamic> json,
 ) => DigitalOceanServerType(
-  (json['regions'] as List<dynamic>).map((e) => e as String).toList(),
+  (json['regions'] as List<dynamic>?)?.map((e) => e as String).toList(),
   (json['memory'] as num).toDouble(),
   json['description'] as String,
   (json['disk'] as num).toInt(),

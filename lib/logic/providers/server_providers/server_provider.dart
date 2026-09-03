@@ -15,6 +15,9 @@ export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 export 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
 export 'package:selfprivacy/logic/models/launch_installation_data.dart';
 
+const serverProviderConnectionErrorMessageKey =
+    'initializing.could_not_connect';
+
 abstract class ServerProvider {
   /// Returns an assigned enum value, respectively to which
   /// provider implements [ServerProvider] interface.

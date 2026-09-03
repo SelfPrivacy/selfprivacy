@@ -15,13 +15,13 @@ import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
-import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
@@ -95,7 +95,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     if (!apiResponse.success) {
       getIt<NavigationService>().showSnackBar(
-        'initializing.could_not_connect'.tr(),
+        _providerErrorMessage(apiResponse),
       );
     }
 
@@ -114,13 +114,14 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         .getServerTypes(location: location);
 
     if (!apiResult.success) {
-      getIt<NavigationService>().showSnackBar(
-        'initializing.could_not_connect'.tr(),
-      );
+      getIt<NavigationService>().showSnackBar(_providerErrorMessage(apiResult));
     }
 
     return apiResult.data;
   }
+
+  String _providerErrorMessage(final GenericResult result) =>
+      (result.message ?? serverProviderConnectionErrorMessageKey).tr();
 
   Future<AdditionalPricing?> fetchAvailableAdditionalPricing(
     final ServerProviderLocation location,

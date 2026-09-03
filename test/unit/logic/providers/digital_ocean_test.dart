@@ -10,10 +10,15 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider_fac
 import '../../../helpers/fixtures/json_fixture.dart';
 
 class _DigitalOceanClientFactory {
-  _DigitalOceanClientFactory({this.volume, this.dropletsResponse});
+  _DigitalOceanClientFactory({
+    this.volume,
+    this.dropletsResponse,
+    this.sizesResponse,
+  });
 
   final Map<String, dynamic>? volume;
   final Map<String, dynamic>? dropletsResponse;
+  final Map<String, dynamic>? sizesResponse;
   final List<RequestOptions> requests = [];
 
   Map<String, dynamic> get _volume =>
@@ -61,9 +66,11 @@ class _DigitalOceanClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: loadJsonFixture(
-                        'server_providers/digital_ocean/sizes.json',
-                      ),
+                      data:
+                          sizesResponse ??
+                          loadJsonFixture(
+                            'server_providers/digital_ocean/sizes.json',
+                          ),
                     ),
                   );
                 case ('GET', '/droplets'):
@@ -341,6 +348,25 @@ void main() {
     expect(result.data?.identifier, 's-1vcpu-1gb');
   });
 
+  test('getServerType fails when the embedded size omits regions', () async {
+    final response = loadJsonFixture(
+      'server_providers/digital_ocean/droplets.json',
+    );
+    final droplet =
+        (response['droplets'] as List<dynamic>).single as Map<String, dynamic>;
+    (droplet['size'] as Map<String, dynamic>).remove('regions');
+    final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+
+    final result = await _provider(clients).getServerType('7');
+
+    expect(result.success, isFalse);
+    expect(result.data, isNull);
+    expect(
+      result.message,
+      'initializing.digital_ocean_regions_permission_error',
+    );
+  });
+
   test('power actions convert the string provider ID for the API', () async {
     final clients = _DigitalOceanClientFactory();
     final provider = _provider(clients);
@@ -473,5 +499,27 @@ void main() {
     expect(serverType.price.value, 12);
     expect(serverType.price.currency.shortcode, 'USD');
     expect(serverType.location.identifier, 'nyc1');
+  });
+
+  test('fails server type listing when a size omits regions', () async {
+    final response = loadJsonFixture(
+      'server_providers/digital_ocean/sizes.json',
+    );
+    final sizes = response['sizes'] as List<dynamic>;
+    (sizes.first as Map<String, dynamic>).remove('regions');
+    final clients = _DigitalOceanClientFactory(sizesResponse: response);
+    final provider = _provider(clients);
+    final locations = await provider.getAvailableLocations();
+
+    final result = await provider.getServerTypes(
+      location: locations.data.single,
+    );
+
+    expect(result.success, isFalse);
+    expect(result.data, isEmpty);
+    expect(
+      result.message,
+      'initializing.digital_ocean_regions_permission_error',
+    );
   });
 }

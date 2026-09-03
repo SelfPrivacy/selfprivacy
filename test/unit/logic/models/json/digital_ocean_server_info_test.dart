@@ -27,4 +27,17 @@ void main() {
       }
     }
   });
+
+  test('parses DigitalOcean server types without regions', () {
+    final json = Map<String, dynamic>.from(
+      (loadJsonFixture('server_providers/digital_ocean/sizes.json')['sizes']
+                  as List<dynamic>)
+              .first
+          as Map<String, dynamic>,
+    )..remove('regions');
+
+    final serverType = DigitalOceanServerType.fromJson(json);
+
+    expect(serverType.regions, isNull);
+  });
 }

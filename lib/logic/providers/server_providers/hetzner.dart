@@ -461,7 +461,7 @@ class HetznerServerProvider extends ServerProvider {
         success: result.success,
         data: locations,
         code: result.code,
-        message: result.message,
+        message: serverProviderConnectionErrorMessageKey,
       );
     }
 
@@ -496,7 +496,7 @@ class HetznerServerProvider extends ServerProvider {
         success: result.success,
         data: types,
         code: result.code,
-        message: result.message,
+        message: serverProviderConnectionErrorMessageKey,
       );
     }
 

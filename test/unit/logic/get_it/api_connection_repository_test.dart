@@ -74,6 +74,22 @@ void main() {
     expect(repository.refreshCount, 0);
   });
 
+  test(
+    'initialization does not call the API without a selected server',
+    () async {
+      final noServerRepository = ApiConnectionRepository(
+        resourcesModel: resourcesModel,
+        serverSelector: () => null,
+        api: api,
+      );
+      addTearDown(noServerRepository.dispose);
+
+      await noServerRepository.init();
+
+      verifyNever(api.getApiVersion);
+    },
+  );
+
   test('an overdue token refreshes when the setting is enabled', () async {
     await repository.reload(null);
 
@@ -120,6 +136,7 @@ void main() {
     addTearDown(selectedRepository.dispose);
 
     expect(selectedRepository.serverDomain?.domainName, 'second.example');
+    expect(selectedRepository.serverDetails?.apiToken, 'second-token');
     expect(selectedRepository.api.rootAddress, 'second.example');
     expect(selectedRepository.api.apiToken, 'second-token');
 

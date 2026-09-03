@@ -80,6 +80,10 @@ void main() {
       );
     });
 
+    test('a token-bearing client builds with strict verification', () async {
+      expect(await _TokenBearingApi().getClient(), isA<GraphQLClient>());
+    });
+
     test('the shared verifying client backs the default policy', () async {
       await _AnonymousApi().getClient();
 

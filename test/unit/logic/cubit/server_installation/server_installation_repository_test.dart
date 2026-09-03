@@ -109,6 +109,19 @@ void main() {
     });
   });
 
+  test('createDkimRecord uses the wizard server connection', () async {
+    when(api.getDnsRecords).thenAnswer((_) async => []);
+
+    await expectLater(
+      repository.createDkimRecord(aServerDomain()),
+      throwsA(anything),
+    );
+
+    expect(lastFactoryCall['isWithToken'], isTrue);
+    expect(lastFactoryCall['token'], 'api-token');
+    expect(lastFactoryCall['domain'], 'example.org');
+  });
+
   group('restart', () {
     test(
       'succeeds on an accepted reboot, over an authenticated client',

@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_dynamic_calls
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
@@ -64,7 +66,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
   @override
   Future<GenericResult<List<ServerBasicInfo>>> getServers() async {
-    List<ServerBasicInfo> servers = [];
+    final List<ServerBasicInfo> servers = [];
     final result = await _adapter.api().getServers();
     if (result.data.isEmpty || !result.success) {
       return GenericResult(
@@ -76,27 +78,53 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     final List rawServers = result.data;
-    servers = rawServers.map<ServerBasicInfo>((final server) {
-      String ipv4 = '0.0.0.0';
-      if (server['networks']['v4'].isNotEmpty) {
-        for (final v4 in server['networks']['v4']) {
-          if (v4['type'].toString() == 'public') {
-            ipv4 = v4['ip_address'].toString();
-          }
-        }
+    for (final server in rawServers) {
+      final String? ipv4 = _publicIpv4(server);
+      if (ipv4 == null) {
+        continue;
       }
 
-      return ServerBasicInfo(
-        providerId: server['id'].toString(),
-        reverseDns: server['name'],
-        created: DateTime.now(),
-        ip: ipv4,
-        name: server['name'],
-        location: server['region']['slug'],
+      servers.add(
+        ServerBasicInfo(
+          providerId: server['id'].toString(),
+          reverseDns: server['name'],
+          created: DateTime.now(),
+          ip: ipv4,
+          name: server['name'],
+          location: server['region']['slug'],
+        ),
       );
-    }).toList();
+    }
 
     return GenericResult(success: true, data: servers);
+  }
+
+  String? _publicIpv4(final Object? server) {
+    if (server is! Map) {
+      return null;
+    }
+    final networks = server['networks'];
+    if (networks is! Map) {
+      return null;
+    }
+    final addresses = networks['v4'];
+    if (addresses is! List) {
+      return null;
+    }
+    for (final address in addresses) {
+      if (address is! Map || address['type'] != 'public') {
+        continue;
+      }
+      final rawAddress = address['ip_address'];
+      if (rawAddress is! String) {
+        continue;
+      }
+      final parsedAddress = InternetAddress.tryParse(rawAddress);
+      if (parsedAddress?.type == InternetAddressType.IPv4) {
+        return rawAddress;
+      }
+    }
+    return null;
   }
 
   @override

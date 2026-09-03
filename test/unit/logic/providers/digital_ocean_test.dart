@@ -10,9 +10,10 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider_fac
 import '../../../helpers/fixtures/json_fixture.dart';
 
 class _DigitalOceanClientFactory {
-  _DigitalOceanClientFactory({this.volume});
+  _DigitalOceanClientFactory({this.volume, this.dropletsResponse});
 
   final Map<String, dynamic>? volume;
+  final Map<String, dynamic>? dropletsResponse;
   final List<RequestOptions> requests = [];
 
   Map<String, dynamic> get _volume =>
@@ -70,9 +71,11 @@ class _DigitalOceanClientFactory {
                     _response(
                       request,
                       statusCode: 200,
-                      data: loadJsonFixture(
-                        'server_providers/digital_ocean/droplets.json',
-                      ),
+                      data:
+                          dropletsResponse ??
+                          loadJsonFixture(
+                            'server_providers/digital_ocean/droplets.json',
+                          ),
                     ),
                   );
                 case ('GET', '/regions'):
@@ -255,6 +258,78 @@ void main() {
 
     expect(result.success, isTrue);
     expect(result.data.single.providerId, '7');
+  });
+
+  test('getServers excludes droplets without a public IPv4', () async {
+    final response = loadJsonFixture(
+      'server_providers/digital_ocean/droplets.json',
+    );
+    final droplet =
+        (response['droplets'] as List<dynamic>).single as Map<String, dynamic>;
+    (droplet['networks'] as Map<String, dynamic>).remove('v4');
+    final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+
+    final result = await _provider(clients).getServers();
+
+    expect(result.success, isTrue);
+    expect(result.data, isEmpty);
+  });
+
+  test('getServers excludes malformed public IPv4 entries', () async {
+    final response = loadJsonFixture(
+      'server_providers/digital_ocean/droplets.json',
+    );
+    final droplet =
+        (response['droplets'] as List<dynamic>).single as Map<String, dynamic>;
+    final networks = droplet['networks'] as Map<String, dynamic>;
+    final ipv4 =
+        (networks['v4'] as List<dynamic>).single as Map<String, dynamic>;
+    ipv4['ip_address'] = 'not-an-ip-address';
+    final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+
+    final result = await _provider(clients).getServers();
+
+    expect(result.success, isTrue);
+    expect(result.data, isEmpty);
+  });
+
+  test('getServers excludes IPv4 entries with omitted fields', () async {
+    for (final field in ['type', 'ip_address']) {
+      final response = loadJsonFixture(
+        'server_providers/digital_ocean/droplets.json',
+      );
+      final droplet =
+          (response['droplets'] as List<dynamic>).single
+              as Map<String, dynamic>;
+      final networks = droplet['networks'] as Map<String, dynamic>;
+      ((networks['v4'] as List<dynamic>).single as Map<String, dynamic>).remove(
+        field,
+      );
+      final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+
+      final result = await _provider(clients).getServers();
+
+      expect(result.success, isTrue);
+      expect(result.data, isEmpty);
+    }
+  });
+
+  test('getServers excludes droplets with only a private IPv4', () async {
+    final response = loadJsonFixture(
+      'server_providers/digital_ocean/droplets.json',
+    );
+    final droplet =
+        (response['droplets'] as List<dynamic>).single as Map<String, dynamic>;
+    final networks = droplet['networks'] as Map<String, dynamic>;
+    final ipv4 =
+        (networks['v4'] as List<dynamic>).single as Map<String, dynamic>;
+    ipv4['type'] = 'private';
+    final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+
+    final result = await _provider(clients).getServers();
+
+    expect(result.success, isTrue);
+    expect(result.data, isEmpty);
   });
 
   test('getServerType matches the string provider ID', () async {

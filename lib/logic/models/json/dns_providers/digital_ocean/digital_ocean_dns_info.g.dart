@@ -19,10 +19,10 @@ DigitalOceanDnsRecord _$DigitalOceanDnsRecordFromJson(
   Map<String, dynamic> json,
 ) => DigitalOceanDnsRecord(
   id: (json['id'] as num?)?.toInt(),
-  name: json['name'] as String,
+  name: json['name'] as String?,
   type: json['type'] as String,
-  ttl: (json['ttl'] as num).toInt(),
-  data: json['data'] as String,
+  ttl: (json['ttl'] as num?)?.toInt(),
+  data: json['data'] as String?,
   priority: (json['priority'] as num?)?.toInt(),
   flags: (json['flags'] as num?)?.toInt(),
   tag: json['tag'] as String?,

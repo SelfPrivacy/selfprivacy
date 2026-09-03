@@ -53,7 +53,7 @@ class DigitalOceanDnsRecord {
   final int? id;
 
   /// The host name, alias, or service being defined by the record.
-  final String name;
+  final String? name;
 
   /// The type of the DNS record. For example: A, CNAME, TXT, ...
   final String type;
@@ -61,13 +61,13 @@ class DigitalOceanDnsRecord {
   /// This value is the time to live for the record, in seconds.
   ///
   /// This defines the time frame that clients can cache queried information before a refresh should be requested.
-  final int ttl;
+  final int? ttl;
 
   /// Variable data depending on record type.
   ///
   /// For example, the "data" value for an A record would be the IPv4 address to which the domain will be mapped.
   /// For a CAA record, it would contain the domain name of the CA being granted permission to issue certificates.
-  final String data;
+  final String? data;
 
   /// The priority for SRV and MX records.
   final int? priority;

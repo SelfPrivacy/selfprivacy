@@ -1,0 +1,26 @@
+{
+  "domain_records": [
+    {
+      "id": 123456,
+      "type": "A",
+      "name": "@",
+      "data": "192.0.2.1",
+      "priority": null,
+      "port": null,
+      "ttl": 1800,
+      "weight": null,
+      "flags": null,
+      "tag": null
+    },
+    {
+      "id": 123457,
+      "type": "A",
+      "name": "www",
+      "data": "192.0.2.2"
+    },
+    {
+      "id": 123458,
+      "type": "SOA"
+    }
+  ]
+}

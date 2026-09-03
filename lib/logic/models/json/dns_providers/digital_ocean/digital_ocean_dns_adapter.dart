@@ -5,10 +5,8 @@ DigitalOceanDnsRecord _fromDnsRecord(
   final String rootDomain,
 ) {
   String convert(final String entry) => (entry == rootDomain) ? '@' : entry;
-  String name = dnsRecord.name ?? '';
-  String content = dnsRecord.content ?? '';
-  name = convert(name);
-  content = convert(content);
+  final String name = convert(dnsRecord.name ?? '');
+  final String content = convert(dnsRecord.content ?? '');
 
   if (dnsRecord.type == 'CAA') {
     // Split the content string into parts
@@ -44,14 +42,13 @@ DnsRecord _toDnsRecord(
   final String rootDomain,
 ) {
   final String type = digitalOceanRecord.type;
-  String convert(final String entry) => (entry == '@') ? rootDomain : entry;
-  String name = digitalOceanRecord.name;
-  final String content = convert(digitalOceanRecord.data);
-  name = (name == '@') ? rootDomain : name;
+  String? convert(final String? entry) => (entry == '@') ? rootDomain : entry;
+  final String? name = convert(digitalOceanRecord.name);
+  final String? content = convert(digitalOceanRecord.data);
   return DnsRecord(
     name: name,
     content: content,
-    ttl: digitalOceanRecord.ttl,
+    ttl: digitalOceanRecord.ttl ?? 3600,
     type: type,
     priority: digitalOceanRecord.priority ?? 10,
   );

@@ -19,7 +19,7 @@ class _UsersApi extends GraphQLApiMap with UsersApi {
   final bool isWithToken = false;
 
   @override
-  final String customToken = '';
+  final String apiToken = '';
 
   @override
   Future<GraphQLClient> getClient({

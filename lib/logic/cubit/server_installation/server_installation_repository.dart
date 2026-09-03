@@ -37,10 +37,9 @@ class ServerAuthorizationException implements Exception {
 
 typedef ServerApiFactory =
     ServerApi Function({
+      required ServerDomainProvider domainProvider,
       bool hasLogger,
-      bool isWithToken,
-      String customToken,
-      String? overrideDomain,
+      ServerTokenProvider? tokenProvider,
     });
 
 typedef DeviceNameProvider = Future<String> Function();
@@ -256,10 +255,9 @@ class ServerInstallationRepository {
 
   Future<void> createDkimRecord(final ServerDomain domain) async {
     final ServerApi api = _serverApi(
-      overrideDomain: domain.domainName,
-      customToken:
+      domainProvider: () => domain.domainName,
+      tokenProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
-      isWithToken: true,
     );
 
     late DnsRecord record;
@@ -275,31 +273,28 @@ class ServerInstallationRepository {
 
   Future<bool> isHttpServerWorking() {
     final ServerApi api = _serverApi(
-      overrideDomain:
+      domainProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
-      customToken:
+      tokenProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
-      isWithToken: true,
     );
     return api.isHttpServerWorking();
   }
 
   Future<ServerProbeResult> probeServer() {
     final ServerApi api = _serverApi(
-      overrideDomain:
+      domainProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
-      isWithToken: false,
     );
     return api.probe();
   }
 
   Future<bool> restart() async {
     final result = await _serverApi(
-      overrideDomain:
+      domainProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
-      customToken:
+      tokenProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
-      isWithToken: true,
     ).reboot();
 
     return result.success;
@@ -314,8 +309,7 @@ class ServerInstallationRepository {
     final ServerDomain serverDomain,
   ) async {
     final ServerApi serverApi = _serverApi(
-      isWithToken: false,
-      overrideDomain: serverDomain.domainName,
+      domainProvider: () => serverDomain.domainName,
     );
     final String? serverApiVersion = await serverApi.getApiVersion();
     if (serverApiVersion == null) {
@@ -351,8 +345,7 @@ class ServerInstallationRepository {
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     final ServerApi serverApi = _serverApi(
-      isWithToken: false,
-      overrideDomain: serverDomain.domainName,
+      domainProvider: () => serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final GenericResult<String> result = await serverApi.authorizeDevice(
@@ -387,8 +380,7 @@ class ServerInstallationRepository {
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     final ServerApi serverApi = _serverApi(
-      isWithToken: false,
-      overrideDomain: serverDomain.domainName,
+      domainProvider: () => serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     final GenericResult<String> result = await serverApi.useRecoveryToken(
@@ -423,9 +415,8 @@ class ServerInstallationRepository {
     final ServerRecoveryCapabilities recoveryCapabilities,
   ) async {
     final ServerApi serverApi = _serverApi(
-      isWithToken: true,
-      overrideDomain: serverDomain.domainName,
-      customToken: apiToken,
+      domainProvider: () => serverDomain.domainName,
+      tokenProvider: () => apiToken,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
     if (recoveryCapabilities == ServerRecoveryCapabilities.legacy) {

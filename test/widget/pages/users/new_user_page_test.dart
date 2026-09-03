@@ -55,7 +55,7 @@ void main() {
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
-    final apiData = ApiData(ServerApi());
+    final apiData = ApiData(ServerApi(domainProvider: () => null));
     apiData.groups.data = const [];
     apiData.users.data = const [User.fake(login: 'alice')];
     when(() => repository.apiData).thenReturn(apiData);

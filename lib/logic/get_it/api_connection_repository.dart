@@ -31,9 +31,21 @@ class ApiConnectionRepository {
   static final _log = const AppLogger(name: 'api_connection_repository').log;
 
   Box box = Hive.box(BNames.serverInstallationBox);
-  final ServerApi api = ServerApi();
+  final ServerApi api = ServerApi(
+    domainProvider: () =>
+        getIt<ResourcesModel>().servers.firstOrNull?.domain.domainName,
+    tokenProvider: () =>
+        getIt<ResourcesModel>().servers.firstOrNull?.hostingDetails.apiToken,
+  );
 
-  final ApiData _apiData = ApiData(ServerApi());
+  final ApiData _apiData = ApiData(
+    ServerApi(
+      domainProvider: () =>
+          getIt<ResourcesModel>().servers.firstOrNull?.domain.domainName,
+      tokenProvider: () =>
+          getIt<ResourcesModel>().servers.firstOrNull?.hostingDetails.apiToken,
+    ),
+  );
 
   ApiData get apiData => _apiData;
 

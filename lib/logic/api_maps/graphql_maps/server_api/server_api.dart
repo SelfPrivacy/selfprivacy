@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:graphql/client.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
@@ -14,7 +13,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -46,6 +44,9 @@ part 'monitoring_api.dart';
 
 enum ServerProbeResult { unreachable, untrustedCertificate, reachable }
 
+typedef ServerDomainProvider = String? Function();
+typedef ServerTokenProvider = String? Function();
+
 class ServerApi extends GraphQLApiMap
     with
         VolumeApi,
@@ -57,22 +58,22 @@ class ServerApi extends GraphQLApiMap
         LogsApi,
         MonitoringApi {
   ServerApi({
+    required this.domainProvider,
+    this.tokenProvider,
     this.hasLogger = false,
-    this.isWithToken = true,
-    this.customToken = '',
-    this.overrideDomain,
   });
+
+  final ServerDomainProvider domainProvider;
+  final ServerTokenProvider? tokenProvider;
 
   @override
   bool hasLogger;
   @override
-  bool isWithToken;
+  bool get isWithToken => tokenProvider != null;
   @override
-  String customToken;
+  String get apiToken => tokenProvider?.call() ?? '';
   @override
-  String? get rootAddress =>
-      overrideDomain ?? getIt<ResourcesModel>().serverDomain?.domainName;
-  String? overrideDomain;
+  String? get rootAddress => domainProvider();
 
   Future<String?> getApiVersion() => _getApiVersion();
 

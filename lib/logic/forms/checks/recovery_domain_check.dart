@@ -3,7 +3,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 Future<bool> checkRecoveryDomain(final String domain) async =>
     await ServerApi(
       hasLogger: false,
-      isWithToken: false,
-      overrideDomain: domain,
+      domainProvider: () => domain,
     ).getApiVersion() !=
     null;

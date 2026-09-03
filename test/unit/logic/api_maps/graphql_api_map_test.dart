@@ -7,10 +7,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/forms/checks/recovery_domain_check.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
-import '../../../helpers/fixtures/server_fixtures.dart';
 
 /// A domain under the reserved `.invalid` TLD, so the lookup cannot succeed and
 /// cannot reach a real host by accident.
@@ -24,7 +22,7 @@ class _TokenBearingApi extends GraphQLApiMap {
   @override
   final bool isWithToken = true;
   @override
-  final String customToken = '';
+  final String apiToken = 'server-token';
 }
 
 class _AnonymousApi extends GraphQLApiMap {
@@ -35,24 +33,19 @@ class _AnonymousApi extends GraphQLApiMap {
   @override
   final bool isWithToken = false;
   @override
-  final String customToken = '';
+  final String apiToken = '';
 }
 
 void main() {
   setUpAll(setUpInMemoryHive);
   tearDownAll(tearDownInMemoryHive);
 
-  late ResourcesModel resources;
-
   setUp(() async {
     await Hive.openBox(BNames.appSettingsBox);
-    await Hive.openBox(BNames.resourcesBox);
     await Hive.openBox(BNames.serverInstallationBox);
 
-    resources = ResourcesModel()..init();
     final developerSettings = DeveloperSettingsModel();
     getIt
-      ..registerSingleton<ResourcesModel>(resources)
       ..registerSingleton<ApiConfigModel>(ApiConfigModel())
       ..registerSingleton<ConsoleModel>(ConsoleModel())
       ..registerSingleton<DeveloperSettingsModel>(developerSettings)
@@ -64,7 +57,6 @@ void main() {
     await getIt.reset();
     for (final String name in [
       BNames.appSettingsBox,
-      BNames.resourcesBox,
       BNames.serverInstallationBox,
     ]) {
       final Box box = Hive.box(name);
@@ -109,9 +101,7 @@ void main() {
       );
     });
 
-    test('builds a client once a server token exists', () async {
-      await resources.addServer(aServer());
-
+    test('builds a token-bearing client without global server state', () async {
       expect(
         await _TokenBearingApi().getSubscriptionClient(),
         isA<GraphQLClient>(),
@@ -122,15 +112,17 @@ void main() {
   group('probe', () {
     test('refuses to run on a token-bearing client', () {
       expect(
-        ServerApi(isWithToken: true, overrideDomain: 'example.org').probe(),
+        ServerApi(
+          domainProvider: () => 'example.org',
+          tokenProvider: () => 'server-token',
+        ).probe(),
         throwsStateError,
       );
     });
 
     test('reports a host it cannot reach as unreachable', () async {
       final ServerApi api = ServerApi(
-        isWithToken: false,
-        overrideDomain: _unresolvableDomain,
+        domainProvider: () => _unresolvableDomain,
       );
 
       expect(await api.probe(), ServerProbeResult.unreachable);
@@ -138,8 +130,7 @@ void main() {
 
     test('reboot reports failure rather than throwing', () async {
       final ServerApi api = ServerApi(
-        isWithToken: false,
-        overrideDomain: _unresolvableDomain,
+        domainProvider: () => _unresolvableDomain,
       );
 
       expect((await api.reboot()).success, isFalse);
@@ -147,8 +138,7 @@ void main() {
 
     test('getApiVersion answers null rather than throwing', () async {
       final ServerApi api = ServerApi(
-        isWithToken: false,
-        overrideDomain: _unresolvableDomain,
+        domainProvider: () => _unresolvableDomain,
       );
 
       expect(await api.getApiVersion(), isNull);
@@ -157,5 +147,23 @@ void main() {
     test('a recovery-domain check rejects an unreachable domain', () async {
       expect(await checkRecoveryDomain(_unresolvableDomain), isFalse);
     });
+  });
+
+  test('reads current connection values from their providers', () {
+    var domain = 'first.example';
+    var token = 'first-token';
+    final api = ServerApi(
+      domainProvider: () => domain,
+      tokenProvider: () => token,
+    );
+
+    expect(api.rootAddress, 'first.example');
+    expect(api.apiToken, 'first-token');
+
+    domain = 'second.example';
+    token = 'rotated-token';
+
+    expect(api.rootAddress, 'second.example');
+    expect(api.apiToken, 'rotated-token');
   });
 }

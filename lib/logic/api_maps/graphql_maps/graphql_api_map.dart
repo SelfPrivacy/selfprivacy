@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:web_socket_channel/io.dart';
@@ -77,12 +76,10 @@ abstract class GraphQLApiMap {
       defaultHeaders: {'Accept-Language': _locale},
     );
 
+    final token = apiToken;
     final Link graphQLLink = RequestLoggingLink().concat(
       isWithToken
-          ? AuthLink(
-              getToken: () =>
-                  customToken == '' ? 'Bearer $_token' : customToken,
-            ).concat(httpLink)
+          ? AuthLink(getToken: () => 'Bearer $token').concat(httpLink)
           : httpLink,
     );
 
@@ -96,9 +93,10 @@ abstract class GraphQLApiMap {
   Future<GraphQLClient> getSubscriptionClient({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
   }) async {
-    final Map<String, dynamic>? headers = _token.isEmpty
+    final token = apiToken;
+    final Map<String, dynamic>? headers = token.isEmpty
         ? null
-        : {'Authorization': 'Bearer $_token', 'Accept-Language': _locale};
+        : {'Authorization': 'Bearer $token', 'Accept-Language': _locale};
 
     final WebSocketLink webSocketLink = WebSocketLink(
       'wss://$_host/graphql',
@@ -107,9 +105,9 @@ abstract class GraphQLApiMap {
       config: SocketClientConfig(
         onConnectionLost: onConnectionLost,
         autoReconnect: true,
-        initialPayload: _token.isEmpty
+        initialPayload: token.isEmpty
             ? null
-            : {'Authorization': 'Bearer $_token'},
+            : {'Authorization': 'Bearer $token'},
         headers: headers,
         connectFn: (final Uri uri, final Iterable<String>? protocols) =>
             IOWebSocketChannel.connect(
@@ -128,18 +126,8 @@ abstract class GraphQLApiMap {
 
   String get _locale => getIt.get<ApiConfigModel>().localeCode;
 
-  String get _token {
-    String token = '';
-    final serverDetails = getIt<ResourcesModel>().serverDetails;
-    if (serverDetails != null) {
-      token = serverDetails.apiToken;
-    }
-
-    return token;
-  }
-
   abstract final String? rootAddress;
   abstract final bool hasLogger;
   abstract final bool isWithToken;
-  abstract final String customToken;
+  abstract final String apiToken;
 }

@@ -51,15 +51,14 @@ void main() {
       deviceName: () async => 'Test device',
       serverApi:
           ({
+            required final ServerDomainProvider domainProvider,
             final bool hasLogger = false,
-            final bool isWithToken = true,
-            final String customToken = '',
-            final String? overrideDomain,
+            final ServerTokenProvider? tokenProvider,
           }) {
             lastFactoryCall = {
-              'isWithToken': isWithToken,
-              'customToken': customToken,
-              'overrideDomain': overrideDomain,
+              'isWithToken': tokenProvider != null,
+              'token': tokenProvider?.call(),
+              'domain': domainProvider(),
             };
             return api;
           },
@@ -94,8 +93,8 @@ void main() {
       await repository.probeServer();
 
       expect(lastFactoryCall['isWithToken'], isFalse);
-      expect(lastFactoryCall['customToken'], '');
-      expect(lastFactoryCall['overrideDomain'], 'example.org');
+      expect(lastFactoryCall['token'], isNull);
+      expect(lastFactoryCall['domain'], 'example.org');
     });
 
     test('passes the probe result through', () async {
@@ -120,7 +119,7 @@ void main() {
 
         expect(await repository.restart(), isTrue);
         expect(lastFactoryCall['isWithToken'], isTrue);
-        expect(lastFactoryCall['customToken'], 'api-token');
+        expect(lastFactoryCall['token'], 'api-token');
       },
     );
 
@@ -269,7 +268,7 @@ void main() {
 
       expect(await repository.isHttpServerWorking(), isTrue);
       expect(lastFactoryCall['isWithToken'], isTrue);
-      expect(lastFactoryCall['customToken'], 'api-token');
+      expect(lastFactoryCall['token'], 'api-token');
     },
   );
 }

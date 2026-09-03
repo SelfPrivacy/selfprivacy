@@ -519,14 +519,12 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         dataState.recoveryCapabilities,
       );
       final ServerProviderType serverProvider = await ServerApi(
-        customToken: serverDetails.apiToken,
-        isWithToken: true,
-        overrideDomain: serverDomain.domainName,
+        domainProvider: () => serverDomain.domainName,
+        tokenProvider: () => serverDetails.apiToken,
       ).getServerProviderType();
       final dnsProvider = await ServerApi(
-        customToken: serverDetails.apiToken,
-        isWithToken: true,
-        overrideDomain: serverDomain.domainName,
+        domainProvider: () => serverDomain.domainName,
+        tokenProvider: () => serverDetails.apiToken,
       ).getDnsProviderType();
       if (dnsProvider == DnsProviderType.unknown) {
         getIt<NavigationService>().showSnackBar(
@@ -718,9 +716,8 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       return;
     }
     final dnsProviderType = await ServerApi(
-      customToken: dataState.serverDetails!.apiToken,
-      isWithToken: true,
-      overrideDomain: serverDomain.domainName,
+      domainProvider: () => serverDomain.domainName,
+      tokenProvider: () => dataState.serverDetails!.apiToken,
     ).getDnsProviderType();
     await repository.saveDomain(
       ServerDomain(

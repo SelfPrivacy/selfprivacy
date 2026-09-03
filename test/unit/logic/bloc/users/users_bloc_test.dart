@@ -20,7 +20,7 @@ void main() {
   setUp(() async {
     await getIt.reset();
     repository = _MockApiConnectionRepository();
-    apiData = ApiData(ServerApi());
+    apiData = ApiData(ServerApi(domainProvider: () => null));
     dataController = StreamController<ApiData>.broadcast();
     connectionStatusController = StreamController<ConnectionStatus>.broadcast();
 

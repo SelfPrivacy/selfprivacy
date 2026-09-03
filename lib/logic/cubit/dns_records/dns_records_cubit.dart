@@ -15,7 +15,7 @@ class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
   DnsRecordsCubit()
     : super(const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
 
-  final ServerApi api = ServerApi();
+  ServerApi get api => getIt<ApiConnectionRepository>().api;
 
   static final logger = const AppLogger(name: 'dns_records_cubit').log;
 

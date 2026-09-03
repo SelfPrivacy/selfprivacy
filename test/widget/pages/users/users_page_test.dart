@@ -56,7 +56,7 @@ void main() {
   setUp(() async {
     await getIt.reset();
     repository = _MockApiConnectionRepository();
-    apiData = ApiData(ServerApi());
+    apiData = ApiData(ServerApi(domainProvider: () => null));
     usersBloc = _MockUsersBloc();
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();

@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+
+import '../../../../helpers/fixtures/graphql_fixtures.dart';
 
 class _MockApiConnectionRepository extends Mock
     implements ApiConnectionRepository {}
@@ -20,7 +21,7 @@ void main() {
   setUp(() async {
     await getIt.reset();
     repository = _MockApiConnectionRepository();
-    apiData = ApiData(ServerApi(domainProvider: () => null));
+    apiData = ApiData(aServerApi());
     dataController = StreamController<ApiData>.broadcast();
     connectionStatusController = StreamController<ConnectionStatus>.broadcast();
 

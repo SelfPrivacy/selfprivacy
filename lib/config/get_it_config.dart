@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
@@ -14,6 +15,19 @@ export 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
 export 'package:selfprivacy/logic/get_it/navigation.dart';
 
 final GetIt getIt = GetIt.instance;
+
+GraphQLTransport createGraphQLTransport({
+  required final GraphQLDomainProvider domainProvider,
+  final GraphQLTokenProvider? tokenProvider,
+  final TlsPolicy tlsPolicy = TlsPolicy.strict,
+}) => GraphQLTransport(
+  domainProvider: domainProvider,
+  tokenProvider: tokenProvider,
+  localeProvider: () => getIt<ApiConfigModel>().localeCode,
+  tlsContext: getIt<TlsContext>(),
+  tlsPolicy: tlsPolicy,
+  consoleLog: getIt<ConsoleModel>().log,
+);
 
 Future<void> getItSetup() async {
   final developerSettings = DeveloperSettingsModel();

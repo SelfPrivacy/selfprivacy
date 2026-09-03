@@ -8,6 +8,7 @@ import 'package:http/testing.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/models/console_log.dart';
 
 class _MockTlsContext extends Mock implements TlsContext {}
 
@@ -97,14 +98,14 @@ void main() {
     ).called(1);
   });
 
-  test('refuses an authenticated unverified HTTP client', () {
-    expect(
-      () => transport(
-        tokenProvider: () => token,
-        tlsPolicy: TlsPolicy.allowUnverified,
-      ).client(),
-      throwsStateError,
+  test('refuses authenticated unverified clients', () {
+    final unverified = transport(
+      tokenProvider: () => token,
+      tlsPolicy: TlsPolicy.allowUnverified,
     );
+
+    expect(unverified.client, throwsStateError);
+    expect(unverified.subscriptionClient, throwsStateError);
   });
 
   test('copies connection providers when its TLS policy changes', () {
@@ -127,5 +128,17 @@ void main() {
       transport(tokenProvider: () => token).subscriptionClient(),
       isA<GraphQLClient>(),
     );
+  });
+
+  test('logs parsed GraphQL errors', () {
+    final logs = <ConsoleLog>[];
+    final parser = ResponseLoggingParser(consoleLog: logs.add);
+
+    final error = parser.parseError({'message': 'access denied'});
+
+    expect(error.message, 'access denied');
+    expect(logs.single, isA<ManualConsoleLog>());
+    expect(logs.single.severity, ConsoleLogSeverity.warning);
+    expect(logs.single.content, contains('access denied'));
   });
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:graphql/client.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/logs.graphql.dart';
@@ -44,9 +45,6 @@ part 'monitoring_api.dart';
 
 enum ServerProbeResult { unreachable, untrustedCertificate, reachable }
 
-typedef ServerDomainProvider = String? Function();
-typedef ServerTokenProvider = String? Function();
-
 class ServerApi extends GraphQLApiMap
     with
         VolumeApi,
@@ -57,34 +55,23 @@ class ServerApi extends GraphQLApiMap
         BackupsApi,
         LogsApi,
         MonitoringApi {
-  ServerApi({
-    required this.domainProvider,
-    this.tokenProvider,
-    this.hasLogger = false,
-  });
+  ServerApi({required final GraphQLTransport transport}) : super(transport);
 
-  final ServerDomainProvider domainProvider;
-  final ServerTokenProvider? tokenProvider;
-
-  @override
-  bool hasLogger;
-  @override
-  bool get isWithToken => tokenProvider != null;
-  @override
-  String get apiToken => tokenProvider?.call() ?? '';
-  @override
-  String? get rootAddress => domainProvider();
+  bool get isWithToken => transport.isAuthenticated;
+  String get apiToken => transport.token;
+  String? get rootAddress => transport.domain;
 
   Future<String?> getApiVersion() => _getApiVersion();
 
   Future<String?> _getApiVersion({
-    final TlsPolicy tlsPolicy = TlsPolicy.strict,
+    final GraphQLTransport? clientTransport,
   }) async {
     QueryResult<Query$GetApiVersion> response;
     String? apiVersion;
 
     try {
-      final GraphQLClient client = await getClient(tlsPolicy: tlsPolicy);
+      final GraphQLClient client =
+          clientTransport?.client() ?? await getClient();
       response = await client.query$GetApiVersion();
       if (response.hasException) {
         logger(
@@ -604,7 +591,10 @@ class ServerApi extends GraphQLApiMap
     if (await _getApiVersion() != null) {
       return ServerProbeResult.reachable;
     }
-    if (await _getApiVersion(tlsPolicy: TlsPolicy.allowUnverified) != null) {
+    if (await _getApiVersion(
+          clientTransport: transport.withTlsPolicy(TlsPolicy.allowUnverified),
+        ) !=
+        null) {
       return ServerProbeResult.untrustedCertificate;
     }
     return ServerProbeResult.unreachable;

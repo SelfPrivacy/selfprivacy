@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/pages/users/new_user.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
+import '../../../helpers/fixtures/graphql_fixtures.dart';
 import '../../../helpers/widget_harness.dart';
 
 class _MockApiConnectionRepository extends Mock
@@ -55,7 +55,7 @@ void main() {
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
-    final apiData = ApiData(ServerApi(domainProvider: () => null));
+    final apiData = ApiData(aServerApi());
     apiData.groups.data = const [];
     apiData.users.data = const [User.fake(login: 'alice')];
     when(() => repository.apiData).thenReturn(apiData);

@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
@@ -44,6 +45,16 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   final DiskSize initialStorage = DiskSize.fromGibibyte(10);
 
   static final logger = const AppLogger(name: 'server_installation_cubit').log;
+
+  ServerApi _serverApi({
+    required final GraphQLDomainProvider domainProvider,
+    final GraphQLTokenProvider? tokenProvider,
+  }) => ServerApi(
+    transport: createGraphQLTransport(
+      domainProvider: domainProvider,
+      tokenProvider: tokenProvider,
+    ),
+  );
 
   Future<void> load() async {
     final ServerInstallationState state = await repository.load();
@@ -518,11 +529,11 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         token,
         dataState.recoveryCapabilities,
       );
-      final ServerProviderType serverProvider = await ServerApi(
+      final ServerProviderType serverProvider = await _serverApi(
         domainProvider: () => serverDomain.domainName,
         tokenProvider: () => serverDetails.apiToken,
       ).getServerProviderType();
-      final dnsProvider = await ServerApi(
+      final dnsProvider = await _serverApi(
         domainProvider: () => serverDomain.domainName,
         tokenProvider: () => serverDetails.apiToken,
       ).getDnsProviderType();
@@ -715,7 +726,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       );
       return;
     }
-    final dnsProviderType = await ServerApi(
+    final dnsProviderType = await _serverApi(
       domainProvider: () => serverDomain.domainName,
       tokenProvider: () => dataState.serverDetails!.apiToken,
     ).getDnsProviderType();

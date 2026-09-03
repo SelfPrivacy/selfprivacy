@@ -5,6 +5,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -37,10 +38,19 @@ class ServerAuthorizationException implements Exception {
 
 typedef ServerApiFactory =
     ServerApi Function({
-      required ServerDomainProvider domainProvider,
-      bool hasLogger,
-      ServerTokenProvider? tokenProvider,
+      required GraphQLDomainProvider domainProvider,
+      GraphQLTokenProvider? tokenProvider,
     });
+
+ServerApi _createServerApi({
+  required final GraphQLDomainProvider domainProvider,
+  final GraphQLTokenProvider? tokenProvider,
+}) => ServerApi(
+  transport: createGraphQLTransport(
+    domainProvider: domainProvider,
+    tokenProvider: tokenProvider,
+  ),
+);
 
 typedef DeviceNameProvider = Future<String> Function();
 
@@ -48,7 +58,7 @@ class ServerInstallationRepository {
   ServerInstallationRepository({
     final ServerApiFactory? serverApi,
     final DeviceNameProvider? deviceName,
-  }) : _serverApi = serverApi ?? ServerApi.new,
+  }) : _serverApi = serverApi ?? _createServerApi,
        _deviceName = deviceName ?? (() => PlatformAdapter.deviceName);
 
   final ServerApiFactory _serverApi;

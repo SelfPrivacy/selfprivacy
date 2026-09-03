@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 import 'package:web_socket_channel/io.dart';
@@ -11,11 +10,8 @@ typedef GraphQLTokenProvider = String? Function();
 typedef GraphQLLocaleProvider = String Function();
 typedef ConsoleLogSink = void Function(ConsoleLog);
 
-void _addConsoleLog(final ConsoleLog message) =>
-    getIt.get<ConsoleModel>().log(message);
-
 class RequestLoggingLink extends Link {
-  RequestLoggingLink({final ConsoleLogSink consoleLog = _addConsoleLog})
+  RequestLoggingLink({required final ConsoleLogSink consoleLog})
     : _consoleLog = consoleLog;
 
   final ConsoleLogSink _consoleLog;
@@ -37,7 +33,7 @@ class RequestLoggingLink extends Link {
 }
 
 class ResponseLoggingParser extends ResponseParser {
-  ResponseLoggingParser({final ConsoleLogSink consoleLog = _addConsoleLog})
+  ResponseLoggingParser({required final ConsoleLogSink consoleLog})
     : _consoleLog = consoleLog;
 
   final ConsoleLogSink _consoleLog;
@@ -73,9 +69,9 @@ class GraphQLTransport {
     required this.domainProvider,
     required this.localeProvider,
     required this.tlsContext,
+    required this.consoleLog,
     this.tokenProvider,
     this.tlsPolicy = TlsPolicy.strict,
-    this.consoleLog = _addConsoleLog,
   });
 
   final GraphQLDomainProvider domainProvider;
@@ -99,12 +95,16 @@ class GraphQLTransport {
     consoleLog: consoleLog,
   );
 
-  GraphQLClient client() {
+  void _validateTlsPolicy() {
     if (tlsPolicy == TlsPolicy.allowUnverified && isAuthenticated) {
       throw StateError(
         'A token-bearing client must not opt out of certificate verification',
       );
     }
+  }
+
+  GraphQLClient client() {
+    _validateTlsPolicy();
 
     final httpLink = HttpLink(
       'https://$_host/graphql',
@@ -126,6 +126,7 @@ class GraphQLTransport {
   GraphQLClient subscriptionClient({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
   }) {
+    _validateTlsPolicy();
     final currentToken = token;
     final Map<String, dynamic>? headers = currentToken.isEmpty
         ? null

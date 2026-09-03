@@ -1,31 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_api_map.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 
 class _UsersApi extends GraphQLApiMap with UsersApi {
-  _UsersApi(this.client);
-
-  final GraphQLClient client;
-
-  @override
-  final String? rootAddress = 'example.test';
-
-  @override
-  final bool hasLogger = false;
-
-  @override
-  final bool isWithToken = false;
-
-  @override
-  final String apiToken = '';
-
-  @override
-  Future<GraphQLClient> getClient({
-    final TlsPolicy tlsPolicy = TlsPolicy.strict,
-  }) async => client;
+  _UsersApi(super.transport);
 }
+
+class _MockGraphQLTransport extends Mock implements GraphQLTransport {}
 
 GraphQLClient _clientReturning(final Map<String, dynamic> data) =>
     GraphQLClient(
@@ -35,6 +19,12 @@ GraphQLClient _clientReturning(final Map<String, dynamic> data) =>
             Stream.value(Response(data: data, response: const {})),
       ),
     );
+
+GraphQLTransport _transportReturning(final Map<String, dynamic> data) {
+  final transport = _MockGraphQLTransport();
+  when(transport.client).thenReturn(_clientReturning(data));
+  return transport;
+}
 
 Map<String, dynamic> _failedMutation(final String name) => {
   '__typename': 'Mutation',
@@ -53,8 +43,27 @@ Map<String, dynamic> _failedMutation(final String name) => {
 };
 
 void main() {
+  test('delegates subscription client creation to the transport', () async {
+    final transport = _MockGraphQLTransport();
+    final client = _clientReturning(const {});
+    Future<Duration?> onConnectionLost(
+      final int? code,
+      final String? reason,
+    ) async => null;
+    when(
+      () => transport.subscriptionClient(onConnectionLost: onConnectionLost),
+    ).thenReturn(client);
+
+    final api = _UsersApi(transport);
+
+    expect(
+      await api.getSubscriptionClient(onConnectionLost: onConnectionLost),
+      same(client),
+    );
+  });
+
   test('createUser preserves mutation failure', () async {
-    final api = _UsersApi(_clientReturning(_failedMutation('createUser')));
+    final api = _UsersApi(_transportReturning(_failedMutation('createUser')));
 
     final result = await api.createUser('alice', null, const []);
 
@@ -65,7 +74,7 @@ void main() {
   });
 
   test('updateUser preserves mutation failure', () async {
-    final api = _UsersApi(_clientReturning(_failedMutation('updateUser')));
+    final api = _UsersApi(_transportReturning(_failedMutation('updateUser')));
 
     final result = await api.updateUser('alice', null, const []);
 
@@ -76,7 +85,7 @@ void main() {
   });
 
   test('deleteUser preserves mutation failure', () async {
-    final api = _UsersApi(_clientReturning(_failedMutation('deleteUser')));
+    final api = _UsersApi(_transportReturning(_failedMutation('deleteUser')));
 
     final result = await api.deleteUser('alice');
 
@@ -87,7 +96,7 @@ void main() {
   });
 
   test('addSshKey preserves mutation failure', () async {
-    final api = _UsersApi(_clientReturning(_failedMutation('addSshKey')));
+    final api = _UsersApi(_transportReturning(_failedMutation('addSshKey')));
 
     final result = await api.addSshKey('alice', 'ssh-ed25519 key');
 

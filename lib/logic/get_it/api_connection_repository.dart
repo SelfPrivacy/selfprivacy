@@ -40,8 +40,10 @@ class ApiConnectionRepository {
     this.api =
         api ??
         ServerApi(
-          domainProvider: () => _server?.domain.domainName,
-          tokenProvider: () => _server?.hostingDetails.apiToken,
+          transport: createGraphQLTransport(
+            domainProvider: () => _server?.domain.domainName,
+            tokenProvider: () => _server?.hostingDetails.apiToken,
+          ),
         );
     _apiData = ApiData(this.api);
   }

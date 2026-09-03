@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
@@ -48,12 +49,17 @@ void main() {
       api: api,
     );
 
-    getIt.registerSingleton<DeveloperSettingsModel>(settings);
+    getIt
+      ..registerSingleton<ApiConfigModel>(ApiConfigModel())
+      ..registerSingleton<ConsoleModel>(ConsoleModel())
+      ..registerSingleton<DeveloperSettingsModel>(settings)
+      ..registerSingleton<TlsContext>(TlsContext(settings));
   });
 
   tearDown(() async {
     repository.dispose();
     await resourcesModel.dispose();
+    getIt<TlsContext>().reset();
     await getIt.reset();
     for (final name in [
       BNames.appSettingsBox,

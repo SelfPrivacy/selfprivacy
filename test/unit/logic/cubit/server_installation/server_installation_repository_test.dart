@@ -3,6 +3,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
@@ -51,9 +52,8 @@ void main() {
       deviceName: () async => 'Test device',
       serverApi:
           ({
-            required final ServerDomainProvider domainProvider,
-            final bool hasLogger = false,
-            final ServerTokenProvider? tokenProvider,
+            required final GraphQLDomainProvider domainProvider,
+            final GraphQLTokenProvider? tokenProvider,
           }) {
             lastFactoryCall = {
               'isWithToken': tokenProvider != null,

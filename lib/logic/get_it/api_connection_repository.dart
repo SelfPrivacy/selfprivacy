@@ -25,29 +25,38 @@ import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
+typedef ServerSelector = Server? Function();
+
 /// Repository for all API calls
 /// Stores the current state of all data from API and exposes it to Blocs.
 class ApiConnectionRepository {
+  ApiConnectionRepository({
+    required final ResourcesModel resourcesModel,
+    final ServerSelector? serverSelector,
+    final ServerApi? api,
+  }) : _resourcesModel = resourcesModel,
+       _serverSelector =
+           serverSelector ?? (() => resourcesModel.servers.firstOrNull) {
+    this.api =
+        api ??
+        ServerApi(
+          domainProvider: () => _server?.domain.domainName,
+          tokenProvider: () => _server?.hostingDetails.apiToken,
+        );
+    _apiData = ApiData(this.api);
+  }
+
   static final _log = const AppLogger(name: 'api_connection_repository').log;
 
-  Box box = Hive.box(BNames.serverInstallationBox);
-  final ServerApi api = ServerApi(
-    domainProvider: () =>
-        getIt<ResourcesModel>().servers.firstOrNull?.domain.domainName,
-    tokenProvider: () =>
-        getIt<ResourcesModel>().servers.firstOrNull?.hostingDetails.apiToken,
-  );
+  final ResourcesModel _resourcesModel;
+  final ServerSelector _serverSelector;
 
-  final ApiData _apiData = ApiData(
-    ServerApi(
-      domainProvider: () =>
-          getIt<ResourcesModel>().servers.firstOrNull?.domain.domainName,
-      tokenProvider: () =>
-          getIt<ResourcesModel>().servers.firstOrNull?.hostingDetails.apiToken,
-    ),
-  );
+  Box box = Hive.box(BNames.serverInstallationBox);
+  late final ServerApi api;
+  late final ApiData _apiData;
 
   ApiData get apiData => _apiData;
+  Server? get _server => _serverSelector();
 
   ConnectionStatus connectionStatus = ConnectionStatus.nonexistent;
 
@@ -351,18 +360,17 @@ class ApiConnectionRepository {
       });
 
   Future<(bool, String)> _refreshDeviceTokenImpl() async {
-    final List<Server> servers = getIt<ResourcesModel>().servers;
-    if (servers.isEmpty) {
+    final server = _server;
+    if (server == null) {
       return (false, 'jobs.generic_error'.tr());
     }
-    final Server server = servers.first;
 
     final GenericResult<String> result = await api.refreshDeviceApiToken();
     if (!result.success || result.data.isEmpty) {
       return (false, result.message ?? 'jobs.generic_error'.tr());
     }
 
-    await getIt<ResourcesModel>().updateServerByUuid(
+    await _resourcesModel.updateServerByUuid(
       Server(
         uuid: server.uuid,
         domain: server.domain,
@@ -397,10 +405,7 @@ class ApiConnectionRepository {
       return;
     }
     final DateTime now = DateTime.now();
-    final List<Server> servers = getIt<ResourcesModel>().servers;
-    final ServerHostingDetails? details = servers.isEmpty
-        ? null
-        : servers.first.hostingDetails;
+    final ServerHostingDetails? details = _server?.hostingDetails;
     final schedule = TokenRenewalSchedule.fromToken(
       token: details?.apiToken,
       rotatedAt: details?.apiTokenRotatedAt,
@@ -429,9 +434,8 @@ class ApiConnectionRepository {
     _timer?.cancel();
   }
 
-  ServerHostingDetails? get serverDetails =>
-      getIt<ResourcesModel>().serverDetails;
-  ServerDomain? get serverDomain => getIt<ResourcesModel>().serverDomain;
+  ServerHostingDetails? get serverDetails => _server?.hostingDetails;
+  ServerDomain? get serverDomain => _server?.domain;
 
   void _setStatus(final ConnectionStatus status) {
     connectionStatus = status;
@@ -439,7 +443,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> init() async {
-    if (getIt<ResourcesModel>().serverDetails == null) {
+    if (_server == null) {
       return;
     }
     _setStatus(ConnectionStatus.reconnecting);
@@ -550,7 +554,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> reload(final Timer? timer) async {
-    if (getIt<ResourcesModel>().serverDetails == null) {
+    if (_server == null) {
       return;
     }
 

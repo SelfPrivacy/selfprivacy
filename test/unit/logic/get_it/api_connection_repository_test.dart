@@ -13,13 +13,9 @@ import '../../../helpers/fixtures/server_fixtures.dart';
 class _MockServerApi extends Mock implements ServerApi {}
 
 class _ReloadTestRepository extends ApiConnectionRepository {
-  _ReloadTestRepository(this.testApi);
+  _ReloadTestRepository({required super.resourcesModel, required super.api});
 
-  final ServerApi testApi;
   int refreshCount = 0;
-
-  @override
-  ServerApi get api => testApi;
 
   @override
   Future<(bool, String)> refreshDeviceToken() async {
@@ -47,11 +43,12 @@ void main() {
     await resourcesModel.addServer(aServer());
     api = _MockServerApi();
     when(() => api.getApiVersion()).thenAnswer((_) async => '0.0.0');
-    repository = _ReloadTestRepository(api);
+    repository = _ReloadTestRepository(
+      resourcesModel: resourcesModel,
+      api: api,
+    );
 
-    getIt
-      ..registerSingleton<DeveloperSettingsModel>(settings)
-      ..registerSingleton<ResourcesModel>(resourcesModel);
+    getIt.registerSingleton<DeveloperSettingsModel>(settings);
   });
 
   tearDown(() async {
@@ -104,5 +101,70 @@ void main() {
 
     expect(result.$1, isTrue);
     expect((await emittedData).users.data, [updatedUser]);
+  });
+
+  test('the server selector scopes connection values', () async {
+    await resourcesModel.addServer(
+      aServer(
+        uuid: 'second-server',
+        domain: aServerDomain(domainName: 'second.example'),
+        hostingDetails: aServerHostingDetails(apiToken: 'second-token'),
+      ),
+    );
+    final selectedRepository = ApiConnectionRepository(
+      resourcesModel: resourcesModel,
+      serverSelector: () => resourcesModel.servers.firstWhere(
+        (final server) => server.uuid == 'second-server',
+      ),
+    );
+    addTearDown(selectedRepository.dispose);
+
+    expect(selectedRepository.serverDomain?.domainName, 'second.example');
+    expect(selectedRepository.api.rootAddress, 'second.example');
+    expect(selectedRepository.api.apiToken, 'second-token');
+
+    await resourcesModel.updateServerByUuid(
+      aServer(
+        uuid: 'second-server',
+        domain: aServerDomain(domainName: 'second.example'),
+        hostingDetails: aServerHostingDetails(apiToken: 'rotated-token'),
+      ),
+    );
+
+    expect(selectedRepository.api.apiToken, 'rotated-token');
+  });
+
+  test('token rotation updates only the selected server', () async {
+    await resourcesModel.addServer(
+      aServer(
+        uuid: 'second-server',
+        domain: aServerDomain(domainName: 'second.example'),
+        hostingDetails: aServerHostingDetails(apiToken: 'second-token'),
+      ),
+    );
+    final selectedApi = _MockServerApi();
+    when(selectedApi.refreshDeviceApiToken).thenAnswer(
+      (_) async => GenericResult(success: true, data: 'rotated-token'),
+    );
+    final selectedRepository = ApiConnectionRepository(
+      resourcesModel: resourcesModel,
+      serverSelector: () => resourcesModel.servers.firstWhere(
+        (final server) => server.uuid == 'second-server',
+      ),
+      api: selectedApi,
+    );
+    addTearDown(selectedRepository.dispose);
+
+    final result = await selectedRepository.refreshDeviceToken();
+
+    expect(result.$1, isTrue);
+    expect(resourcesModel.servers.first.hostingDetails.apiToken, 'api-token');
+    expect(
+      resourcesModel.servers
+          .firstWhere((final server) => server.uuid == 'second-server')
+          .hostingDetails
+          .apiToken,
+      'rotated-token',
+    );
   });
 }

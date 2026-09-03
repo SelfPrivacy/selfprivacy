@@ -18,6 +18,7 @@ final GetIt getIt = GetIt.instance;
 Future<void> getItSetup() async {
   final developerSettings = DeveloperSettingsModel();
   final tlsContext = TlsContext(developerSettings);
+  final resourcesModel = ResourcesModel()..init();
   await tlsContext.loadStagingRoots();
 
   getIt
@@ -26,7 +27,7 @@ Future<void> getItSetup() async {
     ..registerSingleton<NavigationService>(NavigationService())
     ..registerSingleton<ConsoleModel>(ConsoleModel())
     ..registerSingleton<ResourcesModel>(
-      ResourcesModel()..init(),
+      resourcesModel,
       dispose: (final ResourcesModel model) => model.dispose(),
     )
     ..registerSingleton<WizardDataModel>(WizardDataModel()..init());
@@ -36,7 +37,7 @@ Future<void> getItSetup() async {
     ..registerSingleton<ApiConfigModel>(apiConfigModel)
     ..registerSingleton<ApiConnectionRepository>(
       // ignore: unawaited_futures
-      ApiConnectionRepository()..init(),
+      ApiConnectionRepository(resourcesModel: resourcesModel)..init(),
     );
 
   await getIt.allReady();

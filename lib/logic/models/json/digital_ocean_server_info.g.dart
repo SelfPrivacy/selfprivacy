@@ -8,13 +8,17 @@ part of 'digital_ocean_server_info.dart';
 
 DigitalOceanVolume _$DigitalOceanVolumeFromJson(Map<String, dynamic> json) =>
     DigitalOceanVolume(
-      json['id'] as String,
-      json['name'] as String,
-      (json['size_gigabytes'] as num).toInt(),
+      json['id'] as String?,
+      json['name'] as String?,
+      (json['size_gigabytes'] as num?)?.toInt(),
       (json['droplet_ids'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
-      DigitalOceanLocation.fromJson(json['region'] as Map<String, dynamic>),
+      json['region'] == null
+          ? null
+          : DigitalOceanLocation.fromJson(
+              json['region'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$DigitalOceanVolumeToJson(DigitalOceanVolume instance) =>

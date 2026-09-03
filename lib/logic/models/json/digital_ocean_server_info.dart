@@ -12,16 +12,16 @@ class DigitalOceanVolume {
     this.region,
   );
 
-  final String id;
-  final String name;
+  final String? id;
+  final String? name;
 
   @JsonKey(name: 'droplet_ids')
   final List<int>? dropletIds;
 
   @JsonKey(name: 'size_gigabytes')
-  final int sizeGigabytes;
+  final int? sizeGigabytes;
 
-  final DigitalOceanLocation region;
+  final DigitalOceanLocation? region;
 
   static DigitalOceanVolume fromJson(final Map<String, dynamic> json) =>
       _$DigitalOceanVolumeFromJson(json);

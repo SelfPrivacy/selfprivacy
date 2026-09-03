@@ -10,7 +10,27 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider_fac
 import '../../../helpers/fixtures/json_fixture.dart';
 
 class _DigitalOceanClientFactory {
+  _DigitalOceanClientFactory({this.volume});
+
+  final Map<String, dynamic>? volume;
   final List<RequestOptions> requests = [];
+
+  Map<String, dynamic> get _volume =>
+      volume ??
+      loadJsonFixtureItem(
+        'server_providers/digital_ocean/volumes.json',
+        'volumes',
+      );
+
+  Map<String, dynamic> get _volumesResponse {
+    final response = loadJsonFixture(
+      'server_providers/digital_ocean/volumes.json',
+    );
+    if (volume != null) {
+      response['volumes'] = [_volume];
+    }
+    return response;
+  }
 
   Dio call(final BaseOptions options) => Dio(options)
     ..interceptors.add(
@@ -28,23 +48,12 @@ class _DigitalOceanClientFactory {
                     _response(
                       request,
                       statusCode: 201,
-                      data: {
-                        'volume': loadJsonFixtureItem(
-                          'server_providers/digital_ocean/volumes.json',
-                          'volumes',
-                        ),
-                      },
+                      data: {'volume': _volume},
                     ),
                   );
                 case ('GET', '/volumes'):
                   handler.resolve(
-                    _response(
-                      request,
-                      statusCode: 200,
-                      data: loadJsonFixture(
-                        'server_providers/digital_ocean/volumes.json',
-                      ),
-                    ),
+                    _response(request, statusCode: 200, data: _volumesResponse),
                   );
                 case ('GET', '/sizes'):
                   handler.resolve(
@@ -177,6 +186,65 @@ void main() {
       final requestData = createRequest.data as Map<String, dynamic>;
       expect(requestData['size_gigabytes'], 10);
     });
+
+    testWidgets(
+      'preserves creation details when the response volume is incomplete',
+      (final tester) async {
+        final incompleteVolume = Map<String, dynamic>.from(
+          loadJsonFixtureItem(
+            'server_providers/digital_ocean/volumes.json',
+            'volumes',
+          ),
+        )..remove('region');
+        final clients = _DigitalOceanClientFactory(volume: incompleteVolume);
+        final provider = _provider(clients);
+
+        final resultFuture = provider.createVolume(10, 'nyc1');
+
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 6));
+        final result = await resultFuture;
+
+        expect(result.success, isFalse);
+        expect(result.wasCreated, isTrue);
+        expect(result.resourceId, '7724db7c-e098-11e5-b522-000f53304e51');
+        expect(result.data, isNull);
+        expect(result.message, 'DigitalOcean returned an incomplete volume.');
+        expect(clients.requests, hasLength(1));
+      },
+    );
+  });
+
+  test('getVolumes fails when a volume is incomplete', () async {
+    final incompleteVolume = Map<String, dynamic>.from(
+      loadJsonFixtureItem(
+        'server_providers/digital_ocean/volumes.json',
+        'volumes',
+      ),
+    )..remove('size_gigabytes');
+    final clients = _DigitalOceanClientFactory(volume: incompleteVolume);
+
+    final result = await _provider(clients).getVolumes();
+
+    expect(result.success, isFalse);
+    expect(result.data, isEmpty);
+    expect(result.message, contains('incomplete volume'));
+  });
+
+  test('getMetadata fails when its volume is incomplete', () async {
+    final incompleteVolume = Map<String, dynamic>.from(
+      loadJsonFixtureItem(
+        'server_providers/digital_ocean/volumes.json',
+        'volumes',
+      ),
+    )..remove('size_gigabytes');
+    final clients = _DigitalOceanClientFactory(volume: incompleteVolume);
+
+    final result = await _provider(clients).getMetadata('7', 'nyc1');
+
+    expect(result.success, isFalse);
+    expect(result.data, isEmpty);
+    expect(result.message, contains('incomplete volume'));
   });
 
   test('getServers exposes provider IDs as strings', () async {

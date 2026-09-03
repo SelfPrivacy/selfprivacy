@@ -592,18 +592,29 @@ class DigitalOceanServerProvider extends ServerProvider {
     try {
       int id = 0;
       for (final rawVolume in result.data) {
-        final String volumeName = rawVolume.name;
+        final String? volumeUuid = rawVolume.id;
+        final String? volumeName = rawVolume.name;
+        final int? sizeGigabytes = rawVolume.sizeGigabytes;
+        final DigitalOceanLocation? region = rawVolume.region;
+        if (volumeUuid == null ||
+            volumeName == null ||
+            sizeGigabytes == null ||
+            region == null) {
+          throw const FormatException(
+            'DigitalOcean returned an incomplete volume.',
+          );
+        }
         final volume = ServerProviderVolume(
           id: id++,
           name: volumeName,
-          sizeByte: rawVolume.sizeGigabytes * 1024 * 1024 * 1024,
+          sizeByte: sizeGigabytes * 1024 * 1024 * 1024,
           serverId:
               (rawVolume.dropletIds != null && rawVolume.dropletIds!.isNotEmpty)
               ? rawVolume.dropletIds![0].toString()
               : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
-          uuid: rawVolume.id,
-          location: rawVolume.region.slug,
+          uuid: volumeUuid,
+          location: region.slug,
         );
         volumes.add(volume);
       }
@@ -635,6 +646,24 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
+    final String? volumeUuid = result.data!.id;
+    final String? volumeName = result.data!.name;
+    final int? sizeGigabytes = result.data!.sizeGigabytes;
+    final DigitalOceanLocation? region = result.data!.region;
+    if (volumeUuid == null ||
+        volumeName == null ||
+        sizeGigabytes == null ||
+        region == null) {
+      return ResourceCreationResult(
+        data: null,
+        success: false,
+        wasCreated: result.wasCreated,
+        resourceId: result.resourceId,
+        code: result.code,
+        message: 'DigitalOcean returned an incomplete volume.',
+      );
+    }
+
     final getVolumesResult = await _adapter.api().getVolumes();
 
     if (!getVolumesResult.success || getVolumesResult.data.isEmpty) {
@@ -648,14 +677,14 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final String volumeName = result.data!.name;
     volume = ServerProviderVolume(
       id: getVolumesResult.data.length,
       name: volumeName,
-      sizeByte: result.data!.sizeGigabytes * 1024 * 1024 * 1024,
+      sizeByte: sizeGigabytes * 1024 * 1024 * 1024,
       serverId: null,
       linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
-      uuid: result.data!.id,
+      uuid: volumeUuid,
+      location: region.slug,
     );
 
     return ResourceCreationResult(
@@ -768,6 +797,15 @@ class DigitalOceanServerProvider extends ServerProvider {
       final volume = volumes.firstWhere(
         (final volume) => droplet['volume_ids'].contains(volume.id),
       );
+      if (volume.id == null ||
+          volume.name == null ||
+          volume.sizeGigabytes == null ||
+          volume.region == null) {
+        throw const FormatException(
+          'DigitalOcean returned an incomplete volume.',
+        );
+      }
+      final int volumeSizeGigabytes = volume.sizeGigabytes!;
 
       metadata = [
         ServerMetadataEntity(
@@ -794,7 +832,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           type: MetadataType.cost,
           trId: 'server.monthly_cost',
           value:
-              '${droplet['size']['price_monthly']} + ${(volume.sizeGigabytes * pricePerGb.value).toStringAsFixed(2)} ${currency.shortcode}',
+              '${droplet['size']['price_monthly']} + ${(volumeSizeGigabytes * pricePerGb.value).toStringAsFixed(2)} ${currency.shortcode}',
         ),
         ServerMetadataEntity(
           type: MetadataType.location,

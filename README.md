@@ -94,7 +94,7 @@ nix run .#widgetbook                             # open the catalog
 nix run .#generate-widgetbook                    # regenerate after editing use cases
 nix run .#test-widgetbook                        # compare goldens and run catalog checks
 nix run .#test-widgetbook -- --update-goldens    # generate baselines for review
-nix run .#build-widgetbook                       # build the standalone Linux catalog
+nix build .#widgetbook                           # build the standalone Linux catalog
 ```
 
 Add meaningful use cases with every new public component. Keep one component per file under `tool/widgetbook/use_cases`, mirroring the production folders, and use `@UseCase` annotations with shared fixtures. Regenerate the directory file rather than editing it. The default `PreviewHost.content` captures natural height; use `PreviewHost.screen` for full-screen layouts instead of adjusting card heights.

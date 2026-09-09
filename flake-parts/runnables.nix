@@ -9,30 +9,6 @@
       sp,
       ...
     }:
-    let
-      linuxLibraries = lib.closePropagation sp.buildLibs;
-      mkWidgetbookCommand =
-        name: command:
-        pkgs.writeShellApplication {
-          inherit name;
-          runtimeInputs = sp.buildTools ++ [ pkgs.xdg-user-dirs ];
-          runtimeEnv = {
-            FLUTTER_ROOT = "${sp.ourFlutter}";
-            FLUTTER_NO_ANALYTICS = "1";
-            CI = "true";
-            TZ = "UTC";
-            PKG_CONFIG_PATH =
-              lib.makeSearchPathOutput "dev" "lib/pkgconfig" linuxLibraries
-              + ":"
-              + lib.makeSearchPathOutput "dev" "share/pkgconfig" linuxLibraries;
-            LD_LIBRARY_PATH = lib.makeLibraryPath linuxLibraries;
-          };
-          text = ''
-            exec flutter ${command} --target tool/widgetbook/main.dart "$@"
-          '';
-          meta.platforms = lib.platforms.linux;
-        };
-    in
     {
 
       # Converts a list of runnable names into Nix applications to `nix run`
@@ -42,12 +18,13 @@
       });
 
       packages = with pkgs; {
-        widgetbook = mkWidgetbookCommand "widgetbook" "run -d linux";
-        build-widgetbook = mkWidgetbookCommand "build-widgetbook" "build linux";
-
         generate-widgetbook = pkgs.writeShellApplication {
           name = "generate-widgetbook";
-          runtimeInputs = sp.testTools;
+          runtimeInputs = sp.testTools ++ [
+            git
+            bash
+            coreutils
+          ];
           runtimeEnv = {
             FLUTTER_ROOT = "${sp.ourFlutter}";
             FLUTTER_NO_ANALYTICS = "1";

@@ -28,7 +28,7 @@ jobs:
           nix run .#generate-widgetbook
           git diff --exit-code -- tool/widgetbook/main.directories.g.dart
       - name: Build Linux catalog
-        run: nix run .#build-widgetbook
+        run: nix build .#widgetbook
 
   tests-and-sonar:
     runs-on:

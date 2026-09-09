@@ -109,7 +109,6 @@
         # `nix run` applications
         runnables = [
           "widgetbook"
-          "build-widgetbook"
           "generate-widgetbook"
           "test-widgetbook"
           "test-flutter"

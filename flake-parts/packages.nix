@@ -16,6 +16,8 @@
 
           flutter-deps = callPackage ./packages/flutter-deps.nix { inherit sp; };
 
+          widgetbook = callPackage ./packages/widgetbook.nix { inherit sp; };
+
           linux-nix = callPackage ./packages/linux-nix.nix { inherit sp; };
           linux-generic = callPackage ./packages/linux-generic.nix { inherit sp; };
           linux-portable = callPackage ./packages/linux-portable.nix { inherit sp; };

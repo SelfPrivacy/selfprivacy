@@ -8,9 +8,15 @@ import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
 import 'package:selfprivacy/utils/extensions/duration.dart';
 
 class TokenRenewalSubtitle extends StatefulWidget {
-  const TokenRenewalSubtitle({required this.resourcesModel, super.key});
+  const TokenRenewalSubtitle({
+    required this.resourcesModel,
+    this.now = DateTime.now,
+    super.key,
+  });
 
   final ResourcesModel resourcesModel;
+
+  final DateTime Function() now;
 
   @override
   State<TokenRenewalSubtitle> createState() => _TokenRenewalSubtitleState();
@@ -60,7 +66,7 @@ class _TokenRenewalSubtitleState extends State<TokenRenewalSubtitle> {
   });
 
   String _scheduledRenewal(final DateTime renewalAt) {
-    final now = DateTime.now();
+    final now = widget.now();
     if (renewalAt.isAfter(now)) {
       return 'developer_settings.token_renewal_next'.tr(
         args: [_relativeDuration(renewalAt.difference(now))],

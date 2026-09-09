@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,46 +46,46 @@ class _BrandFabState extends State<BrandFab>
       end: Theme.of(context).colorScheme.primary,
     ).animate(_animationController);
 
+    final icon = AnimatedBuilder(
+      animation: _colorTween,
+      builder: (final BuildContext context, final Widget? child) {
+        final double v = _animationController.value;
+        return Transform.scale(
+          scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
+          child: Icon(
+            v > 0.5 ? Ionicons.flash : Ionicons.flash_outline,
+            color: _colorTween.value,
+          ),
+        );
+      },
+    );
+    Future<void> openJobs() => showModalJobsSheet(context: context);
+
     return BlocListener<JobsCubit, JobsState>(
       listener: (final BuildContext context, final JobsState state) {
         if (wasPrevStateIsEmpty && state is! JobsStateEmpty) {
           wasPrevStateIsEmpty = false;
-          _animationController.forward();
+          unawaited(_animationController.forward());
         } else if (!wasPrevStateIsEmpty && state is JobsStateEmpty) {
           wasPrevStateIsEmpty = true;
 
-          _animationController.reverse();
+          unawaited(_animationController.reverse());
         }
       },
-      child: FloatingActionButton(
-        onPressed: () async {
-          await showModalJobsSheet(context: context);
-        },
-        isExtended: widget.extended,
-        tooltip: 'jobs.title'.tr(),
-        elevation: widget.elevation,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedBuilder(
-              animation: _colorTween,
-              builder: (final BuildContext context, final Widget? child) {
-                final double v = _animationController.value;
-                final IconData icon = v > 0.5
-                    ? Ionicons.flash
-                    : Ionicons.flash_outline;
-                return Transform.scale(
-                  scale: 1 + (v < 0.5 ? v : 1 - v) * 2,
-                  child: Icon(icon, color: _colorTween.value),
-                );
-              },
+      child: widget.extended
+          ? FloatingActionButton.extended(
+              onPressed: openJobs,
+              tooltip: 'jobs.title'.tr(),
+              elevation: widget.elevation,
+              icon: icon,
+              label: Text('jobs.title'.tr()),
+            )
+          : FloatingActionButton(
+              onPressed: openJobs,
+              tooltip: 'jobs.title'.tr(),
+              elevation: widget.elevation,
+              child: icon,
             ),
-            if (widget.extended) const SizedBox(width: 8),
-            if (widget.extended) Text('jobs.title'.tr()),
-          ],
-        ),
-      ),
     );
   }
 }

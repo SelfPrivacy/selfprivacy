@@ -19,19 +19,42 @@ class BrandMarkdown extends StatefulWidget {
 class _BrandMarkdownState extends State<BrandMarkdown> {
   String _mdContent = '';
 
+  String? _loadedPath;
+
   @override
-  void initState() {
-    super.initState();
-    unawaited(_loadMdFile());
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadIfChanged();
   }
 
-  Future<void> _loadMdFile() async {
-    final String mdFromFile = await rootBundle.loadString(
-      'assets/markdown/${widget.fileName}-${'locale'.tr()}.md',
-    );
-    setState(() {
-      _mdContent = mdFromFile;
-    });
+  @override
+  void didUpdateWidget(final BrandMarkdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _loadIfChanged();
+  }
+
+  void _loadIfChanged() {
+    final locale = context.locale;
+    final path = 'assets/markdown/${widget.fileName}-${locale.languageCode}.md';
+    if (path == _loadedPath) {
+      return;
+    }
+    _loadedPath = path;
+    unawaited(_loadMdFile(path));
+  }
+
+  Future<void> _loadMdFile(final String path) async {
+    String content;
+    try {
+      content = await rootBundle.loadString(path);
+    } on FlutterError {
+      content = await rootBundle.loadString(
+        'assets/markdown/${widget.fileName}-en.md',
+      );
+    }
+    if (mounted && path == _loadedPath) {
+      setState(() => _mdContent = content);
+    }
   }
 
   @override

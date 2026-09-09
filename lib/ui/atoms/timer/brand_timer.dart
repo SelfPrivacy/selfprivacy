@@ -8,11 +8,14 @@ class BrandTimer extends StatefulWidget {
   const BrandTimer({
     required this.startDateTime,
     required this.duration,
+    this.now = DateTime.now,
     super.key,
   });
 
   final DateTime startDateTime;
   final Duration duration;
+
+  final DateTime Function() now;
 
   @override
   State<BrandTimer> createState() => _BrandTimerState();
@@ -31,9 +34,7 @@ class _BrandTimerState extends State<BrandTimer> {
   void _timerStart() {
     _timeString = differenceFromStart;
     timer = Timer.periodic(const Duration(seconds: 1), (final Timer t) {
-      final Duration timePassed = DateTime.now().difference(
-        widget.startDateTime,
-      );
+      final Duration timePassed = widget.now().difference(widget.startDateTime);
       if (timePassed > widget.duration) {
         t.cancel();
       } else {
@@ -67,7 +68,7 @@ class _BrandTimerState extends State<BrandTimer> {
   }
 
   String get differenceFromStart =>
-      _durationToString(DateTime.now().difference(widget.startDateTime));
+      _durationToString(widget.now().difference(widget.startDateTime));
 
   String _durationToString(final Duration duration) {
     final Duration timeLeft = widget.duration - duration;

@@ -30,6 +30,10 @@ abstract class AppThemeFactory {
 
     final ColorScheme colorScheme = dynamicColorsScheme ?? fallbackColorScheme;
 
+    return fromColorScheme(colorScheme);
+  }
+
+  static ThemeData fromColorScheme(final ColorScheme colorScheme) {
     final Typography appTypography = Typography.material2021();
 
     final ThemeData materialThemeData = ThemeData(

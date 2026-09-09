@@ -69,12 +69,14 @@ class NetworkChart extends GenericLineChart {
   }
 
   @override
-  double getMaxY() =>
-      [
-        ...data[0].map((final e) => e.value),
-        ...data[1].map((final e) => e.value),
-      ].reduce(max) *
-      1.2;
+  double getMaxY() => max(
+    1,
+    [
+          ...data[0].map((final e) => e.value),
+          ...data[1].map((final e) => e.value),
+        ].reduce(max) *
+        1.2,
+  );
 
   @override
   LineTooltipItem generateTooltipItem({

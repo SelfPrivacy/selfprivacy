@@ -48,6 +48,10 @@
         generate-widgetbook = pkgs.writeShellApplication {
           name = "generate-widgetbook";
           runtimeInputs = sp.testTools;
+          runtimeEnv = {
+            FLUTTER_ROOT = "${sp.ourFlutter}";
+            FLUTTER_NO_ANALYTICS = "1";
+          };
           text = ''
             dart run build_runner build "$@"
           '';
@@ -157,7 +161,7 @@
 
             SONAR_PARAMS="-Dsonar.projectKey=SelfPrivacy-Flutter-App"
             SONAR_PARAMS="$SONAR_PARAMS -Dsonar.sources=lib"
-            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.tests=test"
+            SONAR_PARAMS="$SONAR_PARAMS -Dsonar.tests=test,tool/widgetbook"
             SONAR_PARAMS="$SONAR_PARAMS -Dsonar.host.url=https://analyzer.selfprivacy.org"
             SONAR_PARAMS="$SONAR_PARAMS -Dsonar.token=$SONAR_TOKEN"
             SONAR_PARAMS="$SONAR_PARAMS -Dsonar.dart.lcov.reportPaths=coverage/lcov.info"
@@ -172,10 +176,10 @@
               SONAR_PARAMS="$SONAR_PARAMS -Dsonar.branch.name=$SONAR_BRANCH_NAME"
             fi
 
+            set +e
             # shellcheck disable=SC2086
             sonar-scanner $SONAR_PARAMS 2>&1 \
-              | grep --line-buffered -v 'File not included in SonarQube' \
-              || true
+              | grep --line-buffered -v 'File not included in SonarQube'
             exit "''${PIPESTATUS[0]}"
           '';
         };

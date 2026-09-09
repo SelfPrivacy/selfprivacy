@@ -33,6 +33,8 @@
 .pub/
 **/build/
 coverage/
+tests.output
+test/widgetbook/**/failures/
 
 # Android related
 **/android/**/gradle-wrapper.jar

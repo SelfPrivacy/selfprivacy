@@ -16,10 +16,11 @@ class _NavigationDrawer extends SubrouteSelector {
       selectedIndex: getActiveIndex(context),
       onDestinationSelected: openSubpage(context),
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: BrandFab(extended: true),
-        ),
+        if (showFab)
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: BrandFab(extended: true),
+          ),
         const SizedBox(height: 16),
         for (final destination in subroutes)
           NavigationDrawerDestination(

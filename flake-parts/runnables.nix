@@ -9,6 +9,30 @@
       sp,
       ...
     }:
+    let
+      linuxLibraries = lib.closePropagation sp.buildLibs;
+      mkWidgetbookCommand =
+        name: command:
+        pkgs.writeShellApplication {
+          inherit name;
+          runtimeInputs = sp.buildTools ++ [ pkgs.xdg-user-dirs ];
+          runtimeEnv = {
+            FLUTTER_ROOT = "${sp.ourFlutter}";
+            FLUTTER_NO_ANALYTICS = "1";
+            CI = "true";
+            TZ = "UTC";
+            PKG_CONFIG_PATH =
+              lib.makeSearchPathOutput "dev" "lib/pkgconfig" linuxLibraries
+              + ":"
+              + lib.makeSearchPathOutput "dev" "share/pkgconfig" linuxLibraries;
+            LD_LIBRARY_PATH = lib.makeLibraryPath linuxLibraries;
+          };
+          text = ''
+            exec flutter ${command} --target tool/widgetbook/main.dart "$@"
+          '';
+          meta.platforms = lib.platforms.linux;
+        };
+    in
     {
 
       # Converts a list of runnable names into Nix applications to `nix run`
@@ -18,6 +42,26 @@
       });
 
       packages = with pkgs; {
+        widgetbook = mkWidgetbookCommand "widgetbook" "run -d linux";
+        build-widgetbook = mkWidgetbookCommand "build-widgetbook" "build linux";
+
+        generate-widgetbook = pkgs.writeShellApplication {
+          name = "generate-widgetbook";
+          runtimeInputs = sp.testTools;
+          text = ''
+            dart run build_runner build "$@"
+          '';
+        };
+
+        test-widgetbook = pkgs.writeShellApplication {
+          name = "test-widgetbook";
+          runtimeInputs = sp.testTools;
+          text = ''
+            export TZ=UTC
+            flutter test test/widgetbook "$@"
+          '';
+        };
+
         # Generic runnables
         test-flutter = pkgs.writeShellApplication {
           name = "test-flutter";
@@ -25,6 +69,7 @@
           # --machine emits JSON to stdout for sonar-flutter's Flutter unit
           # tests sensor; --coverage writes coverage/lcov.info.
           text = ''
+            export TZ=UTC
             flutter test --machine --coverage > tests.output
           '';
         };

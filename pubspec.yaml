@@ -61,6 +61,7 @@ dependencies:
 #  wakelock: ^0.6.2 # TODO: Developer is not available, update later.
 
 dev_dependencies:
+  analyzer: ^10.0.1
   auto_route_generator: ^10.4.0
   build_runner: ^2.14.1
   cupertino_icons: ^1.0.9
@@ -77,6 +78,9 @@ dev_dependencies:
     git:
       url: https://git.selfprivacy.org/SelfPrivacy/sp_vcr.git
       ref: 0.1.0
+  widgetbook: 3.21.0
+  widgetbook_annotation: 3.10.0
+  widgetbook_generator: 3.21.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

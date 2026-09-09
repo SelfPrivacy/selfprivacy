@@ -26,6 +26,7 @@
             ../selfprivacy.desktop
             ../selfprivacy.metainfo.xml
             ../test
+            ../tool/widgetbook
           ];
         };
 
@@ -107,6 +108,10 @@
 
         # `nix run` applications
         runnables = [
+          "widgetbook"
+          "build-widgetbook"
+          "generate-widgetbook"
+          "test-widgetbook"
           "test-flutter"
           "record-vcr"
           "analyze-flutter"

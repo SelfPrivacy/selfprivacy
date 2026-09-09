@@ -1,6 +1,13 @@
 targets:
   $default:
+    sources:
+      - "$package$"
+      - "lib/**"
+      - "test/**"
+      - "tool/**"
     builders:
+      widgetbook_generator:telemetry:
+        enabled: false
       graphql_codegen:
         options:
           scalars:

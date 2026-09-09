@@ -9,8 +9,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "93.0.0"
-  analyzer:
+  accessibility_tools:
     dependency: transitive
+    description:
+      name: accessibility_tools
+      sha256: "088cfe6d3520dbe86bb5259059c0d5f478fe113e09311023b0485e68879b34b2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.1"
+  analyzer:
+    dependency: "direct dev"
     description:
       name: analyzer
       sha256: de7148ed2fcec579b19f122c1800933dfa028f6d9fd38a152b04b1516cec120b
@@ -281,6 +289,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.12"
+  device_frame_plus:
+    dependency: transitive
+    description:
+      name: device_frame_plus
+      sha256: ccc94abccd4d9f0a9f19ef239001b3a59896e678ad42601371d7065889f2bf78
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   device_info_plus:
     dependency: "direct main"
     description:
@@ -717,6 +733,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
+  inspector:
+    dependency: transitive
+    description:
+      name: inspector
+      sha256: a01ea538b15947a9189835cc910041bab91aea3ad7c421684118aa1040189ded
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   intl:
     dependency: "direct main"
     description:
@@ -1109,6 +1133,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  resizable_widget:
+    dependency: transitive
+    description:
+      name: resizable_widget
+      sha256: db2919754b93f386b9b3fb15e9f48f6c9d6d41f00a24397629133c99df86606a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   rxdart:
     dependency: transitive
     description:
@@ -1467,6 +1499,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  widgetbook:
+    dependency: "direct dev"
+    description:
+      name: widgetbook
+      sha256: "1877019a90c514c69be049255801487ef22fe0a86c33f81fd82c80cabe86d886"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.21.0"
+  widgetbook_annotation:
+    dependency: "direct dev"
+    description:
+      name: widgetbook_annotation
+      sha256: c074bcb262e32bfd62038557fd5ed51e88f4d14e24447ed60fa5e57854941dbb
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.0"
+  widgetbook_generator:
+    dependency: "direct dev"
+    description:
+      name: widgetbook_generator
+      sha256: f615ad0d5052a4cf25e3d8b51d7f3d4191879958ba4bd09c326b2e36ae5b904c
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.21.0"
   win32:
     dependency: transitive
     description:

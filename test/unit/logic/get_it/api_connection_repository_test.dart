@@ -102,6 +102,44 @@ void main() {
     expect(repository.refreshCount, 1);
   });
 
+  test('an authentication failure publishes unauthorized once', () async {
+    final connectedRepository = ApiConnectionRepository(
+      resourcesModel: resourcesModel,
+    );
+    addTearDown(connectedRepository.dispose);
+    final statuses = <ConnectionStatus>[];
+    final subscription = connectedRepository.connectionStatusStream.listen(
+      statuses.add,
+    );
+    addTearDown(subscription.cancel);
+
+    connectedRepository.api.transport.onAuthFailure?.call();
+    connectedRepository.api.transport.onAuthFailure?.call();
+    await pumpEventQueue();
+
+    expect(
+      connectedRepository.currentConnectionStatus,
+      ConnectionStatus.unauthorized,
+    );
+    expect(statuses, [ConnectionStatus.unauthorized]);
+  });
+
+  test('reload does not overwrite an unauthorized status', () async {
+    repository.connectionStatus = ConnectionStatus.unauthorized;
+
+    await repository.reload(null);
+
+    expect(repository.currentConnectionStatus, ConnectionStatus.unauthorized);
+  });
+
+  test('initialization can reconnect after token recovery', () async {
+    repository.connectionStatus = ConnectionStatus.unauthorized;
+
+    await repository.init();
+
+    expect(repository.currentConnectionStatus, ConnectionStatus.connected);
+  });
+
   test('an updated user is published to data listeners', () async {
     const originalUser = User.fake(login: 'user', displayName: 'Alex');
     const updatedUser = User.fake(login: 'user', displayName: 'Luna');

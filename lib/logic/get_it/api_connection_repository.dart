@@ -43,6 +43,7 @@ class ApiConnectionRepository {
           transport: createGraphQLTransport(
             domainProvider: () => _server?.domain.domainName,
             tokenProvider: () => _server?.hostingDetails.apiToken,
+            onAuthFailure: _handleAuthFailure,
           ),
         );
     _apiData = ApiData(this.api);
@@ -444,6 +445,12 @@ class ApiConnectionRepository {
     _connectionStatusStream.add(status);
   }
 
+  void _handleAuthFailure() {
+    if (connectionStatus != ConnectionStatus.unauthorized) {
+      _setStatus(ConnectionStatus.unauthorized);
+    }
+  }
+
   Future<void> init() async {
     if (_server == null) {
       return;
@@ -586,7 +593,9 @@ class ApiConnectionRepository {
       await _connectJobsStream(apiVersion);
     }
     await _refetchEverything(version);
-    _setStatus(ConnectionStatus.connected);
+    if (connectionStatus != ConnectionStatus.unauthorized) {
+      _setStatus(ConnectionStatus.connected);
+    }
 
     // After the refetch so the rotation doesn't invalidate the token under
     // requests already in flight.

@@ -30,7 +30,7 @@
             FLUTTER_NO_ANALYTICS = "1";
           };
           text = ''
-            dart run build_runner build "$@"
+            dart run build_runner build --force-jit "$@"
           '';
         };
 

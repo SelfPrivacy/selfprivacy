@@ -80,6 +80,14 @@ import 'use_cases/forms/ssh_key_form_view.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view;
 import 'use_cases/forms/user_form_view.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view;
+import 'use_cases/layouts/brand_hero_screen.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen;
+import 'use_cases/layouts/hero_sliver_app_bar.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar;
+import 'use_cases/layouts/responsive_layout_with_infobox.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox;
+import 'use_cases/layouts/root_scaffold_with_subroute_selector.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector;
 import 'use_cases/molecules/buttons/brand_fab.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_buttons_brand_fab;
 import 'use_cases/molecules/buttons/period_selector.dart'
@@ -1137,6 +1145,253 @@ final directories = <_widgetbook.WidgetbookNode>[
             builder:
                 _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
                     .userFormViewTakenLogin,
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Layouts',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'BrandHeroScreen',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Collapsed',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenCollapsed,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Desktop nested',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenDesktopNested,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Desktop standalone',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenDesktopStandalone,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Jobs pending',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenJobsPending,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Long title',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenLongTitle,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Mobile',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenMobile,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'No icon',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenNoIcon,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'With subtitle',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenWithSubtitle,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'HeroSliverAppBar',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Collapsed',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar
+                    .heroSliverAppBarCollapsed,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Desktop nested',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar
+                    .heroSliverAppBarDesktopNested,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Desktop standalone',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar
+                    .heroSliverAppBarDesktopStandalone,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Long title',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar
+                    .heroSliverAppBarLongTitle,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Mobile',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar
+                    .heroSliverAppBarMobile,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'No icon',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_hero_sliver_app_bar
+                    .heroSliverAppBarNoIcon,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ResponsiveLayoutWithInfobox',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Below columns',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox
+                    .responsiveLayoutWithInfoboxBelowColumns,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Columns',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox
+                    .responsiveLayoutWithInfoboxColumns,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Columns boundary',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox
+                    .responsiveLayoutWithInfoboxColumnsBoundary,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'No header',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox
+                    .responsiveLayoutWithInfoboxNoHeader,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Primary only',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox
+                    .responsiveLayoutWithInfoboxPrimaryOnly,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Stacked',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_responsive_layout_with_infobox
+                    .responsiveLayoutWithInfoboxStacked,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'RootScaffoldWithSubrouteSelector',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Below drawer',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorBelowDrawer,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Below rail',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorBelowRail,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Desktop detail',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorDesktopDetail,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Drawer',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorDrawer,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Drawer boundary',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorDrawerBoundary,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Drawer without configured server',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorDrawerWithoutConfiguredServer,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Jobs pending',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorJobsPending,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Mobile',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorMobile,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Mobile detail',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorMobileDetail,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Mobile without configured server',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorMobileWithoutConfiguredServer,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'More selected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorMoreSelected,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rail',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorRail,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rail boundary',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorRailBoundary,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rail without configured server',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorRailWithoutConfiguredServer,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Services selected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorServicesSelected,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Support open',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorSupportOpen,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Users selected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_root_scaffold_with_subroute_selector
+                    .rootScaffoldWithSubrouteSelectorUsersSelected,
           ),
         ],
       ),

@@ -46,7 +46,16 @@ class CatalogRouter extends Mock implements StackRouter {
   }
 }
 
-enum PreviewHost { content, viewport, scroll, dialog, sheet, drawer, header }
+enum PreviewHost {
+  content,
+  viewport,
+  screen,
+  scroll,
+  dialog,
+  sheet,
+  drawer,
+  header,
+}
 
 const catalogContentKey = ValueKey('catalog-content');
 
@@ -150,6 +159,7 @@ class _CatalogCaseState extends State<CatalogCase> {
         scaffoldKey.currentState!.openEndDrawer();
       case PreviewHost.content:
       case PreviewHost.viewport:
+      case PreviewHost.screen:
       case PreviewHost.scroll:
       case PreviewHost.header:
         break;
@@ -179,12 +189,17 @@ class _CatalogCaseState extends State<CatalogCase> {
           locale: context.locale,
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
-          builder: (final context, final child) => MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: media.textScaler),
-            child: StackRouterScope(
-              controller: router,
-              stateHash: 0,
-              child: child!,
+          builder: (final context, final child) => LayoutBuilder(
+            builder: (final context, final constraints) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: media.textScaler,
+                size: constraints.biggest,
+              ),
+              child: StackRouterScope(
+                controller: router,
+                stateHash: 0,
+                child: child!,
+              ),
             ),
           ),
           home: Builder(
@@ -207,6 +222,8 @@ class _CatalogCaseState extends State<CatalogCase> {
                         key: ValueKey(widget.id),
                         open: () => open(context),
                       )
+                    : widget.host == PreviewHost.screen
+                    ? component(context)
                     : widget.host == PreviewHost.content
                     ? SingleChildScrollView(
                         child: RepaintBoundary(

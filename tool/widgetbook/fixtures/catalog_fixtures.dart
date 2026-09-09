@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
@@ -84,6 +85,7 @@ class CatalogFixtures {
       variant == 'Not configured' ? NoServer() : ServerConfigured(demoServer()),
     );
     bind(services, servicesState);
+    bind(groups, DemoGroupsState());
     bind(backups, backupsState);
     bind(serverJobs, serverJobsState);
     bind(
@@ -148,6 +150,7 @@ class CatalogFixtures {
   final readiness = DemoReadiness();
   final jobs = DemoJobs();
   final services = DemoServices();
+  final groups = DemoGroups();
   final backups = DemoBackups();
   final serverJobs = DemoServerJobs();
   final volumes = DemoVolumes();
@@ -171,6 +174,7 @@ class CatalogFixtures {
       BlocProvider<AppReadinessCubit>.value(value: readiness),
       BlocProvider<JobsCubit>.value(value: jobs),
       BlocProvider<ServicesBloc>.value(value: services),
+      BlocProvider<GroupsBloc>.value(value: groups),
       BlocProvider<BackupsBloc>.value(value: backups),
       BlocProvider<ServerJobsBloc>.value(value: serverJobs),
       BlocProvider<VolumesBloc>.value(value: volumes),

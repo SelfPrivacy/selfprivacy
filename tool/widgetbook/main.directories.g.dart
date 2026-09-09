@@ -64,6 +64,22 @@ import 'use_cases/atoms/progress_indicators/progress_bar.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_atoms_progress_indicators_progress_bar;
 import 'use_cases/atoms/timer/brand_timer.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_atoms_timer_brand_timer;
+import 'use_cases/forms/backblaze_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view;
+import 'use_cases/forms/credential_check_error.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_credential_check_error;
+import 'use_cases/forms/dns_provider_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view;
+import 'use_cases/forms/recovery_device_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view;
+import 'use_cases/forms/recovery_domain_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_domain_form_view;
+import 'use_cases/forms/server_provider_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view;
+import 'use_cases/forms/ssh_key_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view;
+import 'use_cases/forms/user_form_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view;
 import 'use_cases/molecules/buttons/brand_fab.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_buttons_brand_fab;
 import 'use_cases/molecules/buttons/period_selector.dart'
@@ -758,6 +774,369 @@ final directories = <_widgetbook.WidgetbookNode>[
                         .brandTimerRunning,
               ),
             ],
+          ),
+        ],
+      ),
+    ],
+  ),
+  _widgetbook.WidgetbookCategory(
+    name: 'Forms',
+    children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'BackblazeFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Checking',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view
+                    .backblazeFormViewChecking,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view
+                    .backblazeFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Ready',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view
+                    .backblazeFormViewReady,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rejected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view
+                    .backblazeFormViewRejected,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view
+                    .backblazeFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unavailable',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_backblaze_form_view
+                    .backblazeFormViewUnavailable,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'CredentialCheckError',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Provider message',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_credential_check_error
+                    .credentialCheckErrorProviderMessage,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rejected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_credential_check_error
+                    .credentialCheckErrorRejected,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Translated message',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_credential_check_error
+                    .credentialCheckErrorTranslatedMessage,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unavailable',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_credential_check_error
+                    .credentialCheckErrorUnavailable,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'DnsProviderFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Checking',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewChecking,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Porkbun empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewPorkbunEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Porkbun ready',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewPorkbunReady,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Porkbun required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewPorkbunRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Ready',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewReady,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rejected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewRejected,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unavailable',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_dns_provider_form_view
+                    .dnsProviderFormViewUnavailable,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'RecoveryDeviceFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Invalid device key',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewInvalidDeviceKey,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Invalid recovery key',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewInvalidRecoveryKey,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'New device key',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewNewDeviceKey,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Old token',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewOldToken,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Recovery key',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewRecoveryKey,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Submitting',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_device_form_view
+                    .recoveryDeviceFormViewSubmitting,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'RecoveryDomainFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_domain_form_view
+                    .recoveryDomainFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Not found',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_domain_form_view
+                    .recoveryDomainFormViewNotFound,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Ready',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_domain_form_view
+                    .recoveryDomainFormViewReady,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_domain_form_view
+                    .recoveryDomainFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Submitting',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_recovery_domain_form_view
+                    .recoveryDomainFormViewSubmitting,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'ServerProviderFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Checking',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view
+                    .serverProviderFormViewChecking,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view
+                    .serverProviderFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Ready',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view
+                    .serverProviderFormViewReady,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Rejected',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view
+                    .serverProviderFormViewRejected,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view
+                    .serverProviderFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unavailable',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view
+                    .serverProviderFormViewUnavailable,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'SshKeyFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Duplicate',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view
+                    .sshKeyFormViewDuplicate,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view
+                    .sshKeyFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Invalid',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view
+                    .sshKeyFormViewInvalid,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view
+                    .sshKeyFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Valid',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view
+                    .sshKeyFormViewValid,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'UserFormView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Edit',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewEdit,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Invalid login',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewInvalidLogin,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Long display name',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewLongDisplayName,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Long login',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewLongLogin,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Ready',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewReady,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Required',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewRequired,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Reserved login',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewReservedLogin,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Submitting',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewSubmitting,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Taken login',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewTakenLogin,
           ),
         ],
       ),

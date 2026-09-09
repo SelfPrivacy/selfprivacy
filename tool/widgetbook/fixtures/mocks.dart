@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
@@ -86,3 +87,17 @@ class DemoLoadedDetails extends Mock implements Loaded {}
 class DemoSshSettings extends Mock implements SshSettings {}
 
 class DemoResources extends Mock implements ResourcesModel {}
+
+class DemoGroups extends ActionMock implements GroupsBloc {}
+
+class DemoGroupsState extends GroupsLoaded {
+  DemoGroupsState()
+    : super(groups: const ['sp.full_users', 'sp.admins', 'sp.nextcloud.user']);
+
+  @override
+  List<String> get groups => const [
+    'sp.full_users',
+    'sp.admins',
+    'sp.nextcloud.user',
+  ];
+}

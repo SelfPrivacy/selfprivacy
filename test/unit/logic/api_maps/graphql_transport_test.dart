@@ -16,25 +16,31 @@ void main() {
   late _MockTlsContext tlsContext;
   late List<http.BaseRequest> requests;
   late http.Client httpClient;
+  late Map<String, dynamic> responseBody;
   var domain = 'first.example';
   var token = 'first-token';
   var locale = 'en';
 
   GraphQLTransport transport({
     final GraphQLTokenProvider? tokenProvider,
+    final GraphQLAuthFailureHandler? onAuthFailure,
     final TlsPolicy tlsPolicy = TlsPolicy.strict,
   }) => GraphQLTransport(
     domainProvider: () => domain,
     tokenProvider: tokenProvider,
+    onAuthFailure: onAuthFailure,
     localeProvider: () => locale,
     tlsContext: tlsContext,
     tlsPolicy: tlsPolicy,
     consoleLog: (_) {},
   );
 
-  Future<void> query(final GraphQLTransport transport) => transport
-      .client()
-      .query(QueryOptions(document: parseString('query { api { version } }')));
+  Future<QueryResult<Object?>> query(final GraphQLTransport transport) =>
+      transport.client().query<Object?>(
+        QueryOptions<Object?>(
+          document: parseString('query { api { version } }'),
+        ),
+      );
 
   setUpAll(() => registerFallbackValue(TlsPolicy.strict));
 
@@ -44,14 +50,15 @@ void main() {
     locale = 'en';
     tlsContext = _MockTlsContext();
     requests = [];
+    responseBody = {
+      'data': {
+        'api': {'version': '3.9.0'},
+      },
+    };
     httpClient = MockClient((final request) async {
       requests.add(request);
       return http.Response(
-        jsonEncode({
-          'data': {
-            'api': {'version': '3.9.0'},
-          },
-        }),
+        jsonEncode(responseBody),
         200,
         headers: {'content-type': 'application/json'},
       );
@@ -109,7 +116,11 @@ void main() {
   });
 
   test('copies connection providers when its TLS policy changes', () {
-    final strict = transport(tokenProvider: () => token);
+    var authFailures = 0;
+    final strict = transport(
+      tokenProvider: () => token,
+      onAuthFailure: () => authFailures++,
+    );
     final unverified = strict.withTlsPolicy(TlsPolicy.allowUnverified);
 
     domain = 'second.example';
@@ -120,6 +131,8 @@ void main() {
     expect(unverified.token, 'rotated-token');
     expect(unverified.localeProvider(), 'de');
     expect(unverified.tlsPolicy, TlsPolicy.allowUnverified);
+    unverified.onAuthFailure?.call();
+    expect(authFailures, 1);
   });
 
   test('builds anonymous and authenticated subscription clients', () {
@@ -140,5 +153,88 @@ void main() {
     expect(logs.single, isA<ManualConsoleLog>());
     expect(logs.single.severity, ConsoleLogSeverity.warning);
     expect(logs.single.content, contains('access denied'));
+  });
+
+  test('reports coded authentication errors without consuming them', () async {
+    var authFailures = 0;
+    responseBody = {
+      'data': null,
+      'errors': [
+        {
+          'message': 'Authentication failed',
+          'extensions': {'code': 'UNAUTHENTICATED'},
+        },
+        {
+          'message': 'Authentication also failed',
+          'extensions': {'code': 'UNAUTHENTICATED'},
+        },
+      ],
+    };
+
+    final result = await query(transport(onAuthFailure: () => authFailures++));
+
+    expect(authFailures, 1);
+    expect(result.exception?.graphqlErrors, hasLength(2));
+    expect(
+      result.exception?.graphqlErrors.first.message,
+      'Authentication failed',
+    );
+  });
+
+  test('reports legacy authentication errors without a code', () async {
+    var authFailures = 0;
+    responseBody = {
+      'data': null,
+      'errors': [
+        {'message': 'You must be authenticated to access this resource.'},
+      ],
+    };
+
+    await query(transport(onAuthFailure: () => authFailures++));
+
+    expect(authFailures, 1);
+  });
+
+  test(
+    'does not use the legacy message when another code is present',
+    () async {
+      var authFailures = 0;
+      responseBody = {
+        'data': null,
+        'errors': [
+          {
+            'message': 'You must be authenticated to access this resource.',
+            'extensions': {'code': 'FORBIDDEN'},
+          },
+        ],
+      };
+
+      await query(transport(onAuthFailure: () => authFailures++));
+
+      expect(authFailures, 0);
+    },
+  );
+
+  test('ignores unrelated GraphQL errors', () async {
+    var authFailures = 0;
+    responseBody = {
+      'data': null,
+      'errors': [
+        {'message': 'Service failed'},
+      ],
+    };
+
+    await query(transport(onAuthFailure: () => authFailures++));
+
+    expect(authFailures, 0);
+  });
+
+  test('builds a subscription client with auth failure handling', () {
+    final graphQLClient = transport(
+      tokenProvider: () => token,
+      onAuthFailure: () {},
+    ).subscriptionClient();
+
+    expect(graphQLClient, isA<GraphQLClient>());
   });
 }

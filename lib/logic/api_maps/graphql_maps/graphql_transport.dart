@@ -8,7 +8,12 @@ import 'package:web_socket_channel/io.dart';
 typedef GraphQLDomainProvider = String? Function();
 typedef GraphQLTokenProvider = String? Function();
 typedef GraphQLLocaleProvider = String Function();
+typedef GraphQLAuthFailureHandler = void Function();
 typedef ConsoleLogSink = void Function(ConsoleLog);
+
+const String _unauthenticatedErrorCode = 'UNAUTHENTICATED';
+const String _legacyUnauthenticatedErrorMessage =
+    'You must be authenticated to access this resource.';
 
 class RequestLoggingLink extends Link {
   RequestLoggingLink({required final ConsoleLogSink consoleLog})
@@ -71,12 +76,14 @@ class GraphQLTransport {
     required this.tlsContext,
     required this.consoleLog,
     this.tokenProvider,
+    this.onAuthFailure,
     this.tlsPolicy = TlsPolicy.strict,
   });
 
   final GraphQLDomainProvider domainProvider;
   final GraphQLTokenProvider? tokenProvider;
   final GraphQLLocaleProvider localeProvider;
+  final GraphQLAuthFailureHandler? onAuthFailure;
   final TlsContext tlsContext;
   final TlsPolicy tlsPolicy;
   final ConsoleLogSink consoleLog;
@@ -90,6 +97,7 @@ class GraphQLTransport {
     domainProvider: domainProvider,
     tokenProvider: tokenProvider,
     localeProvider: localeProvider,
+    onAuthFailure: onAuthFailure,
     tlsContext: tlsContext,
     tlsPolicy: policy,
     consoleLog: consoleLog,
@@ -103,6 +111,28 @@ class GraphQLTransport {
     }
   }
 
+  Link _watchAuthFailures(final Link link) {
+    final callback = onAuthFailure;
+    if (callback == null) {
+      return link;
+    }
+
+    return ErrorLink(
+      onGraphQLError: (final request, final forward, final response) {
+        final hasAuthenticationError = response.errors?.any((final error) {
+          final code = error.extensions?['code'];
+          return code == _unauthenticatedErrorCode ||
+              (code == null &&
+                  error.message == _legacyUnauthenticatedErrorMessage);
+        });
+        if (hasAuthenticationError ?? false) {
+          callback();
+        }
+        return null;
+      },
+    ).concat(link);
+  }
+
   GraphQLClient client() {
     _validateTlsPolicy();
 
@@ -114,10 +144,12 @@ class GraphQLTransport {
     );
 
     final currentToken = token;
-    final Link link = RequestLoggingLink(consoleLog: consoleLog).concat(
-      isAuthenticated
-          ? AuthLink(getToken: () => 'Bearer $currentToken').concat(httpLink)
-          : httpLink,
+    final Link link = _watchAuthFailures(
+      RequestLoggingLink(consoleLog: consoleLog).concat(
+        isAuthenticated
+            ? AuthLink(getToken: () => 'Bearer $currentToken').concat(httpLink)
+            : httpLink,
+      ),
     );
 
     return GraphQLClient(cache: GraphQLCache(), link: link);
@@ -158,6 +190,9 @@ class GraphQLTransport {
       ),
     );
 
-    return GraphQLClient(cache: GraphQLCache(), link: webSocketLink);
+    return GraphQLClient(
+      cache: GraphQLCache(),
+      link: _watchAuthFailures(webSocketLink),
+    );
   }
 }

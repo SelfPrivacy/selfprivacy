@@ -6,9 +6,11 @@ import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
 GraphQLTransport aGraphQLTransport({
   final GraphQLDomainProvider? domainProvider,
   final GraphQLTokenProvider? tokenProvider,
+  final GraphQLAuthFailureHandler? onAuthFailure,
 }) => GraphQLTransport(
   domainProvider: domainProvider ?? () => null,
   tokenProvider: tokenProvider,
+  onAuthFailure: onAuthFailure,
   localeProvider: () => 'en',
   tlsContext: TlsContext(DeveloperSettingsModel()),
   consoleLog: (_) {},

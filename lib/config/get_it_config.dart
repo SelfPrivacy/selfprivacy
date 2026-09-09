@@ -19,10 +19,12 @@ final GetIt getIt = GetIt.instance;
 GraphQLTransport createGraphQLTransport({
   required final GraphQLDomainProvider domainProvider,
   final GraphQLTokenProvider? tokenProvider,
+  final GraphQLAuthFailureHandler? onAuthFailure,
   final TlsPolicy tlsPolicy = TlsPolicy.strict,
 }) => GraphQLTransport(
   domainProvider: domainProvider,
   tokenProvider: tokenProvider,
+  onAuthFailure: onAuthFailure,
   localeProvider: () => getIt<ApiConfigModel>().localeCode,
   tlsContext: getIt<TlsContext>(),
   tlsPolicy: tlsPolicy,

@@ -91,8 +91,7 @@ void main() {
         for (var frame = 0; frame < 5; frame++) {
           await tester.pump(const Duration(milliseconds: 300));
         }
-        if (example.id.startsWith('BrandMarkdown/') ||
-            example.id.startsWith('SupportDrawer/')) {
+        if (find.byType(MarkdownBody).evaluate().isNotEmpty) {
           await waitForContent(
             tester,
             () => tester

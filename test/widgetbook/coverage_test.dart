@@ -15,7 +15,13 @@ Iterable<WidgetbookNode> descendants(final List<WidgetbookNode> nodes) sync* {
 void main() {
   test('every public concrete component and visual helper is catalogued', () {
     final classes = <ClassDeclaration>[];
-    for (final group in ['atoms', 'molecules', 'organisms', 'forms']) {
+    for (final group in [
+      'atoms',
+      'molecules',
+      'organisms',
+      'forms',
+      'layouts',
+    ]) {
       for (final file
           in Directory('lib/ui/$group')
               .listSync(recursive: true)

@@ -84,10 +84,7 @@ void main() {
                 ) => const Card(
                   key: cardKey,
                   child: Column(
-                    children: [
-                      SizedBox(height: 30),
-                      SizedBox(height: 40),
-                    ],
+                    children: [SizedBox(height: 30), SizedBox(height: 40)],
                   ),
                 ),
           ),

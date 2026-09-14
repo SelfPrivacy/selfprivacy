@@ -1,0 +1,518 @@
+{
+  "GetApiVersion": {
+    "__typename": "Query",
+    "api": {
+      "__typename": "Api",
+      "version": "3.9.0"
+    }
+  },
+  "AllUsers": {
+    "__typename": "Query",
+    "users": {
+      "__typename": "Users",
+      "allUsers": [
+        {
+          "__typename": "User",
+          "username": "alice",
+          "userType": "PRIMARY",
+          "sshKeys": [],
+          "directmemberof": [
+            "sp.admins"
+          ],
+          "displayName": "Alice",
+          "memberof": [
+            "sp.admins",
+            "sp.outline.users",
+            "sp.full_users",
+            "sp.roundcube.admins",
+            "sp.nextcloud.admins",
+            "sp.vikunja.users",
+            "sp.roundcube.users",
+            "sp.nextcloud.users",
+            "ext_idm_provisioned_entities"
+          ],
+          "email": "alice@example.org",
+          "emailPasswordMetadata": []
+        },
+        {
+          "__typename": "User",
+          "username": "bob",
+          "userType": "NORMAL",
+          "sshKeys": [],
+          "directmemberof": [
+            "sp.full_users"
+          ],
+          "displayName": "Bob",
+          "memberof": [
+            "sp.outline.users",
+            "sp.full_users",
+            "sp.vikunja.users",
+            "sp.roundcube.users",
+            "sp.nextcloud.users",
+            "ext_idm_provisioned_entities"
+          ],
+          "email": "bob@example.org",
+          "emailPasswordMetadata": []
+        }
+      ],
+      "rootUser": {
+        "__typename": "User",
+        "username": "root",
+        "userType": "ROOT",
+        "sshKeys": [],
+        "directmemberof": [],
+        "displayName": null,
+        "memberof": [],
+        "email": null,
+        "emailPasswordMetadata": []
+      }
+    }
+  },
+  "AllGroups": {
+    "__typename": "Query",
+    "groups": {
+      "__typename": "Groups",
+      "allGroups": [
+        {
+          "__typename": "Group",
+          "name": "sp.nextcloud.users"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.full_users"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.admins"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.nextcloud.admins"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.roundcube.admins"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.roundcube.users"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.outline.users"
+        },
+        {
+          "__typename": "Group",
+          "name": "sp.vikunja.users"
+        }
+      ]
+    }
+  },
+  "GetApiJobs": {
+    "__typename": "Query",
+    "jobs": {
+      "__typename": "Job",
+      "getJobs": [
+        {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Rebuild system",
+          "error": null,
+          "finishedAt": null,
+          "name": "Rebuild",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-1",
+          "typeId": "system.rebuild"
+        }
+      ]
+    }
+  },
+  "JobUpdates": {
+    "__typename": "Subscription",
+    "jobUpdates": [
+      {
+        "__typename": "ApiJob",
+        "createdAt": "2026-09-10T10:00:00Z",
+        "updatedAt": "2026-09-10T10:01:00Z",
+        "description": "Rebuild system",
+        "error": null,
+        "finishedAt": null,
+        "name": "Rebuild",
+        "progress": 25,
+        "result": null,
+        "status": "RUNNING",
+        "statusText": "Running",
+        "uid": "job-1",
+        "typeId": "system.rebuild"
+      }
+    ]
+  },
+  "GetApiTokens": {
+    "__typename": "Query",
+    "api": {
+      "__typename": "Api",
+      "devices": [
+        {
+          "__typename": "ApiDevice",
+          "creationDate": "2026-09-01T10:00:00+00:00",
+          "isCaller": true,
+          "name": "Laptop"
+        },
+        {
+          "__typename": "ApiDevice",
+          "creationDate": "2026-09-02T10:00:00+00:00",
+          "isCaller": false,
+          "name": "Phone"
+        }
+      ]
+    }
+  },
+  "RecoveryKey": {
+    "__typename": "Query",
+    "api": {
+      "__typename": "Api",
+      "recoveryKey": {
+        "__typename": "ApiRecoveryKeyStatus",
+        "creationDate": null,
+        "exists": false,
+        "expirationDate": null,
+        "usesLeft": null,
+        "valid": false
+      }
+    }
+  },
+  "SystemSettings": {
+    "__typename": "Query",
+    "system": {
+      "__typename": "System",
+      "settings": {
+        "__typename": "SystemSettings",
+        "autoUpgrade": {
+          "__typename": "AutoUpgradeOptions",
+          "allowReboot": true,
+          "enable": true
+        },
+        "ssh": {
+          "__typename": "SshSettings",
+          "enable": true
+        },
+        "timezone": "Europe/Moscow"
+      }
+    }
+  },
+  "BackupConfiguration": {
+    "__typename": "Query",
+    "backup": {
+      "__typename": "Backup",
+      "configuration": {
+        "__typename": "BackupConfiguration",
+        "autobackupPeriod": 60,
+        "encryptionKey": "fixture-key",
+        "isInitialized": true,
+        "locationId": "bucket-id",
+        "locationName": "Backups",
+        "provider": "BACKBLAZE",
+        "autobackupQuotas": {
+          "__typename": "AutobackupQuotas",
+          "last": 3,
+          "daily": 7,
+          "weekly": 4,
+          "monthly": 12,
+          "yearly": 1
+        }
+      }
+    }
+  },
+  "AllBackupSnapshots": {
+    "__typename": "Query",
+    "backup": {
+      "__typename": "Backup",
+      "allSnapshots": [
+        {
+          "__typename": "SnapshotInfo",
+          "id": "snapshot-1",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "service": {
+            "__typename": "Service",
+            "displayName": "Files",
+            "id": "nextcloud"
+          },
+          "reason": "EXPLICIT"
+        }
+      ]
+    }
+  },
+  "GetServerDiskVolumes": {
+    "__typename": "Query",
+    "storage": {
+      "__typename": "Storage",
+      "volumes": [
+        {
+          "__typename": "StorageVolume",
+          "freeSpace": "1072693248",
+          "model": "Virtual disk",
+          "name": "sda",
+          "root": false,
+          "serial": "fixture-disk",
+          "totalSpace": "1073741824",
+          "type": "disk",
+          "usedSpace": "1048576",
+          "usages": [
+            {
+              "__typename": "ServiceStorageUsage",
+              "title": "Service 1",
+              "usedSpace": "1048576",
+              "service": {
+                "__typename": "Service",
+                "id": "example-app",
+                "isMovable": true,
+                "displayName": "Example app"
+              }
+            },
+            {
+              "__typename": "ServiceStorageUsage",
+              "title": "Service 2",
+              "usedSpace": "1048576",
+              "service": {
+                "__typename": "Service",
+                "id": "mail",
+                "isMovable": true,
+                "displayName": "Mail"
+              }
+            }
+          ]
+        },
+        {
+          "__typename": "StorageVolume",
+          "freeSpace": "1072693248",
+          "model": null,
+          "name": "sdb",
+          "root": true,
+          "serial": null,
+          "totalSpace": "1073741824",
+          "type": "part",
+          "usedSpace": "1048576",
+          "usages": [
+            {
+              "__typename": "ServiceStorageUsage",
+              "title": "Service 1",
+              "usedSpace": "1048576",
+              "service": {
+                "__typename": "Service",
+                "id": "example-app",
+                "isMovable": false,
+                "displayName": "Example app"
+              }
+            },
+            {
+              "__typename": "ServiceStorageUsage",
+              "title": "Service 2",
+              "usedSpace": "1048576",
+              "service": {
+                "__typename": "Service",
+                "id": "mail",
+                "isMovable": false,
+                "displayName": "Mail"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "AllServices": {
+    "__typename": "Query",
+    "services": {
+      "__typename": "Services",
+      "allServices": [
+        {
+          "__typename": "Service",
+          "description": "Example configuration",
+          "displayName": "Example app",
+          "dnsRecords": [
+            {
+              "__typename": "DnsRecord",
+              "recordType": "A",
+              "name": "app.example.org",
+              "displayName": "Example DNS record",
+              "content": "192.0.2.10",
+              "ttl": 3600,
+              "priority": null
+            }
+          ],
+          "id": "example-app",
+          "isEnabled": false,
+          "isInstalled": false,
+          "isMovable": true,
+          "isRequired": false,
+          "isSystemService": false,
+          "canBeBackedUp": true,
+          "backupDescription": "Example backup",
+          "status": "INACTIVE",
+          "storageUsage": {
+            "__typename": "ServiceStorageUsage",
+            "title": "Example service",
+            "usedSpace": "1048576",
+            "volume": {
+              "__typename": "StorageVolume",
+              "name": "sda"
+            }
+          },
+          "svgIcon": "PHN2Zy8+",
+          "url": "https://app.example.org",
+          "homepage": "https://example.org",
+          "sourcePage": "https://example.org/source",
+          "license": [
+            {
+              "__typename": "LicenseType",
+              "free": true,
+              "fullName": "Example license",
+              "redistributable": true,
+              "shortName": "Example",
+              "url": "https://app.example.org"
+            }
+          ],
+          "supportLevel": "NORMAL",
+          "configuration": [
+            {
+              "__typename": "StringConfigItem",
+              "fieldId": "option-1",
+              "description": "Example configuration",
+              "type": "string",
+              "widget": "subdomain",
+              "stringValue": "app",
+              "defaultStringValue": "app",
+              "regex": "^[a-z][a-z0-9-]*$"
+            },
+            {
+              "__typename": "StringConfigItem",
+              "fieldId": "option-2",
+              "description": "Example configuration",
+              "type": "string",
+              "widget": "text",
+              "stringValue": "example",
+              "defaultStringValue": "default",
+              "regex": null
+            },
+            {
+              "__typename": "BoolConfigItem",
+              "fieldId": "option-3",
+              "description": "Example configuration",
+              "type": "bool",
+              "widget": "switch",
+              "boolValue": true,
+              "defaultBoolValue": true
+            },
+            {
+              "__typename": "EnumConfigItem",
+              "fieldId": "option-4",
+              "description": "Example configuration",
+              "type": "enum",
+              "widget": "select",
+              "stringValue": "dark",
+              "defaultStringValue": "light",
+              "options": [
+                "light",
+                "dark"
+              ]
+            }
+          ]
+        },
+        {
+          "__typename": "Service",
+          "description": "Example configuration",
+          "displayName": "Mail",
+          "dnsRecords": [
+            {
+              "__typename": "DnsRecord",
+              "recordType": "A",
+              "name": "app.example.org",
+              "displayName": "Example DNS record",
+              "content": "192.0.2.10",
+              "ttl": 3600,
+              "priority": null
+            },
+            {
+              "__typename": "DnsRecord",
+              "recordType": "MX",
+              "name": "example.org",
+              "displayName": "Example DNS record",
+              "content": "mail.example.org",
+              "ttl": 3600,
+              "priority": 10
+            },
+            {
+              "__typename": "DnsRecord",
+              "recordType": "TXT",
+              "name": "app.example.org",
+              "displayName": "Example DNS record",
+              "content": "v=spf1 -all",
+              "ttl": 18000,
+              "priority": null
+            }
+          ],
+          "id": "mail",
+          "isEnabled": true,
+          "isInstalled": true,
+          "isMovable": true,
+          "isRequired": true,
+          "isSystemService": false,
+          "canBeBackedUp": true,
+          "backupDescription": "Example backup",
+          "status": "ACTIVE",
+          "storageUsage": {
+            "__typename": "ServiceStorageUsage",
+            "title": "Example service",
+            "usedSpace": "1048576",
+            "volume": {
+              "__typename": "StorageVolume",
+              "name": "sdb"
+            }
+          },
+          "svgIcon": "PHN2Zy8+",
+          "url": null,
+          "homepage": null,
+          "sourcePage": null,
+          "license": [],
+          "supportLevel": "NORMAL",
+          "configuration": null
+        },
+        {
+          "__typename": "Service",
+          "description": "Example configuration",
+          "displayName": "System service",
+          "dnsRecords": [],
+          "id": "system-service",
+          "isEnabled": true,
+          "isInstalled": true,
+          "isMovable": false,
+          "isRequired": true,
+          "isSystemService": true,
+          "canBeBackedUp": false,
+          "backupDescription": "Example backup",
+          "status": "ACTIVE",
+          "storageUsage": {
+            "__typename": "ServiceStorageUsage",
+            "title": "Example service",
+            "usedSpace": "1048576",
+            "volume": {
+              "__typename": "StorageVolume",
+              "name": "sdb"
+            }
+          },
+          "svgIcon": "PHN2Zy8+",
+          "url": null,
+          "homepage": null,
+          "sourcePage": null,
+          "license": [],
+          "supportLevel": "NORMAL",
+          "configuration": null
+        }
+      ]
+    }
+  }
+}

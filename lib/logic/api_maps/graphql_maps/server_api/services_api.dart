@@ -1,25 +1,11 @@
 part of 'server_api.dart';
 
 mixin ServicesApi on GraphQLApiMap {
-  Future<List<Service>?> getAllServices() async {
-    QueryResult<Query$AllServices> response;
-    List<Service>? services;
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$AllServices();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetAllServices request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      services = response.parsedData?.services.allServices
-          .map<Service>(Service.fromGraphQL)
-          .toList();
-    } catch (e) {
-      logger('Error in GraphQL GetAllServices request: $e', error: e);
-    }
-    return services;
+  Future<List<Service>> getAllServices() async {
+    final client = await getClient();
+    return requireServerApiData(
+      await client.query$AllServices(),
+    ).services.allServices.map(Service.fromGraphQL).toList();
   }
 
   Future<GenericResult<bool>> enableService(final String serviceId) async {

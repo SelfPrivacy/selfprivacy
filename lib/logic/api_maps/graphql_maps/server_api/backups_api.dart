@@ -1,51 +1,20 @@
 part of 'server_api.dart';
 
 mixin BackupsApi on GraphQLApiMap {
-  Future<List<Backup>?> getBackups() async {
-    List<Backup>? backups;
-    QueryResult<Query$AllBackupSnapshots> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$AllBackupSnapshots();
-      if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        backups = null;
-      }
-      final List<Backup> parsed = response.parsedData!.backup.allSnapshots
-          .map(Backup.fromGraphQL)
-          .toList();
-      backups = parsed;
-    } catch (e) {
-      logger("Couldn't get backups", error: e);
-      backups = null;
-    }
-
-    return backups;
+  Future<List<Backup>> getBackups() async {
+    final client = await getClient();
+    return requireServerApiData(
+      await client.query$AllBackupSnapshots(),
+    ).backup.allSnapshots.map(Backup.fromGraphQL).toList();
   }
 
-  Future<BackupConfiguration?> getBackupsConfiguration() async {
-    BackupConfiguration? backupConfiguration;
-    QueryResult<Query$BackupConfiguration> response;
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$BackupConfiguration();
-      if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        backupConfiguration = null;
-      }
-      final BackupConfiguration parsed = BackupConfiguration.fromGraphQL(
-        response.parsedData!.backup.configuration,
-      );
-      backupConfiguration = parsed;
-    } catch (e) {
-      logger("Couldn't get backups configuration", error: e);
-      backupConfiguration = null;
-    }
-
-    return backupConfiguration;
+  Future<BackupConfiguration> getBackupsConfiguration() async {
+    final client = await getClient();
+    return BackupConfiguration.fromGraphQL(
+      requireServerApiData(
+        await client.query$BackupConfiguration(),
+      ).backup.configuration,
+    );
   }
 
   Future<GenericResult> forceBackupListReload() async {

@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/require_server_api_data.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
@@ -63,27 +64,24 @@ class ServerApi extends GraphQLApiMap
 
   Future<String?> getApiVersion() => _getApiVersion();
 
+  Future<String> fetchApiVersion() => _fetchApiVersion();
+
+  Future<String> _fetchApiVersion({
+    final GraphQLTransport? clientTransport,
+  }) async {
+    final client = clientTransport?.client() ?? await getClient();
+    return requireServerApiData(await client.query$GetApiVersion()).api.version;
+  }
+
   Future<String?> _getApiVersion({
     final GraphQLTransport? clientTransport,
   }) async {
-    QueryResult<Query$GetApiVersion> response;
-    String? apiVersion;
-
     try {
-      final GraphQLClient client =
-          clientTransport?.client() ?? await getClient();
-      response = await client.query$GetApiVersion();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetApiVersion request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      apiVersion = response.parsedData?.api.version;
+      return await _fetchApiVersion(clientTransport: clientTransport);
     } catch (e) {
       logger('Error in GraphQL GetApiVersion request: $e', error: e);
+      return null;
     }
-    return apiVersion;
   }
 
   Future<ServerProviderType> getServerProviderType() async {
@@ -315,57 +313,16 @@ class ServerApi extends GraphQLApiMap
   }
 
   Future<SystemSettings> getSystemSettings() async {
-    QueryResult<Query$SystemSettings> response;
-    SystemSettings settings = SystemSettings(
-      autoUpgradeSettings: AutoUpgradeSettings(
-        allowReboot: false,
-        enable: false,
-      ),
-      sshSettings: SshSettings(enable: false),
-      timezone: 'Unknown',
+    final client = await getClient();
+    return SystemSettings.fromGraphQL(
+      requireServerApiData(await client.query$SystemSettings()).system,
     );
-
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$SystemSettings();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL SystemSettings request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      settings = SystemSettings.fromGraphQL(response.parsedData!.system);
-    } catch (e) {
-      logger('Error in GraphQL SystemSettings request: $e', error: e);
-    }
-
-    return settings;
   }
 
-  Future<GenericResult<RecoveryKeyStatus?>> getRecoveryTokenStatus() async {
-    RecoveryKeyStatus? key;
-    QueryResult<Query$RecoveryKey> response;
-    String? error;
-
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$RecoveryKey();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL RecoveryKey request: ${response.exception}',
-          error: response.exception,
-        );
-        error = response.exception.toString();
-      }
-      key = RecoveryKeyStatus.fromGraphQL(response.parsedData!.api.recoveryKey);
-    } catch (e) {
-      logger('Error in GraphQL RecoveryKey request: $e', error: e);
-    }
-
-    return GenericResult<RecoveryKeyStatus?>(
-      success: error == null,
-      data: key,
-      message: error,
+  Future<RecoveryKeyStatus> getRecoveryTokenStatus() async {
+    final client = await getClient();
+    return RecoveryKeyStatus.fromGraphQL(
+      requireServerApiData(await client.query$RecoveryKey()).api.recoveryKey,
     );
   }
 
@@ -438,39 +395,11 @@ class ServerApi extends GraphQLApiMap
     return records;
   }
 
-  Future<GenericResult<List<ApiToken>?>> getApiTokens() async {
-    GenericResult<List<ApiToken>?> tokens;
-    QueryResult<Query$GetApiTokens> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$GetApiTokens();
-      if (response.hasException) {
-        final message = response.exception.toString();
-        logger(
-          'Exception in GraphQL GetApiTokens request: $message',
-          error: response.exception,
-        );
-        tokens = GenericResult<List<ApiToken>?>(
-          success: false,
-          data: null,
-          message: message,
-        );
-      }
-      final List<ApiToken> parsed = response.parsedData!.api.devices
-          .map(ApiToken.fromGraphQL)
-          .toList();
-      tokens = GenericResult<List<ApiToken>?>(success: true, data: parsed);
-    } catch (e) {
-      logger('Error in GraphQL GetApiTokens request: $e', error: e);
-      tokens = GenericResult<List<ApiToken>?>(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return tokens;
+  Future<List<ApiToken>> getApiTokens() async {
+    final client = await getClient();
+    return requireServerApiData(
+      await client.query$GetApiTokens(),
+    ).api.devices.map(ApiToken.fromGraphQL).toList();
   }
 
   Future<GenericResult<void>> deleteApiToken(final String name) async {

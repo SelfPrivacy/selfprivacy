@@ -1,0 +1,39 @@
+{
+  "GetApiJobs": {
+    "__typename": "Query",
+    "jobs": {
+      "__typename": "Job",
+      "getJobs": []
+    }
+  },
+  "AllBackupSnapshots": {
+    "__typename": "Query",
+    "backup": {
+      "__typename": "Backup",
+      "allSnapshots": []
+    }
+  },
+  "BackupConfiguration": {
+    "__typename": "Query",
+    "backup": {
+      "__typename": "Backup",
+      "configuration": {
+        "__typename": "BackupConfiguration",
+        "autobackupPeriod": null,
+        "encryptionKey": "fixture-backup-key",
+        "isInitialized": true,
+        "locationId": "fixture-bucket",
+        "locationName": "fixture-backups",
+        "provider": "BACKBLAZE",
+        "autobackupQuotas": {
+          "__typename": "AutobackupQuotas",
+          "last": -1,
+          "daily": -1,
+          "weekly": -1,
+          "monthly": -1,
+          "yearly": -1
+        }
+      }
+    }
+  }
+}

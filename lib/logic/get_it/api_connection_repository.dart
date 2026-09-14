@@ -75,7 +75,7 @@ class ApiConnectionRepository {
 
   Timer? _timer;
 
-  StreamSubscription<List<ServerJob>?>? _serverJobsStreamSubscription;
+  StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
   DateTime? _jobsStreamDisconnectTime;
 
   Future<void> removeServerJob(final String uid) async {
@@ -477,7 +477,7 @@ class ApiConnectionRepository {
       return;
     }
 
-    late final StreamSubscription<List<ServerJob>?> subscription;
+    late final StreamSubscription<List<ServerJob>> subscription;
     void detach() {
       if (identical(_serverJobsStreamSubscription, subscription)) {
         _serverJobsStreamSubscription = null;
@@ -488,10 +488,7 @@ class ApiConnectionRepository {
     subscription = api
         .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
         .listen(
-          (final List<ServerJob>? jobs) {
-            if (jobs == null) {
-              return;
-            }
+          (final List<ServerJob> jobs) {
             _apiData.serverJobs.data = jobs;
             _dataStream.add(_apiData);
             _jobsStreamDisconnectTime = null;
@@ -632,12 +629,10 @@ class ApiData {
         fetchData: api.getServerDiskVolumes,
       ),
       recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
-        fetchData: () async => (await api.getRecoveryTokenStatus()).data,
+        fetchData: api.getRecoveryTokenStatus,
         ttl: 300,
       ),
-      devices = ApiDataElement<List<ApiToken>>(
-        fetchData: () async => (await api.getApiTokens()).data,
-      ),
+      devices = ApiDataElement<List<ApiToken>>(fetchData: api.getApiTokens),
       users = ApiDataElement<List<User>>(fetchData: api.getAllUsers),
       groups = ApiDataElement<List<String>>(
         fetchData: api.getAllGroups,

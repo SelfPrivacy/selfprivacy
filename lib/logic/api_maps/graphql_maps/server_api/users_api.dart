@@ -1,51 +1,22 @@
 part of 'server_api.dart';
 
 mixin UsersApi on GraphQLApiMap {
-  Future<List<User>?> getAllUsers() async {
-    QueryResult<Query$AllUsers> response;
-    List<User>? users;
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$AllUsers();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetAllUsers request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      users = response.parsedData?.users.allUsers
-          .map<User>(User.fromGraphQL)
-          .toList();
-      final rootUser = response.parsedData?.users.rootUser;
-      if (rootUser != null) {
-        users ??= [];
-        users.add(User.fromGraphQL(rootUser));
-      }
-    } catch (e) {
-      logger('Error in GraphQL GetAllUsers request: $e', error: e);
+  Future<List<User>> getAllUsers() async {
+    final client = await getClient();
+    final data = requireServerApiData(await client.query$AllUsers());
+    final users = data.users.allUsers.map(User.fromGraphQL).toList();
+    final rootUser = data.users.rootUser;
+    if (rootUser != null) {
+      users.add(User.fromGraphQL(rootUser));
     }
     return users;
   }
 
-  Future<List<String>?> getAllGroups() async {
-    QueryResult<Query$AllGroups> response;
-    List<String>? groups;
-    try {
-      final GraphQLClient client = await getClient();
-      response = await client.query$AllGroups();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetAllGroups request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      groups = response.parsedData?.groups.allGroups
-          .map<String>((final group) => group.name)
-          .toList();
-    } catch (e) {
-      logger('Error in GraphQL GetAllGroups request: $e', error: e);
-    }
-    return groups;
+  Future<List<String>> getAllGroups() async {
+    final client = await getClient();
+    return requireServerApiData(
+      await client.query$AllGroups(),
+    ).groups.allGroups.map((final group) => group.name).toList();
   }
 
   Future<User?> getUser(final String login) async {

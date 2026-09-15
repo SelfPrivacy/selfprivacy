@@ -330,6 +330,135 @@ void main() {
     },
   );
 
+  testReachability('starting paused performs no probes until resumed', (
+    final tester,
+  ) async {
+    reachability.start(paused: true);
+    expect(reachability.isPaused, isTrue);
+    network.events.add(NetworkConnectivity.available);
+    await tester.pump();
+    await reachability.probe();
+    reachability.reportWsState(alive: false);
+    await tester.pump(const Duration(minutes: 5));
+    expect(calls, 0);
+    reachability
+      ..resume()
+      ..resume();
+    await tester.pump();
+    expect(reachability.isPaused, isFalse);
+    expect(reachability.current, ReachabilityStatus.reachable);
+    expect(calls, 1);
+  });
+
+  testReachability(
+    'pause cancels backoff and resume starts a fresh retry sequence',
+    (final tester) async {
+      response = () async => false;
+      reachability.start();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 5));
+      expect(calls, 2);
+      reachability
+        ..pause()
+        ..pause();
+      expect(reachability.current, ReachabilityStatus.serverUnreachable);
+      reachability
+        ..reportNetworkFailure()
+        ..reportWsState(alive: false);
+      await tester.pump(const Duration(minutes: 5));
+      expect(calls, 2);
+      reachability.resume();
+      expect(reachability.current, ReachabilityStatus.checking);
+      await tester.pump();
+      expect(calls, 3);
+      await tester.pump(const Duration(seconds: 5));
+      expect(calls, 4);
+    },
+  );
+
+  for (final succeeds in [true, false]) {
+    testReachability('pause supersedes a pending probe ($succeeds)', (
+      final tester,
+    ) async {
+      final pending = Completer<bool>();
+      response = () => pending.future;
+      reachability.start();
+      await tester.pump();
+      final completion = reachability.probe();
+      reachability.pause();
+      await completion;
+      pending.complete(succeeds);
+      await tester.pump(const Duration(minutes: 5));
+      expect(reachability.current, ReachabilityStatus.checking);
+      expect(calls, 1);
+      response = () async => true;
+      reachability.resume();
+      await tester.pump();
+      expect(reachability.current, ReachabilityStatus.reachable);
+      expect(calls, 2);
+    });
+  }
+
+  testReachability('resume rechecks OS state even when no events arrived', (
+    final tester,
+  ) async {
+    reachability.start();
+    await tester.pump();
+    reachability.pause();
+    network.initial = Future.value(NetworkConnectivity.offline);
+    reachability.resume();
+    await tester.pump();
+    expect(calls, 1);
+    expect(reachability.current, ReachabilityStatus.noLocalNetwork);
+    reachability.pause();
+    network.initial = Future.value(NetworkConnectivity.available);
+    reachability.resume();
+    await tester.pump();
+    expect(calls, 2);
+  });
+
+  testReachability('paused network events cannot probe or erase unauthorized', (
+    final tester,
+  ) async {
+    reachability.start();
+    await tester.pump();
+    reachability
+      ..reportAuthFailure()
+      ..pause();
+    network.events.add(NetworkConnectivity.offline);
+    network.events.add(NetworkConnectivity.available);
+    await tester.pump();
+    reachability.resume();
+    await tester.pump();
+    expect(reachability.current, ReachabilityStatus.unauthorized);
+    expect(calls, 1);
+  });
+
+  testReachability('pause supersedes initial and resume connectivity reads', (
+    final tester,
+  ) async {
+    final initial = Completer<NetworkConnectivity>();
+    network.initial = initial.future;
+    reachability
+      ..start()
+      ..pause();
+    initial.complete(NetworkConnectivity.available);
+    await tester.pump();
+    expect(calls, 0);
+    final resumed = Completer<NetworkConnectivity>();
+    network.initial = resumed.future;
+    reachability
+      ..resume()
+      ..pause();
+    resumed.complete(NetworkConnectivity.available);
+    await tester.pump();
+    expect(calls, 0);
+    network.initial = Future.value(NetworkConnectivity.available);
+    reachability.resume();
+    await tester.pump();
+    expect(calls, 1);
+  });
+
   testReachability(
     'synchronous probe errors are state and disposal rejects writes',
     (final tester) async {
@@ -346,6 +475,8 @@ void main() {
       expect(reachability.reportProtectedSuccess, throwsStateError);
       expect(reachability.reportNetworkFailure, throwsStateError);
       expect(reachability.reportAuthFailure, throwsStateError);
+      expect(reachability.pause, throwsStateError);
+      expect(reachability.resume, throwsStateError);
     },
   );
 }

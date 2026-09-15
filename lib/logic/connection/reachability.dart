@@ -42,23 +42,52 @@ class Reachability {
   bool _started = false;
   bool _disposed = false;
   bool _offline = false;
+  bool _paused = false;
+  bool get isPaused => _paused;
   int _networkRevision = 0;
   int _failures = 0;
   int _retrySeconds = 5;
 
-  void start() {
+  void start({final bool paused = false}) {
     _ensureOpen();
     if (_started) {
       return;
     }
     _started = true;
+    _paused = paused;
     _subscription = _connectivity.changes.listen(
       _networkChanged,
       onError: (final Object error) =>
           _networkChanged(NetworkConnectivity.unknown),
     );
-    final revision = _networkRevision;
-    unawaited(_readInitialNetwork(revision));
+    if (!_paused) {
+      unawaited(_readInitialNetwork(_networkRevision));
+    }
+  }
+
+  void pause() {
+    _ensureStarted();
+    if (_paused) {
+      return;
+    }
+    _paused = true;
+    _networkRevision++;
+    _cancelWork();
+  }
+
+  void resume() {
+    _ensureStarted();
+    if (!_paused) {
+      return;
+    }
+    _paused = false;
+    _networkRevision++;
+    _failures = 0;
+    _retrySeconds = 5;
+    if (_current != ReachabilityStatus.unauthorized) {
+      _setStatus(ReachabilityStatus.checking);
+    }
+    unawaited(_readInitialNetwork(_networkRevision));
   }
 
   Future<void> _readInitialNetwork(final int revision) async {
@@ -80,7 +109,7 @@ class Reachability {
     _networkRevision++;
     final wasOffline = _offline;
     _offline = network == NetworkConnectivity.offline;
-    if (_current == ReachabilityStatus.unauthorized) {
+    if (_paused || _current == ReachabilityStatus.unauthorized) {
       return;
     }
     if (_offline) {
@@ -95,7 +124,7 @@ class Reachability {
 
   Future<void> probe() {
     _ensureStarted();
-    if (_offline || _current == ReachabilityStatus.unauthorized) {
+    if (_paused || _offline || _current == ReachabilityStatus.unauthorized) {
       return Future<void>.value();
     }
     final pending = _pending;
@@ -159,7 +188,7 @@ class Reachability {
 
   void reportNetworkFailure() {
     _ensureStarted();
-    if (_offline || _current == ReachabilityStatus.unauthorized) {
+    if (_paused || _offline || _current == ReachabilityStatus.unauthorized) {
       return;
     }
     _failures = min(_failures + 1, 2);
@@ -185,7 +214,7 @@ class Reachability {
   }
 
   void _scheduleRetry() {
-    if (_retry != null || _pending != null) {
+    if (_paused || _retry != null || _pending != null) {
       return;
     }
     final milliseconds = min(

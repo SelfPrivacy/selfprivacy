@@ -1,0 +1,70 @@
+{
+  "DeleteDeviceApiToken": {
+    "__typename": "Mutation",
+    "api": {
+      "__typename": "ApiMutations",
+      "deleteDeviceApiToken": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "Device deleted"
+      }
+    }
+  },
+  "StartBackup": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "startBackup": {
+        "__typename": "GenericJobMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Backing up Outline",
+          "error": null,
+          "finishedAt": null,
+          "name": "Backup Outline",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-backup-outline",
+          "typeId": "services.outline.backup"
+        }
+      }
+    }
+  },
+  "SetAutobackupPeriod": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "setAutobackupPeriod": {
+        "__typename": "GenericBackupConfigReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "configuration": {
+          "__typename": "BackupConfiguration",
+          "autobackupPeriod": 60,
+          "encryptionKey": "fixture-key",
+          "isInitialized": true,
+          "locationId": "bucket-id",
+          "locationName": "Backups",
+          "provider": "BACKBLAZE",
+          "autobackupQuotas": {
+            "__typename": "AutobackupQuotas",
+            "last": 3,
+            "daily": 7,
+            "weekly": 4,
+            "monthly": 12,
+            "yearly": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -13,7 +13,9 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/decode_server_mutation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/require_server_api_data.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
@@ -402,40 +404,19 @@ class ServerApi extends GraphQLApiMap
     ).api.devices.map(ApiToken.fromGraphQL).toList();
   }
 
-  Future<GenericResult<void>> deleteApiToken(final String name) async {
-    GenericResult<void> returnable;
-    QueryResult<Mutation$DeleteDeviceApiToken> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-
-      final variables = Variables$Mutation$DeleteDeviceApiToken(device: name);
-      final mutation = Options$Mutation$DeleteDeviceApiToken(
-        variables: variables,
-      );
-      response = await client.mutate$DeleteDeviceApiToken(mutation);
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL DeleteDeviceApiToken request: ${response.exception}',
-          error: response.exception,
-        );
-        returnable = GenericResult<void>(
-          success: false,
-          data: null,
-          message: response.exception.toString(),
-        );
-      }
-      returnable = GenericResult<void>(success: true, data: null);
-    } catch (e) {
-      logger('Error in GraphQL DeleteDeviceApiToken request: $e', error: e);
-      returnable = GenericResult<void>(
-        success: false,
-        data: null,
-        message: e.toString(),
-      );
-    }
-
-    return returnable;
+  Future<ServerMutationResult<void>> deleteApiToken(final String name) async {
+    final client = await getClient();
+    final response = await client.mutate$DeleteDeviceApiToken(
+      Options$Mutation$DeleteDeviceApiToken(
+        variables: Variables$Mutation$DeleteDeviceApiToken(device: name),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.api.deleteDeviceApiToken,
+    );
   }
 
   Future<GenericResult<String>> createDeviceToken() async {

@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/utils/fake_data.dart';
 
@@ -52,7 +54,6 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     final DeleteDevice event,
     final Emitter<DevicesState> emit,
   ) async {
-    // Optimistically remove the device from the list
     emit(
       DevicesDeleting(
         devices: state.devices
@@ -61,10 +62,10 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       ),
     );
 
-    final GenericResult<void> response = await getIt<ApiConnectionRepository>()
-        .api
-        .deleteApiToken(event.device.name);
-    if (response.success) {
+    final response = await getIt<ApiConnectionRepository>().api.deleteApiToken(
+      event.device.name,
+    );
+    if (response.outcome == ServerMutationOutcome.confirmed) {
       getIt<ApiConnectionRepository>().apiData.devices.invalidate();
       emit(
         DevicesLoaded(
@@ -75,7 +76,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       );
     } else {
       getIt<NavigationService>().showSnackBar(
-        response.message ?? 'Error deleting device',
+        response.outcome == ServerMutationOutcome.indeterminate
+            ? 'server_mutation.outcome_unknown'.tr()
+            : response.message ?? 'server_mutation.rejected'.tr(),
       );
       emit(DevicesLoaded(devices: state.devices));
     }

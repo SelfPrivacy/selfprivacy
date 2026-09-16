@@ -1,6 +1,11 @@
 {
     "test": "en-test",
     "locale": "en",
+    "server_mutation": {
+        "outcome_unknown": "Couldn't check the operation result. Refresh the data before trying again.",
+        "rejected": "Operation rejected by the server.",
+        "payload_unavailable": "Operation confirmed, but couldn't load its result. You might need to refresh the page."
+    },
     "basis": {
         "app_name": "SelfPrivacy",
         "providers": "Providers",

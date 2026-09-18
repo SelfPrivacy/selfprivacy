@@ -13,6 +13,16 @@ import '../../../helpers/fixtures/json_fixture.dart';
 
 void main() {
   final calls = <String, Future<ServerMutationResult> Function(ServerApi)>{
+    'RebootSystem': (final api) => api.reboot(),
+    'PullRepositoryChanges': (final api) => api.pullConfigurationUpdate(),
+    'RunSystemRebuild': (final api) => api.apply(),
+    'RunSystemUpgrade': (final api) => api.upgrade(),
+    'NixCollectGarbage': (final api) => api.collectNixGarbage(),
+    'MountVolume': (final api) => api.mountVolume('sdb'),
+    'UnmountVolume': (final api) => api.unmountVolume('sdb'),
+    'ResizeVolume': (final api) => api.resizeVolume('sdb'),
+    'MigrateToBinds': (final api) =>
+        api.migrateToBinds({'gitea': 'sdb'}, 'sda1'),
     'CreateUser': (final api) =>
         api.createUser('bob', 'Bob', ['sp.full_users']),
     'UpdateUser': (final api) =>
@@ -196,6 +206,10 @@ void main() {
         'RemoveSshKey',
         'MoveService',
         'ChangeTimezone',
+        'RunSystemRebuild',
+        'RunSystemUpgrade',
+        'NixCollectGarbage',
+        'MigrateToBinds',
       ].contains(call.key)) {
         test('nullable missing payload retains confirmation', () async {
           mutation[payloadField!] = null;
@@ -222,7 +236,13 @@ void main() {
           );
         });
       }
-      if (call.key == 'MoveService') {
+      if ([
+        'MoveService',
+        'RunSystemRebuild',
+        'RunSystemUpgrade',
+        'NixCollectGarbage',
+        'MigrateToBinds',
+      ].contains(call.key)) {
         test('unknown job status is indeterminate', () async {
           (mutation['job'] as Map<String, dynamic>)['status'] = 'UNKNOWN';
           expect(

@@ -5,11 +5,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
 
@@ -41,8 +43,10 @@ class JobsCubit extends Cubit<JobsState> {
     final ServerJob? rebuildJob = jobs.firstWhereOrNull(
       (final job) => job.uid == state.rebuildJobUid,
     );
-    if (rebuildJob == null ||
-        rebuildJob.status == JobStatusEnum.error ||
+    if (rebuildJob == null) {
+      return;
+    }
+    if (rebuildJob.status == JobStatusEnum.error ||
         rebuildJob.status == JobStatusEnum.finished) {
       emit((state as JobsStateLoading).finished());
     }
@@ -67,13 +71,13 @@ class JobsCubit extends Cubit<JobsState> {
         ),
       );
       final rebootResult = await getIt<ApiConnectionRepository>().api.reboot();
-      if (rebootResult.success) {
+      if (rebootResult.outcome == ServerMutationOutcome.confirmed) {
         emit(
           JobsStateFinished(
             [
               RebootServerJob(
                 status: JobStatusEnum.finished,
-                message: rebootResult.message,
+                message: serverMutationMessage(rebootResult),
               ),
             ],
             null,
@@ -83,7 +87,12 @@ class JobsCubit extends Cubit<JobsState> {
       } else {
         emit(
           JobsStateFinished(
-            [RebootServerJob(status: JobStatusEnum.error)],
+            [
+              RebootServerJob(
+                status: JobStatusEnum.error,
+                message: serverMutationMessage(rebootResult),
+              ),
+            ],
             null,
             const [],
           ),
@@ -102,18 +111,30 @@ class JobsCubit extends Cubit<JobsState> {
         ),
       );
       final result = await getIt<ApiConnectionRepository>().api.upgrade();
-      if (result.success && result.data != null) {
+      getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+      if (result.outcome == ServerMutationOutcome.confirmed &&
+          result.payload.value != null) {
         emit(
           JobsStateLoading(
-            [UpgradeServerJob(status: JobStatusEnum.finished)],
-            result.data!.uid,
+            [
+              UpgradeServerJob(
+                status: JobStatusEnum.finished,
+                message: serverMutationMessage(result),
+              ),
+            ],
+            result.payload.value!.uid,
             const [],
           ),
         );
-      } else if (result.success) {
+      } else if (result.outcome == ServerMutationOutcome.confirmed) {
         emit(
           JobsStateFinished(
-            [UpgradeServerJob(status: JobStatusEnum.finished)],
+            [
+              UpgradeServerJob(
+                status: JobStatusEnum.finished,
+                message: serverMutationMessage(result),
+              ),
+            ],
             null,
             const [],
           ),
@@ -121,7 +142,12 @@ class JobsCubit extends Cubit<JobsState> {
       } else {
         emit(
           JobsStateFinished(
-            [UpgradeServerJob(status: JobStatusEnum.error)],
+            [
+              UpgradeServerJob(
+                status: JobStatusEnum.error,
+                message: serverMutationMessage(result),
+              ),
+            ],
             null,
             const [],
           ),
@@ -181,10 +207,8 @@ class JobsCubit extends Cubit<JobsState> {
 
       await Future<void>.delayed(Duration.zero);
 
-      // If all jobs failed, do not try to change DNS records or rebuild the server
-      if ((state as JobsStateLoading).clientJobList.every(
-        (final job) =>
-            (job.status == JobStatusEnum.error) || (job is UpdateDnsRecordsJob),
+      if ((state as JobsStateLoading).clientJobList.any(
+        (final job) => job.status == JobStatusEnum.error,
       )) {
         if (dnsUpdateRequired) {
           emit(
@@ -209,17 +233,27 @@ class JobsCubit extends Cubit<JobsState> {
         return;
       }
       final rebuildResult = await getIt<ApiConnectionRepository>().api.apply();
-      if (rebuildResult.success) {
-        if (rebuildResult.data != null) {
+      getIt<ApiConnectionRepository>().applyServerJobMutation(rebuildResult);
+      if (rebuildResult.outcome == ServerMutationOutcome.confirmed) {
+        if (rebuildResult.payload.value != null) {
           emit(
             (state as JobsStateLoading).copyWith(
-              rebuildJobUid: rebuildResult.data!.uid,
+              rebuildJobUid: rebuildResult.payload.value!.uid,
             ),
           );
         } else {
+          if (rebuildResult.payload.status !=
+              ServerMutationPayloadStatus.notExpected) {
+            getIt<NavigationService>().showSnackBar(
+              serverMutationMessage(rebuildResult),
+            );
+          }
           emit((state as JobsStateLoading).finished());
         }
       } else {
+        getIt<NavigationService>().showSnackBar(
+          serverMutationMessage(rebuildResult),
+        );
         emit((state as JobsStateLoading).finished());
       }
     }
@@ -295,18 +329,30 @@ class JobsCubit extends Cubit<JobsState> {
       );
       final result = await getIt<ApiConnectionRepository>().api
           .collectNixGarbage();
-      if (result.success && result.data != null) {
+      getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+      if (result.outcome == ServerMutationOutcome.confirmed &&
+          result.payload.value != null) {
         emit(
           JobsStateLoading(
-            [CollectNixGarbageJob(status: JobStatusEnum.finished)],
-            result.data!.uid,
+            [
+              CollectNixGarbageJob(
+                status: JobStatusEnum.finished,
+                message: serverMutationMessage(result),
+              ),
+            ],
+            result.payload.value!.uid,
             const [],
           ),
         );
-      } else if (result.success) {
+      } else if (result.outcome == ServerMutationOutcome.confirmed) {
         emit(
           JobsStateFinished(
-            [CollectNixGarbageJob(status: JobStatusEnum.finished)],
+            [
+              CollectNixGarbageJob(
+                status: JobStatusEnum.finished,
+                message: serverMutationMessage(result),
+              ),
+            ],
             null,
             const [],
           ),
@@ -314,7 +360,12 @@ class JobsCubit extends Cubit<JobsState> {
       } else {
         emit(
           JobsStateFinished(
-            [CollectNixGarbageJob(status: JobStatusEnum.error)],
+            [
+              CollectNixGarbageJob(
+                status: JobStatusEnum.error,
+                message: serverMutationMessage(result),
+              ),
+            ],
             null,
             const [],
           ),

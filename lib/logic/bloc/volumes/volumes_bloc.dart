@@ -6,7 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -14,12 +14,18 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
+
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'volumes_event.dart';
 part 'volumes_state.dart';
 
 class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
-  VolumesBloc() : super(VolumesInitial()) {
+  VolumesBloc({final ServerProvider? Function()? serverProvider})
+    : _serverProvider =
+          serverProvider ?? (() => ProvidersController.currentServerProvider),
+      super(VolumesInitial()) {
     on<VolumesServerLoaded>(_loadState, transformer: droppable());
     on<VolumesServerReset>(_resetState, transformer: droppable());
     on<VolumesServerStateChanged>(_updateState, transformer: droppable());
@@ -65,20 +71,23 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     });
   }
 
+  final ServerProvider? Function() _serverProvider;
+
   late StreamSubscription _apiStatusSubscription;
   late StreamSubscription _apiDataSubscription;
   late StreamSubscription _resourcesModelSubscription;
   bool isLoaded = false;
 
   Future<Price?> getPricePerGb() async {
-    if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
+    if (!(_serverProvider()?.isAuthorized ?? false)) {
       return null;
     }
     Price? price;
     final location = state.location;
     if (location != null) {
-      final pricingResult = await ProvidersController.currentServerProvider!
-          .getAdditionalPricing(location);
+      final pricingResult = await _serverProvider()!.getAdditionalPricing(
+        location,
+      );
       if (pricingResult.data == null || !pricingResult.success) {
         getIt<NavigationService>().showSnackBar('server.pricing_error'.tr());
         return price;
@@ -103,9 +112,8 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
 
     late final GenericResult<List<ServerProviderVolume>>? volumesResult;
 
-    if (ProvidersController.currentServerProvider?.isAuthorized ?? false) {
-      volumesResult = await ProvidersController.currentServerProvider
-          ?.getVolumes();
+    if (_serverProvider()?.isAuthorized ?? false) {
+      volumesResult = await _serverProvider()?.getVolumes();
     } else {
       volumesResult = null;
     }
@@ -187,7 +195,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     if (state is! VolumesLoaded) {
       return;
     }
-    if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
+    if (!(_serverProvider()?.isAuthorized ?? false)) {
       return;
     }
     getIt<NavigationService>().showSnackBar(
@@ -201,8 +209,10 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       ),
     );
 
-    final resizedResult = await ProvidersController.currentServerProvider!
-        .resizeVolume(event.volume.providerVolume!, event.newSize);
+    final resizedResult = await _serverProvider()!.resizeVolume(
+      event.volume.providerVolume!,
+      event.newSize,
+    );
 
     if (!resizedResult.success || !resizedResult.data) {
       getIt<NavigationService>().showSnackBar(
@@ -224,7 +234,21 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
 
     await Future.delayed(const Duration(seconds: 10));
 
-    await getIt<ApiConnectionRepository>().api.resizeVolume(event.volume.name);
+    final resize = await getIt<ApiConnectionRepository>().api.resizeVolume(
+      event.volume.name,
+    );
+    if (resize.outcome != ServerMutationOutcome.confirmed) {
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(resize));
+      emit(
+        VolumesLoaded(
+          serverVolumesHashCode: state._serverVolumesHashCode,
+          diskStatus: state.diskStatus,
+          providerVolumes: state.providerVolumes,
+        ),
+      );
+      return;
+    }
+    getIt<ApiConnectionRepository>().apiData.volumes.invalidate();
     getIt<NavigationService>().showSnackBar(
       'storage.extending_volume_server_waiting'.tr(),
     );
@@ -242,6 +266,9 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       ),
     );
 
-    await getIt<ApiConnectionRepository>().api.reboot();
+    final reboot = await getIt<ApiConnectionRepository>().api.reboot();
+    if (reboot.outcome != ServerMutationOutcome.confirmed) {
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(reboot));
+    }
   }
 }

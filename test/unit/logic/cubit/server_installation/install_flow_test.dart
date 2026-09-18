@@ -1,11 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 
 import '../../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
+
+class _Navigation extends Mock implements NavigationService {}
 
 class _MockRepository extends Mock implements ServerInstallationRepository {}
 
@@ -31,6 +35,7 @@ void main() {
   late ServerInstallationCubit cubit;
 
   setUp(() {
+    getIt.registerSingleton<NavigationService>(_Navigation());
     repository = _MockRepository();
     cubit = ServerInstallationCubit(repository: repository);
 
@@ -49,6 +54,7 @@ void main() {
   tearDown(() async {
     cubit.closeTimer();
     await cubit.close();
+    await getIt.reset();
   });
 
   test('an unreachable server keeps waiting and sends nothing', () async {
@@ -103,7 +109,12 @@ void main() {
         _stateAfterServerStarted(isCertificateVerified: true);
 
     test('records the reboot once the server accepts it', () async {
-      when(() => repository.restart()).thenAnswer((_) async => true);
+      when(() => repository.restart()).thenAnswer(
+        (_) async => ServerMutationResult<void>(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
 
       await cubit.rebootServer(state: afterCertificate());
 
@@ -113,18 +124,33 @@ void main() {
       expect(cubit.state.isServerRebooted, isTrue);
     });
 
-    test('retries instead of advancing when the reboot fails', () async {
-      when(() => repository.restart()).thenAnswer((_) async => false);
+    for (final outcome in [
+      ServerMutationOutcome.rejected,
+      ServerMutationOutcome.indeterminate,
+    ]) {
+      test(
+        'stops without advancing or retrying after $outcome reboot',
+        () async {
+          when(() => repository.restart()).thenAnswer(
+            (_) async => ServerMutationResult<void>(
+              outcome: outcome,
+              payload: const ServerMutationPayload.notExpected(),
+            ),
+          );
 
-      await cubit.rebootServer(state: afterCertificate());
+          await cubit.rebootServer(state: afterCertificate());
 
-      verifyNever(
-        () => repository.saveIsServerRebooted(
-          serverRebooted: any(named: 'serverRebooted'),
-        ),
+          verifyNever(
+            () => repository.saveIsServerRebooted(
+              serverRebooted: any(named: 'serverRebooted'),
+            ),
+          );
+          expect(cubit.state.isServerRebooted, isFalse);
+          expect(cubit.timer?.isActive ?? false, isFalse);
+          expect(cubit.state, isNot(isA<TimerState>()));
+        },
       );
-      expect(cubit.state.isServerRebooted, isFalse);
-    });
+    }
   });
 
   test(

@@ -1,166 +1,123 @@
 part of 'server_api.dart';
 
 mixin ServerActionsApi on GraphQLApiMap {
-  Future<bool> _commonBoolRequest(final Function() graphQLMethod) async {
-    QueryResult response;
-    bool result = false;
+  Future<ServerMutationResult<void>> reboot() async {
+    final client = await getClient();
+    final response = await client.mutate$RebootSystem(
+      Options$Mutation$RebootSystem(
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
 
-    try {
-      response = await graphQLMethod();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL request: ${response.exception}',
-          error: response.exception,
-        );
-        result = false;
-      } else {
-        result = true;
-      }
-    } catch (e) {
-      logger('Error in GraphQL request: $e', error: e);
-    }
-
-    return result;
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.rebootSystem,
+    );
   }
 
-  Future<GenericResult<void>> reboot() async {
-    try {
-      final GraphQLClient client = await getClient();
-      final response = await client.mutate$RebootSystem();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL Reboot request: ${response.exception}',
-          error: response.exception,
-        );
-        return GenericResult(data: null, success: false);
-      }
-      return GenericResult(
-        data: null,
-        success: response.parsedData!.system.rebootSystem.success,
-        message: response.parsedData!.system.rebootSystem.message,
+  Future<ServerMutationResult<void>> pullConfigurationUpdate() async {
+    final client = await getClient();
+    final response = await client.mutate$PullRepositoryChanges(
+      Options$Mutation$PullRepositoryChanges(
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.pullRepositoryChanges,
+    );
+  }
+
+  Future<ServerMutationResult<ServerJob>> upgrade() async {
+    final client = await getClient();
+    final response = await client.mutate$RunSystemUpgrade(
+      Options$Mutation$RunSystemUpgrade(
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    if (_needsLegacyJobFallback(response)) {
+      return decodeServerMutation(
+        await client.mutate$RunSystemUpgradeFallback(
+          Options$Mutation$RunSystemUpgradeFallback(
+            errorPolicy: ErrorPolicy.all,
+            fetchPolicy: FetchPolicy.noCache,
+          ),
+        ),
+        select: (final data) => data.system.runSystemUpgrade,
       );
-    } catch (e) {
-      logger('Error in GraphQL Reboot request: $e', error: e);
-      return GenericResult(data: null, success: false);
     }
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.runSystemUpgrade,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
 
-  Future<bool> pullConfigurationUpdate() async {
-    try {
-      final GraphQLClient client = await getClient();
-      return await _commonBoolRequest(client.mutate$PullRepositoryChanges);
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<GenericResult<ServerJob?>> upgrade() async {
-    try {
-      final GraphQLClient client = await getClient();
-      final result = await client.mutate$RunSystemUpgrade();
-      if (result.hasException) {
-        final fallbackResult = await client.mutate$RunSystemUpgradeFallback();
-        if (fallbackResult.parsedData!.system.runSystemUpgrade.success) {
-          return GenericResult(
-            success: true,
-            data: null,
-            message: fallbackResult.parsedData!.system.runSystemUpgrade.message,
-          );
-        } else {
-          return GenericResult(
-            success: false,
-            message: fallbackResult.parsedData!.system.runSystemUpgrade.message,
-            data: null,
-          );
-        }
-      } else if (result.parsedData!.system.runSystemUpgrade.success &&
-          result.parsedData!.system.runSystemUpgrade.job != null) {
-        return GenericResult(
-          success: true,
-          data: ServerJob.fromGraphQL(
-            result.parsedData!.system.runSystemUpgrade.job!,
+  Future<ServerMutationResult<ServerJob>> apply() async {
+    final client = await getClient();
+    final response = await client.mutate$RunSystemRebuild(
+      Options$Mutation$RunSystemRebuild(
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    if (_needsLegacyJobFallback(response)) {
+      return decodeServerMutation(
+        await client.mutate$RunSystemRebuildFallback(
+          Options$Mutation$RunSystemRebuildFallback(
+            errorPolicy: ErrorPolicy.all,
+            fetchPolicy: FetchPolicy.noCache,
           ),
-          message: result.parsedData!.system.runSystemUpgrade.message,
-        );
-      } else {
-        return GenericResult(
-          success: false,
-          message: result.parsedData!.system.runSystemUpgrade.message,
-          data: null,
-        );
-      }
-    } catch (e) {
-      return GenericResult(success: false, message: e.toString(), data: null);
+        ),
+        select: (final data) => data.system.runSystemRebuild,
+      );
     }
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.runSystemRebuild,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
 
-  Future<GenericResult<ServerJob?>> apply() async {
-    try {
-      final GraphQLClient client = await getClient();
-      final result = await client.mutate$RunSystemRebuild();
-      if (result.hasException) {
-        final fallbackResult = await client.mutate$RunSystemRebuildFallback();
-        if (fallbackResult.parsedData!.system.runSystemRebuild.success) {
-          return GenericResult(
-            success: true,
-            data: null,
-            message: fallbackResult.parsedData!.system.runSystemRebuild.message,
-          );
-        } else {
-          return GenericResult(
-            success: false,
-            message: fallbackResult.parsedData!.system.runSystemRebuild.message,
-            data: null,
-          );
-        }
-      } else {
-        if (result.parsedData!.system.runSystemRebuild.success &&
-            result.parsedData!.system.runSystemRebuild.job != null) {
-          return GenericResult(
-            success: true,
-            data: ServerJob.fromGraphQL(
-              result.parsedData!.system.runSystemRebuild.job!,
-            ),
-            message: result.parsedData!.system.runSystemRebuild.message,
-          );
-        } else {
-          return GenericResult(
-            success: false,
-            message: result.parsedData!.system.runSystemRebuild.message,
-            data: null,
-          );
-        }
-      }
-    } catch (e) {
-      logger('Error in GraphQL Apply request: $e', error: e);
-      return GenericResult(success: false, message: e.toString(), data: null);
-    }
-  }
+  Future<ServerMutationResult<ServerJob>> collectNixGarbage() async {
+    final client = await getClient();
+    final response = await client.mutate$NixCollectGarbage(
+      Options$Mutation$NixCollectGarbage(
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
 
-  Future<GenericResult<ServerJob?>> collectNixGarbage() async {
-    try {
-      final GraphQLClient client = await getClient();
-      final result = await client.mutate$NixCollectGarbage();
-      if (result.hasException) {
-        return GenericResult(success: false, data: null);
-      } else if (result.parsedData!.system.nixCollectGarbage.success &&
-          result.parsedData!.system.nixCollectGarbage.job != null) {
-        return GenericResult(
-          success: true,
-          data: ServerJob.fromGraphQL(
-            result.parsedData!.system.nixCollectGarbage.job!,
-          ),
-          message: result.parsedData!.system.nixCollectGarbage.message,
-        );
-      } else {
-        return GenericResult(
-          success: false,
-          message: result.parsedData!.system.nixCollectGarbage.message,
-          data: null,
-        );
-      }
-    } catch (e) {
-      return GenericResult(success: false, message: e.toString(), data: null);
-    }
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.nixCollectGarbage,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
+}
+
+bool _needsLegacyJobFallback(final QueryResult response) {
+  final exception = response.exception;
+  if (response.data != null || exception?.linkException != null) {
+    return false;
+  }
+  final errors = exception?.graphqlErrors ?? const <GraphQLError>[];
+  return errors.isNotEmpty &&
+      errors.every(
+        (final error) =>
+            (error.path == null || error.path!.isEmpty) &&
+            (error.extensions?['code'] == null ||
+                error.extensions?['code'] == 'GRAPHQL_VALIDATION_FAILED') &&
+            const {
+              "Cannot query field 'job' on type 'GenericMutationReturn'.",
+              'Cannot query field "job" on type "GenericMutationReturn".',
+            }.contains(error.message),
+      );
 }

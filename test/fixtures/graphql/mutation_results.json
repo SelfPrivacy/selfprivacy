@@ -587,5 +587,197 @@
         "message": ""
       }
     }
+  },
+  "RebootSystem": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "rebootSystem": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
+  },
+  "PullRepositoryChanges": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "pullRepositoryChanges": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
+  },
+  "RunSystemRebuild": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "runSystemRebuild": {
+        "__typename": "GenericJobMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Rebuild system",
+          "error": null,
+          "finishedAt": null,
+          "name": "Rebuild",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-runSystemRebuild",
+          "typeId": "system.rebuild"
+        }
+      }
+    }
+  },
+  "RunSystemUpgrade": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "runSystemUpgrade": {
+        "__typename": "GenericJobMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Upgrading the system",
+          "error": null,
+          "finishedAt": null,
+          "name": "Upgrade system",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-runSystemUpgrade",
+          "typeId": "system.upgrade"
+        }
+      }
+    }
+  },
+  "NixCollectGarbage": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "nixCollectGarbage": {
+        "__typename": "GenericJobMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Removing unused Nix store paths",
+          "error": null,
+          "finishedAt": null,
+          "name": "Collect Nix garbage",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-nixCollectGarbage",
+          "typeId": "system.nix_collect_garbage"
+        }
+      }
+    }
+  },
+  "MountVolume": {
+    "__typename": "Mutation",
+    "storage": {
+      "__typename": "StorageMutations",
+      "mountVolume": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
+  },
+  "UnmountVolume": {
+    "__typename": "Mutation",
+    "storage": {
+      "__typename": "StorageMutations",
+      "unmountVolume": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
+  },
+  "ResizeVolume": {
+    "__typename": "Mutation",
+    "storage": {
+      "__typename": "StorageMutations",
+      "resizeVolume": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
+  },
+  "MigrateToBinds": {
+    "__typename": "Mutation",
+    "storage": {
+      "__typename": "StorageMutations",
+      "migrateToBinds": {
+        "__typename": "GenericJobMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Migrating service storage to bind mounts",
+          "error": null,
+          "finishedAt": null,
+          "name": "Migrate service storage",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-migrateToBinds",
+          "typeId": "storage.migrate_to_binds"
+        }
+      }
+    }
+  },
+  "RunSystemRebuildFallback": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "runSystemRebuild": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
+  },
+  "RunSystemUpgradeFallback": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "runSystemUpgrade": {
+        "__typename": "GenericMutationReturn",
+        "code": 200,
+        "success": true,
+        "message": ""
+      }
+    }
   }
 }

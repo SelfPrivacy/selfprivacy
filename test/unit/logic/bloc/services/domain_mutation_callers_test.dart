@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
@@ -224,6 +227,76 @@ void main() {
     expect(data.serverJobs.data, [job]);
     expect(data.serverJobs.isExpired, isTrue);
   });
+
+  for (final outcome in ServerMutationOutcome.values) {
+    testWidgets('migration applies only the typed result: $outcome', (
+      final tester,
+    ) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      data.volumes.data = [];
+      final result = ServerMutationResult(
+        outcome: outcome,
+        payload: ServerMutationPayload.available(aServiceMoveJob()),
+      );
+      when(
+        () => api.migrateToBinds({'gitea': 'sdb'}, 'sda1'),
+      ).thenAnswer((_) async => result);
+      await jobs.migrateToBinds({'gitea': 'sdb'});
+      verify(() => repository.applyServerJobMutation(result)).called(1);
+      if (outcome == ServerMutationOutcome.confirmed) {
+        verifyNever(
+          () =>
+              navigation.showSnackBar(any(), behavior: any(named: 'behavior')),
+        );
+      } else {
+        verify(
+          () => navigation.showSnackBar(
+            any(),
+            behavior: SnackBarBehavior.floating,
+          ),
+        ).called(1);
+      }
+    });
+  }
+  testWidgets('migration uses the loaded root volume as fallback', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    data.volumes.data = Query$GetServerDiskVolumes.fromJson(
+      loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
+          as Map<String, dynamic>,
+    ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList();
+    final root = data.volumes.data!.firstWhere((final volume) => volume.root);
+    final result = ServerMutationResult(
+      outcome: ServerMutationOutcome.confirmed,
+      payload: ServerMutationPayload.available(aServiceMoveJob()),
+    );
+    when(() => api.migrateToBinds({}, root.name)).thenAnswer((_) async => result);
+    await jobs.migrateToBinds({});
+    verify(() => api.migrateToBinds({}, root.name)).called(1);
+  });
+
+  testWidgets(
+    'migration with missing confirmed job reports unavailable payload',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      final result = ServerMutationResult<ServerJob>(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.missing(),
+      );
+      when(
+        () => api.migrateToBinds({}, 'sda1'),
+      ).thenAnswer((_) async => result);
+      await jobs.migrateToBinds({});
+      verify(
+        () => navigation.showSnackBar(
+          'server_mutation.payload_unavailable'.tr(),
+          behavior: SnackBarBehavior.floating,
+        ),
+      ).called(1);
+    },
+  );
+
   testWidgets('bulk deletion reports each failed result only', (
     final tester,
   ) async {

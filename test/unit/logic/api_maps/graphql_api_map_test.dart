@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/forms/checks/recovery_domain_check.dart';
 
@@ -76,7 +77,7 @@ void main() {
         domainProvider: () => _unresolvableDomain,
       );
 
-      expect((await api.reboot()).success, isFalse);
+      expect((await api.reboot()).outcome, ServerMutationOutcome.indeterminate);
     });
 
     test('getApiVersion answers null rather than throwing', () async {

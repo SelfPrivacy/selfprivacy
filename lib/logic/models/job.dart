@@ -90,7 +90,11 @@ class CollectNixGarbageJob extends ClientJob {
   Future<(bool, String)> execute() async {
     final result = await getIt<ApiConnectionRepository>().api
         .collectNixGarbage();
-    return (result.success, result.message ?? '');
+    getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+    return (
+      result.outcome == ServerMutationOutcome.confirmed,
+      serverMutationMessage(result),
+    );
   }
 
   @override

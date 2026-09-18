@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
@@ -26,6 +27,7 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider.dar
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
 
@@ -382,10 +384,10 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
 
     emit(TimerState(dataState: dataState, isLoading: true));
 
-    if (!await repository.restart()) {
-      unawaited(
-        runDelayed(rebootServer, const Duration(seconds: 60), dataState),
-      );
+    final result = await repository.restart();
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      emit(dataState.copyWith(isLoading: () => false));
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
       return;
     }
 

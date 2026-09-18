@@ -128,10 +128,16 @@ void main() {
       'succeeds on an accepted reboot, over an authenticated client',
       () async {
         when(() => api.reboot()).thenAnswer(
-          (_) async => GenericResult<void>(success: true, data: null),
+          (_) async => ServerMutationResult<void>(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: const ServerMutationPayload.notExpected(),
+          ),
         );
 
-        expect(await repository.restart(), isTrue);
+        expect(
+          (await repository.restart()).outcome,
+          ServerMutationOutcome.confirmed,
+        );
         expect(lastFactoryCall['isWithToken'], isTrue);
         expect(lastFactoryCall['token'], 'api-token');
       },
@@ -139,10 +145,16 @@ void main() {
 
     test('fails when the server refuses the reboot', () async {
       when(() => api.reboot()).thenAnswer(
-        (_) async => GenericResult<void>(success: false, data: null),
+        (_) async => ServerMutationResult<void>(
+          outcome: ServerMutationOutcome.rejected,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
       );
 
-      expect(await repository.restart(), isFalse);
+      expect(
+        (await repository.restart()).outcome,
+        ServerMutationOutcome.rejected,
+      );
     });
   });
 

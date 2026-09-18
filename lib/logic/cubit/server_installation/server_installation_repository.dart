@@ -301,7 +301,7 @@ class ServerInstallationRepository {
     return api.probe();
   }
 
-  Future<bool> restart() async {
+  Future<ServerMutationResult<void>> restart() async {
     final result = await _serverApi(
       domainProvider: () =>
           getIt<WizardDataModel>().serverInstallation!.serverDomain!.domainName,
@@ -309,7 +309,7 @@ class ServerInstallationRepository {
           getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
     ).reboot();
 
-    return result.success;
+    return result;
   }
 
   Future<ServerHostingDetails> powerOn() {

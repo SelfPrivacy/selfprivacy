@@ -8,82 +8,86 @@ mixin VolumeApi on GraphQLApiMap {
     ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList();
   }
 
-  Future<void> mountVolume(final String volumeName) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$MountVolume(name: volumeName);
-      final mountVolumeMutation = Options$Mutation$MountVolume(
-        variables: variables,
-      );
-      await client.mutate$MountVolume(mountVolumeMutation);
-    } catch (e) {
-      logger('Error in GraphQL MountVolume request: $e', error: e);
-    }
+  Future<ServerMutationResult<void>> mountVolume(
+    final String volumeName,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$MountVolume(
+      Options$Mutation$MountVolume(
+        variables: Variables$Mutation$MountVolume(name: volumeName),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.storage.mountVolume,
+    );
   }
 
-  Future<void> unmountVolume(final String volumeName) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$UnmountVolume(name: volumeName);
-      final unmountVolumeMutation = Options$Mutation$UnmountVolume(
-        variables: variables,
-      );
-      await client.mutate$UnmountVolume(unmountVolumeMutation);
-    } catch (e) {
-      logger('Error in GraphQL UnmountVolume request: $e', error: e);
-    }
+  Future<ServerMutationResult<void>> unmountVolume(
+    final String volumeName,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$UnmountVolume(
+      Options$Mutation$UnmountVolume(
+        variables: Variables$Mutation$UnmountVolume(name: volumeName),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.storage.unmountVolume,
+    );
   }
 
-  Future<void> resizeVolume(final String volumeName) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$ResizeVolume(name: volumeName);
-      final resizeVolumeMutation = Options$Mutation$ResizeVolume(
-        variables: variables,
-      );
-      await client.mutate$ResizeVolume(resizeVolumeMutation);
-    } catch (e) {
-      logger('Error in GraphQL ResizeVolume request: $e', error: e);
-    }
+  Future<ServerMutationResult<void>> resizeVolume(
+    final String volumeName,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$ResizeVolume(
+      Options$Mutation$ResizeVolume(
+        variables: Variables$Mutation$ResizeVolume(name: volumeName),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.storage.resizeVolume,
+    );
   }
 
-  Future<GenericResult<String?>> migrateToBinds(
+  Future<ServerMutationResult<ServerJob>> migrateToBinds(
     final Map<String, String> serviceToDisk,
     final String fallbackDrive,
   ) async {
-    GenericResult<String?>? mutation;
+    final client = await getClient();
+    final response = await client.mutate$MigrateToBinds(
+      Options$Mutation$MigrateToBinds(
+        variables: Variables$Mutation$MigrateToBinds(
+          input: Input$MigrateToBindsInput(
+            bitwardenBlockDevice: serviceToDisk['bitwarden'] ?? fallbackDrive,
+            emailBlockDevice: serviceToDisk['email'] ?? fallbackDrive,
+            giteaBlockDevice: serviceToDisk['gitea'] ?? fallbackDrive,
+            nextcloudBlockDevice: serviceToDisk['nextcloud'] ?? fallbackDrive,
+            pleromaBlockDevice: serviceToDisk['pleroma'] ?? fallbackDrive,
+          ),
+        ),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
 
-    try {
-      final GraphQLClient client = await getClient();
-      final input = Input$MigrateToBindsInput(
-        bitwardenBlockDevice: serviceToDisk['bitwarden'] ?? fallbackDrive,
-        emailBlockDevice: serviceToDisk['email'] ?? fallbackDrive,
-        giteaBlockDevice: serviceToDisk['gitea'] ?? fallbackDrive,
-        nextcloudBlockDevice: serviceToDisk['nextcloud'] ?? fallbackDrive,
-        pleromaBlockDevice: serviceToDisk['pleroma'] ?? fallbackDrive,
-      );
-      final variables = Variables$Mutation$MigrateToBinds(input: input);
-      final migrateMutation = Options$Mutation$MigrateToBinds(
-        variables: variables,
-      );
-      final QueryResult<Mutation$MigrateToBinds> result = await client
-          .mutate$MigrateToBinds(migrateMutation);
-      mutation = mutation = GenericResult(
-        success: true,
-        code: result.parsedData!.storage.migrateToBinds.code,
-        message: result.parsedData!.storage.migrateToBinds.message,
-        data: result.parsedData!.storage.migrateToBinds.job?.uid,
-      );
-    } catch (e) {
-      logger('Error in GraphQL MigrateToBinds request: $e', error: e);
-      mutation = GenericResult(
-        success: false,
-        code: 0,
-        message: e.toString(),
-        data: null,
-      );
-    }
-
-    return mutation;
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.storage.migrateToBinds,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
 }

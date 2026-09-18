@@ -1,0 +1,4 @@
+{
+  "message": "Cannot query field 'job' on type 'GenericMutationReturn'.",
+  "locations": [{"line": 7, "column": 7}]
+}

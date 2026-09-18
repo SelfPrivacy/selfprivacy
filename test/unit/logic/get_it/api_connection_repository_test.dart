@@ -460,6 +460,62 @@ void main() {
     );
   });
 
+  for (final outcome in ServerMutationOutcome.values) {
+    test('server-job payload application requires $outcome confirmation', () {
+      final job = aServiceMoveJob();
+      repository.apiData.serverJobs.data = [];
+      repository.applyServerJobMutation(
+        ServerMutationResult(
+          outcome: outcome,
+          payload: ServerMutationPayload.available(job),
+        ),
+      );
+      expect(
+        repository.apiData.serverJobs.data,
+        outcome == ServerMutationOutcome.confirmed ? [job] : isEmpty,
+      );
+    });
+  }
+  test(
+    'server-job payload replaces duplicate IDs without refreshing the list',
+    () {
+      repository.apiData.serverJobs
+        ..data = [aServiceMoveJob(status: 'CREATED')]
+        ..invalidate();
+      final job = aServiceMoveJob();
+      repository.applyServerJobMutation(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(job),
+        ),
+      );
+      expect(repository.apiData.serverJobs.data, [job]);
+      expect(repository.apiData.serverJobs.isExpired, isTrue);
+    },
+  );
+  test('server-job payload seeds an unloaded list as incomplete', () {
+    final job = aServiceMoveJob();
+    repository.applyServerJobMutation(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(job),
+      ),
+    );
+    expect(repository.apiData.serverJobs.data, [job]);
+    expect(repository.apiData.serverJobs.isExpired, isTrue);
+  });
+  test('missing confirmed server-job payload invalidates the list', () {
+    repository.apiData.serverJobs.data = [];
+    repository.applyServerJobMutation(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.missing(),
+      ),
+    );
+    expect(repository.apiData.serverJobs.data, isEmpty);
+    expect(repository.apiData.serverJobs.isExpired, isTrue);
+  });
+
   test('the developer setting stops an automatic token refresh', () async {
     await settings.setAutomaticGraphqlTokenRefresh(enabled: false);
 

@@ -80,16 +80,18 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     final fallbackDrive =
         getIt<ApiConnectionRepository>().apiData.volumes.data
             ?.where((final drive) => drive.root)
-            .first
-            .name ??
+            .firstOrNull
+            ?.name ??
         'sda1';
     final result = await getIt<ApiConnectionRepository>().api.migrateToBinds(
       serviceToDisk,
       fallbackDrive,
     );
-    if (result.data == null) {
+    getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+    if (result.outcome != ServerMutationOutcome.confirmed ||
+        result.payload.value == null) {
       getIt<NavigationService>().showSnackBar(
-        result.message!,
+        serverMutationMessage(result),
         behavior: SnackBarBehavior.floating,
       );
       return;

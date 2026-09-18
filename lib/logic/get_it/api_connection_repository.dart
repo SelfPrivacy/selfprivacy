@@ -79,6 +79,31 @@ class ApiConnectionRepository {
   StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
   DateTime? _jobsStreamDisconnectTime;
 
+  void applyServerJobMutation(final ServerMutationResult<ServerJob> result) {
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      return;
+    }
+    final job = result.payload.value;
+    final jobs = _apiData.serverJobs;
+    if (job == null) {
+      jobs.invalidate();
+    } else if (jobs.data == null) {
+      jobs
+        ..data = [job]
+        ..invalidate();
+    } else {
+      final index = jobs.data!.indexWhere(
+        (final existing) => existing.uid == job.uid,
+      );
+      if (index < 0) {
+        jobs.data!.add(job);
+      } else {
+        jobs.data![index] = job;
+      }
+    }
+    emitData();
+  }
+
   Future<ServerMutationResult<void>> removeServerJob(final String uid) async {
     final result = await api.removeApiJob(uid);
     if (result.outcome == ServerMutationOutcome.confirmed) {

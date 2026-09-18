@@ -23,6 +23,136 @@ DomainStore<T> createStore<T extends Object>(
 }
 
 void main() {
+  testWidgets(
+    'partial effects preserve unrelated data and snapshot deadlines',
+    (final tester) async {
+      final store = createStore<Map<String, int>>(
+        tester,
+        fetch: () async => const {'changed': 1, 'retained': 2},
+      );
+      expect(await store.refresh(), RefreshResult.applied);
+      final original = store.value;
+      await tester.pump(const Duration(seconds: 9));
+      expect(
+        store.patch((final data) => Map.unmodifiable({...data, 'changed': 3})),
+        isTrue,
+      );
+      expect(store.value.data, {'changed': 3, 'retained': 2});
+      expect(original.data, {'changed': 1, 'retained': 2});
+      expect(store.value.updatedAt, original.updatedAt);
+      expect(store.value.needsReconciliation, isFalse);
+      expect(store.isDue, isFalse);
+      expect(await store.refresh(), RefreshResult.current);
+      expect(() => store.value.data!['changed'] = 4, throwsUnsupportedError);
+      await tester.pump(const Duration(seconds: 1));
+      expect(store.isDue, isTrue);
+      await tester.pump(const Duration(seconds: 10));
+      expect(store.value.freshness, Freshness.stale);
+      store.dispose();
+    },
+  );
+
+  testWidgets('partial effects cannot establish a complete initial list', (
+    final tester,
+  ) async {
+    final store = createStore<List<int>>(tester, fetch: () async => const [1]);
+    expect(
+      store.patch((_) => fail('must not reduce an absent snapshot')),
+      isFalse,
+    );
+    expect(store.value.data, isNull);
+    expect(store.value.updatedAt, isNull);
+    expect(store.value.needsReconciliation, isTrue);
+    expect(await store.refresh(), RefreshResult.applied);
+    expect(store.value.needsReconciliation, isFalse);
+    store.dispose();
+  });
+
+  for (final fails in [false, true]) {
+    testWidgets('partial deletion fences old reads and errors ($fails)', (
+      final tester,
+    ) async {
+      final response = Completer<List<int>>();
+      final store = createStore<List<int>>(tester, fetch: () => response.future)
+        ..push(const [1, 2]);
+      final updatedAt = store.value.updatedAt;
+      final attempt = store.refresh(force: true);
+      store.patch(
+        (final data) => List.unmodifiable(data.where((final id) => id != 1)),
+      );
+      expect(await store.refresh(), RefreshResult.superseded);
+      if (fails) {
+        response.completeError(StateError('obsolete error'));
+      } else {
+        response.complete(const [1, 2]);
+      }
+      expect(await attempt, RefreshResult.superseded);
+      expect(store.value.data, [2]);
+      expect(store.value.updatedAt, updatedAt);
+      expect(store.value.lastError, isNull);
+      expect(store.value.needsReconciliation, isTrue);
+      expect(store.isDue, isTrue);
+      store.push(const [2]);
+      expect(store.value.needsReconciliation, isFalse);
+      expect(store.isDue, isFalse);
+      store.dispose();
+    });
+  }
+
+  testWidgets('patch retains stale state and existing reconciliation', (
+    final tester,
+  ) async {
+    final store = createStore<int>(tester, fetch: () async => 1)
+      ..push(1)
+      ..invalidate()
+      ..patch((final data) => data + 1);
+    expect(store.value.freshness, Freshness.stale);
+    expect(store.value.needsReconciliation, isTrue);
+    expect(store.value.data, 2);
+    expect(await store.refresh(), RefreshResult.applied);
+    expect(store.value.needsReconciliation, isFalse);
+    store.dispose();
+  });
+
+  testWidgets('failed reducers leave the snapshot and active read unchanged', (
+    final tester,
+  ) async {
+    final response = Completer<int>();
+    final store = createStore<int>(tester, fetch: () => response.future)
+      ..push(1);
+    final attempt = store.refresh(force: true);
+    final before = store.value;
+    expect(
+      () => store.patch((_) => throw StateError('bad reducer')),
+      throwsStateError,
+    );
+    expect(store.value, same(before));
+    response.complete(2);
+    expect(await attempt, RefreshResult.applied);
+    store.setSupport(DomainSupport.unsupported);
+    expect(() => store.patch((final value) => value), throwsStateError);
+    store.dispose();
+    expect(() => store.patch((final value) => value), throwsStateError);
+  });
+
+  testWidgets('complete push covers old reads even after a later patch', (
+    final tester,
+  ) async {
+    final response = Completer<int>();
+    final store = createStore<int>(tester, fetch: () => response.future);
+    final attempt = store.refresh();
+    store
+      ..invalidate()
+      ..push(2)
+      ..patch((final value) => value + 1);
+    response.complete(1);
+    expect(await attempt, RefreshResult.superseded);
+    expect(store.value.data, 3);
+    expect(store.value.needsReconciliation, isFalse);
+    expect(await store.refresh(), RefreshResult.current);
+    store.dispose();
+  });
+
   test('rejects invalid timing policies', () {
     DomainStore<int> create(
       final Duration interval,
@@ -177,7 +307,7 @@ void main() {
     final updatedAt = store.value.updatedAt;
     fails = true;
     await tester.pump(const Duration(seconds: 10));
-    await store.refresh();
+    expect(await store.refresh(), RefreshResult.failed);
     expect(store.value.lastError, same(error));
     expect(store.value.data, 1);
     expect(store.value.updatedAt, updatedAt);
@@ -289,20 +419,22 @@ void main() {
         responses[0].complete(1);
       }
       await tester.pump();
-      expect(requests, 2);
+      expect(await refresh, RefreshResult.superseded);
+      expect(requests, 1);
       expect(store.value.data, 0);
       expect(store.value.lastError, isNull);
-      expect(store.value.isRefreshing, isTrue);
-      expect(identical(store.refresh(), refresh), isTrue);
+      expect(store.value.isRefreshing, isFalse);
+      expect(store.value.needsReconciliation, isTrue);
+      final replacement = store.refresh();
       responses[1].complete(2);
-      await refresh;
+      expect(await replacement, RefreshResult.applied);
       expect(store.value.data, 2);
       expect(store.value.freshness, Freshness.fresh);
       store.dispose();
     });
   }
 
-  testWidgets('invalidation during a follow-up queues its successor', (
+  testWidgets('each invalidated attempt requires a separate refresh call', (
     final tester,
   ) async {
     final responses = List.generate(3, (_) => Completer<int>());
@@ -314,14 +446,17 @@ void main() {
     final refresh = store.refresh();
     store.invalidate();
     responses[0].complete(1);
-    await tester.pump();
+    expect(await refresh, RefreshResult.superseded);
+    expect(requests, 1);
+    final second = store.refresh();
     store.invalidate();
     responses[1].complete(2);
-    await tester.pump();
-    expect(requests, 3);
+    expect(await second, RefreshResult.superseded);
+    expect(requests, 2);
     expect(store.value.data, isNull);
+    final third = store.refresh();
     responses[2].complete(3);
-    await refresh;
+    expect(await third, RefreshResult.applied);
     expect(store.value.data, 3);
     store.dispose();
   });
@@ -356,7 +491,7 @@ void main() {
       support: DomainSupport.unknown,
       fetch: () async => ++requests,
     );
-    await store.refresh(force: true);
+    expect(await store.refresh(force: true), RefreshResult.unsupported);
     expect(store.isDue, isFalse);
     expect(() => store.push(1), throwsStateError);
     store.setSupport(DomainSupport.unsupported);
@@ -395,7 +530,7 @@ void main() {
     store.dispose();
   });
 
-  testWidgets('regaining support during an old fetch queues a new request', (
+  testWidgets('regaining support does not start another request', (
     final tester,
   ) async {
     final response = Completer<int>();
@@ -412,7 +547,10 @@ void main() {
       ..setSupport(DomainSupport.unknown)
       ..setSupport(DomainSupport.supported);
     response.complete(1);
-    await refresh;
+    expect(await refresh, RefreshResult.superseded);
+    expect(requests, 1);
+    expect(store.value.needsReconciliation, isTrue);
+    expect(await store.refresh(), RefreshResult.applied);
     expect(requests, 2);
     expect(store.value.data, 2);
     store.dispose();
@@ -463,7 +601,7 @@ void main() {
       store
         ..invalidate()
         ..dispose();
-      await refresh;
+      expect(await refresh, RefreshResult.disposed);
       await tester.pump();
       final count = states.length;
       expect(closed, isTrue);
@@ -478,7 +616,7 @@ void main() {
       expect(store.value.data, 0);
       expect(store.value.lastError, isNull);
       expect(store.value.isRefreshing, isFalse);
-      expect(store.refresh, throwsStateError);
+      expect(await store.refresh(), RefreshResult.disposed);
       expect(store.invalidate, throwsStateError);
       expect(() => store.push(3), throwsStateError);
       expect(() => store.setSupport(DomainSupport.supported), throwsStateError);

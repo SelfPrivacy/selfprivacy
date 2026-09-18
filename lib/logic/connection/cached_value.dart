@@ -11,6 +11,7 @@ class CachedValue<T extends Object> {
     this.isRefreshing = false,
     this.support = DomainSupport.unknown,
     this.lastError,
+    this.needsReconciliation = false,
   });
 
   /// Null until a fetch or a complete subscription update supplies data.
@@ -21,6 +22,9 @@ class CachedValue<T extends Object> {
   final DomainSupport support;
   final Object? lastError;
 
+  /// Unresolved state changes require a read even before the refresh deadline.
+  final bool needsReconciliation;
+
   CachedValue<T> copyWith({
     final T? data,
     final DateTime? updatedAt,
@@ -28,6 +32,7 @@ class CachedValue<T extends Object> {
     final bool? isRefreshing,
     final DomainSupport? support,
     final Object? Function()? lastError,
+    final bool? needsReconciliation,
   }) => CachedValue<T>(
     data: data ?? this.data,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -35,5 +40,6 @@ class CachedValue<T extends Object> {
     isRefreshing: isRefreshing ?? this.isRefreshing,
     support: support ?? this.support,
     lastError: lastError == null ? this.lastError : lastError(),
+    needsReconciliation: needsReconciliation ?? this.needsReconciliation,
   );
 }

@@ -4,6 +4,16 @@ import 'package:selfprivacy/logic/connection/cached_value.dart';
 
 typedef CacheTimerFactory = Timer Function(Duration delay, void Function() run);
 
+enum RefreshResult {
+  applied,
+  failed,
+  superseded,
+  unsupported,
+  disposed,
+  current,
+  deferred,
+}
+
 /// Caches one domain. Only [refresh] performs fetches.
 ///
 /// The clock and timer factory must use the same time source. Consumers must
@@ -45,88 +55,135 @@ class DomainStore<T extends Object> {
   Stream<CachedValue<T>> get stream => _changes.stream;
 
   Timer? _expiryTimer;
-  Completer<void>? _refresh;
-  bool _refreshAgain = false;
+  Completer<RefreshResult>? _refresh;
+  int? _refreshRevision;
   bool _disposed = false;
   int _revision = 0;
+  int _readRevision = 0;
+
+  bool get isDisposed => _disposed;
+  int get revision => _revision;
+
+  /// Changes only when a fetch result is accepted, not on pushes or patches.
+  int get readRevision => _readRevision;
 
   bool get isDue =>
       _value.support == DomainSupport.supported &&
-      (_value.data == null ||
+      (_value.needsReconciliation ||
+          _value.data == null ||
           _value.freshness == Freshness.stale ||
           !_now().isBefore(_value.updatedAt!.add(refreshInterval)));
 
-  /// Coalesces concurrent calls, including forced refreshes.
+  /// Performs at most one read. Calls for the same revision share its future.
   ///
   /// Fetch failures are recorded in [value] and do not escape this future.
   /// Unknown and unsupported domains are skipped, even with [force].
-  Future<void> refresh({final bool force = false}) {
-    _ensureOpen();
+  Future<RefreshResult> refresh({final bool force = false}) {
+    if (_disposed) {
+      return Future.value(RefreshResult.disposed);
+    }
     if (_value.support != DomainSupport.supported) {
-      return Future<void>.value();
+      return Future.value(RefreshResult.unsupported);
     }
     final current = _refresh;
     if (current != null) {
-      return current.future;
+      return _refreshRevision == _revision
+          ? current.future
+          : Future.value(RefreshResult.superseded);
     }
     if (!force && !isDue) {
-      return Future<void>.value();
+      return Future.value(RefreshResult.current);
     }
-    final completion = Completer<void>();
+    final completion = Completer<RefreshResult>();
     _refresh = completion;
+    _refreshRevision = _revision;
     unawaited(_runRefresh(completion));
     return completion.future;
   }
 
-  Future<void> _runRefresh(final Completer<void> completion) async {
+  Future<void> _runRefresh(final Completer<RefreshResult> completion) async {
+    final ticket = _revision;
+    var result = RefreshResult.superseded;
     _emit(_value.copyWith(isRefreshing: true));
     try {
-      do {
-        _refreshAgain = false;
-        final revision = _revision;
-        try {
-          final data = await _fetch();
-          if (!_disposed && revision == _revision) {
-            _accept(data);
-          }
-        } catch (error) {
-          if (!_disposed && revision == _revision) {
-            _emit(_value.copyWith(lastError: () => error));
-          }
-        }
-      } while (!_disposed &&
-          _refreshAgain &&
-          _value.support == DomainSupport.supported);
+      final data = await _fetch();
+      if (!_disposed && ticket == _revision) {
+        _readRevision++;
+        _accept(data);
+        result = RefreshResult.applied;
+      }
+    } catch (error) {
+      if (!_disposed && ticket == _revision) {
+        _emit(_value.copyWith(lastError: () => error));
+        result = RefreshResult.failed;
+      }
     } finally {
       if (!_disposed) {
         _refresh = null;
         _emit(_value.copyWith(isRefreshing: false));
       }
       if (!completion.isCompleted) {
-        completion.complete();
+        completion.complete(result);
       }
     }
   }
 
-  /// Marks data stale. An active fetch is superseded and followed by one fetch.
-  /// Invalidation while idle does not start a request.
+  /// Supersedes active reads and records reconciliation without starting I/O.
   void invalidate() {
     _ensureOpen();
     _revision++;
-    _refreshAgain = _refresh != null;
     _expiryTimer?.cancel();
-    _emit(_value.copyWith(freshness: Freshness.stale));
+    _emit(
+      _value.copyWith(freshness: Freshness.stale, needsReconciliation: true),
+    );
+  }
+
+  /// Records deferred work without superseding an active read.
+  void requestReconciliation() {
+    _ensureOpen();
+    _emit(_value.copyWith(needsReconciliation: true));
+  }
+
+  /// Fences reads before a command without aging the retained snapshot.
+  /// A discarded active read leaves reconciliation due.
+  void fenceReads() {
+    _ensureOpen();
+    final supersedesRead = _refresh != null && _refreshRevision == _revision;
+    _revision++;
+    _emit(
+      _value.copyWith(
+        needsReconciliation: _value.needsReconciliation || supersedesRead,
+      ),
+    );
+  }
+
+  /// Applies a reducer without renewing the complete snapshot's age.
+  /// Reducers must return immutable values without mutating their input.
+  /// Returns false before first load. The repository must retain that effect
+  /// in its entity projection until a complete snapshot is available.
+  bool patch(final T Function(T data) reduce) {
+    _ensureOpen();
+    _ensureSupported();
+    final data = _value.data;
+    final next = data == null ? null : reduce(data);
+    final supersedesRead = _refresh != null && _refreshRevision == _revision;
+    _revision++;
+    _emit(
+      _value.copyWith(
+        data: next,
+        needsReconciliation:
+            _value.needsReconciliation || data == null || supersedesRead,
+      ),
+    );
+    return data != null;
   }
 
   /// Accepts a complete domain update and supersedes pending fetch results.
   /// A push also satisfies any queued invalidation.
   void push(final T data) {
     _ensureOpen();
-    if (_value.support != DomainSupport.supported) {
-      throw StateError('Cannot push data to an unsupported or unknown domain.');
-    }
+    _ensureSupported();
     _revision++;
-    _refreshAgain = false;
     _accept(data);
   }
 
@@ -138,12 +195,12 @@ class DomainStore<T extends Object> {
       return;
     }
     _revision++;
-    _refreshAgain = support == DomainSupport.supported && _refresh != null;
     _expiryTimer?.cancel();
     _emit(
       _value.copyWith(
         support: support,
         freshness: Freshness.stale,
+        needsReconciliation: true,
         isRefreshing: support == DomainSupport.supported && _refresh != null,
         lastError: () => null,
       ),
@@ -157,6 +214,7 @@ class DomainStore<T extends Object> {
         data: data,
         updatedAt: _now(),
         freshness: Freshness.fresh,
+        needsReconciliation: false,
         lastError: () => null,
       ),
     );
@@ -173,6 +231,7 @@ class DomainStore<T extends Object> {
         next.freshness == _value.freshness &&
         next.isRefreshing == _value.isRefreshing &&
         next.support == _value.support &&
+        next.needsReconciliation == _value.needsReconciliation &&
         identical(next.lastError, _value.lastError)) {
       return;
     }
@@ -181,16 +240,15 @@ class DomainStore<T extends Object> {
   }
 
   /// Stops notifications and completes refresh waiters without awaiting I/O.
-  /// Late fetch results are ignored. Further writes and refreshes throw.
+  /// Late fetch results are ignored. Further writes throw.
   void dispose() {
     if (_disposed) {
       return;
     }
     _disposed = true;
     _expiryTimer?.cancel();
-    _refreshAgain = false;
     _value = _value.copyWith(isRefreshing: false);
-    _refresh?.complete();
+    _refresh?.complete(RefreshResult.disposed);
     _refresh = null;
     unawaited(_changes.close());
   }
@@ -198,6 +256,14 @@ class DomainStore<T extends Object> {
   void _ensureOpen() {
     if (_disposed) {
       throw StateError('DomainStore $name is disposed.');
+    }
+  }
+
+  void _ensureSupported() {
+    if (_value.support != DomainSupport.supported) {
+      throw StateError(
+        'Cannot write data to an unsupported or unknown domain.',
+      );
     }
   }
 }

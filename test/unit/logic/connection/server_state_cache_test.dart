@@ -6,6 +6,7 @@ import 'package:graphql/client.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/connection/cached_value.dart';
+import 'package:selfprivacy/logic/connection/domain_store.dart';
 import 'package:selfprivacy/logic/connection/server_state_cache.dart';
 
 import '../../../fakes/graphql/link_transport.dart';
@@ -310,7 +311,7 @@ void main() {
     expect(second.users.value.data, isNotEmpty);
     expect(await sharedApi.fetchApiVersion(), '3.9.0');
     for (final store in first.stores) {
-      expect(store.refresh, throwsStateError);
+      expect(await store.refresh(), RefreshResult.disposed);
     }
     second.dispose();
   });

@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'services_event.dart';
 part 'services_state.dart';
@@ -88,37 +89,53 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     final result = await getIt<ApiConnectionRepository>().api.restartService(
       event.service.id,
     );
-    if (!result.success) {
-      getIt<NavigationService>().showSnackBar('jobs.generic_error'.tr());
-      return;
-    }
-    if (!result.data) {
-      getIt<NavigationService>().showSnackBar(
-        result.message ?? 'jobs.generic_error'.tr(),
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      emit(
+        state.copyWith(
+          lockedServices: state._lockedServices
+              .where((final lock) => lock.serviceId != event.service.id)
+              .toList(),
+        ),
       );
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
       return;
     }
+    getIt<ApiConnectionRepository>().apiData.services.invalidate();
   }
 
   Future<void> _move(
     final ServiceMove event,
     final Emitter<ServicesState> emit,
   ) async {
-    final migrationJob = await getIt<ApiConnectionRepository>().api.moveService(
+    final repository = getIt<ApiConnectionRepository>();
+    final result = await repository.api.moveService(
       event.service.id,
       event.destination,
     );
-    if (!migrationJob.success) {
-      getIt<NavigationService>().showSnackBar(
-        migrationJob.message ?? 'jobs.generic_error'.tr(),
-      );
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
+      return;
     }
-    if (migrationJob.data != null) {
-      getIt<ApiConnectionRepository>().apiData.serverJobs.data?.add(
-        migrationJob.data!,
+    final job = result.payload.value;
+    final jobs = repository.apiData.serverJobs;
+    if (job == null) {
+      jobs.invalidate();
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
+    } else if (jobs.data == null) {
+      jobs
+        ..data = [job]
+        ..invalidate();
+    } else {
+      final index = jobs.data!.indexWhere(
+        (final existing) => existing.uid == job.uid,
       );
-      getIt<ApiConnectionRepository>().emitData();
+      if (index < 0) {
+        jobs.data!.add(job);
+      } else {
+        jobs.data![index] = job;
+      }
     }
+    repository.emitData();
   }
 
   late StreamSubscription _apiDataSubscription;

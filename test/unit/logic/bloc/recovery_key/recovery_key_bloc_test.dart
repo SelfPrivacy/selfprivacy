@@ -60,8 +60,15 @@ void main() {
             expect(data.recoveryKeyStatus.isExpired, isTrue);
             verify(() => repository.reload(null)).called(1);
           } else {
-            final message = result.secretFailureKey.tr();
-            expect(message, isNot(result.secretFailureKey));
+            final failureKey = switch (outcome) {
+              ServerMutationOutcome.confirmed =>
+                'server_mutation.payload_unavailable',
+              ServerMutationOutcome.rejected => 'server_mutation.rejected',
+              ServerMutationOutcome.indeterminate =>
+                'server_mutation.outcome_unknown',
+            };
+            final message = failureKey.tr();
+            expect(message, isNot(failureKey));
             await expectLater(
               bloc.generateRecoveryKey(),
               throwsA(

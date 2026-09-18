@@ -20,28 +20,6 @@ GraphQLClient _clientReturning(final Map<String, dynamic> data) =>
       ),
     );
 
-GraphQLTransport _transportReturning(final Map<String, dynamic> data) {
-  final transport = _MockGraphQLTransport();
-  when(transport.client).thenReturn(_clientReturning(data));
-  return transport;
-}
-
-Map<String, dynamic> _failedMutation(final String name) => {
-  '__typename': 'Mutation',
-  'users': {
-    '__typename': 'UsersMutations',
-    name: {
-      '__typename': name == 'deleteUser'
-          ? 'GenericMutationReturn'
-          : 'UserMutationReturn',
-      'success': false,
-      'code': 400,
-      'message': 'rejected',
-      if (name != 'deleteUser') 'user': null,
-    },
-  },
-};
-
 void main() {
   test('delegates subscription client creation to the transport', () async {
     final transport = _MockGraphQLTransport();
@@ -60,49 +38,5 @@ void main() {
       await api.getSubscriptionClient(onConnectionLost: onConnectionLost),
       same(client),
     );
-  });
-
-  test('createUser preserves mutation failure', () async {
-    final api = _UsersApi(_transportReturning(_failedMutation('createUser')));
-
-    final result = await api.createUser('alice', null, const []);
-
-    expect(result.success, isFalse);
-    expect(result.code, 400);
-    expect(result.message, 'rejected');
-    expect(result.data, isNull);
-  });
-
-  test('updateUser preserves mutation failure', () async {
-    final api = _UsersApi(_transportReturning(_failedMutation('updateUser')));
-
-    final result = await api.updateUser('alice', null, const []);
-
-    expect(result.success, isFalse);
-    expect(result.code, 400);
-    expect(result.message, 'rejected');
-    expect(result.data, isNull);
-  });
-
-  test('deleteUser preserves mutation failure', () async {
-    final api = _UsersApi(_transportReturning(_failedMutation('deleteUser')));
-
-    final result = await api.deleteUser('alice');
-
-    expect(result.success, isFalse);
-    expect(result.code, 400);
-    expect(result.message, 'rejected');
-    expect(result.data, isFalse);
-  });
-
-  test('addSshKey preserves mutation failure', () async {
-    final api = _UsersApi(_transportReturning(_failedMutation('addSshKey')));
-
-    final result = await api.addSshKey('alice', 'ssh-ed25519 key');
-
-    expect(result.success, isFalse);
-    expect(result.code, 400);
-    expect(result.message, 'rejected');
-    expect(result.data, isNull);
   });
 }

@@ -150,168 +150,73 @@ class ServerApi extends GraphQLApiMap
     return usesBinds;
   }
 
-  Future<GenericResult> switchService({
+  Future<ServerMutationResult<void>> switchService({
     required final String serviceId,
     required final bool needTurnOn,
-  }) async {
-    try {
-      final GraphQLClient client = await getClient();
-      if (needTurnOn) {
-        final variables = Variables$Mutation$EnableService(
-          serviceId: serviceId,
-        );
-        final mutation = Options$Mutation$EnableService(variables: variables);
-        final result = await client.mutate$EnableService(mutation);
-        if (result.hasException) {
-          return GenericResult(
-            success: false,
-            message: result.exception.toString(),
-            data: null,
-          );
-        }
-        return GenericResult(
-          success: result.parsedData?.services.enableService.success ?? false,
-          message: result.parsedData?.services.enableService.message,
-          data: null,
-        );
-      } else {
-        final variables = Variables$Mutation$DisableService(
-          serviceId: serviceId,
-        );
-        final mutation = Options$Mutation$DisableService(variables: variables);
-        final result = await client.mutate$DisableService(mutation);
-        if (result.hasException) {
-          return GenericResult(
-            success: false,
-            message: result.exception.toString(),
-            data: null,
-          );
-        }
-        return GenericResult(
-          success: result.parsedData?.services.disableService.success ?? false,
-          message: result.parsedData?.services.disableService.message,
-          data: null,
-        );
-      }
-    } catch (e) {
-      return GenericResult(success: false, message: e.toString(), data: null);
-    }
-  }
+  }) => needTurnOn ? enableService(serviceId) : disableService(serviceId);
 
-  Future<GenericResult<AutoUpgradeSettings?>> setAutoUpgradeSettings(
+  Future<ServerMutationResult<AutoUpgradeSettings>> setAutoUpgradeSettings(
     final AutoUpgradeSettings settings,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final input = Input$AutoUpgradeSettingsInput(
-        allowReboot: settings.allowReboot,
-        enableAutoUpgrade: settings.enable,
-      );
-      final variables = Variables$Mutation$ChangeAutoUpgradeSettings(
-        settings: input,
-      );
-      final mutation = Options$Mutation$ChangeAutoUpgradeSettings(
-        variables: variables,
-      );
-      final result = await client.mutate$ChangeAutoUpgradeSettings(mutation);
-      if (result.hasException) {
-        return GenericResult<AutoUpgradeSettings?>(
-          success: false,
-          message: result.exception.toString(),
-          data: null,
-        );
-      }
-      return GenericResult<AutoUpgradeSettings?>(
-        success:
-            result.parsedData?.system.changeAutoUpgradeSettings.success ??
-            false,
-        message: result.parsedData?.system.changeAutoUpgradeSettings.message,
-        data: result.parsedData == null
-            ? null
-            : AutoUpgradeSettings(
-                allowReboot: result
-                    .parsedData!
-                    .system
-                    .changeAutoUpgradeSettings
-                    .allowReboot,
-                enable: result
-                    .parsedData!
-                    .system
-                    .changeAutoUpgradeSettings
-                    .enableAutoUpgrade,
-              ),
-      );
-    } catch (e) {
-      logger('Error setting auto upgrade settings: $e', error: e);
-      return GenericResult<AutoUpgradeSettings?>(
-        success: false,
-        message: e.toString(),
-        data: null,
-      );
-    }
+    final client = await getClient();
+    final response = await client.mutate$ChangeAutoUpgradeSettings(
+      Options$Mutation$ChangeAutoUpgradeSettings(
+        variables: Variables$Mutation$ChangeAutoUpgradeSettings(
+          settings: Input$AutoUpgradeSettingsInput(
+            allowReboot: settings.allowReboot,
+            enableAutoUpgrade: settings.enable,
+          ),
+        ),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.changeAutoUpgradeSettings,
+      decodePayload: (final mutation) => AutoUpgradeSettings(
+        allowReboot: mutation.allowReboot,
+        enable: mutation.enableAutoUpgrade,
+      ),
+    );
   }
 
-  Future<GenericResult<String?>> setTimezone(final String timezone) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$ChangeTimezone(timezone: timezone);
-      final mutation = Options$Mutation$ChangeTimezone(variables: variables);
-      final result = await client.mutate$ChangeTimezone(mutation);
-      if (result.hasException) {
-        return GenericResult<String>(
-          success: false,
-          message: result.exception.toString(),
-          data: '',
-        );
-      }
-      return GenericResult<String?>(
-        success: result.parsedData?.system.changeTimezone.success ?? false,
-        message: result.parsedData?.system.changeTimezone.message,
-        data: result.parsedData?.system.changeTimezone.timezone,
-      );
-    } catch (e) {
-      logger('Error setting timezone: $e', error: e);
-      return GenericResult<String?>(
-        success: false,
-        message: e.toString(),
-        data: '',
-      );
-    }
+  Future<ServerMutationResult<String>> setTimezone(
+    final String timezone,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$ChangeTimezone(
+      Options$Mutation$ChangeTimezone(
+        variables: Variables$Mutation$ChangeTimezone(timezone: timezone),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.changeTimezone,
+      decodePayload: (final mutation) => mutation.timezone,
+    );
   }
 
-  Future<GenericResult<SshSettings?>> setSshSettings(
+  Future<ServerMutationResult<SshSettings>> setSshSettings(
     final SshSettings settings,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final input = Input$SSHSettingsInput(enable: settings.enable);
-      final variables = Variables$Mutation$ChangeSshSettings(settings: input);
-      final mutation = Options$Mutation$ChangeSshSettings(variables: variables);
-      final result = await client.mutate$ChangeSshSettings(mutation);
-      if (result.hasException) {
-        return GenericResult<SshSettings?>(
-          success: false,
-          message: result.exception.toString(),
-          data: null,
-        );
-      }
-      return GenericResult<SshSettings?>(
-        success: result.parsedData?.system.changeSshSettings.success ?? false,
-        message: result.parsedData?.system.changeSshSettings.message,
-        data: result.parsedData == null
-            ? null
-            : SshSettings(
-                enable: result.parsedData!.system.changeSshSettings.enable,
-              ),
-      );
-    } catch (e) {
-      logger('Error setting SSH settings: $e', error: e);
-      return GenericResult<SshSettings?>(
-        success: false,
-        message: e.toString(),
-        data: null,
-      );
-    }
+    final client = await getClient();
+    final response = await client.mutate$ChangeSshSettings(
+      Options$Mutation$ChangeSshSettings(
+        variables: Variables$Mutation$ChangeSshSettings(
+          settings: Input$SSHSettingsInput(enable: settings.enable),
+        ),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.changeSshSettings,
+      decodePayload: (final mutation) => SshSettings(enable: mutation.enable),
+    );
   }
 
   Future<SystemSettings> getSystemSettings() async {

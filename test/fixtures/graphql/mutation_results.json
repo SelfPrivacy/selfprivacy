@@ -294,5 +294,298 @@
         }
       }
     }
+  },
+  "CreateUser": {
+    "__typename": "Mutation",
+    "users": {
+      "__typename": "UsersMutations",
+      "createUser": {
+        "__typename": "UserMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "user": {
+          "__typename": "User",
+          "username": "bob",
+          "userType": "NORMAL",
+          "sshKeys": [],
+          "directmemberof": [
+            "sp.full_users"
+          ],
+          "displayName": "Bob",
+          "memberof": [
+            "sp.outline.users",
+            "sp.full_users",
+            "sp.vikunja.users",
+            "sp.roundcube.users",
+            "sp.nextcloud.users",
+            "ext_idm_provisioned_entities"
+          ],
+          "email": "bob@example.org",
+          "emailPasswordMetadata": []
+        }
+      }
+    }
+  },
+  "UpdateUser": {
+    "__typename": "Mutation",
+    "users": {
+      "__typename": "UsersMutations",
+      "updateUser": {
+        "__typename": "UserMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "user": {
+          "__typename": "User",
+          "username": "bob",
+          "userType": "NORMAL",
+          "sshKeys": [],
+          "directmemberof": [
+            "sp.full_users"
+          ],
+          "displayName": "Robert",
+          "memberof": [
+            "sp.outline.users",
+            "sp.full_users",
+            "sp.vikunja.users",
+            "sp.roundcube.users",
+            "sp.nextcloud.users",
+            "ext_idm_provisioned_entities"
+          ],
+          "email": "bob@example.org",
+          "emailPasswordMetadata": []
+        }
+      }
+    }
+  },
+  "AddSshKey": {
+    "__typename": "Mutation",
+    "users": {
+      "__typename": "UsersMutations",
+      "addSshKey": {
+        "__typename": "UserMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "user": {
+          "__typename": "User",
+          "username": "bob",
+          "userType": "NORMAL",
+          "sshKeys": [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFixturePublicKeyOnly fixture@example.org"
+          ],
+          "directmemberof": [
+            "sp.full_users"
+          ],
+          "displayName": "Bob",
+          "memberof": [
+            "sp.outline.users",
+            "sp.full_users",
+            "sp.vikunja.users",
+            "sp.roundcube.users",
+            "sp.nextcloud.users",
+            "ext_idm_provisioned_entities"
+          ],
+          "email": "bob@example.org",
+          "emailPasswordMetadata": []
+        }
+      }
+    }
+  },
+  "RemoveSshKey": {
+    "__typename": "Mutation",
+    "users": {
+      "__typename": "UsersMutations",
+      "removeSshKey": {
+        "__typename": "UserMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "user": {
+          "__typename": "User",
+          "username": "bob",
+          "userType": "NORMAL",
+          "sshKeys": [],
+          "directmemberof": [
+            "sp.full_users"
+          ],
+          "displayName": "Bob",
+          "memberof": [
+            "sp.outline.users",
+            "sp.full_users",
+            "sp.vikunja.users",
+            "sp.roundcube.users",
+            "sp.nextcloud.users",
+            "ext_idm_provisioned_entities"
+          ],
+          "email": "bob@example.org",
+          "emailPasswordMetadata": []
+        }
+      }
+    }
+  },
+  "DeleteUser": {
+    "__typename": "Mutation",
+    "users": {
+      "__typename": "UsersMutations",
+      "deleteUser": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "DeleteEmailPassword": {
+    "__typename": "Mutation",
+    "emailPasswordMetadataMutations": {
+      "__typename": "EmailPasswordsMetadataMutations",
+      "deleteEmailPassword": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "ChangeTimezone": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "changeTimezone": {
+        "__typename": "TimezoneMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "timezone": "Europe/Moscow"
+      }
+    }
+  },
+  "ChangeAutoUpgradeSettings": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "changeAutoUpgradeSettings": {
+        "__typename": "AutoUpgradeSettingsMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "enableAutoUpgrade": true,
+        "allowReboot": true
+      }
+    }
+  },
+  "ChangeSshSettings": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "changeSshSettings": {
+        "__typename": "SSHSettingsMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "enable": true
+      }
+    }
+  },
+  "EnableService": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "enableService": {
+        "__typename": "ServiceMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "DisableService": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "disableService": {
+        "__typename": "ServiceMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "StartService": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "startService": {
+        "__typename": "ServiceMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "StopService": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "stopService": {
+        "__typename": "ServiceMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "RestartService": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "restartService": {
+        "__typename": "ServiceMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "MoveService": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "moveService": {
+        "__typename": "ServiceJobMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Moving Outline to sdb",
+          "error": null,
+          "finishedAt": null,
+          "name": "Move Outline",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-move-outline",
+          "typeId": "services.outline.move"
+        }
+      }
+    }
+  },
+  "RemoveJob": {
+    "__typename": "Mutation",
+    "jobs": {
+      "__typename": "JobMutations",
+      "removeJob": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
   }
 }

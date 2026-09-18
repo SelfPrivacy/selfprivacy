@@ -11,7 +11,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
-import 'package:selfprivacy/logic/models/hive/email_password_metadata.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -25,6 +24,7 @@ import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 typedef ServerSelector = Server? Function();
 
@@ -79,114 +79,71 @@ class ApiConnectionRepository {
   StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
   DateTime? _jobsStreamDisconnectTime;
 
-  Future<void> removeServerJob(final String uid) async {
-    await api.removeApiJob(uid);
-    _apiData.serverJobs.data?.removeWhere(
-      (final ServerJob element) => element.uid == uid,
-    );
-    _dataStream.add(_apiData);
+  Future<ServerMutationResult<void>> removeServerJob(final String uid) async {
+    final result = await api.removeApiJob(uid);
+    if (result.outcome == ServerMutationOutcome.confirmed) {
+      _apiData.serverJobs.data?.removeWhere((final job) => job.uid == uid);
+      emitData();
+    }
+    return result;
   }
 
-  Future<void> removeAllFinishedServerJobs() async {
-    final List<ServerJob> finishedJobs =
+  Future<Map<String, ServerMutationResult<void>>>
+  removeAllFinishedServerJobs() async {
+    final finishedJobs =
         _apiData.serverJobs.data
             ?.where(
-              (final ServerJob element) =>
-                  element.status == JobStatusEnum.finished ||
-                  element.status == JobStatusEnum.error,
+              (final job) =>
+                  job.status == JobStatusEnum.finished ||
+                  job.status == JobStatusEnum.error,
             )
             .toList() ??
         [];
-    // Optimistically remove the jobs from the list
-    _apiData.serverJobs.data?.removeWhere(
-      (final ServerJob element) =>
-          element.status == JobStatusEnum.finished ||
-          element.status == JobStatusEnum.error,
-    );
-    _dataStream.add(_apiData);
-
-    await Future.forEach<ServerJob>(
-      finishedJobs,
-      (final ServerJob job) => removeServerJob(job.uid),
-    );
+    return {
+      for (final job in finishedJobs) job.uid: await removeServerJob(job.uid),
+    };
   }
 
   Future<(bool, String)> createUser(final User user) async {
-    final List<User>? loadedUsers = _apiData.users.data;
+    final loadedUsers = _apiData.users.data;
     if (loadedUsers == null) {
       return (false, 'basis.network_error'.tr());
     }
-    // If user exists on server, do nothing
     if (loadedUsers.any(
-      (final User u) => u.login == user.login && u.isFoundOnServer,
+      (final u) => u.login == user.login && u.isFoundOnServer,
     )) {
       return (false, 'users.user_already_exists'.tr());
     }
-
-    // If API returned error, do nothing
-    final GenericResult<User?> result = await api.createUser(
-      user.login,
-      user.displayName,
-      user.directmemberof,
+    return _applyUserMutation(
+      await api.createUser(user.login, user.displayName, user.directmemberof),
     );
-
-    if (result.data == null) {
-      return (false, result.message ?? 'users.could_not_create_user'.tr());
-    }
-
-    _apiData.users.data?.add(result.data!);
-    _apiData.users.invalidate();
-
-    return (true, result.message ?? 'basis.done'.tr());
   }
 
   Future<(bool, String)> updateUser(final User user) async {
-    final List<User>? loadedUsers = _apiData.users.data;
-    if (loadedUsers == null) {
+    if (_apiData.users.data == null) {
       return (false, 'basis.network_error'.tr());
     }
-
-    final GenericResult<User?> result = await api.updateUser(
-      user.login,
-      user.displayName,
-      user.directmemberof,
+    return _applyUserMutation(
+      await api.updateUser(user.login, user.displayName, user.directmemberof),
     );
-
-    if (result.data == null) {
-      return (false, result.message ?? 'users.could_not_update_user');
-    }
-
-    // Update the user instance in the cache
-    final int index = loadedUsers.indexWhere(
-      (final User u) => u.login == user.login,
-    );
-    loadedUsers[index] = result.data!;
-    _apiData.users.invalidate();
-    emitData();
-
-    return (true, result.message ?? 'basis.done'.tr());
   }
 
   Future<(bool, String)> deleteUser(final User user) async {
-    final List<User>? loadedUsers = _apiData.users.data;
-    if (loadedUsers == null) {
+    if (_apiData.users.data == null) {
       return (false, 'basis.network_error'.tr());
     }
-    // If user is root, don't delete
     if (user.type == UserType.root) {
       return (false, 'users.user_delete_protected'.tr());
     }
-    final GenericResult result = await api.deleteUser(user.login);
-    if (result.success && result.data) {
-      _apiData.users.data?.removeWhere((final User u) => u.login == user.login);
-      _apiData.users.invalidate();
+    final result = await api.deleteUser(user.login);
+    if (result.outcome == ServerMutationOutcome.confirmed) {
+      _apiData.users.data?.removeWhere((final u) => u.login == user.login);
+      emitData();
     }
-
-    if (!result.success || result.data == false) {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
-    }
-
-    return (true, result.message ?? 'basis.done'.tr());
+    return (
+      result.outcome == ServerMutationOutcome.confirmed,
+      serverMutationMessage(result),
+    );
   }
 
   // url and error message
@@ -199,7 +156,7 @@ class ApiConnectionRepository {
 
     final secret = result.confirmedSecret;
     if (secret == null) {
-      return (null, result.secretFailureKey.tr());
+      return (null, serverMutationMessage(result, sensitive: true));
     }
     final uri = Uri.tryParse(secret);
     if (uri == null || uri.scheme.isEmpty) {
@@ -214,139 +171,129 @@ class ApiConnectionRepository {
     final User user,
     final String uuid,
   ) async {
-    final GenericResult<bool> result = await api.deleteEmailPassword(
-      user.login,
-      uuid,
-    );
-    if (result.success && result.data) {
-      // Find a user and delete the email password with a given uuid
-      final List<User>? loadedUsers = _apiData.users.data;
-      if (loadedUsers != null) {
-        final int index = loadedUsers.indexWhere(
-          (final User u) => u.login == user.login,
+    final result = await api.deleteEmailPassword(user.login, uuid);
+    if (result.outcome == ServerMutationOutcome.confirmed) {
+      final users = _apiData.users.data;
+      final index = users?.indexWhere((final u) => u.login == user.login) ?? -1;
+      if (users != null && index >= 0) {
+        final current = users[index];
+        users[index] = current.copyWith(
+          emailPasswordMetadata: current.emailPasswordMetadata
+              ?.where((final metadata) => metadata.uuid != uuid)
+              .toList(),
         );
-        if (index != -1) {
-          final User updatedUser = loadedUsers[index].copyWith(
-            emailPasswordMetadata: loadedUsers[index].emailPasswordMetadata
-                ?.where(
-                  (final EmailPasswordMetadata metadata) =>
-                      metadata.uuid != uuid,
-                )
-                .toList(),
-          );
-          loadedUsers[index] = updatedUser;
-        }
+      } else {
+        _apiData.users.invalidate();
       }
-      _apiData.users.invalidate();
-      return (true, result.message ?? 'basis.done'.tr());
-    } else {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
+      emitData();
     }
+    return (
+      result.outcome == ServerMutationOutcome.confirmed,
+      serverMutationMessage(result),
+    );
   }
 
   Future<(bool, String)> addSshKey(
     final User user,
     final String publicKey,
   ) async {
-    final List<User>? loadedUsers = _apiData.users.data;
-    if (loadedUsers == null) {
+    if (_apiData.users.data == null) {
       return (false, 'basis.network_error'.tr());
     }
-    final GenericResult<User?> result = await api.addSshKey(
-      user.login,
-      publicKey,
-    );
-    if (result.data != null) {
-      final User updatedUser = result.data!;
-      final int index = loadedUsers.indexWhere(
-        (final User u) => u.login == user.login,
-      );
-      loadedUsers[index] = updatedUser;
-      _apiData.users.invalidate();
-    } else {
-      return (false, result.message ?? 'users.could_not_add_ssh_key'.tr());
-    }
-
-    return (true, result.message ?? 'basis.done'.tr());
+    return _applyUserMutation(await api.addSshKey(user.login, publicKey));
   }
 
   Future<(bool, String)> deleteSshKey(
     final User user,
     final String publicKey,
   ) async {
-    final List<User>? loadedUsers = _apiData.users.data;
-    if (loadedUsers == null) {
+    if (_apiData.users.data == null) {
       return (false, 'basis.network_error'.tr());
     }
-    final GenericResult<User?> result = await api.removeSshKey(
-      user.login,
-      publicKey,
-    );
-    if (result.data != null) {
-      final User updatedUser = result.data!;
-      final int index = loadedUsers.indexWhere(
-        (final User u) => u.login == user.login,
-      );
-      loadedUsers[index] = updatedUser;
+    return _applyUserMutation(await api.removeSshKey(user.login, publicKey));
+  }
+
+  (bool, String) _applyUserMutation(final ServerMutationResult<User> result) {
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      return (false, serverMutationMessage(result));
+    }
+    final user = result.payload.value;
+    if (user == null) {
+      _apiData.users.invalidate();
+      emitData();
+      return (false, serverMutationMessage(result));
+    }
+    final users = _apiData.users.data;
+    if (users == null) {
+      _apiData.users.data = [user];
       _apiData.users.invalidate();
     } else {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
+      final index = users.indexWhere((final u) => u.login == user.login);
+      if (index < 0) {
+        users.add(user);
+      } else {
+        users[index] = user;
+      }
     }
-    return (true, result.message ?? 'basis.done'.tr());
+    emitData();
+    return (true, serverMutationMessage(result));
+  }
+
+  (bool, String) _applySettingsMutation<T>(
+    final ServerMutationResult<T> result,
+    final SystemSettings Function(SystemSettings, T) apply,
+  ) {
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      return (false, serverMutationMessage(result));
+    }
+    final value = result.payload.value;
+    final current = _apiData.settings.data;
+    if (value == null || current == null) {
+      _apiData.settings.invalidate();
+    } else {
+      // A partial response does not renew the whole settings snapshot.
+      _apiData.settings._data = apply(current, value);
+    }
+    emitData();
+    return (true, serverMutationMessage(result));
   }
 
   Future<(bool, String)> setAutoUpgradeSettings({
     required final bool enable,
     required final bool allowReboot,
-  }) async {
-    final GenericResult<AutoUpgradeSettings?> result = await api
-        .setAutoUpgradeSettings(
-          AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
-        );
-    _apiData.settings.invalidate();
-    if (result.data != null) {
-      return (true, result.message ?? 'basis.done'.tr());
-    } else {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
-    }
-  }
+  }) async => _applySettingsMutation(
+    await api.setAutoUpgradeSettings(
+      AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
+    ),
+    (final current, final value) =>
+        current.copyWith(autoUpgradeSettings: value),
+  );
 
-  Future<(bool, String)> setServerTimezone(final String timezone) async {
-    final GenericResult result = await api.setTimezone(timezone);
-    _apiData.settings.invalidate();
-    if (result.success) {
-      return (true, result.message ?? 'basis.done'.tr());
-    } else {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
-    }
-  }
+  Future<(bool, String)> setServerTimezone(final String timezone) async =>
+      _applySettingsMutation(
+        await api.setTimezone(timezone),
+        (final current, final value) => current.copyWith(timezone: value),
+      );
 
-  Future<(bool, String)> setSshSettings({required final bool enable}) async {
-    final GenericResult<SshSettings?> result = await api.setSshSettings(
-      SshSettings(enable: enable),
-    );
-    _apiData.settings.invalidate();
-    if (result.data != null) {
-      return (true, result.message ?? 'basis.done'.tr());
-    } else {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
-    }
-  }
+  Future<(bool, String)> setSshSettings({required final bool enable}) async =>
+      _applySettingsMutation(
+        await api.setSshSettings(SshSettings(enable: enable)),
+        (final current, final value) => current.copyWith(sshSettings: value),
+      );
 
   Future<(bool, String)> setServiceConfiguration(
     final String serviceId,
     final Map<String, dynamic> settings,
   ) async {
-    final GenericResult result = await api.setServiceConfiguration(
-      serviceId,
-      settings,
-    );
-    _apiData.services.invalidate();
-    if (result.success) {
-      return (true, result.message ?? 'basis.done'.tr());
-    } else {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
+    final result = await api.setServiceConfiguration(serviceId, settings);
+    if (result.outcome == ServerMutationOutcome.confirmed) {
+      _apiData.services.invalidate();
+      emitData();
     }
+    return (
+      result.outcome == ServerMutationOutcome.confirmed,
+      serverMutationMessage(result, sensitive: true),
+    );
   }
 
   // Single-flight guard. Manual refreshes from TokensBloc and automatic
@@ -378,7 +325,7 @@ class ApiConnectionRepository {
       if (result.outcome != ServerMutationOutcome.rejected) {
         _rotationSuppressedFor[server.uuid] = {credential};
       }
-      return (false, result.secretFailureKey.tr());
+      return (false, serverMutationMessage(result, sensitive: true));
     }
 
     final current = _resourcesModel.servers.firstWhereOrNull(

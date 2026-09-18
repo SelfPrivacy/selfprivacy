@@ -79,26 +79,18 @@ mixin JobsApi on GraphQLApiMap {
     return controller.stream;
   }
 
-  Future<GenericResult<bool>> removeApiJob(final String uid) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$RemoveJob(jobId: uid);
-      final mutation = Options$Mutation$RemoveJob(variables: variables);
-      final response = await client.mutate$RemoveJob(mutation);
-      return GenericResult(
-        data: response.parsedData?.jobs.removeJob.success ?? false,
-        success: true,
-        code: response.parsedData?.jobs.removeJob.code ?? 0,
-        message: response.parsedData?.jobs.removeJob.message,
-      );
-    } catch (e) {
-      logger("Couldn't remove the API job", error: e);
-      return GenericResult(
-        data: false,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> removeApiJob(final String uid) async {
+    final client = await getClient();
+    final response = await client.mutate$RemoveJob(
+      Options$Mutation$RemoveJob(
+        variables: Variables$Mutation$RemoveJob(jobId: uid),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.jobs.removeJob,
+    );
   }
 }

@@ -6964,26 +6964,9 @@ const documentNodeMutationDeleteEmailPassword = DocumentNode(
                   directives: [],
                   selectionSet: SelectionSetNode(
                     selections: [
-                      FieldNode(
-                        name: NameNode(value: 'code'),
-                        alias: null,
-                        arguments: [],
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
                         directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'message'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'success'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
                       ),
                       FieldNode(
                         name: NameNode(value: '__typename'),
@@ -7015,6 +6998,7 @@ const documentNodeMutationDeleteEmailPassword = DocumentNode(
         ],
       ),
     ),
+    fragmentDefinitionbasicMutationReturnFields,
   ],
 );
 Mutation$DeleteEmailPassword _parserFn$Mutation$DeleteEmailPassword(
@@ -7296,7 +7280,8 @@ class _CopyWithStubImpl$Mutation$DeleteEmailPassword$emailPasswordMetadataMutati
       );
 }
 
-class Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword {
+class Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword
+    implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
   Mutation$DeleteEmailPassword$emailPasswordMetadataMutations$deleteEmailPassword({
     required this.code,
     required this.message,

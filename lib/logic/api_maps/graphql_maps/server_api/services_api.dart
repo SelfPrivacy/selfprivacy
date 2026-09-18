@@ -10,181 +10,135 @@ mixin ServicesApi on GraphQLApiMap {
     ).services.allServices.map(Service.fromGraphQL).toList();
   }
 
-  Future<GenericResult<bool>> enableService(final String serviceId) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$EnableService(serviceId: serviceId);
-      final mutation = Options$Mutation$EnableService(variables: variables);
-      final response = await client.mutate$EnableService(mutation);
-      return GenericResult(
-        data: response.parsedData?.services.enableService.success ?? false,
-        success: true,
-        code: response.parsedData?.services.enableService.code ?? 0,
-        message: response.parsedData?.services.enableService.message,
-      );
-    } catch (e) {
-      logger('Error in GraphQL EnableService request: $e', error: e);
-      return GenericResult(
-        data: false,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> enableService(
+    final String serviceId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$EnableService(
+      Options$Mutation$EnableService(
+        variables: Variables$Mutation$EnableService(serviceId: serviceId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.enableService,
+    );
   }
 
-  Future<GenericResult<void>> disableService(final String serviceId) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$DisableService(serviceId: serviceId);
-      final mutation = Options$Mutation$DisableService(variables: variables);
-      final response = await client.mutate$DisableService(mutation);
-      return GenericResult(
-        data: null,
-        success: response.parsedData?.services.disableService.success ?? false,
-        code: response.parsedData?.services.disableService.code ?? 0,
-        message: response.parsedData?.services.disableService.message,
-      );
-    } catch (e) {
-      logger('Error in GraphQL DisableService request: $e', error: e);
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> disableService(
+    final String serviceId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$DisableService(
+      Options$Mutation$DisableService(
+        variables: Variables$Mutation$DisableService(serviceId: serviceId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.disableService,
+    );
   }
 
-  Future<GenericResult<bool>> stopService(final String serviceId) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$StopService(serviceId: serviceId);
-      final mutation = Options$Mutation$StopService(variables: variables);
-      final response = await client.mutate$StopService(mutation);
-      return GenericResult(
-        data: response.parsedData?.services.stopService.success ?? false,
-        success: true,
-        code: response.parsedData?.services.stopService.code ?? 0,
-        message: response.parsedData?.services.stopService.message,
-      );
-    } catch (e) {
-      logger('Error in GraphQL StopService request: $e', error: e);
-      return GenericResult(
-        data: false,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> stopService(final String serviceId) async {
+    final client = await getClient();
+    final response = await client.mutate$StopService(
+      Options$Mutation$StopService(
+        variables: Variables$Mutation$StopService(serviceId: serviceId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.stopService,
+    );
   }
 
-  Future<GenericResult> startService(final String serviceId) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$StartService(serviceId: serviceId);
-      final mutation = Options$Mutation$StartService(variables: variables);
-      final response = await client.mutate$StartService(mutation);
-      return GenericResult(
-        data: null,
-        success: response.parsedData?.services.startService.success ?? false,
-        code: response.parsedData?.services.startService.code ?? 0,
-        message: response.parsedData?.services.startService.message,
-      );
-    } catch (e) {
-      logger('Error in GraphQL StartService request: $e', error: e);
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> startService(
+    final String serviceId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$StartService(
+      Options$Mutation$StartService(
+        variables: Variables$Mutation$StartService(serviceId: serviceId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.startService,
+    );
   }
 
-  Future<GenericResult<bool>> restartService(final String serviceId) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$RestartService(serviceId: serviceId);
-      final mutation = Options$Mutation$RestartService(variables: variables);
-      final response = await client.mutate$RestartService(mutation);
-      return GenericResult(
-        data: response.parsedData?.services.restartService.success ?? false,
-        success: true,
-        code: response.parsedData?.services.restartService.code ?? 0,
-        message: response.parsedData?.services.restartService.message,
-      );
-    } catch (e) {
-      logger('Error in GraphQL RestartService request: $e', error: e);
-      return GenericResult(
-        data: false,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> restartService(
+    final String serviceId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$RestartService(
+      Options$Mutation$RestartService(
+        variables: Variables$Mutation$RestartService(serviceId: serviceId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.restartService,
+    );
   }
 
-  Future<GenericResult<ServerJob?>> moveService(
+  Future<ServerMutationResult<ServerJob>> moveService(
     final String serviceId,
     final String destination,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$MoveService(
-        input: Input$MoveServiceInput(
-          serviceId: serviceId,
-          location: destination,
+    final client = await getClient();
+    final response = await client.mutate$MoveService(
+      Options$Mutation$MoveService(
+        variables: Variables$Mutation$MoveService(
+          input: Input$MoveServiceInput(
+            serviceId: serviceId,
+            location: destination,
+          ),
         ),
-      );
-      final mutation = Options$Mutation$MoveService(variables: variables);
-      final response = await client.mutate$MoveService(mutation);
-      final jobJson = response.parsedData?.services.moveService.job?.toJson();
-      return GenericResult(
-        success: true,
-        code: response.parsedData?.services.moveService.code ?? 0,
-        message: response.parsedData?.services.moveService.message,
-        data: jobJson != null ? ServerJob.fromJson(jobJson) : null,
-      );
-    } catch (e) {
-      logger('Error in GraphQL MoveService request: $e', error: e);
-      return GenericResult(
-        success: false,
-        code: 0,
-        message: e.toString(),
-        data: null,
-      );
-    }
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.moveService,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
 
-  Future<GenericResult> setServiceConfiguration(
+  Future<ServerMutationResult<void>> setServiceConfiguration(
     final String serviceId,
     final Map<String, dynamic> settings,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$SetServiceConfiguration(
-        input: Input$SetServiceConfigurationInput(
-          serviceId: serviceId,
-          configuration: settings,
+    final client = await getClient();
+    final response = await client.mutate$SetServiceConfiguration(
+      Options$Mutation$SetServiceConfiguration(
+        variables: Variables$Mutation$SetServiceConfiguration(
+          input: Input$SetServiceConfigurationInput(
+            serviceId: serviceId,
+            configuration: settings,
+          ),
         ),
-      );
-      final mutation = Options$Mutation$SetServiceConfiguration(
         context: sensitiveGraphQLContext,
-        variables: variables,
-      );
-      final response = await client.mutate$SetServiceConfiguration(mutation);
-      return GenericResult(
-        data: null,
-        success:
-            response.parsedData?.services.setServiceConfiguration.success ??
-            false,
-        code: response.parsedData?.services.setServiceConfiguration.code ?? 0,
-        message: response.parsedData?.services.setServiceConfiguration.message,
-      );
-    } catch (_) {
-      logger('Service configuration request failed');
-      return GenericResult(data: null, success: false, code: 0);
-    }
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.services.setServiceConfiguration,
+    );
   }
 }

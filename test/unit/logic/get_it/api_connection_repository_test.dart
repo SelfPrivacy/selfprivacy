@@ -5,15 +5,21 @@ import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/models/ssh_settings.dart';
+import 'package:selfprivacy/logic/models/system_settings.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
+import '../../../helpers/fixtures/domain_mutation_fixtures.dart';
+import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 
 class _MockServerApi extends Mock implements ServerApi {}
@@ -33,7 +39,13 @@ class _ReloadTestRepository extends ApiConnectionRepository {
 }
 
 void main() {
-  setUpAll(setUpInMemoryHive);
+  setUpAll(() async {
+    await setUpInMemoryHive();
+    registerFallbackValue(SshSettings(enable: false));
+    registerFallbackValue(
+      AutoUpgradeSettings(enable: false, allowReboot: false),
+    );
+  });
   tearDownAll(tearDownInMemoryHive);
 
   late DeveloperSettingsModel settings;
@@ -77,6 +89,375 @@ void main() {
       await box.clear();
       await box.close();
     }
+  });
+
+  final userCalls = <String, Future<(bool, String)> Function(User)>{
+    'CreateUser': (final user) => repository.createUser(user),
+    'UpdateUser': (final user) => repository.updateUser(user),
+    'AddSshKey': (final user) => repository.addSshKey(user, 'fixture-key'),
+    'RemoveSshKey': (final user) =>
+        repository.deleteSshKey(user, 'fixture-key'),
+  };
+  for (final call in userCalls.entries) {
+    group(call.key, () {
+      late User returned;
+      late Completer<ServerMutationResult<User>> response;
+      setUp(() {
+        returned = aMutationUser(call.key);
+        response = Completer<ServerMutationResult<User>>();
+        when(
+          () => api.createUser(any(), any(), any()),
+        ).thenAnswer((_) => response.future);
+        when(
+          () => api.updateUser(any(), any(), any()),
+        ).thenAnswer((_) => response.future);
+        when(
+          () => api.addSshKey(any(), any()),
+        ).thenAnswer((_) => response.future);
+        when(
+          () => api.removeSshKey(any(), any()),
+        ).thenAnswer((_) => response.future);
+        repository.apiData.users.data = [];
+      });
+      test(
+        'applies the returned user and publishes without aging other entries',
+        () async {
+          final timestamp = repository.apiData.users.lastUpdated;
+          final pending = call.value(returned);
+          final published = repository.dataStream.first;
+          response.complete(
+            ServerMutationResult(
+              outcome: ServerMutationOutcome.confirmed,
+              payload: ServerMutationPayload.available(returned),
+            ),
+          );
+          expect((await pending).$1, isTrue);
+          expect((await published).users.data, [returned]);
+          expect(repository.apiData.users.lastUpdated, timestamp);
+        },
+      );
+      test('upserts a user added while the mutation was in flight', () async {
+        final pending = call.value(returned);
+        repository.apiData.users.data!.add(aMutationUser('CreateUser'));
+        response.complete(
+          ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: ServerMutationPayload.available(returned),
+          ),
+        );
+        expect((await pending).$1, isTrue);
+        expect(repository.apiData.users.data, [returned]);
+      });
+      for (final outcome in [
+        ServerMutationOutcome.rejected,
+        ServerMutationOutcome.indeterminate,
+      ]) {
+        test('$outcome never applies the returned user', () async {
+          response.complete(
+            ServerMutationResult(
+              outcome: outcome,
+              payload: ServerMutationPayload.available(returned),
+            ),
+          );
+          expect((await call.value(returned)).$1, isFalse);
+          expect(repository.apiData.users.data, isEmpty);
+          expect(repository.apiData.users.isExpired, isFalse);
+        });
+      }
+      test(
+        'missing confirmed user invalidates without reporting usable data',
+        () async {
+          response.complete(
+            ServerMutationResult(
+              outcome: ServerMutationOutcome.confirmed,
+              payload: const ServerMutationPayload.missing(),
+            ),
+          );
+          expect((await call.value(returned)).$1, isFalse);
+          expect(repository.apiData.users.data, isEmpty);
+          expect(repository.apiData.users.isExpired, isTrue);
+        },
+      );
+      test(
+        'a list lost during the request is seeded but remains incomplete',
+        () async {
+          final pending = call.value(returned);
+          repository.apiData.users.data = null;
+          response.complete(
+            ServerMutationResult(
+              outcome: ServerMutationOutcome.confirmed,
+              payload: ServerMutationPayload.available(returned),
+            ),
+          );
+          expect((await pending).$1, isTrue);
+          expect(repository.apiData.users.data, [returned]);
+          expect(repository.apiData.users.isExpired, isTrue);
+        },
+      );
+      test('unloaded users prevent a request', () async {
+        repository.apiData.users.data = null;
+        expect((await call.value(returned)).$1, isFalse);
+        verifyZeroInteractions(api);
+      });
+    });
+  }
+
+  test('create refuses a user already found on the server', () async {
+    final user = aMutationUser('CreateUser');
+    repository.apiData.users.data = [user];
+    expect((await repository.createUser(user)).$1, isFalse);
+    verifyNever(() => api.createUser(any(), any(), any()));
+  });
+
+  for (final outcome in ServerMutationOutcome.values) {
+    test('deleteUser only removes on confirmation: $outcome', () async {
+      final user = aMutationUser('CreateUser');
+      repository.apiData.users.data = [user];
+      when(() => api.deleteUser(user.login)).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: outcome,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      expect(
+        (await repository.deleteUser(user)).$1,
+        outcome == ServerMutationOutcome.confirmed,
+      );
+      expect(
+        repository.apiData.users.data,
+        outcome == ServerMutationOutcome.confirmed ? isEmpty : [user],
+      );
+    });
+    test(
+      'deleteEmailPassword only removes on confirmation: $outcome',
+      () async {
+        final user = aUserWithEmailPasswords();
+        repository.apiData.users.data = [user];
+        when(() => api.deleteEmailPassword(user.login, 'remove')).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: outcome,
+            payload: const ServerMutationPayload.notExpected(),
+          ),
+        );
+        expect(
+          (await repository.deleteEmailPassword(user, 'remove')).$1,
+          outcome == ServerMutationOutcome.confirmed,
+        );
+        expect(
+          repository.apiData.users.data!.single.emailPasswordMetadata!.map(
+            (final entry) => entry.uuid,
+          ),
+          outcome == ServerMutationOutcome.confirmed
+              ? ['keep']
+              : ['remove', 'keep'],
+        );
+      },
+    );
+    test('job removal waits for confirmation: $outcome', () async {
+      final job = aServiceMoveJob();
+      repository.apiData.serverJobs.data = [job];
+      final response = Completer<ServerMutationResult<void>>();
+      when(() => api.removeApiJob(job.uid)).thenAnswer((_) => response.future);
+      final pending = repository.removeServerJob(job.uid);
+      expect(repository.apiData.serverJobs.data, [job]);
+      response.complete(
+        ServerMutationResult(
+          outcome: outcome,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      expect((await pending).outcome, outcome);
+      expect(
+        repository.apiData.serverJobs.data,
+        outcome == ServerMutationOutcome.confirmed ? isEmpty : [job],
+      );
+    });
+    test('service configuration feedback is secret safe: $outcome', () async {
+      repository.apiData.services.data = [];
+      when(() => api.setServiceConfiguration('outline', any())).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: outcome,
+          payload: const ServerMutationPayload.notExpected(),
+          message: 'SECRET_SENTINEL',
+        ),
+      );
+      final result = await repository.setServiceConfiguration('outline', {
+        'setting': true,
+      });
+      expect(result.$1, outcome == ServerMutationOutcome.confirmed);
+      expect(result.$2, isNot(contains('SECRET_SENTINEL')));
+      expect(
+        repository.apiData.services.isExpired,
+        outcome == ServerMutationOutcome.confirmed,
+      );
+    });
+  }
+
+  test('email password deletion tolerates missing user data', () async {
+    final user = aMutationUser('CreateUser');
+    repository.apiData.users.data = [];
+    when(() => api.deleteEmailPassword(user.login, 'password-id')).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    expect(
+      (await repository.deleteEmailPassword(user, 'password-id')).$1,
+      isTrue,
+    );
+    expect(repository.apiData.users.isExpired, isTrue);
+  });
+
+  test(
+    'bulk job deletion retains failed entries and skips running jobs',
+    () async {
+      final removed = aServiceMoveJob(uid: 'removed', status: 'FINISHED');
+      final rejected = aServiceMoveJob(uid: 'rejected', status: 'ERROR');
+      final uncertain = aServiceMoveJob(uid: 'uncertain', status: 'FINISHED');
+      final running = aServiceMoveJob();
+      repository.apiData.serverJobs.data = [
+        removed,
+        rejected,
+        uncertain,
+        running,
+      ];
+      for (final (job, outcome) in [
+        (removed, ServerMutationOutcome.confirmed),
+        (rejected, ServerMutationOutcome.rejected),
+        (uncertain, ServerMutationOutcome.indeterminate),
+      ]) {
+        when(() => api.removeApiJob(job.uid)).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: outcome,
+            payload: const ServerMutationPayload.notExpected(),
+          ),
+        );
+      }
+      final results = await repository.removeAllFinishedServerJobs();
+      expect(results.keys, ['removed', 'rejected', 'uncertain']);
+      expect(results['rejected']!.outcome, ServerMutationOutcome.rejected);
+      expect(
+        results['uncertain']!.outcome,
+        ServerMutationOutcome.indeterminate,
+      );
+      expect(repository.apiData.serverJobs.data, [
+        rejected,
+        uncertain,
+        running,
+      ]);
+      verifyNever(() => api.removeApiJob(running.uid));
+    },
+  );
+
+  test('bulk removal with no loaded jobs sends no mutations', () async {
+    expect(await repository.removeAllFinishedServerJobs(), isEmpty);
+    verifyNever(() => api.removeApiJob(any()));
+  });
+
+  group('returned system settings', () {
+    late SystemSettings original;
+    setUp(() {
+      original = SystemSettings.fromGraphQL(
+        Query$SystemSettings.fromJson(
+          loadJsonFixture('graphql/domain_reads.json')['SystemSettings']
+              as Map<String, dynamic>,
+        ).system,
+      );
+      repository.apiData.settings.data = original;
+    });
+    test('timezone updates preserve other settings and snapshot age', () async {
+      repository.apiData.settings.invalidate();
+      final age = repository.apiData.settings.lastUpdated;
+      when(() => api.setTimezone('requested')).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('UTC'),
+        ),
+      );
+      expect((await repository.setServerTimezone('requested')).$1, isTrue);
+      final updated = repository.apiData.settings.data!;
+      expect(updated.timezone, 'UTC');
+      expect(updated.autoUpgradeSettings, same(original.autoUpgradeSettings));
+      expect(updated.sshSettings, same(original.sshSettings));
+      expect(repository.apiData.settings.lastUpdated, age);
+    });
+    test('SSH and auto-upgrade use returned values, not the input', () async {
+      final age = repository.apiData.settings.lastUpdated;
+      when(() => api.setSshSettings(any())).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(SshSettings(enable: false)),
+        ),
+      );
+      when(() => api.setAutoUpgradeSettings(any())).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(
+            AutoUpgradeSettings(enable: false, allowReboot: false),
+          ),
+        ),
+      );
+      expect((await repository.setSshSettings(enable: true)).$1, isTrue);
+      expect(
+        (await repository.setAutoUpgradeSettings(
+          enable: true,
+          allowReboot: true,
+        )).$1,
+        isTrue,
+      );
+      final updated = repository.apiData.settings.data!;
+      expect(updated.sshSettings.enable, isFalse);
+      expect(updated.autoUpgradeSettings.enable, isFalse);
+      expect(updated.autoUpgradeSettings.allowReboot, isFalse);
+      expect(updated.timezone, original.timezone);
+      expect(repository.apiData.settings.lastUpdated, age);
+    });
+    for (final outcome in [
+      ServerMutationOutcome.rejected,
+      ServerMutationOutcome.indeterminate,
+    ]) {
+      test('$outcome never applies returned settings', () async {
+        when(() => api.setTimezone(any())).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: outcome,
+            payload: const ServerMutationPayload.available('UTC'),
+          ),
+        );
+        expect((await repository.setServerTimezone('UTC')).$1, isFalse);
+        expect(repository.apiData.settings.data, same(original));
+        expect(repository.apiData.settings.isExpired, isFalse);
+      });
+    }
+    test(
+      'missing confirmed timezone invalidates without inventing settings',
+      () async {
+        when(() => api.setTimezone(any())).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: const ServerMutationPayload.missing(),
+          ),
+        );
+        expect((await repository.setServerTimezone('UTC')).$1, isTrue);
+        expect(repository.apiData.settings.data, same(original));
+        expect(repository.apiData.settings.isExpired, isTrue);
+      },
+    );
+    test(
+      'partial returned settings do not fabricate an unloaded snapshot',
+      () async {
+        repository.apiData.settings.data = null;
+        when(() => api.setTimezone(any())).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: const ServerMutationPayload.available('UTC'),
+          ),
+        );
+        expect((await repository.setServerTimezone('UTC')).$1, isTrue);
+        expect(repository.apiData.settings.data, isNull);
+        expect(repository.apiData.settings.isExpired, isTrue);
+      },
+    );
   });
 
   test('the developer setting stops an automatic token refresh', () async {
@@ -154,7 +535,10 @@ void main() {
     when(
       () => api.updateUser('user', 'Luna', const ['sp.full_users']),
     ).thenAnswer(
-      (_) async => GenericResult<User?>(success: true, data: updatedUser),
+      (_) async => ServerMutationResult<User>(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available(updatedUser),
+      ),
     );
     final emittedData = repository.dataStream.first;
 

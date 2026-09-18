@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'recovery_key_event.dart';
 part 'recovery_key_state.dart';
@@ -55,7 +55,7 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
       unawaited(getIt<ApiConnectionRepository>().reload(null));
       return secret;
     } else {
-      throw GenerationError(response.secretFailureKey.tr());
+      throw GenerationError(serverMutationMessage(response, sensitive: true));
     }
   }
 

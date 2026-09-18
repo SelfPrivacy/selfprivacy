@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 @immutable
 abstract class ClientJob extends Equatable {
@@ -168,7 +170,13 @@ class ServiceToggleJob extends ClientJob {
       serviceId: service.id,
       needTurnOn: needToTurnOn,
     );
-    return (result.success, result.message ?? 'jobs.generic_error'.tr());
+    if (result.outcome == ServerMutationOutcome.confirmed) {
+      getIt<ApiConnectionRepository>().apiData.services.invalidate();
+    }
+    return (
+      result.outcome == ServerMutationOutcome.confirmed,
+      serverMutationMessage(result),
+    );
   }
 
   @override

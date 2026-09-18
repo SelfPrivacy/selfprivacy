@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
 
@@ -52,14 +55,25 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     final RemoveServerJob event,
     final Emitter<ServerJobsState> emit,
   ) async {
-    await getIt<ApiConnectionRepository>().removeServerJob(event.uid);
+    final result = await getIt<ApiConnectionRepository>().removeServerJob(
+      event.uid,
+    );
+    if (result.outcome != ServerMutationOutcome.confirmed) {
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
+    }
   }
 
   Future<void> _mapRemoveAllFinishedJobsToState(
     final RemoveAllFinishedJobs event,
     final Emitter<ServerJobsState> emit,
   ) async {
-    await getIt<ApiConnectionRepository>().removeAllFinishedServerJobs();
+    final results = await getIt<ApiConnectionRepository>()
+        .removeAllFinishedServerJobs();
+    for (final result in results.values) {
+      if (result.outcome != ServerMutationOutcome.confirmed) {
+        getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
+      }
+    }
   }
 
   Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/utils/fake_data.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'devices_event.dart';
 part 'devices_state.dart';
@@ -74,11 +74,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         ),
       );
     } else {
-      getIt<NavigationService>().showSnackBar(
-        response.outcome == ServerMutationOutcome.indeterminate
-            ? 'server_mutation.outcome_unknown'.tr()
-            : response.message ?? 'server_mutation.rejected'.tr(),
-      );
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(response));
       emit(DevicesLoaded(devices: state.devices));
     }
   }
@@ -90,7 +86,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     if (secret != null) {
       return secret;
     } else {
-      getIt<NavigationService>().showSnackBar(response.secretFailureKey.tr());
+      getIt<NavigationService>().showSnackBar(
+        serverMutationMessage(response, sensitive: true),
+      );
       return null;
     }
   }

@@ -150,7 +150,6 @@ void main() {
         final result = await operation.value(api);
         expect(result.outcome, ServerMutationOutcome.rejected);
         expect(result.confirmedSecret, isNull);
-        expect(result.secretFailureKey, 'server_mutation.rejected');
         expectSafe(result);
       });
 
@@ -161,10 +160,6 @@ void main() {
           expect(result.outcome, ServerMutationOutcome.confirmed);
           expect(result.payload.status, ServerMutationPayloadStatus.missing);
           expect(result.confirmedSecret, isNull);
-          expect(
-            result.secretFailureKey,
-            'server_mutation.payload_unavailable',
-          );
           expectSafe(result);
         });
       }
@@ -182,7 +177,6 @@ void main() {
         final result = await operation.value(api);
         expect(result.outcome, ServerMutationOutcome.indeterminate);
         expect(result.confirmedSecret, isNull);
-        expect(result.secretFailureKey, 'server_mutation.outcome_unknown');
         expectSafe(result);
       });
 

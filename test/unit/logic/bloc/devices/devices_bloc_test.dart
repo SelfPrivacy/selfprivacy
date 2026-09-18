@@ -153,8 +153,15 @@ void main() {
             verifyNever(() => navigation.showSnackBar(any()));
           } else {
             expect(key, isNull);
-            final message = result.secretFailureKey.tr();
-            expect(message, isNot(result.secretFailureKey));
+            final failureKey = switch (outcome) {
+              ServerMutationOutcome.confirmed =>
+                'server_mutation.payload_unavailable',
+              ServerMutationOutcome.rejected => 'server_mutation.rejected',
+              ServerMutationOutcome.indeterminate =>
+                'server_mutation.outcome_unknown',
+            };
+            final message = failureKey.tr();
+            expect(message, isNot(failureKey));
             verify(() => navigation.showSnackBar(message)).called(1);
           }
         });

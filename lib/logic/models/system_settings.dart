@@ -18,6 +18,16 @@ class SystemSettings {
         timezone: system.settings.timezone,
       );
 
+  SystemSettings copyWith({
+    final SshSettings? sshSettings,
+    final AutoUpgradeSettings? autoUpgradeSettings,
+    final String? timezone,
+  }) => SystemSettings(
+    sshSettings: sshSettings ?? this.sshSettings,
+    autoUpgradeSettings: autoUpgradeSettings ?? this.autoUpgradeSettings,
+    timezone: timezone ?? this.timezone,
+  );
+
   final SshSettings sshSettings;
   final AutoUpgradeSettings autoUpgradeSettings;
   final String timezone;

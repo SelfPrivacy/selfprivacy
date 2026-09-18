@@ -44,155 +44,117 @@ mixin UsersApi on GraphQLApiMap {
     return user;
   }
 
-  Future<GenericResult<User?>> createUser(
+  Future<ServerMutationResult<User>> createUser(
     final String username,
     final String? displayName,
     final List<String>? directMemberOf,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$CreateUser(
-        user: Input$UserMutationInput(
-          username: username,
-          displayName: displayName,
-          directmemberof: directMemberOf,
+    final client = await getClient();
+    final response = await client.mutate$CreateUser(
+      Options$Mutation$CreateUser(
+        variables: Variables$Mutation$CreateUser(
+          user: Input$UserMutationInput(
+            username: username,
+            displayName: displayName,
+            directmemberof: directMemberOf,
+          ),
         ),
-      );
-      final mutation = Options$Mutation$CreateUser(variables: variables);
-      final response = await client.mutate$CreateUser(mutation);
-      final parsed = response.parsedData?.users.createUser;
-      return GenericResult(
-        success: parsed?.success ?? false,
-        code: parsed?.code ?? 500,
-        message: parsed?.message,
-        data: parsed?.user != null ? User.fromGraphQL(parsed!.user!) : null,
-      );
-    } catch (e) {
-      logger('Error in GraphQL CreateUser request: $e', error: e);
-      return GenericResult(
-        success: false,
-        code: 0,
-        message: e.toString(),
-        data: null,
-      );
-    }
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.users.createUser,
+      decodePayload: (final mutation) =>
+          mutation.user == null ? null : User.fromGraphQL(mutation.user!),
+    );
   }
 
-  Future<GenericResult<User?>> updateUser(
+  Future<ServerMutationResult<User>> updateUser(
     final String username,
     final String? displayName,
     final List<String>? directMemberOf,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$UpdateUser(
-        user: Input$UserMutationInput(
-          username: username,
-          displayName: displayName,
-          directmemberof: directMemberOf,
+    final client = await getClient();
+    final response = await client.mutate$UpdateUser(
+      Options$Mutation$UpdateUser(
+        variables: Variables$Mutation$UpdateUser(
+          user: Input$UserMutationInput(
+            username: username,
+            displayName: displayName,
+            directmemberof: directMemberOf,
+          ),
         ),
-      );
-      final mutation = Options$Mutation$UpdateUser(variables: variables);
-      final response = await client.mutate$UpdateUser(mutation);
-      final parsed = response.parsedData?.users.updateUser;
-      return GenericResult(
-        success: parsed?.success ?? false,
-        code: parsed?.code ?? 500,
-        message: parsed?.message,
-        data: parsed?.user != null ? User.fromGraphQL(parsed!.user!) : null,
-      );
-    } catch (e) {
-      logger('Error in GraphQL UpdateUser request: $e', error: e);
-      return GenericResult(
-        success: false,
-        code: 0,
-        message: e.toString(),
-        data: null,
-      );
-    }
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.users.updateUser,
+      decodePayload: (final mutation) =>
+          mutation.user == null ? null : User.fromGraphQL(mutation.user!),
+    );
   }
 
-  Future<GenericResult<bool>> deleteUser(final String username) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$DeleteUser(username: username);
-      final mutation = Options$Mutation$DeleteUser(variables: variables);
-      final response = await client.mutate$DeleteUser(mutation);
-      final parsed = response.parsedData?.users.deleteUser;
-      return GenericResult(
-        data: parsed?.success ?? false,
-        success: parsed?.success ?? false,
-        code: parsed?.code ?? 500,
-        message: parsed?.message,
-      );
-    } catch (e) {
-      logger('Error in GraphQL DeleteUser request: $e', error: e);
-      return GenericResult(
-        data: false,
-        success: false,
-        code: 500,
-        message: e.toString(),
-      );
-    }
+  Future<ServerMutationResult<void>> deleteUser(final String username) async {
+    final client = await getClient();
+    final response = await client.mutate$DeleteUser(
+      Options$Mutation$DeleteUser(
+        variables: Variables$Mutation$DeleteUser(username: username),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.users.deleteUser,
+    );
   }
 
-  Future<GenericResult<User?>> addSshKey(
+  Future<ServerMutationResult<User>> addSshKey(
     final String username,
     final String sshKey,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$AddSshKey(
-        sshInput: Input$SshMutationInput(username: username, sshKey: sshKey),
-      );
-      final mutation = Options$Mutation$AddSshKey(variables: variables);
-      final response = await client.mutate$AddSshKey(mutation);
-      final parsed = response.parsedData?.users.addSshKey;
-      return GenericResult(
-        success: parsed?.success ?? false,
-        code: parsed?.code ?? 500,
-        message: parsed?.message,
-        data: parsed?.user != null ? User.fromGraphQL(parsed!.user!) : null,
-      );
-    } catch (e) {
-      logger('Error in GraphQL AddSshKey request: $e', error: e);
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+    final client = await getClient();
+    final response = await client.mutate$AddSshKey(
+      Options$Mutation$AddSshKey(
+        variables: Variables$Mutation$AddSshKey(
+          sshInput: Input$SshMutationInput(username: username, sshKey: sshKey),
+        ),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.users.addSshKey,
+      decodePayload: (final mutation) =>
+          mutation.user == null ? null : User.fromGraphQL(mutation.user!),
+    );
   }
 
-  Future<GenericResult<User?>> removeSshKey(
+  Future<ServerMutationResult<User>> removeSshKey(
     final String username,
     final String sshKey,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$RemoveSshKey(
-        sshInput: Input$SshMutationInput(username: username, sshKey: sshKey),
-      );
-      final mutation = Options$Mutation$RemoveSshKey(variables: variables);
-      final response = await client.mutate$RemoveSshKey(mutation);
-      return GenericResult(
-        success: response.parsedData?.users.removeSshKey.success ?? false,
-        code: response.parsedData?.users.removeSshKey.code ?? 500,
-        message: response.parsedData?.users.removeSshKey.message,
-        data: response.parsedData?.users.removeSshKey.user != null
-            ? User.fromGraphQL(response.parsedData!.users.removeSshKey.user!)
-            : null,
-      );
-    } catch (e) {
-      logger('Error in GraphQL RemoveSshKey request: $e', error: e);
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+    final client = await getClient();
+    final response = await client.mutate$RemoveSshKey(
+      Options$Mutation$RemoveSshKey(
+        variables: Variables$Mutation$RemoveSshKey(
+          sshInput: Input$SshMutationInput(username: username, sshKey: sshKey),
+        ),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.users.removeSshKey,
+      decodePayload: (final mutation) =>
+          mutation.user == null ? null : User.fromGraphQL(mutation.user!),
+    );
   }
 
   Future<ServerMutationResult<String>> generatePasswordResetLink(
@@ -217,38 +179,25 @@ mixin UsersApi on GraphQLApiMap {
     );
   }
 
-  Future<GenericResult<bool>> deleteEmailPassword(
+  Future<ServerMutationResult<void>> deleteEmailPassword(
     final String username,
     final String uuid,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$DeleteEmailPassword(
-        username: username,
-        uuid: uuid,
-      );
-      final mutation = Options$Mutation$DeleteEmailPassword(
-        variables: variables,
-      );
-      final response = await client.mutate$DeleteEmailPassword(mutation);
-      final parsed = response
-          .parsedData
-          ?.emailPasswordMetadataMutations
-          .deleteEmailPassword;
-      return GenericResult(
-        success: parsed?.success ?? false,
-        code: parsed?.code ?? 500,
-        message: parsed?.message,
-        data: parsed?.success ?? false,
-      );
-    } catch (e) {
-      logger('Error in GraphQL DeleteEmailPassword request: $e', error: e);
-      return GenericResult(
-        data: false,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+    final client = await getClient();
+    final response = await client.mutate$DeleteEmailPassword(
+      Options$Mutation$DeleteEmailPassword(
+        variables: Variables$Mutation$DeleteEmailPassword(
+          username: username,
+          uuid: uuid,
+        ),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) =>
+          data.emailPasswordMetadataMutations.deleteEmailPassword,
+    );
   }
 }

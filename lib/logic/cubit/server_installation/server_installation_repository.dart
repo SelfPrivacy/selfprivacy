@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -27,6 +26,7 @@ import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 class IpNotFoundException implements Exception {
   IpNotFoundException(this.message);
@@ -384,7 +384,9 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(result.secretFailureKey.tr());
+    throw ServerAuthorizationException(
+      serverMutationMessage(result, sensitive: true),
+    );
   }
 
   Future<ServerHostingDetails> authorizeByRecoveryKey(
@@ -420,7 +422,9 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(result.secretFailureKey.tr());
+    throw ServerAuthorizationException(
+      serverMutationMessage(result, sensitive: true),
+    );
   }
 
   Future<ServerHostingDetails> authorizeByApiToken(
@@ -459,7 +463,9 @@ class ServerInstallationRepository {
     final deviceAuthKey = await serverApi.createDeviceToken();
     final deviceKey = deviceAuthKey.confirmedSecret;
     if (deviceKey == null) {
-      throw ServerAuthorizationException(deviceAuthKey.secretFailureKey.tr());
+      throw ServerAuthorizationException(
+        serverMutationMessage(deviceAuthKey, sensitive: true),
+      );
     }
     final result = await serverApi.authorizeDevice(
       DeviceToken(device: await _deviceName(), token: deviceKey),
@@ -485,7 +491,9 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(result.secretFailureKey.tr());
+    throw ServerAuthorizationException(
+      serverMutationMessage(result, sensitive: true),
+    );
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async =>

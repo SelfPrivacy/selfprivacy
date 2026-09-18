@@ -16,6 +16,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'backups_event.dart';
 part 'backups_state.dart';
@@ -400,11 +401,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       return true;
     }
     getIt<NavigationService>().showSnackBar(
-      result.outcome == ServerMutationOutcome.indeterminate
-          ? 'server_mutation.outcome_unknown'.tr()
-          : sensitive
-          ? 'server_mutation.rejected'.tr()
-          : result.message ?? 'server_mutation.rejected'.tr(),
+      serverMutationMessage(result, sensitive: sensitive),
     );
     return false;
   }
@@ -420,7 +417,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     if (returned == null) {
       config.invalidate();
       getIt<NavigationService>().showSnackBar(
-        'server_mutation.payload_unavailable'.tr(),
+        serverMutationMessage(result, sensitive: true),
       );
     } else {
       config.data = returned;
@@ -453,9 +450,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final job = result.payload.value;
     if (job == null) {
       jobs.invalidate();
-      getIt<NavigationService>().showSnackBar(
-        'server_mutation.payload_unavailable'.tr(),
-      );
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
     } else {
       final existing = jobs.data;
       if (existing == null) {

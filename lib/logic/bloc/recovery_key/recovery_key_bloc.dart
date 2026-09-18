@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 
 part 'recovery_key_event.dart';
@@ -46,17 +47,15 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     final DateTime? expirationDate,
     final int? numberOfUses,
   }) async {
-    final GenericResult<String> response =
-        await getIt<ApiConnectionRepository>().api.generateRecoveryToken(
-          expirationDate,
-          numberOfUses,
-        );
-    if (response.success) {
+    final response = await getIt<ApiConnectionRepository>().api
+        .generateRecoveryToken(expirationDate, numberOfUses);
+    final secret = response.confirmedSecret;
+    if (secret != null) {
       getIt<ApiConnectionRepository>().apiData.recoveryKeyStatus.invalidate();
       unawaited(getIt<ApiConnectionRepository>().reload(null));
-      return response.data;
+      return secret;
     } else {
-      throw GenerationError(response.message ?? 'Unknown error');
+      throw GenerationError(response.secretFailureKey.tr());
     }
   }
 

@@ -133,4 +133,32 @@ void main() {
       verify(() => navigation.showSnackBar(message)).called(1);
     });
   });
+  for (final outcome in ServerMutationOutcome.values) {
+    for (final secret in ['fixture-secret', '', null]) {
+      testWidgets('device key ${outcome.name}/$secret', (final tester) async {
+        await pumpForTest(tester, const SizedBox.shrink());
+        await tester.runAsync(() async {
+          final result = ServerMutationResult<String>(
+            outcome: outcome,
+            payload: secret == null
+                ? const ServerMutationPayload.missing()
+                : ServerMutationPayload.available(secret),
+            message: 'secret-sentinel',
+          );
+          when(api.createDeviceToken).thenAnswer((_) async => result);
+          final key = await bloc.getNewDeviceKey();
+          if (outcome == ServerMutationOutcome.confirmed &&
+              secret == 'fixture-secret') {
+            expect(key, secret);
+            verifyNever(() => navigation.showSnackBar(any()));
+          } else {
+            expect(key, isNull);
+            final message = result.secretFailureKey.tr();
+            expect(message, isNot(result.secretFailureKey));
+            verify(() => navigation.showSnackBar(message)).called(1);
+          }
+        });
+      });
+    }
+  }
 }

@@ -4,7 +4,9 @@ mixin ServicesApi on GraphQLApiMap {
   Future<List<Service>> getAllServices() async {
     final client = await getClient();
     return requireServerApiData(
-      await client.query$AllServices(),
+      await client.query$AllServices(
+        Options$Query$AllServices(context: sensitiveGraphQLContext),
+      ),
     ).services.allServices.map(Service.fromGraphQL).toList();
   }
 
@@ -168,6 +170,7 @@ mixin ServicesApi on GraphQLApiMap {
         ),
       );
       final mutation = Options$Mutation$SetServiceConfiguration(
+        context: sensitiveGraphQLContext,
         variables: variables,
       );
       final response = await client.mutate$SetServiceConfiguration(mutation);
@@ -179,14 +182,9 @@ mixin ServicesApi on GraphQLApiMap {
         code: response.parsedData?.services.setServiceConfiguration.code ?? 0,
         message: response.parsedData?.services.setServiceConfiguration.message,
       );
-    } catch (e) {
-      logger('Error in GraphQL SetServiceConfiguration request: $e', error: e);
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
+    } catch (_) {
+      logger('Service configuration request failed');
+      return GenericResult(data: null, success: false, code: 0);
     }
   }
 }

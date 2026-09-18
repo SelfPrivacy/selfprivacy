@@ -328,50 +328,29 @@ class ServerApi extends GraphQLApiMap
     );
   }
 
-  Future<GenericResult<String>> generateRecoveryToken(
+  Future<ServerMutationResult<String>> generateRecoveryToken(
     final DateTime? expirationDate,
     final int? numberOfUses,
   ) async {
-    GenericResult<String> key;
-    QueryResult<Mutation$GetNewRecoveryApiKey> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-
-      final input = Input$RecoveryKeyLimitsInput(
-        expirationDate: expirationDate?.toUtc(),
-        uses: numberOfUses,
-      );
-      final variables = Variables$Mutation$GetNewRecoveryApiKey(limits: input);
-      final mutation = Options$Mutation$GetNewRecoveryApiKey(
-        variables: variables,
-      );
-      response = await client.mutate$GetNewRecoveryApiKey(mutation);
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetNewRecoveryApiKey request: ${response.exception}',
-          error: response.exception,
-        );
-        key = GenericResult<String>(
-          success: false,
-          data: '',
-          message: response.exception.toString(),
-        );
-      }
-      key = GenericResult<String>(
-        success: true,
-        data: response.parsedData!.api.getNewRecoveryApiKey.key!,
-      );
-    } catch (e) {
-      logger('Error in GraphQL GetNewRecoveryApiKey request: $e', error: e);
-      key = GenericResult<String>(
-        success: false,
-        data: '',
-        message: e.toString(),
-      );
-    }
-
-    return key;
+    final client = await getClient();
+    final response = await client.mutate$GetNewRecoveryApiKey(
+      Options$Mutation$GetNewRecoveryApiKey(
+        variables: Variables$Mutation$GetNewRecoveryApiKey(
+          limits: Input$RecoveryKeyLimitsInput(
+            expirationDate: expirationDate?.toUtc(),
+            uses: numberOfUses,
+          ),
+        ),
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.api.getNewRecoveryApiKey,
+      decodePayload: (final mutation) => nonEmptySecret(mutation.key),
+    );
   }
 
   Future<List<DnsRecord>?> getDnsRecords() async {
@@ -419,76 +398,36 @@ class ServerApi extends GraphQLApiMap
     );
   }
 
-  Future<GenericResult<String>> createDeviceToken() async {
-    GenericResult<String> token;
-    QueryResult<Mutation$GetNewDeviceApiKey> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-
-      final mutation = Options$Mutation$GetNewDeviceApiKey();
-      response = await client.mutate$GetNewDeviceApiKey(mutation);
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetNewDeviceApiKey request: ${response.exception}',
-          error: response.exception,
-        );
-        token = GenericResult<String>(
-          success: false,
-          data: '',
-          message: response.exception.toString(),
-        );
-      }
-      token = GenericResult<String>(
-        success: true,
-        data: response.parsedData!.api.getNewDeviceApiKey.key!,
-      );
-    } catch (e) {
-      logger('Error in GraphQL GetNewDeviceApiKey request: $e', error: e);
-      token = GenericResult<String>(
-        success: false,
-        data: '',
-        message: e.toString(),
-      );
-    }
-
-    return token;
+  Future<ServerMutationResult<String>> createDeviceToken() async {
+    final client = await getClient();
+    final response = await client.mutate$GetNewDeviceApiKey(
+      Options$Mutation$GetNewDeviceApiKey(
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.api.getNewDeviceApiKey,
+      decodePayload: (final mutation) => nonEmptySecret(mutation.key),
+    );
   }
 
-  Future<GenericResult<String>> refreshDeviceApiToken() async {
-    GenericResult<String> token;
-    QueryResult<Mutation$RefreshDeviceApiToken> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-
-      final mutation = Options$Mutation$RefreshDeviceApiToken();
-      response = await client.mutate$RefreshDeviceApiToken(mutation);
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL RefreshDeviceApiToken request: ${response.exception}',
-          error: response.exception,
-        );
-        token = GenericResult<String>(
-          success: false,
-          data: '',
-          message: response.exception.toString(),
-        );
-      }
-      token = GenericResult<String>(
-        success: true,
-        data: response.parsedData!.api.refreshDeviceApiToken.token!,
-      );
-    } catch (e) {
-      logger('Error in GraphQL RefreshDeviceApiToken request: $e', error: e);
-      token = GenericResult<String>(
-        success: false,
-        data: '',
-        message: e.toString(),
-      );
-    }
-
-    return token;
+  Future<ServerMutationResult<String>> refreshDeviceApiToken() async {
+    final client = await getClient();
+    final response = await client.mutate$RefreshDeviceApiToken(
+      Options$Mutation$RefreshDeviceApiToken(
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.api.refreshDeviceApiToken,
+      decodePayload: (final mutation) => nonEmptySecret(mutation.token),
+    );
   }
 
   Future<bool> isHttpServerWorking() async => (await getApiVersion()) != null;
@@ -510,98 +449,51 @@ class ServerApi extends GraphQLApiMap
     return ServerProbeResult.unreachable;
   }
 
-  Future<GenericResult<String>> authorizeDevice(
+  Future<ServerMutationResult<String>> authorizeDevice(
     final DeviceToken deviceToken,
   ) async {
-    GenericResult<String> token;
-    QueryResult<Mutation$AuthorizeWithNewDeviceApiKey> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-
-      final input = Input$UseNewDeviceKeyInput(
-        deviceName: deviceToken.device,
-        key: deviceToken.token,
-      );
-
-      final variables = Variables$Mutation$AuthorizeWithNewDeviceApiKey(
-        input: input,
-      );
-      final mutation = Options$Mutation$AuthorizeWithNewDeviceApiKey(
-        variables: variables,
-      );
-      response = await client.mutate$AuthorizeWithNewDeviceApiKey(mutation);
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL AuthorizeWithNewDeviceApiKey request: ${response.exception}',
-          error: response.exception,
-        );
-        token = GenericResult<String>(
-          success: false,
-          data: '',
-          message: response.exception.toString(),
-        );
-      }
-      token = GenericResult<String>(
-        success: true,
-        data: response.parsedData!.api.authorizeWithNewDeviceApiKey.token!,
-      );
-    } catch (e) {
-      logger(
-        'Error in GraphQL AuthorizeWithNewDeviceApiKey request: $e',
-        error: e,
-      );
-      token = GenericResult<String>(
-        success: false,
-        data: '',
-        message: e.toString(),
-      );
-    }
-
-    return token;
+    final client = await getClient();
+    final response = await client.mutate$AuthorizeWithNewDeviceApiKey(
+      Options$Mutation$AuthorizeWithNewDeviceApiKey(
+        variables: Variables$Mutation$AuthorizeWithNewDeviceApiKey(
+          input: Input$UseNewDeviceKeyInput(
+            deviceName: deviceToken.device,
+            key: deviceToken.token,
+          ),
+        ),
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.api.authorizeWithNewDeviceApiKey,
+      decodePayload: (final mutation) => nonEmptySecret(mutation.token),
+    );
   }
 
-  Future<GenericResult<String>> useRecoveryToken(
+  Future<ServerMutationResult<String>> useRecoveryToken(
     final DeviceToken deviceToken,
   ) async {
-    GenericResult<String> token;
-    QueryResult<Mutation$UseRecoveryApiKey> response;
-
-    try {
-      final GraphQLClient client = await getClient();
-
-      final input = Input$UseRecoveryKeyInput(
-        deviceName: deviceToken.device,
-        key: deviceToken.token,
-      );
-
-      final variables = Variables$Mutation$UseRecoveryApiKey(input: input);
-      final mutation = Options$Mutation$UseRecoveryApiKey(variables: variables);
-      response = await client.mutate$UseRecoveryApiKey(mutation);
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL UseRecoveryApiKey request: ${response.exception}',
-          error: response.exception,
-        );
-        token = GenericResult<String>(
-          success: false,
-          data: '',
-          message: response.exception.toString(),
-        );
-      }
-      token = GenericResult<String>(
-        success: true,
-        data: response.parsedData!.api.useRecoveryApiKey.token!,
-      );
-    } catch (e) {
-      logger('Error in GraphQL UseRecoveryApiKey request: $e', error: e);
-      token = GenericResult<String>(
-        success: false,
-        data: '',
-        message: e.toString(),
-      );
-    }
-
-    return token;
+    final client = await getClient();
+    final response = await client.mutate$UseRecoveryApiKey(
+      Options$Mutation$UseRecoveryApiKey(
+        variables: Variables$Mutation$UseRecoveryApiKey(
+          input: Input$UseRecoveryKeyInput(
+            deviceName: deviceToken.device,
+            key: deviceToken.token,
+          ),
+        ),
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.api.useRecoveryApiKey,
+      decodePayload: (final mutation) => nonEmptySecret(mutation.token),
+    );
   }
 }

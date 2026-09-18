@@ -1,5 +1,20 @@
 enum ServerMutationOutcome { confirmed, rejected, indeterminate }
 
+String? nonEmptySecret(final String? value) =>
+    value == null || value.trim().isEmpty ? null : value;
+
+extension SecretMutationResult on ServerMutationResult<String> {
+  String? get confirmedSecret => outcome == ServerMutationOutcome.confirmed
+      ? nonEmptySecret(payload.value)
+      : null;
+
+  String get secretFailureKey => switch (outcome) {
+    ServerMutationOutcome.confirmed => 'server_mutation.payload_unavailable',
+    ServerMutationOutcome.rejected => 'server_mutation.rejected',
+    ServerMutationOutcome.indeterminate => 'server_mutation.outcome_unknown',
+  };
+}
+
 enum ServerMutationPayloadStatus { available, notExpected, missing, unreadable }
 
 class ServerMutationPayload<T> {

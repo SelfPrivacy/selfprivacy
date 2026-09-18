@@ -7,6 +7,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
@@ -194,19 +195,19 @@ class ApiConnectionRepository {
     if (user.type == UserType.root) {
       return (null, errorMessage);
     }
-    final GenericResult<String?> result = await api.generatePasswordResetLink(
-      user.login,
-    );
+    final result = await api.generatePasswordResetLink(user.login);
 
-    // check if got valid url
-    final uri = Uri.tryParse(result.data ?? '');
+    final secret = result.confirmedSecret;
+    if (secret == null) {
+      return (null, result.secretFailureKey.tr());
+    }
+    final uri = Uri.tryParse(secret);
     if (uri == null || uri.scheme.isEmpty) {
-      errorMessage =
-          result.message ?? 'users.could_not_generate_password_link'.tr();
+      errorMessage = 'users.could_not_generate_password_link'.tr();
       return (null, errorMessage);
     }
 
-    return (uri, result.message ?? 'basis.done'.tr());
+    return (uri, 'basis.done'.tr());
   }
 
   Future<(bool, String)> deleteEmailPassword(
@@ -352,6 +353,8 @@ class ApiConnectionRepository {
   // rotations from `_rotateTokenIfNeeded` can arrive concurrently; without
   // this, the second rotation would invalidate the token issued by the first.
   Future<(bool, String)>? _rotationInFlight;
+  final Map<String, Set<String?>> _rotationSuppressedFor = {};
+  (String, String?)? _lastRotationCredential;
 
   /// Rotates the device API token and persists the new one.
   ///
@@ -368,21 +371,41 @@ class ApiConnectionRepository {
       return (false, 'jobs.generic_error'.tr());
     }
 
-    final GenericResult<String> result = await api.refreshDeviceApiToken();
-    if (!result.success || result.data.isEmpty) {
-      return (false, result.message ?? 'jobs.generic_error'.tr());
+    final credential = server.hostingDetails.apiToken;
+    final result = await api.refreshDeviceApiToken();
+    final replacement = result.confirmedSecret;
+    if (replacement == null) {
+      if (result.outcome != ServerMutationOutcome.rejected) {
+        _rotationSuppressedFor[server.uuid] = {credential};
+      }
+      return (false, result.secretFailureKey.tr());
     }
 
-    await _resourcesModel.updateServerByUuid(
-      Server(
-        uuid: server.uuid,
-        domain: server.domain,
-        hostingDetails: server.hostingDetails.copyWith(
-          apiToken: result.data,
-          apiTokenRotatedAt: DateTime.now(),
-        ),
-      ),
+    final current = _resourcesModel.servers.firstWhereOrNull(
+      (final candidate) => candidate.uuid == server.uuid,
     );
+    if (current == null || current.hostingDetails.apiToken != credential) {
+      return (false, 'server_mutation.outcome_unknown'.tr());
+    }
+    try {
+      await _resourcesModel.updateServerByUuid(
+        Server(
+          uuid: current.uuid,
+          domain: current.domain,
+          hostingDetails: current.hostingDetails.copyWith(
+            apiToken: replacement,
+            apiTokenRotatedAt: DateTime.now(),
+          ),
+        ),
+      );
+    } catch (_) {
+      _rotationSuppressedFor[server.uuid] = {credential, replacement};
+      return (false, 'server_mutation.outcome_unknown'.tr());
+    }
+    _rotationSuppressedFor.remove(server.uuid);
+    if (_server?.uuid != server.uuid) {
+      return (true, 'basis.done'.tr());
+    }
     _apiData.devices.invalidate();
 
     // The jobs websocket was authenticated with the old token; its reconnects
@@ -392,7 +415,7 @@ class ApiConnectionRepository {
       await _connectJobsStream(apiVersion);
     }
 
-    return (true, result.message ?? 'basis.done'.tr());
+    return (true, 'basis.done'.tr());
   }
 
   static const Duration _tokenRotationRetryInterval = Duration(hours: 1);
@@ -408,10 +431,25 @@ class ApiConnectionRepository {
       return;
     }
     final DateTime now = DateTime.now();
-    final ServerHostingDetails? details = _server?.hostingDetails;
+    final server = _server;
+    if (server == null) {
+      return;
+    }
+    final details = server.hostingDetails;
+    final credential = (server.uuid, details.apiToken);
+    if (_lastRotationCredential != credential) {
+      _lastRotationCredential = credential;
+      _lastTokenRotationAttempt = null;
+    }
+    if (_rotationSuppressedFor.containsKey(server.uuid)) {
+      if (_rotationSuppressedFor[server.uuid]!.contains(details.apiToken)) {
+        return;
+      }
+      _rotationSuppressedFor.remove(server.uuid);
+    }
     final schedule = TokenRenewalSchedule.fromToken(
-      token: details?.apiToken,
-      rotatedAt: details?.apiTokenRotatedAt,
+      token: details.apiToken,
+      rotatedAt: details.apiTokenRotatedAt,
     );
     if (!schedule.shouldRefreshAutomatically(
       enabled: getIt<DeveloperSettingsModel>().automaticGraphqlTokenRefresh,

@@ -5,6 +5,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -201,6 +202,121 @@ void main() {
     });
   });
 
+  group('unusable authorization results', () {
+    final results = [
+      ServerMutationResult<String>(
+        outcome: ServerMutationOutcome.rejected,
+        payload: const ServerMutationPayload.available('secret-sentinel'),
+        message: 'secret-sentinel',
+      ),
+      ServerMutationResult<String>(
+        outcome: ServerMutationOutcome.indeterminate,
+        payload: const ServerMutationPayload.unreadable(),
+        message: 'secret-sentinel',
+      ),
+      ServerMutationResult<String>(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.missing(),
+        message: 'secret-sentinel',
+      ),
+      ServerMutationResult<String>(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available(''),
+      ),
+    ];
+
+    for (final result in results) {
+      test(
+        'device-key chain stops at ${result.outcome.name}/${result.payload.status.name}',
+        () async {
+          when(api.createDeviceToken).thenAnswer((_) async => result);
+          await expectLater(
+            repository.authorizeByApiToken(
+              aServerDomain(),
+              'existing-token',
+              ServerRecoveryCapabilities.loginTokens,
+            ),
+            throwsA(
+              isA<ServerAuthorizationException>().having(
+                (final error) => error.message,
+                'message',
+                isNot(contains('secret-sentinel')),
+              ),
+            ),
+          );
+          verifyNever(() => api.authorizeDevice(any()));
+        },
+      );
+
+      test(
+        'API-token chain stops if authorization returns ${result.outcome.name}/${result.payload.status.name}',
+        () async {
+          when(api.createDeviceToken).thenAnswer(
+            (_) async => ServerMutationResult<String>(
+              outcome: ServerMutationOutcome.confirmed,
+              payload: const ServerMutationPayload.available('device-key'),
+            ),
+          );
+          when(
+            () => api.authorizeDevice(any()),
+          ).thenAnswer((_) async => result);
+          await expectLater(
+            repository.authorizeByApiToken(
+              aServerDomain(),
+              'existing-token',
+              ServerRecoveryCapabilities.loginTokens,
+            ),
+            throwsA(
+              isA<ServerAuthorizationException>().having(
+                (final error) => error.message,
+                'message',
+                isNot(contains('secret-sentinel')),
+              ),
+            ),
+          );
+          final token =
+              verify(() => api.authorizeDevice(captureAny())).captured.single
+                  as DeviceToken;
+          expect(token.token, 'device-key');
+        },
+      );
+
+      for (final recovery in [true, false]) {
+        test(
+          'authorization recovery=$recovery rejects ${result.outcome.name}/${result.payload.status.name}',
+          () async {
+            when(
+              () => api.useRecoveryToken(any()),
+            ).thenAnswer((_) async => result);
+            when(
+              () => api.authorizeDevice(any()),
+            ).thenAnswer((_) async => result);
+            await expectLater(
+              recovery
+                  ? repository.authorizeByRecoveryKey(
+                      aServerDomain(),
+                      'key',
+                      ServerRecoveryCapabilities.loginTokens,
+                    )
+                  : repository.authorizeByNewDeviceKey(
+                      aServerDomain(),
+                      'key',
+                      ServerRecoveryCapabilities.loginTokens,
+                    ),
+              throwsA(
+                isA<ServerAuthorizationException>().having(
+                  (final error) => error.message,
+                  'message',
+                  isNot(contains('secret-sentinel')),
+                ),
+              ),
+            );
+          },
+        );
+      }
+    }
+  });
+
   group('recovery token age', () {
     Future<void> expectFresh(
       final Future<ServerHostingDetails> Function() authorize,
@@ -217,7 +333,10 @@ void main() {
 
     test('a new-device key produces a fresh token', () async {
       when(() => api.authorizeDevice(any())).thenAnswer(
-        (_) async => GenericResult(success: true, data: 'fresh-token'),
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('fresh-token'),
+        ),
       );
 
       await expectFresh(
@@ -231,7 +350,10 @@ void main() {
 
     test('a recovery key produces a fresh token', () async {
       when(() => api.useRecoveryToken(any())).thenAnswer(
-        (_) async => GenericResult(success: true, data: 'fresh-token'),
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('fresh-token'),
+        ),
       );
 
       await expectFresh(
@@ -245,10 +367,16 @@ void main() {
 
     test('a current API token is exchanged for a fresh device token', () async {
       when(() => api.createDeviceToken()).thenAnswer(
-        (_) async => GenericResult(success: true, data: 'device-key'),
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('device-key'),
+        ),
       );
       when(() => api.authorizeDevice(any())).thenAnswer(
-        (_) async => GenericResult(success: true, data: 'fresh-token'),
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('fresh-token'),
+        ),
       );
 
       await expectFresh(

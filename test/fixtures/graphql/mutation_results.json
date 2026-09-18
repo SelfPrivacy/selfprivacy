@@ -66,5 +66,182 @@
         }
       }
     }
+  },
+  "GetNewRecoveryApiKey": {
+    "__typename": "Mutation",
+    "api": {
+      "__typename": "ApiMutations",
+      "getNewRecoveryApiKey": {
+        "__typename": "ApiKeyMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "key": "fixture-secret"
+      }
+    }
+  },
+  "GetNewDeviceApiKey": {
+    "__typename": "Mutation",
+    "api": {
+      "__typename": "ApiMutations",
+      "getNewDeviceApiKey": {
+        "__typename": "ApiKeyMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "key": "fixture-secret"
+      }
+    }
+  },
+  "AuthorizeWithNewDeviceApiKey": {
+    "__typename": "Mutation",
+    "api": {
+      "__typename": "ApiMutations",
+      "authorizeWithNewDeviceApiKey": {
+        "__typename": "DeviceApiTokenMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "token": "fixture-secret"
+      }
+    }
+  },
+  "UseRecoveryApiKey": {
+    "__typename": "Mutation",
+    "api": {
+      "__typename": "ApiMutations",
+      "useRecoveryApiKey": {
+        "__typename": "DeviceApiTokenMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "token": "fixture-secret"
+      }
+    }
+  },
+  "RefreshDeviceApiToken": {
+    "__typename": "Mutation",
+    "api": {
+      "__typename": "ApiMutations",
+      "refreshDeviceApiToken": {
+        "__typename": "DeviceApiTokenMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "token": "fixture-secret"
+      }
+    }
+  },
+  "GeneratePasswordResetLink": {
+    "__typename": "Mutation",
+    "users": {
+      "__typename": "UsersMutations",
+      "generatePasswordResetLink": {
+        "__typename": "PasswordResetLinkReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "passwordResetLink": "https://auth.example.org/ui/reset?token=abcd-0123-abcd-0123"
+      }
+    }
+  },
+  "setAutobackupQuotas": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "setAutobackupQuotas": {
+        "__typename": "GenericBackupConfigReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "configuration": {
+          "__typename": "BackupConfiguration",
+          "autobackupPeriod": 60,
+          "encryptionKey": "fixture-key",
+          "isInitialized": true,
+          "locationId": "bucket-id",
+          "locationName": "Backups",
+          "provider": "BACKBLAZE",
+          "autobackupQuotas": {
+            "__typename": "AutobackupQuotas",
+            "last": 3,
+            "daily": 7,
+            "weekly": 4,
+            "monthly": 12,
+            "yearly": 1
+          }
+        }
+      }
+    }
+  },
+  "RemoveRepository": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "removeRepository": {
+        "__typename": "GenericBackupConfigReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "configuration": {
+          "__typename": "BackupConfiguration",
+          "autobackupPeriod": 60,
+          "encryptionKey": "fixture-key",
+          "isInitialized": true,
+          "locationId": "bucket-id",
+          "locationName": "Backups",
+          "provider": "BACKBLAZE",
+          "autobackupQuotas": {
+            "__typename": "AutobackupQuotas",
+            "last": 3,
+            "daily": 7,
+            "weekly": 4,
+            "monthly": 12,
+            "yearly": 1
+          }
+        }
+      }
+    }
+  },
+  "InitializeRepository": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "initializeRepository": {
+        "__typename": "GenericBackupConfigReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "configuration": {
+          "__typename": "BackupConfiguration",
+          "autobackupPeriod": 60,
+          "encryptionKey": "fixture-key",
+          "isInitialized": true,
+          "locationId": "bucket-id",
+          "locationName": "Backups",
+          "provider": "BACKBLAZE",
+          "autobackupQuotas": {
+            "__typename": "AutobackupQuotas",
+            "last": 3,
+            "daily": 7,
+            "weekly": 4,
+            "monthly": 12,
+            "yearly": 1
+          }
+        }
+      }
+    }
+  },
+  "SetServiceConfiguration": {
+    "__typename": "Mutation",
+    "services": {
+      "__typename": "ServicesMutations",
+      "setServiceConfiguration": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
   }
 }

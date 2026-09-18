@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/utils/fake_data.dart';
@@ -85,14 +84,13 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   }
 
   Future<String?> getNewDeviceKey() async {
-    final GenericResult<String> response =
-        await getIt<ApiConnectionRepository>().api.createDeviceToken();
-    if (response.success) {
-      return response.data;
+    final response = await getIt<ApiConnectionRepository>().api
+        .createDeviceToken();
+    final secret = response.confirmedSecret;
+    if (secret != null) {
+      return secret;
     } else {
-      getIt<NavigationService>().showSnackBar(
-        response.message ?? 'Error getting new device key',
-      );
+      getIt<NavigationService>().showSnackBar(response.secretFailureKey.tr());
       return null;
     }
   }

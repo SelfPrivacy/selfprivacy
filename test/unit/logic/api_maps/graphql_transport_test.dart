@@ -20,6 +20,7 @@ void main() {
   var domain = 'first.example';
   var token = 'first-token';
   var locale = 'en';
+  late List<ConsoleLog> logs;
 
   GraphQLTransport transport({
     final GraphQLTokenProvider? tokenProvider,
@@ -32,7 +33,7 @@ void main() {
     localeProvider: () => locale,
     tlsContext: tlsContext,
     tlsPolicy: tlsPolicy,
-    consoleLog: (_) {},
+    consoleLog: (final log) => logs.add(log),
   );
 
   Future<QueryResult<Object?>> query(final GraphQLTransport transport) =>
@@ -48,6 +49,7 @@ void main() {
     domain = 'first.example';
     token = 'first-token';
     locale = 'en';
+    logs = [];
     tlsContext = _MockTlsContext();
     requests = [];
     responseBody = {
@@ -143,17 +145,57 @@ void main() {
     );
   });
 
-  test('logs parsed GraphQL errors', () {
-    final logs = <ConsoleLog>[];
-    final parser = ResponseLoggingParser(consoleLog: logs.add);
-
-    final error = parser.parseError({'message': 'access denied'});
-
-    expect(error.message, 'access denied');
-    expect(logs.single, isA<ManualConsoleLog>());
-    expect(logs.single.severity, ConsoleLogSeverity.warning);
-    expect(logs.single.content, contains('access denied'));
+  test('logs ordinary requests, responses and GraphQL errors', () async {
+    responseBody['errors'] = [
+      {'message': 'access denied'},
+    ];
+    await query(transport());
+    expect(logs.whereType<GraphQlRequestConsoleLog>(), hasLength(1));
+    expect(
+      logs.whereType<GraphQlResponseConsoleLog>().single.rawResponse,
+      contains('access denied'),
+    );
+    expect(
+      logs.whereType<ManualConsoleLog>().single.content,
+      contains('access denied'),
+    );
   });
+
+  test(
+    'sensitive failures keep auth callbacks but not free-form errors',
+    () async {
+      var authFailures = 0;
+      responseBody = {
+        'errors': [
+          {
+            'message': 'secret-sentinel',
+            'extensions': {
+              'code': 'UNAUTHENTICATED',
+              'detail': 'secret-sentinel',
+            },
+          },
+        ],
+      };
+      final result = await transport(onAuthFailure: () => authFailures++)
+          .client()
+          .query<Object?>(
+            QueryOptions(
+              document: parseString('query Sensitive { api { version } }'),
+              context: sensitiveGraphQLContext,
+              variables: const {'key': 'secret-sentinel'},
+            ),
+          );
+      expect(authFailures, 1);
+      expect(result.exception?.graphqlErrors.single.message, 'secret-sentinel');
+      expect(logs, hasLength(2));
+      for (final log in logs) {
+        expect(log, isNot(isA<LogWithRawResponse>()));
+        expect(log.content, isNot(contains('secret-sentinel')));
+        expect(log.shareableData, isNot(contains('secret-sentinel')));
+        expect(log.content, contains('Sensitive'));
+      }
+    },
+  );
 
   test('reports coded authentication errors without consuming them', () async {
     var authFailures = 0;

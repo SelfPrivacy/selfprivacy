@@ -195,37 +195,26 @@ mixin UsersApi on GraphQLApiMap {
     }
   }
 
-  Future<GenericResult<String?>> generatePasswordResetLink(
+  Future<ServerMutationResult<String>> generatePasswordResetLink(
     final String username,
   ) async {
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$GeneratePasswordResetLink(
-        username: username,
-      );
-      final mutation = Options$Mutation$GeneratePasswordResetLink(
-        variables: variables,
-      );
-      final response = await client.mutate$GeneratePasswordResetLink(mutation);
-      final parsed = response.parsedData?.users.generatePasswordResetLink;
-      return GenericResult(
-        success: parsed?.success ?? false,
-        code: parsed?.code ?? 500,
-        message: parsed?.message,
-        data: parsed?.passwordResetLink,
-      );
-    } catch (e) {
-      logger(
-        'Error in GraphQL GeneratePasswordResetLink request: $e',
-        error: e,
-      );
-      return GenericResult(
-        data: null,
-        success: false,
-        code: 0,
-        message: e.toString(),
-      );
-    }
+    final client = await getClient();
+    final response = await client.mutate$GeneratePasswordResetLink(
+      Options$Mutation$GeneratePasswordResetLink(
+        variables: Variables$Mutation$GeneratePasswordResetLink(
+          username: username,
+        ),
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.users.generatePasswordResetLink,
+      decodePayload: (final mutation) =>
+          nonEmptySecret(mutation.passwordResetLink),
+    );
   }
 
   Future<GenericResult<bool>> deleteEmailPassword(

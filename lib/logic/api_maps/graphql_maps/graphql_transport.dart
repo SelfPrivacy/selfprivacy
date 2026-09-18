@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:gql/ast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
@@ -15,8 +16,19 @@ const String _unauthenticatedErrorCode = 'UNAUTHENTICATED';
 const String _legacyUnauthenticatedErrorMessage =
     'You must be authenticated to access this resource.';
 
-class RequestLoggingLink extends Link {
-  RequestLoggingLink({required final ConsoleLogSink consoleLog})
+class SensitiveGraphQLRequest extends ContextEntry {
+  const SensitiveGraphQLRequest();
+
+  @override
+  List<Object?> get fieldsForEquality => const [];
+}
+
+final sensitiveGraphQLContext = const Context().withEntry(
+  const SensitiveGraphQLRequest(),
+);
+
+class GraphQLLoggingLink extends Link {
+  GraphQLLoggingLink({required final ConsoleLogSink consoleLog})
     : _consoleLog = consoleLog;
 
   final ConsoleLogSink _consoleLog;
@@ -26,46 +38,73 @@ class RequestLoggingLink extends Link {
     final Request request, [
     final NextLink? forward,
   ]) async* {
-    _consoleLog(
-      GraphQlRequestConsoleLog(
-        operationType: request.type.name,
-        operation: request.operation,
-        variables: request.variables,
-      ),
-    );
-    yield* forward!(request);
-  }
-}
+    final sensitive = request.context.entry<SensitiveGraphQLRequest>() != null;
 
-class ResponseLoggingParser extends ResponseParser {
-  ResponseLoggingParser({required final ConsoleLogSink consoleLog})
-    : _consoleLog = consoleLog;
+    void logSensitive(final String phase, [final String? error]) {
+      _consoleLog(
+        ManualConsoleLog(
+          customTitle: 'GraphQL $phase',
+          content: jsonEncode({
+            'type': request.type.name,
+            'name':
+                request.operation.operationName ??
+                request.operation.document.definitions
+                    .whereType<OperationDefinitionNode>()
+                    .single
+                    .name
+                    ?.value,
+            'error': ?error,
+          }),
+          severity: error == null
+              ? ConsoleLogSeverity.normal
+              : ConsoleLogSeverity.warning,
+        ),
+      );
+    }
 
-  final ConsoleLogSink _consoleLog;
-
-  @override
-  Response parseResponse(final Map<String, dynamic> body) {
-    final response = super.parseResponse(body);
-    _consoleLog(
-      GraphQlResponseConsoleLog(
-        data: response.data,
-        errors: response.errors,
-        rawResponse: jsonEncode(response.response),
-      ),
-    );
-    return response;
-  }
-
-  @override
-  GraphQLError parseError(final Map<String, dynamic> error) {
-    final graphQlError = super.parseError(error);
-    _consoleLog(
-      ManualConsoleLog.warning(
-        customTitle: 'GraphQL Error',
-        content: graphQlError.toString(),
-      ),
-    );
-    return graphQlError;
+    if (sensitive) {
+      logSensitive('Request');
+    } else {
+      _consoleLog(
+        GraphQlRequestConsoleLog(
+          operationType: request.type.name,
+          operation: request.operation,
+          variables: request.variables,
+        ),
+      );
+    }
+    try {
+      await for (final response in forward!(request)) {
+        if (sensitive) {
+          logSensitive(
+            'Response',
+            response.errors?.isNotEmpty ?? false ? 'graphql' : null,
+          );
+        } else {
+          _consoleLog(
+            GraphQlResponseConsoleLog(
+              data: response.data,
+              errors: response.errors,
+              rawResponse: jsonEncode(response.response),
+            ),
+          );
+          for (final error in response.errors ?? const <GraphQLError>[]) {
+            _consoleLog(
+              ManualConsoleLog.warning(
+                customTitle: 'GraphQL Error',
+                content: error.toString(),
+              ),
+            );
+          }
+        }
+        yield response;
+      }
+    } catch (_) {
+      if (sensitive) {
+        logSensitive('Error', 'transport');
+      }
+      rethrow;
+    }
   }
 }
 
@@ -139,13 +178,12 @@ class GraphQLTransport {
     final httpLink = HttpLink(
       'https://$_host/graphql',
       httpClient: tlsContext.clientFor(host: _host, policy: tlsPolicy),
-      parser: ResponseLoggingParser(consoleLog: consoleLog),
       defaultHeaders: {'Accept-Language': localeProvider()},
     );
 
     final currentToken = token;
     final Link link = _watchAuthFailures(
-      RequestLoggingLink(consoleLog: consoleLog).concat(
+      GraphQLLoggingLink(consoleLog: consoleLog).concat(
         isAuthenticated
             ? AuthLink(getToken: () => 'Bearer $currentToken').concat(httpLink)
             : httpLink,

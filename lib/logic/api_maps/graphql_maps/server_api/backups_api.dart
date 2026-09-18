@@ -12,7 +12,9 @@ mixin BackupsApi on GraphQLApiMap {
     final client = await getClient();
     return BackupConfiguration.fromGraphQL(
       requireServerApiData(
-        await client.query$BackupConfiguration(),
+        await client.query$BackupConfiguration(
+          Options$Query$BackupConfiguration(context: sensitiveGraphQLContext),
+        ),
       ).backup.configuration,
     );
   }
@@ -65,18 +67,18 @@ mixin BackupsApi on GraphQLApiMap {
       final GraphQLClient client = await getClient();
       final variables = Variables$Mutation$SetAutobackupPeriod(period: period);
       final options = Options$Mutation$SetAutobackupPeriod(
+        context: sensitiveGraphQLContext,
         variables: variables,
       );
       response = await client.mutate$SetAutobackupPeriod(options);
       if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        result = GenericResult(success: false, data: null, message: message);
+        logger('Server configuration request failed');
+        result = GenericResult(success: false, data: null);
       }
       result = GenericResult(success: true, data: null);
-    } catch (e) {
-      logger("Couldn't set autobackup period", error: e);
-      result = GenericResult(success: false, data: null, message: e.toString());
+    } catch (_) {
+      logger("Couldn't set autobackup period");
+      result = GenericResult(success: false, data: null);
     }
 
     return result;
@@ -100,18 +102,18 @@ mixin BackupsApi on GraphQLApiMap {
         ),
       );
       final options = Options$Mutation$setAutobackupQuotas(
+        context: sensitiveGraphQLContext,
         variables: variables,
       );
       response = await client.mutate$setAutobackupQuotas(options);
       if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        result = GenericResult(success: false, data: null, message: message);
+        logger('Server configuration request failed');
+        result = GenericResult(success: false, data: null);
       }
       result = GenericResult(success: true, data: null);
-    } catch (e) {
-      logger("Couldn't set autobackup quotas", error: e);
-      result = GenericResult(success: false, data: null, message: e.toString());
+    } catch (_) {
+      logger("Couldn't set autobackup quotas");
+      result = GenericResult(success: false, data: null);
     }
 
     return result;
@@ -120,10 +122,12 @@ mixin BackupsApi on GraphQLApiMap {
   Future<GenericResult> removeRepository() async {
     try {
       final GraphQLClient client = await getClient();
-      await client.mutate$RemoveRepository();
-    } catch (e) {
-      logger("Couldn't remove repository", error: e);
-      return GenericResult(success: false, data: null, message: e.toString());
+      await client.mutate$RemoveRepository(
+        Options$Mutation$RemoveRepository(context: sensitiveGraphQLContext),
+      );
+    } catch (_) {
+      logger("Couldn't remove repository");
+      return GenericResult(success: false, data: null);
     }
 
     return GenericResult(success: true, data: null);
@@ -147,18 +151,18 @@ mixin BackupsApi on GraphQLApiMap {
         ),
       );
       final options = Options$Mutation$InitializeRepository(
+        context: sensitiveGraphQLContext,
         variables: variables,
       );
       response = await client.mutate$InitializeRepository(options);
       if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        result = GenericResult(success: false, data: null, message: message);
+        logger('Server configuration request failed');
+        result = GenericResult(success: false, data: null);
       }
       result = GenericResult(success: true, data: null);
-    } catch (e) {
-      logger("Couldn't initialize repository", error: e);
-      result = GenericResult(success: false, data: null, message: e.toString());
+    } catch (_) {
+      logger("Couldn't initialize repository");
+      result = GenericResult(success: false, data: null);
     }
 
     return result;

@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -358,13 +360,14 @@ class ServerInstallationRepository {
       domainProvider: () => serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final GenericResult<String> result = await serverApi.authorizeDevice(
+    final result = await serverApi.authorizeDevice(
       DeviceToken(device: await _deviceName(), token: newDeviceKey),
     );
 
-    if (result.success) {
+    final secret = result.confirmedSecret;
+    if (secret != null) {
       return ServerHostingDetails(
-        apiToken: result.data,
+        apiToken: secret,
         apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
           id: 0,
@@ -381,7 +384,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(result.message ?? result.data);
+    throw ServerAuthorizationException(result.secretFailureKey.tr());
   }
 
   Future<ServerHostingDetails> authorizeByRecoveryKey(
@@ -393,13 +396,14 @@ class ServerInstallationRepository {
       domainProvider: () => serverDomain.domainName,
     );
     final String serverIp = await getServerIpFromDomain(serverDomain);
-    final GenericResult<String> result = await serverApi.useRecoveryToken(
+    final result = await serverApi.useRecoveryToken(
       DeviceToken(device: await _deviceName(), token: recoveryKey),
     );
 
-    if (result.success) {
+    final secret = result.confirmedSecret;
+    if (secret != null) {
       return ServerHostingDetails(
-        apiToken: result.data,
+        apiToken: secret,
         apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
           id: 0,
@@ -416,7 +420,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(result.message ?? result.data);
+    throw ServerAuthorizationException(result.secretFailureKey.tr());
   }
 
   Future<ServerHostingDetails> authorizeByApiToken(
@@ -452,15 +456,19 @@ class ServerInstallationRepository {
         );
       }
     }
-    final GenericResult<String> deviceAuthKey = await serverApi
-        .createDeviceToken();
-    final GenericResult<String> result = await serverApi.authorizeDevice(
-      DeviceToken(device: await _deviceName(), token: deviceAuthKey.data),
+    final deviceAuthKey = await serverApi.createDeviceToken();
+    final deviceKey = deviceAuthKey.confirmedSecret;
+    if (deviceKey == null) {
+      throw ServerAuthorizationException(deviceAuthKey.secretFailureKey.tr());
+    }
+    final result = await serverApi.authorizeDevice(
+      DeviceToken(device: await _deviceName(), token: deviceKey),
     );
 
-    if (result.success) {
+    final secret = result.confirmedSecret;
+    if (secret != null) {
       return ServerHostingDetails(
-        apiToken: result.data,
+        apiToken: secret,
         apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
           id: 0,
@@ -477,7 +485,7 @@ class ServerInstallationRepository {
       );
     }
 
-    throw ServerAuthorizationException(result.message ?? result.data);
+    throw ServerAuthorizationException(result.secretFailureKey.tr());
   }
 
   Future<List<ServerBasicInfo>> getServersOnProviderAccount() async =>

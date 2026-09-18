@@ -5,6 +5,7 @@ import 'package:selfprivacy/logic/connection/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/cached_value.dart';
 import 'package:selfprivacy/logic/connection/domain_store.dart';
 import 'package:selfprivacy/logic/connection/reachability.dart';
+import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/connection/server_state_cache.dart';
 
 class InterestHandle {
@@ -32,6 +33,7 @@ class _ScheduledDomain {
   final interests = <_Interest>{};
   DateTime? failedAt;
   bool wasRefreshing = false;
+  _RefreshRequest? request;
 
   Duration get interval => interests.fold(
     store.refreshInterval,
@@ -39,7 +41,8 @@ class _ScheduledDomain {
         interest.interval < interval ? interest.interval : interval,
   );
 
-  bool get forced => interests.any((final interest) => interest.pending);
+  bool get forced =>
+      request != null || interests.any((final interest) => interest.pending);
 
   void observe(final DateTime now) {
     final value = store.value;
@@ -63,7 +66,8 @@ class _ScheduledDomain {
     }
     final value = store.value;
     final deadline = value.updatedAt?.add(interval) ?? now;
-    return value.freshness == Freshness.stale && deadline.isAfter(now)
+    return (value.needsReconciliation || value.freshness == Freshness.stale) &&
+            deadline.isAfter(now)
         ? now
         : deadline;
   }
@@ -73,6 +77,13 @@ class _ScheduledDomain {
       interest.pending = false;
     }
   }
+}
+
+class _RefreshRequest {
+  _RefreshRequest(this.revision);
+  final int revision;
+  final completion = Completer<RefreshResult>();
+  bool dispatched = false;
 }
 
 typedef _Candidate = ({
@@ -88,23 +99,30 @@ class SyncScheduler {
     required final ServerStateCache cache,
     required final Reachability reachability,
     required final AppLifecycle lifecycle,
+    required final ServerCommandCoordinator commands,
     final DateTime Function()? now,
     final CacheTimerFactory? createTimer,
   }) : _cache = cache,
        _reachability = reachability,
        _lifecycle = lifecycle,
+       _commands = commands,
        _now = now ?? DateTime.now,
        _createTimer = createTimer ?? Timer.new,
        _domains = {
          for (final (index, store) in cache.stores.indexed)
            store.name: _ScheduledDomain(store, index),
-       };
+       } {
+    if (!cache.stores.every(commands.owns)) {
+      throw ArgumentError('The coordinator must own every scheduled store.');
+    }
+  }
 
   static const poolSize = 3;
 
   final ServerStateCache _cache;
   final Reachability _reachability;
   final AppLifecycle _lifecycle;
+  final ServerCommandCoordinator _commands;
   final DateTime Function() _now;
   final CacheTimerFactory _createTimer;
   final Map<String, _ScheduledDomain> _domains;
@@ -122,6 +140,7 @@ class SyncScheduler {
   bool _queued = false;
   bool _wasAllowed = false;
   bool _waitingForPermit = false;
+  int _forcedStreak = 0;
 
   List<SyncPoolActivity?> get poolStatus => _poolStatus;
 
@@ -131,6 +150,7 @@ class SyncScheduler {
   bool get _allowed =>
       _lifecycle.isForeground &&
       !_reachability.isPaused &&
+      _commands.isAttached &&
       _reachability.current == ReachabilityStatus.reachable;
 
   void start() {
@@ -141,13 +161,98 @@ class SyncScheduler {
     _started = true;
     for (final domain in _domains.values) {
       domain.wasRefreshing = domain.store.value.isRefreshing;
-      _subscriptions.add(domain.store.stream.listen((_) => _observe(domain)));
+      _subscriptions.add(
+        domain.store.stream.listen(
+          (_) => _observe(domain),
+          onDone: () => _observe(domain),
+        ),
+      );
     }
     _subscriptions
+      ..add(_commands.changes.listen((_) => _environmentChanged()))
       ..add(_reachability.stream.listen((_) => _environmentChanged()))
       ..add(_lifecycle.foregroundChanges.listen((_) => _syncLifecycle()));
     _reachability.start(paused: !_lifecycle.isForeground);
     _syncLifecycle();
+  }
+
+  /// Reports one eligible attempt for this domain. Policy-blocked work returns
+  /// immediately and stays due. Concurrent callers for one revision coalesce.
+  Future<RefreshResult> refresh(final String domain) {
+    final entry =
+        _domains[domain] ?? (throw ArgumentError.value(domain, 'domain'));
+    _settleBlocked(entry);
+    if (_blocked(entry) case final result?) {
+      if (!entry.store.isDisposed && !_disposed) {
+        entry.store.requestReconciliation();
+      }
+      return Future.value(result);
+    }
+    if (entry.request case final request?) {
+      return request.completion.future;
+    }
+    entry.store.requestReconciliation();
+    final request = _RefreshRequest(entry.store.revision);
+    entry.request = request;
+    if (entry.store.value.isRefreshing) {
+      request.dispatched = true;
+      unawaited(
+        entry.store
+            .refresh(force: true)
+            .then((final result) => _finishRequest(entry, request, result)),
+      );
+    }
+    _queue();
+    return request.completion.future;
+  }
+
+  RefreshResult? _blocked(final _ScheduledDomain domain) {
+    if (_disposed || domain.store.isDisposed || !_commands.isAttached) {
+      return RefreshResult.disposed;
+    }
+    if (domain.store.value.support != DomainSupport.supported) {
+      return RefreshResult.unsupported;
+    }
+    if (!_started ||
+        !_allowed ||
+        _commands.isReserved(domain.store) ||
+        (_cache.apiVersion.value.data == null &&
+            !identical(domain.store, _cache.apiVersion))) {
+      return RefreshResult.deferred;
+    }
+    return null;
+  }
+
+  void _finishRequest(
+    final _ScheduledDomain domain,
+    final _RefreshRequest request,
+    final RefreshResult result,
+  ) {
+    if (!request.completion.isCompleted) {
+      request.completion.complete(result);
+    }
+    if (identical(domain.request, request)) {
+      domain.request = null;
+    }
+  }
+
+  void _settleBlocked(final _ScheduledDomain domain) {
+    final request = domain.request;
+    if (request == null) {
+      return;
+    }
+    final result = domain.store.revision != request.revision
+        ? RefreshResult.superseded
+        : _blocked(domain);
+    if (result != null &&
+        (!request.dispatched ||
+            result == RefreshResult.disposed ||
+            result == RefreshResult.superseded)) {
+      if (result == RefreshResult.deferred && !domain.store.isDisposed) {
+        domain.store.requestReconciliation();
+      }
+      _finishRequest(domain, request, result);
+    }
   }
 
   InterestHandle boost(
@@ -195,6 +300,7 @@ class SyncScheduler {
       }
     }
     _wasAllowed = allowed;
+    _domains.values.forEach(_settleBlocked);
     if (!allowed) {
       _timer?.cancel();
       _timer = null;
@@ -207,12 +313,15 @@ class SyncScheduler {
       return;
     }
     domain.observe(_now());
+    _settleBlocked(domain);
     _queue();
   }
 
   bool _eligible(final _ScheduledDomain domain) {
     final value = domain.store.value;
     return !_active.contains(domain) &&
+        !domain.store.isDisposed &&
+        !_commands.isReserved(domain.store) &&
         !value.isRefreshing &&
         value.support == DomainSupport.supported &&
         (_cache.apiVersion.value.data != null ||
@@ -227,7 +336,9 @@ class SyncScheduler {
             deadline: domain.deadline(now),
             priority: identical(domain.store, _cache.apiVersion)
                 ? 0
-                : (domain.forced ? 1 : 2),
+                : (_forcedStreak >= poolSize
+                      ? (domain.forced ? 2 : 1)
+                      : (domain.forced ? 1 : 2)),
           ),
       ]..sort((final a, final b) {
         final priority = a.priority.compareTo(b.priority);
@@ -282,7 +393,9 @@ class SyncScheduler {
       if (candidate.deadline.isAfter(now)) {
         continue;
       }
-      final domain = candidate.domain
+      final domain = candidate.domain;
+      _forcedStreak = domain.forced ? _forcedStreak + 1 : 0;
+      domain
         ..consumeInterests()
         ..wasRefreshing = true;
       _active.add(domain);
@@ -323,8 +436,15 @@ class SyncScheduler {
   }
 
   Future<void> _refresh(final _ScheduledDomain domain, final int slot) async {
+    final request = domain.request;
+    if (request != null) {
+      request.dispatched = true;
+    }
     try {
-      await domain.store.refresh(force: true);
+      final result = await domain.store.refresh(force: true);
+      if (request != null) {
+        _finishRequest(domain, request, result);
+      }
     } finally {
       _setSlot(slot, null);
       _active.remove(domain);
@@ -350,6 +470,9 @@ class SyncScheduler {
       unawaited(subscription.cancel());
     }
     for (final domain in _domains.values) {
+      if (domain.request case final request?) {
+        _finishRequest(domain, request, RefreshResult.disposed);
+      }
       domain.interests.clear();
     }
     if (_started) {

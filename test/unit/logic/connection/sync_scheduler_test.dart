@@ -5,10 +5,13 @@ import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/cached_value.dart';
+import 'package:selfprivacy/logic/connection/domain_store.dart';
 import 'package:selfprivacy/logic/connection/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/reachability.dart';
+import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/connection/server_state_cache.dart';
 import 'package:selfprivacy/logic/connection/sync_scheduler.dart';
 
@@ -18,6 +21,8 @@ import '../../../helpers/fixtures/json_fixture.dart';
 class _Lifecycle extends Mock implements AppLifecycle {}
 
 class _Network extends Mock implements NetworkConnectivitySource {}
+
+class _Api extends Mock implements ServerApi {}
 
 void main() {
   late SyncScheduler scheduler;
@@ -30,6 +35,7 @@ void main() {
   late Map<String, Completer<Response>> pending;
   late Set<String> failures;
   late List<Duration> timers;
+  late ServerCommandCoordinator commands;
 
   Response response(final String operation) => Response(
     response: const {},
@@ -86,10 +92,18 @@ void main() {
           ),
         ),
       );
+      final origin = ServerStateOrigin('server');
+      commands = ServerCommandCoordinator(
+        origin: origin,
+        currentOrigin: () => origin,
+        api: _Api(),
+        stores: cache.stores,
+      );
       scheduler = SyncScheduler(
         cache: cache,
         reachability: reachability,
         lifecycle: lifecycle,
+        commands: commands,
         now: tester.binding.clock.now,
         createTimer: (final delay, final callback) {
           timers.add(delay);
@@ -100,6 +114,7 @@ void main() {
         await body(tester);
       } finally {
         scheduler.dispose();
+        commands.dispose();
         reachability.dispose();
         cache.dispose();
         for (final entry in pending.entries) {
@@ -164,6 +179,188 @@ void main() {
     expect(snapshots.last, scheduler.poolStatus);
     expect(() => snapshots.last.clear(), throwsUnsupportedError);
   });
+
+  testScheduler('explicit requests coalesce and report their applied result', (
+    final tester,
+  ) async {
+    scheduler.start();
+    await tester.pump();
+    calls.clear();
+    pending['AllUsers'] = Completer<Response>();
+    final first = scheduler.refresh('users');
+    final second = scheduler.refresh('users');
+    expect(second, same(first));
+    await tester.pump();
+    final third = scheduler.refresh('users');
+    expect(third, same(first));
+    expect(calls, ['AllUsers']);
+    pending.remove('AllUsers')!.complete(response('AllUsers'));
+    await tester.pump();
+    expect(await first, RefreshResult.applied);
+  });
+
+  for (final background in [false, true]) {
+    testScheduler(
+      'explicit refresh is finite while ${background ? 'backgrounded' : 'unauthorized'}',
+      (final tester) async {
+        scheduler.start();
+        await tester.pump();
+        calls.clear();
+        if (background) {
+          show(visible: false);
+        } else {
+          reachability.reportAuthFailure();
+        }
+        expect(await scheduler.refresh('users'), RefreshResult.deferred);
+        expect(cache.users.value.needsReconciliation, isTrue);
+        expect(calls, isEmpty);
+        if (background) {
+          show(visible: true);
+        } else {
+          reachability.reportProtectedSuccess();
+        }
+        await tester.pump();
+        expect(calls, ['AllUsers']);
+      },
+    );
+  }
+
+  testScheduler('unknown support and pre-start policy return finite outcomes', (
+    final tester,
+  ) async {
+    expect(await scheduler.refresh('users'), RefreshResult.unsupported);
+    expect(await scheduler.refresh('apiVersion'), RefreshResult.deferred);
+    expect(() => scheduler.refresh('unknown'), throwsArgumentError);
+    scheduler.dispose();
+    expect(await scheduler.refresh('users'), RefreshResult.disposed);
+  });
+
+  testScheduler('commands block dispatch and reconcile only after release', (
+    final tester,
+  ) async {
+    scheduler.start();
+    await tester.pump();
+    calls.clear();
+    final response = Completer<ServerMutationResult<void>>();
+    final command = commands.submit<void>(
+      domains: [cache.users],
+      send: (_) => response.future,
+    );
+    expect(await scheduler.refresh('users'), RefreshResult.deferred);
+    await tester.pump();
+    expect(calls, isEmpty);
+    response.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    await command.completion;
+    await tester.pump();
+    expect(calls, ['AllUsers']);
+  });
+
+  testScheduler(
+    'confirmed complete payload discharges blocked reconciliation',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      calls.clear();
+      final users = cache.users.value.data!;
+      final response = Completer<ServerMutationResult<void>>();
+      final command = commands.submit<void>(
+        domains: [cache.users],
+        send: (_) => response.future,
+        applyConfirmed: (_) {
+          cache.users.push(users);
+          return [cache.users];
+        },
+      );
+      expect(await scheduler.refresh('users'), RefreshResult.deferred);
+      response.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      await command.completion;
+      await tester.pump();
+      expect(calls, isEmpty);
+    },
+  );
+
+  testScheduler('queued refresh defers when a command takes its domain', (
+    final tester,
+  ) async {
+    scheduler.start();
+    await tester.pump();
+    calls.clear();
+    final refresh = scheduler.refresh('users');
+    final response = Completer<ServerMutationResult<void>>();
+    final command = commands.submit<void>(
+      domains: [cache.users],
+      send: (_) => response.future,
+    );
+    await tester.pump();
+    expect(await refresh, RefreshResult.superseded);
+    expect(calls, isEmpty);
+    response.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.rejected,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    await command.completion;
+  });
+
+  testScheduler(
+    'explicit failure reports failed and respects subsequent cooldown',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      calls.clear();
+      failures.add('AllUsers');
+      final refresh = scheduler.refresh('users');
+      await tester.pump();
+      expect(await refresh, RefreshResult.failed);
+      await tester.pump(const Duration(seconds: 59));
+      expect(calls.where((final call) => call == 'AllUsers'), hasLength(1));
+    },
+  );
+
+  testScheduler(
+    'disposal completes both queued and in-flight refresh waiters',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      pending['AllUsers'] = Completer<Response>();
+      final active = scheduler.refresh('users');
+      await tester.pump();
+      final queued = scheduler.refresh('settings');
+      scheduler.dispose();
+      expect(await active, RefreshResult.disposed);
+      expect(await queued, RefreshResult.disposed);
+    },
+  );
+
+  testScheduler(
+    'repeated explicit refreshes yield to overdue background work',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      for (var i = 0; i < SyncScheduler.poolSize; i++) {
+        final refresh = scheduler.refresh('users');
+        await tester.pump();
+        await refresh;
+      }
+      calls.clear();
+      cache.settings.invalidate();
+      final refresh = scheduler.refresh('users');
+      await tester.pump();
+      await refresh;
+      expect(calls.take(2), ['SystemSettings', 'AllUsers']);
+    },
+  );
 
   testScheduler('failed reads release observable slots', (final tester) async {
     failures.add('GetApiVersion');
@@ -481,7 +678,147 @@ void main() {
     },
   );
 
+  testScheduler(
+    'queued callers finish when backgrounded while all permits are occupied',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      for (final entry in {
+        'serverJobs': 'GetApiJobs',
+        'backups': 'AllBackupSnapshots',
+        'backupConfig': 'BackupConfiguration',
+      }.entries) {
+        pending[entry.value] = Completer<Response>();
+        unawaited(scheduler.refresh(entry.key));
+      }
+      await tester.pump();
+      calls.clear();
+      final queued = scheduler.refresh('users');
+      await tester.pump();
+      show(visible: false);
+      await tester.pump();
+      expect(await queued, RefreshResult.deferred);
+      expect(cache.users.value.needsReconciliation, isTrue);
+      expect(calls, isEmpty);
+    },
+  );
+
+  testScheduler(
+    'background command completion publishes without passive reads',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      calls.clear();
+      final response = Completer<ServerMutationResult<void>>();
+      final command = commands.submit<void>(
+        domains: [cache.users],
+        send: (_) => response.future,
+        applyConfirmed: (_) {
+          cache.users.patch((final users) => List.unmodifiable(users.skip(1)));
+          return [cache.users];
+        },
+      );
+      expect(await scheduler.refresh('users'), RefreshResult.deferred);
+      show(visible: false);
+      response.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      expect(
+        (await command.completion).application,
+        CommandApplication.applied,
+      );
+      await tester.pump();
+      expect(cache.users.value.data!.map((final user) => user.login), [
+        'bob',
+        'root',
+      ]);
+      expect(calls, isEmpty);
+      show(visible: true);
+      await tester.pump();
+      expect(calls, ['AllUsers']);
+    },
+  );
+
+  testScheduler('an active explicit read can finish in the background', (
+    final tester,
+  ) async {
+    scheduler.start();
+    await tester.pump();
+    calls.clear();
+    pending['AllUsers'] = Completer<Response>();
+    final refresh = scheduler.refresh('users');
+    await tester.pump();
+    show(visible: false);
+    pending.remove('AllUsers')!.complete(response('AllUsers'));
+    await tester.pump();
+    expect(await refresh, RefreshResult.applied);
+    expect(calls, ['AllUsers']);
+  });
+
+  testScheduler('explicit refresh joins an externally started read', (
+    final tester,
+  ) async {
+    scheduler.start();
+    await tester.pump();
+    calls.clear();
+    pending['AllUsers'] = Completer<Response>();
+    final external = cache.users.refresh(force: true);
+    final requested = scheduler.refresh('users');
+    pending.remove('AllUsers')!.complete(response('AllUsers'));
+    await tester.pump();
+    expect(await external, RefreshResult.applied);
+    expect(await requested, RefreshResult.applied);
+    expect(calls, ['AllUsers']);
+  });
+
+  testScheduler('cache disposal resolves queued refreshes without dispatch', (
+    final tester,
+  ) async {
+    scheduler.start();
+    await tester.pump();
+    calls.clear();
+    final requested = scheduler.refresh('users');
+    cache.dispose();
+    await tester.pump();
+    expect(await requested, RefreshResult.disposed);
+    expect(calls, isEmpty);
+  });
+
+  testScheduler(
+    'coordinator disposal stops dispatch and finishes queued callers',
+    (final tester) async {
+      scheduler.start();
+      await tester.pump();
+      calls.clear();
+      final requested = scheduler.refresh('users');
+      commands.dispose();
+      await tester.pump();
+      expect(await requested, RefreshResult.disposed);
+      expect(calls, isEmpty);
+    },
+  );
+
   testScheduler('rejects invalid interests', (final tester) async {
+    final origin = ServerStateOrigin('other-server');
+    final foreign = ServerCommandCoordinator(
+      origin: origin,
+      currentOrigin: () => origin,
+      api: _Api(),
+      stores: [],
+    );
+    expect(
+      () => SyncScheduler(
+        cache: cache,
+        reachability: reachability,
+        lifecycle: _Lifecycle(),
+        commands: foreign,
+      ),
+      throwsArgumentError,
+    );
+    foreign.dispose();
     expect(
       () => scheduler.boost('typo', interval: const Duration(seconds: 1)),
       throwsArgumentError,
@@ -553,6 +890,41 @@ void main() {
     await tester.pump();
     expect(calls, ['AllUsers']);
   });
+
+  for (final background in [false, true]) {
+    testScheduler(
+      'superseded reads recheck ${background ? 'lifecycle' : 'authentication'} before replacement',
+      (final tester) async {
+        scheduler.start();
+        await tester.pump();
+        calls.clear();
+        pending['AllUsers'] = Completer<Response>();
+        scheduler.boost('users', interval: const Duration(seconds: 30));
+        await tester.pump();
+        cache.users.patch((final users) => List.unmodifiable(users.skip(1)));
+        final patched = cache.users.value.data;
+        if (background) {
+          show(visible: false);
+        } else {
+          reachability.reportAuthFailure();
+        }
+        pending.remove('AllUsers')!.complete(response('AllUsers'));
+        await tester.pump();
+        expect(calls, ['AllUsers']);
+        expect(cache.users.value.data, same(patched));
+        expect(cache.users.value.needsReconciliation, isTrue);
+        expect(scheduler.poolStatus, everyElement(isNull));
+        if (background) {
+          show(visible: true);
+        } else {
+          reachability.reportProtectedSuccess();
+        }
+        await tester.pump();
+        expect(calls, ['AllUsers', 'AllUsers']);
+        expect(cache.users.value.needsReconciliation, isFalse);
+      },
+    );
+  }
 
   testScheduler(
     'cooldown starts at failure completion rather than request start',

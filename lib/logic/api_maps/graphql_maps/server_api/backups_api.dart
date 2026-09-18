@@ -19,214 +19,173 @@ mixin BackupsApi on GraphQLApiMap {
     );
   }
 
-  Future<GenericResult> forceBackupListReload() async {
-    try {
-      final GraphQLClient client = await getClient();
-      await client.mutate$ForceSnapshotsReload();
-    } catch (e) {
-      logger("Couldn't force reload the backups list", error: e);
-      return GenericResult(success: false, data: null, message: e.toString());
-    }
-
-    return GenericResult(success: true, data: null);
+  Future<ServerMutationResult<void>> forceBackupListReload() async {
+    final client = await getClient();
+    final response = await client.mutate$ForceSnapshotsReload(
+      Options$Mutation$ForceSnapshotsReload(
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.forceSnapshotsReload,
+    );
   }
 
-  Future<GenericResult<ServerJob?>> startBackup(final String serviceId) async {
-    QueryResult<Mutation$StartBackup> response;
-    GenericResult<ServerJob?>? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$StartBackup(serviceId: serviceId);
-      final options = Options$Mutation$StartBackup(variables: variables);
-      response = await client.mutate$StartBackup(options);
-      if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        result = GenericResult(success: false, data: null, message: message);
-      }
-      result = GenericResult(
-        success: true,
-        data: ServerJob.fromGraphQL(
-          response.parsedData!.backup.startBackup.job!,
-        ),
-      );
-    } catch (e) {
-      logger("Couldn't start backup", error: e);
-      result = GenericResult(success: false, data: null, message: e.toString());
-    }
-
-    return result;
+  Future<ServerMutationResult<ServerJob>> startBackup(
+    final String serviceId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$StartBackup(
+      Options$Mutation$StartBackup(
+        variables: Variables$Mutation$StartBackup(serviceId: serviceId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.startBackup,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
 
-  Future<GenericResult> setAutobackupPeriod({final int? period}) async {
-    QueryResult<Mutation$SetAutobackupPeriod> response;
-    GenericResult? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$SetAutobackupPeriod(period: period);
-      final options = Options$Mutation$SetAutobackupPeriod(
+  Future<ServerMutationResult<BackupConfiguration>> setAutobackupPeriod({
+    final int? period,
+  }) async {
+    final client = await getClient();
+    final response = await client.mutate$SetAutobackupPeriod(
+      Options$Mutation$SetAutobackupPeriod(
+        variables: Variables$Mutation$SetAutobackupPeriod(period: period),
         context: sensitiveGraphQLContext,
-        variables: variables,
-      );
-      response = await client.mutate$SetAutobackupPeriod(options);
-      if (response.hasException) {
-        logger('Server configuration request failed');
-        result = GenericResult(success: false, data: null);
-      }
-      result = GenericResult(success: true, data: null);
-    } catch (_) {
-      logger("Couldn't set autobackup period");
-      result = GenericResult(success: false, data: null);
-    }
-
-    return result;
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.setAutobackupPeriod,
+      decodePayload: (final mutation) => mutation.configuration == null
+          ? null
+          : BackupConfiguration.fromGraphQL(mutation.configuration!),
+    );
   }
 
-  Future<GenericResult> setAutobackupQuotas(
+  Future<ServerMutationResult<BackupConfiguration>> setAutobackupQuotas(
     final AutobackupQuotas quotas,
   ) async {
-    QueryResult<Mutation$setAutobackupQuotas> response;
-    GenericResult? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$setAutobackupQuotas(
-        quotas: Input$AutobackupQuotasInput(
-          last: quotas.last,
-          daily: quotas.daily,
-          weekly: quotas.weekly,
-          monthly: quotas.monthly,
-          yearly: quotas.yearly,
+    final client = await getClient();
+    final response = await client.mutate$setAutobackupQuotas(
+      Options$Mutation$setAutobackupQuotas(
+        variables: Variables$Mutation$setAutobackupQuotas(
+          quotas: Input$AutobackupQuotasInput(
+            last: quotas.last,
+            daily: quotas.daily,
+            weekly: quotas.weekly,
+            monthly: quotas.monthly,
+            yearly: quotas.yearly,
+          ),
         ),
-      );
-      final options = Options$Mutation$setAutobackupQuotas(
         context: sensitiveGraphQLContext,
-        variables: variables,
-      );
-      response = await client.mutate$setAutobackupQuotas(options);
-      if (response.hasException) {
-        logger('Server configuration request failed');
-        result = GenericResult(success: false, data: null);
-      }
-      result = GenericResult(success: true, data: null);
-    } catch (_) {
-      logger("Couldn't set autobackup quotas");
-      result = GenericResult(success: false, data: null);
-    }
-
-    return result;
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.setAutobackupQuotas,
+      decodePayload: (final mutation) => mutation.configuration == null
+          ? null
+          : BackupConfiguration.fromGraphQL(mutation.configuration!),
+    );
   }
 
-  Future<GenericResult> removeRepository() async {
-    try {
-      final GraphQLClient client = await getClient();
-      await client.mutate$RemoveRepository(
-        Options$Mutation$RemoveRepository(context: sensitiveGraphQLContext),
-      );
-    } catch (_) {
-      logger("Couldn't remove repository");
-      return GenericResult(success: false, data: null);
-    }
-
-    return GenericResult(success: true, data: null);
+  Future<ServerMutationResult<BackupConfiguration>> removeRepository() async {
+    final client = await getClient();
+    final response = await client.mutate$RemoveRepository(
+      Options$Mutation$RemoveRepository(
+        context: sensitiveGraphQLContext,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.removeRepository,
+      decodePayload: (final mutation) => mutation.configuration == null
+          ? null
+          : BackupConfiguration.fromGraphQL(mutation.configuration!),
+    );
   }
 
-  Future<GenericResult> initializeRepository(
+  Future<ServerMutationResult<BackupConfiguration>> initializeRepository(
     final InitializeRepositoryInput input,
   ) async {
-    QueryResult<Mutation$InitializeRepository> response;
-    GenericResult? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$InitializeRepository(
-        repository: Input$InitializeRepositoryInput(
-          locationId: input.locationId,
-          locationName: input.locationName,
-          login: input.login,
-          password: input.password,
-          provider: input.provider.toGraphQL(),
+    final client = await getClient();
+    final response = await client.mutate$InitializeRepository(
+      Options$Mutation$InitializeRepository(
+        variables: Variables$Mutation$InitializeRepository(
+          repository: Input$InitializeRepositoryInput(
+            locationId: input.locationId,
+            locationName: input.locationName,
+            login: input.login,
+            password: input.password,
+            provider: input.provider.toGraphQL(),
+          ),
         ),
-      );
-      final options = Options$Mutation$InitializeRepository(
         context: sensitiveGraphQLContext,
-        variables: variables,
-      );
-      response = await client.mutate$InitializeRepository(options);
-      if (response.hasException) {
-        logger('Server configuration request failed');
-        result = GenericResult(success: false, data: null);
-      }
-      result = GenericResult(success: true, data: null);
-    } catch (_) {
-      logger("Couldn't initialize repository");
-      result = GenericResult(success: false, data: null);
-    }
-
-    return result;
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.initializeRepository,
+      decodePayload: (final mutation) => mutation.configuration == null
+          ? null
+          : BackupConfiguration.fromGraphQL(mutation.configuration!),
+    );
   }
 
-  Future<GenericResult<ServerJob?>> restoreBackup(
+  Future<ServerMutationResult<ServerJob>> restoreBackup(
     final String snapshotId,
     final BackupRestoreStrategy strategy,
   ) async {
-    QueryResult<Mutation$RestoreBackup> response;
-    GenericResult<ServerJob?>? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$RestoreBackup(
-        snapshotId: snapshotId,
-        strategy: strategy.toGraphQL,
-      );
-      final options = Options$Mutation$RestoreBackup(variables: variables);
-      response = await client.mutate$RestoreBackup(options);
-      if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        result = GenericResult(success: false, data: null, message: message);
-      }
-      result = GenericResult(
-        success: true,
-        data: ServerJob.fromGraphQL(
-          response.parsedData!.backup.restoreBackup.job!,
+    final client = await getClient();
+    final response = await client.mutate$RestoreBackup(
+      Options$Mutation$RestoreBackup(
+        variables: Variables$Mutation$RestoreBackup(
+          snapshotId: snapshotId,
+          strategy: strategy.toGraphQL,
         ),
-      );
-    } catch (e) {
-      logger("Couldn't restore backup", error: e);
-      result = GenericResult(success: false, data: null, message: e.toString());
-    }
-
-    return result;
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.restoreBackup,
+      decodePayload: (final mutation) =>
+          mutation.job == null ? null : ServerJob.fromGraphQL(mutation.job!),
+    );
   }
 
-  Future<GenericResult<bool?>> forgetSnapshot(final String snapshotId) async {
-    QueryResult<Mutation$ForgetSnapshot> response;
-    GenericResult<bool?>? result;
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Mutation$ForgetSnapshot(
-        snapshotId: snapshotId,
-      );
-      final options = Options$Mutation$ForgetSnapshot(variables: variables);
-      response = await client.mutate$ForgetSnapshot(options);
-      if (response.hasException) {
-        final message = response.exception.toString();
-        logger(message);
-        result = GenericResult(success: false, data: null, message: message);
-      }
-      result = GenericResult(
-        success: true,
-        data: response.parsedData!.backup.forgetSnapshot.success,
-      );
-    } catch (e) {
-      logger("Couldn't forget the snapshot", error: e);
-      result = GenericResult(success: false, data: null, message: e.toString());
-    }
-
-    return result;
+  Future<ServerMutationResult<void>> forgetSnapshot(
+    final String snapshotId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$ForgetSnapshot(
+      Options$Mutation$ForgetSnapshot(
+        variables: Variables$Mutation$ForgetSnapshot(snapshotId: snapshotId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.backup.forgetSnapshot,
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -123,7 +124,13 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     if (state is! BackupsUnititialized) {
       return;
     }
-    emit(BackupsInitializing());
+    final previous = state;
+    emit(
+      BackupsInitializing(
+        backblazeBucket:
+            previous.backblazeBucket ?? getIt<ResourcesModel>().backblazeBucket,
+      ),
+    );
     final String? encryptionKey = getIt<ApiConnectionRepository>()
         .apiData
         .backupConfig
@@ -132,7 +139,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     if (encryptionKey == null) {
       emit(BackupsUnititialized());
       getIt<NavigationService>().showSnackBar(
-        "Couldn't get encryption key from your server.",
+        'backup.backups_encryption_key_not_found'.tr(),
       );
       return;
     }
@@ -199,7 +206,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       bucket = state.backblazeBucket!;
     }
 
-    final GenericResult result = await getIt<ApiConnectionRepository>().api
+    final result = await getIt<ApiConnectionRepository>().api
         .initializeRepository(
           InitializeRepositoryInput(
             provider: BackupsProviderType.backblaze,
@@ -209,20 +216,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
             password: bucket.applicationKey,
           ),
         );
-    if (!result.success) {
-      getIt<NavigationService>().showSnackBar(
-        result.message ?? "Couldn't initialize repository on your server.",
-      );
-      emit(BackupsUnititialized());
+    if (!_applyConfiguration(result)) {
+      emit(BackupsUnititialized(backblazeBucket: bucket));
       return;
     }
-    getIt<ApiConnectionRepository>().apiData.backupConfig.invalidate();
-    getIt<ApiConnectionRepository>().apiData.backups.invalidate();
-    await getIt<ApiConnectionRepository>().reload(null);
-
-    getIt<NavigationService>().showSnackBar(
-      'Backups repository is now initializing. It may take a while.',
+    final repository = getIt<ApiConnectionRepository>();
+    repository.apiData.backups.invalidate();
+    emit(
+      _configuredState(
+        previous.copyWith(backblazeBucket: bucket),
+        result.payload.value,
+      ),
     );
+    repository.emitData();
   }
 
   Future<void> _updateState(
@@ -252,8 +258,11 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
       getIt<NavigationService>().showSnackBar('backup.refetching_list'.tr());
-      await getIt<ApiConnectionRepository>().api.forceBackupListReload();
-      getIt<ApiConnectionRepository>().apiData.backups.invalidate();
+      final result = await getIt<ApiConnectionRepository>().api
+          .forceBackupListReload();
+      if (_isConfirmed(result)) {
+        getIt<ApiConnectionRepository>().apiData.backups.invalidate();
+      }
       emit(currentState);
     }
   }
@@ -265,22 +274,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final currentState = state;
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
+      var hasConfirmedResult = false;
       for (final service in event.services) {
-        final GenericResult<ServerJob?> result =
-            await getIt<ApiConnectionRepository>().api.startBackup(service.id);
-        if (!result.success) {
-          getIt<NavigationService>().showSnackBar(
-            result.message ?? 'Unknown error',
-          );
-        }
-        if (result.data != null) {
-          getIt<ApiConnectionRepository>().apiData.serverJobs.data?.add(
-            result.data!,
-          );
+        final result = await getIt<ApiConnectionRepository>().api.startBackup(
+          service.id,
+        );
+        if (_applyJob(result)) {
+          hasConfirmedResult = true;
         }
       }
       emit(currentState);
-      getIt<ApiConnectionRepository>().emitData();
+      if (hasConfirmedResult) {
+        getIt<ApiConnectionRepository>().emitData();
+      }
     }
   }
 
@@ -291,62 +297,52 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final currentState = state;
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result = await getIt<ApiConnectionRepository>().api
-          .restoreBackup(event.backupId, event.restoreStrategy);
-      if (!result.success) {
-        getIt<NavigationService>().showSnackBar(
-          result.message ?? 'Unknown error',
-        );
-      }
+      final result = await getIt<ApiConnectionRepository>().api.restoreBackup(
+        event.backupId,
+        event.restoreStrategy,
+      );
+      final confirmed = _applyJob(result);
       emit(currentState);
+      if (confirmed) {
+        getIt<ApiConnectionRepository>().emitData();
+      }
     }
   }
 
   Future<void> _setAutobackupPeriod(
     final SetAutobackupPeriod event,
     final Emitter<BackupsState> emit,
-  ) async {
-    final currentState = state;
-    if (currentState is BackupsInitialized) {
-      emit(BackupsBusy.fromState(currentState));
-      final GenericResult result = await getIt<ApiConnectionRepository>().api
-          .setAutobackupPeriod(period: event.period?.inMinutes);
-      if (!result.success) {
-        getIt<NavigationService>().showSnackBar(
-          result.message ?? 'Unknown error',
-        );
-      }
-      if (result.success) {
-        getIt<ApiConnectionRepository>().apiData.backupConfig.data =
-            getIt<ApiConnectionRepository>().apiData.backupConfig.data
-                ?.copyWith(autobackupPeriod: event.period);
-      }
-      emit(currentState);
-      getIt<ApiConnectionRepository>().emitData();
-    }
-  }
+  ) => _changeConfiguration(
+    () => getIt<ApiConnectionRepository>().api.setAutobackupPeriod(
+      period: event.period?.inMinutes,
+    ),
+    emit,
+  );
 
   Future<void> _setAutobackupQuotas(
     final SetAutobackupQuotas event,
     final Emitter<BackupsState> emit,
+  ) => _changeConfiguration(
+    () =>
+        getIt<ApiConnectionRepository>().api.setAutobackupQuotas(event.quotas),
+    emit,
+  );
+
+  Future<void> _changeConfiguration(
+    final Future<ServerMutationResult<BackupConfiguration>> Function() change,
+    final Emitter<BackupsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is BackupsInitialized) {
-      emit(BackupsBusy.fromState(currentState));
-      final GenericResult result = await getIt<ApiConnectionRepository>().api
-          .setAutobackupQuotas(event.quotas);
-      if (!result.success) {
-        getIt<NavigationService>().showSnackBar(
-          result.message ?? 'Unknown error',
-        );
-      }
-      if (result.success) {
-        getIt<ApiConnectionRepository>().apiData.backupConfig.data =
-            getIt<ApiConnectionRepository>().apiData.backupConfig.data
-                ?.copyWith(autobackupQuotas: event.quotas);
-      }
-      emit(currentState);
+    if (currentState is! BackupsInitialized) {
+      return;
+    }
+    emit(BackupsBusy.fromState(currentState));
+    final result = await change();
+    if (_applyConfiguration(result)) {
+      emit(_configuredState(currentState, result.payload.value));
       getIt<ApiConnectionRepository>().emitData();
+    } else {
+      emit(currentState);
     }
   }
 
@@ -356,24 +352,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   ) async {
     final currentState = state;
     if (currentState is BackupsInitialized) {
-      // Optimistically remove the snapshot from the list
-      getIt<ApiConnectionRepository>().apiData.backups.data =
-          getIt<ApiConnectionRepository>().apiData.backups.data
-              ?.where((final Backup backup) => backup.id != event.backupId)
-              .toList();
       emit(BackupsBusy.fromState(currentState));
-      final GenericResult result = await getIt<ApiConnectionRepository>().api
-          .forgetSnapshot(event.backupId);
-      if (!result.success) {
-        getIt<NavigationService>().showSnackBar(
-          result.message ?? 'jobs.generic_error'.tr(),
-        );
-      } else if (result.data == false) {
-        getIt<NavigationService>().showSnackBar(
-          'backup.forget_snapshot_error'.tr(),
-        );
+      final repository = getIt<ApiConnectionRepository>();
+      final result = await repository.api.forgetSnapshot(event.backupId);
+      final confirmed = _isConfirmed(result);
+      if (confirmed) {
+        repository.apiData.backups.data = repository.apiData.backups.data
+            ?.where((final backup) => backup.id != event.backupId)
+            .toList();
       }
       emit(currentState);
+      if (confirmed) {
+        repository.emitData();
+      }
     }
   }
 
@@ -382,23 +373,105 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final Emitter<BackupsState> emit,
   ) async {
     final currentState = state;
-    if (currentState is BackupsInitialized) {
-      emit(BackupsBusy.fromState(currentState));
-      final GenericResult result = await getIt<ApiConnectionRepository>().api
-          .removeRepository();
-      if (!result.success) {
-        getIt<NavigationService>().showSnackBar(
-          result.message ?? 'Unknown error',
-        );
-        return;
-      }
-      await getIt<ResourcesModel>().removeBackblazeBucket();
-      emit(BackupsUnititialized());
-      getIt<NavigationService>().showSnackBar('backup.repository_removed'.tr());
-      getIt<ApiConnectionRepository>().apiData.backupConfig.invalidate();
-      getIt<ApiConnectionRepository>().apiData.backups.invalidate();
-      await getIt<ApiConnectionRepository>().reload(null);
+    if (currentState is! BackupsInitialized) {
+      return;
     }
+    emit(BackupsBusy.fromState(currentState));
+    final repository = getIt<ApiConnectionRepository>();
+    final result = await repository.api.removeRepository();
+    if (!_applyConfiguration(result)) {
+      emit(currentState);
+      return;
+    }
+    await getIt<ResourcesModel>().removeBackblazeBucket();
+    repository.apiData.backups.invalidate();
+    emit(BackupsUnititialized());
+    if (result.payload.value != null) {
+      getIt<NavigationService>().showSnackBar('backup.repository_removed'.tr());
+      repository.emitData();
+    }
+  }
+
+  bool _isConfirmed<T>(
+    final ServerMutationResult<T> result, {
+    final bool sensitive = false,
+  }) {
+    if (result.outcome == ServerMutationOutcome.confirmed) {
+      return true;
+    }
+    getIt<NavigationService>().showSnackBar(
+      result.outcome == ServerMutationOutcome.indeterminate
+          ? 'server_mutation.outcome_unknown'.tr()
+          : sensitive
+          ? 'server_mutation.rejected'.tr()
+          : result.message ?? 'server_mutation.rejected'.tr(),
+    );
+    return false;
+  }
+
+  bool _applyConfiguration(
+    final ServerMutationResult<BackupConfiguration> result,
+  ) {
+    if (!_isConfirmed(result, sensitive: true)) {
+      return false;
+    }
+    final config = getIt<ApiConnectionRepository>().apiData.backupConfig;
+    final returned = result.payload.value;
+    if (returned == null) {
+      config.invalidate();
+      getIt<NavigationService>().showSnackBar(
+        'server_mutation.payload_unavailable'.tr(),
+      );
+    } else {
+      config.data = returned;
+    }
+    return true;
+  }
+
+  BackupsState _configuredState(
+    final BackupsState previous,
+    final BackupConfiguration? config,
+  ) {
+    final data = getIt<ApiConnectionRepository>().apiData;
+    if (config == null) {
+      return previous;
+    }
+    return config.isInitialized
+        ? BackupsInitialized(
+            backups: data.backups.data ?? [],
+            backupConfig: config,
+            backblazeBucket: previous.backblazeBucket,
+          )
+        : BackupsUnititialized(backblazeBucket: previous.backblazeBucket);
+  }
+
+  bool _applyJob(final ServerMutationResult<ServerJob> result) {
+    if (!_isConfirmed(result)) {
+      return false;
+    }
+    final jobs = getIt<ApiConnectionRepository>().apiData.serverJobs;
+    final job = result.payload.value;
+    if (job == null) {
+      jobs.invalidate();
+      getIt<NavigationService>().showSnackBar(
+        'server_mutation.payload_unavailable'.tr(),
+      );
+    } else {
+      final existing = jobs.data;
+      if (existing == null) {
+        jobs
+          ..data = [job]
+          ..invalidate();
+      } else {
+        final index = existing.indexWhere((final item) => item.uid == job.uid);
+        if (index < 0) {
+          existing.add(job);
+        } else {
+          existing[index] = job;
+        }
+      }
+    }
+    return true;
   }
 
   @override

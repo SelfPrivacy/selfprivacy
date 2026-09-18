@@ -6,6 +6,7 @@ import 'package:http/testing.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
@@ -114,6 +115,9 @@ void main() {
           final result = await operation.value(api);
           if (failure == null && result is GenericResult) {
             expect(result.success, isTrue);
+          }
+          if (failure == null && result is ServerMutationResult) {
+            expect(result.outcome, ServerMutationOutcome.confirmed);
           }
         } catch (_) {
           if (failure == null) {

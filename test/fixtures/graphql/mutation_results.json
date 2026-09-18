@@ -187,10 +187,10 @@
           "__typename": "BackupConfiguration",
           "autobackupPeriod": 60,
           "encryptionKey": "fixture-key",
-          "isInitialized": true,
-          "locationId": "bucket-id",
-          "locationName": "Backups",
-          "provider": "BACKBLAZE",
+          "isInitialized": false,
+          "locationId": null,
+          "locationName": null,
+          "provider": "NONE",
           "autobackupQuotas": {
             "__typename": "AutobackupQuotas",
             "last": 3,
@@ -241,6 +241,57 @@
         "success": true,
         "code": 200,
         "message": ""
+      }
+    }
+  },
+  "ForceSnapshotsReload": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "forceSnapshotsReload": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "ForgetSnapshot": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "forgetSnapshot": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": ""
+      }
+    }
+  },
+  "RestoreBackup": {
+    "__typename": "Mutation",
+    "backup": {
+      "__typename": "BackupMutations",
+      "restoreBackup": {
+        "__typename": "GenericJobMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "",
+        "job": {
+          "__typename": "ApiJob",
+          "createdAt": "2026-09-10T10:00:00Z",
+          "updatedAt": "2026-09-10T10:01:00Z",
+          "description": "Restoring Outline",
+          "error": null,
+          "finishedAt": null,
+          "name": "Restore Outline",
+          "progress": 25,
+          "result": null,
+          "status": "RUNNING",
+          "statusText": "Running",
+          "uid": "job-restore-outline",
+          "typeId": "services.outline.restore"
+        }
       }
     }
   }

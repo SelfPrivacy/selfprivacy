@@ -53,7 +53,7 @@ class BackupConfiguration extends Equatable {
   });
 
   BackupConfiguration.fromGraphQL(
-    final Query$BackupConfiguration$backup$configuration configuration,
+    final Fragment$backupConfigurationFields configuration,
   ) : this(
         // Provided by API as int of minutes
         autobackupPeriod: configuration.autobackupPeriod != null
@@ -116,8 +116,7 @@ class AutobackupQuotas extends Equatable {
     required this.yearly,
   });
   AutobackupQuotas.fromGraphQL(
-    final Query$BackupConfiguration$backup$configuration$autobackupQuotas
-    autobackupQuotas,
+    final Fragment$backupConfigurationFields$autobackupQuotas autobackupQuotas,
   ) : this(
         last: autobackupQuotas.last,
         daily: autobackupQuotas.daily,

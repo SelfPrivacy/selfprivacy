@@ -1,19 +1,23 @@
+fragment backupConfigurationFields on BackupConfiguration {
+  autobackupPeriod
+  encryptionKey
+  isInitialized
+  locationId
+  locationName
+  provider
+  autobackupQuotas {
+    last
+    daily
+    weekly
+    monthly
+    yearly
+  }
+}
+
 query BackupConfiguration {
   backup {
     configuration {
-      autobackupPeriod
-      encryptionKey
-      isInitialized
-      locationId
-      locationName
-      provider
-      autobackupQuotas {
-        last
-        daily
-        weekly
-        monthly
-        yearly
-      }
+      ...backupConfigurationFields
     }
   }
 }
@@ -33,23 +37,9 @@ query AllBackupSnapshots {
 }
 
 fragment genericBackupConfigReturn on GenericBackupConfigReturn {
-  code
-  message
-  success
+  ...basicMutationReturnFields
   configuration {
-    provider
-    encryptionKey
-    isInitialized
-    autobackupPeriod
-    locationName
-    locationId
-    autobackupQuotas {
-      last
-      daily
-      weekly
-      monthly
-      yearly
-    }
+    ...backupConfigurationFields
   }
 }
 

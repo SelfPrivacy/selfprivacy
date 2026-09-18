@@ -5,56 +5,76 @@ import 'package:selfprivacy/utils/scalars.dart';
 import 'schema.graphql.dart';
 import 'server_api.graphql.dart';
 
-class Fragment$genericBackupConfigReturn {
-  Fragment$genericBackupConfigReturn({
-    required this.code,
-    required this.message,
-    required this.success,
-    this.configuration,
-    this.$__typename = 'GenericBackupConfigReturn',
+class Fragment$backupConfigurationFields {
+  Fragment$backupConfigurationFields({
+    this.autobackupPeriod,
+    required this.encryptionKey,
+    required this.isInitialized,
+    this.locationId,
+    this.locationName,
+    required this.provider,
+    required this.autobackupQuotas,
+    this.$__typename = 'BackupConfiguration',
   });
 
-  factory Fragment$genericBackupConfigReturn.fromJson(
+  factory Fragment$backupConfigurationFields.fromJson(
     Map<String, dynamic> json,
   ) {
-    final l$code = json['code'];
-    final l$message = json['message'];
-    final l$success = json['success'];
-    final l$configuration = json['configuration'];
+    final l$autobackupPeriod = json['autobackupPeriod'];
+    final l$encryptionKey = json['encryptionKey'];
+    final l$isInitialized = json['isInitialized'];
+    final l$locationId = json['locationId'];
+    final l$locationName = json['locationName'];
+    final l$provider = json['provider'];
+    final l$autobackupQuotas = json['autobackupQuotas'];
     final l$$__typename = json['__typename'];
-    return Fragment$genericBackupConfigReturn(
-      code: (l$code as int),
-      message: (l$message as String),
-      success: (l$success as bool),
-      configuration: l$configuration == null
-          ? null
-          : Fragment$genericBackupConfigReturn$configuration.fromJson(
-              (l$configuration as Map<String, dynamic>),
-            ),
+    return Fragment$backupConfigurationFields(
+      autobackupPeriod: (l$autobackupPeriod as int?),
+      encryptionKey: (l$encryptionKey as String),
+      isInitialized: (l$isInitialized as bool),
+      locationId: (l$locationId as String?),
+      locationName: (l$locationName as String?),
+      provider: fromJson$Enum$BackupProvider((l$provider as String)),
+      autobackupQuotas:
+          Fragment$backupConfigurationFields$autobackupQuotas.fromJson(
+            (l$autobackupQuotas as Map<String, dynamic>),
+          ),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final int code;
+  final int? autobackupPeriod;
 
-  final String message;
+  final String encryptionKey;
 
-  final bool success;
+  final bool isInitialized;
 
-  final Fragment$genericBackupConfigReturn$configuration? configuration;
+  final String? locationId;
+
+  final String? locationName;
+
+  final Enum$BackupProvider provider;
+
+  final Fragment$backupConfigurationFields$autobackupQuotas autobackupQuotas;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
     final _resultData = <String, dynamic>{};
-    final l$code = code;
-    _resultData['code'] = l$code;
-    final l$message = message;
-    _resultData['message'] = l$message;
-    final l$success = success;
-    _resultData['success'] = l$success;
-    final l$configuration = configuration;
-    _resultData['configuration'] = l$configuration?.toJson();
+    final l$autobackupPeriod = autobackupPeriod;
+    _resultData['autobackupPeriod'] = l$autobackupPeriod;
+    final l$encryptionKey = encryptionKey;
+    _resultData['encryptionKey'] = l$encryptionKey;
+    final l$isInitialized = isInitialized;
+    _resultData['isInitialized'] = l$isInitialized;
+    final l$locationId = locationId;
+    _resultData['locationId'] = l$locationId;
+    final l$locationName = locationName;
+    _resultData['locationName'] = l$locationName;
+    final l$provider = provider;
+    _resultData['provider'] = toJson$Enum$BackupProvider(l$provider);
+    final l$autobackupQuotas = autobackupQuotas;
+    _resultData['autobackupQuotas'] = l$autobackupQuotas.toJson();
     final l$$__typename = $__typename;
     _resultData['__typename'] = l$$__typename;
     return _resultData;
@@ -62,16 +82,22 @@ class Fragment$genericBackupConfigReturn {
 
   @override
   int get hashCode {
-    final l$code = code;
-    final l$message = message;
-    final l$success = success;
-    final l$configuration = configuration;
+    final l$autobackupPeriod = autobackupPeriod;
+    final l$encryptionKey = encryptionKey;
+    final l$isInitialized = isInitialized;
+    final l$locationId = locationId;
+    final l$locationName = locationName;
+    final l$provider = provider;
+    final l$autobackupQuotas = autobackupQuotas;
     final l$$__typename = $__typename;
     return Object.hashAll([
-      l$code,
-      l$message,
-      l$success,
-      l$configuration,
+      l$autobackupPeriod,
+      l$encryptionKey,
+      l$isInitialized,
+      l$locationId,
+      l$locationName,
+      l$provider,
+      l$autobackupQuotas,
       l$$__typename,
     ]);
   }
@@ -81,28 +107,43 @@ class Fragment$genericBackupConfigReturn {
     if (identical(this, other)) {
       return true;
     }
-    if (other is! Fragment$genericBackupConfigReturn ||
+    if (other is! Fragment$backupConfigurationFields ||
         runtimeType != other.runtimeType) {
       return false;
     }
-    final l$code = code;
-    final lOther$code = other.code;
-    if (l$code != lOther$code) {
+    final l$autobackupPeriod = autobackupPeriod;
+    final lOther$autobackupPeriod = other.autobackupPeriod;
+    if (l$autobackupPeriod != lOther$autobackupPeriod) {
       return false;
     }
-    final l$message = message;
-    final lOther$message = other.message;
-    if (l$message != lOther$message) {
+    final l$encryptionKey = encryptionKey;
+    final lOther$encryptionKey = other.encryptionKey;
+    if (l$encryptionKey != lOther$encryptionKey) {
       return false;
     }
-    final l$success = success;
-    final lOther$success = other.success;
-    if (l$success != lOther$success) {
+    final l$isInitialized = isInitialized;
+    final lOther$isInitialized = other.isInitialized;
+    if (l$isInitialized != lOther$isInitialized) {
       return false;
     }
-    final l$configuration = configuration;
-    final lOther$configuration = other.configuration;
-    if (l$configuration != lOther$configuration) {
+    final l$locationId = locationId;
+    final lOther$locationId = other.locationId;
+    if (l$locationId != lOther$locationId) {
+      return false;
+    }
+    final l$locationName = locationName;
+    final lOther$locationName = other.locationName;
+    if (l$locationName != lOther$locationName) {
+      return false;
+    }
+    final l$provider = provider;
+    final lOther$provider = other.provider;
+    if (l$provider != lOther$provider) {
+      return false;
+    }
+    final l$autobackupQuotas = autobackupQuotas;
+    final lOther$autobackupQuotas = other.autobackupQuotas;
+    if (l$autobackupQuotas != lOther$autobackupQuotas) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -114,107 +155,124 @@ class Fragment$genericBackupConfigReturn {
   }
 }
 
-extension UtilityExtension$Fragment$genericBackupConfigReturn
-    on Fragment$genericBackupConfigReturn {
-  CopyWith$Fragment$genericBackupConfigReturn<
-    Fragment$genericBackupConfigReturn
+extension UtilityExtension$Fragment$backupConfigurationFields
+    on Fragment$backupConfigurationFields {
+  CopyWith$Fragment$backupConfigurationFields<
+    Fragment$backupConfigurationFields
   >
-  get copyWith => CopyWith$Fragment$genericBackupConfigReturn(this, (i) => i);
+  get copyWith => CopyWith$Fragment$backupConfigurationFields(this, (i) => i);
 }
 
-abstract class CopyWith$Fragment$genericBackupConfigReturn<TRes> {
-  factory CopyWith$Fragment$genericBackupConfigReturn(
-    Fragment$genericBackupConfigReturn instance,
-    TRes Function(Fragment$genericBackupConfigReturn) then,
-  ) = _CopyWithImpl$Fragment$genericBackupConfigReturn;
+abstract class CopyWith$Fragment$backupConfigurationFields<TRes> {
+  factory CopyWith$Fragment$backupConfigurationFields(
+    Fragment$backupConfigurationFields instance,
+    TRes Function(Fragment$backupConfigurationFields) then,
+  ) = _CopyWithImpl$Fragment$backupConfigurationFields;
 
-  factory CopyWith$Fragment$genericBackupConfigReturn.stub(TRes res) =
-      _CopyWithStubImpl$Fragment$genericBackupConfigReturn;
+  factory CopyWith$Fragment$backupConfigurationFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$backupConfigurationFields;
 
   TRes call({
-    int? code,
-    String? message,
-    bool? success,
-    Fragment$genericBackupConfigReturn$configuration? configuration,
+    int? autobackupPeriod,
+    String? encryptionKey,
+    bool? isInitialized,
+    String? locationId,
+    String? locationName,
+    Enum$BackupProvider? provider,
+    Fragment$backupConfigurationFields$autobackupQuotas? autobackupQuotas,
     String? $__typename,
   });
-  CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes>
-  get configuration;
+  CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<TRes>
+  get autobackupQuotas;
 }
 
-class _CopyWithImpl$Fragment$genericBackupConfigReturn<TRes>
-    implements CopyWith$Fragment$genericBackupConfigReturn<TRes> {
-  _CopyWithImpl$Fragment$genericBackupConfigReturn(this._instance, this._then);
+class _CopyWithImpl$Fragment$backupConfigurationFields<TRes>
+    implements CopyWith$Fragment$backupConfigurationFields<TRes> {
+  _CopyWithImpl$Fragment$backupConfigurationFields(this._instance, this._then);
 
-  final Fragment$genericBackupConfigReturn _instance;
+  final Fragment$backupConfigurationFields _instance;
 
-  final TRes Function(Fragment$genericBackupConfigReturn) _then;
+  final TRes Function(Fragment$backupConfigurationFields) _then;
 
   static const _undefined = <dynamic, dynamic>{};
 
   TRes call({
-    Object? code = _undefined,
-    Object? message = _undefined,
-    Object? success = _undefined,
-    Object? configuration = _undefined,
+    Object? autobackupPeriod = _undefined,
+    Object? encryptionKey = _undefined,
+    Object? isInitialized = _undefined,
+    Object? locationId = _undefined,
+    Object? locationName = _undefined,
+    Object? provider = _undefined,
+    Object? autobackupQuotas = _undefined,
     Object? $__typename = _undefined,
   }) => _then(
-    Fragment$genericBackupConfigReturn(
-      code: code == _undefined || code == null ? _instance.code : (code as int),
-      message: message == _undefined || message == null
-          ? _instance.message
-          : (message as String),
-      success: success == _undefined || success == null
-          ? _instance.success
-          : (success as bool),
-      configuration: configuration == _undefined
-          ? _instance.configuration
-          : (configuration
-                as Fragment$genericBackupConfigReturn$configuration?),
+    Fragment$backupConfigurationFields(
+      autobackupPeriod: autobackupPeriod == _undefined
+          ? _instance.autobackupPeriod
+          : (autobackupPeriod as int?),
+      encryptionKey: encryptionKey == _undefined || encryptionKey == null
+          ? _instance.encryptionKey
+          : (encryptionKey as String),
+      isInitialized: isInitialized == _undefined || isInitialized == null
+          ? _instance.isInitialized
+          : (isInitialized as bool),
+      locationId: locationId == _undefined
+          ? _instance.locationId
+          : (locationId as String?),
+      locationName: locationName == _undefined
+          ? _instance.locationName
+          : (locationName as String?),
+      provider: provider == _undefined || provider == null
+          ? _instance.provider
+          : (provider as Enum$BackupProvider),
+      autobackupQuotas:
+          autobackupQuotas == _undefined || autobackupQuotas == null
+          ? _instance.autobackupQuotas
+          : (autobackupQuotas
+                as Fragment$backupConfigurationFields$autobackupQuotas),
       $__typename: $__typename == _undefined || $__typename == null
           ? _instance.$__typename
           : ($__typename as String),
     ),
   );
 
-  CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes>
-  get configuration {
-    final local$configuration = _instance.configuration;
-    return local$configuration == null
-        ? CopyWith$Fragment$genericBackupConfigReturn$configuration.stub(
-            _then(_instance),
-          )
-        : CopyWith$Fragment$genericBackupConfigReturn$configuration(
-            local$configuration,
-            (e) => call(configuration: e),
-          );
+  CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<TRes>
+  get autobackupQuotas {
+    final local$autobackupQuotas = _instance.autobackupQuotas;
+    return CopyWith$Fragment$backupConfigurationFields$autobackupQuotas(
+      local$autobackupQuotas,
+      (e) => call(autobackupQuotas: e),
+    );
   }
 }
 
-class _CopyWithStubImpl$Fragment$genericBackupConfigReturn<TRes>
-    implements CopyWith$Fragment$genericBackupConfigReturn<TRes> {
-  _CopyWithStubImpl$Fragment$genericBackupConfigReturn(this._res);
+class _CopyWithStubImpl$Fragment$backupConfigurationFields<TRes>
+    implements CopyWith$Fragment$backupConfigurationFields<TRes> {
+  _CopyWithStubImpl$Fragment$backupConfigurationFields(this._res);
 
   TRes _res;
 
   call({
-    int? code,
-    String? message,
-    bool? success,
-    Fragment$genericBackupConfigReturn$configuration? configuration,
+    int? autobackupPeriod,
+    String? encryptionKey,
+    bool? isInitialized,
+    String? locationId,
+    String? locationName,
+    Enum$BackupProvider? provider,
+    Fragment$backupConfigurationFields$autobackupQuotas? autobackupQuotas,
     String? $__typename,
   }) => _res;
 
-  CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes>
-  get configuration =>
-      CopyWith$Fragment$genericBackupConfigReturn$configuration.stub(_res);
+  CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<TRes>
+  get autobackupQuotas =>
+      CopyWith$Fragment$backupConfigurationFields$autobackupQuotas.stub(_res);
 }
 
-const fragmentDefinitiongenericBackupConfigReturn = FragmentDefinitionNode(
-  name: NameNode(value: 'genericBackupConfigReturn'),
+const fragmentDefinitionbackupConfigurationFields = FragmentDefinitionNode(
+  name: NameNode(value: 'backupConfigurationFields'),
   typeCondition: TypeConditionNode(
     on: NamedTypeNode(
-      name: NameNode(value: 'GenericBackupConfigReturn'),
+      name: NameNode(value: 'BackupConfiguration'),
       isNonNull: false,
     ),
   ),
@@ -222,126 +280,88 @@ const fragmentDefinitiongenericBackupConfigReturn = FragmentDefinitionNode(
   selectionSet: SelectionSetNode(
     selections: [
       FieldNode(
-        name: NameNode(value: 'code'),
+        name: NameNode(value: 'autobackupPeriod'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: null,
       ),
       FieldNode(
-        name: NameNode(value: 'message'),
+        name: NameNode(value: 'encryptionKey'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: null,
       ),
       FieldNode(
-        name: NameNode(value: 'success'),
+        name: NameNode(value: 'isInitialized'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: null,
       ),
       FieldNode(
-        name: NameNode(value: 'configuration'),
+        name: NameNode(value: 'locationId'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'locationName'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'provider'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'autobackupQuotas'),
         alias: null,
         arguments: [],
         directives: [],
         selectionSet: SelectionSetNode(
           selections: [
             FieldNode(
-              name: NameNode(value: 'provider'),
+              name: NameNode(value: 'last'),
               alias: null,
               arguments: [],
               directives: [],
               selectionSet: null,
             ),
             FieldNode(
-              name: NameNode(value: 'encryptionKey'),
+              name: NameNode(value: 'daily'),
               alias: null,
               arguments: [],
               directives: [],
               selectionSet: null,
             ),
             FieldNode(
-              name: NameNode(value: 'isInitialized'),
+              name: NameNode(value: 'weekly'),
               alias: null,
               arguments: [],
               directives: [],
               selectionSet: null,
             ),
             FieldNode(
-              name: NameNode(value: 'autobackupPeriod'),
+              name: NameNode(value: 'monthly'),
               alias: null,
               arguments: [],
               directives: [],
               selectionSet: null,
             ),
             FieldNode(
-              name: NameNode(value: 'locationName'),
+              name: NameNode(value: 'yearly'),
               alias: null,
               arguments: [],
               directives: [],
               selectionSet: null,
-            ),
-            FieldNode(
-              name: NameNode(value: 'locationId'),
-              alias: null,
-              arguments: [],
-              directives: [],
-              selectionSet: null,
-            ),
-            FieldNode(
-              name: NameNode(value: 'autobackupQuotas'),
-              alias: null,
-              arguments: [],
-              directives: [],
-              selectionSet: SelectionSetNode(
-                selections: [
-                  FieldNode(
-                    name: NameNode(value: 'last'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'daily'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'weekly'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'monthly'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'yearly'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ],
-              ),
             ),
             FieldNode(
               name: NameNode(value: '__typename'),
@@ -363,29 +383,29 @@ const fragmentDefinitiongenericBackupConfigReturn = FragmentDefinitionNode(
     ],
   ),
 );
-const documentNodeFragmentgenericBackupConfigReturn = DocumentNode(
-  definitions: [fragmentDefinitiongenericBackupConfigReturn],
+const documentNodeFragmentbackupConfigurationFields = DocumentNode(
+  definitions: [fragmentDefinitionbackupConfigurationFields],
 );
 
-extension ClientExtension$Fragment$genericBackupConfigReturn
+extension ClientExtension$Fragment$backupConfigurationFields
     on graphql.GraphQLClient {
-  void writeFragment$genericBackupConfigReturn({
-    required Fragment$genericBackupConfigReturn data,
+  void writeFragment$backupConfigurationFields({
+    required Fragment$backupConfigurationFields data,
     required Map<String, dynamic> idFields,
     bool broadcast = true,
   }) => this.writeFragment(
     graphql.FragmentRequest(
       idFields: idFields,
       fragment: const graphql.Fragment(
-        fragmentName: 'genericBackupConfigReturn',
-        document: documentNodeFragmentgenericBackupConfigReturn,
+        fragmentName: 'backupConfigurationFields',
+        document: documentNodeFragmentbackupConfigurationFields,
       ),
     ),
     data: data.toJson(),
     broadcast: broadcast,
   );
 
-  Fragment$genericBackupConfigReturn? readFragment$genericBackupConfigReturn({
+  Fragment$backupConfigurationFields? readFragment$backupConfigurationFields({
     required Map<String, dynamic> idFields,
     bool optimistic = true,
   }) {
@@ -393,299 +413,20 @@ extension ClientExtension$Fragment$genericBackupConfigReturn
       graphql.FragmentRequest(
         idFields: idFields,
         fragment: const graphql.Fragment(
-          fragmentName: 'genericBackupConfigReturn',
-          document: documentNodeFragmentgenericBackupConfigReturn,
+          fragmentName: 'backupConfigurationFields',
+          document: documentNodeFragmentbackupConfigurationFields,
         ),
       ),
       optimistic: optimistic,
     );
     return result == null
         ? null
-        : Fragment$genericBackupConfigReturn.fromJson(result);
+        : Fragment$backupConfigurationFields.fromJson(result);
   }
 }
 
-class Fragment$genericBackupConfigReturn$configuration {
-  Fragment$genericBackupConfigReturn$configuration({
-    required this.provider,
-    required this.encryptionKey,
-    required this.isInitialized,
-    this.autobackupPeriod,
-    this.locationName,
-    this.locationId,
-    required this.autobackupQuotas,
-    this.$__typename = 'BackupConfiguration',
-  });
-
-  factory Fragment$genericBackupConfigReturn$configuration.fromJson(
-    Map<String, dynamic> json,
-  ) {
-    final l$provider = json['provider'];
-    final l$encryptionKey = json['encryptionKey'];
-    final l$isInitialized = json['isInitialized'];
-    final l$autobackupPeriod = json['autobackupPeriod'];
-    final l$locationName = json['locationName'];
-    final l$locationId = json['locationId'];
-    final l$autobackupQuotas = json['autobackupQuotas'];
-    final l$$__typename = json['__typename'];
-    return Fragment$genericBackupConfigReturn$configuration(
-      provider: fromJson$Enum$BackupProvider((l$provider as String)),
-      encryptionKey: (l$encryptionKey as String),
-      isInitialized: (l$isInitialized as bool),
-      autobackupPeriod: (l$autobackupPeriod as int?),
-      locationName: (l$locationName as String?),
-      locationId: (l$locationId as String?),
-      autobackupQuotas:
-          Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.fromJson(
-            (l$autobackupQuotas as Map<String, dynamic>),
-          ),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final Enum$BackupProvider provider;
-
-  final String encryptionKey;
-
-  final bool isInitialized;
-
-  final int? autobackupPeriod;
-
-  final String? locationName;
-
-  final String? locationId;
-
-  final Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
-  autobackupQuotas;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$provider = provider;
-    _resultData['provider'] = toJson$Enum$BackupProvider(l$provider);
-    final l$encryptionKey = encryptionKey;
-    _resultData['encryptionKey'] = l$encryptionKey;
-    final l$isInitialized = isInitialized;
-    _resultData['isInitialized'] = l$isInitialized;
-    final l$autobackupPeriod = autobackupPeriod;
-    _resultData['autobackupPeriod'] = l$autobackupPeriod;
-    final l$locationName = locationName;
-    _resultData['locationName'] = l$locationName;
-    final l$locationId = locationId;
-    _resultData['locationId'] = l$locationId;
-    final l$autobackupQuotas = autobackupQuotas;
-    _resultData['autobackupQuotas'] = l$autobackupQuotas.toJson();
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$provider = provider;
-    final l$encryptionKey = encryptionKey;
-    final l$isInitialized = isInitialized;
-    final l$autobackupPeriod = autobackupPeriod;
-    final l$locationName = locationName;
-    final l$locationId = locationId;
-    final l$autobackupQuotas = autobackupQuotas;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$provider,
-      l$encryptionKey,
-      l$isInitialized,
-      l$autobackupPeriod,
-      l$locationName,
-      l$locationId,
-      l$autobackupQuotas,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (other is! Fragment$genericBackupConfigReturn$configuration ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$provider = provider;
-    final lOther$provider = other.provider;
-    if (l$provider != lOther$provider) {
-      return false;
-    }
-    final l$encryptionKey = encryptionKey;
-    final lOther$encryptionKey = other.encryptionKey;
-    if (l$encryptionKey != lOther$encryptionKey) {
-      return false;
-    }
-    final l$isInitialized = isInitialized;
-    final lOther$isInitialized = other.isInitialized;
-    if (l$isInitialized != lOther$isInitialized) {
-      return false;
-    }
-    final l$autobackupPeriod = autobackupPeriod;
-    final lOther$autobackupPeriod = other.autobackupPeriod;
-    if (l$autobackupPeriod != lOther$autobackupPeriod) {
-      return false;
-    }
-    final l$locationName = locationName;
-    final lOther$locationName = other.locationName;
-    if (l$locationName != lOther$locationName) {
-      return false;
-    }
-    final l$locationId = locationId;
-    final lOther$locationId = other.locationId;
-    if (l$locationId != lOther$locationId) {
-      return false;
-    }
-    final l$autobackupQuotas = autobackupQuotas;
-    final lOther$autobackupQuotas = other.autobackupQuotas;
-    if (l$autobackupQuotas != lOther$autobackupQuotas) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Fragment$genericBackupConfigReturn$configuration
-    on Fragment$genericBackupConfigReturn$configuration {
-  CopyWith$Fragment$genericBackupConfigReturn$configuration<
-    Fragment$genericBackupConfigReturn$configuration
-  >
-  get copyWith =>
-      CopyWith$Fragment$genericBackupConfigReturn$configuration(this, (i) => i);
-}
-
-abstract class CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes> {
-  factory CopyWith$Fragment$genericBackupConfigReturn$configuration(
-    Fragment$genericBackupConfigReturn$configuration instance,
-    TRes Function(Fragment$genericBackupConfigReturn$configuration) then,
-  ) = _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration;
-
-  factory CopyWith$Fragment$genericBackupConfigReturn$configuration.stub(
-    TRes res,
-  ) = _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration;
-
-  TRes call({
-    Enum$BackupProvider? provider,
-    String? encryptionKey,
-    bool? isInitialized,
-    int? autobackupPeriod,
-    String? locationName,
-    String? locationId,
-    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas?
-    autobackupQuotas,
-    String? $__typename,
-  });
-  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-    TRes
-  >
-  get autobackupQuotas;
-}
-
-class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
-    implements CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes> {
-  _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration(
-    this._instance,
-    this._then,
-  );
-
-  final Fragment$genericBackupConfigReturn$configuration _instance;
-
-  final TRes Function(Fragment$genericBackupConfigReturn$configuration) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? provider = _undefined,
-    Object? encryptionKey = _undefined,
-    Object? isInitialized = _undefined,
-    Object? autobackupPeriod = _undefined,
-    Object? locationName = _undefined,
-    Object? locationId = _undefined,
-    Object? autobackupQuotas = _undefined,
-    Object? $__typename = _undefined,
-  }) => _then(
-    Fragment$genericBackupConfigReturn$configuration(
-      provider: provider == _undefined || provider == null
-          ? _instance.provider
-          : (provider as Enum$BackupProvider),
-      encryptionKey: encryptionKey == _undefined || encryptionKey == null
-          ? _instance.encryptionKey
-          : (encryptionKey as String),
-      isInitialized: isInitialized == _undefined || isInitialized == null
-          ? _instance.isInitialized
-          : (isInitialized as bool),
-      autobackupPeriod: autobackupPeriod == _undefined
-          ? _instance.autobackupPeriod
-          : (autobackupPeriod as int?),
-      locationName: locationName == _undefined
-          ? _instance.locationName
-          : (locationName as String?),
-      locationId: locationId == _undefined
-          ? _instance.locationId
-          : (locationId as String?),
-      autobackupQuotas:
-          autobackupQuotas == _undefined || autobackupQuotas == null
-          ? _instance.autobackupQuotas
-          : (autobackupQuotas
-                as Fragment$genericBackupConfigReturn$configuration$autobackupQuotas),
-      $__typename: $__typename == _undefined || $__typename == null
-          ? _instance.$__typename
-          : ($__typename as String),
-    ),
-  );
-
-  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-    TRes
-  >
-  get autobackupQuotas {
-    final local$autobackupQuotas = _instance.autobackupQuotas;
-    return CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
-      local$autobackupQuotas,
-      (e) => call(autobackupQuotas: e),
-    );
-  }
-}
-
-class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration<TRes>
-    implements CopyWith$Fragment$genericBackupConfigReturn$configuration<TRes> {
-  _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration(this._res);
-
-  TRes _res;
-
-  call({
-    Enum$BackupProvider? provider,
-    String? encryptionKey,
-    bool? isInitialized,
-    int? autobackupPeriod,
-    String? locationName,
-    String? locationId,
-    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas?
-    autobackupQuotas,
-    String? $__typename,
-  }) => _res;
-
-  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-    TRes
-  >
-  get autobackupQuotas =>
-      CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.stub(
-        _res,
-      );
-}
-
-class Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
-  Fragment$genericBackupConfigReturn$configuration$autobackupQuotas({
+class Fragment$backupConfigurationFields$autobackupQuotas {
+  Fragment$backupConfigurationFields$autobackupQuotas({
     required this.last,
     required this.daily,
     required this.weekly,
@@ -694,7 +435,7 @@ class Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
     this.$__typename = 'AutobackupQuotas',
   });
 
-  factory Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.fromJson(
+  factory Fragment$backupConfigurationFields$autobackupQuotas.fromJson(
     Map<String, dynamic> json,
   ) {
     final l$last = json['last'];
@@ -703,7 +444,7 @@ class Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
     final l$monthly = json['monthly'];
     final l$yearly = json['yearly'];
     final l$$__typename = json['__typename'];
-    return Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+    return Fragment$backupConfigurationFields$autobackupQuotas(
       last: (l$last as int),
       daily: (l$daily as int),
       weekly: (l$weekly as int),
@@ -765,8 +506,7 @@ class Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
     if (identical(this, other)) {
       return true;
     }
-    if (other
-            is! Fragment$genericBackupConfigReturn$configuration$autobackupQuotas ||
+    if (other is! Fragment$backupConfigurationFields$autobackupQuotas ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -804,32 +544,28 @@ class Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
   }
 }
 
-extension UtilityExtension$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
-    on Fragment$genericBackupConfigReturn$configuration$autobackupQuotas {
-  CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
+extension UtilityExtension$Fragment$backupConfigurationFields$autobackupQuotas
+    on Fragment$backupConfigurationFields$autobackupQuotas {
+  CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<
+    Fragment$backupConfigurationFields$autobackupQuotas
   >
-  get copyWith =>
-      CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
-        this,
-        (i) => i,
-      );
+  get copyWith => CopyWith$Fragment$backupConfigurationFields$autobackupQuotas(
+    this,
+    (i) => i,
+  );
 }
 
-abstract class CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+abstract class CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<
   TRes
 > {
-  factory CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
-    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas instance,
-    TRes Function(
-      Fragment$genericBackupConfigReturn$configuration$autobackupQuotas,
-    )
-    then,
-  ) = _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
+  factory CopyWith$Fragment$backupConfigurationFields$autobackupQuotas(
+    Fragment$backupConfigurationFields$autobackupQuotas instance,
+    TRes Function(Fragment$backupConfigurationFields$autobackupQuotas) then,
+  ) = _CopyWithImpl$Fragment$backupConfigurationFields$autobackupQuotas;
 
-  factory CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas.stub(
+  factory CopyWith$Fragment$backupConfigurationFields$autobackupQuotas.stub(
     TRes res,
-  ) = _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas;
+  ) = _CopyWithStubImpl$Fragment$backupConfigurationFields$autobackupQuotas;
 
   TRes call({
     int? last,
@@ -841,24 +577,17 @@ abstract class CopyWith$Fragment$genericBackupConfigReturn$configuration$autobac
   });
 }
 
-class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-  TRes
->
+class _CopyWithImpl$Fragment$backupConfigurationFields$autobackupQuotas<TRes>
     implements
-        CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-          TRes
-        > {
-  _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+        CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<TRes> {
+  _CopyWithImpl$Fragment$backupConfigurationFields$autobackupQuotas(
     this._instance,
     this._then,
   );
 
-  final Fragment$genericBackupConfigReturn$configuration$autobackupQuotas
-  _instance;
+  final Fragment$backupConfigurationFields$autobackupQuotas _instance;
 
-  final TRes Function(
-    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas,
-  )
+  final TRes Function(Fragment$backupConfigurationFields$autobackupQuotas)
   _then;
 
   static const _undefined = <dynamic, dynamic>{};
@@ -871,7 +600,7 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQ
     Object? yearly = _undefined,
     Object? $__typename = _undefined,
   }) => _then(
-    Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+    Fragment$backupConfigurationFields$autobackupQuotas(
       last: last == _undefined || last == null ? _instance.last : (last as int),
       daily: daily == _undefined || daily == null
           ? _instance.daily
@@ -892,14 +621,12 @@ class _CopyWithImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQ
   );
 }
 
-class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
+class _CopyWithStubImpl$Fragment$backupConfigurationFields$autobackupQuotas<
   TRes
 >
     implements
-        CopyWith$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas<
-          TRes
-        > {
-  _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobackupQuotas(
+        CopyWith$Fragment$backupConfigurationFields$autobackupQuotas<TRes> {
+  _CopyWithStubImpl$Fragment$backupConfigurationFields$autobackupQuotas(
     this._res,
   );
 
@@ -913,6 +640,298 @@ class _CopyWithStubImpl$Fragment$genericBackupConfigReturn$configuration$autobac
     int? yearly,
     String? $__typename,
   }) => _res;
+}
+
+class Fragment$genericBackupConfigReturn
+    implements Fragment$basicMutationReturnFields$$GenericBackupConfigReturn {
+  Fragment$genericBackupConfigReturn({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericBackupConfigReturn',
+    this.configuration,
+  });
+
+  factory Fragment$genericBackupConfigReturn.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    final l$configuration = json['configuration'];
+    return Fragment$genericBackupConfigReturn(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+      configuration: l$configuration == null
+          ? null
+          : Fragment$backupConfigurationFields.fromJson(
+              (l$configuration as Map<String, dynamic>),
+            ),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  final Fragment$backupConfigurationFields? configuration;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    final l$configuration = configuration;
+    _resultData['configuration'] = l$configuration?.toJson();
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$configuration = configuration;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+      l$configuration,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Fragment$genericBackupConfigReturn ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$configuration = configuration;
+    final lOther$configuration = other.configuration;
+    if (l$configuration != lOther$configuration) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$genericBackupConfigReturn
+    on Fragment$genericBackupConfigReturn {
+  CopyWith$Fragment$genericBackupConfigReturn<
+    Fragment$genericBackupConfigReturn
+  >
+  get copyWith => CopyWith$Fragment$genericBackupConfigReturn(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$genericBackupConfigReturn<TRes> {
+  factory CopyWith$Fragment$genericBackupConfigReturn(
+    Fragment$genericBackupConfigReturn instance,
+    TRes Function(Fragment$genericBackupConfigReturn) then,
+  ) = _CopyWithImpl$Fragment$genericBackupConfigReturn;
+
+  factory CopyWith$Fragment$genericBackupConfigReturn.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$genericBackupConfigReturn;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Fragment$backupConfigurationFields? configuration,
+  });
+  CopyWith$Fragment$backupConfigurationFields<TRes> get configuration;
+}
+
+class _CopyWithImpl$Fragment$genericBackupConfigReturn<TRes>
+    implements CopyWith$Fragment$genericBackupConfigReturn<TRes> {
+  _CopyWithImpl$Fragment$genericBackupConfigReturn(this._instance, this._then);
+
+  final Fragment$genericBackupConfigReturn _instance;
+
+  final TRes Function(Fragment$genericBackupConfigReturn) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+    Object? configuration = _undefined,
+  }) => _then(
+    Fragment$genericBackupConfigReturn(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      configuration: configuration == _undefined
+          ? _instance.configuration
+          : (configuration as Fragment$backupConfigurationFields?),
+    ),
+  );
+
+  CopyWith$Fragment$backupConfigurationFields<TRes> get configuration {
+    final local$configuration = _instance.configuration;
+    return local$configuration == null
+        ? CopyWith$Fragment$backupConfigurationFields.stub(_then(_instance))
+        : CopyWith$Fragment$backupConfigurationFields(
+            local$configuration,
+            (e) => call(configuration: e),
+          );
+  }
+}
+
+class _CopyWithStubImpl$Fragment$genericBackupConfigReturn<TRes>
+    implements CopyWith$Fragment$genericBackupConfigReturn<TRes> {
+  _CopyWithStubImpl$Fragment$genericBackupConfigReturn(this._res);
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Fragment$backupConfigurationFields? configuration,
+  }) => _res;
+
+  CopyWith$Fragment$backupConfigurationFields<TRes> get configuration =>
+      CopyWith$Fragment$backupConfigurationFields.stub(_res);
+}
+
+const fragmentDefinitiongenericBackupConfigReturn = FragmentDefinitionNode(
+  name: NameNode(value: 'genericBackupConfigReturn'),
+  typeCondition: TypeConditionNode(
+    on: NamedTypeNode(
+      name: NameNode(value: 'GenericBackupConfigReturn'),
+      isNonNull: false,
+    ),
+  ),
+  directives: [],
+  selectionSet: SelectionSetNode(
+    selections: [
+      FragmentSpreadNode(
+        name: NameNode(value: 'basicMutationReturnFields'),
+        directives: [],
+      ),
+      FieldNode(
+        name: NameNode(value: 'configuration'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: SelectionSetNode(
+          selections: [
+            FragmentSpreadNode(
+              name: NameNode(value: 'backupConfigurationFields'),
+              directives: [],
+            ),
+            FieldNode(
+              name: NameNode(value: '__typename'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+          ],
+        ),
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
+);
+const documentNodeFragmentgenericBackupConfigReturn = DocumentNode(
+  definitions: [
+    fragmentDefinitiongenericBackupConfigReturn,
+    fragmentDefinitionbasicMutationReturnFields,
+    fragmentDefinitionbackupConfigurationFields,
+  ],
+);
+
+extension ClientExtension$Fragment$genericBackupConfigReturn
+    on graphql.GraphQLClient {
+  void writeFragment$genericBackupConfigReturn({
+    required Fragment$genericBackupConfigReturn data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'genericBackupConfigReturn',
+        document: documentNodeFragmentgenericBackupConfigReturn,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
+
+  Fragment$genericBackupConfigReturn? readFragment$genericBackupConfigReturn({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'genericBackupConfigReturn',
+          document: documentNodeFragmentgenericBackupConfigReturn,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null
+        ? null
+        : Fragment$genericBackupConfigReturn.fromJson(result);
+  }
 }
 
 class Query$BackupConfiguration {
@@ -1057,99 +1076,9 @@ const documentNodeQueryBackupConfiguration = DocumentNode(
                   directives: [],
                   selectionSet: SelectionSetNode(
                     selections: [
-                      FieldNode(
-                        name: NameNode(value: 'autobackupPeriod'),
-                        alias: null,
-                        arguments: [],
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'backupConfigurationFields'),
                         directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'encryptionKey'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'isInitialized'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'locationId'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'locationName'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'provider'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: null,
-                      ),
-                      FieldNode(
-                        name: NameNode(value: 'autobackupQuotas'),
-                        alias: null,
-                        arguments: [],
-                        directives: [],
-                        selectionSet: SelectionSetNode(
-                          selections: [
-                            FieldNode(
-                              name: NameNode(value: 'last'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null,
-                            ),
-                            FieldNode(
-                              name: NameNode(value: 'daily'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null,
-                            ),
-                            FieldNode(
-                              name: NameNode(value: 'weekly'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null,
-                            ),
-                            FieldNode(
-                              name: NameNode(value: 'monthly'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null,
-                            ),
-                            FieldNode(
-                              name: NameNode(value: 'yearly'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null,
-                            ),
-                            FieldNode(
-                              name: NameNode(value: '__typename'),
-                              alias: null,
-                              arguments: [],
-                              directives: [],
-                              selectionSet: null,
-                            ),
-                          ],
-                        ),
                       ),
                       FieldNode(
                         name: NameNode(value: '__typename'),
@@ -1181,6 +1110,7 @@ const documentNodeQueryBackupConfiguration = DocumentNode(
         ],
       ),
     ),
+    fragmentDefinitionbackupConfigurationFields,
   ],
 );
 Query$BackupConfiguration _parserFn$Query$BackupConfiguration(
@@ -1324,14 +1254,14 @@ class Query$BackupConfiguration$backup {
     final l$configuration = json['configuration'];
     final l$$__typename = json['__typename'];
     return Query$BackupConfiguration$backup(
-      configuration: Query$BackupConfiguration$backup$configuration.fromJson(
+      configuration: Fragment$backupConfigurationFields.fromJson(
         (l$configuration as Map<String, dynamic>),
       ),
       $__typename: (l$$__typename as String),
     );
   }
 
-  final Query$BackupConfiguration$backup$configuration configuration;
+  final Fragment$backupConfigurationFields configuration;
 
   final String $__typename;
 
@@ -1390,11 +1320,10 @@ abstract class CopyWith$Query$BackupConfiguration$backup<TRes> {
       _CopyWithStubImpl$Query$BackupConfiguration$backup;
 
   TRes call({
-    Query$BackupConfiguration$backup$configuration? configuration,
+    Fragment$backupConfigurationFields? configuration,
     String? $__typename,
   });
-  CopyWith$Query$BackupConfiguration$backup$configuration<TRes>
-  get configuration;
+  CopyWith$Fragment$backupConfigurationFields<TRes> get configuration;
 }
 
 class _CopyWithImpl$Query$BackupConfiguration$backup<TRes>
@@ -1414,17 +1343,16 @@ class _CopyWithImpl$Query$BackupConfiguration$backup<TRes>
     Query$BackupConfiguration$backup(
       configuration: configuration == _undefined || configuration == null
           ? _instance.configuration
-          : (configuration as Query$BackupConfiguration$backup$configuration),
+          : (configuration as Fragment$backupConfigurationFields),
       $__typename: $__typename == _undefined || $__typename == null
           ? _instance.$__typename
           : ($__typename as String),
     ),
   );
 
-  CopyWith$Query$BackupConfiguration$backup$configuration<TRes>
-  get configuration {
+  CopyWith$Fragment$backupConfigurationFields<TRes> get configuration {
     final local$configuration = _instance.configuration;
-    return CopyWith$Query$BackupConfiguration$backup$configuration(
+    return CopyWith$Fragment$backupConfigurationFields(
       local$configuration,
       (e) => call(configuration: e),
     );
@@ -1438,517 +1366,12 @@ class _CopyWithStubImpl$Query$BackupConfiguration$backup<TRes>
   TRes _res;
 
   call({
-    Query$BackupConfiguration$backup$configuration? configuration,
+    Fragment$backupConfigurationFields? configuration,
     String? $__typename,
   }) => _res;
 
-  CopyWith$Query$BackupConfiguration$backup$configuration<TRes>
-  get configuration =>
-      CopyWith$Query$BackupConfiguration$backup$configuration.stub(_res);
-}
-
-class Query$BackupConfiguration$backup$configuration {
-  Query$BackupConfiguration$backup$configuration({
-    this.autobackupPeriod,
-    required this.encryptionKey,
-    required this.isInitialized,
-    this.locationId,
-    this.locationName,
-    required this.provider,
-    required this.autobackupQuotas,
-    this.$__typename = 'BackupConfiguration',
-  });
-
-  factory Query$BackupConfiguration$backup$configuration.fromJson(
-    Map<String, dynamic> json,
-  ) {
-    final l$autobackupPeriod = json['autobackupPeriod'];
-    final l$encryptionKey = json['encryptionKey'];
-    final l$isInitialized = json['isInitialized'];
-    final l$locationId = json['locationId'];
-    final l$locationName = json['locationName'];
-    final l$provider = json['provider'];
-    final l$autobackupQuotas = json['autobackupQuotas'];
-    final l$$__typename = json['__typename'];
-    return Query$BackupConfiguration$backup$configuration(
-      autobackupPeriod: (l$autobackupPeriod as int?),
-      encryptionKey: (l$encryptionKey as String),
-      isInitialized: (l$isInitialized as bool),
-      locationId: (l$locationId as String?),
-      locationName: (l$locationName as String?),
-      provider: fromJson$Enum$BackupProvider((l$provider as String)),
-      autobackupQuotas:
-          Query$BackupConfiguration$backup$configuration$autobackupQuotas.fromJson(
-            (l$autobackupQuotas as Map<String, dynamic>),
-          ),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int? autobackupPeriod;
-
-  final String encryptionKey;
-
-  final bool isInitialized;
-
-  final String? locationId;
-
-  final String? locationName;
-
-  final Enum$BackupProvider provider;
-
-  final Query$BackupConfiguration$backup$configuration$autobackupQuotas
-  autobackupQuotas;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$autobackupPeriod = autobackupPeriod;
-    _resultData['autobackupPeriod'] = l$autobackupPeriod;
-    final l$encryptionKey = encryptionKey;
-    _resultData['encryptionKey'] = l$encryptionKey;
-    final l$isInitialized = isInitialized;
-    _resultData['isInitialized'] = l$isInitialized;
-    final l$locationId = locationId;
-    _resultData['locationId'] = l$locationId;
-    final l$locationName = locationName;
-    _resultData['locationName'] = l$locationName;
-    final l$provider = provider;
-    _resultData['provider'] = toJson$Enum$BackupProvider(l$provider);
-    final l$autobackupQuotas = autobackupQuotas;
-    _resultData['autobackupQuotas'] = l$autobackupQuotas.toJson();
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$autobackupPeriod = autobackupPeriod;
-    final l$encryptionKey = encryptionKey;
-    final l$isInitialized = isInitialized;
-    final l$locationId = locationId;
-    final l$locationName = locationName;
-    final l$provider = provider;
-    final l$autobackupQuotas = autobackupQuotas;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$autobackupPeriod,
-      l$encryptionKey,
-      l$isInitialized,
-      l$locationId,
-      l$locationName,
-      l$provider,
-      l$autobackupQuotas,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (other is! Query$BackupConfiguration$backup$configuration ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$autobackupPeriod = autobackupPeriod;
-    final lOther$autobackupPeriod = other.autobackupPeriod;
-    if (l$autobackupPeriod != lOther$autobackupPeriod) {
-      return false;
-    }
-    final l$encryptionKey = encryptionKey;
-    final lOther$encryptionKey = other.encryptionKey;
-    if (l$encryptionKey != lOther$encryptionKey) {
-      return false;
-    }
-    final l$isInitialized = isInitialized;
-    final lOther$isInitialized = other.isInitialized;
-    if (l$isInitialized != lOther$isInitialized) {
-      return false;
-    }
-    final l$locationId = locationId;
-    final lOther$locationId = other.locationId;
-    if (l$locationId != lOther$locationId) {
-      return false;
-    }
-    final l$locationName = locationName;
-    final lOther$locationName = other.locationName;
-    if (l$locationName != lOther$locationName) {
-      return false;
-    }
-    final l$provider = provider;
-    final lOther$provider = other.provider;
-    if (l$provider != lOther$provider) {
-      return false;
-    }
-    final l$autobackupQuotas = autobackupQuotas;
-    final lOther$autobackupQuotas = other.autobackupQuotas;
-    if (l$autobackupQuotas != lOther$autobackupQuotas) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Query$BackupConfiguration$backup$configuration
-    on Query$BackupConfiguration$backup$configuration {
-  CopyWith$Query$BackupConfiguration$backup$configuration<
-    Query$BackupConfiguration$backup$configuration
-  >
-  get copyWith =>
-      CopyWith$Query$BackupConfiguration$backup$configuration(this, (i) => i);
-}
-
-abstract class CopyWith$Query$BackupConfiguration$backup$configuration<TRes> {
-  factory CopyWith$Query$BackupConfiguration$backup$configuration(
-    Query$BackupConfiguration$backup$configuration instance,
-    TRes Function(Query$BackupConfiguration$backup$configuration) then,
-  ) = _CopyWithImpl$Query$BackupConfiguration$backup$configuration;
-
-  factory CopyWith$Query$BackupConfiguration$backup$configuration.stub(
-    TRes res,
-  ) = _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration;
-
-  TRes call({
-    int? autobackupPeriod,
-    String? encryptionKey,
-    bool? isInitialized,
-    String? locationId,
-    String? locationName,
-    Enum$BackupProvider? provider,
-    Query$BackupConfiguration$backup$configuration$autobackupQuotas?
-    autobackupQuotas,
-    String? $__typename,
-  });
-  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
-  get autobackupQuotas;
-}
-
-class _CopyWithImpl$Query$BackupConfiguration$backup$configuration<TRes>
-    implements CopyWith$Query$BackupConfiguration$backup$configuration<TRes> {
-  _CopyWithImpl$Query$BackupConfiguration$backup$configuration(
-    this._instance,
-    this._then,
-  );
-
-  final Query$BackupConfiguration$backup$configuration _instance;
-
-  final TRes Function(Query$BackupConfiguration$backup$configuration) _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? autobackupPeriod = _undefined,
-    Object? encryptionKey = _undefined,
-    Object? isInitialized = _undefined,
-    Object? locationId = _undefined,
-    Object? locationName = _undefined,
-    Object? provider = _undefined,
-    Object? autobackupQuotas = _undefined,
-    Object? $__typename = _undefined,
-  }) => _then(
-    Query$BackupConfiguration$backup$configuration(
-      autobackupPeriod: autobackupPeriod == _undefined
-          ? _instance.autobackupPeriod
-          : (autobackupPeriod as int?),
-      encryptionKey: encryptionKey == _undefined || encryptionKey == null
-          ? _instance.encryptionKey
-          : (encryptionKey as String),
-      isInitialized: isInitialized == _undefined || isInitialized == null
-          ? _instance.isInitialized
-          : (isInitialized as bool),
-      locationId: locationId == _undefined
-          ? _instance.locationId
-          : (locationId as String?),
-      locationName: locationName == _undefined
-          ? _instance.locationName
-          : (locationName as String?),
-      provider: provider == _undefined || provider == null
-          ? _instance.provider
-          : (provider as Enum$BackupProvider),
-      autobackupQuotas:
-          autobackupQuotas == _undefined || autobackupQuotas == null
-          ? _instance.autobackupQuotas
-          : (autobackupQuotas
-                as Query$BackupConfiguration$backup$configuration$autobackupQuotas),
-      $__typename: $__typename == _undefined || $__typename == null
-          ? _instance.$__typename
-          : ($__typename as String),
-    ),
-  );
-
-  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
-  get autobackupQuotas {
-    final local$autobackupQuotas = _instance.autobackupQuotas;
-    return CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-      local$autobackupQuotas,
-      (e) => call(autobackupQuotas: e),
-    );
-  }
-}
-
-class _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration<TRes>
-    implements CopyWith$Query$BackupConfiguration$backup$configuration<TRes> {
-  _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration(this._res);
-
-  TRes _res;
-
-  call({
-    int? autobackupPeriod,
-    String? encryptionKey,
-    bool? isInitialized,
-    String? locationId,
-    String? locationName,
-    Enum$BackupProvider? provider,
-    Query$BackupConfiguration$backup$configuration$autobackupQuotas?
-    autobackupQuotas,
-    String? $__typename,
-  }) => _res;
-
-  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<TRes>
-  get autobackupQuotas =>
-      CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas.stub(
-        _res,
-      );
-}
-
-class Query$BackupConfiguration$backup$configuration$autobackupQuotas {
-  Query$BackupConfiguration$backup$configuration$autobackupQuotas({
-    required this.last,
-    required this.daily,
-    required this.weekly,
-    required this.monthly,
-    required this.yearly,
-    this.$__typename = 'AutobackupQuotas',
-  });
-
-  factory Query$BackupConfiguration$backup$configuration$autobackupQuotas.fromJson(
-    Map<String, dynamic> json,
-  ) {
-    final l$last = json['last'];
-    final l$daily = json['daily'];
-    final l$weekly = json['weekly'];
-    final l$monthly = json['monthly'];
-    final l$yearly = json['yearly'];
-    final l$$__typename = json['__typename'];
-    return Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-      last: (l$last as int),
-      daily: (l$daily as int),
-      weekly: (l$weekly as int),
-      monthly: (l$monthly as int),
-      yearly: (l$yearly as int),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final int last;
-
-  final int daily;
-
-  final int weekly;
-
-  final int monthly;
-
-  final int yearly;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
-    final l$last = last;
-    _resultData['last'] = l$last;
-    final l$daily = daily;
-    _resultData['daily'] = l$daily;
-    final l$weekly = weekly;
-    _resultData['weekly'] = l$weekly;
-    final l$monthly = monthly;
-    _resultData['monthly'] = l$monthly;
-    final l$yearly = yearly;
-    _resultData['yearly'] = l$yearly;
-    final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$last = last;
-    final l$daily = daily;
-    final l$weekly = weekly;
-    final l$monthly = monthly;
-    final l$yearly = yearly;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$last,
-      l$daily,
-      l$weekly,
-      l$monthly,
-      l$yearly,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (other
-            is! Query$BackupConfiguration$backup$configuration$autobackupQuotas ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$last = last;
-    final lOther$last = other.last;
-    if (l$last != lOther$last) {
-      return false;
-    }
-    final l$daily = daily;
-    final lOther$daily = other.daily;
-    if (l$daily != lOther$daily) {
-      return false;
-    }
-    final l$weekly = weekly;
-    final lOther$weekly = other.weekly;
-    if (l$weekly != lOther$weekly) {
-      return false;
-    }
-    final l$monthly = monthly;
-    final lOther$monthly = other.monthly;
-    if (l$monthly != lOther$monthly) {
-      return false;
-    }
-    final l$yearly = yearly;
-    final lOther$yearly = other.yearly;
-    if (l$yearly != lOther$yearly) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Query$BackupConfiguration$backup$configuration$autobackupQuotas
-    on Query$BackupConfiguration$backup$configuration$autobackupQuotas {
-  CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
-    Query$BackupConfiguration$backup$configuration$autobackupQuotas
-  >
-  get copyWith =>
-      CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-        this,
-        (i) => i,
-      );
-}
-
-abstract class CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
-  TRes
-> {
-  factory CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-    Query$BackupConfiguration$backup$configuration$autobackupQuotas instance,
-    TRes Function(
-      Query$BackupConfiguration$backup$configuration$autobackupQuotas,
-    )
-    then,
-  ) = _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
-
-  factory CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas.stub(
-    TRes res,
-  ) = _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas;
-
-  TRes call({
-    int? last,
-    int? daily,
-    int? weekly,
-    int? monthly,
-    int? yearly,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
-  TRes
->
-    implements
-        CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
-          TRes
-        > {
-  _CopyWithImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-    this._instance,
-    this._then,
-  );
-
-  final Query$BackupConfiguration$backup$configuration$autobackupQuotas
-  _instance;
-
-  final TRes Function(
-    Query$BackupConfiguration$backup$configuration$autobackupQuotas,
-  )
-  _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  TRes call({
-    Object? last = _undefined,
-    Object? daily = _undefined,
-    Object? weekly = _undefined,
-    Object? monthly = _undefined,
-    Object? yearly = _undefined,
-    Object? $__typename = _undefined,
-  }) => _then(
-    Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-      last: last == _undefined || last == null ? _instance.last : (last as int),
-      daily: daily == _undefined || daily == null
-          ? _instance.daily
-          : (daily as int),
-      weekly: weekly == _undefined || weekly == null
-          ? _instance.weekly
-          : (weekly as int),
-      monthly: monthly == _undefined || monthly == null
-          ? _instance.monthly
-          : (monthly as int),
-      yearly: yearly == _undefined || yearly == null
-          ? _instance.yearly
-          : (yearly as int),
-      $__typename: $__typename == _undefined || $__typename == null
-          ? _instance.$__typename
-          : ($__typename as String),
-    ),
-  );
-}
-
-class _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
-  TRes
->
-    implements
-        CopyWith$Query$BackupConfiguration$backup$configuration$autobackupQuotas<
-          TRes
-        > {
-  _CopyWithStubImpl$Query$BackupConfiguration$backup$configuration$autobackupQuotas(
-    this._res,
-  );
-
-  TRes _res;
-
-  call({
-    int? last,
-    int? daily,
-    int? weekly,
-    int? monthly,
-    int? yearly,
-    String? $__typename,
-  }) => _res;
+  CopyWith$Fragment$backupConfigurationFields<TRes> get configuration =>
+      CopyWith$Fragment$backupConfigurationFields.stub(_res);
 }
 
 class Query$AllBackupSnapshots {
@@ -4446,6 +3869,8 @@ const documentNodeMutationSetAutobackupPeriod = DocumentNode(
       ),
     ),
     fragmentDefinitiongenericBackupConfigReturn,
+    fragmentDefinitionbasicMutationReturnFields,
+    fragmentDefinitionbackupConfigurationFields,
   ],
 );
 Mutation$SetAutobackupPeriod _parserFn$Mutation$SetAutobackupPeriod(
@@ -4987,6 +4412,8 @@ const documentNodeMutationsetAutobackupQuotas = DocumentNode(
       ),
     ),
     fragmentDefinitiongenericBackupConfigReturn,
+    fragmentDefinitionbasicMutationReturnFields,
+    fragmentDefinitionbackupConfigurationFields,
   ],
 );
 Mutation$setAutobackupQuotas _parserFn$Mutation$setAutobackupQuotas(
@@ -5406,6 +4833,8 @@ const documentNodeMutationRemoveRepository = DocumentNode(
       ),
     ),
     fragmentDefinitiongenericBackupConfigReturn,
+    fragmentDefinitionbasicMutationReturnFields,
+    fragmentDefinitionbackupConfigurationFields,
   ],
 );
 Mutation$RemoveRepository _parserFn$Mutation$RemoveRepository(
@@ -5934,6 +5363,8 @@ const documentNodeMutationInitializeRepository = DocumentNode(
       ),
     ),
     fragmentDefinitiongenericBackupConfigReturn,
+    fragmentDefinitionbasicMutationReturnFields,
+    fragmentDefinitionbackupConfigurationFields,
   ],
 );
 Mutation$InitializeRepository _parserFn$Mutation$InitializeRepository(

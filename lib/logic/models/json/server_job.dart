@@ -91,7 +91,7 @@ enum JobStatusEnum {
       case 'ERROR':
         return error;
       default:
-        throw Exception('Unknown status: $status');
+        throw const FormatException('Unknown job status');
     }
   }
 }

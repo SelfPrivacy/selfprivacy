@@ -5,12 +5,12 @@ sealed class DevicesEvent extends Equatable {
 }
 
 class DevicesListChanged extends DevicesEvent {
-  const DevicesListChanged(this.devices);
+  const DevicesListChanged(this.snapshot);
 
-  final List<ApiToken>? devices;
+  final CachedValue<List<ApiToken>> snapshot;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [snapshot];
 }
 
 class DeleteDevice extends DevicesEvent {

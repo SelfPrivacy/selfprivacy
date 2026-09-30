@@ -8,6 +8,11 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/cached_value.dart';
+import 'package:selfprivacy/logic/connection/domain_store.dart';
+import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/server_connection_scope.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
@@ -48,12 +53,44 @@ class ApiConnectionRepository {
           ),
         );
     _apiData = ApiData(this.api);
+    _connections = ServerConnectionScope(
+      selectServer: _serverSelector,
+      serverChanges: resourcesModel.statusStream,
+      createApi: (final binding, final onAuthFailure) =>
+          api ??
+          ServerApi(
+            transport: createGraphQLTransport(
+              domainProvider: () => binding.domain,
+              tokenProvider: () => binding.token,
+              onAuthFailure: onAuthFailure,
+            ),
+          ),
+      onAuthFailure: _handleAuthFailure,
+    );
   }
 
   static final _log = const AppLogger(name: 'api_connection_repository').log;
 
   final ResourcesModel _resourcesModel;
   final ServerSelector _serverSelector;
+  late final ServerConnectionScope _connections;
+
+  CachedValue<List<ApiToken>> get devicesSnapshot =>
+      _connections.current?.devices.value ?? const CachedValue();
+  Stream<CachedValue<List<ApiToken>>> get devicesStream =>
+      _connections.changes.map((_) => devicesSnapshot);
+
+  Future<RefreshResult> refreshDevices() async {
+    final rotation = _rotationInFlight;
+    if (rotation != null) {
+      await rotation;
+    }
+    return _connections.current?.devices.refresh(force: true) ??
+        RefreshResult.disposed;
+  }
+
+  Future<CommandCompletion<void>?> revokeDevice(final String name) =>
+      _connections.current?.devices.revoke(name) ?? Future.value();
 
   Box box = Hive.box(BNames.serverInstallationBox);
   late final ServerApi api;
@@ -378,7 +415,7 @@ class ApiConnectionRepository {
     if (_server?.uuid != server.uuid) {
       return (true, 'basis.done'.tr());
     }
-    _apiData.devices.invalidate();
+    _connections.current?.devices.invalidate();
 
     // The jobs websocket was authenticated with the old token; its reconnects
     // would fail auth, so re-establish it with the new one.
@@ -442,6 +479,7 @@ class ApiConnectionRepository {
   }
 
   void dispose() {
+    _connections.dispose();
     unawaited(_dataStream.close());
     unawaited(_connectionStatusStream.close());
     _timer?.cancel();
@@ -462,6 +500,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> init() async {
+    _connections.resume();
     if (_server == null) {
       return;
     }
@@ -517,6 +556,7 @@ class ApiConnectionRepository {
   }
 
   Future<void> clear() async {
+    _connections.clear();
     _setStatus(ConnectionStatus.nonexistent);
     _timer?.cancel();
     final previous = _serverJobsStreamSubscription;
@@ -544,7 +584,10 @@ class ApiConnectionRepository {
     return null;
   }
 
-  Future<void> _refetchEverything(final Version version) async {
+  Future<void> _refetchEverything(
+    final Version version,
+    final ServerConnection? connection,
+  ) async {
     await Future.wait([
       if (_isForceServerJobsRefetchRequired())
         _apiData.serverJobs.refetchData(
@@ -560,7 +603,8 @@ class ApiConnectionRepository {
         version,
         () => _dataStream.add(_apiData),
       ),
-      _apiData.devices.refetchData(version, () => _dataStream.add(_apiData)),
+      if (connection != null && connection.isAttached)
+        connection.devices.refresh(),
       _apiData.backupConfig.refetchData(
         version,
         () => _dataStream.add(_apiData),
@@ -586,20 +630,23 @@ class ApiConnectionRepository {
       }
     }
 
+    final connection = _connections.current;
     final String? apiVersion = await api.getApiVersion();
     if (apiVersion == null) {
+      connection?.versionUnavailable();
       _setStatus(ConnectionStatus.offline);
       return;
     }
 
     _apiData.apiVersion.data = apiVersion;
     final Version version = Version.parse(apiVersion);
+    connection?.setVersion(version);
     // Reconnecting an already-live stream would open a new websocket every
     // reload; socket-level drops are handled by the client's autoReconnect.
     if (_serverJobsStreamSubscription == null) {
       await _connectJobsStream(apiVersion);
     }
-    await _refetchEverything(version);
+    await _refetchEverything(version, connection);
     if (connectionStatus != ConnectionStatus.unauthorized) {
       _setStatus(ConnectionStatus.connected);
     }
@@ -642,7 +689,6 @@ class ApiData {
         fetchData: api.getRecoveryTokenStatus,
         ttl: 300,
       ),
-      devices = ApiDataElement<List<ApiToken>>(fetchData: api.getApiTokens),
       users = ApiDataElement<List<User>>(fetchData: api.getAllUsers),
       groups = ApiDataElement<List<String>>(
         fetchData: api.getAllGroups,
@@ -660,7 +706,6 @@ class ApiData {
   ApiDataElement<List<Service>> services;
   ApiDataElement<List<ServerDiskVolume>> volumes;
   ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
-  ApiDataElement<List<ApiToken>> devices;
   ApiDataElement<List<User>> users;
   ApiDataElement<List<String>> groups;
   ApiDataElement<SystemSettings> settings;

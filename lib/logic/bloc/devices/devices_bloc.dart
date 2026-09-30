@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/cached_value.dart';
+import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
-import 'package:selfprivacy/utils/fake_data.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'devices_event.dart';
@@ -18,65 +20,76 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       _mapDevicesListChangedToState,
       transformer: sequential(),
     );
-    on<DeleteDevice>(_mapDeleteDeviceToState, transformer: sequential());
+    on<DeleteDevice>(_mapDeleteDeviceToState, transformer: droppable());
 
     final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
-      final ApiData apiData,
+    _devicesSubscription = apiConnectionRepository.devicesStream.listen((
+      final snapshot,
     ) {
-      add(DevicesListChanged(apiData.devices.data));
+      add(DevicesListChanged(snapshot));
     });
+    add(DevicesListChanged(apiConnectionRepository.devicesSnapshot));
   }
 
-  StreamSubscription? _apiDataSubscription;
+  StreamSubscription<CachedValue<List<ApiToken>>>? _devicesSubscription;
 
   Future<void> _mapDevicesListChangedToState(
     final DevicesListChanged event,
     final Emitter<DevicesState> emit,
   ) async {
-    if (state is DevicesDeleting) {
-      return;
-    }
-    if (event.devices == null) {
-      emit(DevicesError());
-      return;
-    }
-    emit(DevicesLoaded(devices: event.devices!));
+    emit(_fromSnapshot(event.snapshot));
   }
 
-  Future<void> refresh() async {
-    getIt<ApiConnectionRepository>().apiData.devices.invalidate();
-    await getIt<ApiConnectionRepository>().reload(null);
+  String? _pendingDeviceName;
+
+  DevicesState _fromSnapshot(final CachedValue<List<ApiToken>> snapshot) {
+    final devices = snapshot.data;
+    if (devices == null) {
+      return snapshot.lastError == null &&
+              snapshot.support != DomainSupport.unsupported
+          ? DevicesInitial()
+          : DevicesError();
+    }
+    if (_pendingDeviceName case final String name) {
+      return DevicesDeleting(
+        devices: devices,
+        pendingDeviceName: name,
+        hasError: snapshot.lastError != null,
+      );
+    }
+    return DevicesLoaded(
+      devices: devices,
+      hasError: snapshot.lastError != null,
+      isRefreshing: snapshot.isRefreshing,
+    );
   }
+
+  Future<void> refresh() => getIt<ApiConnectionRepository>().refreshDevices();
 
   Future<void> _mapDeleteDeviceToState(
     final DeleteDevice event,
     final Emitter<DevicesState> emit,
   ) async {
-    emit(
-      DevicesDeleting(
-        devices: state.devices
-            .where((final d) => d.name != event.device.name)
-            .toList(),
-      ),
-    );
-
-    final response = await getIt<ApiConnectionRepository>().api.deleteApiToken(
-      event.device.name,
-    );
-    if (response.outcome == ServerMutationOutcome.confirmed) {
-      getIt<ApiConnectionRepository>().apiData.devices.invalidate();
-      emit(
-        DevicesLoaded(
-          devices: state.devices
-              .where((final d) => d.name != event.device.name)
-              .toList(),
-        ),
-      );
-    } else {
-      getIt<NavigationService>().showSnackBar(serverMutationMessage(response));
-      emit(DevicesLoaded(devices: state.devices));
+    if (!state.devices.any(
+      (final device) => device.name == event.device.name && !device.isCaller,
+    )) {
+      return;
     }
+    final repository = getIt<ApiConnectionRepository>();
+    _pendingDeviceName = event.device.name;
+    emit(_fromSnapshot(repository.devicesSnapshot));
+    final completion = await repository.revokeDevice(event.device.name);
+    _pendingDeviceName = null;
+    if (emit.isDone) {
+      return;
+    }
+    final response = completion?.result;
+    if (completion?.application != CommandApplication.detached &&
+        response != null &&
+        response.outcome != ServerMutationOutcome.confirmed) {
+      getIt<NavigationService>().showSnackBar(serverMutationMessage(response));
+    }
+    emit(_fromSnapshot(repository.devicesSnapshot));
   }
 
   Future<String?> getNewDeviceKey() async {
@@ -94,13 +107,8 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   }
 
   @override
-  void onChange(final Change<DevicesState> change) {
-    super.onChange(change);
-  }
-
-  @override
   Future<void> close() async {
-    await _apiDataSubscription?.cancel();
+    await _devicesSubscription?.cancel();
     return super.close();
   }
 }

@@ -638,6 +638,10 @@
             "description": "These devices have full access to the server via SelfPrivacy app.",
             "this_device": "This device",
             "other_devices": "Other devices",
+            "no_other_devices": "No other devices",
+            "load_error": "Could not load the device list.",
+            "retry": "Retry",
+            "revoking": "Revoking access for {}",
             "authorize_new_device": "Authorize new device",
             "access_granted_on": "Access granted on {}",
             "tip": "Press on the device to revoke access."

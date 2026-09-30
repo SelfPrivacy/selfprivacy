@@ -4,11 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/connection/devices_repository.dart';
+import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';
@@ -24,8 +28,8 @@ void main() {
   late _MockRepository repository;
   late _MockApi api;
   late _MockNavigation navigation;
-  late ApiData apiData;
-  late StreamController<ApiData> controller;
+  late DevicesRepository devices;
+  late ServerConnection connection;
   late DevicesBloc bloc;
   late ApiToken device;
 
@@ -36,29 +40,141 @@ void main() {
     repository = _MockRepository();
     api = _MockApi();
     navigation = _MockNavigation();
-    apiData = ApiData(api);
     final data =
         loadJsonFixture('graphql/domain_reads.json')['GetApiTokens']
             as Map<String, dynamic>;
-    apiData.devices.data = Query$GetApiTokens.fromJson(
+    final tokens = Query$GetApiTokens.fromJson(
       data,
     ).api.devices.map(ApiToken.fromGraphQL).toList();
-    device = apiData.devices.data!.firstWhere((final token) => !token.isCaller);
-    controller = StreamController<ApiData>.broadcast();
+    device = tokens.firstWhere((final token) => !token.isCaller);
+    when(api.getApiTokens).thenAnswer((_) async => tokens);
+    final origin = ServerStateOrigin('server');
+    connection = ServerConnection(
+      api: api,
+      origin: origin,
+      currentOrigin: () => origin,
+    )..setVersion(Version(3, 6, 0));
+    devices = connection.devices;
+    await devices.refresh();
     when(() => repository.api).thenReturn(api);
-    when(() => repository.apiData).thenReturn(apiData);
-    when(() => repository.dataStream).thenAnswer((_) => controller.stream);
+    when(() => repository.devicesSnapshot).thenAnswer((_) => devices.value);
+    when(() => repository.devicesStream).thenAnswer((_) => devices.changes);
+    when(
+      repository.refreshDevices,
+    ).thenAnswer((_) => devices.refresh(force: true));
+    when(() => repository.revokeDevice(any())).thenAnswer(
+      (final invocation) =>
+          devices.revoke(invocation.positionalArguments.first as String),
+    );
     getIt
       ..registerSingleton<ApiConnectionRepository>(repository)
       ..registerSingleton<NavigationService>(navigation);
     bloc = DevicesBloc();
+    await bloc.stream.firstWhere((final state) => state.isLoaded);
   });
 
   tearDown(() async {
     await bloc.close();
-    await controller.close();
+    connection.dispose();
     await getIt.reset();
   });
+
+  test('seeds immutable state from the current snapshot', () {
+    expect(bloc.state.devices, devices.value.data);
+    expect(bloc.state.isLoaded, isTrue);
+    expect(() => bloc.state.devices.clear(), throwsUnsupportedError);
+    expect(() => bloc.state.otherDevices.clear(), throwsUnsupportedError);
+  });
+
+  test('refresh failure retains the last valid list', () async {
+    final before = bloc.state;
+    when(api.getApiTokens).thenAnswer((_) async => []);
+    final failed = bloc.stream.firstWhere((final state) => state.hasError);
+    await bloc.refresh();
+    expect((await failed).devices, before.devices);
+    expect(bloc.state.isLoaded, isTrue);
+    expect(before.hasError, isFalse);
+    verifyNever(() => repository.reload(any()));
+  });
+
+  test('duplicate revoke events are dropped while pending', () async {
+    final pending = Completer<ServerMutationResult<void>>();
+    when(
+      () => api.deleteApiToken(device.name),
+    ).thenAnswer((_) => pending.future);
+    final deleting = bloc.stream.firstWhere(
+      (final state) => state is DevicesDeleting,
+    );
+    bloc
+      ..add(DeleteDevice(device))
+      ..add(DeleteDevice(device));
+    await deleting;
+    await pumpEventQueue();
+    verify(() => api.deleteApiToken(device.name)).called(1);
+    final loaded = bloc.stream.firstWhere(
+      (final state) => state is DevicesLoaded,
+    );
+    pending.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    await loaded;
+    expect(bloc.state.otherDevices, isEmpty);
+    expect(bloc.state.isLoaded, isTrue);
+  });
+
+  test('closing the BLoC does not cancel a confirmed domain effect', () async {
+    final pending = Completer<ServerMutationResult<void>>();
+    when(
+      () => api.deleteApiToken(device.name),
+    ).thenAnswer((_) => pending.future);
+    final deleting = bloc.stream.firstWhere(
+      (final state) => state is DevicesDeleting,
+    );
+    bloc.add(DeleteDevice(device));
+    await deleting;
+    final closing = bloc.close();
+    await pumpEventQueue();
+    pending.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    await closing;
+    await pumpEventQueue();
+    expect(
+      devices.value.data!.any((final token) => token.name == device.name),
+      isFalse,
+    );
+    verifyNever(() => navigation.showSnackBar(any()));
+  });
+
+  test(
+    'detaching a pending command produces no old-session feedback',
+    () async {
+      final pending = Completer<ServerMutationResult<void>>();
+      when(
+        () => api.deleteApiToken(device.name),
+      ).thenAnswer((_) => pending.future);
+      final deleting = bloc.stream.firstWhere(
+        (final state) => state is DevicesDeleting,
+      );
+      bloc.add(DeleteDevice(device));
+      await deleting;
+      connection.dispose();
+      pending.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.rejected,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      await pumpEventQueue();
+      verifyNever(() => navigation.showSnackBar(any()));
+    },
+  );
 
   for (final outcome in ServerMutationOutcome.values) {
     testWidgets('device deletion handles ${outcome.name}', (
@@ -66,7 +182,8 @@ void main() {
     ) async {
       await pumpForTest(tester, const SizedBox.shrink());
       await tester.runAsync(() async {
-        final originalData = List<ApiToken>.of(apiData.devices.data!);
+        final originalData = List<ApiToken>.of(devices.value.data!);
+        final originalState = bloc.state;
         final pending = Completer<ServerMutationResult<void>>();
         when(
           () => api.deleteApiToken(device.name),
@@ -76,7 +193,8 @@ void main() {
         );
         bloc.add(DeleteDevice(device));
         await deleting;
-        expect(apiData.devices.isExpired, isFalse);
+        expect(bloc.state.devices, originalData);
+        expect(bloc.state.pendingDeviceName, device.name);
 
         final loaded = bloc.stream.firstWhere(
           (final state) => state is DevicesLoaded,
@@ -92,11 +210,14 @@ void main() {
         );
         await loaded;
 
-        expect(apiData.devices.data, originalData);
-        expect(
-          apiData.devices.isExpired,
-          outcome == ServerMutationOutcome.confirmed,
-        );
+        final expectedDevices = outcome == ServerMutationOutcome.confirmed
+            ? originalData
+                  .where((final token) => token.name != device.name)
+                  .toList()
+            : originalData;
+        expect(devices.value.data, expectedDevices);
+        expect(bloc.state.devices, expectedDevices);
+        expect(originalState.devices, originalData);
         if (outcome == ServerMutationOutcome.confirmed) {
           verifyNever(() => navigation.showSnackBar(any()));
         } else {

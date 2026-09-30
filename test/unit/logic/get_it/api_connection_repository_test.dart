@@ -824,6 +824,9 @@ void main() {
       () async {
         registerFallbackValue(aServer());
         final resources = _MockResources();
+        when(
+          () => resources.statusStream,
+        ).thenAnswer((_) => const Stream.empty());
         var stored = aServer();
         when(() => resources.servers).thenAnswer((_) => [stored]);
         when(() => resources.updateServerByUuid(any())).thenAnswer((

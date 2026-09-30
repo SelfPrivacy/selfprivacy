@@ -6,19 +6,44 @@ import 'package:selfprivacy/logic/cubit/server_installation/server_installation_
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 class DeviceItem extends StatelessWidget {
-  const DeviceItem({required this.device, super.key});
+  const DeviceItem({
+    required this.device,
+    this.pending = false,
+    this.enabled = true,
+    this.onRevoke,
+    this.onRotate,
+    super.key,
+  });
 
   final ApiToken device;
+  final bool pending;
+  final bool enabled;
+  final VoidCallback? onRevoke;
+  final VoidCallback? onRotate;
 
   @override
   Widget build(final BuildContext context) => ListTile(
+    enabled: enabled && !pending,
+    trailing: pending
+        ? SizedBox.square(
+            dimension: 24,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              semanticsLabel: 'devices.main_screen.revoking'.tr(
+                args: [device.name],
+              ),
+            ),
+          )
+        : null,
     title: Text(device.name),
     subtitle: Text(
       'devices.main_screen.access_granted_on'.tr(
         args: [DateFormat.yMMMMd().format(device.date)],
       ),
     ),
-    onTap: device.isCaller
+    onTap: !enabled || pending
+        ? null
+        : device.isCaller
         ? () => _showTokenRefreshDialog(context, device)
         : () => _showConfirmationDialog(context, device),
   );
@@ -66,7 +91,11 @@ class DeviceItem extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            context.read<DevicesBloc>().add(DeleteDevice(device));
+            if (onRevoke case final callback?) {
+              callback();
+            } else {
+              context.read<DevicesBloc>().add(DeleteDevice(device));
+            }
             Navigator.of(context).pop();
           },
         ),
@@ -112,7 +141,13 @@ class DeviceItem extends StatelessWidget {
         TextButton(
           child: Text('devices.refresh_token_alert.yes'.tr()),
           onPressed: () {
-            context.read<TokensBloc>().add(const RefreshServerApiTokenEvent());
+            if (onRotate case final callback?) {
+              callback();
+            } else {
+              context.read<TokensBloc>().add(
+                const RefreshServerApiTokenEvent(),
+              );
+            }
             Navigator.of(context).pop();
           },
         ),

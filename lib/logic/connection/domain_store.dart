@@ -78,7 +78,12 @@ class DomainStore<T extends Object> {
   ///
   /// Fetch failures are recorded in [value] and do not escape this future.
   /// Unknown and unsupported domains are skipped, even with [force].
-  Future<RefreshResult> refresh({final bool force = false}) {
+  /// If [acceptResult] returns false, discards the fetched data or error.
+  /// Shared reads use the first caller's [acceptResult].
+  Future<RefreshResult> refresh({
+    final bool force = false,
+    final bool Function()? acceptResult,
+  }) {
     if (_disposed) {
       return Future.value(RefreshResult.disposed);
     }
@@ -97,23 +102,26 @@ class DomainStore<T extends Object> {
     final completion = Completer<RefreshResult>();
     _refresh = completion;
     _refreshRevision = _revision;
-    unawaited(_runRefresh(completion));
+    unawaited(_runRefresh(completion, acceptResult));
     return completion.future;
   }
 
-  Future<void> _runRefresh(final Completer<RefreshResult> completion) async {
+  Future<void> _runRefresh(
+    final Completer<RefreshResult> completion,
+    final bool Function()? acceptResult,
+  ) async {
     final ticket = _revision;
     var result = RefreshResult.superseded;
     _emit(_value.copyWith(isRefreshing: true));
     try {
       final data = await _fetch();
-      if (!_disposed && ticket == _revision) {
+      if (!_disposed && ticket == _revision && (acceptResult?.call() ?? true)) {
         _readRevision++;
         _accept(data);
         result = RefreshResult.applied;
       }
     } catch (error) {
-      if (!_disposed && ticket == _revision) {
+      if (!_disposed && ticket == _revision && (acceptResult?.call() ?? true)) {
         _emit(_value.copyWith(lastError: () => error));
         result = RefreshResult.failed;
       }

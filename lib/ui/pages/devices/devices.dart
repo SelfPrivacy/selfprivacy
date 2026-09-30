@@ -8,8 +8,6 @@ import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:selfprivacy/ui/router/router.dart';
-import 'package:selfprivacy/utils/fake_data.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 @RoutePage()
 class DevicesPage extends StatefulWidget {
@@ -41,7 +39,21 @@ class _DevicesPageState extends State<DevicesPage> {
               child: CircularProgressIndicator.adaptive(),
             ),
           ],
-          if (devicesStatus is! DevicesInitial) ...[
+          if (devicesStatus.hasError) ...[
+            InfoBox(text: 'devices.main_screen.load_error'.tr()),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed:
+                    devicesStatus.isRefreshing ||
+                        devicesStatus.pendingDeviceName != null
+                    ? null
+                    : () => context.read<DevicesBloc>().refresh(),
+                child: Text('devices.main_screen.retry'.tr()),
+              ),
+            ),
+          ],
+          if (devicesStatus.isLoaded) ...[
             _DevicesInfo(devicesStatus: devicesStatus),
             const SizedBox(height: 16),
             OutlinedButton(
@@ -70,35 +82,25 @@ class _DevicesInfo extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       SectionTitle(title: 'devices.main_screen.this_device'.tr()),
-      Skeletonizer(
-        enabled:
-            devicesStatus.thisDevice == FakeSelfPrivacyData.thisDeviceToken,
-        enableSwitchAnimation: true,
-        child: DeviceItem(device: devicesStatus.thisDevice),
-      ),
+      if (devicesStatus.thisDevice case final device?)
+        DeviceItem(device: device),
       const SizedBox(height: 8),
       const Divider(height: 1),
       const SizedBox(height: 8),
       SectionTitle(title: 'devices.main_screen.other_devices'.tr()),
-      if (devicesStatus is DevicesDeleting) ...[
-        const Center(
-          heightFactor: 4,
-          child: CircularProgressIndicator.adaptive(),
+      if (devicesStatus.otherDevices.isEmpty)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text('devices.main_screen.no_other_devices'.tr()),
         ),
-      ],
-      if (!devicesStatus.isLoaded)
-        ...List.generate(
-          3,
-          (final index) => Skeletonizer(
-            enabled: true,
-            enableSwitchAnimation: true,
-            child: DeviceItem(device: FakeSelfPrivacyData.otherDeviceToken),
-          ),
+      ...devicesStatus.otherDevices.map(
+        (final device) => DeviceItem(
+          key: ValueKey(device.name),
+          device: device,
+          pending: devicesStatus.pendingDeviceName == device.name,
+          enabled: devicesStatus.pendingDeviceName == null,
         ),
-      if (devicesStatus is! DevicesDeleting && devicesStatus.isLoaded)
-        ...devicesStatus.otherDevices.map(
-          (final device) => DeviceItem(device: device),
-        ),
+      ),
     ],
   );
 }

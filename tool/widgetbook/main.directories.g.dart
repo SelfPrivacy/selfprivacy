@@ -2212,10 +2212,22 @@ final directories = <_widgetbook.WidgetbookNode>[
                         .deviceItemCurrentDevice,
               ),
               _widgetbook.WidgetbookUseCase(
+                name: 'Disabled',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
+                        .deviceItemDisabled,
+              ),
+              _widgetbook.WidgetbookUseCase(
                 name: 'Other device',
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
                         .deviceItemOtherDevice,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Pending',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
+                        .deviceItemPending,
               ),
               _widgetbook.WidgetbookUseCase(
                 name: 'Refresh dialog',

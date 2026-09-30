@@ -1,50 +1,50 @@
 part of 'devices_bloc.dart';
 
 sealed class DevicesState extends Equatable {
-  DevicesState({required final List<ApiToken> devices})
-    : _hashCode = Object.hashAll(devices);
+  DevicesState({
+    required final List<ApiToken> devices,
+    this.hasError = false,
+    this.isRefreshing = false,
+    this.pendingDeviceName,
+  }) : devices = List.unmodifiable(devices);
 
-  final int _hashCode;
+  final List<ApiToken> devices;
+  final bool hasError;
+  final bool isRefreshing;
+  final String? pendingDeviceName;
+  bool get isLoaded => this is DevicesLoaded || this is DevicesDeleting;
 
-  bool get isLoaded => _devices.isNotEmpty;
-
-  List<ApiToken> get _devices =>
-      getIt<ApiConnectionRepository>().apiData.devices.data ?? const [];
-
-  List<ApiToken> get devices => _devices;
-  ApiToken get thisDevice => _devices.firstWhere(
-    (final device) => device.isCaller,
-    orElse: () => FakeSelfPrivacyData.thisDeviceToken,
-  );
+  ApiToken? get thisDevice =>
+      devices.firstWhereOrNull((final device) => device.isCaller);
 
   List<ApiToken> get otherDevices =>
-      _devices.where((final device) => !device.isCaller).toList();
+      List.unmodifiable(devices.where((final device) => !device.isCaller));
+
+  @override
+  List<Object?> get props => [
+    devices,
+    hasError,
+    isRefreshing,
+    pendingDeviceName,
+  ];
 }
 
 class DevicesInitial extends DevicesState {
   DevicesInitial() : super(devices: const []);
-
-  @override
-  List<Object> get props => [_hashCode];
 }
 
 class DevicesLoaded extends DevicesState {
-  DevicesLoaded({required super.devices});
-
-  @override
-  List<Object> get props => [_hashCode];
+  DevicesLoaded({required super.devices, super.hasError, super.isRefreshing});
 }
 
 class DevicesError extends DevicesState {
-  DevicesError() : super(devices: const []);
-
-  @override
-  List<Object> get props => [_hashCode];
+  DevicesError() : super(devices: const [], hasError: true);
 }
 
 class DevicesDeleting extends DevicesState {
-  DevicesDeleting({required super.devices});
-
-  @override
-  List<Object> get props => [_hashCode];
+  DevicesDeleting({
+    required super.devices,
+    required super.pendingDeviceName,
+    super.hasError,
+  });
 }

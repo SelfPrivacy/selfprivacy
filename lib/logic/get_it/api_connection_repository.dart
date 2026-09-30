@@ -8,13 +8,12 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_scope.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -25,7 +24,6 @@ import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
@@ -52,7 +50,6 @@ class ApiConnectionRepository {
             onAuthFailure: _handleAuthFailure,
           ),
         );
-    _apiData = ApiData(this.api);
     _connections = ServerConnectionScope(
       selectServer: _serverSelector,
       serverChanges: resourcesModel.statusStream,
@@ -67,6 +64,8 @@ class ApiConnectionRepository {
           ),
       onAuthFailure: _handleAuthFailure,
     );
+    _apiData = ApiData(this.api, connection: () => connection);
+    _domainSubscription = _connections.changes.listen((_) => emitData());
   }
 
   static final _log = const AppLogger(name: 'api_connection_repository').log;
@@ -74,6 +73,8 @@ class ApiConnectionRepository {
   final ResourcesModel _resourcesModel;
   final ServerSelector _serverSelector;
   late final ServerConnectionScope _connections;
+  late final StreamSubscription<void> _domainSubscription;
+  ServerConnection? get connection => _connections.current;
 
   CachedValue<List<ApiToken>> get devicesSnapshot =>
       _connections.current?.devices.value ?? const CachedValue();
@@ -116,247 +117,93 @@ class ApiConnectionRepository {
   StreamSubscription<List<ServerJob>>? _serverJobsStreamSubscription;
   DateTime? _jobsStreamDisconnectTime;
 
-  void applyServerJobMutation(final ServerMutationResult<ServerJob> result) {
-    if (result.outcome != ServerMutationOutcome.confirmed) {
-      return;
-    }
-    final job = result.payload.value;
-    final jobs = _apiData.serverJobs;
-    if (job == null) {
-      jobs.invalidate();
-    } else if (jobs.data == null) {
-      jobs
-        ..data = [job]
-        ..invalidate();
-    } else {
-      final index = jobs.data!.indexWhere(
-        (final existing) => existing.uid == job.uid,
-      );
-      if (index < 0) {
-        jobs.data!.add(job);
-      } else {
-        jobs.data![index] = job;
-      }
-    }
-    emitData();
-  }
-
-  Future<ServerMutationResult<void>> removeServerJob(final String uid) async {
-    final result = await api.removeApiJob(uid);
-    if (result.outcome == ServerMutationOutcome.confirmed) {
-      _apiData.serverJobs.data?.removeWhere((final job) => job.uid == uid);
-      emitData();
-    }
-    return result;
-  }
+  Future<ServerMutationResult<void>> removeServerJob(final String uid) async =>
+      await connection?.jobs.removeJob(uid) ?? _unavailable<void>();
 
   Future<Map<String, ServerMutationResult<void>>>
-  removeAllFinishedServerJobs() async {
-    final finishedJobs =
-        _apiData.serverJobs.data
-            ?.where(
-              (final job) =>
-                  job.status == JobStatusEnum.finished ||
-                  job.status == JobStatusEnum.error,
-            )
-            .toList() ??
-        [];
-    return {
-      for (final job in finishedJobs) job.uid: await removeServerJob(job.uid),
-    };
-  }
+  removeAllFinishedServerJobs() async =>
+      await connection?.jobs.removeAllFinished() ?? const {};
 
-  Future<(bool, String)> createUser(final User user) async {
-    final loadedUsers = _apiData.users.data;
-    if (loadedUsers == null) {
-      return (false, 'basis.network_error'.tr());
-    }
-    if (loadedUsers.any(
-      (final u) => u.login == user.login && u.isFoundOnServer,
-    )) {
-      return (false, 'users.user_already_exists'.tr());
-    }
-    return _applyUserMutation(
-      await api.createUser(user.login, user.displayName, user.directmemberof),
-    );
-  }
+  Future<(bool, String)> createUser(final User user) async =>
+      _userFeedback(await connection?.users.createUser(user));
+  Future<(bool, String)> updateUser(final User user) async =>
+      _userFeedback(await connection?.users.updateUser(user));
+  Future<(bool, String)> deleteUser(final User user) async =>
+      _feedback(await connection?.users.deleteUser(user));
+  Future<(bool, String)> addSshKey(
+    final User user,
+    final String publicKey,
+  ) async => _userFeedback(await connection?.users.addSshKey(user, publicKey));
+  Future<(bool, String)> deleteSshKey(
+    final User user,
+    final String publicKey,
+  ) async =>
+      _userFeedback(await connection?.users.deleteSshKey(user, publicKey));
+  Future<(bool, String)> deleteEmailPassword(
+    final User user,
+    final String uuid,
+  ) async => _feedback(await connection?.users.deleteEmailPassword(user, uuid));
 
-  Future<(bool, String)> updateUser(final User user) async {
-    if (_apiData.users.data == null) {
-      return (false, 'basis.network_error'.tr());
-    }
-    return _applyUserMutation(
-      await api.updateUser(user.login, user.displayName, user.directmemberof),
-    );
-  }
-
-  Future<(bool, String)> deleteUser(final User user) async {
-    if (_apiData.users.data == null) {
-      return (false, 'basis.network_error'.tr());
-    }
-    if (user.type == UserType.root) {
-      return (false, 'users.user_delete_protected'.tr());
-    }
-    final result = await api.deleteUser(user.login);
-    if (result.outcome == ServerMutationOutcome.confirmed) {
-      _apiData.users.data?.removeWhere((final u) => u.login == user.login);
-      emitData();
-    }
-    return (
-      result.outcome == ServerMutationOutcome.confirmed,
-      serverMutationMessage(result),
-    );
-  }
-
-  // url and error message
   Future<(Uri?, String)> generatePasswordResetLink(final User user) async {
-    String errorMessage = 'users.user_modify_protected'.tr();
-    if (user.type == UserType.root) {
-      return (null, errorMessage);
-    }
-    final result = await api.generatePasswordResetLink(user.login);
-
+    final result =
+        await connection?.users.generatePasswordResetLink(user) ??
+        _unavailable<String>();
     final secret = result.confirmedSecret;
     if (secret == null) {
       return (null, serverMutationMessage(result, sensitive: true));
     }
     final uri = Uri.tryParse(secret);
     if (uri == null || uri.scheme.isEmpty) {
-      errorMessage = 'users.could_not_generate_password_link'.tr();
-      return (null, errorMessage);
+      return (null, 'users.could_not_generate_password_link'.tr());
     }
-
     return (uri, 'basis.done'.tr());
   }
 
-  Future<(bool, String)> deleteEmailPassword(
-    final User user,
-    final String uuid,
-  ) async {
-    final result = await api.deleteEmailPassword(user.login, uuid);
-    if (result.outcome == ServerMutationOutcome.confirmed) {
-      final users = _apiData.users.data;
-      final index = users?.indexWhere((final u) => u.login == user.login) ?? -1;
-      if (users != null && index >= 0) {
-        final current = users[index];
-        users[index] = current.copyWith(
-          emailPasswordMetadata: current.emailPasswordMetadata
-              ?.where((final metadata) => metadata.uuid != uuid)
-              .toList(),
-        );
-      } else {
-        _apiData.users.invalidate();
-      }
-      emitData();
-    }
-    return (
-      result.outcome == ServerMutationOutcome.confirmed,
-      serverMutationMessage(result),
-    );
-  }
+  (bool, String) _userFeedback(final ServerMutationResult<User>? result) => (
+    result?.outcome == ServerMutationOutcome.confirmed &&
+        result?.payload.value != null,
+    serverMutationMessage(result ?? _unavailable<User>()).tr(),
+  );
 
-  Future<(bool, String)> addSshKey(
-    final User user,
-    final String publicKey,
-  ) async {
-    if (_apiData.users.data == null) {
-      return (false, 'basis.network_error'.tr());
-    }
-    return _applyUserMutation(await api.addSshKey(user.login, publicKey));
-  }
+  (bool, String) _feedback<T>(
+    final ServerMutationResult<T>? result, {
+    final bool sensitive = false,
+  }) => (
+    result?.outcome == ServerMutationOutcome.confirmed,
+    serverMutationMessage(
+      result ?? _unavailable<T>(),
+      sensitive: sensitive,
+    ).tr(),
+  );
 
-  Future<(bool, String)> deleteSshKey(
-    final User user,
-    final String publicKey,
-  ) async {
-    if (_apiData.users.data == null) {
-      return (false, 'basis.network_error'.tr());
-    }
-    return _applyUserMutation(await api.removeSshKey(user.login, publicKey));
-  }
-
-  (bool, String) _applyUserMutation(final ServerMutationResult<User> result) {
-    if (result.outcome != ServerMutationOutcome.confirmed) {
-      return (false, serverMutationMessage(result));
-    }
-    final user = result.payload.value;
-    if (user == null) {
-      _apiData.users.invalidate();
-      emitData();
-      return (false, serverMutationMessage(result));
-    }
-    final users = _apiData.users.data;
-    if (users == null) {
-      _apiData.users.data = [user];
-      _apiData.users.invalidate();
-    } else {
-      final index = users.indexWhere((final u) => u.login == user.login);
-      if (index < 0) {
-        users.add(user);
-      } else {
-        users[index] = user;
-      }
-    }
-    emitData();
-    return (true, serverMutationMessage(result));
-  }
-
-  (bool, String) _applySettingsMutation<T>(
-    final ServerMutationResult<T> result,
-    final SystemSettings Function(SystemSettings, T) apply,
-  ) {
-    if (result.outcome != ServerMutationOutcome.confirmed) {
-      return (false, serverMutationMessage(result));
-    }
-    final value = result.payload.value;
-    final current = _apiData.settings.data;
-    if (value == null || current == null) {
-      _apiData.settings.invalidate();
-    } else {
-      // A partial response does not renew the whole settings snapshot.
-      _apiData.settings._data = apply(current, value);
-    }
-    emitData();
-    return (true, serverMutationMessage(result));
-  }
+  ServerMutationResult<T> _unavailable<T>() => ServerMutationResult<T>(
+    outcome: ServerMutationOutcome.indeterminate,
+    payload: const ServerMutationPayload.notExpected(),
+  );
 
   Future<(bool, String)> setAutoUpgradeSettings({
     required final bool enable,
     required final bool allowReboot,
-  }) async => _applySettingsMutation(
-    await api.setAutoUpgradeSettings(
-      AutoUpgradeSettings(enable: enable, allowReboot: allowReboot),
+  }) async => _feedback(
+    await connection?.settings.setAutoUpgradeSettings(
+      enable: enable,
+      allowReboot: allowReboot,
     ),
-    (final current, final value) =>
-        current.copyWith(autoUpgradeSettings: value),
   );
 
   Future<(bool, String)> setServerTimezone(final String timezone) async =>
-      _applySettingsMutation(
-        await api.setTimezone(timezone),
-        (final current, final value) => current.copyWith(timezone: value),
-      );
+      _feedback(await connection?.settings.setServerTimezone(timezone));
 
   Future<(bool, String)> setSshSettings({required final bool enable}) async =>
-      _applySettingsMutation(
-        await api.setSshSettings(SshSettings(enable: enable)),
-        (final current, final value) => current.copyWith(sshSettings: value),
-      );
+      _feedback(await connection?.settings.setSshSettings(enable: enable));
 
   Future<(bool, String)> setServiceConfiguration(
     final String serviceId,
     final Map<String, dynamic> settings,
-  ) async {
-    final result = await api.setServiceConfiguration(serviceId, settings);
-    if (result.outcome == ServerMutationOutcome.confirmed) {
-      _apiData.services.invalidate();
-      emitData();
-    }
-    return (
-      result.outcome == ServerMutationOutcome.confirmed,
-      serverMutationMessage(result, sensitive: true),
-    );
-  }
+  ) async => _feedback(
+    await connection?.services.setConfiguration(serviceId, settings),
+    sensitive: true,
+  );
 
   // Single-flight guard. Manual refreshes from TokensBloc and automatic
   // rotations from `_rotateTokenIfNeeded` can arrive concurrently; without
@@ -480,6 +327,8 @@ class ApiConnectionRepository {
 
   void dispose() {
     _connections.dispose();
+    unawaited(_domainSubscription.cancel());
+    unawaited(_serverJobsStreamSubscription?.cancel());
     unawaited(_dataStream.close());
     unawaited(_connectionStatusStream.close());
     _timer?.cancel();
@@ -534,13 +383,20 @@ class ApiConnectionRepository {
       unawaited(subscription.cancel());
     }
 
-    subscription = api
+    final owner = connection;
+    if (owner == null || !owner.isAttached) {
+      return;
+    }
+    subscription = owner.api
         .getServerJobsStream(onConnectionLost: _handleWebsocketDisconnect)
         .listen(
           (final List<ServerJob> jobs) {
-            _apiData.serverJobs.data = jobs;
-            _dataStream.add(_apiData);
-            _jobsStreamDisconnectTime = null;
+            if (owner.isAttached) {
+              owner.jobs.receiveSnapshot(jobs);
+              _jobsStreamDisconnectTime = null;
+            } else {
+              detach();
+            }
           },
           onError: (final Object error, final StackTrace stack) {
             _log(
@@ -589,27 +445,13 @@ class ApiConnectionRepository {
     final ServerConnection? connection,
   ) async {
     await Future.wait([
-      if (_isForceServerJobsRefetchRequired())
-        _apiData.serverJobs.refetchData(
-          version,
-          () => _dataStream.add(_apiData),
-        ),
-      _apiData.services.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.users.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.groups.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.volumes.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.settings.refetchData(version, () => _dataStream.add(_apiData)),
-      _apiData.recoveryKeyStatus.refetchData(
-        version,
-        () => _dataStream.add(_apiData),
-      ),
       if (connection != null && connection.isAttached)
-        connection.devices.refresh(),
-      _apiData.backupConfig.refetchData(
-        version,
-        () => _dataStream.add(_apiData),
-      ),
-      _apiData.backups.refetchData(version, () => _dataStream.add(_apiData)),
+        for (final store in connection.stores)
+          if (store != connection.jobs.store ||
+              _isForceServerJobsRefetchRequired())
+            connection.refresh(store),
+      _apiData.groups.refetchData(version, emitData),
+      _apiData.recoveryKeyStatus.refetchData(version, emitData),
     ]);
   }
 
@@ -662,53 +504,63 @@ class ApiConnectionRepository {
 }
 
 class ApiData {
-  ApiData(final ServerApi api)
-    : apiVersion = ApiDataElement<String>(fetchData: api.getApiVersion),
-      serverJobs = ApiDataElement<List<ServerJob>>(
-        fetchData: api.getServerJobs,
-        ttl: 10,
-      ),
-      backupConfig = ApiDataElement<BackupConfiguration>(
-        fetchData: api.getBackupsConfiguration,
-        requiredApiVersion: '>=2.4.2',
-        ttl: 120,
-      ),
-      backups = ApiDataElement<List<Backup>>(
-        fetchData: api.getBackups,
-        requiredApiVersion: '>=2.4.2',
-        ttl: 120,
-      ),
-      services = ApiDataElement<List<Service>>(
-        fetchData: api.getAllServices,
-        requiredApiVersion: '>=2.4.3',
-      ),
-      volumes = ApiDataElement<List<ServerDiskVolume>>(
-        fetchData: api.getServerDiskVolumes,
-      ),
-      recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
-        fetchData: api.getRecoveryTokenStatus,
-        ttl: 300,
-      ),
-      users = ApiDataElement<List<User>>(fetchData: api.getAllUsers),
-      groups = ApiDataElement<List<String>>(
-        fetchData: api.getAllGroups,
-        requiredApiVersion: '>=3.6.0',
-      ),
-      settings = ApiDataElement<SystemSettings>(
-        fetchData: api.getSystemSettings,
-        ttl: 600,
-      );
+  ApiData(
+    final ServerApi api, {
+    required final ServerConnection? Function() connection,
+  }) : apiVersion = ApiDataElement<String>(fetchData: api.getApiVersion),
+       serverJobs = ApiDataView(
+         () => connection()?.jobs.value ?? const CachedValue(),
+       ),
+       backupConfig = ApiDataView(
+         () => connection()?.backups.configValue ?? const CachedValue(),
+       ),
+       backups = ApiDataView(
+         () => connection()?.backups.value ?? const CachedValue(),
+       ),
+       services = ApiDataView(
+         () => connection()?.services.value ?? const CachedValue(),
+       ),
+       volumes = ApiDataView(() {
+         final owner = connection();
+         return owner?.snapshot(owner.volumesStore) ?? const CachedValue();
+       }),
+       recoveryKeyStatus = ApiDataElement<RecoveryKeyStatus>(
+         fetchData: api.getRecoveryTokenStatus,
+         ttl: 300,
+       ),
+       users = ApiDataView(
+         () => connection()?.users.value ?? const CachedValue(),
+       ),
+       groups = ApiDataElement<List<String>>(
+         fetchData: api.getAllGroups,
+         requiredApiVersion: '>=3.6.0',
+       ),
+       settings = ApiDataView(
+         () => connection()?.settings.value ?? const CachedValue(),
+       );
 
-  ApiDataElement<List<ServerJob>> serverJobs;
-  ApiDataElement<String> apiVersion;
-  ApiDataElement<BackupConfiguration> backupConfig;
-  ApiDataElement<List<Backup>> backups;
-  ApiDataElement<List<Service>> services;
-  ApiDataElement<List<ServerDiskVolume>> volumes;
-  ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
-  ApiDataElement<List<User>> users;
-  ApiDataElement<List<String>> groups;
-  ApiDataElement<SystemSettings> settings;
+  final ApiDataView<List<ServerJob>> serverJobs;
+  final ApiDataElement<String> apiVersion;
+  final ApiDataView<BackupConfiguration> backupConfig;
+  final ApiDataView<List<Backup>> backups;
+  final ApiDataView<List<Service>> services;
+  final ApiDataView<List<ServerDiskVolume>> volumes;
+  final ApiDataElement<RecoveryKeyStatus> recoveryKeyStatus;
+  final ApiDataView<List<User>> users;
+  final ApiDataElement<List<String>> groups;
+  final ApiDataView<SystemSettings> settings;
+}
+
+class ApiDataView<T extends Object> {
+  ApiDataView(this._snapshot);
+
+  final CachedValue<T> Function() _snapshot;
+  T? get data => _snapshot().data;
+  Object? get lastError => _snapshot().lastError;
+  DateTime? get lastUpdated => _snapshot().updatedAt;
+  bool get isExpired =>
+      _snapshot().freshness == Freshness.stale ||
+      _snapshot().needsReconciliation;
 }
 
 enum ConnectionStatus {

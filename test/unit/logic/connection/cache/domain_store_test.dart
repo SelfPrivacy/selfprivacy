@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 
 DomainStore<T> createStore<T extends Object>(
   final WidgetTester tester, {

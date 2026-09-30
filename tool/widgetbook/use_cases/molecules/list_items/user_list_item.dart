@@ -13,7 +13,7 @@ Widget userListItemRegular(final BuildContext context) => CatalogCase(
   width: 560,
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
-      const UserListItem(
+      UserListItem(
         user: User.fake(
           login: 'alice',
           displayName: null,
@@ -32,7 +32,7 @@ Widget userListItemPrimary(final BuildContext context) => CatalogCase(
   width: 560,
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
-      const UserListItem(
+      UserListItem(
         user: User.fake(
           login: 'alice',
           displayName: null,
@@ -55,7 +55,7 @@ Widget userListItemDisplayName(final BuildContext context) => CatalogCase(
   width: 560,
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
-      const UserListItem(
+      UserListItem(
         user: User.fake(
           login: 'alice',
           displayName: 'Alice Example',
@@ -78,7 +78,7 @@ Widget userListItemMissingOnServer(final BuildContext context) => CatalogCase(
   width: 560,
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
-      const UserListItem(
+      UserListItem(
         user: User.fake(
           login: 'alice',
           displayName: null,

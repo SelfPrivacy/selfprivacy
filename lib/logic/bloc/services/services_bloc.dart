@@ -58,16 +58,18 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     final currentState = state;
     if (currentState is ServicesLoaded) {
       emit(ServicesReloading.fromState(currentState));
-      getIt<ApiConnectionRepository>().apiData.services.invalidate();
-      await getIt<ApiConnectionRepository>().reload(null);
+      await getIt<ApiConnectionRepository>().connection?.services.refresh(
+        force: true,
+      );
     }
   }
 
   Future<void> awaitReload() async {
     final currentState = state;
     if (currentState is ServicesLoaded) {
-      getIt<ApiConnectionRepository>().apiData.services.invalidate();
-      await getIt<ApiConnectionRepository>().reload(null);
+      await getIt<ApiConnectionRepository>().connection?.services.refresh(
+        force: true,
+      );
     }
   }
 
@@ -75,6 +77,10 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     final ServiceRestart event,
     final Emitter<ServicesState> emit,
   ) async {
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
     emit(
       state.copyWith(
         lockedServices: [
@@ -86,9 +92,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
         ],
       ),
     );
-    final result = await getIt<ApiConnectionRepository>().api.restartService(
-      event.service.id,
-    );
+    final result = await connection.services.restart(event.service.id);
     if (result.outcome != ServerMutationOutcome.confirmed) {
       emit(
         state.copyWith(
@@ -100,15 +104,17 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
       getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
       return;
     }
-    getIt<ApiConnectionRepository>().apiData.services.invalidate();
   }
 
   Future<void> _move(
     final ServiceMove event,
     final Emitter<ServicesState> emit,
   ) async {
-    final repository = getIt<ApiConnectionRepository>();
-    final result = await repository.api.moveService(
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
+    final result = await connection.services.move(
       event.service.id,
       event.destination,
     );
@@ -116,26 +122,9 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
       getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
       return;
     }
-    final job = result.payload.value;
-    final jobs = repository.apiData.serverJobs;
-    if (job == null) {
-      jobs.invalidate();
+    if (result.payload.value == null) {
       getIt<NavigationService>().showSnackBar(serverMutationMessage(result));
-    } else if (jobs.data == null) {
-      jobs
-        ..data = [job]
-        ..invalidate();
-    } else {
-      final index = jobs.data!.indexWhere(
-        (final existing) => existing.uid == job.uid,
-      );
-      if (index < 0) {
-        jobs.data!.add(job);
-      } else {
-        jobs.data![index] = job;
-      }
     }
-    repository.emitData();
   }
 
   late StreamSubscription _apiDataSubscription;

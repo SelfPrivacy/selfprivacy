@@ -15,7 +15,7 @@ ServerInstallationWizardData _wizardData({
   serverLocation: 'fsn1',
   dnsProviderToken: 'dns-token',
   dnsProviderType: DnsProviderType.cloudflare,
-  rootUser: const User.fake(),
+  rootUser: User.fake(),
   serverDetails: aServerHostingDetails,
   serverDomain: aServerDomain,
   isServerStarted: true,
@@ -59,7 +59,7 @@ void main() {
           serverLocation: 'fsn1',
           dnsProviderToken: 'dns-token',
           dnsProviderType: DnsProviderType.cloudflare,
-          rootUser: const User.fake(),
+          rootUser: User.fake(),
           serverDomain: aServerDomain,
         ),
       );

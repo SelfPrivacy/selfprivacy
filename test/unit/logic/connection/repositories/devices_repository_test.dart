@@ -6,14 +6,14 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/devices_repository.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
-import '../../../helpers/fixtures/json_fixture.dart';
+import '../../../../helpers/fixtures/json_fixture.dart';
 
 class _Api extends Mock implements ServerApi {}
 

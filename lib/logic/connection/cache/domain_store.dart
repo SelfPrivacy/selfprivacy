@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:selfprivacy/logic/connection/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 
 typedef CacheTimerFactory = Timer Function(Duration delay, void Function() run);
 

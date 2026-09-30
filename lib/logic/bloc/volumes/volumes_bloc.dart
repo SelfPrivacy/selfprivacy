@@ -160,7 +160,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   }
 
   Future<void> invalidateCache() async {
-    getIt<ApiConnectionRepository>().apiData.volumes.invalidate();
+    getIt<ApiConnectionRepository>().connection?.volumes.invalidate();
   }
 
   Future<void> _updateState(
@@ -196,6 +196,10 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       return;
     }
     if (!(_serverProvider()?.isAuthorized ?? false)) {
+      return;
+    }
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
       return;
     }
     getIt<NavigationService>().showSnackBar(
@@ -234,9 +238,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
 
     await Future.delayed(const Duration(seconds: 10));
 
-    final resize = await getIt<ApiConnectionRepository>().api.resizeVolume(
-      event.volume.name,
-    );
+    final resize = await connection.volumes.resize(event.volume.name);
     if (resize.outcome != ServerMutationOutcome.confirmed) {
       getIt<NavigationService>().showSnackBar(serverMutationMessage(resize));
       emit(
@@ -248,7 +250,6 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       );
       return;
     }
-    getIt<ApiConnectionRepository>().apiData.volumes.invalidate();
     getIt<NavigationService>().showSnackBar(
       'storage.extending_volume_server_waiting'.tr(),
     );
@@ -266,7 +267,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       ),
     );
 
-    final reboot = await getIt<ApiConnectionRepository>().api.reboot();
+    final reboot = await connection.volumes.reboot();
     if (reboot.outcome != ServerMutationOutcome.confirmed) {
       getIt<NavigationService>().showSnackBar(serverMutationMessage(reboot));
     }

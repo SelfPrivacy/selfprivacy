@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:selfprivacy/logic/connection/network_connectivity.dart';
-import 'package:selfprivacy/logic/connection/reachability.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 
 class _Network implements NetworkConnectivitySource {
   final events = StreamController<NetworkConnectivity>();

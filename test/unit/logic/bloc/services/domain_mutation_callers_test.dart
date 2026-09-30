@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
@@ -11,6 +12,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -35,18 +38,27 @@ void main() {
   late Service service;
   late ServicesBloc services;
   late ServerJobsBloc jobs;
+  late ServerConnection connection;
 
   setUp(() {
     repository = _Repository();
     api = _Api();
     navigation = _Navigation();
-    data = ApiData(api);
-    data.services.data = Query$AllServices.fromJson(
-      loadJsonFixture('graphql/domain_reads.json')['AllServices']
-          as Map<String, dynamic>,
-    ).services.allServices.map(Service.fromGraphQL).toList();
+    final origin = ServerStateOrigin('server');
+    connection = ServerConnection(
+      api: api,
+      origin: origin,
+      currentOrigin: () => origin,
+    )..setVersion(Version(3, 0, 0));
+    when(() => repository.connection).thenReturn(connection);
+    data = ApiData(api, connection: () => connection);
+    connection.services.store.push(
+      Query$AllServices.fromJson(
+        loadJsonFixture('graphql/domain_reads.json')['AllServices']
+            as Map<String, dynamic>,
+      ).services.allServices.map(Service.fromGraphQL).toList(),
+    );
     service = data.services.data!.first;
-    data.serverJobs.data = [];
     when(() => repository.api).thenReturn(api);
     when(() => repository.apiData).thenReturn(data);
     when(() => repository.dataStream).thenAnswer((_) => const Stream.empty());
@@ -62,6 +74,7 @@ void main() {
   tearDown(() async {
     await services.close();
     await jobs.close();
+    connection.dispose();
     await getIt.reset();
   });
 
@@ -80,10 +93,7 @@ void main() {
         services.add(ServiceRestart(service));
         await pumpEventQueue();
       });
-      expect(
-        data.services.isExpired,
-        outcome == ServerMutationOutcome.confirmed,
-      );
+      expect(data.services.isExpired, isTrue);
       expect(
         services.state.isServiceLocked(service.id),
         outcome == ServerMutationOutcome.confirmed,
@@ -103,6 +113,7 @@ void main() {
     ) async {
       await pumpForTest(tester, const SizedBox.shrink());
       final job = aServiceMoveJob();
+      await tester.runAsync(() async => connection.jobs.store.push([]));
       when(() => api.moveService(service.id, 'sdb')).thenAnswer(
         (_) async => ServerMutationResult(
           outcome: outcome,
@@ -117,10 +128,7 @@ void main() {
         data.serverJobs.data,
         outcome == ServerMutationOutcome.confirmed ? [job] : isEmpty,
       );
-      if (outcome == ServerMutationOutcome.confirmed) {
-        verify(repository.emitData).called(1);
-      } else {
-        verifyNever(repository.emitData);
+      if (outcome != ServerMutationOutcome.confirmed) {
         verify(() => navigation.showSnackBar(any())).called(1);
       }
     });
@@ -141,10 +149,7 @@ void main() {
         needToTurnOn: true,
       ).execute();
       expect(result.$1, outcome == ServerMutationOutcome.confirmed);
-      expect(
-        data.services.isExpired,
-        outcome == ServerMutationOutcome.confirmed,
-      );
+      expect(data.services.isExpired, isTrue);
     });
     testWidgets('job deletion reports $outcome', (final tester) async {
       await pumpForTest(tester, const SizedBox.shrink());
@@ -170,6 +175,7 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
+    connection.jobs.store.push([]);
     when(() => api.moveService(service.id, 'sdb')).thenAnswer(
       (_) async => ServerMutationResult(
         outcome: ServerMutationOutcome.confirmed,
@@ -185,15 +191,14 @@ void main() {
     const key = 'server_mutation.payload_unavailable';
     expect(key.tr(), isNot(key));
     verify(() => navigation.showSnackBar(key.tr())).called(1);
-    verify(repository.emitData).called(1);
   });
   testWidgets('move upserts an existing job and preserves stale status', (
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
     final updated = aServiceMoveJob();
-    data.serverJobs
-      ..data = [aServiceMoveJob(status: 'CREATED')]
+    connection.jobs.store
+      ..push([aServiceMoveJob(status: 'CREATED')])
       ..invalidate();
     when(() => api.moveService(service.id, 'sdb')).thenAnswer(
       (_) async => ServerMutationResult(
@@ -213,7 +218,6 @@ void main() {
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
     final job = aServiceMoveJob();
-    data.serverJobs.data = null;
     when(() => api.moveService(service.id, 'sdb')).thenAnswer(
       (_) async => ServerMutationResult(
         outcome: ServerMutationOutcome.confirmed,
@@ -224,7 +228,8 @@ void main() {
       services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
-    expect(data.serverJobs.data, [job]);
+    expect(data.serverJobs.data, isNull);
+    expect(connection.jobs.confirmedBeforeLoad[job.uid], job);
     expect(data.serverJobs.isExpired, isTrue);
   });
 
@@ -233,7 +238,7 @@ void main() {
       final tester,
     ) async {
       await pumpForTest(tester, const SizedBox.shrink());
-      data.volumes.data = [];
+      connection.volumesStore.push([]);
       final result = ServerMutationResult(
         outcome: outcome,
         payload: ServerMutationPayload.available(aServiceMoveJob()),
@@ -242,7 +247,10 @@ void main() {
         () => api.migrateToBinds({'gitea': 'sdb'}, 'sda1'),
       ).thenAnswer((_) async => result);
       await jobs.migrateToBinds({'gitea': 'sdb'});
-      verify(() => repository.applyServerJobMutation(result)).called(1);
+      expect(
+        connection.jobs.confirmedBeforeLoad.isNotEmpty,
+        outcome == ServerMutationOutcome.confirmed,
+      );
       if (outcome == ServerMutationOutcome.confirmed) {
         verifyNever(
           () =>
@@ -262,16 +270,20 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
-    data.volumes.data = Query$GetServerDiskVolumes.fromJson(
-      loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
-          as Map<String, dynamic>,
-    ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList();
+    connection.volumesStore.push(
+      Query$GetServerDiskVolumes.fromJson(
+        loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
+            as Map<String, dynamic>,
+      ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList(),
+    );
     final root = data.volumes.data!.firstWhere((final volume) => volume.root);
     final result = ServerMutationResult(
       outcome: ServerMutationOutcome.confirmed,
       payload: ServerMutationPayload.available(aServiceMoveJob()),
     );
-    when(() => api.migrateToBinds({}, root.name)).thenAnswer((_) async => result);
+    when(
+      () => api.migrateToBinds({}, root.name),
+    ).thenAnswer((_) async => result);
     await jobs.migrateToBinds({});
     verify(() => api.migrateToBinds({}, root.name)).called(1);
   });

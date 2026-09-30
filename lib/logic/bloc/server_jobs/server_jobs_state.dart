@@ -1,25 +1,13 @@
 part of 'server_jobs_bloc.dart';
 
 sealed class ServerJobsState extends Equatable {
-  ServerJobsState({final int? hashCode})
-    : _hashCode = hashCode ?? Object.hashAll([]);
+  ServerJobsState({final List<ServerJob> serverJobList = const []})
+    : serverJobList = List.unmodifiable(
+        <ServerJob>[...serverJobList]
+          ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt)),
+      );
 
-  final int? _hashCode;
-
-  final apiConnectionRepository = getIt<ApiConnectionRepository>();
-
-  List<ServerJob> get _serverJobList =>
-      apiConnectionRepository.apiData.serverJobs.data ?? [];
-
-  List<ServerJob> get serverJobList {
-    try {
-      final List<ServerJob> list = _serverJobList
-        ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt));
-      return list;
-    } on UnsupportedError {
-      return _serverJobList;
-    }
-  }
+  final List<ServerJob> serverJobList;
 
   List<ServerJob> get backupJobList => serverJobList
       .where(
@@ -54,18 +42,17 @@ sealed class ServerJobsState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [_hashCode];
+  List<Object?> get props => [serverJobList];
 }
 
 class ServerJobsInitialState extends ServerJobsState {
-  ServerJobsInitialState() : super(hashCode: Object.hashAll([]));
+  ServerJobsInitialState();
 }
 
 class ServerJobsListEmptyState extends ServerJobsState {
-  ServerJobsListEmptyState() : super(hashCode: Object.hashAll([]));
+  ServerJobsListEmptyState();
 }
 
 class ServerJobsListWithJobsState extends ServerJobsState {
-  ServerJobsListWithJobsState({required final List<ServerJob> serverJobList})
-    : super(hashCode: Object.hashAll([...serverJobList]));
+  ServerJobsListWithJobsState({required super.serverJobList});
 }

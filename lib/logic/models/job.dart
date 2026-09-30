@@ -88,9 +88,11 @@ class CollectNixGarbageJob extends ClientJob {
 
   @override
   Future<(bool, String)> execute() async {
-    final result = await getIt<ApiConnectionRepository>().api
-        .collectNixGarbage();
-    getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return (false, 'Server connection unavailable');
+    }
+    final result = await connection.jobs.collectNixGarbage();
     return (
       result.outcome == ServerMutationOutcome.confirmed,
       serverMutationMessage(result),
@@ -170,13 +172,14 @@ class ServiceToggleJob extends ClientJob {
 
   @override
   Future<(bool, String)> execute() async {
-    final result = await getIt<ApiConnectionRepository>().api.switchService(
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return (false, 'Server connection unavailable');
+    }
+    final result = await connection.services.switchService(
       serviceId: service.id,
       needTurnOn: needToTurnOn,
     );
-    if (result.outcome == ServerMutationOutcome.confirmed) {
-      getIt<ApiConnectionRepository>().apiData.services.invalidate();
-    }
     return (
       result.outcome == ServerMutationOutcome.confirmed,
       serverMutationMessage(result),

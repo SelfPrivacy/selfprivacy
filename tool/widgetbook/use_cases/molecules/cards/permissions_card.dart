@@ -13,8 +13,8 @@ Widget permissionsCardEmailOnly(final BuildContext context) => CatalogCase(
   width: 560,
   height: 400,
   builder: (final context, final fixtures, final controller, final update) =>
-      const PermissionsCard(
-        user: User.fake(login: 'alice', directmemberof: []),
+      PermissionsCard(
+        user: User.fake(login: 'alice', directmemberof: const []),
       ),
 );
 
@@ -31,10 +31,10 @@ Widget permissionsCardAdministrator(final BuildContext context) => CatalogCase(
   width: 560,
   height: 400,
   builder: (final context, final fixtures, final controller, final update) =>
-      const PermissionsCard(
+      PermissionsCard(
         user: User.fake(
           login: 'alice',
-          directmemberof: ['sp.admins', 'sp.full_users'],
+          directmemberof: const ['sp.admins', 'sp.full_users'],
         ),
       ),
 );
@@ -54,10 +54,10 @@ Widget permissionsCardServicePermissions(final BuildContext context) =>
       height: 400,
       builder:
           (final context, final fixtures, final controller, final update) =>
-              const PermissionsCard(
+              PermissionsCard(
                 user: User.fake(
                   login: 'alice',
-                  directmemberof: ['sp.nextcloud.user', 'custom-group'],
+                  directmemberof: const ['sp.nextcloud.user', 'custom-group'],
                 ),
               ),
     );

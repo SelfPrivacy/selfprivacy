@@ -53,8 +53,9 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   }
 
   Future<void> refresh() async {
-    getIt<ApiConnectionRepository>().apiData.users.invalidate();
-    await getIt<ApiConnectionRepository>().reload(null);
+    await getIt<ApiConnectionRepository>().connection?.users.refresh(
+      force: true,
+    );
   }
 
   Future<void> _reload(

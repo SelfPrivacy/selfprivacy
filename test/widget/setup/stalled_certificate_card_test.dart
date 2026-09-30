@@ -17,7 +17,9 @@ void main() {
 
   setUp(() {
     final connection = _MockConnection();
-    when(() => connection.apiData).thenReturn(ApiData(_MockServerApi()));
+    when(
+      () => connection.apiData,
+    ).thenReturn(ApiData(_MockServerApi(), connection: () => null));
     getIt.registerSingleton<ApiConnectionRepository>(connection);
   });
 

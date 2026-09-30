@@ -4,12 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
@@ -43,6 +46,8 @@ void main() {
   late _Resources resources;
   late _Navigation navigation;
   late ApiData data;
+  late ServerConnection connection;
+  late ServerStateOrigin? origin;
   late StreamController<ApiData> controller;
   late BackupsBloc bloc;
   late List<Service> services;
@@ -52,17 +57,27 @@ void main() {
     api = _Api();
     resources = _Resources();
     navigation = _Navigation();
-    data = ApiData(api);
+    data = ApiData(api, connection: () => connection);
+    origin = ServerStateOrigin('server');
+    connection = ServerConnection(
+      api: api,
+      origin: origin!,
+      currentOrigin: () => origin,
+    )..setVersion(Version(3, 6, 0));
     controller = StreamController<ApiData>.broadcast();
     final fixtures = loadJsonFixture('graphql/domain_reads.json');
-    data.backupConfig.data = aBackupConfiguration();
-    data.backups.data = Query$AllBackupSnapshots.fromJson(
-      fixtures['AllBackupSnapshots'] as Map<String, dynamic>,
-    ).backup.allSnapshots.map(Backup.fromGraphQL).toList();
+    connection.backups.configStore.push(aBackupConfiguration());
+    connection.backups.store.push(
+      List.unmodifiable(
+        Query$AllBackupSnapshots.fromJson(
+          fixtures['AllBackupSnapshots'] as Map<String, dynamic>,
+        ).backup.allSnapshots.map(Backup.fromGraphQL),
+      ),
+    );
     services = Query$AllServices.fromJson(
       fixtures['AllServices'] as Map<String, dynamic>,
     ).services.allServices.map(Service.fromGraphQL).toList();
-    data.serverJobs.data = [];
+    when(() => repository.connection).thenReturn(connection);
     when(() => repository.api).thenReturn(api);
     when(() => repository.apiData).thenReturn(data);
     when(
@@ -84,16 +99,28 @@ void main() {
 
   tearDown(() async {
     await bloc.close();
+    connection.dispose();
     await controller.close();
     await getIt.reset();
   });
 
-  Future<void> ready({final bool initialized = true}) async {
-    data.backupConfig.data = aBackupConfiguration().copyWith(
-      isInitialized: initialized,
+  Future<void> ready({
+    final bool initialized = true,
+    final bool jobsLoaded = true,
+  }) async {
+    if (jobsLoaded) {
+      connection.jobs.store.push(const []);
+    }
+    connection.backups.configStore.push(
+      aBackupConfiguration().copyWith(isInitialized: initialized),
     );
     final loaded = bloc.stream.first;
-    bloc.add(BackupsStateChanged(data.backups.data!, data.backupConfig.data));
+    bloc.add(
+      BackupsStateChanged(
+        connection.backups.value.data!,
+        connection.backups.configValue.data,
+      ),
+    );
     await loaded;
   }
 
@@ -115,7 +142,7 @@ void main() {
           await pumpForTest(tester, const SizedBox.shrink());
           await tester.runAsync(() async {
             await ready(initialized: operation != 'initialize');
-            final original = data.backupConfig.data;
+            final original = connection.backups.configValue.data;
             final fixture = loadJsonFixture('graphql/mutation_results.json');
             final returned = operation == 'remove'
                 ? BackupConfiguration.fromGraphQL(
@@ -152,16 +179,24 @@ void main() {
             await dispatch(event);
             final confirmed = outcome == ServerMutationOutcome.confirmed;
             expect(
-              data.backupConfig.data,
+              connection.backups.configValue.data,
               confirmed && !missing ? returned : original,
             );
-            expect(data.backupConfig.isExpired, confirmed && missing);
+            expect(
+              connection.backups.configValue.needsReconciliation,
+              !confirmed || missing,
+            );
             expect(bloc.state, isNot(isA<BackupsBusy>()));
             expect(bloc.state, isNot(isA<BackupsInitializing>()));
             verifyNever(() => repository.reload(any()));
             if (operation == 'remove' && confirmed) {
               verify(resources.removeBackblazeBucket).called(1);
-              expect(bloc.state, isA<BackupsUnititialized>());
+              expect(
+                bloc.state,
+                missing
+                    ? isA<BackupsInitialized>()
+                    : isA<BackupsUninitialized>(),
+              );
             } else {
               verifyNever(resources.removeBackblazeBucket);
             }
@@ -208,7 +243,7 @@ void main() {
         ),
       );
       await dispatch(const SetAutobackupPeriod(null));
-      expect(data.backupConfig.data!.autobackupPeriod, isNull);
+      expect(connection.backups.configValue.data!.autobackupPeriod, isNull);
       expect(bloc.state.autobackupPeriod, isNull);
       verifyNever(() => repository.reload(any()));
     });
@@ -221,7 +256,7 @@ void main() {
       await pumpForTest(tester, const SizedBox.shrink());
       await tester.runAsync(() async {
         await ready();
-        final original = List<Backup>.of(data.backups.data!);
+        final original = List<Backup>.of(connection.backups.value.data!);
         final snapshotId = original.first.id;
         final pending = Completer<ServerMutationResult<void>>();
         when(
@@ -232,7 +267,7 @@ void main() {
         );
         bloc.add(ForgetSnapshot(snapshotId));
         await busy;
-        expect(data.backups.data, original);
+        expect(connection.backups.value.data, original);
         final done = bloc.stream.firstWhere(
           (final state) => state is! BackupsBusy,
         );
@@ -245,7 +280,7 @@ void main() {
         await done;
         await pumpEventQueue();
         expect(
-          data.backups.data,
+          connection.backups.value.data,
           outcome == ServerMutationOutcome.confirmed
               ? original.where((final item) => item.id != snapshotId).toList()
               : original,
@@ -267,10 +302,7 @@ void main() {
           ),
         );
         await dispatch(const ForceSnapshotListUpdate());
-        expect(
-          data.backups.isExpired,
-          outcome == ServerMutationOutcome.confirmed,
-        );
+        expect(connection.backups.value.needsReconciliation, isTrue);
       });
     });
   }
@@ -307,14 +339,14 @@ void main() {
                   : CreateBackups(services.take(1).toList()),
             );
             expect(
-              data.serverJobs.data,
+              connection.jobs.store.value.data,
               outcome == ServerMutationOutcome.confirmed && !missing
                   ? [job]
                   : isEmpty,
             );
             expect(
-              data.serverJobs.isExpired,
-              outcome == ServerMutationOutcome.confirmed && missing,
+              connection.jobs.store.value.needsReconciliation,
+              outcome != ServerMutationOutcome.confirmed || missing,
             );
             expect(bloc.state, isNot(isA<BackupsBusy>()));
           });
@@ -329,9 +361,11 @@ void main() {
       (final tester) async {
         await pumpForTest(tester, const SizedBox.shrink());
         await tester.runAsync(() async {
-          await ready();
+          await ready(jobsLoaded: !missingList);
           final job = aBackupJob();
-          data.serverJobs.data = missingList ? null : [job];
+          if (!missingList) {
+            connection.jobs.store.push([job]);
+          }
           when(() => api.startBackup(any())).thenAnswer(
             (_) async => ServerMutationResult(
               outcome: ServerMutationOutcome.confirmed,
@@ -339,8 +373,10 @@ void main() {
             ),
           );
           await dispatch(CreateBackups(services.take(1).toList()));
-          expect(data.serverJobs.data, [job]);
-          expect(data.serverJobs.isExpired, missingList);
+          expect(connection.jobs.store.value.data, missingList ? null : [job]);
+          if (missingList) {
+            expect(connection.jobs.confirmedBeforeLoad, {job.uid: job});
+          }
         });
       },
     );
@@ -362,7 +398,7 @@ void main() {
         );
         final event = InitializeBackupsRepository(aBackupsCredential());
         await dispatch(event);
-        expect(bloc.state, isA<BackupsUnititialized>());
+        expect(bloc.state, isA<BackupsUninitialized>());
         expect(
           bloc.state.backblazeBucket?.bucketId,
           aBackblazeBucket().bucketId,
@@ -387,9 +423,17 @@ void main() {
     await pumpForTest(tester, const SizedBox.shrink());
     await tester.runAsync(() async {
       await ready(initialized: false);
-      data.backupConfig.data = null;
+      final emptyOrigin = ServerStateOrigin('empty');
+      connection.dispose();
+      origin = emptyOrigin;
+      connection = ServerConnection(
+        api: api,
+        origin: emptyOrigin,
+        currentOrigin: () => origin,
+      )..setVersion(Version(3, 6, 0));
+      when(() => repository.connection).thenReturn(connection);
       await dispatch(InitializeBackupsRepository(aBackupsCredential()));
-      expect(bloc.state, isA<BackupsUnititialized>());
+      expect(bloc.state, isA<BackupsUninitialized>());
       verifyNever(() => api.initializeRepository(any()));
       verify(
         () => navigation.showSnackBar(
@@ -419,6 +463,82 @@ void main() {
       }
       verifyZeroInteractions(api);
       expect(bloc.state, isA<BackupsInitial>());
+    });
+  });
+
+  testWidgets('configuration completion does not restore a removed snapshot', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    await tester.runAsync(() async {
+      await ready();
+      final pending = Completer<ServerMutationResult<BackupConfiguration>>();
+      when(
+        () => api.setAutobackupPeriod(period: 15),
+      ).thenAnswer((_) => pending.future);
+      final id = connection.backups.value.data!.first.id;
+      when(() => api.forgetSnapshot(id)).thenAnswer(
+        (_) async => ServerMutationResult<void>(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      bloc.add(const SetAutobackupPeriod(Duration(minutes: 15)));
+      await pumpEventQueue();
+      await dispatch(ForgetSnapshot(id));
+      pending.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aBackupConfiguration()),
+        ),
+      );
+      await pumpEventQueue();
+      expect(
+        bloc.state.backups.map((final backup) => backup.id),
+        isNot(contains(id)),
+      );
+    });
+  });
+
+  testWidgets('server switch stops a backup batch at its original connection', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    await tester.runAsync(() async {
+      await ready();
+      final first = Completer<ServerMutationResult<ServerJob>>();
+      when(
+        () => api.startBackup(services.first.id),
+      ).thenAnswer((_) => first.future);
+      bloc.add(CreateBackups(services));
+      await pumpEventQueue();
+      final replacementApi = _Api();
+      final replacementOrigin = ServerStateOrigin('replacement');
+      final replacement = ServerConnection(
+        api: replacementApi,
+        origin: replacementOrigin,
+        currentOrigin: () => origin,
+      )..setVersion(Version(3, 6, 0));
+      addTearDown(replacement.dispose);
+      origin = replacementOrigin;
+      when(() => repository.connection).thenReturn(replacement);
+      bloc.add(const BackupsServerReset());
+      await pumpEventQueue();
+      first.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aBackupJob()),
+        ),
+      );
+      await pumpEventQueue();
+      expect(bloc.state, isA<BackupsInitial>());
+      expect(connection.jobs.value.data, isEmpty);
+      expect(replacement.jobs.value.data, isNull);
+      verify(() => api.startBackup(services.first.id)).called(1);
+      for (final service in services.skip(1)) {
+        verifyNever(() => api.startBackup(service.id));
+      }
+      verifyZeroInteractions(replacementApi);
     });
   });
 }

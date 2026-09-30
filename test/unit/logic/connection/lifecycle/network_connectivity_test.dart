@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/logic/connection/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 
 class _Connectivity extends Mock implements Connectivity {}
 

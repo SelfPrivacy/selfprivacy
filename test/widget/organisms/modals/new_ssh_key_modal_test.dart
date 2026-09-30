@@ -14,7 +14,7 @@ import '../../../helpers/widget_harness.dart';
 const _validKey =
     'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+y1mUS1rFbuy2V5ndMWBwS4AavxjSt0JQGwUhddu1h user@host';
 
-const _user = User.fake(login: 'alice', sshKeys: []);
+final _user = User.fake(login: 'alice', sshKeys: const []);
 
 class MockJobsCubit extends Mock implements JobsCubit {}
 
@@ -104,7 +104,7 @@ void main() {
       await _pumpModal(
         tester,
         jobsCubit: jobsCubit,
-        user: const User.fake(login: 'alice', sshKeys: [_validKey]),
+        user: User.fake(login: 'alice', sshKeys: const [_validKey]),
       );
 
       await tester.enterText(find.byType(ReactiveTextField<String>), _validKey);

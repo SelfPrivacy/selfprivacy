@@ -11,19 +11,26 @@ part 'user.g.dart';
 
 @HiveType(typeId: 1)
 class User extends Equatable {
-  const User({
+  User({
     required this.login,
     required this.type,
     this.password,
-    this.sshKeys = const [],
+    final List<String> sshKeys = const [],
     this.isFoundOnServer = true,
     this.note,
     this.email,
     this.displayName,
-    this.directmemberof,
-    this.memberof,
-    this.emailPasswordMetadata,
-  });
+    final List<String>? directmemberof,
+    final List<String>? memberof,
+    final List<EmailPasswordMetadata>? emailPasswordMetadata,
+  }) : sshKeys = List.unmodifiable(sshKeys),
+       directmemberof = directmemberof == null
+           ? null
+           : List.unmodifiable(directmemberof),
+       memberof = memberof == null ? null : List.unmodifiable(memberof),
+       emailPasswordMetadata = emailPasswordMetadata == null
+           ? null
+           : List.unmodifiable(emailPasswordMetadata);
 
   User.fromGraphQL(final Fragment$userFields user)
     : this(
@@ -40,19 +47,31 @@ class User extends Equatable {
         email: user.email,
       );
 
-  const User.fake({
-    this.login = 'fake_username',
-    this.type = UserType.normal,
-    this.password = 'fake',
-    this.sshKeys = const [],
-    this.isFoundOnServer = true,
-    this.note,
-    this.email,
-    this.displayName,
-    this.directmemberof,
-    this.memberof,
-    this.emailPasswordMetadata,
-  });
+  User.fake({
+    final String login = 'fake_username',
+    final UserType type = UserType.normal,
+    final String? password = 'fake',
+    final List<String> sshKeys = const [],
+    final bool isFoundOnServer = true,
+    final String? note,
+    final String? email,
+    final String? displayName,
+    final List<String>? directmemberof,
+    final List<String>? memberof,
+    final List<EmailPasswordMetadata>? emailPasswordMetadata,
+  }) : this(
+         login: login,
+         type: type,
+         password: password,
+         sshKeys: sshKeys,
+         isFoundOnServer: isFoundOnServer,
+         note: note,
+         email: email,
+         displayName: displayName,
+         directmemberof: directmemberof,
+         memberof: memberof,
+         emailPasswordMetadata: emailPasswordMetadata,
+       );
 
   @HiveField(0)
   final String login;

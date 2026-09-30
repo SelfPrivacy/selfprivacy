@@ -5,12 +5,12 @@ import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
 
-import '../../../fakes/graphql/link_transport.dart';
-import '../../../helpers/fixtures/json_fixture.dart';
+import '../../../../fakes/graphql/link_transport.dart';
+import '../../../../helpers/fixtures/json_fixture.dart';
 
 void main() {
   late Map<String, dynamic> responses;

@@ -1,8 +1,7 @@
 part of 'backups_bloc.dart';
 
 sealed class BackupsState extends Equatable {
-  BackupsState({this.backblazeBucket});
-  final apiConnectionRepository = getIt<ApiConnectionRepository>();
+  const BackupsState({this.backblazeBucket});
   final BackblazeBucket? backblazeBucket;
 
   @Deprecated('Infer the initializations status from state')
@@ -30,7 +29,7 @@ sealed class BackupsState extends Equatable {
 }
 
 class BackupsInitial extends BackupsState {
-  BackupsInitial({super.backblazeBucket});
+  const BackupsInitial({super.backblazeBucket});
   @override
   List<Object> get props => [];
 
@@ -40,7 +39,7 @@ class BackupsInitial extends BackupsState {
 }
 
 class BackupsLoading extends BackupsState {
-  BackupsLoading({super.backblazeBucket});
+  const BackupsLoading({super.backblazeBucket});
   @override
   List<Object> get props => [];
 
@@ -53,8 +52,8 @@ class BackupsLoading extends BackupsState {
       BackupsLoading(backblazeBucket: backblazeBucket ?? this.backblazeBucket);
 }
 
-class BackupsUnititialized extends BackupsState {
-  BackupsUnititialized({super.backblazeBucket});
+class BackupsUninitialized extends BackupsState {
+  const BackupsUninitialized({super.backblazeBucket});
   @override
   List<Object> get props => [];
 
@@ -62,14 +61,14 @@ class BackupsUnititialized extends BackupsState {
   bool get preventActions => false;
 
   @override
-  BackupsUnititialized copyWith({final BackblazeBucket? backblazeBucket}) =>
-      BackupsUnititialized(
+  BackupsUninitialized copyWith({final BackblazeBucket? backblazeBucket}) =>
+      BackupsUninitialized(
         backblazeBucket: backblazeBucket ?? this.backblazeBucket,
       );
 }
 
 class BackupsInitializing extends BackupsState {
-  BackupsInitializing({super.backblazeBucket});
+  const BackupsInitializing({super.backblazeBucket});
   @override
   List<Object> get props => [];
 
@@ -85,17 +84,14 @@ class BackupsInitialized extends BackupsState {
     final List<Backup> backups = const [],
     final BackupConfiguration? backupConfig,
     super.backblazeBucket,
-  }) : _backupsHashCode = Object.hashAll(backups),
-       _backupConfigHashCode = Object.hashAll([backupConfig]);
+  }) : _backupList = List.unmodifiable(
+         List<Backup>.of(backups)
+           ..sort((final a, final b) => b.time.compareTo(a.time)),
+       ),
+       _backupConfig = backupConfig;
 
-  final int _backupsHashCode;
-  final int _backupConfigHashCode;
-
-  List<Backup> get _backupList =>
-      apiConnectionRepository.apiData.backups.data ?? [];
-
-  BackupConfiguration? get _backupConfig =>
-      apiConnectionRepository.apiData.backupConfig.data;
+  final List<Backup> _backupList;
+  final BackupConfiguration? _backupConfig;
 
   @override
   AutobackupQuotas? get autobackupQuotas => _backupConfig?.autobackupQuotas;
@@ -129,15 +125,7 @@ class BackupsInitialized extends BackupsState {
   bool get preventActions => false;
 
   @override
-  List<Backup> get backups {
-    try {
-      final List<Backup> list = _backupList
-        ..sort((final a, final b) => b.time.compareTo(a.time));
-      return list;
-    } catch (_) {
-      return _backupList;
-    }
-  }
+  List<Backup> get backups => _backupList;
 
   @override
   List<Backup> serviceBackups(final String serviceId) => backups
@@ -145,7 +133,7 @@ class BackupsInitialized extends BackupsState {
       .toList(growable: false);
 
   @override
-  List<Object> get props => [_backupsHashCode, _backupConfigHashCode];
+  List<Object?> get props => [_backupList, _backupConfig, backblazeBucket];
 
   @override
   BackupsState copyWith({required final BackblazeBucket backblazeBucket}) =>
@@ -167,7 +155,4 @@ class BackupsBusy extends BackupsInitialized {
   @override
   @Deprecated('Infer the prevent actions status from state')
   bool get preventActions => true;
-
-  @override
-  List<Object> get props => [];
 }

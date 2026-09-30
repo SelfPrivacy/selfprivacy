@@ -7,11 +7,11 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/devices_repository.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 import '../../../helpers/fixtures/json_fixture.dart';
@@ -64,6 +64,13 @@ void main() {
       expect(connection.stores.map((final store) => store.name), [
         'devices',
         'groups',
+        'serverJobs',
+        'users',
+        'settings',
+        'services',
+        'backups',
+        'backupConfig',
+        'volumes',
       ]);
       final version = Completer<String?>();
       when(api.getApiVersion).thenAnswer((_) => version.future);
@@ -209,5 +216,17 @@ void main() {
       () => DevicesRepository(connection: connection, store: foreign),
       throwsArgumentError,
     );
+  });
+
+  test('disposal resolves a command waiting for version discovery', () async {
+    final version = Completer<String?>();
+    when(api.getApiVersion).thenAnswer((_) => version.future);
+    final pending = connection.settings.setServerTimezone('UTC');
+    connection.dispose();
+    final result = await pending.timeout(const Duration(seconds: 1));
+    expect(result.outcome, ServerMutationOutcome.indeterminate);
+    version.complete('3.6.0');
+    await pumpEventQueue();
+    verifyNever(() => api.setTimezone(any()));
   });
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:selfprivacy/logic/connection/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 
 enum ReachabilityStatus {
   checking,

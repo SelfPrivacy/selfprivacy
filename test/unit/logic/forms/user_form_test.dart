@@ -111,10 +111,10 @@ void main() {
       test('submits the editable fields of an existing user', () async {
         User? submitted;
         final form = _form(
-          initialUser: const User.fake(
+          initialUser: User.fake(
             login: 'alice',
             displayName: 'Alice',
-            directmemberof: ['sp.admins', 'service.group'],
+            directmemberof: const ['sp.admins', 'service.group'],
           ),
           onSubmit: (final user) async => submitted = user,
         );

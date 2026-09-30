@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
-import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/require_server_api_data.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
 import '../../../fakes/graphql/link_transport.dart';
+import '../../../helpers/connection_fixture.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 
 void main() {
@@ -316,7 +315,7 @@ void main() {
     expect(await api.getApiVersion(), isNull);
   });
 
-  test('legacy cache retains settings when a strict read fails', () async {
+  test('domain cache retains settings when a strict read fails', () async {
     var fail = false;
     final api = ServerApi(
       transport: transportWithLink(
@@ -331,15 +330,17 @@ void main() {
         ),
       ),
     );
-    final settings = ApiData(api).settings;
-    await settings.refetchData(Version(3, 9, 0), () {});
-    final previous = settings.data;
+    final connection = seededConnection(api);
+    addTearDown(connection.dispose);
+    final settings = connection.settings;
+    await settings.refresh();
+    final previous = settings.value.data;
     fail = true;
     settings.invalidate();
-    await settings.refetchData(Version(3, 9, 0), () {});
-    expect(settings.data, same(previous));
-    expect(settings.data!.timezone, 'Europe/Moscow');
-    expect(settings.lastError, isA<OperationException>());
+    await settings.refresh();
+    expect(settings.value.data, same(previous));
+    expect(settings.value.data!.timezone, 'Europe/Moscow');
+    expect(settings.value.lastError, isA<OperationException>());
   });
 
   test('response validation identifies absent data', () {

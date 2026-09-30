@@ -39,7 +39,7 @@ class _TestRouter extends RootStackRouter {
 void main() {
   setUpAll(() async {
     await setUpWidgetTestHarness();
-    registerFallbackValue(const User.fake());
+    registerFallbackValue(User.fake());
   });
 
   late _MockApiConnectionRepository repository;
@@ -55,13 +55,14 @@ void main() {
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
-    final apiData = ApiData(aServerApi());
+    final apiData = ApiData(aServerApi(), connection: () => null);
     apiData.groups.data = const [];
-    apiData.users.data = const [User.fake(login: 'alice')];
     when(() => repository.apiData).thenReturn(apiData);
     getIt.registerSingleton<ApiConnectionRepository>(repository);
 
-    when(() => usersBloc.state).thenReturn(UsersLoaded(users: const []));
+    when(
+      () => usersBloc.state,
+    ).thenReturn(UsersLoaded(users: [User.fake(login: 'alice')]));
     when(
       () => usersBloc.stream,
     ).thenAnswer((_) => const Stream<UsersState>.empty());
@@ -84,10 +85,10 @@ void main() {
   testWidgets('editing a user pops the form after a successful update', (
     final tester,
   ) async {
-    const user = User.fake(
+    final user = User.fake(
       login: 'alice',
       displayName: 'Alice',
-      directmemberof: ['sp.full_users'],
+      directmemberof: const ['sp.full_users'],
     );
     final router = _TestRouter(GlobalKey<NavigatorState>());
     when(

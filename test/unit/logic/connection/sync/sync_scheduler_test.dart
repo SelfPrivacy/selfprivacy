@@ -6,17 +6,17 @@ import 'package:graphql/client.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/app_lifecycle.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
-import 'package:selfprivacy/logic/connection/network_connectivity.dart';
-import 'package:selfprivacy/logic/connection/reachability.dart';
-import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
-import 'package:selfprivacy/logic/connection/server_state_cache.dart';
-import 'package:selfprivacy/logic/connection/sync_scheduler.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
 
-import '../../../fakes/graphql/link_transport.dart';
-import '../../../helpers/fixtures/json_fixture.dart';
+import '../../../../fakes/graphql/link_transport.dart';
+import '../../../../helpers/fixtures/json_fixture.dart';
 
 class _Lifecycle extends Mock implements AppLifecycle {}
 

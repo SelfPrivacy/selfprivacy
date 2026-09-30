@@ -14,8 +14,8 @@ Widget sshKeysCardEmpty(final BuildContext context) => CatalogCase(
   width: 560,
   height: 440,
   builder: (final context, final fixtures, final controller, final update) =>
-      const SshKeysCard(
-        user: User.fake(login: 'alice', sshKeys: []),
+      SshKeysCard(
+        user: User.fake(login: 'alice', sshKeys: const []),
       ),
 );
 
@@ -28,8 +28,8 @@ Widget sshKeysCardKeys(final BuildContext context) => CatalogCase(
   width: 560,
   height: 440,
   builder: (final context, final fixtures, final controller, final update) =>
-      const SshKeysCard(
-        user: User.fake(login: 'alice', sshKeys: [demoKey]),
+      SshKeysCard(
+        user: User.fake(login: 'alice', sshKeys: const [demoKey]),
       ),
 );
 
@@ -42,7 +42,7 @@ Widget sshKeysCardSSHDisabled(final BuildContext context) => CatalogCase(
   width: 560,
   height: 440,
   builder: (final context, final fixtures, final controller, final update) =>
-      const SshKeysCard(
-        user: User.fake(login: 'alice', sshKeys: [demoKey]),
+      SshKeysCard(
+        user: User.fake(login: 'alice', sshKeys: const [demoKey]),
       ),
 );

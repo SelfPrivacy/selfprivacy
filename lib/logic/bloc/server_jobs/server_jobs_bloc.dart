@@ -77,17 +77,20 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
   }
 
   Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
     final fallbackDrive =
         getIt<ApiConnectionRepository>().apiData.volumes.data
             ?.where((final drive) => drive.root)
             .firstOrNull
             ?.name ??
         'sda1';
-    final result = await getIt<ApiConnectionRepository>().api.migrateToBinds(
+    final result = await connection.jobs.migrateToBinds(
       serviceToDisk,
       fallbackDrive,
     );
-    getIt<ApiConnectionRepository>().applyServerJobMutation(result);
     if (result.outcome != ServerMutationOutcome.confirmed ||
         result.payload.value == null) {
       getIt<NavigationService>().showSnackBar(

@@ -83,20 +83,13 @@ class ServicesLoaded extends ServicesState {
   ServicesLoaded({
     required final List<Service> services,
     required super.lockedServices,
-  }) : _servicesHachCode = Object.hashAll([...services]);
-
-  final int _servicesHachCode;
-
-  final apiConnectionRepository = getIt<ApiConnectionRepository>();
-
-  List<Service> get _services =>
-      apiConnectionRepository.apiData.services.data ?? [];
+  }) : services = List.unmodifiable(services);
 
   @override
-  List<Service> get services => _services;
+  final List<Service> services;
 
   @override
-  List<Object?> get props => [_servicesHachCode, _lockedServices];
+  List<Object?> get props => [services, _lockedServices];
 
   @override
   ServicesLoaded copyWith({

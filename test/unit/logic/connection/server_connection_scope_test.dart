@@ -52,7 +52,19 @@ void main() {
       await pumpEventQueue();
       expect(scope.current, same(first));
       expect(bindings, hasLength(1));
-      expect(first.stores.map((final store) => store.name), ['devices']);
+      expect(
+        first.stores.map((final store) => store.name),
+        containsAll([
+          'devices',
+          'users',
+          'serverJobs',
+          'settings',
+          'services',
+          'backups',
+          'backupConfig',
+          'volumes',
+        ]),
+      );
     },
   );
 

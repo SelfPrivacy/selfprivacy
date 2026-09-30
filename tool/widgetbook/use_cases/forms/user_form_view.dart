@@ -57,10 +57,10 @@ CatalogCase _example(final String variant) => CatalogCase(
         create: (final scope) {
           final form = UserForm(
             initialUser: variant == 'Edit'
-                ? const User.fake(
+                ? User.fake(
                     login: 'alice',
                     displayName: 'Alice',
-                    directmemberof: ['sp.admins'],
+                    directmemberof: const ['sp.admins'],
                   )
                 : null,
             isLoginRegistered: (final login) => login == 'existing_user',

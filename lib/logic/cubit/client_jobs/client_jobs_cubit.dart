@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -31,8 +32,12 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   StreamSubscription? _apiDataSubscription;
+  ServerConnection? _jobConnection;
 
   void _handleServerJobs(final List<ServerJob> jobs) {
+    if (_jobConnection?.isAttached != true) {
+      return;
+    }
     if (state is! JobsStateLoading) {
       return;
     }
@@ -62,6 +67,10 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> rebootServer() async {
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
     if (state is JobsStateEmpty) {
       emit(
         JobsStateLoading(
@@ -70,7 +79,7 @@ class JobsCubit extends Cubit<JobsState> {
           const [],
         ),
       );
-      final rebootResult = await getIt<ApiConnectionRepository>().api.reboot();
+      final rebootResult = await connection.volumes.reboot();
       if (rebootResult.outcome == ServerMutationOutcome.confirmed) {
         emit(
           JobsStateFinished(
@@ -102,7 +111,12 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> upgradeServer() async {
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
     if (state is JobsStateEmpty) {
+      _jobConnection = connection;
       emit(
         JobsStateLoading(
           [UpgradeServerJob(status: JobStatusEnum.running)],
@@ -110,8 +124,7 @@ class JobsCubit extends Cubit<JobsState> {
           const [],
         ),
       );
-      final result = await getIt<ApiConnectionRepository>().api.upgrade();
-      getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+      final result = await connection.jobs.upgrade();
       if (result.outcome == ServerMutationOutcome.confirmed &&
           result.payload.value != null) {
         emit(
@@ -157,8 +170,13 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> applyAll() async {
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
     if (state is JobsStateWithJobs) {
-      final List<ClientJob> jobs = (state as JobsStateWithJobs).clientJobList;
+      _jobConnection = connection;
+      final jobs = [...(state as JobsStateWithJobs).clientJobList];
 
       final rebuildRequired = jobs.any((final job) => job.requiresRebuild);
       final dnsUpdateRequired = jobs.any((final job) => job.requiresDnsUpdate);
@@ -172,9 +190,13 @@ class JobsCubit extends Cubit<JobsState> {
       await Future<void>.delayed(Duration.zero);
 
       final List<DnsRecord> oldDnsRecords =
-          await getIt<ApiConnectionRepository>().api.getDnsRecords() ?? [];
+          await connection.api.getDnsRecords() ?? [];
 
       for (final ClientJob job in jobs) {
+        if (!connection.isAttached) {
+          emit((state as JobsStateLoading).finished());
+          return;
+        }
         if (job is UpdateDnsRecordsJob) {
           continue;
         }
@@ -225,15 +247,18 @@ class JobsCubit extends Cubit<JobsState> {
       }
 
       if (dnsUpdateRequired) {
-        await updateDnsRecords(oldDnsRecords);
+        if (!connection.isAttached) {
+          emit((state as JobsStateLoading).finished());
+          return;
+        }
+        await updateDnsRecords(oldDnsRecords, connection: connection);
       }
 
       if (!rebuildRequired) {
         emit((state as JobsStateLoading).finished());
         return;
       }
-      final rebuildResult = await getIt<ApiConnectionRepository>().api.apply();
-      getIt<ApiConnectionRepository>().applyServerJobMutation(rebuildResult);
+      final rebuildResult = await connection.jobs.apply();
       if (rebuildResult.outcome == ServerMutationOutcome.confirmed) {
         if (rebuildResult.payload.value != null) {
           emit(
@@ -259,7 +284,14 @@ class JobsCubit extends Cubit<JobsState> {
     }
   }
 
-  Future<void> updateDnsRecords(final List<DnsRecord> oldDnsRecords) async {
+  Future<void> updateDnsRecords(
+    final List<DnsRecord> oldDnsRecords, {
+    final ServerConnection? connection,
+  }) async {
+    final binding = connection ?? getIt<ApiConnectionRepository>().connection;
+    if (binding == null || !binding.isAttached) {
+      return;
+    }
     emit(
       (state as JobsStateLoading).updateJobStatus(
         UpdateDnsRecordsJob.jobId,
@@ -267,7 +299,10 @@ class JobsCubit extends Cubit<JobsState> {
       ),
     );
     final List<DnsRecord> newDnsRecords =
-        await getIt<ApiConnectionRepository>().api.getDnsRecords() ?? [];
+        await binding.api.getDnsRecords() ?? [];
+    if (!binding.isAttached) {
+      return;
+    }
 
     // If any of the records have a null content, we don't want to update
     // the DNS records
@@ -319,7 +354,12 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> collectNixGarbage() async {
+    final connection = getIt<ApiConnectionRepository>().connection;
+    if (connection == null) {
+      return;
+    }
     if (state is JobsStateEmpty) {
+      _jobConnection = connection;
       emit(
         JobsStateLoading(
           [CollectNixGarbageJob(status: JobStatusEnum.running)],
@@ -327,9 +367,7 @@ class JobsCubit extends Cubit<JobsState> {
           const [],
         ),
       );
-      final result = await getIt<ApiConnectionRepository>().api
-          .collectNixGarbage();
-      getIt<ApiConnectionRepository>().applyServerJobMutation(result);
+      final result = await connection.jobs.collectNixGarbage();
       if (result.outcome == ServerMutationOutcome.confirmed &&
           result.payload.value != null) {
         emit(
@@ -385,8 +423,9 @@ class JobsCubit extends Cubit<JobsState> {
       emit(JobsStateEmpty());
     }
     if (rebuildJobUid != null) {
-      await getIt<ApiConnectionRepository>().removeServerJob(rebuildJobUid);
+      await _jobConnection?.jobs.removeJob(rebuildJobUid);
     }
+    _jobConnection = null;
   }
 
   @override

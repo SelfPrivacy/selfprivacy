@@ -16,7 +16,7 @@ Widget newSshKeyModalEmpty(final BuildContext context) => CatalogCase(
   height: 650,
   builder: (final context, final fixtures, final controller, final update) =>
       NewSshKeyModal(
-        user: const User.fake(login: 'alice'),
+        user: User.fake(login: 'alice'),
         scrollController: controller,
       ),
 );
@@ -32,7 +32,7 @@ Widget newSshKeyModalValidKey(final BuildContext context) => CatalogCase(
   height: 650,
   builder: (final context, final fixtures, final controller, final update) =>
       NewSshKeyModal(
-        user: const User.fake(login: 'alice'),
+        user: User.fake(login: 'alice'),
         scrollController: controller,
       ),
 );
@@ -48,7 +48,7 @@ Widget newSshKeyModalInvalidKey(final BuildContext context) => CatalogCase(
   height: 650,
   builder: (final context, final fixtures, final controller, final update) =>
       NewSshKeyModal(
-        user: const User.fake(login: 'alice'),
+        user: User.fake(login: 'alice'),
         scrollController: controller,
       ),
 );

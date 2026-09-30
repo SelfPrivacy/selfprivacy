@@ -25,7 +25,7 @@ void main() {
   setUp(() {
     repository = _Repository();
     api = _Api();
-    data = ApiData(api);
+    data = ApiData(api, connection: () => null);
     when(() => repository.api).thenReturn(api);
     when(() => repository.apiData).thenReturn(data);
     when(() => repository.dataStream).thenAnswer((_) => const Stream.empty());

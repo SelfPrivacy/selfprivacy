@@ -56,7 +56,7 @@ void main() {
   setUp(() async {
     await getIt.reset();
     repository = _MockApiConnectionRepository();
-    apiData = ApiData(aServerApi());
+    apiData = ApiData(aServerApi(), connection: () => null);
     usersBloc = _MockUsersBloc();
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
@@ -141,11 +141,10 @@ void main() {
   testWidgets('shows an empty state for a root-only user list', (
     final tester,
   ) async {
-    const rootUser = User.fake(login: 'root', type: UserType.root);
-    apiData.users.data = const [rootUser];
+    final rootUser = User.fake(login: 'root', type: UserType.root);
     when(
       () => usersBloc.state,
-    ).thenReturn(UsersLoaded(users: const [rootUser]));
+    ).thenReturn(UsersLoaded(users: [rootUser]));
     final router = _TestRouter(GlobalKey<NavigatorState>());
 
     await pumpRouter(tester, router);
@@ -176,9 +175,8 @@ void main() {
   });
 
   testWidgets('shows a loaded user', (final tester) async {
-    const user = User.fake(login: 'alice');
-    apiData.users.data = const [user];
-    when(() => usersBloc.state).thenReturn(UsersLoaded(users: const [user]));
+    final user = User.fake(login: 'alice');
+    when(() => usersBloc.state).thenReturn(UsersLoaded(users: [user]));
     final router = _TestRouter(GlobalKey<NavigatorState>());
 
     await pumpRouter(tester, router);

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/logic/connection/app_lifecycle.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 
 class _Binding extends Mock implements WidgetsBinding {}
 

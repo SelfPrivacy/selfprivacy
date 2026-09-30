@@ -2,12 +2,9 @@ part of 'users_bloc.dart';
 
 sealed class UsersState extends Equatable {
   UsersState({required final List<User> users})
-    : _hashCode = Object.hashAll(users);
+    : users = List.unmodifiable(users);
 
-  final int _hashCode;
-
-  List<User> get users =>
-      getIt<ApiConnectionRepository>().apiData.users.data ?? const [];
+  final List<User> users;
 
   User get rootUser =>
       users.firstWhere((final user) => user.type == UserType.root);
@@ -59,26 +56,26 @@ class UsersInitial extends UsersState {
   UsersInitial() : super(users: const []);
 
   @override
-  List<Object> get props => [_hashCode];
+  List<Object> get props => [users];
 }
 
 class UsersRefreshing extends UsersState {
   UsersRefreshing({required super.users});
 
   @override
-  List<Object> get props => [_hashCode];
+  List<Object> get props => [users];
 }
 
 class UsersLoaded extends UsersState {
   UsersLoaded({required super.users});
 
   @override
-  List<Object> get props => [_hashCode];
+  List<Object> get props => [users];
 }
 
 class UsersError extends UsersState {
   UsersError() : super(users: const []);
 
   @override
-  List<Object> get props => [_hashCode];
+  List<Object> get props => [users];
 }

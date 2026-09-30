@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:pool/pool.dart';
-import 'package:selfprivacy/logic/connection/app_lifecycle.dart';
-import 'package:selfprivacy/logic/connection/cached_value.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
-import 'package:selfprivacy/logic/connection/reachability.dart';
-import 'package:selfprivacy/logic/connection/server_command_coordinator.dart';
-import 'package:selfprivacy/logic/connection/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 
 class InterestHandle {
   InterestHandle._(this._release);

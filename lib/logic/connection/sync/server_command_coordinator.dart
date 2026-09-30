@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/domain_store.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 
 /// Identity of one server's cache and transport generation.
 /// Create a new instance when either binding is replaced, even for the same UUID.

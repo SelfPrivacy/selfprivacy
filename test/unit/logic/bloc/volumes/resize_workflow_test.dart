@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
+import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
 import '../../../../helpers/widget_harness.dart';
@@ -41,11 +42,16 @@ void main() {
     navigation = _Navigation();
     provider = _Provider();
     final resources = _Resources();
-    data = ApiData(api);
-    data.volumes.data = Query$GetServerDiskVolumes.fromJson(
-      loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
-          as Map<String, dynamic>,
-    ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList();
+    final connection = seededConnection(api);
+    addTearDown(connection.dispose);
+    when(() => repository.connection).thenReturn(connection);
+    data = ApiData(api, connection: () => connection);
+    connection.volumesStore.push(
+      Query$GetServerDiskVolumes.fromJson(
+        loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
+            as Map<String, dynamic>,
+      ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList(),
+    );
     when(() => repository.api).thenReturn(api);
     when(() => repository.apiData).thenReturn(data);
     when(() => repository.dataStream).thenAnswer((_) => const Stream.empty());

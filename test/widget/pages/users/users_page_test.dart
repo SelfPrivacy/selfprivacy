@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
-import '../../../helpers/fixtures/graphql_fixtures.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 import '../../../helpers/widget_harness.dart';
 
@@ -56,7 +55,7 @@ void main() {
   setUp(() async {
     await getIt.reset();
     repository = _MockApiConnectionRepository();
-    apiData = ApiData(aServerApi(), connection: () => null);
+    apiData = ApiData(connection: () => null);
     usersBloc = _MockUsersBloc();
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
@@ -142,9 +141,7 @@ void main() {
     final tester,
   ) async {
     final rootUser = User.fake(login: 'root', type: UserType.root);
-    when(
-      () => usersBloc.state,
-    ).thenReturn(UsersLoaded(users: [rootUser]));
+    when(() => usersBloc.state).thenReturn(UsersLoaded(users: [rootUser]));
     final router = _TestRouter(GlobalKey<NavigatorState>());
 
     await pumpRouter(tester, router);

@@ -14,5 +14,9 @@ abstract class GraphQLApiMap {
 
   Future<GraphQLClient> getSubscriptionClient({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
-  }) async => transport.subscriptionClient(onConnectionLost: onConnectionLost);
+    final void Function({required bool connected})? onConnectionState,
+  }) async => transport.subscriptionClient(
+    onConnectionLost: onConnectionLost,
+    onConnectionState: onConnectionState,
+  );
 }

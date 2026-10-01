@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:pub_semver/pub_semver.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
@@ -12,13 +14,10 @@ import 'package:selfprivacy/logic/connection/repositories/services_repository.da
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
-import 'package:selfprivacy/logic/models/backup.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
-import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/logic/models/service.dart';
 
 /// Owns domain stores and coordinates commands for one server connection.
 class ServerConnection {
@@ -26,73 +25,23 @@ class ServerConnection {
     required this.api,
     required this.origin,
     required final ServerStateOrigin? Function() currentOrigin,
-    final Map<DomainStore<Object>, VersionConstraint> additionalDomains =
-        const {},
+    final DateTime Function()? now,
+    final CacheTimerFactory? createTimer,
   }) : _currentOrigin = currentOrigin {
-    final deviceStore = DomainStore<List<ApiToken>>(
-      name: 'devices',
-      refreshInterval: const Duration(seconds: 60),
-      fetch: () => DevicesRepository.fetch(api),
-    );
-    _domains = {
-      deviceStore: VersionConstraint.parse('>=2.3.0'),
-      ...additionalDomains,
-    };
-    DomainStore<T> domain<T extends Object>(
-      final String name,
-      final Future<T> Function() fetch, {
-      final int seconds = 60,
-      final String version = '>=2.3.0',
-    }) {
-      final store = DomainStore<T>(
-        name: name,
-        fetch: fetch,
-        refreshInterval: Duration(seconds: seconds),
-      );
-      _domains[store] = VersionConstraint.parse(version);
-      return store;
-    }
-
-    final jobsStore = domain<List<ServerJob>>(
-      'serverJobs',
-      () async => List.unmodifiable(await api.getServerJobs()),
-      seconds: 10,
-    );
-    final usersStore = domain<List<User>>(
-      'users',
-      () => UsersRepository.fetch(api),
-    );
-    final settingsStore = domain(
-      'settings',
-      api.getSystemSettings,
-      seconds: 600,
-    );
-    final servicesStore = domain<List<Service>>(
-      'services',
-      () async => List.unmodifiable(await api.getAllServices()),
-      version: '>=2.4.3',
-    );
-    final backupsStore = domain<List<Backup>>(
-      'backups',
-      () async => List.unmodifiable(await api.getBackups()),
-      seconds: 120,
-      version: '>=2.4.2',
-    );
-    final configStore = domain(
-      'backupConfig',
-      api.getBackupsConfiguration,
-      seconds: 120,
-      version: '>=2.4.2',
-    );
-    volumesStore = domain<List<ServerDiskVolume>>(
-      'volumes',
-      () async => List.unmodifiable(await api.getServerDiskVolumes()),
-    );
+    cache = ServerStateCache(api: api, now: now, createTimer: createTimer);
+    final deviceStore = cache.devices;
+    final jobsStore = cache.serverJobs;
+    final usersStore = cache.users;
+    final settingsStore = cache.settings;
+    final servicesStore = cache.services;
+    final backupsStore = cache.backups;
+    final configStore = cache.backupConfig;
+    volumesStore = cache.volumes;
     commands = ServerCommandCoordinator(
       api: api,
       origin: origin,
       currentOrigin: () => isAttached ? origin : null,
-      stores: _domains.keys,
+      stores: cache.stores,
     );
     devices = DevicesRepository(connection: this, store: deviceStore);
     jobs = JobsRepository(connection: this, store: jobsStore);
@@ -105,7 +54,7 @@ class ServerConnection {
       configStore: configStore,
     );
     volumes = VolumesRepository(connection: this, store: volumesStore);
-    for (final store in _domains.keys) {
+    for (final store in cache.stores) {
       _subscriptions.add(
         store.stream.listen((_) {
           if (isAttached) {
@@ -119,7 +68,7 @@ class ServerConnection {
   final ServerApi api;
   final ServerStateOrigin origin;
   final ServerStateOrigin? Function() _currentOrigin;
-  late final Map<DomainStore<Object>, VersionConstraint> _domains;
+  late final ServerStateCache cache;
   late final ServerCommandCoordinator commands;
   late final DevicesRepository devices;
   late final JobsRepository jobs;
@@ -133,13 +82,20 @@ class ServerConnection {
   final _subscriptions = <StreamSubscription<Object?>>[];
   final _refreshes = <DomainStore<Object>, Completer<RefreshResult>>{};
   bool _disposed = false;
-  Future<bool>? _versionRequest;
-  Completer<bool>? _commandVersion;
-  Version? _version;
-  Object? _versionError;
+  SyncScheduler? scheduler;
+
+  void restoreFrom(final ServerConnection previous) {
+    if (origin.serverId != previous.origin.serverId) {
+      throw ArgumentError('Cannot restore another server.');
+    }
+    cache.restoreFrom(previous.cache);
+    users.restoreFrom(previous.users);
+    backups.restoreFrom(previous.backups);
+    jobs.restoreFrom(previous.jobs);
+  }
 
   Stream<void> get changes => _changes.stream;
-  Iterable<DomainStore<Object>> get stores => List.unmodifiable(_domains.keys);
+  Iterable<DomainStore<Object>> get stores => List.unmodifiable(cache.stores);
   bool get isAttached => !_disposed && identical(_currentOrigin(), origin);
 
   Future<ServerMutationResult<T>> mutate<T>({
@@ -148,9 +104,27 @@ class ServerConnection {
     final Iterable<DomainStore<Object>> Function(ServerMutationResult<T>)?
     applyConfirmed,
   }) async {
+    final result = await _mutate(
+      domains: domains,
+      send: (final api) {
+        GraphQLDispatchGuard.current?.check();
+        return send(api);
+      },
+      applyConfirmed: applyConfirmed,
+    );
+    OperationExecution.current?.record(result);
+    return result;
+  }
+
+  Future<ServerMutationResult<T>> _mutate<T>({
+    required final Iterable<DomainStore<Object>> domains,
+    required final Future<ServerMutationResult<T>> Function(ServerApi) send,
+    final Iterable<DomainStore<Object>> Function(ServerMutationResult<T>)?
+    applyConfirmed,
+  }) async {
     final affected = domains.toSet()..forEach(_checkOwner);
-    if (isAttached && _version == null) {
-      await _prepareCommandVersion();
+    if (isAttached && cache.apiVersion.value.data == null) {
+      await _refreshVersion();
     }
     if (!isAttached ||
         affected.any(
@@ -176,58 +150,28 @@ class ServerConnection {
         payload: const ServerMutationPayload.unreadable(),
       );
     }
-    return completion.result!;
+    final result = completion.result!;
+    return result;
   }
 
-  Future<bool> _prepareCommandVersion() {
-    final active = _commandVersion;
-    if (active != null) {
-      return active.future;
-    }
-    final completion = _commandVersion = Completer<bool>();
-    final discovery = _versionRequest ??= _discoverVersion().whenComplete(
-      () => _versionRequest = null,
-    );
-    unawaited(
-      discovery.then((final supported) {
-        if (!completion.isCompleted) {
-          completion.complete(supported);
-          _commandVersion = null;
-        }
-      }),
-    );
-    return completion.future;
-  }
+  Future<RefreshResult> _refreshVersion() => cache.apiVersion.refresh(
+    force: cache.apiVersion.value.lastError != null,
+    acceptResult: () => isAttached,
+  );
 
   CachedValue<T> snapshot<T extends Object>(final DomainStore<T> store) {
     _checkOwner(store);
-    return _versionError == null
+    final versionError = cache.apiVersion.value.lastError;
+    return versionError == null
         ? store.value
-        : store.value.copyWith(lastError: () => _versionError);
+        : store.value.copyWith(lastError: () => versionError);
   }
 
   void setVersion(final Version version) {
     if (!isAttached) {
       return;
     }
-    _version = version;
-    _versionError = null;
-    for (final entry in _domains.entries) {
-      entry.key.setSupport(
-        entry.value.allows(version)
-            ? DomainSupport.supported
-            : DomainSupport.unsupported,
-      );
-    }
-    _changes.add(null);
-  }
-
-  void versionUnavailable() {
-    if (!isAttached) {
-      return;
-    }
-    _versionError = StateError('Server API version unavailable.');
-    _changes.add(null);
+    cache.setVersion(version);
   }
 
   /// Shares pending reads per store. Returns deferred while a command owns it.
@@ -238,6 +182,9 @@ class ServerConnection {
     _checkOwner(store);
     if (!isAttached) {
       return Future.value(RefreshResult.disposed);
+    }
+    if (scheduler case final active?) {
+      return active.refresh(store.name);
     }
     if (force) {
       store.requestReconciliation();
@@ -275,14 +222,16 @@ class ServerConnection {
     final DomainStore<Object> store,
     final bool force,
   ) async {
-    if (_version == null || _versionError != null) {
-      final supported = await (_versionRequest ??= _discoverVersion()
-          .whenComplete(() => _versionRequest = null));
+    if (store != cache.apiVersion &&
+        (cache.apiVersion.value.data == null ||
+            cache.apiVersion.value.lastError != null)) {
+      final versionResult = await _refreshVersion();
       if (!isAttached) {
         return RefreshResult.disposed;
       }
-      if (!supported) {
-        return RefreshResult.failed;
+      if (versionResult != RefreshResult.applied &&
+          versionResult != RefreshResult.current) {
+        return versionResult;
       }
     }
     if (!isAttached) {
@@ -303,25 +252,8 @@ class ServerConnection {
     return result;
   }
 
-  Future<bool> _discoverVersion() async {
-    try {
-      final version = await api.getApiVersion();
-      if (!isAttached) {
-        return false;
-      }
-      if (version != null) {
-        setVersion(Version.parse(version));
-        return true;
-      }
-    } catch (_) {
-      // Do not expose raw API errors to consumers.
-    }
-    versionUnavailable();
-    return false;
-  }
-
   void _checkOwner(final DomainStore<Object> store) {
-    if (!_domains.containsKey(store)) {
+    if (!cache.stores.contains(store)) {
       throw ArgumentError('Store belongs to another connection.');
     }
   }
@@ -332,17 +264,14 @@ class ServerConnection {
       return;
     }
     _disposed = true;
-    _commandVersion?.complete(false);
-    _commandVersion = null;
+    scheduler?.dispose();
     for (final completion in _refreshes.values) {
       completion.complete(RefreshResult.disposed);
     }
     _refreshes.clear();
     commands.dispose();
     jobs.dispose();
-    for (final store in _domains.keys) {
-      store.dispose();
-    }
+    cache.dispose();
     for (final subscription in _subscriptions) {
       unawaited(subscription.cancel());
     }

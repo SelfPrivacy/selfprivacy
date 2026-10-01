@@ -25,6 +25,11 @@ class BackupsRepository {
   final _removed = <String>{};
   int _removedReadRevision = 0;
 
+  void restoreFrom(final BackupsRepository previous) {
+    _removed.addAll(previous.confirmedRemovedSnapshotIds);
+    _removedReadRevision = store.readRevision;
+  }
+
   CachedValue<List<Backup>> get value => connection.snapshot(store);
   CachedValue<BackupConfiguration> get configValue =>
       connection.snapshot(configStore);

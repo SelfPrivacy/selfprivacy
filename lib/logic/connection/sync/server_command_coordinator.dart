@@ -119,10 +119,13 @@ class ServerCommandCoordinator {
     }
     final completion = Completer<CommandCompletion<T>>();
     final remote = Completer<ServerMutationResult<T>?>();
+    final boundSend = Zone.current.bindUnaryCallback(send);
     late final _Command command;
     command = _Command(
       affected,
-      () => unawaited(_run(command, send, applyConfirmed, completion, remote)),
+      () => unawaited(
+        _run(command, boundSend, applyConfirmed, completion, remote),
+      ),
       () {
         if (!completion.isCompleted) {
           completion.complete(

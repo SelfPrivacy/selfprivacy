@@ -105,7 +105,7 @@ void main() {
     final state = cache(tester);
     const intervals = {
       'apiVersion': 60,
-      'serverJobs': 10,
+      'serverJobs': 60,
       'backupConfig': 120,
       'backups': 120,
       'services': 60,
@@ -130,11 +130,11 @@ void main() {
       api: api(),
       staleAfterOverrides: const {
         'apiVersion': Duration(minutes: 5),
-        'serverJobs': Duration(seconds: 45),
+        'serverJobs': Duration(seconds: 145),
       },
     );
     expect(state.apiVersion.staleAfter, const Duration(minutes: 5));
-    expect(state.serverJobs.staleAfter, const Duration(seconds: 45));
+    expect(state.serverJobs.staleAfter, const Duration(seconds: 145));
     state.dispose();
     expect(
       () => ServerStateCache(

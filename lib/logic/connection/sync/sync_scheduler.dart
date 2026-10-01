@@ -140,6 +140,7 @@ class SyncScheduler {
   bool _queued = false;
   bool _wasAllowed = false;
   bool _waitingForPermit = false;
+  bool _suspended = false;
   int _forcedStreak = 0;
 
   List<SyncPoolActivity?> get poolStatus => _poolStatus;
@@ -148,10 +149,19 @@ class SyncScheduler {
       _poolStatusChanges.stream;
 
   bool get _allowed =>
+      !_suspended &&
       _lifecycle.isForeground &&
       !_reachability.isPaused &&
       _commands.isAttached &&
       _reachability.current == ReachabilityStatus.reachable;
+
+  void setSuspended({required final bool suspended}) {
+    if (_disposed || _suspended == suspended) {
+      return;
+    }
+    _suspended = suspended;
+    _environmentChanged();
+  }
 
   void start() {
     _ensureOpen();

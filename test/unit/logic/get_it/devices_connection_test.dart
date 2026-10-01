@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
@@ -46,7 +45,7 @@ void main() {
           as Map<String, dynamic>,
     ).api.devices.map(ApiToken.fromGraphQL).toList();
     api = _Api();
-    when(api.getApiVersion).thenAnswer((_) async => '3.6.0');
+    when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
     repository = ApiConnectionRepository(resourcesModel: resources, api: api);
   });
@@ -121,7 +120,7 @@ void main() {
           repository.dispose();
       }
       await pumpEventQueue();
-      expect((await deleting)!.application, CommandApplication.detached);
+      expect(await deleting, isNull);
       expect(await reading, RefreshResult.disposed);
       mutation.complete(
         ServerMutationResult(
@@ -136,8 +135,8 @@ void main() {
   }
 
   test('a late version response does not start a new session read', () async {
-    final version = Completer<String?>();
-    when(api.getApiVersion).thenAnswer((_) => version.future);
+    final version = Completer<String>();
+    when(api.fetchApiVersion).thenAnswer((_) => version.future);
     final reading = repository.refreshDevices();
     await repository.clear();
     expect(await reading, RefreshResult.disposed);

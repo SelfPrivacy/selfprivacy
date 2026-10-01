@@ -16,6 +16,7 @@ import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dar
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';
+import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _MockRepository extends Mock implements ApiConnectionRepository {}
@@ -57,6 +58,8 @@ void main() {
     devices = connection.devices;
     await devices.refresh();
     when(() => repository.api).thenReturn(api);
+    final hub = fixtureHub(api);
+    when(() => repository.hub).thenReturn(hub);
     when(() => repository.devicesSnapshot).thenAnswer((_) => devices.value);
     when(() => repository.devicesStream).thenAnswer((_) => devices.changes);
     when(

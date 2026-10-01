@@ -21,6 +21,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
+import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _Repository extends Mock implements ApiConnectionRepository {}
@@ -51,7 +52,8 @@ void main() {
       currentOrigin: () => origin,
     )..setVersion(Version(3, 0, 0));
     when(() => repository.connection).thenReturn(connection);
-    data = ApiData(api, connection: () => connection);
+    stubOperations(repository, connection);
+    data = ApiData(connection: () => connection);
     connection.services.store.push(
       Query$AllServices.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['AllServices']

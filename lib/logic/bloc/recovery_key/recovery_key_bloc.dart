@@ -5,6 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
@@ -46,13 +49,31 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
   Future<String> generateRecoveryKey({
     final DateTime? expirationDate,
     final int? numberOfUses,
+    final SecretRecipient? recipient,
   }) async {
-    final response = await getIt<ApiConnectionRepository>().api
-        .generateRecoveryToken(expirationDate, numberOfUses);
+    final target = recipient ?? SecretRecipient();
+    final response = await target.receive(
+      getIt<ApiConnectionRepository>().hub.submit(
+        OperationKind.generateRecoveryKey,
+        (final owner) => target.protect(() async {
+          final response = await owner.api.generateRecoveryToken(
+            expirationDate,
+            numberOfUses,
+          );
+          OperationExecution.current?.record(response);
+          if (response.outcome == ServerMutationOutcome.confirmed) {
+            owner.cache.recoveryKeyStatus.invalidate();
+          }
+          return response;
+        }),
+      ),
+    );
+    if (response == null) {
+      throw GenerationError('server_mutation.not_sent');
+    }
     final secret = response.confirmedSecret;
     if (secret != null) {
-      getIt<ApiConnectionRepository>().apiData.recoveryKeyStatus.invalidate();
-      unawaited(getIt<ApiConnectionRepository>().reload(null));
+      unawaited(getIt<ApiConnectionRepository>().refreshRecoveryKeyStatus());
       return secret;
     } else {
       throw GenerationError(serverMutationMessage(response, sensitive: true));
@@ -64,8 +85,7 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     final Emitter<RecoveryKeyState> emit,
   ) async {
     emit(RecoveryKeyRefreshing(keyStatus: state._status));
-    getIt<ApiConnectionRepository>().apiData.recoveryKeyStatus.invalidate();
-    await getIt<ApiConnectionRepository>().reload(null);
+    await getIt<ApiConnectionRepository>().refreshRecoveryKeyStatus();
   }
 
   @override

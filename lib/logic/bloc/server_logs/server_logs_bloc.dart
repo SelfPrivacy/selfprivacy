@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 
 part 'server_logs_event.dart';
@@ -13,7 +14,17 @@ part 'server_logs_state.dart';
 
 class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   ServerLogsBloc() : super(ServerLogsInitial()) {
+    final hub = getIt<ApiConnectionRepository>().hub;
+    _connectionSubscription = hub.changes.listen((_) {
+      if (!isClosed && hub.canRead && _deferredRead != null) {
+        final event = _deferredRead!;
+        _deferredRead = null;
+        add(event);
+      }
+    });
     on<ServerLogsFetch>((final event, final emit) async {
+      _deferredRead = null;
+      final previous = state;
       emit(ServerLogsLoading());
       final String? slice = event.serviceId != null
           ? '${event.serviceId?.replaceAll('-', '_')}.slice'
@@ -40,11 +51,16 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         if (_apiLogsSubscription != null) {
           await _apiLogsSubscription?.cancel();
         }
-        _apiLogsSubscription = getIt<ApiConnectionRepository>().api
-            .getServerLogsStream()
+        _apiLogsSubscription = getIt<ApiConnectionRepository>().hub
+            .logs()
             .listen((final ServerLogEntry logEntry) {
               add(ServerLogsGotNewEntry(logEntry));
             });
+      } on GraphQLDispatchDeferred {
+        _deferredRead = event;
+        if (previous is ServerLogsLoaded) {
+          emit(previous);
+        }
       } catch (e) {
         emit(ServerLogsError(e.toString()));
       }
@@ -75,6 +91,8 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
               unit: currentState.unit,
             ),
           );
+        } on GraphQLDispatchDeferred {
+          _deferredRead = event;
         } catch (e) {
           emit(ServerLogsError(e.toString()));
         }
@@ -109,12 +127,15 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     });
 
     on<ServerLogsDisconnect>((final event, final emit) async {
+      _deferredRead = null;
       await _apiLogsSubscription?.cancel();
       emit(ServerLogsInitial());
     });
   }
 
   static const String logsSupportedVersion = '>=3.3.0';
+  ServerLogsEvent? _deferredRead;
+  late final StreamSubscription<void> _connectionSubscription;
 
   Future<(List<ServerLogEntry>, ServerLogsPageMeta)> _getLogs({
     // No more than 50
@@ -144,17 +165,20 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         ),
       );
     }
-    return getIt<ApiConnectionRepository>().api.getServerLogs(
-      limit: limit,
-      upCursor: upCursor,
-      downCursor: downCursor,
-      slice: slice,
-      unit: unit,
+    return getIt<ApiConnectionRepository>().hub.read(
+      (final connection) => connection.api.getServerLogs(
+        limit: limit,
+        upCursor: upCursor,
+        downCursor: downCursor,
+        slice: slice,
+        unit: unit,
+      ),
     );
   }
 
   @override
   Future<void> close() async {
+    await _connectionSubscription.cancel();
     await _apiLogsSubscription?.cancel();
     return super.close();
   }

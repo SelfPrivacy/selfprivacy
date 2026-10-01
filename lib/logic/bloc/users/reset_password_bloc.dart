@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/utils/app_logger.dart';
 
@@ -26,6 +27,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   static const String ssoSupportedVersion = '>=3.6.0';
 
   final User user;
+  SecretRecipient _recipient = SecretRecipient();
 
   Future<void> _mapResetPasswordRequestedToState(
     final RequestNewPassword event,
@@ -61,10 +63,9 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
 
     _logger('Load start');
     final (link, message) = await getIt<ApiConnectionRepository>()
-        .generatePasswordResetLink(user);
+        .generatePasswordResetLink(user, recipient: _recipient);
 
-    _logger('Got link: $link, message: $message');
-    if (state.isLoading) {
+    if (!emit.isDone && state.isLoading) {
       emit(
         link != null
             ? ResetPasswordState(
@@ -81,9 +82,17 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
     final Emitter<ResetPasswordState> emit,
   ) async {
     _logger('Reset password request cancelled');
+    _recipient.dispose();
+    _recipient = SecretRecipient();
     if (state.isLoading) {
       emit(const ResetPasswordState(passwordResetLink: null, isLoading: false));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _recipient.dispose();
+    return super.close();
   }
 }
 

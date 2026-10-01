@@ -7,6 +7,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/bloc/server_operation_handler.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -15,7 +19,6 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/price.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
-
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'volumes_event.dart';
@@ -29,7 +32,10 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     on<VolumesServerLoaded>(_loadState, transformer: droppable());
     on<VolumesServerReset>(_resetState, transformer: droppable());
     on<VolumesServerStateChanged>(_updateState, transformer: droppable());
-    on<VolumeResize>(_resizeVolume, transformer: droppable());
+    on<VolumeResize>(
+      serverOperation(OperationKind.manageVolumes, _resizeVolume),
+      transformer: droppable(),
+    );
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
@@ -190,16 +196,13 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
 
   Future<void> _resizeVolume(
     final VolumeResize event,
-    final Emitter<VolumesState> emit,
+    final ServerConnection connection,
+    final void Function(VolumesState) emit,
   ) async {
     if (state is! VolumesLoaded) {
       return;
     }
     if (!(_serverProvider()?.isAuthorized ?? false)) {
-      return;
-    }
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
       return;
     }
     getIt<NavigationService>().showSnackBar(
@@ -216,6 +219,9 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     final resizedResult = await _serverProvider()!.resizeVolume(
       event.volume.providerVolume!,
       event.newSize,
+    );
+    OperationExecution.current?.recordCompletion(
+      succeeded: resizedResult.success && resizedResult.data,
     );
 
     if (!resizedResult.success || !resizedResult.data) {

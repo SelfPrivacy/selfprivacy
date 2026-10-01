@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/api_config.dart';
 import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/get_it/console_model.dart';
@@ -20,11 +21,15 @@ GraphQLTransport createGraphQLTransport({
   required final GraphQLDomainProvider domainProvider,
   final GraphQLTokenProvider? tokenProvider,
   final GraphQLAuthFailureHandler? onAuthFailure,
+  final void Function(GraphQLTransportEvent)? onEvent,
+  final void Function()? beforeRequest,
   final TlsPolicy tlsPolicy = TlsPolicy.strict,
 }) => GraphQLTransport(
   domainProvider: domainProvider,
   tokenProvider: tokenProvider,
   onAuthFailure: onAuthFailure,
+  onEvent: onEvent,
+  beforeRequest: beforeRequest,
   localeProvider: () => getIt<ApiConfigModel>().localeCode,
   tlsContext: getIt<TlsContext>(),
   tlsPolicy: tlsPolicy,
@@ -49,11 +54,16 @@ Future<void> getItSetup() async {
     ..registerSingleton<WizardDataModel>(WizardDataModel()..init());
 
   final apiConfigModel = ApiConfigModel();
+  final hub = ServerConnectionHub(resourcesModel: resourcesModel);
   getIt
     ..registerSingleton<ApiConfigModel>(apiConfigModel)
+    ..registerSingleton<ServerConnectionHub>(
+      hub,
+      dispose: (final hub) => hub.dispose(),
+    )
     ..registerSingleton<ApiConnectionRepository>(
       // ignore: unawaited_futures
-      ApiConnectionRepository(resourcesModel: resourcesModel)..init(),
+      ApiConnectionRepository(resourcesModel: resourcesModel, hub: hub)..init(),
     );
 
   await getIt.allReady();

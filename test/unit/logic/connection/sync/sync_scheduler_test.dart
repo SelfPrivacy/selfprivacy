@@ -128,6 +128,20 @@ void main() {
     });
   }
 
+  testScheduler('suspension blocks dispatch until resumed', (
+    final tester,
+  ) async {
+    scheduler
+      ..setSuspended(suspended: true)
+      ..start();
+    await tester.pump();
+    expect(calls, isEmpty);
+    expect(await scheduler.refresh('apiVersion'), RefreshResult.deferred);
+    scheduler.setSuspended(suspended: false);
+    await tester.pump();
+    expect(calls, contains('GetApiVersion'));
+  });
+
   testScheduler('pool snapshots are immutable and slots stay stable', (
     final tester,
   ) async {
@@ -426,7 +440,7 @@ void main() {
     await tester.pump(const Duration(seconds: 9));
     expect(calls, isEmpty);
     await tester.pump(const Duration(seconds: 1));
-    expect(calls, ['GetApiJobs']);
+    expect(calls, isEmpty);
     expect(cache.serverJobs.value.freshness, Freshness.fresh);
     await tester.pump(const Duration(seconds: 50));
     expect(calls, contains('AllUsers'));
@@ -642,8 +656,8 @@ void main() {
       cache.serverJobs.push([]);
       await tester.pump(const Duration(seconds: 1));
       expect(calls, isEmpty);
-      await tester.pump(const Duration(seconds: 9));
-      expect(calls, ['GetApiJobs']);
+      await tester.pump(const Duration(seconds: 59));
+      expect(calls, contains('GetApiJobs'));
       cache.users.invalidate();
       await tester.pump();
       expect(calls.last, 'AllUsers');

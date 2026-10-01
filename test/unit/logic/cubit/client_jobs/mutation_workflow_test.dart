@@ -15,6 +15,7 @@ import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
+import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _Repository extends Mock implements ApiConnectionRepository {}
@@ -75,8 +76,9 @@ void main() {
       currentOrigin: () => origin,
     )..setVersion(Version(3, 0, 0));
     when(() => repository.connection).thenReturn(connection);
+    stubOperations(repository, connection);
     navigation = _Navigation();
-    data = ApiData(api, connection: () => connection);
+    data = ApiData(connection: () => connection);
     stream = StreamController<ApiData>.broadcast();
     when(() => repository.api).thenReturn(api);
     when(() => repository.apiData).thenReturn(data);

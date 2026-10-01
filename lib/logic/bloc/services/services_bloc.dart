@@ -5,8 +5,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/bloc/server_operation_handler.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'services_event.dart';
@@ -16,8 +18,14 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   ServicesBloc() : super(ServicesInitial()) {
     on<ServicesListUpdate>(_updateList, transformer: sequential());
     on<ServicesReload>(_reload, transformer: droppable());
-    on<ServiceRestart>(_restart, transformer: sequential());
-    on<ServiceMove>(_move, transformer: sequential());
+    on<ServiceRestart>(
+      serverOperation(OperationKind.manageServices, _restart),
+      transformer: sequential(),
+    );
+    on<ServiceMove>(
+      serverOperation(OperationKind.manageServices, _move),
+      transformer: sequential(),
+    );
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
@@ -75,12 +83,9 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
 
   Future<void> _restart(
     final ServiceRestart event,
-    final Emitter<ServicesState> emit,
+    final ServerConnection connection,
+    final void Function(ServicesState) emit,
   ) async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
     emit(
       state.copyWith(
         lockedServices: [
@@ -108,12 +113,9 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
 
   Future<void> _move(
     final ServiceMove event,
-    final Emitter<ServicesState> emit,
+    final ServerConnection connection,
+    final void Function(ServicesState) emit,
   ) async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
     final result = await connection.services.move(
       event.service.id,
       event.destination,

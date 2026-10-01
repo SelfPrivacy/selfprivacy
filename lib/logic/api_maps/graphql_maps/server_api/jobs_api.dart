@@ -15,6 +15,7 @@ mixin JobsApi on GraphQLApiMap {
   // from ever running the WebSocketLink disposal.
   Stream<List<ServerJob>> getServerJobsStream({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
+    final void Function({required bool connected})? onConnectionState,
   }) {
     late StreamController<List<ServerJob>> controller;
     GraphQLClient? client;
@@ -25,6 +26,7 @@ mixin JobsApi on GraphQLApiMap {
         try {
           client = await getSubscriptionClient(
             onConnectionLost: onConnectionLost,
+            onConnectionState: onConnectionState,
           );
           inner = client!.subscribe$JobUpdates().listen(
             (final response) {
@@ -69,10 +71,7 @@ mixin JobsApi on GraphQLApiMap {
         // care about. The trailing WS close-frame await may hang on an
         // invalidated session, but it's a TCP-level cleanup the OS will
         // reap, not a leaked link.
-        final link = client?.link;
-        if (link is WebSocketLink) {
-          unawaited(link.dispose());
-        }
+        unawaited(client?.link.dispose());
       },
     );
 

@@ -17,6 +17,7 @@ import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 
 import '../../../helpers/fixtures/json_fixture.dart';
+import '../../../helpers/operation_fixture.dart';
 import '../../../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
@@ -39,7 +40,7 @@ void main() {
       loadJsonFixture('graphql/domain_reads.json')['GetApiTokens']
           as Map<String, dynamic>,
     ).api.devices.map(ApiToken.fromGraphQL).toList();
-    when(api.getApiVersion).thenAnswer((_) async => '3.6.0');
+    when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
     final origin = ServerStateOrigin('server');
     connection = ServerConnection(
@@ -49,6 +50,8 @@ void main() {
     );
     devices = connection.devices;
     final facade = _Connection();
+    final hub = fixtureHub(api);
+    when(() => facade.hub).thenReturn(hub);
     when(() => facade.devicesSnapshot).thenAnswer((_) => devices.value);
     when(() => facade.devicesStream).thenAnswer((_) => devices.changes);
     when(facade.refreshDevices).thenAnswer((_) => devices.refresh(force: true));

@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 
+import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _Repository extends Mock implements ApiConnectionRepository {}
@@ -25,11 +26,13 @@ void main() {
   setUp(() {
     repository = _Repository();
     api = _Api();
-    data = ApiData(api, connection: () => null);
+    data = ApiData(connection: () => null);
     when(() => repository.api).thenReturn(api);
+    final hub = fixtureHub(api);
+    when(() => repository.hub).thenReturn(hub);
     when(() => repository.apiData).thenReturn(data);
     when(() => repository.dataStream).thenAnswer((_) => const Stream.empty());
-    when(() => repository.reload(null)).thenAnswer((_) async {});
+    when(() => repository.refreshRecoveryKeyStatus()).thenAnswer((_) async {});
     getIt.registerSingleton<ApiConnectionRepository>(repository);
     bloc = RecoveryKeyBloc();
   });
@@ -58,7 +61,7 @@ void main() {
               secret == 'fixture-secret') {
             expect(await bloc.generateRecoveryKey(), secret);
             expect(data.recoveryKeyStatus.isExpired, isTrue);
-            verify(() => repository.reload(null)).called(1);
+            verify(() => repository.refreshRecoveryKeyStatus()).called(1);
           } else {
             final failureKey = switch (outcome) {
               ServerMutationOutcome.confirmed =>
@@ -79,7 +82,7 @@ void main() {
                 ),
               ),
             );
-            verifyNever(() => repository.reload(null));
+            verifyNever(() => repository.refreshRecoveryKeyStatus());
           }
         });
       });

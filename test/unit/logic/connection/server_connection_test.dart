@@ -39,21 +39,16 @@ void main() {
     groupNames = Query$AllGroups.fromJson(
       fixture['AllGroups'] as Map<String, dynamic>,
     ).groups.allGroups.map((final group) => group.name).toList();
-    when(api.getApiVersion).thenAnswer((_) async => '3.6.0');
+    when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
     when(api.getAllGroups).thenAnswer((_) async => groupNames);
-    groups = DomainStore(
-      name: 'groups',
-      fetch: api.getAllGroups,
-      refreshInterval: const Duration(seconds: 60),
-    );
     currentOrigin = ServerStateOrigin('server');
     connection = ServerConnection(
       api: api,
       origin: currentOrigin!,
       currentOrigin: () => currentOrigin,
-      additionalDomains: {groups: VersionConstraint.parse('>=3.6.0')},
     );
+    groups = connection.cache.groups;
   });
   tearDown(() => connection.dispose());
 
@@ -61,26 +56,42 @@ void main() {
     'construction is inert and shares version discovery across domains',
     () async {
       verifyZeroInteractions(api);
-      expect(connection.stores.map((final store) => store.name), [
-        'devices',
-        'groups',
-        'serverJobs',
-        'users',
-        'settings',
-        'services',
-        'backups',
-        'backupConfig',
-        'volumes',
-      ]);
-      final version = Completer<String?>();
-      when(api.getApiVersion).thenAnswer((_) => version.future);
+      expect(connection.stores, connection.cache.stores);
+      expect(connection.users.store, same(connection.cache.users));
+      expect(connection.jobs.store, same(connection.cache.serverJobs));
+      expect(connection.backups.store, same(connection.cache.backups));
+      final version = Completer<String>();
+      when(api.fetchApiVersion).thenAnswer((_) => version.future);
       final devicesRead = connection.devices.refresh();
       final groupsRead = connection.refresh(groups);
       version.complete('3.6.0');
       expect(await devicesRead, RefreshResult.applied);
       expect(await groupsRead, RefreshResult.applied);
-      verify(api.getApiVersion).called(1);
+      verify(api.fetchApiVersion).called(1);
       expect(connection.snapshot(groups).data, groupNames);
+    },
+  );
+
+  test(
+    'commands share a version read already running in the canonical store',
+    () async {
+      final version = Completer<String>();
+      when(api.fetchApiVersion).thenAnswer((_) => version.future);
+      when(() => api.setTimezone('UTC')).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('UTC'),
+        ),
+      );
+      final reading = connection.cache.apiVersion.refresh();
+      final command = connection.settings.setServerTimezone('UTC');
+      await pumpEventQueue();
+      verifyNever(api.getApiVersion);
+      verifyNever(() => api.setTimezone(any()));
+      version.complete('3.6.0');
+      expect(await reading, RefreshResult.applied);
+      expect((await command).outcome, ServerMutationOutcome.confirmed);
+      verify(api.fetchApiVersion).called(1);
     },
   );
 
@@ -219,8 +230,8 @@ void main() {
   });
 
   test('disposal resolves a command waiting for version discovery', () async {
-    final version = Completer<String?>();
-    when(api.getApiVersion).thenAnswer((_) => version.future);
+    final version = Completer<String>();
+    when(api.fetchApiVersion).thenAnswer((_) => version.future);
     final pending = connection.settings.setServerTimezone('UTC');
     connection.dispose();
     final result = await pending.timeout(const Duration(seconds: 1));

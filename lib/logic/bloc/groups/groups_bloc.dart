@@ -44,8 +44,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
   }
 
   Future<void> refresh() async {
-    getIt<ApiConnectionRepository>().apiData.groups.invalidate();
-    await getIt<ApiConnectionRepository>().reload(null);
+    await getIt<ApiConnectionRepository>().refreshGroups();
   }
 
   Future<void> _reload(

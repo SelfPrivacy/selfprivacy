@@ -87,7 +87,7 @@ mixin LogsApi on GraphQLApiMap {
       },
       onCancel: () {
         unawaited(inner?.cancel());
-        unawaited((client?.link as WebSocketLink?)?.dispose());
+        unawaited(client?.link.dispose());
       },
     );
 

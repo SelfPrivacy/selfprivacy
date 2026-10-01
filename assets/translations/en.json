@@ -1,7 +1,41 @@
 {
     "test": "en-test",
     "locale": "en",
+    "operations": {
+        "kind": {
+            "manageUsers": "Update users",
+            "manageDevices": "Update devices",
+            "manageServices": "Update services",
+            "manageBackups": "Update backups",
+            "manageVolumes": "Update storage",
+            "manageSettings": "Update settings",
+            "manageJobs": "Manage server jobs",
+            "applyChanges": "Apply changes",
+            "generateDeviceKey": "Generate device key",
+            "generateRecoveryKey": "Generate recovery key",
+            "generatePasswordResetLink": "Generate password-reset link",
+            "rotateToken": "Refresh access token"
+        },
+        "status": {
+            "queued": "Waiting",
+            "running": "Running",
+            "accepted": "Waiting for server jobs",
+            "succeeded": "Completed",
+            "rejected": "Rejected by the server",
+            "failed": "Failed",
+            "unknown": "Outcome unknown",
+            "cancelled": "Cancelled before sending",
+            "notSent": "Not sent"
+        },
+        "reason": {
+            "rotationFailed": "Access token refresh did not complete",
+            "connectionReplaced": "Server connection changed",
+            "cancelled": "Cancelled by you",
+            "unavailable": "Server connection unavailable"
+        }
+    },
     "server_mutation": {
+        "not_sent": "Operation was not sent to the server.",
         "outcome_unknown": "Couldn't check the operation result. Refresh the data before trying again.",
         "rejected": "Operation rejected by the server.",
         "payload_unavailable": "Operation confirmed, but couldn't load its result. You might need to refresh the page."
@@ -659,6 +693,11 @@
             "description": "The device {} will no longer have access to the server.",
             "yes": "Revoke",
             "no": "Cancel"
+        },
+        "rotation": {
+            "waiting": "Waiting for current operations to finish…",
+            "running": "Refreshing access token…",
+            "suppressed": "The token refresh result is unknown. Reconnect this device before trying again."
         },
         "refresh_token_alert": {
             "header": "Refresh access token?",

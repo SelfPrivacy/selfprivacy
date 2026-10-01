@@ -4,6 +4,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
@@ -53,8 +54,7 @@ class ServerStateCache {
     );
     serverJobs = domain(
       name: 'serverJobs',
-      fetch: api.getServerJobs,
-      refreshSeconds: 10,
+      fetch: () async => List.unmodifiable(await api.getServerJobs()),
     );
     backupConfig = domain(
       name: 'backupConfig',
@@ -64,26 +64,35 @@ class ServerStateCache {
     );
     backups = domain(
       name: 'backups',
-      fetch: api.getBackups,
+      fetch: () async => List.unmodifiable(await api.getBackups()),
       refreshSeconds: 120,
       requiredApiVersion: '>=2.4.2',
     );
     services = domain(
       name: 'services',
-      fetch: api.getAllServices,
+      fetch: () async => List.unmodifiable(await api.getAllServices()),
       requiredApiVersion: '>=2.4.3',
     );
-    volumes = domain(name: 'volumes', fetch: api.getServerDiskVolumes);
+    volumes = domain(
+      name: 'volumes',
+      fetch: () async => List.unmodifiable(await api.getServerDiskVolumes()),
+    );
     recoveryKeyStatus = domain(
       name: 'recoveryKeyStatus',
       fetch: api.getRecoveryTokenStatus,
       refreshSeconds: 300,
     );
-    devices = domain(name: 'devices', fetch: api.getApiTokens);
-    users = domain(name: 'users', fetch: api.getAllUsers);
+    devices = domain(
+      name: 'devices',
+      fetch: () => DevicesRepository.fetch(api),
+    );
+    users = domain(
+      name: 'users',
+      fetch: () async => List.unmodifiable(await api.getAllUsers()),
+    );
     groups = domain(
       name: 'groups',
-      fetch: api.getAllGroups,
+      fetch: () async => List.unmodifiable(await api.getAllGroups()),
       requiredApiVersion: '>=3.6.0',
     );
     settings = domain(
@@ -120,6 +129,21 @@ class ServerStateCache {
   late final StreamSubscription<CachedValue<Version>> _versionSubscription;
   Version? _supportedVersion;
   bool _disposed = false;
+
+  void setVersion(final Version version) {
+    apiVersion.push(version);
+    _updateSupport();
+  }
+
+  void restoreFrom(final ServerStateCache previous) {
+    final snapshots = {
+      for (final store in previous.stores) store.name: store.value,
+    };
+    for (final store in stores) {
+      store.restore(snapshots[store.name]!);
+    }
+    _supportedVersion = apiVersion.value.data;
+  }
 
   void _updateSupport() {
     if (_disposed) {

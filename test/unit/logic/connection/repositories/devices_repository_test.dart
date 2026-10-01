@@ -43,7 +43,7 @@ void main() {
       currentOrigin: () => origin,
     );
     repository = connection.devices;
-    when(api.getApiVersion).thenAnswer((_) async => '3.6.0');
+    when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
   });
   tearDown(() => connection.dispose());
@@ -55,7 +55,7 @@ void main() {
     expect(() => repository.value.data!.clear(), throwsUnsupportedError);
     expect(await repository.refresh(), RefreshResult.current);
     verify(api.getApiTokens).called(1);
-    verify(api.getApiVersion).called(1);
+    verify(api.fetchApiVersion).called(1);
   });
 
   for (final loaded in [false, true]) {
@@ -186,10 +186,10 @@ void main() {
   });
 
   test('version failure is observable and retry recovers', () async {
-    when(api.getApiVersion).thenAnswer((_) async => null);
+    when(api.fetchApiVersion).thenThrow(StateError('Version unavailable'));
     expect(await repository.refresh(), RefreshResult.failed);
     expect(repository.value.lastError, isNotNull);
-    when(api.getApiVersion).thenAnswer((_) async => '3.6.0');
+    when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     expect(await repository.refresh(), RefreshResult.applied);
     expect(repository.value.lastError, isNull);
   });
@@ -203,7 +203,9 @@ void main() {
 
   test('a failed version probe after loading can be retried', () async {
     await repository.refresh();
-    connection.versionUnavailable();
+    when(api.fetchApiVersion).thenThrow(StateError('Version unavailable'));
+    await connection.cache.apiVersion.refresh(force: true);
+    when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     expect(repository.value.lastError, isNotNull);
     expect(repository.value.data, tokens);
     expect(await repository.refresh(force: true), RefreshResult.applied);
@@ -236,8 +238,8 @@ void main() {
   test(
     'disposing resolves version waiters and prevents a late fetch',
     () async {
-      final version = Completer<String?>();
-      when(api.getApiVersion).thenAnswer((_) => version.future);
+      final version = Completer<String>();
+      when(api.fetchApiVersion).thenAnswer((_) => version.future);
       final reading = repository.refresh();
       connection.dispose();
       expect(await reading, RefreshResult.disposed);

@@ -10,11 +10,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 
@@ -27,19 +28,8 @@ class _MockServerApi extends Mock implements ServerApi {}
 
 class _MockResources extends Mock implements ResourcesModel {}
 
-class _ReloadTestRepository extends ApiConnectionRepository {
-  _ReloadTestRepository({required super.resourcesModel, required super.api});
-
-  int refreshCount = 0;
-
-  @override
-  Future<(bool, String)> refreshDeviceToken() async {
-    refreshCount++;
-    return (true, 'done');
-  }
-}
-
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
     await setUpInMemoryHive();
     registerFallbackValue(SshSettings(enable: false));
@@ -52,7 +42,7 @@ void main() {
   late DeveloperSettingsModel settings;
   late ResourcesModel resourcesModel;
   late _MockServerApi api;
-  late _ReloadTestRepository repository;
+  late ApiConnectionRepository repository;
 
   setUp(() async {
     await Hive.openBox(BNames.appSettingsBox);
@@ -64,7 +54,7 @@ void main() {
     await resourcesModel.addServer(aServer());
     api = _MockServerApi();
     when(() => api.getApiVersion()).thenAnswer((_) async => '0.0.0');
-    repository = _ReloadTestRepository(
+    repository = ApiConnectionRepository(
       resourcesModel: resourcesModel,
       api: api,
     );
@@ -101,6 +91,48 @@ void main() {
     'RemoveSshKey': (final user) =>
         repository.deleteSshKey(user, 'fixture-key'),
   };
+  test(
+    'disposed recipient prevents reset queued behind a users command',
+    () async {
+      final user = aMutationUser('CreateUser');
+      final blocker = Completer<ServerMutationResult<User>>();
+      when(
+        () => api.updateUser(any(), any(), any()),
+      ).thenAnswer((_) => blocker.future);
+      when(() => api.generatePasswordResetLink(any())).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available(
+            'https://auth.example.org/ui/reset?token=abcd-0123-abcd-0123',
+          ),
+        ),
+      );
+      final update = repository.updateUser(user);
+      final recipient = SecretRecipient();
+      final reset = repository.generatePasswordResetLink(
+        user,
+        recipient: recipient,
+      );
+      recipient.dispose();
+      blocker.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(user),
+        ),
+      );
+      await update;
+      expect((await reset).$1, isNull);
+      verifyNever(() => api.generatePasswordResetLink(any()));
+      expect(
+        repository.hub
+            .operationsFor(resourcesModel.servers.single.uuid)
+            .history
+            .last
+            .status,
+        OperationStatus.notSent,
+      );
+    },
+  );
   test('replacing credentials clears domain views', () async {
     repository.connection!.users.store.push([aMutationUser('CreateUser')]);
     await resourcesModel.updateServerByUuid(
@@ -108,6 +140,40 @@ void main() {
     );
     expect(repository.apiData.users.data, isNull);
   });
+
+  test(
+    'recipient disposal after dispatch discards only the returned secret',
+    () async {
+      final response = Completer<ServerMutationResult<String>>();
+      when(
+        () => api.generatePasswordResetLink(any()),
+      ).thenAnswer((_) => response.future);
+      final recipient = SecretRecipient();
+      final reset = repository.generatePasswordResetLink(
+        aMutationUser('CreateUser'),
+        recipient: recipient,
+      );
+      verify(() => api.generatePasswordResetLink(any())).called(1);
+      recipient.dispose();
+      response.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available(
+            'https://auth.example.org/ui/reset?token=abcd-0123-abcd-0123',
+          ),
+        ),
+      );
+      expect((await reset).$1, isNull);
+      expect(
+        repository.hub
+            .operationsFor(resourcesModel.servers.single.uuid)
+            .history
+            .last
+            .status,
+        OperationStatus.succeeded,
+      );
+    },
+  );
 
   for (final call in userCalls.entries) {
     group(call.key, () {
@@ -194,7 +260,7 @@ void main() {
         () async {
           final pending = call.value(returned);
           repository.dispose();
-          repository = _ReloadTestRepository(
+          repository = ApiConnectionRepository(
             resourcesModel: resourcesModel,
             api: api,
           );
@@ -211,7 +277,7 @@ void main() {
       );
       test('confirmed user before loading does not fabricate a list', () async {
         repository.dispose();
-        repository = _ReloadTestRepository(
+        repository = ApiConnectionRepository(
           resourcesModel: resourcesModel,
           api: api,
         );
@@ -471,7 +537,7 @@ void main() {
       'partial returned settings do not fabricate an unloaded snapshot',
       () async {
         repository.dispose();
-        repository = _ReloadTestRepository(
+        repository = ApiConnectionRepository(
           resourcesModel: resourcesModel,
           api: api,
         );
@@ -523,14 +589,6 @@ void main() {
     },
   );
 
-  test('the developer setting stops an automatic token refresh', () async {
-    await settings.setAutomaticGraphqlTokenRefresh(enabled: false);
-
-    await repository.reload(null);
-
-    expect(repository.refreshCount, 0);
-  });
-
   test(
     'initialization does not call the API without a selected server',
     () async {
@@ -546,50 +604,6 @@ void main() {
       verifyNever(api.getApiVersion);
     },
   );
-
-  test('an overdue token refreshes when the setting is enabled', () async {
-    await repository.reload(null);
-
-    expect(repository.refreshCount, 1);
-  });
-
-  test('an authentication failure publishes unauthorized once', () async {
-    final connectedRepository = ApiConnectionRepository(
-      resourcesModel: resourcesModel,
-    );
-    addTearDown(connectedRepository.dispose);
-    final statuses = <ConnectionStatus>[];
-    final subscription = connectedRepository.connectionStatusStream.listen(
-      statuses.add,
-    );
-    addTearDown(subscription.cancel);
-
-    connectedRepository.api.transport.onAuthFailure?.call();
-    connectedRepository.api.transport.onAuthFailure?.call();
-    await pumpEventQueue();
-
-    expect(
-      connectedRepository.currentConnectionStatus,
-      ConnectionStatus.unauthorized,
-    );
-    expect(statuses, [ConnectionStatus.unauthorized]);
-  });
-
-  test('reload does not overwrite an unauthorized status', () async {
-    repository.connectionStatus = ConnectionStatus.unauthorized;
-
-    await repository.reload(null);
-
-    expect(repository.currentConnectionStatus, ConnectionStatus.unauthorized);
-  });
-
-  test('initialization can reconnect after token recovery', () async {
-    repository.connectionStatus = ConnectionStatus.unauthorized;
-
-    await repository.init();
-
-    expect(repository.currentConnectionStatus, ConnectionStatus.connected);
-  });
 
   test('an updated user is published to data listeners', () async {
     final originalUser = User.fake(login: 'user', displayName: 'Alex');
@@ -646,6 +660,7 @@ void main() {
       ),
     );
 
+    await pumpEventQueue();
     expect(selectedRepository.api.apiToken, 'rotated-token');
   });
 
@@ -701,50 +716,25 @@ void main() {
         message: 'secret-sentinel',
       );
 
-  test(
-    'rotation is single-flight and persists before reconnecting jobs',
-    () async {
-      final pending = Completer<ServerMutationResult<String>>();
-      final jobs = StreamController<List<ServerJob>>();
-      when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
-      when(
-        () => api.getServerJobsStream(
-          onConnectionLost: any(named: 'onConnectionLost'),
-        ),
-      ).thenAnswer((_) {
-        expect(
-          resourcesModel.servers.first.hostingDetails.apiToken,
-          'replacement',
-        );
-        expect(
-          (Hive.box(BNames.resourcesBox).get(BNames.servers) as List<Server>)
-              .first
-              .hostingDetails
-              .apiToken,
-          'replacement',
-        );
-        return jobs.stream;
-      });
-      final connection = realRepository();
-      addTearDown(() async {
-        await connection.clear();
-        await jobs.close();
-      });
-      connection.apiData.apiVersion.data = '3.9.0';
-      final first = connection.refreshDeviceToken();
-      final second = connection.refreshDeviceToken();
-      expect(identical(first, second), isTrue);
-      pending.complete(confirmed('replacement'));
-      expect((await first).$1, isTrue);
-      expect((await second).$1, isTrue);
-      verify(api.refreshDeviceApiToken).called(1);
-      verify(
-        () => api.getServerJobsStream(
-          onConnectionLost: any(named: 'onConnectionLost'),
-        ),
-      ).called(1);
-    },
-  );
+  test('rotation is single-flight and saves the replacement', () async {
+    final pending = Completer<ServerMutationResult<String>>();
+    when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
+    final connection = realRepository();
+    final first = connection.refreshDeviceToken();
+    final second = connection.refreshDeviceToken();
+    pending.complete(confirmed('replacement'));
+    expect((await first).$1, isTrue);
+    expect((await second).$1, isTrue);
+    verify(api.refreshDeviceApiToken).called(1);
+    expect(resourcesModel.servers.first.hostingDetails.apiToken, 'replacement');
+    expect(
+      (Hive.box(BNames.resourcesBox).get(BNames.servers) as List<Server>)
+          .first
+          .hostingDetails
+          .apiToken,
+      'replacement',
+    );
+  });
 
   for (final outcome in ServerMutationOutcome.values) {
     test(
@@ -765,8 +755,7 @@ void main() {
           resourcesModel.servers.first.hostingDetails.apiToken,
           'api-token',
         );
-        await connection.reload(null);
-        await connection.reload(null);
+        await connection.refreshDeviceToken();
         verify(
           api.refreshDeviceApiToken,
         ).called(outcome == ServerMutationOutcome.rejected ? 2 : 1);
@@ -798,7 +787,7 @@ void main() {
       when(
         api.refreshDeviceApiToken,
       ).thenAnswer((_) async => confirmed('replacement'));
-      await connection.reload(null);
+      await connection.refreshDeviceToken();
       await pumpEventQueue();
       verify(api.refreshDeviceApiToken).called(1);
       expect(
@@ -854,7 +843,7 @@ void main() {
           api.refreshDeviceApiToken,
         ).thenAnswer((_) async => confirmed('replacement'));
         final connection = realRepository(resources: resources);
-        connection.apiData.apiVersion.data = '3.9.0';
+        connection.connection!.setVersion(Version(3, 9, 0));
         final result = await connection.refreshDeviceToken();
         expect(result.$1, isFalse);
         expect(result.$2, isNot(contains('secret-sentinel')));
@@ -934,32 +923,26 @@ void main() {
       expect(resourcesModel.servers.first.hostingDetails.apiToken, 'api-token');
     },
   );
-  test(
-    'rotation saves its origin without reconnecting a different selection',
-    () async {
-      Server? selected = resourcesModel.servers.first;
-      final pending = Completer<ServerMutationResult<String>>();
-      when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
-      final connection = ApiConnectionRepository(
-        resourcesModel: resourcesModel,
-        api: api,
-        serverSelector: () => selected,
-      );
-      addTearDown(connection.dispose);
-      connection.apiData.apiVersion.data = '3.9.0';
-      final rotation = connection.refreshDeviceToken();
-      selected = null;
-      pending.complete(confirmed('replacement'));
-      expect((await rotation).$1, isTrue);
-      expect(
-        resourcesModel.servers.first.hostingDetails.apiToken,
-        'replacement',
-      );
-      verifyNever(
-        () => api.getServerJobsStream(
-          onConnectionLost: any(named: 'onConnectionLost'),
-        ),
-      );
-    },
-  );
+  test('an unsent rotation is detached when its selection changes', () async {
+    Server? selected = resourcesModel.servers.first;
+    final pending = Completer<ServerMutationResult<String>>();
+    when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
+    final connection = ApiConnectionRepository(
+      resourcesModel: resourcesModel,
+      api: api,
+      serverSelector: () => selected,
+    );
+    addTearDown(connection.dispose);
+    connection.connection!.setVersion(Version(3, 9, 0));
+    final rotation = connection.refreshDeviceToken();
+    selected = null;
+    pending.complete(confirmed('replacement'));
+    expect((await rotation).$1, isFalse);
+    expect(resourcesModel.servers.first.hostingDetails.apiToken, 'api-token');
+    verifyNever(
+      () => api.getServerJobsStream(
+        onConnectionLost: any(named: 'onConnectionLost'),
+      ),
+    );
+  });
 }

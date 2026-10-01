@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
@@ -83,7 +84,16 @@ class _DevicesInfo extends StatelessWidget {
     children: [
       SectionTitle(title: 'devices.main_screen.this_device'.tr()),
       if (devicesStatus.thisDevice case final device?)
-        DeviceItem(device: device),
+        StreamBuilder<void>(
+          stream: getIt<ApiConnectionRepository>().hub.changes,
+          builder: (final context, _) => DeviceItem(
+            device: device,
+            rotationStatus:
+                getIt<ApiConnectionRepository>().hub.rotation.status,
+            onCancelRotation: () =>
+                getIt<ApiConnectionRepository>().hub.cancelRotation(),
+          ),
+        ),
       const SizedBox(height: 8),
       const Divider(height: 1),
       const SizedBox(height: 8),

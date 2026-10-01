@@ -72,7 +72,13 @@ class ServerApi extends GraphQLApiMap
     final GraphQLTransport? clientTransport,
   }) async {
     final client = clientTransport?.client() ?? await getClient();
-    return requireServerApiData(await client.query$GetApiVersion()).api.version;
+    return requireServerApiData(
+      await client.query$GetApiVersion(
+        Options$Query$GetApiVersion(
+          context: const Context().withEntry(const PublicGraphQLRequest()),
+        ),
+      ),
+    ).api.version;
   }
 
   Future<String?> _getApiVersion({

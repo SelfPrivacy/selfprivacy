@@ -7,6 +7,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.grap
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -17,6 +19,7 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider.dar
 import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
+import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _Repository extends Mock implements ApiConnectionRepository {}
@@ -45,7 +48,8 @@ void main() {
     final connection = seededConnection(api);
     addTearDown(connection.dispose);
     when(() => repository.connection).thenReturn(connection);
-    data = ApiData(api, connection: () => connection);
+    stubOperations(repository, connection);
+    data = ApiData(connection: () => connection);
     connection.volumesStore.push(
       Query$GetServerDiskVolumes.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
@@ -72,6 +76,46 @@ void main() {
       ..registerSingleton<ResourcesModel>(resources);
   });
   tearDown(getIt.reset);
+
+  testWidgets('provider resize failure is not a successful operation', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    final hub = fixtureHub(api);
+    when(() => repository.connection).thenReturn(null);
+    when(() => repository.run<void>(any(), any())).thenAnswer(
+      (final call) => hub.run<void>(
+        call.positionalArguments[0] as OperationKind,
+        call.positionalArguments[1] as Future<void> Function(ServerConnection),
+      ),
+    );
+    final providerVolume = aServerProviderVolume();
+    const size = DiskSize(byte: 20000000000);
+    when(
+      () => provider.resizeVolume(providerVolume, size),
+    ).thenAnswer((_) async => GenericResult(success: false, data: false));
+    final bloc = VolumesBloc(serverProvider: () => provider)
+      ..add(const VolumesServerLoaded());
+    await tester.pump();
+    bloc.add(
+      VolumeResize(
+        DiskVolume(name: 'sdb', providerVolume: providerVolume),
+        size,
+      ),
+    );
+    await tester.pump();
+    expect(
+      hub.operationsFor(hub.active!.origin.serverId).history.single.status,
+      OperationStatus.failed,
+    );
+    await tester.runAsync(() async {
+      final closing = bloc.close();
+      await Future<void>.delayed(Duration.zero);
+      await tester.pump();
+      await closing;
+    });
+    hub.dispose();
+  });
 
   test('the default provider lookup handles missing credentials', () async {
     ProvidersController.clearServerProvider();

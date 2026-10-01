@@ -7,6 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
@@ -92,9 +95,21 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     emit(_fromSnapshot(repository.devicesSnapshot));
   }
 
-  Future<String?> getNewDeviceKey() async {
-    final response = await getIt<ApiConnectionRepository>().api
-        .createDeviceToken();
+  Future<String?> getNewDeviceKey({final SecretRecipient? recipient}) async {
+    final target = recipient ?? SecretRecipient();
+    final response = await target.receive(
+      getIt<ApiConnectionRepository>().hub.submit(
+        OperationKind.generateDeviceKey,
+        (final owner) => target.protect(() async {
+          final response = await owner.api.createDeviceToken();
+          OperationExecution.current?.record(response);
+          return response;
+        }),
+      ),
+    );
+    if (response == null) {
+      return null;
+    }
     final secret = response.confirmedSecret;
     if (secret != null) {
       return secret;

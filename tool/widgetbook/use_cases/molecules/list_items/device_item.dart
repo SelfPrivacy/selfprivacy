@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
+
 import '../../../catalog_case.dart';
 import '../../../fixtures.dart';
-
 import '../../../preparation.dart';
 
 @UseCase(
@@ -118,5 +119,76 @@ Widget deviceItemDisabled(final BuildContext context) => CatalogCase(
         device: ApiToken(name: 'Phone', isCaller: false, date: referenceTime),
         enabled: false,
         onRevoke: () => catalogActions.record('Revoke device'),
+      ),
+);
+
+@UseCase(
+  name: 'Rotation waiting',
+  type: DeviceItem,
+  path: '[Molecules]/list_items',
+)
+Widget deviceItemWaiting(final BuildContext context) => CatalogCase(
+  key: const ValueKey('DeviceItem/Rotation waiting'),
+  id: 'DeviceItem/Rotation waiting',
+  variant: 'Rotation waiting',
+  host: PreviewHost.content,
+  width: 560,
+  height: 180,
+  builder: (final context, final fixtures, final controller, final update) =>
+      DeviceItem(
+        device: ApiToken(
+          name: 'This Linux computer',
+          isCaller: true,
+          date: referenceTime,
+        ),
+        rotationStatus: RotationStatus.waiting,
+        onCancelRotation: () => catalogActions.record('Cancel token rotation'),
+        onRotate: () => catalogActions.record('Rotate device token'),
+      ),
+);
+
+@UseCase(name: 'Rotating', type: DeviceItem, path: '[Molecules]/list_items')
+Widget deviceItemRotating(final BuildContext context) => CatalogCase(
+  key: const ValueKey('DeviceItem/Rotating'),
+  id: 'DeviceItem/Rotating',
+  variant: 'Rotating',
+  host: PreviewHost.content,
+  width: 560,
+  height: 180,
+  builder: (final context, final fixtures, final controller, final update) =>
+      DeviceItem(
+        device: ApiToken(
+          name: 'This Linux computer',
+          isCaller: true,
+          date: referenceTime,
+        ),
+        rotationStatus: RotationStatus.rotating,
+        onCancelRotation: () => catalogActions.record('Cancel token rotation'),
+        onRotate: () => catalogActions.record('Rotate device token'),
+      ),
+);
+
+@UseCase(
+  name: 'Rotation uncertain',
+  type: DeviceItem,
+  path: '[Molecules]/list_items',
+)
+Widget deviceItemSuppressed(final BuildContext context) => CatalogCase(
+  key: const ValueKey('DeviceItem/Rotation uncertain'),
+  id: 'DeviceItem/Rotation uncertain',
+  variant: 'Rotation uncertain',
+  host: PreviewHost.content,
+  width: 560,
+  height: 180,
+  builder: (final context, final fixtures, final controller, final update) =>
+      DeviceItem(
+        device: ApiToken(
+          name: 'This Linux computer',
+          isCaller: true,
+          date: referenceTime,
+        ),
+        rotationStatus: RotationStatus.suppressed,
+        onCancelRotation: () => catalogActions.record('Cancel token rotation'),
+        onRotate: () => catalogActions.record('Rotate device token'),
       ),
 );

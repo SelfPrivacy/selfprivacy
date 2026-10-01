@@ -2241,6 +2241,24 @@ final directories = <_widgetbook.WidgetbookNode>[
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
                         .deviceItemRevokeDialog,
               ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Rotating',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
+                        .deviceItemRotating,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Rotation uncertain',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
+                        .deviceItemSuppressed,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Rotation waiting',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_device_item
+                        .deviceItemWaiting,
+              ),
             ],
           ),
           _widgetbook.WidgetbookComponent(

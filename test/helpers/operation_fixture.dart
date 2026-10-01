@@ -1,0 +1,39 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:pub_semver/pub_semver.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
+
+import 'fixtures/server_fixtures.dart';
+
+class _Resources extends Mock implements ResourcesModel {}
+
+ServerConnectionHub fixtureHub(final ServerApi api) {
+  final resources = _Resources();
+  when(() => resources.servers).thenReturn([aServer()]);
+  when(() => resources.statusStream).thenAnswer((_) => const Stream.empty());
+  final hub = ServerConnectionHub(
+    resourcesModel: resources,
+    createApi: (_, _, _) => api,
+  );
+  hub.active!.setVersion(Version(3, 6, 0));
+  addTearDown(hub.dispose);
+  return hub;
+}
+
+void stubOperations(
+  final ApiConnectionRepository repository,
+  final ServerConnection connection,
+) {
+  registerFallbackValue(OperationKind.manageJobs);
+  registerFallbackValue((final ServerConnection _) => Future<void>.value());
+  when(() => repository.run<void>(any(), any())).thenAnswer(
+    (final call) =>
+        (call.positionalArguments[1]
+            as Future<void> Function(ServerConnection))(connection),
+  );
+}

@@ -17,7 +17,11 @@ User aMutationUser(final String operation) => User.fromGraphQL(
   ),
 );
 
-ServerJob aServiceMoveJob({final String? uid, final String? status}) {
+ServerJob aServiceMoveJob({
+  final String? uid,
+  final String? status,
+  final DateTime? updatedAt,
+}) {
   final operation =
       loadJsonFixture('graphql/mutation_results.json')['MoveService']
           as Map<String, dynamic>;
@@ -29,6 +33,9 @@ ServerJob aServiceMoveJob({final String? uid, final String? status}) {
   }
   if (status != null) {
     json['status'] = status;
+  }
+  if (updatedAt != null) {
+    json['updatedAt'] = updatedAt.toIso8601String();
   }
   return ServerJob.fromGraphQL(Fragment$basicApiJobsFields.fromJson(json));
 }

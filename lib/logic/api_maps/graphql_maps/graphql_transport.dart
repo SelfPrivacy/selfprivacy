@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:gql/ast.dart';
@@ -11,6 +12,100 @@ typedef GraphQLTokenProvider = String? Function();
 typedef GraphQLLocaleProvider = String Function();
 typedef GraphQLAuthFailureHandler = void Function();
 typedef ConsoleLogSink = void Function(ConsoleLog);
+
+enum GraphQLTransportEvent {
+  requestStarted,
+  requestFinished,
+  reachable,
+  protectedSuccess,
+  authFailure,
+  networkFailure,
+}
+
+class GraphQLDispatchDeferred implements Exception {
+  const GraphQLDispatchDeferred();
+}
+
+class GraphQLDispatchGuard {
+  GraphQLDispatchGuard(this.check);
+
+  static final _zoneKey = Object();
+  static GraphQLDispatchGuard? get current =>
+      Zone.current[_zoneKey] as GraphQLDispatchGuard?;
+  final void Function() check;
+
+  Future<T> run<T>(final Future<T> Function() action) =>
+      runZoned(action, zoneValues: {_zoneKey: this});
+}
+
+class PublicGraphQLRequest extends ContextEntry {
+  const PublicGraphQLRequest();
+  @override
+  List<Object?> get fieldsForEquality => const [];
+}
+
+class _RequestFeedbackLink extends Link {
+  _RequestFeedbackLink(this.transport, {this.subscription = false});
+  final GraphQLTransport transport;
+  final bool subscription;
+
+  @override
+  Stream<Response> request(
+    final Request request, [
+    final NextLink? forward,
+  ]) async* {
+    GraphQLDispatchGuard.current?.check();
+    transport.beforeRequest?.call();
+    if (!subscription) {
+      transport.onEvent?.call(GraphQLTransportEvent.requestStarted);
+    }
+    try {
+      await for (final response in forward!(request)) {
+        if (!(response.errors?.isNotEmpty ?? false) &&
+            transport.isAuthenticated &&
+            request.context.entry<PublicGraphQLRequest>() == null) {
+          transport.onEvent?.call(GraphQLTransportEvent.protectedSuccess);
+        } else {
+          transport.onEvent?.call(GraphQLTransportEvent.reachable);
+        }
+        yield response;
+      }
+    } catch (_) {
+      transport.onEvent?.call(GraphQLTransportEvent.networkFailure);
+      rethrow;
+    } finally {
+      if (!subscription) {
+        transport.onEvent?.call(GraphQLTransportEvent.requestFinished);
+      }
+    }
+  }
+}
+
+class _SocketStateLink extends Link {
+  _SocketStateLink(this.socket, this.onState);
+  final WebSocketLink socket;
+  final void Function({required bool connected})? onState;
+  StreamSubscription<SocketConnectionState>? _subscription;
+
+  @override
+  Stream<Response> request(final Request request, [final NextLink? forward]) {
+    if (socket.getSocketClient == null) {
+      socket.connectOrReconnect();
+      _subscription = socket.getSocketClient!.connectionState.listen((
+        final state,
+      ) {
+        onState?.call(connected: state == SocketConnectionState.connected);
+      });
+    }
+    return socket.request(request, forward);
+  }
+
+  @override
+  Future<void> dispose() async {
+    unawaited(_subscription?.cancel());
+    await socket.dispose();
+  }
+}
 
 const String _unauthenticatedErrorCode = 'UNAUTHENTICATED';
 const String _legacyUnauthenticatedErrorMessage =
@@ -116,6 +211,8 @@ class GraphQLTransport {
     required this.consoleLog,
     this.tokenProvider,
     this.onAuthFailure,
+    this.onEvent,
+    this.beforeRequest,
     this.tlsPolicy = TlsPolicy.strict,
   });
 
@@ -123,6 +220,8 @@ class GraphQLTransport {
   final GraphQLTokenProvider? tokenProvider;
   final GraphQLLocaleProvider localeProvider;
   final GraphQLAuthFailureHandler? onAuthFailure;
+  final void Function(GraphQLTransportEvent)? onEvent;
+  final void Function()? beforeRequest;
   final TlsContext tlsContext;
   final TlsPolicy tlsPolicy;
   final ConsoleLogSink consoleLog;
@@ -137,6 +236,8 @@ class GraphQLTransport {
     tokenProvider: tokenProvider,
     localeProvider: localeProvider,
     onAuthFailure: onAuthFailure,
+    onEvent: onEvent,
+    beforeRequest: beforeRequest,
     tlsContext: tlsContext,
     tlsPolicy: policy,
     consoleLog: consoleLog,
@@ -152,7 +253,7 @@ class GraphQLTransport {
 
   Link _watchAuthFailures(final Link link) {
     final callback = onAuthFailure;
-    if (callback == null) {
+    if (callback == null && onEvent == null) {
       return link;
     }
 
@@ -165,7 +266,8 @@ class GraphQLTransport {
                   error.message == _legacyUnauthenticatedErrorMessage);
         });
         if (hasAuthenticationError ?? false) {
-          callback();
+          callback?.call();
+          onEvent?.call(GraphQLTransportEvent.authFailure);
         }
         return null;
       },
@@ -183,11 +285,15 @@ class GraphQLTransport {
 
     final currentToken = token;
     final Link link = _watchAuthFailures(
-      GraphQLLoggingLink(consoleLog: consoleLog).concat(
-        isAuthenticated
-            ? AuthLink(getToken: () => 'Bearer $currentToken').concat(httpLink)
-            : httpLink,
-      ),
+      _RequestFeedbackLink(this)
+          .concat(GraphQLLoggingLink(consoleLog: consoleLog))
+          .concat(
+            isAuthenticated
+                ? AuthLink(
+                    getToken: () => 'Bearer $currentToken',
+                  ).concat(httpLink)
+                : httpLink,
+          ),
     );
 
     return GraphQLClient(cache: GraphQLCache(), link: link);
@@ -195,6 +301,7 @@ class GraphQLTransport {
 
   GraphQLClient subscriptionClient({
     final Future<Duration?>? Function(int?, String?)? onConnectionLost,
+    final void Function({required bool connected})? onConnectionState,
   }) {
     _validateTlsPolicy();
     final currentToken = token;
@@ -230,7 +337,12 @@ class GraphQLTransport {
 
     return GraphQLClient(
       cache: GraphQLCache(),
-      link: _watchAuthFailures(webSocketLink),
+      link: _watchAuthFailures(
+        _RequestFeedbackLink(
+          this,
+          subscription: true,
+        ).concat(_SocketStateLink(webSocketLink, onConnectionState)),
+      ),
     );
   }
 }

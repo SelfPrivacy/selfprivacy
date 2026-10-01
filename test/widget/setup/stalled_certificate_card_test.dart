@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/stalled_certificate_card.dart';
 
 import '../../helpers/widget_harness.dart';
-
-class _MockServerApi extends Mock implements ServerApi {}
 
 class _MockConnection extends Mock implements ApiConnectionRepository {}
 
@@ -17,9 +14,7 @@ void main() {
 
   setUp(() {
     final connection = _MockConnection();
-    when(
-      () => connection.apiData,
-    ).thenReturn(ApiData(_MockServerApi(), connection: () => null));
+    when(() => connection.apiData).thenReturn(ApiData(connection: () => null));
     getIt.registerSingleton<ApiConnectionRepository>(connection);
   });
 

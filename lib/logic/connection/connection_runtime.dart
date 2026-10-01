@@ -1,0 +1,229 @@
+import 'dart:async';
+
+import 'package:pub_semver/pub_semver.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
+
+class ConnectionRuntime {
+  ConnectionRuntime({
+    required this.connection,
+    required this.lifecycle,
+    required final NetworkConnectivitySource connectivity,
+    required this.operations,
+    required this.onChanged,
+    final DateTime Function()? now,
+  }) {
+    reachability = Reachability(
+      connectivity: connectivity,
+      probe: () async => await connection.api.getApiVersion() != null,
+    );
+    scheduler = SyncScheduler(
+      cache: connection.cache,
+      reachability: reachability,
+      lifecycle: lifecycle,
+      commands: connection.commands,
+      now: now,
+    );
+    connection.scheduler = scheduler;
+  }
+
+  static const socketGrace = Duration(seconds: 30);
+  final ServerConnection connection;
+  final AppLifecycle lifecycle;
+  final OperationQueue operations;
+  final void Function() onChanged;
+  late final Reachability reachability;
+  late final SyncScheduler scheduler;
+  final _subscriptions = <StreamSubscription<Object?>>[];
+  StreamSubscription<List<ServerJob>>? _jobs;
+  InterestHandle? _jobsFallback;
+  Timer? _grace;
+  Timer? _socketRetry;
+  bool _suspended = false;
+  bool _disposed = false;
+  bool _socketAllowed = true;
+  bool get canStream =>
+      !_disposed &&
+      !_suspended &&
+      _socketAllowed &&
+      reachability.current == ReachabilityStatus.reachable;
+
+  void start() {
+    _subscriptions
+      ..add(
+        connection.changes.listen((_) {
+          _connectJobs();
+          _observeJobs();
+          onChanged();
+        }),
+      )
+      ..add(
+        reachability.stream.listen((_) {
+          _connectJobs();
+          onChanged();
+        }),
+      )
+      ..add(lifecycle.foregroundChanges.listen((_) => _visibilityChanged()))
+      ..add(operations.changes.listen((_) => _observeJobs()));
+    scheduler.start();
+    _setJobsHealth(false);
+    _visibilityChanged();
+  }
+
+  void event(final GraphQLTransportEvent event) {
+    if (_disposed) {
+      return;
+    }
+    switch (event) {
+      case GraphQLTransportEvent.reachable:
+        reachability.reportSuccess();
+      case GraphQLTransportEvent.protectedSuccess:
+        reachability.reportProtectedSuccess();
+      case GraphQLTransportEvent.authFailure:
+        reachability.reportAuthFailure();
+        _closeJobs();
+      case GraphQLTransportEvent.networkFailure:
+        reachability.reportNetworkFailure();
+      case GraphQLTransportEvent.requestStarted:
+      case GraphQLTransportEvent.requestFinished:
+        break;
+    }
+  }
+
+  void setSuspended({required final bool suspended}) {
+    if (_disposed) {
+      return;
+    }
+    _suspended = suspended;
+    scheduler.setSuspended(suspended: suspended);
+    if (suspended) {
+      reachability.pause();
+      _closeJobs();
+    } else {
+      if (lifecycle.isForeground) {
+        reachability.resume();
+      }
+      _connectJobs();
+      onChanged();
+    }
+  }
+
+  void _visibilityChanged() {
+    if (lifecycle.isForeground) {
+      _grace?.cancel();
+      _grace = null;
+      _socketAllowed = true;
+      _connectJobs();
+    } else {
+      _grace ??= Timer(socketGrace, () {
+        _grace = null;
+        _socketAllowed = false;
+        _closeJobs();
+        onChanged();
+      });
+    }
+    onChanged();
+  }
+
+  void _setJobsHealth(final bool healthy) {
+    if (_disposed) {
+      return;
+    }
+    if (healthy) {
+      _jobsFallback?.dispose();
+      _jobsFallback = null;
+    } else {
+      _jobsFallback ??= scheduler.boost(
+        'serverJobs',
+        interval: const Duration(seconds: 10),
+      );
+    }
+  }
+
+  void _connectJobs() {
+    final version = connection.cache.apiVersion.value.data;
+    if (_disposed ||
+        _suspended ||
+        !_socketAllowed ||
+        _jobs != null ||
+        _socketRetry != null ||
+        version == null ||
+        version < Version(3, 3, 0) ||
+        reachability.current != ReachabilityStatus.reachable ||
+        !lifecycle.isForeground) {
+      return;
+    }
+    _jobs = connection.api
+        .getServerJobsStream(
+          onConnectionState: ({required final bool connected}) {
+            if (!_disposed && !_suspended && connection.isAttached) {
+              _setJobsHealth(connected);
+            }
+          },
+        )
+        .listen(
+          (final jobs) {
+            if (connection.isAttached && !_disposed) {
+              connection.jobs.receiveSnapshot(jobs);
+            }
+          },
+          onError: (final Object _) => _jobsLost(),
+          onDone: _jobsLost,
+        );
+  }
+
+  void _jobsLost() {
+    if (_disposed) {
+      return;
+    }
+    _closeJobs();
+    _socketRetry ??= Timer(const Duration(seconds: 10), () {
+      _socketRetry = null;
+      _connectJobs();
+    });
+  }
+
+  void _observeJobs() {
+    for (final job in [
+      ...?connection.jobs.value.data,
+      ...connection.jobs.confirmedBeforeLoad.values,
+    ]) {
+      if (job.status == JobStatusEnum.finished ||
+          job.status == JobStatusEnum.error) {
+        operations.observeJob(
+          job.uid,
+          succeeded: job.status == JobStatusEnum.finished,
+        );
+      }
+    }
+  }
+
+  void _closeJobs() {
+    final subscription = _jobs;
+    _jobs = null;
+    unawaited(subscription?.cancel());
+    _setJobsHealth(false);
+  }
+
+  void dispose() {
+    if (_disposed) {
+      return;
+    }
+    _disposed = true;
+    _grace?.cancel();
+    _socketRetry?.cancel();
+    _closeJobs();
+    _jobsFallback?.dispose();
+    for (final subscription in _subscriptions) {
+      unawaited(subscription.cancel());
+    }
+    scheduler.dispose();
+    reachability.dispose();
+  }
+}

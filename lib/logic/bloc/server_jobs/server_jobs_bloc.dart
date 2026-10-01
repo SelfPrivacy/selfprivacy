@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
 
-part 'server_jobs_state.dart';
 part 'server_jobs_event.dart';
+part 'server_jobs_state.dart';
 
 class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
   ServerJobsBloc() : super(ServerJobsInitialState()) {
@@ -77,12 +78,19 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
   }
 
   Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
+    final destinations = Map<String, String>.unmodifiable(serviceToDisk);
+    await getIt<ApiConnectionRepository>().run<void>(
+      OperationKind.manageJobs,
+      (final owner) => _migrateToBinds(destinations, owner),
+    );
+  }
+
+  Future<void> _migrateToBinds(
+    final Map<String, String> serviceToDisk,
+    final ServerConnection connection,
+  ) async {
     final fallbackDrive =
-        getIt<ApiConnectionRepository>().apiData.volumes.data
+        connection.volumes.store.value.data
             ?.where((final drive) => drive.root)
             .firstOrNull
             ?.name ??

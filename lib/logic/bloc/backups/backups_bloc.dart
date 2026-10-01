@@ -6,7 +6,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/bloc/server_operation_handler.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -27,19 +31,37 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     on<BackupsServerReset>(_resetState, transformer: droppable());
     on<BackupsStateChanged>(_updateState, transformer: droppable());
     on<InitializeBackupsRepository>(
-      _initializeRepository,
+      serverOperation(OperationKind.manageBackups, _initializeRepository),
       transformer: droppable(),
     );
     on<ForceSnapshotListUpdate>(
-      _forceSnapshotListUpdate,
+      serverOperation(OperationKind.manageBackups, _forceSnapshotListUpdate),
       transformer: droppable(),
     );
-    on<CreateBackups>(_createBackups, transformer: sequential());
-    on<RestoreBackup>(_restoreBackup, transformer: sequential());
-    on<SetAutobackupPeriod>(_setAutobackupPeriod, transformer: restartable());
-    on<SetAutobackupQuotas>(_setAutobackupQuotas, transformer: restartable());
-    on<ForgetSnapshot>(_forgetSnapshot, transformer: sequential());
-    on<RemoveBackupsRepository>(_removeRepository, transformer: droppable());
+    on<CreateBackups>(
+      serverOperation(OperationKind.manageBackups, _createBackups),
+      transformer: sequential(),
+    );
+    on<RestoreBackup>(
+      serverOperation(OperationKind.manageBackups, _restoreBackup),
+      transformer: sequential(),
+    );
+    on<SetAutobackupPeriod>(
+      serverOperation(OperationKind.manageBackups, _setAutobackupPeriod),
+      transformer: restartable(),
+    );
+    on<SetAutobackupQuotas>(
+      serverOperation(OperationKind.manageBackups, _setAutobackupQuotas),
+      transformer: restartable(),
+    );
+    on<ForgetSnapshot>(
+      serverOperation(OperationKind.manageBackups, _forgetSnapshot),
+      transformer: sequential(),
+    );
+    on<RemoveBackupsRepository>(
+      serverOperation(OperationKind.manageBackups, _removeRepository),
+      transformer: droppable(),
+    );
 
     final connectionRepository = getIt<ApiConnectionRepository>();
 
@@ -120,16 +142,13 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _initializeRepository(
     final InitializeBackupsRepository event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) async {
     if (state is! BackupsUninitialized) {
       return;
     }
-    final owner = getIt<ApiConnectionRepository>();
-    final repository = owner.connection?.backups;
-    if (repository == null) {
-      return;
-    }
+    final repository = connection.backups;
     final previous = state;
     emit(
       BackupsInitializing(
@@ -139,6 +158,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     );
     final String? encryptionKey = repository.configValue.data?.encryptionKey;
     if (encryptionKey == null) {
+      OperationExecution.current?.recordCompletion(succeeded: false);
       emit(const BackupsUninitialized());
       getIt<NavigationService>().showSnackBar(
         'backup.backups_encryption_key_not_found'.tr(),
@@ -172,7 +192,11 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       }
 
       final createStorageResult = await provider.createStorage(bucketName);
-      if (!repository.connection.isAttached || emit.isDone) {
+      OperationExecution.current?.recordCompletion(
+        succeeded:
+            createStorageResult.success && createStorageResult.data.isNotEmpty,
+      );
+      if (!repository.connection.isAttached) {
         return;
       }
       if (!createStorageResult.success || createStorageResult.data.isEmpty) {
@@ -188,7 +212,8 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       final BackupsApplicationKey? key = (await provider.createApplicationKey(
         bucketId,
       )).data;
-      if (!repository.connection.isAttached || emit.isDone) {
+      OperationExecution.current?.recordCompletion(succeeded: key != null);
+      if (!repository.connection.isAttached) {
         return;
       }
 
@@ -209,7 +234,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       );
 
       await getIt<ApiConfigModel>().setBackblazeBucket(bucket);
-      if (!repository.connection.isAttached || emit.isDone) {
+      if (!repository.connection.isAttached) {
         return;
       }
       emit(state.copyWith(backblazeBucket: bucket));
@@ -226,7 +251,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         password: bucket.applicationKey,
       ),
     );
-    if (!repository.connection.isAttached || emit.isDone) {
+    if (!repository.connection.isAttached) {
       return;
     }
     if (!_configurationConfirmed(result)) {
@@ -262,15 +287,16 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _forceSnapshotListUpdate(
     final ForceSnapshotListUpdate event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) async {
     final currentState = state;
-    final repository = getIt<ApiConnectionRepository>().connection?.backups;
-    if (currentState is BackupsInitialized && repository != null) {
+    final repository = connection.backups;
+    if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
       getIt<NavigationService>().showSnackBar('backup.refetching_list'.tr());
       final result = await repository.forceBackupListReload();
-      if (!repository.connection.isAttached || emit.isDone) {
+      if (!repository.connection.isAttached) {
         return;
       }
       _isConfirmed(result);
@@ -280,18 +306,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _createBackups(
     final CreateBackups event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) async {
     final currentState = state;
-    final repository = getIt<ApiConnectionRepository>().connection?.backups;
-    if (currentState is BackupsInitialized && repository != null) {
+    final repository = connection.backups;
+    if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
       for (final service in event.services) {
-        if (!repository.connection.isAttached || emit.isDone) {
+        if (!repository.connection.isAttached) {
           return;
         }
         final result = await repository.startBackup(service.id);
-        if (!repository.connection.isAttached || emit.isDone) {
+        if (!repository.connection.isAttached) {
           return;
         }
         if (_isConfirmed(result) && result.payload.value == null) {
@@ -306,17 +333,18 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _restoreBackup(
     final RestoreBackup event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) async {
     final currentState = state;
-    final repository = getIt<ApiConnectionRepository>().connection?.backups;
-    if (currentState is BackupsInitialized && repository != null) {
+    final repository = connection.backups;
+    if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
       final result = await repository.restoreBackup(
         event.backupId,
         event.restoreStrategy,
       );
-      if (!repository.connection.isAttached || emit.isDone) {
+      if (!repository.connection.isAttached) {
         return;
       }
       if (_isConfirmed(result) && result.payload.value == null) {
@@ -328,8 +356,10 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _setAutobackupPeriod(
     final SetAutobackupPeriod event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) => _changeConfiguration(
+    connection,
     (final repository) =>
         repository.setAutobackupPeriod(period: event.period?.inMinutes),
     emit,
@@ -337,27 +367,30 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _setAutobackupQuotas(
     final SetAutobackupQuotas event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) => _changeConfiguration(
+    connection,
     (final repository) => repository.setAutobackupQuotas(event.quotas),
     emit,
   );
 
   Future<void> _changeConfiguration(
+    final ServerConnection connection,
     final Future<ServerMutationResult<BackupConfiguration>> Function(
       BackupsRepository,
     )
     change,
-    final Emitter<BackupsState> emit,
+    final void Function(BackupsState) emit,
   ) async {
     final currentState = state;
-    final repository = getIt<ApiConnectionRepository>().connection?.backups;
-    if (currentState is! BackupsInitialized || repository == null) {
+    final repository = connection.backups;
+    if (currentState is! BackupsInitialized) {
       return;
     }
     emit(BackupsBusy.fromState(currentState));
     final result = await change(repository);
-    if (!repository.connection.isAttached || emit.isDone) {
+    if (!repository.connection.isAttached) {
       return;
     }
     _configurationConfirmed(result);
@@ -366,14 +399,15 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _forgetSnapshot(
     final ForgetSnapshot event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) async {
     final currentState = state;
-    final repository = getIt<ApiConnectionRepository>().connection?.backups;
-    if (currentState is BackupsInitialized && repository != null) {
+    final repository = connection.backups;
+    if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
       final result = await repository.forgetSnapshot(event.backupId);
-      if (!repository.connection.isAttached || emit.isDone) {
+      if (!repository.connection.isAttached) {
         return;
       }
       _isConfirmed(result);
@@ -383,16 +417,17 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
 
   Future<void> _removeRepository(
     final RemoveBackupsRepository event,
-    final Emitter<BackupsState> emit,
+    final ServerConnection connection,
+    final void Function(BackupsState) emit,
   ) async {
     final currentState = state;
-    final repository = getIt<ApiConnectionRepository>().connection?.backups;
-    if (currentState is! BackupsInitialized || repository == null) {
+    final repository = connection.backups;
+    if (currentState is! BackupsInitialized) {
       return;
     }
     emit(BackupsBusy.fromState(currentState));
     final result = await repository.removeRepository();
-    if (!repository.connection.isAttached || emit.isDone) {
+    if (!repository.connection.isAttached) {
       return;
     }
     if (!_configurationConfirmed(result)) {
@@ -400,7 +435,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       return;
     }
     await getIt<ResourcesModel>().removeBackblazeBucket();
-    if (!repository.connection.isAttached || emit.isDone) {
+    if (!repository.connection.isAttached) {
       return;
     }
     emit(_configuredState(currentState, result.payload.value));

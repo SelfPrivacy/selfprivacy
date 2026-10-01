@@ -29,6 +29,11 @@ class MetricsRepository {
   Future<MetricsStateUpdate> getRelevantServerMetrics(
     final Period period,
   ) async {
+    final hub = getIt<ApiConnectionRepository>().hub;
+    final owner = hub.active;
+    if (!hub.canRead || owner == null) {
+      throw StateError('Metrics paused');
+    }
     MetricsLoaded? state;
     int nextUpdate = 0;
 
@@ -47,6 +52,9 @@ class MetricsRepository {
       return MetricsStateUpdate(state, nextUpdate);
     }
 
+    if (!hub.canRead || !owner.isAttached) {
+      throw StateError('Metrics paused');
+    }
     try {
       final stateLoaded = await _getLegacyMetrics(period);
       nextUpdate = stateLoaded.metrics.stepsInSecond.toInt();
@@ -61,6 +69,7 @@ class MetricsRepository {
   }
 
   Future<MetricsLoaded> _getServerMetrics(final Period period) async {
+    final api = getIt<ApiConnectionRepository>().api;
     final String? apiVersion =
         getIt<ApiConnectionRepository>().apiData.apiVersion.data;
     if (apiVersion == null) {
@@ -91,7 +100,7 @@ class MetricsRepository {
         start = end.subtract(const Duration(days: 15));
     }
 
-    final result = await getIt<ApiConnectionRepository>().api.getServerMetrics(
+    final result = await api.getServerMetrics(
       start: start,
       end: end,
       step: end.difference(start).inSeconds ~/ 120,
@@ -101,12 +110,11 @@ class MetricsRepository {
       throw MetricsLoadException('Metrics data is null');
     }
 
-    final memoryResult = await getIt<ApiConnectionRepository>().api
-        .getMemoryMetrics(
-          start: start,
-          end: end,
-          step: end.difference(start).inSeconds ~/ 120,
-        );
+    final memoryResult = await api.getMemoryMetrics(
+      start: start,
+      end: end,
+      step: end.difference(start).inSeconds ~/ 120,
+    );
 
     final diskResult = await getIt<ApiConnectionRepository>().api
         .getDiskMetrics(

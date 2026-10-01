@@ -22,6 +22,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import '../../../../helpers/fixtures/backup_fixtures.dart';
 import '../../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
+import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _Repository extends Mock implements ApiConnectionRepository {}
@@ -57,7 +58,7 @@ void main() {
     api = _Api();
     resources = _Resources();
     navigation = _Navigation();
-    data = ApiData(api, connection: () => connection);
+    data = ApiData(connection: () => connection);
     origin = ServerStateOrigin('server');
     connection = ServerConnection(
       api: api,
@@ -78,6 +79,7 @@ void main() {
       fixtures['AllServices'] as Map<String, dynamic>,
     ).services.allServices.map(Service.fromGraphQL).toList();
     when(() => repository.connection).thenReturn(connection);
+    stubOperations(repository, connection);
     when(() => repository.api).thenReturn(api);
     when(() => repository.apiData).thenReturn(data);
     when(
@@ -432,6 +434,7 @@ void main() {
         currentOrigin: () => origin,
       )..setVersion(Version(3, 6, 0));
       when(() => repository.connection).thenReturn(connection);
+      stubOperations(repository, connection);
       await dispatch(InitializeBackupsRepository(aBackupsCredential()));
       expect(bloc.state, isA<BackupsUninitialized>());
       verifyNever(() => api.initializeRepository(any()));

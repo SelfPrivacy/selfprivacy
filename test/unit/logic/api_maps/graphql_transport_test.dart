@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -8,6 +9,8 @@ import 'package:http/testing.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
 
 class _MockTlsContext extends Mock implements TlsContext {}
@@ -26,6 +29,8 @@ void main() {
     final GraphQLTokenProvider? tokenProvider,
     final GraphQLAuthFailureHandler? onAuthFailure,
     final TlsPolicy tlsPolicy = TlsPolicy.strict,
+    final void Function(GraphQLTransportEvent)? onEvent,
+    final void Function()? beforeRequest,
   }) => GraphQLTransport(
     domainProvider: () => domain,
     tokenProvider: tokenProvider,
@@ -34,6 +39,8 @@ void main() {
     tlsContext: tlsContext,
     tlsPolicy: tlsPolicy,
     consoleLog: (final log) => logs.add(log),
+    onEvent: onEvent,
+    beforeRequest: beforeRequest,
   );
 
   Future<QueryResult<Object?>> query(final GraphQLTransport transport) =>
@@ -94,6 +101,67 @@ void main() {
     await query(transport());
 
     expect(requests.single.headers, isNot(contains('Authorization')));
+  });
+
+  test(
+    'recipient cancellation after preparation prevents HTTP dispatch and logging',
+    () async {
+      final recipient = SecretRecipient();
+      final prepared = Completer<void>();
+      final graphQLTransport = transport(tokenProvider: () => token);
+      final pending = recipient.protect(() async {
+        await prepared.future;
+        return query(graphQLTransport);
+      });
+      final rejected = expectLater(pending, throwsA(isA<OperationNotSent>()));
+      recipient.dispose();
+      prepared.complete();
+      await rejected;
+      expect(requests, isEmpty);
+      expect(logs, isEmpty);
+    },
+  );
+
+  test(
+    'reports protected request lifecycle without exposing payloads',
+    () async {
+      final events = <GraphQLTransportEvent>[];
+      await query(transport(tokenProvider: () => token, onEvent: events.add));
+      await Future<void>.delayed(Duration.zero);
+      expect(events, [
+        GraphQLTransportEvent.requestStarted,
+        GraphQLTransportEvent.protectedSuccess,
+        GraphQLTransportEvent.requestFinished,
+      ]);
+    },
+  );
+
+  test('refuses gated dispatch before any network request', () async {
+    final events = <GraphQLTransportEvent>[];
+    final result = await query(
+      transport(
+        beforeRequest: () => throw const GraphQLDispatchDeferred(),
+        onEvent: events.add,
+      ),
+    );
+    expect(result.hasException, isTrue);
+    expect(requests, isEmpty);
+    expect(events, isEmpty);
+  });
+
+  test('public request success is not proof of authentication', () async {
+    final events = <GraphQLTransportEvent>[];
+    await transport(
+      tokenProvider: () => token,
+      onEvent: events.add,
+    ).client().query<Object?>(
+      QueryOptions<Object?>(
+        document: parseString('query { api { version } }'),
+        context: const Context().withEntry(const PublicGraphQLRequest()),
+      ),
+    );
+    expect(events, contains(GraphQLTransportEvent.reachable));
+    expect(events, isNot(contains(GraphQLTransportEvent.protectedSuccess)));
   });
 
   test('passes its TLS policy to the HTTP client', () async {

@@ -17,6 +17,12 @@ class UsersRepository {
   final Map<String, User> _known = {};
   int _knownReadRevision = 0;
 
+  void restoreFrom(final UsersRepository previous) {
+    previous._clearReconciled();
+    _known.addAll(previous._known);
+    _knownReadRevision = store.readRevision;
+  }
+
   static Future<List<User>> fetch(final ServerApi api) async =>
       List.unmodifiable(await api.getAllUsers());
 

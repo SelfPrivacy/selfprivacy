@@ -29,7 +29,7 @@ void main() {
     repository = _MockApiConnectionRepository();
     api = _Api();
     connection = seededConnection(api);
-    apiData = ApiData(api, connection: () => connection);
+    apiData = ApiData(connection: () => connection);
     dataController = StreamController<ApiData>.broadcast();
     connectionStatusController = StreamController<ConnectionStatus>.broadcast();
 
@@ -82,7 +82,7 @@ void main() {
   });
 
   test('reports an error when no user data is available', () async {
-    when(api.getAllUsers).thenThrow(const StaleDataError());
+    when(api.getAllUsers).thenThrow(StateError('unavailable'));
     await connection.users.refresh(force: true);
 
     final nextState = usersBloc.stream.first;
@@ -93,7 +93,7 @@ void main() {
 
   test('keeps cached user data when a refresh fails', () async {
     connection.users.store.push([User.fake(login: 'alice')]);
-    when(api.getAllUsers).thenThrow(const StaleDataError());
+    when(api.getAllUsers).thenThrow(StateError('unavailable'));
     await connection.users.refresh(force: true);
 
     final nextState = usersBloc.stream.first;

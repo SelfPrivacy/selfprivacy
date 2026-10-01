@@ -1,14 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/ui/pages/server/logs.dart';
 
+import '../../helpers/operation_fixture.dart';
 import '../../helpers/widget_harness.dart';
 
 class _MockServerLogsBloc extends Mock implements ServerLogsBloc {}
+
+class _Api extends Mock implements ServerApi {}
+
+class _Repository extends Mock implements ApiConnectionRepository {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
@@ -38,6 +48,65 @@ void main() {
       () => serverLogsBloc.stream,
     ).thenAnswer((_) => const Stream<ServerLogsState>.empty());
   });
+
+  for (final pagination in [false, true]) {
+    test(
+      'deferred logs retain state and resume after rotation: pagination=$pagination',
+      () async {
+        final api = _Api();
+        final hub = fixtureHub(api);
+        final repository = _Repository();
+        when(() => repository.hub).thenReturn(hub);
+        when(
+          () => repository.apiData,
+        ).thenReturn(ApiData(connection: () => hub.active));
+        getIt.registerSingleton<ApiConnectionRepository>(repository);
+        addTearDown(() => getIt.unregister<ApiConnectionRepository>());
+        final fixture = serverLogsBloc.state as ServerLogsLoaded;
+        when(
+          () => api.getServerLogs(
+            limit: 50,
+            upCursor: any(named: 'upCursor'),
+            downCursor: any(named: 'downCursor'),
+            slice: any(named: 'slice'),
+            unit: any(named: 'unit'),
+          ),
+        ).thenAnswer(
+          (_) async => (
+            fixture.oldEntries.toList(),
+            const ServerLogsPageMeta(downCursor: null, upCursor: 'cursor-1'),
+          ),
+        );
+        final bloc = ServerLogsBloc();
+        addTearDown(bloc.close);
+        if (pagination) {
+          bloc.add(const ServerLogsFetch());
+          await pumpEventQueue();
+          expect(bloc.state, isA<ServerLogsLoaded>());
+        }
+        final before = bloc.state;
+        final work = Completer<void>();
+        final operation = hub.submit(
+          OperationKind.manageJobs,
+          (_) => work.future,
+        );
+        final rotation = hub.rotateToken();
+        bloc.add(pagination ? ServerLogsFetchMore() : const ServerLogsFetch());
+        await pumpEventQueue();
+        expect(
+          bloc.state,
+          pagination ? same(before) : isA<ServerLogsLoading>(),
+        );
+        expect(hub.cancelRotation(), isTrue);
+        await rotation;
+        await pumpEventQueue();
+        expect(bloc.state, isA<ServerLogsLoaded>());
+        expect((bloc.state as ServerLogsLoaded).oldEntries, fixture.oldEntries);
+        work.complete();
+        await operation.completion;
+      },
+    );
+  }
 
   testWidgets('enables the all-units log-filter option', (final tester) async {
     await pumpForTest(

@@ -14,7 +14,6 @@ import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/pages/users/new_user.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
-import '../../../helpers/fixtures/graphql_fixtures.dart';
 import '../../../helpers/widget_harness.dart';
 
 class _MockApiConnectionRepository extends Mock
@@ -55,8 +54,7 @@ void main() {
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
-    final apiData = ApiData(aServerApi(), connection: () => null);
-    apiData.groups.data = const [];
+    final apiData = ApiData(connection: () => null);
     when(() => repository.apiData).thenReturn(apiData);
     getIt.registerSingleton<ApiConnectionRepository>(repository);
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
+import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
@@ -199,6 +200,16 @@ class RecoveryKeyConfiguration extends StatefulWidget {
 }
 
 class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
+  final _recipient = SecretRecipient();
+
+  @override
+  void dispose() {
+    _recipient.dispose();
+    _amountController.dispose();
+    _expirationController.dispose();
+    super.dispose();
+  }
+
   bool _isAmountToggled = false;
   bool _isExpirationToggled = false;
 
@@ -221,6 +232,7 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
       final String token = await context
           .read<RecoveryKeyBloc>()
           .generateRecoveryKey(
+            recipient: _recipient,
             numberOfUses: _isAmountToggled
                 ? int.tryParse(_amountController.text)
                 : null,
@@ -236,6 +248,9 @@ class _RecoveryKeyConfigurationState extends State<RecoveryKeyConfiguration> {
         context,
       ).push(materialRoute(NewRecoveryKeyPage(recoveryKey: token)));
     } on GenerationError catch (e) {
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _isLoading = false;
       });

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
@@ -12,6 +13,8 @@ class DeviceItem extends StatelessWidget {
     this.enabled = true,
     this.onRevoke,
     this.onRotate,
+    this.rotationStatus = RotationStatus.idle,
+    this.onCancelRotation,
     super.key,
   });
 
@@ -20,28 +23,38 @@ class DeviceItem extends StatelessWidget {
   final bool enabled;
   final VoidCallback? onRevoke;
   final VoidCallback? onRotate;
+  final RotationStatus rotationStatus;
+  final VoidCallback? onCancelRotation;
 
   @override
   Widget build(final BuildContext context) => ListTile(
     enabled: enabled && !pending,
-    trailing: pending
+    trailing: rotationStatus == RotationStatus.waiting
+        ? TextButton(
+            onPressed: onCancelRotation,
+            child: Text('basis.cancel'.tr()),
+          )
+        : pending || rotationStatus == RotationStatus.rotating
         ? SizedBox.square(
             dimension: 24,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              semanticsLabel: 'devices.main_screen.revoking'.tr(
-                args: [device.name],
-              ),
+              semanticsLabel: rotationStatus == RotationStatus.rotating
+                  ? 'devices.rotation.running'.tr()
+                  : 'devices.main_screen.revoking'.tr(args: [device.name]),
             ),
           )
         : null,
     title: Text(device.name),
-    subtitle: Text(
-      'devices.main_screen.access_granted_on'.tr(
+    subtitle: Text(switch (rotationStatus) {
+      RotationStatus.waiting => 'devices.rotation.waiting'.tr(),
+      RotationStatus.rotating => 'devices.rotation.running'.tr(),
+      RotationStatus.suppressed => 'devices.rotation.suppressed'.tr(),
+      RotationStatus.idle => 'devices.main_screen.access_granted_on'.tr(
         args: [DateFormat.yMMMMd().format(device.date)],
       ),
-    ),
-    onTap: !enabled || pending
+    }),
+    onTap: !enabled || pending || rotationStatus != RotationStatus.idle
         ? null
         : device.isCaller
         ? () => _showTokenRefreshDialog(context, device)

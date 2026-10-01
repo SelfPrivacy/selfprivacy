@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
@@ -35,7 +37,9 @@ class JobsCubit extends Cubit<JobsState> {
   ServerConnection? _jobConnection;
 
   void _handleServerJobs(final List<ServerJob> jobs) {
-    if (_jobConnection?.isAttached != true) {
+    if (_jobConnection == null ||
+        getIt<ApiConnectionRepository>().connection?.origin.serverId !=
+            _jobConnection!.origin.serverId) {
       return;
     }
     if (state is! JobsStateLoading) {
@@ -67,10 +71,13 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> rebootServer() async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
+    await getIt<ApiConnectionRepository>().run<void>(
+      OperationKind.manageJobs,
+      _rebootServer,
+    );
+  }
+
+  Future<void> _rebootServer(final ServerConnection connection) async {
     if (state is JobsStateEmpty) {
       emit(
         JobsStateLoading(
@@ -111,10 +118,13 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> upgradeServer() async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
+    await getIt<ApiConnectionRepository>().run<void>(
+      OperationKind.manageJobs,
+      _upgradeServer,
+    );
+  }
+
+  Future<void> _upgradeServer(final ServerConnection connection) async {
     if (state is JobsStateEmpty) {
       _jobConnection = connection;
       emit(
@@ -170,10 +180,13 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> applyAll() async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
+    await getIt<ApiConnectionRepository>().run<void>(
+      OperationKind.applyChanges,
+      _applyAll,
+    );
+  }
+
+  Future<void> _applyAll(final ServerConnection connection) async {
     if (state is JobsStateWithJobs) {
       _jobConnection = connection;
       final jobs = [...(state as JobsStateWithJobs).clientJobList];
@@ -208,6 +221,7 @@ class JobsCubit extends Cubit<JobsState> {
           ),
         );
         final (result, message) = await job.execute();
+        OperationExecution.current?.recordCompletion(succeeded: result);
         if (result) {
           emit(
             (state as JobsStateLoading).updateJobStatus(
@@ -307,6 +321,7 @@ class JobsCubit extends Cubit<JobsState> {
     // If any of the records have a null content, we don't want to update
     // the DNS records
     if (newDnsRecords.isEmpty || oldDnsRecords.isEmpty) {
+      OperationExecution.current?.recordCompletion(succeeded: false);
       emit(
         (state as JobsStateLoading).updateJobStatus(
           UpdateDnsRecordsJob.jobId,
@@ -321,6 +336,7 @@ class JobsCubit extends Cubit<JobsState> {
       oldDnsRecords,
       newDnsRecords,
     )) {
+      OperationExecution.current?.recordCompletion(succeeded: true);
       emit(
         (state as JobsStateLoading).updateJobStatus(
           UpdateDnsRecordsJob.jobId,
@@ -340,6 +356,9 @@ class JobsCubit extends Cubit<JobsState> {
             oldRecords: oldDnsRecords,
             domain: domain!,
           );
+      OperationExecution.current?.recordCompletion(
+        succeeded: dnsCreateResult.success,
+      );
 
       emit(
         (state as JobsStateLoading).updateJobStatus(
@@ -354,10 +373,13 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> collectNixGarbage() async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return;
-    }
+    await getIt<ApiConnectionRepository>().run<void>(
+      OperationKind.manageJobs,
+      _collectNixGarbage,
+    );
+  }
+
+  Future<void> _collectNixGarbage(final ServerConnection connection) async {
     if (state is JobsStateEmpty) {
       _jobConnection = connection;
       emit(
@@ -423,7 +445,14 @@ class JobsCubit extends Cubit<JobsState> {
       emit(JobsStateEmpty());
     }
     if (rebuildJobUid != null) {
-      await _jobConnection?.jobs.removeJob(rebuildJobUid);
+      final serverId = _jobConnection?.origin.serverId;
+      await getIt<ApiConnectionRepository>().run(OperationKind.manageJobs, (
+        final owner,
+      ) async {
+        if (owner.origin.serverId == serverId) {
+          await owner.jobs.removeJob(rebuildJobUid);
+        }
+      });
     }
     _jobConnection = null;
   }

@@ -13,6 +13,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
@@ -27,7 +29,7 @@ class _Tls extends Mock implements TlsContext {}
 void main() {
   late ResourcesModel resources;
   late _Api api;
-  late ApiConnectionRepository repository;
+  late ServerConnectionHub hub;
   late List<ApiToken> tokens;
 
   setUpAll(() async {
@@ -47,10 +49,13 @@ void main() {
     api = _Api();
     when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
-    repository = ApiConnectionRepository(resourcesModel: resources, api: api);
+    hub = ServerConnectionHub(
+      resourcesModel: resources,
+      createApi: (_, _, _) => api,
+    );
   });
   tearDown(() async {
-    repository.dispose();
+    hub.dispose();
     await resources.dispose();
     await getIt.reset();
     for (final name in [BNames.resourcesBox, BNames.serverInstallationBox]) {
@@ -62,8 +67,11 @@ void main() {
   test(
     'refresh loads only devices and confirmed removal is published',
     () async {
-      expect(await repository.refreshDevices(), RefreshResult.applied);
-      final before = repository.devicesSnapshot;
+      expect(
+        await hub.active!.devices.refresh(force: true),
+        RefreshResult.applied,
+      );
+      final before = hub.active!.devices.value;
       final name = tokens.firstWhere((final token) => !token.isCaller).name;
       when(() => api.deleteApiToken(name)).thenAnswer(
         (_) async => ServerMutationResult(
@@ -71,12 +79,15 @@ void main() {
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      final changed = repository.devicesStream.firstWhere(
+      final changed = hub.active!.devices.changes.firstWhere(
         (final value) => value.data?.length == 1,
       );
-      await repository.revokeDevice(name);
+      await hub.run(
+        OperationKind.manageDevices,
+        (final connection) => connection.devices.revoke(name),
+      );
       expect((await changed).data!.single.isCaller, isTrue);
-      expect(repository.devicesSnapshot.updatedAt, before.updatedAt);
+      expect(hub.active!.devices.value.updatedAt, before.updatedAt);
       verify(api.getApiTokens).called(1);
       verifyNever(api.getAllServices);
     },
@@ -90,14 +101,17 @@ void main() {
     'dispose',
   ]) {
     test('$change detaches pending commands and reads', () async {
-      await repository.refreshDevices();
+      await hub.active!.devices.refresh(force: true);
       final read = Completer<List<ApiToken>>();
       when(api.getApiTokens).thenAnswer((_) => read.future);
-      final reading = repository.refreshDevices();
+      final reading = hub.active!.devices.refresh(force: true);
       final name = tokens.firstWhere((final token) => !token.isCaller).name;
       final mutation = Completer<ServerMutationResult<void>>();
       when(() => api.deleteApiToken(name)).thenAnswer((_) => mutation.future);
-      final deleting = repository.revokeDevice(name);
+      final deleting = hub.run(
+        OperationKind.manageDevices,
+        (final connection) => connection.devices.revoke(name),
+      );
       switch (change) {
         case 'server':
           await resources.removeServer(resources.servers.single);
@@ -115,9 +129,9 @@ void main() {
             ),
           );
         case 'clear':
-          await repository.clear();
+          hub.clear();
         case 'dispose':
-          repository.dispose();
+          hub.dispose();
       }
       await pumpEventQueue();
       expect(await deleting, isNull);
@@ -130,15 +144,15 @@ void main() {
       );
       read.complete(tokens);
       await pumpEventQueue();
-      expect(repository.devicesSnapshot.data, isNull);
+      expect(hub.active?.devices.value.data, isNull);
     });
   }
 
   test('a late version response does not start a new session read', () async {
     final version = Completer<String>();
     when(api.fetchApiVersion).thenAnswer((_) => version.future);
-    final reading = repository.refreshDevices();
-    await repository.clear();
+    final reading = hub.active!.devices.refresh(force: true);
+    hub.clear();
     expect(await reading, RefreshResult.disposed);
     version.complete('3.6.0');
     await pumpEventQueue();
@@ -165,9 +179,10 @@ void main() {
         ..registerSingleton<TlsContext>(tls)
         ..registerSingleton<ApiConfigModel>(ApiConfigModel())
         ..registerSingleton<ConsoleModel>(ConsoleModel());
-      final bound = ApiConnectionRepository(resourcesModel: resources);
+      final bound = ServerConnectionHub(resourcesModel: resources);
       addTearDown(bound.dispose);
-      final reading = bound.refreshDevices();
+      final previous = bound.active!;
+      final reading = previous.devices.refresh(force: true);
       await pumpEventQueue();
       expect(requests.single.url.host, 'api.example.org');
       expect(requests.single.headers['authorization'], 'Bearer api-token');
@@ -191,11 +206,8 @@ void main() {
         ),
       );
       await pumpEventQueue();
-      expect(
-        bound.currentConnectionStatus,
-        isNot(ConnectionStatus.unauthorized),
-      );
-      expect(bound.devicesSnapshot.data, isNull);
+      expect(previous.isAttached, isFalse);
+      expect(bound.active!.devices.value.data, isNull);
       expect(requests, hasLength(1));
     },
   );

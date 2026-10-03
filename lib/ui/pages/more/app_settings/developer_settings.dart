@@ -3,9 +3,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
+import 'package:selfprivacy/config/connection_observation.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -22,10 +25,11 @@ class DeveloperSettingsPage extends StatefulWidget {
 
 class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
   DeveloperSettingsModel get _settings => getIt<DeveloperSettingsModel>();
+  late final _reachability = observeReachability(getIt<ServerConnectionHub>());
 
   String? get _apiHost {
     final String? domain =
-        getIt<ResourcesModel>().serverDomain?.domainName ??
+        getIt<ResourcesModel>().servers.firstOrNull?.domain.domainName ??
         getIt<WizardDataModel>().serverInstallation?.serverDomain?.domainName;
     return domain == null ? null : 'api.$domain';
   }
@@ -127,10 +131,11 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         ),
       ),
       SectionTitle(title: 'developer_settings.cubit_statuses'.tr()),
-      ListTile(
-        title: const Text('ApiConnectionRepository status'),
-        subtitle: Text(
-          getIt<ApiConnectionRepository>().currentConnectionStatus.toString(),
+      StreamBuilder<ReachabilityStatus?>(
+        stream: _reachability,
+        builder: (final context, final snapshot) => ListTile(
+          title: Text('developer_settings.connection_reachability'.tr()),
+          subtitle: Text(snapshot.data?.name ?? '—'),
         ),
       ),
       SectionTitle(title: 'developer_settings.servers'.tr()),

@@ -4,18 +4,19 @@ sealed class BackupsEvent extends Equatable {
   const BackupsEvent();
 }
 
-class BackupsServerLoaded extends BackupsEvent {
-  const BackupsServerLoaded();
-
+class _BackupsObserved extends BackupsEvent {
+  const _BackupsObserved(this.observation);
+  final ConnectionObservation<BackupsSnapshot> observation;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [observation];
 }
 
-class BackupsServerReset extends BackupsEvent {
-  const BackupsServerReset();
-
+class _BackupsAction<T extends BackupsEvent> extends BackupsEvent {
+  const _BackupsAction(this.event, this.origin);
+  final T event;
+  final ServerStateOrigin? origin;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [event, origin];
 }
 
 class InitializeBackupsRepository extends BackupsEvent {
@@ -25,16 +26,6 @@ class InitializeBackupsRepository extends BackupsEvent {
 
   @override
   List<Object?> get props => [];
-}
-
-class BackupsStateChanged extends BackupsEvent {
-  const BackupsStateChanged(this.backups, this.backupConfiguration);
-
-  final List<Backup> backups;
-  final BackupConfiguration? backupConfiguration;
-
-  @override
-  List<Object?> get props => [backups, backupConfiguration];
 }
 
 class ForceSnapshotListUpdate extends BackupsEvent {

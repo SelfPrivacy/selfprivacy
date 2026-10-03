@@ -185,4 +185,25 @@ void main() {
       OperationStatus.notSent,
     );
   });
+
+  test(
+    'a failed job does not settle an operation while another accepted job runs',
+    () async {
+      await queue
+          .submit(
+            OperationKind.manageBackups,
+            () async {},
+            describe: (_) => OperationReport(
+              OperationStatus.accepted,
+              jobIds: {'first', 'second'},
+            ),
+          )
+          .completion;
+      queue.observeJob('first', succeeded: false);
+      expect(queue.pending.single.status, OperationStatus.accepted);
+      queue.observeJob('second', succeeded: true);
+      expect(queue.pending, isEmpty);
+      expect(queue.history.single.status, OperationStatus.failed);
+    },
+  );
 }

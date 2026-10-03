@@ -1,20 +1,18 @@
 import 'dart:async';
 
 import 'package:pub_semver/pub_semver.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
+import 'package:selfprivacy/logic/connection/repositories/recovery_key_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/services_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -42,18 +40,54 @@ class ServerConnection {
       origin: origin,
       currentOrigin: () => isAttached ? origin : null,
       stores: cache.stores,
+      apiVersion: cache.apiVersion,
     );
-    devices = DevicesRepository(connection: this, store: deviceStore);
-    jobs = JobsRepository(connection: this, store: jobsStore);
-    users = UsersRepository(connection: this, store: usersStore);
-    settings = SettingsRepository(connection: this, store: settingsStore);
-    services = ServicesRepository(connection: this, store: servicesStore);
+    scheduler = SyncScheduler(
+      cache: cache,
+      commands: commands,
+      now: now,
+      createTimer: createTimer,
+    );
+    devices = DevicesRepository(
+      commands: commands,
+      reader: _reader(deviceStore),
+    );
+    groups = _reader(cache.groups);
+    recoveryKey = RecoveryKeyRepository(
+      commands: commands,
+      reader: _reader(cache.recoveryKeyStatus),
+    );
+    jobs = JobsRepository(
+      commands: commands,
+      reader: _reader(jobsStore),
+      backupsStore: backupsStore,
+      servicesStore: servicesStore,
+      volumesStore: volumesStore,
+      stores: cache.stores,
+    );
+    users = UsersRepository(commands: commands, reader: _reader(usersStore));
+    settings = SettingsRepository(
+      commands: commands,
+      reader: _reader(settingsStore),
+    );
+    services = ServicesRepository(
+      commands: commands,
+      reader: _reader(servicesStore),
+      jobs: jobs,
+      volumesStore: volumesStore,
+    );
     backups = BackupsRepository(
-      connection: this,
-      store: backupsStore,
-      configStore: configStore,
+      commands: commands,
+      reader: _reader(backupsStore),
+      configuration: _reader(configStore),
+      jobs: jobs,
+      servicesStore: servicesStore,
     );
-    volumes = VolumesRepository(connection: this, store: volumesStore);
+    volumes = VolumesRepository(
+      commands: commands,
+      reader: _reader(volumesStore),
+      servicesStore: servicesStore,
+    );
     for (final store in cache.stores) {
       _subscriptions.add(
         store.stream.listen((_) {
@@ -71,6 +105,8 @@ class ServerConnection {
   late final ServerStateCache cache;
   late final ServerCommandCoordinator commands;
   late final DevicesRepository devices;
+  late final RecoveryKeyRepository recoveryKey;
+  late final DomainReader<List<String>> groups;
   late final JobsRepository jobs;
   late final UsersRepository users;
   late final SettingsRepository settings;
@@ -80,9 +116,8 @@ class ServerConnection {
   late final DomainStore<List<ServerDiskVolume>> volumesStore;
   final _changes = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription<Object?>>[];
-  final _refreshes = <DomainStore<Object>, Completer<RefreshResult>>{};
   bool _disposed = false;
-  SyncScheduler? scheduler;
+  late final SyncScheduler scheduler;
 
   void restoreFrom(final ServerConnection previous) {
     if (origin.serverId != previous.origin.serverId) {
@@ -90,7 +125,6 @@ class ServerConnection {
     }
     cache.restoreFrom(previous.cache);
     users.restoreFrom(previous.users);
-    backups.restoreFrom(previous.backups);
     jobs.restoreFrom(previous.jobs);
   }
 
@@ -98,73 +132,13 @@ class ServerConnection {
   Iterable<DomainStore<Object>> get stores => List.unmodifiable(cache.stores);
   bool get isAttached => !_disposed && identical(_currentOrigin(), origin);
 
-  Future<ServerMutationResult<T>> mutate<T>({
-    required final Iterable<DomainStore<Object>> domains,
-    required final Future<ServerMutationResult<T>> Function(ServerApi) send,
-    final Iterable<DomainStore<Object>> Function(ServerMutationResult<T>)?
-    applyConfirmed,
-  }) async {
-    final result = await _mutate(
-      domains: domains,
-      send: (final api) {
-        GraphQLDispatchGuard.current?.check();
-        return send(api);
-      },
-      applyConfirmed: applyConfirmed,
-    );
-    OperationExecution.current?.record(result);
-    return result;
-  }
-
-  Future<ServerMutationResult<T>> _mutate<T>({
-    required final Iterable<DomainStore<Object>> domains,
-    required final Future<ServerMutationResult<T>> Function(ServerApi) send,
-    final Iterable<DomainStore<Object>> Function(ServerMutationResult<T>)?
-    applyConfirmed,
-  }) async {
-    final affected = domains.toSet()..forEach(_checkOwner);
-    if (isAttached && cache.apiVersion.value.data == null) {
-      await _refreshVersion();
-    }
-    if (!isAttached ||
-        affected.any(
-          (final store) => store.value.support != DomainSupport.supported,
-        )) {
-      return ServerMutationResult<T>(
-        outcome: ServerMutationOutcome.indeterminate,
-        payload: const ServerMutationPayload.notExpected(),
-      );
-    }
-    final completion = await commands
-        .submit<T>(
-          domains: affected,
-          send: send,
-          applyConfirmed: applyConfirmed,
-        )
-        .completion;
-    if (!isAttached ||
-        completion.application == CommandApplication.detached ||
-        completion.application == CommandApplication.failed) {
-      return ServerMutationResult<T>(
-        outcome: ServerMutationOutcome.indeterminate,
-        payload: const ServerMutationPayload.unreadable(),
-      );
-    }
-    final result = completion.result!;
-    return result;
-  }
-
-  Future<RefreshResult> _refreshVersion() => cache.apiVersion.refresh(
-    force: cache.apiVersion.value.lastError != null,
-    acceptResult: () => isAttached,
-  );
-
-  CachedValue<T> snapshot<T extends Object>(final DomainStore<T> store) {
+  DomainReader<T> _reader<T extends Object>(final DomainStore<T> store) {
     _checkOwner(store);
-    final versionError = cache.apiVersion.value.lastError;
-    return versionError == null
-        ? store.value
-        : store.value.copyWith(lastError: () => versionError);
+    return DomainReader(
+      store: store,
+      apiVersion: cache.apiVersion,
+      dispatcher: scheduler,
+    );
   }
 
   void setVersion(final Version version) {
@@ -174,83 +148,10 @@ class ServerConnection {
     cache.setVersion(version);
   }
 
-  /// Shares pending reads per store. Returns deferred while a command owns it.
   Future<RefreshResult> refresh<T extends Object>(
     final DomainStore<T> store, {
     final bool force = false,
-  }) {
-    _checkOwner(store);
-    if (!isAttached) {
-      return Future.value(RefreshResult.disposed);
-    }
-    if (scheduler case final active?) {
-      return active.refresh(store.name);
-    }
-    if (force) {
-      store.requestReconciliation();
-    }
-    if (commands.isReserved(store)) {
-      return Future.value(RefreshResult.deferred);
-    }
-    final active = _refreshes[store];
-    if (active != null) {
-      return active.future;
-    }
-    final completion = Completer<RefreshResult>();
-    _refreshes[store] = completion;
-    unawaited(_completeRead(store, force, completion));
-    return completion.future;
-  }
-
-  Future<void> _completeRead(
-    final DomainStore<Object> store,
-    final bool force,
-    final Completer<RefreshResult> completion,
-  ) async {
-    var result = RefreshResult.failed;
-    try {
-      result = await _read(store, force);
-    } finally {
-      _refreshes.remove(store);
-      if (!completion.isCompleted) {
-        completion.complete(result);
-      }
-    }
-  }
-
-  Future<RefreshResult> _read(
-    final DomainStore<Object> store,
-    final bool force,
-  ) async {
-    if (store != cache.apiVersion &&
-        (cache.apiVersion.value.data == null ||
-            cache.apiVersion.value.lastError != null)) {
-      final versionResult = await _refreshVersion();
-      if (!isAttached) {
-        return RefreshResult.disposed;
-      }
-      if (versionResult != RefreshResult.applied &&
-          versionResult != RefreshResult.current) {
-        return versionResult;
-      }
-    }
-    if (!isAttached) {
-      return RefreshResult.disposed;
-    }
-    if (commands.isReserved(store)) {
-      store.requestReconciliation();
-      return RefreshResult.deferred;
-    }
-    final result = await store.refresh(
-      force: force,
-      acceptResult: () => isAttached,
-    );
-    if (!isAttached) {
-      dispose();
-      return RefreshResult.disposed;
-    }
-    return result;
-  }
+  }) => scheduler.refresh(store, force: force);
 
   void _checkOwner(final DomainStore<Object> store) {
     if (!cache.stores.contains(store)) {
@@ -264,11 +165,7 @@ class ServerConnection {
       return;
     }
     _disposed = true;
-    scheduler?.dispose();
-    for (final completion in _refreshes.values) {
-      completion.complete(RefreshResult.disposed);
-    }
-    _refreshes.clear();
+    scheduler.dispose();
     commands.dispose();
     jobs.dispose();
     cache.dispose();

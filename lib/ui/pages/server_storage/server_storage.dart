@@ -31,13 +31,28 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
     final bool isReady =
         context.watch<AppReadinessCubit>().state is ServerConfigured;
 
-    final DiskStatus diskStatus = context.watch<VolumesBloc>().state.diskStatus;
+    final volumeState = context.watch<VolumesBloc>().state;
+    final DiskStatus diskStatus = volumeState.diskStatus;
 
     if (!isReady) {
       return BrandHeroScreen(
         hasBackButton: true,
         heroTitle: 'storage.card_title'.tr(),
         children: const [],
+      );
+    }
+
+    if (volumeState is VolumesUnavailable) {
+      return BrandHeroScreen(
+        heroTitle: 'storage.card_title'.tr(),
+        children: [
+          Text(
+            (volumeState.isUnsupported
+                    ? 'basis.feature_unsupported'
+                    : 'basis.network_error')
+                .tr(),
+          ),
+        ],
       );
     }
 

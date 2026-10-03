@@ -1688,6 +1688,12 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'ServerTextDetailsCard',
             useCases: [
               _widgetbook.WidgetbookUseCase(
+                name: 'Error',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_server_text_details_card
+                        .serverTextDetailsCardError,
+              ),
+              _widgetbook.WidgetbookUseCase(
                 name: 'Loaded',
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_server_text_details_card
@@ -1704,6 +1710,12 @@ final directories = <_widgetbook.WidgetbookNode>[
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_server_text_details_card
                         .serverTextDetailsCardNotReady,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Unsupported',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_server_text_details_card
+                        .serverTextDetailsCardUnsupported,
               ),
             ],
           ),

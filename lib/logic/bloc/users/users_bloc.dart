@@ -3,99 +3,103 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 part 'users_event.dart';
 part 'users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
-  UsersBloc() : super(UsersInitial()) {
-    on<UsersListChanged>(_updateList, transformer: sequential());
-    on<UsersLoadFailed>(_loadFailed, transformer: sequential());
+  UsersBloc({
+    required final Stream<ConnectionObservation<CachedValue<List<User>>>> users,
+    required final Future<void> Function() refresh,
+    required final Future<ServerMutationResult<User>?> Function(
+      ServerStateOrigin,
+      User, {
+      required bool create,
+    })
+    save,
+  }) : _refresh = refresh,
+       _save = save,
+       super(UsersInitial()) {
+    on<_UsersObserved>(_observe, transformer: sequential());
     on<UsersListRefresh>(_reload, transformer: droppable());
-    on<UsersConnectionStatusChanged>(
-      _mapConnectionStatusChangedToState,
-      transformer: sequential(),
-    );
-
-    final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiConnectionStatusSubscription = apiConnectionRepository
-        .connectionStatusStream
-        .listen((final ConnectionStatus connectionStatus) {
-          add(UsersConnectionStatusChanged(connectionStatus));
-        });
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
-      final ApiData apiData,
-    ) {
-      final users = apiData.users;
-      if (users.data != null) {
-        add(UsersListChanged(users.data!));
-      } else if (users.lastError != null) {
-        add(const UsersLoadFailed());
-      }
+    _subscription = users.listen((final observation) {
+      _latest = observation;
+      add(_UsersObserved(observation));
     });
   }
 
-  Future<void> _updateList(
-    final UsersListChanged event,
-    final Emitter<UsersState> emit,
-  ) async {
-    final newState = UsersLoaded(users: event.users);
-    emit(newState);
+  final Future<void> Function() _refresh;
+  final Future<ServerMutationResult<User>?> Function(
+    ServerStateOrigin,
+    User, {
+    required bool create,
+  })
+  _save;
+  ServerStateOrigin? _presentedOrigin;
+  late final StreamSubscription<ConnectionObservation<CachedValue<List<User>>>>
+  _subscription;
+  ConnectionObservation<CachedValue<List<User>>>? _latest;
+
+  void _observe(final _UsersObserved event, final Emitter<UsersState> emit) {
+    if (!identical(event.observation.origin, _latest?.origin)) {
+      return;
+    }
+    final value = event.observation.value;
+    final origin = event.observation.origin;
+    _presentedOrigin = origin;
+    if (value == null) {
+      emit(UsersInitial());
+    } else if (value.data case final users?) {
+      emit(UsersLoaded(users: users, continuity: origin?.continuity));
+    } else if (value.lastError != null) {
+      emit(UsersError(continuity: origin?.continuity));
+    } else {
+      emit(UsersRefreshing(users: const [], continuity: origin?.continuity));
+    }
   }
 
-  Future<void> _loadFailed(
-    final UsersLoadFailed event,
-    final Emitter<UsersState> emit,
-  ) async {
-    emit(UsersError());
-  }
+  Future<void> refresh() => _refresh();
 
-  Future<void> refresh() async {
-    await getIt<ApiConnectionRepository>().connection?.users.refresh(
-      force: true,
-    );
+  Future<ServerMutationResult<User>?> saveUser(
+    final User user, {
+    required final Object continuity,
+    required final bool create,
+  }) async {
+    final origin = _presentedOrigin;
+    if (isClosed ||
+        origin == null ||
+        !identical(origin.continuity, continuity) ||
+        !identical(origin.continuity, _latest?.origin?.continuity)) {
+      return null;
+    }
+    final result = await _save(origin, user, create: create);
+    return !isClosed &&
+            identical(origin.continuity, _latest?.origin?.continuity)
+        ? result
+        : null;
   }
 
   Future<void> _reload(
     final UsersListRefresh event,
     final Emitter<UsersState> emit,
   ) async {
-    emit(UsersRefreshing(users: state.users));
-    await refresh();
-  }
-
-  Future<void> _mapConnectionStatusChangedToState(
-    final UsersConnectionStatusChanged event,
-    final Emitter<UsersState> emit,
-  ) async {
-    switch (event.connectionStatus) {
-      case ConnectionStatus.nonexistent:
-        emit(UsersInitial());
-      case ConnectionStatus.reconnecting:
-      case ConnectionStatus.connected:
-        if (state is! UsersLoaded) {
-          emit(UsersRefreshing(users: state.users));
-        }
-      case ConnectionStatus.offline:
-      case ConnectionStatus.unauthorized:
-        break;
+    if (_latest?.origin == null) {
+      return;
     }
-  }
-
-  StreamSubscription? _apiDataSubscription;
-  StreamSubscription? _apiConnectionStatusSubscription;
-
-  @override
-  void onChange(final Change<UsersState> change) {
-    super.onChange(change);
+    emit(UsersRefreshing(users: state.users, continuity: state.continuity));
+    await refresh();
   }
 
   @override
   Future<void> close() async {
-    await _apiDataSubscription?.cancel();
-    await _apiConnectionStatusSubscription?.cancel();
+    _latest = null;
+    _presentedOrigin = null;
+    await _subscription.cancel();
     return super.close();
   }
 }

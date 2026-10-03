@@ -1,99 +1,125 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
-import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
-
-final _logger = const AppLogger(name: 'ResetPasswordBloc').log;
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
-  ResetPasswordBloc({required this.user}) : super(const ResetPasswordState()) {
-    _logger('ResetPasswordBloc created for user: ${user.login}');
-
-    on<RequestNewPassword>(
-      _mapResetPasswordRequestedToState,
-      transformer: restartable(),
-    );
-    on<CancelNewPasswordRequest>(
-      _mapCancelResetPasswordRequestedToState,
-      transformer: droppable(),
-    );
+  ResetPasswordBloc({
+    required final ServerStateOrigin? origin,
+    required final Stream<ConnectionObservation<CachedValue<Version>>> versions,
+    required final Future<ServerMutationResult<String>?> Function(
+      SecretRecipient,
+    )
+    generate,
+  }) : _generate = generate,
+       super(const ResetPasswordState()) {
+    on<RequestNewPassword>(_request, transformer: droppable());
+    on<CancelNewPasswordRequest>((_, final emit) {
+      _recipient.dispose();
+      _recipient = SecretRecipient();
+      emit(const ResetPasswordState());
+    });
+    on<_BindingLost>((_, final emit) {
+      emit(ResetPasswordState(errorMessage: 'server_mutation.not_sent'.tr()));
+    });
+    _subscription = versions.listen((final observation) {
+      _valid =
+          origin != null &&
+          identical(origin.continuity, observation.origin?.continuity);
+      _version = _valid ? observation.value?.data : null;
+      if (!_valid) {
+        _recipient.dispose();
+        add(const _BindingLost());
+      }
+    });
   }
 
   static const String ssoSupportedVersion = '>=3.6.0';
-
-  final User user;
+  final Future<ServerMutationResult<String>?> Function(SecretRecipient)
+  _generate;
+  late final StreamSubscription<ConnectionObservation<CachedValue<Version>>>
+  _subscription;
   SecretRecipient _recipient = SecretRecipient();
+  Version? _version;
+  bool _valid = false;
 
-  Future<void> _mapResetPasswordRequestedToState(
+  Future<void> _request(
     final RequestNewPassword event,
     final Emitter<ResetPasswordState> emit,
   ) async {
-    _logger('Reset password requested for user: ${user.login}');
-    if (state.isLoading) {
+    if (!_valid) {
+      emit(ResetPasswordState(errorMessage: 'server_mutation.not_sent'.tr()));
       return;
     }
-
-    emit(const ResetPasswordState(passwordResetLink: null, isLoading: true));
-
-    final String? apiVersion =
-        getIt<ApiConnectionRepository>().apiData.apiVersion.data;
-    if (apiVersion == null) {
-      throw Exception('basis.network_error'.tr());
+    final version = _version;
+    if (version == null) {
+      emit(ResetPasswordState(errorMessage: 'basis.network_error'.tr()));
+      return;
     }
-    if (!VersionConstraint.parse(
-      ssoSupportedVersion,
-    ).allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(ssoSupportedVersion).allows(version)) {
       emit(
         ResetPasswordUnsupported(
           errorMessage: 'basis.feature_unsupported_on_api_version'.tr(
             namedArgs: {
               'versionConstraint': ssoSupportedVersion,
-              'currentVersion': apiVersion,
+              'currentVersion': version.toString(),
             },
           ),
         ),
       );
       return;
     }
-
-    _logger('Load start');
-    final (link, message) = await getIt<ApiConnectionRepository>()
-        .generatePasswordResetLink(user, recipient: _recipient);
-
-    if (!emit.isDone && state.isLoading) {
+    final recipient = _recipient;
+    emit(const ResetPasswordState(isLoading: true));
+    final result = await _generate(recipient);
+    if (emit.isDone || !_valid || !identical(recipient, _recipient)) {
+      return;
+    }
+    if (result == null) {
+      emit(ResetPasswordState(errorMessage: 'server_mutation.not_sent'.tr()));
+      return;
+    }
+    final secret = result.confirmedSecret;
+    if (secret == null) {
       emit(
-        link != null
-            ? ResetPasswordState(
-                passwordResetLink: link,
-                passwordResetMessage: message,
-              )
-            : ResetPasswordState(errorMessage: message),
+        ResetPasswordState(
+          errorMessage: serverMutationMessage(result, sensitive: true),
+        ),
       );
+      return;
     }
-  }
-
-  Future<void> _mapCancelResetPasswordRequestedToState(
-    final CancelNewPasswordRequest event,
-    final Emitter<ResetPasswordState> emit,
-  ) async {
-    _logger('Reset password request cancelled');
-    _recipient.dispose();
-    _recipient = SecretRecipient();
-    if (state.isLoading) {
-      emit(const ResetPasswordState(passwordResetLink: null, isLoading: false));
-    }
+    final uri = Uri.tryParse(secret);
+    emit(
+      uri == null || uri.scheme.isEmpty
+          ? ResetPasswordState(
+              errorMessage: 'users.could_not_generate_password_link'.tr(),
+            )
+          : ResetPasswordState(
+              passwordResetLink: uri,
+              passwordResetMessage: 'basis.done'.tr(),
+            ),
+    );
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     _recipient.dispose();
+    await _subscription.cancel();
     return super.close();
   }
+}
+
+class _BindingLost extends ResetPasswordEvent {
+  const _BindingLost();
 }
 
 sealed class ResetPasswordEvent extends Equatable {

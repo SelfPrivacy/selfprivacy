@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/setup/initializing/stalled_certificate_card.dart';
 
 import '../../helpers/widget_harness.dart';
 
-class _MockConnection extends Mock implements ApiConnectionRepository {}
+class _VersionBloc extends Mock implements OutdatedServerCheckerBloc {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
-
-  setUp(() {
-    final connection = _MockConnection();
-    when(() => connection.apiData).thenReturn(ApiData(connection: () => null));
-    getIt.registerSingleton<ApiConnectionRepository>(connection);
-  });
-
-  tearDown(getIt.reset);
 
   testWidgets('names the problem and what to check', (final tester) async {
     await pumpForTest(tester, const StalledCertificateCard());
@@ -32,7 +25,19 @@ void main() {
   });
 
   testWidgets('opens the support screen', (final tester) async {
-    await pumpForTest(tester, const StalledCertificateCard());
+    final versions = _VersionBloc();
+    when(() => versions.state).thenReturn(OutdatedServerCheckerInitial());
+    when(() => versions.stream).thenAnswer((_) => const Stream.empty());
+    await tester.runAsync(() async {
+      await tester.pumpWidget(
+        BlocProvider<OutdatedServerCheckerBloc>.value(
+          value: versions,
+          child: wrapForTest(child: const StalledCertificateCard()),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+    });
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('Contact support'));
     await tester.pumpAndSettle();

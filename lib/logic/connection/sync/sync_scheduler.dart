@@ -4,8 +4,6 @@ import 'package:pool/pool.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 
 class InterestHandle {
@@ -97,14 +95,10 @@ typedef SyncPoolActivity = ({String domain, DateTime startedAt});
 class SyncScheduler {
   SyncScheduler({
     required final ServerStateCache cache,
-    required final Reachability reachability,
-    required final AppLifecycle lifecycle,
     required final ServerCommandCoordinator commands,
     final DateTime Function()? now,
     final CacheTimerFactory? createTimer,
   }) : _cache = cache,
-       _reachability = reachability,
-       _lifecycle = lifecycle,
        _commands = commands,
        _now = now ?? DateTime.now,
        _createTimer = createTimer ?? Timer.new,
@@ -115,13 +109,21 @@ class SyncScheduler {
     if (!cache.stores.every(commands.owns)) {
       throw ArgumentError('The coordinator must own every scheduled store.');
     }
+    for (final domain in _domains.values) {
+      domain.wasRefreshing = domain.store.value.isRefreshing;
+      _subscriptions.add(
+        domain.store.stream.listen(
+          (_) => _observe(domain),
+          onDone: () => _observe(domain),
+        ),
+      );
+    }
+    _subscriptions.add(_commands.changes.listen((_) => _environmentChanged()));
   }
 
   static const poolSize = 3;
 
   final ServerStateCache _cache;
-  final Reachability _reachability;
-  final AppLifecycle _lifecycle;
   final ServerCommandCoordinator _commands;
   final DateTime Function() _now;
   final CacheTimerFactory _createTimer;
@@ -140,7 +142,7 @@ class SyncScheduler {
   bool _queued = false;
   bool _wasAllowed = false;
   bool _waitingForPermit = false;
-  bool _suspended = false;
+  bool _readAllowed = true;
   int _forcedStreak = 0;
 
   List<SyncPoolActivity?> get poolStatus => _poolStatus;
@@ -148,18 +150,13 @@ class SyncScheduler {
   Stream<List<SyncPoolActivity?>> get poolStatusChanges =>
       _poolStatusChanges.stream;
 
-  bool get _allowed =>
-      !_suspended &&
-      _lifecycle.isForeground &&
-      !_reachability.isPaused &&
-      _commands.isAttached &&
-      _reachability.current == ReachabilityStatus.reachable;
+  bool get _allowed => _readAllowed && _commands.isAttached;
 
-  void setSuspended({required final bool suspended}) {
-    if (_disposed || _suspended == suspended) {
+  void setReadAllowed({required final bool allowed}) {
+    if (_disposed || _readAllowed == allowed) {
       return;
     }
-    _suspended = suspended;
+    _readAllowed = allowed;
     _environmentChanged();
   }
 
@@ -169,28 +166,59 @@ class SyncScheduler {
       return;
     }
     _started = true;
-    for (final domain in _domains.values) {
-      domain.wasRefreshing = domain.store.value.isRefreshing;
-      _subscriptions.add(
-        domain.store.stream.listen(
-          (_) => _observe(domain),
-          onDone: () => _observe(domain),
-        ),
-      );
-    }
-    _subscriptions
-      ..add(_commands.changes.listen((_) => _environmentChanged()))
-      ..add(_reachability.stream.listen((_) => _environmentChanged()))
-      ..add(_lifecycle.foregroundChanges.listen((_) => _syncLifecycle()));
-    _reachability.start(paused: !_lifecycle.isForeground);
-    _syncLifecycle();
+    _environmentChanged();
   }
 
-  /// Reports one eligible attempt for this domain. Policy-blocked work returns
-  /// immediately and stays due. Concurrent callers for one revision coalesce.
-  Future<RefreshResult> refresh(final String domain) {
-    final entry =
-        _domains[domain] ?? (throw ArgumentError.value(domain, 'domain'));
+  Future<RefreshResult> refresh(
+    final DomainStore<Object> store, {
+    final bool force = true,
+  }) {
+    final entry = _domains[store.name];
+    if (entry == null || !identical(entry.store, store)) {
+      throw ArgumentError('Store belongs to another dispatcher.');
+    }
+    return _prepare(entry, force: force);
+  }
+
+  Future<RefreshResult> _prepare(
+    final _ScheduledDomain entry, {
+    required final bool force,
+  }) async {
+    if (_disposed || !_commands.isAttached || entry.store.isDisposed) {
+      return RefreshResult.disposed;
+    }
+    if (force) {
+      entry.store.requestReconciliation();
+    }
+    if (!_allowed) {
+      return RefreshResult.deferred;
+    }
+    if (_commands.isReserved(entry.store)) {
+      return RefreshResult.deferred;
+    }
+    if (!identical(entry.store, _cache.apiVersion) &&
+        (_cache.apiVersion.value.data == null ||
+            _cache.apiVersion.value.lastError != null)) {
+      final version = await _prepare(
+        _domains[_cache.apiVersion.name]!,
+        force: _cache.apiVersion.value.lastError != null,
+      );
+      if (version != RefreshResult.applied &&
+          version != RefreshResult.current) {
+        return version;
+      }
+    }
+    final value = entry.store.value;
+    if (!force &&
+        value.freshness == Freshness.fresh &&
+        !value.needsReconciliation &&
+        value.lastError == null) {
+      return RefreshResult.current;
+    }
+    return _request(entry);
+  }
+
+  Future<RefreshResult> _request(final _ScheduledDomain entry) {
     _settleBlocked(entry);
     if (_blocked(entry) case final result?) {
       if (!entry.store.isDisposed && !_disposed) {
@@ -223,8 +251,7 @@ class SyncScheduler {
     if (domain.store.value.support != DomainSupport.supported) {
       return RefreshResult.unsupported;
     }
-    if (!_started ||
-        !_allowed ||
+    if (!_allowed ||
         _commands.isReserved(domain.store) ||
         (_cache.apiVersion.value.data == null &&
             !identical(domain.store, _cache.apiVersion))) {
@@ -251,9 +278,12 @@ class SyncScheduler {
     if (request == null) {
       return;
     }
-    final result = domain.store.revision != request.revision
+    final blocked = _blocked(domain);
+    final result = blocked == RefreshResult.disposed
+        ? blocked
+        : domain.store.revision != request.revision
         ? RefreshResult.superseded
-        : _blocked(domain);
+        : blocked;
     if (result != null &&
         (!request.dispatched ||
             result == RefreshResult.disposed ||
@@ -287,18 +317,6 @@ class SyncScheduler {
     });
   }
 
-  void _syncLifecycle() {
-    if (_disposed) {
-      return;
-    }
-    if (_lifecycle.isForeground) {
-      _reachability.resume();
-    } else {
-      _reachability.pause();
-    }
-    _environmentChanged();
-  }
-
   void _environmentChanged() {
     if (_disposed) {
       return;
@@ -329,7 +347,8 @@ class SyncScheduler {
 
   bool _eligible(final _ScheduledDomain domain) {
     final value = domain.store.value;
-    return !_active.contains(domain) &&
+    return (_started || domain.request != null) &&
+        !_active.contains(domain) &&
         !domain.store.isDisposed &&
         !_commands.isReserved(domain.store) &&
         !value.isRefreshing &&
@@ -362,7 +381,7 @@ class SyncScheduler {
       });
 
   void _queue() {
-    if (!_started || _disposed || _queued) {
+    if (_disposed || _queued) {
       return;
     }
     _queued = true;
@@ -451,9 +470,16 @@ class SyncScheduler {
       request.dispatched = true;
     }
     try {
-      final result = await domain.store.refresh(force: true);
+      final result = await domain.store.refresh(
+        force: true,
+        acceptResult: () => _commands.isAttached,
+      );
       if (request != null) {
-        _finishRequest(domain, request, result);
+        _finishRequest(
+          domain,
+          request,
+          _commands.isAttached ? result : RefreshResult.disposed,
+        );
       }
     } finally {
       _setSlot(slot, null);
@@ -484,9 +510,6 @@ class SyncScheduler {
         _finishRequest(domain, request, RefreshResult.disposed);
       }
       domain.interests.clear();
-    }
-    if (_started) {
-      _reachability.pause();
     }
   }
 }

@@ -128,6 +128,7 @@ void main() {
         final read = Completer<List<ApiToken>>();
         when(api.getApiTokens).thenAnswer((_) => read.future);
         final reading = repository.refresh(force: true);
+        await pumpEventQueue();
         final name = tokens.firstWhere((final token) => !token.isCaller).name;
         when(
           () => api.deleteApiToken(name),
@@ -221,6 +222,7 @@ void main() {
         final pending = Completer<List<ApiToken>>();
         when(api.getApiTokens).thenAnswer((_) => pending.future);
         final reading = repository.refresh(force: true);
+        await pumpEventQueue();
         origin = null;
         if (fails) {
           pending.completeError(StateError('old failure'));

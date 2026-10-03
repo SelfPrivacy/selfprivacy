@@ -2,11 +2,11 @@ part of 'dns_records_cubit.dart';
 
 enum DnsRecordsStatus { uninitialized, refreshing, good, error }
 
-class DnsRecordsState extends ServerInstallationDependendState {
-  const DnsRecordsState({
+class DnsRecordsState extends Equatable {
+  DnsRecordsState({
     this.dnsState = DnsRecordsStatus.uninitialized,
-    this.dnsRecords = const [],
-  });
+    final List<DesiredDnsRecord> dnsRecords = const [],
+  }) : dnsRecords = List.unmodifiable(dnsRecords);
 
   final DnsRecordsStatus dnsState;
   final List<DesiredDnsRecord> dnsRecords;

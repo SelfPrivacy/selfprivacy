@@ -1,19 +1,21 @@
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 class UsersRepository {
-  UsersRepository({required this.connection, required this.store}) {
-    if (!connection.commands.owns(store)) {
+  UsersRepository({required this.commands, required this.reader}) {
+    if (!commands.owns(store)) {
       throw ArgumentError('User store belongs to another connection.');
     }
   }
 
-  final ServerConnection connection;
-  final DomainStore<List<User>> store;
+  final ServerCommandCoordinator commands;
+  final DomainReader<List<User>> reader;
+  DomainStore<List<User>> get store => reader.store;
   final Map<String, User> _known = {};
   int _knownReadRevision = 0;
 
@@ -23,12 +25,8 @@ class UsersRepository {
     _knownReadRevision = store.readRevision;
   }
 
-  static Future<List<User>> fetch(final ServerApi api) async =>
-      List.unmodifiable(await api.getAllUsers());
-
-  CachedValue<List<User>> get value => connection.snapshot(store);
-  Stream<CachedValue<List<User>>> get changes =>
-      connection.changes.map((_) => value);
+  CachedValue<List<User>> get value => reader.value;
+  Stream<CachedValue<List<User>>> get changes => reader.changes;
   List<User> get knownUsers {
     _clearReconciled();
     return List.unmodifiable(value.data ?? _known.values);
@@ -42,10 +40,10 @@ class UsersRepository {
   }
 
   Future<RefreshResult> refresh({final bool force = false}) =>
-      connection.refresh(store, force: force);
+      reader.refresh(force: force);
 
   void invalidate() {
-    if (connection.isAttached) {
+    if (commands.isAttached) {
       store.invalidate();
     }
   }
@@ -81,7 +79,7 @@ class UsersRepository {
 
   Future<ServerMutationResult<User>> _upsert(
     final Future<ServerMutationResult<User>> Function(ServerApi) send,
-  ) => connection.mutate(
+  ) => commands.mutate(
     domains: [store],
     send: send,
     applyConfirmed: (final result) {
@@ -105,7 +103,7 @@ class UsersRepository {
   );
 
   Future<ServerMutationResult<void>> deleteUser(final User user) =>
-      connection.mutate(
+      commands.mutate(
         domains: [store],
         send: (final api) => user.type == UserType.root
             ? Future.value(_rejected<void>('users.user_delete_protected'))
@@ -126,7 +124,7 @@ class UsersRepository {
   Future<ServerMutationResult<void>> deleteEmailPassword(
     final User user,
     final String uuid,
-  ) => connection.mutate(
+  ) => commands.mutate(
     domains: [store],
     send: (final api) => api.deleteEmailPassword(user.login, uuid),
     applyConfirmed: (_) {
@@ -159,7 +157,7 @@ class UsersRepository {
 
   Future<ServerMutationResult<String>> generatePasswordResetLink(
     final User user,
-  ) => connection.mutate(
+  ) => commands.mutate(
     domains: [store],
     send: (final api) => user.type == UserType.root
         ? Future.value(_rejected<String>('users.user_modify_protected'))

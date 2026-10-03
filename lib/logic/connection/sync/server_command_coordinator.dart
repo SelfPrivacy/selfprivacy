@@ -1,33 +1,24 @@
 import 'dart:async';
 
+import 'package:pub_semver/pub_semver.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 
 /// Identity of one server's cache and transport generation.
 /// Create a new instance when either binding is replaced, even for the same UUID.
 class ServerStateOrigin {
-  ServerStateOrigin(this.serverId);
+  ServerStateOrigin(this.serverId, {final Object? continuity})
+    : continuity = continuity ?? Object();
 
   final String serverId;
+  final Object continuity;
 }
-
-enum CommandPhase { queued, running }
 
 enum CommandApplication { applied, notApplied, failed, detached }
-
-/// Observable metadata excludes command arguments, results and error text.
-class PendingCommand {
-  PendingCommand({
-    required this.id,
-    required this.phase,
-    required final Iterable<String> domains,
-  }) : domains = Set.unmodifiable(domains);
-
-  final Object id;
-  final CommandPhase phase;
-  final Set<String> domains;
-}
 
 class CommandCompletion<T> {
   const CommandCompletion(this.application, {this.result});
@@ -38,23 +29,9 @@ class CommandCompletion<T> {
   final ServerMutationResult<T>? result;
 }
 
-class CommandHandle<T> {
-  CommandHandle._(this.id, this.completion, this.remoteResult);
-
-  final Object id;
-
-  /// Resolves after local publication, or immediately on coordinator disposal.
-  final Future<CommandCompletion<T>> completion;
-
-  /// Preserves late remote results after detachment. Null means never sent.
-  /// This future can outlive the coordinator and contains sensitive payloads.
-  final Future<ServerMutationResult<T>?> remoteResult;
-}
-
 class _Command {
   _Command(this.domains, this.start, this.detach);
 
-  final id = Object();
   final Set<DomainStore<Object>> domains;
   final void Function() start;
   final void Function() detach;
@@ -69,22 +46,23 @@ class ServerCommandCoordinator {
     required final ServerStateOrigin? Function() currentOrigin,
     required final ServerApi api,
     required final Iterable<DomainStore<Object>> stores,
+    final DomainStore<Version>? apiVersion,
   }) : _currentOrigin = currentOrigin,
        _api = api,
+       _apiVersion = apiVersion,
        _stores = Set.unmodifiable(stores);
 
   final ServerStateOrigin origin;
   final ServerStateOrigin? Function() _currentOrigin;
   final ServerApi _api;
+  final DomainStore<Version>? _apiVersion;
   final Set<DomainStore<Object>> _stores;
   final _commands = <_Command>[];
-  final _changes = StreamController<List<PendingCommand>>.broadcast();
-  List<PendingCommand> _pending = const [];
+  final _changes = StreamController<void>.broadcast();
   bool _disposed = false;
   bool _draining = false;
 
-  List<PendingCommand> get pending => _pending;
-  Stream<List<PendingCommand>> get changes => _changes.stream;
+  Stream<void> get changes => _changes.stream;
 
   bool isReserved(final DomainStore<Object> store) => _commands.any(
     (final command) => command.running && command.domains.contains(store),
@@ -99,11 +77,71 @@ class ServerCommandCoordinator {
 
   bool owns(final DomainStore<Object> store) => _stores.contains(store);
 
+  Future<ServerMutationResult<T>> mutate<T>({
+    required final Iterable<DomainStore<Object>> domains,
+    required final Future<ServerMutationResult<T>> Function(ServerApi) send,
+    final Iterable<DomainStore<Object>> Function(ServerMutationResult<T>)?
+    applyConfirmed,
+  }) async {
+    final result = await _mutate(
+      domains: domains,
+      send: (final api) {
+        GraphQLDispatchGuard.current?.check();
+        return send(api);
+      },
+      applyConfirmed: applyConfirmed,
+    );
+    OperationExecution.current?.record(result);
+    return result;
+  }
+
+  Future<ServerMutationResult<T>> _mutate<T>({
+    required final Iterable<DomainStore<Object>> domains,
+    required final Future<ServerMutationResult<T>> Function(ServerApi) send,
+    final Iterable<DomainStore<Object>> Function(ServerMutationResult<T>)?
+    applyConfirmed,
+  }) async {
+    if (isAttached && _apiVersion != null && _apiVersion.value.data == null) {
+      await _refreshVersion();
+    }
+    final affected = domains.toSet();
+    if (!_stores.containsAll(affected)) {
+      throw ArgumentError('Store belongs to another coordinator.');
+    }
+    if (!isAttached ||
+        affected.any(
+          (final store) => store.value.support != DomainSupport.supported,
+        )) {
+      return ServerMutationResult<T>(
+        outcome: ServerMutationOutcome.indeterminate,
+        payload: const ServerMutationPayload.notExpected(),
+      );
+    }
+    final completion = await submit<T>(
+      domains: affected,
+      send: send,
+      applyConfirmed: applyConfirmed,
+    );
+    if (!isAttached || completion.application == CommandApplication.detached) {
+      return ServerMutationResult<T>(
+        outcome: ServerMutationOutcome.indeterminate,
+        payload: const ServerMutationPayload.unreadable(),
+      );
+    }
+    final result = completion.result!;
+    return result;
+  }
+
+  Future<RefreshResult> _refreshVersion() => _apiVersion!.refresh(
+    force: _apiVersion.value.lastError != null,
+    acceptResult: () => isAttached,
+  );
+
   /// [send] must use the supplied API and must not replay the mutation.
   /// [applyConfirmed] runs synchronously and returns the domains its effects
   /// cover. Uncovered domains remain due for reconciliation. Rejected and
   /// indeterminate results never reach this callback.
-  CommandHandle<T> submit<T>({
+  Future<CommandCompletion<T>> submit<T>({
     required final Iterable<DomainStore<Object>> domains,
     required final Future<ServerMutationResult<T>> Function(ServerApi api) send,
     final Iterable<DomainStore<Object>> Function(
@@ -118,22 +156,16 @@ class ServerCommandCoordinator {
       );
     }
     final completion = Completer<CommandCompletion<T>>();
-    final remote = Completer<ServerMutationResult<T>?>();
     final boundSend = Zone.current.bindUnaryCallback(send);
     late final _Command command;
     command = _Command(
       affected,
-      () => unawaited(
-        _run(command, boundSend, applyConfirmed, completion, remote),
-      ),
+      () => unawaited(_run(command, boundSend, applyConfirmed, completion)),
       () {
         if (!completion.isCompleted) {
           completion.complete(
             CommandCompletion<T>(CommandApplication.detached),
           );
-        }
-        if (!command.running && !remote.isCompleted) {
-          remote.complete(null);
         }
       },
     );
@@ -145,7 +177,7 @@ class ServerCommandCoordinator {
       _publish();
       _drain();
     }
-    return CommandHandle._(command.id, completion.future, remote.future);
+    return completion.future;
   }
 
   void _drain() {
@@ -189,7 +221,6 @@ class ServerCommandCoordinator {
     )?
     applyConfirmed,
     final Completer<CommandCompletion<T>> completion,
-    final Completer<ServerMutationResult<T>?> remote,
   ) async {
     ServerMutationResult<T>? result;
     var application = CommandApplication.notApplied;
@@ -205,7 +236,6 @@ class ServerCommandCoordinator {
           payload: const ServerMutationPayload.unreadable(),
         );
       }
-      remote.complete(result);
       if (!_attached) {
         application = CommandApplication.detached;
       } else {
@@ -232,9 +262,6 @@ class ServerCommandCoordinator {
           domain.invalidate();
         }
       }
-      if (!remote.isCompleted) {
-        remote.complete(null);
-      }
     } finally {
       _commands.remove(command);
       _publish();
@@ -249,15 +276,7 @@ class ServerCommandCoordinator {
     if (_disposed) {
       return;
     }
-    _pending = List.unmodifiable([
-      for (final command in _commands)
-        PendingCommand(
-          id: command.id,
-          phase: command.running ? CommandPhase.running : CommandPhase.queued,
-          domains: command.domains.map((final domain) => domain.name),
-        ),
-    ]);
-    _changes.add(_pending);
+    _changes.add(null);
   }
 
   /// Resolves local waiters without cancelling requests already sent.
@@ -270,8 +289,7 @@ class ServerCommandCoordinator {
       command.detach();
     }
     _commands.clear();
-    _pending = const [];
-    _changes.add(_pending);
+    _changes.add(null);
     unawaited(_changes.close());
   }
 }

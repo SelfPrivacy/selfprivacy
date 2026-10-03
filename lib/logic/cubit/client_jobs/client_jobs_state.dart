@@ -3,7 +3,7 @@ part of 'client_jobs_cubit.dart';
 sealed class JobsState extends Equatable {
   String? get rebuildJobUid => null;
 
-  JobsState addJob(final ClientJob job);
+  JobsState addJob(final ClientJob job, {final SystemSettings? settings});
 
   @override
   List<Object?> get props => [];
@@ -11,17 +11,18 @@ sealed class JobsState extends Equatable {
 
 class JobsStateEmpty extends JobsState {
   @override
-  JobsStateWithJobs addJob(final ClientJob job) {
-    getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
-    return JobsStateWithJobs([job]);
-  }
+  JobsStateWithJobs addJob(
+    final ClientJob job, {
+    final SystemSettings? settings,
+  }) => JobsStateWithJobs([job]);
 
   @override
   List<Object?> get props => [];
 }
 
 class JobsStateWithJobs extends JobsState {
-  JobsStateWithJobs(this.clientJobList);
+  JobsStateWithJobs(final List<ClientJob> clientJobList)
+    : clientJobList = List.unmodifiable(clientJobList);
   final List<ClientJob> clientJobList;
 
   bool get rebuildRequired =>
@@ -44,7 +45,7 @@ class JobsStateWithJobs extends JobsState {
   List<Object?> get props => [clientJobList];
 
   @override
-  JobsState addJob(final ClientJob job) {
+  JobsState addJob(final ClientJob job, {final SystemSettings? settings}) {
     if (job is ReplaceableJob) {
       final List<ClientJob> newJobsList = clientJobList
           .where(
@@ -53,11 +54,8 @@ class JobsStateWithJobs extends JobsState {
                 : element.runtimeType != job.runtimeType,
           )
           .toList();
-      if (job.shouldRemoveInsteadOfAdd(clientJobList)) {
-        getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
-      } else {
+      if (!job.matchesSettings(settings)) {
         newJobsList.add(job);
-        getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
       }
       if (newJobsList.isEmpty) {
         return JobsStateEmpty();
@@ -66,7 +64,6 @@ class JobsStateWithJobs extends JobsState {
     }
     if (job.canAddTo(clientJobList)) {
       final List<ClientJob> newJobsList = [...clientJobList, job];
-      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
       return JobsStateWithJobs(newJobsList);
     }
     return this;
@@ -74,7 +71,12 @@ class JobsStateWithJobs extends JobsState {
 }
 
 class JobsStateLoading extends JobsState {
-  JobsStateLoading(this.clientJobList, this.rebuildJobUid, this.postponedJobs);
+  JobsStateLoading(
+    final List<ClientJob> clientJobList,
+    this.rebuildJobUid,
+    final List<ClientJob> postponedJobs,
+  ) : clientJobList = List.unmodifiable(clientJobList),
+      postponedJobs = List.unmodifiable(postponedJobs);
   final List<ClientJob> clientJobList;
   @override
   final String? rebuildJobUid;
@@ -118,22 +120,18 @@ class JobsStateLoading extends JobsState {
   List<Object?> get props => [clientJobList, rebuildJobUid, postponedJobs];
 
   @override
-  JobsState addJob(final ClientJob job) {
+  JobsState addJob(final ClientJob job, {final SystemSettings? settings}) {
     if (job is ReplaceableJob) {
       final List<ClientJob> newPostponedJobs = postponedJobs
           .where((final element) => element.runtimeType != job.runtimeType)
           .toList();
-      if (job.shouldRemoveInsteadOfAdd(postponedJobs)) {
-        getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
-      } else {
+      if (!job.matchesSettings(settings)) {
         newPostponedJobs.add(job);
-        getIt<NavigationService>().showSnackBar('jobs.job_postponed'.tr());
       }
       return JobsStateLoading(clientJobList, rebuildJobUid, newPostponedJobs);
     }
     if (job.canAddTo(postponedJobs)) {
       final List<ClientJob> newPostponedJobs = [...postponedJobs, job];
-      getIt<NavigationService>().showSnackBar('jobs.job_postponed'.tr());
       return JobsStateLoading(clientJobList, rebuildJobUid, newPostponedJobs);
     }
     return this;
@@ -141,7 +139,12 @@ class JobsStateLoading extends JobsState {
 }
 
 class JobsStateFinished extends JobsState {
-  JobsStateFinished(this.clientJobList, this.rebuildJobUid, this.postponedJobs);
+  JobsStateFinished(
+    final List<ClientJob> clientJobList,
+    this.rebuildJobUid,
+    final List<ClientJob> postponedJobs,
+  ) : clientJobList = List.unmodifiable(clientJobList),
+      postponedJobs = List.unmodifiable(postponedJobs);
   final List<ClientJob> clientJobList;
   @override
   final String? rebuildJobUid;
@@ -158,16 +161,13 @@ class JobsStateFinished extends JobsState {
   List<Object?> get props => [clientJobList, rebuildJobUid, postponedJobs];
 
   @override
-  JobsState addJob(final ClientJob job) {
+  JobsState addJob(final ClientJob job, {final SystemSettings? settings}) {
     if (job is ReplaceableJob) {
       final List<ClientJob> newPostponedJobs = postponedJobs
           .where((final element) => element.runtimeType != job.runtimeType)
           .toList();
-      if (job.shouldRemoveInsteadOfAdd(postponedJobs)) {
-        getIt<NavigationService>().showSnackBar('jobs.job_removed'.tr());
-      } else {
+      if (!job.matchesSettings(settings)) {
         newPostponedJobs.add(job);
-        getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
       }
       if (newPostponedJobs.isEmpty) {
         return JobsStateEmpty();
@@ -176,7 +176,6 @@ class JobsStateFinished extends JobsState {
     }
     if (job.canAddTo(postponedJobs)) {
       final List<ClientJob> newPostponedJobs = [...postponedJobs, job];
-      getIt<NavigationService>().showSnackBar('jobs.job_added'.tr());
       return JobsStateWithJobs(newPostponedJobs);
     }
     return this;

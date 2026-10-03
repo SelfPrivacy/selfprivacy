@@ -1,26 +1,50 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_reconciler.dart';
-import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
+class JobsSnapshot extends Equatable {
+  JobsSnapshot({required this.value, required final Iterable<ServerJob> jobs})
+    : jobs = List.unmodifiable(jobs);
+
+  final CachedValue<List<ServerJob>> value;
+  final List<ServerJob> jobs;
+  bool get isComplete => value.data != null;
+
+  @override
+  List<Object> get props => [value, jobs];
+}
+
 class JobsRepository {
-  JobsRepository({required this.connection, required this.store})
-    : _reconciler = JobsReconciler(
-        store: store,
-        commands: connection.commands,
-      ) {
+  JobsRepository({
+    required this.commands,
+    required this.reader,
+    required this.backupsStore,
+    required this.servicesStore,
+    required this.volumesStore,
+    required final Iterable<DomainStore<Object>> stores,
+  }) : _stores = List.unmodifiable(stores),
+       _reconciler = JobsReconciler(store: reader.store, commands: commands) {
     _subscriptions
       ..add(store.stream.listen((_) => _trackCompletions()))
       ..add(_reconciler.changes.listen((_) => _trackCompletions()));
   }
 
-  final ServerConnection connection;
-  final DomainStore<List<ServerJob>> store;
+  final ServerCommandCoordinator commands;
+  final DomainReader<List<ServerJob>> reader;
+  DomainStore<List<ServerJob>> get store => reader.store;
+  final DomainStore<Object> backupsStore;
+  final DomainStore<Object> servicesStore;
+  final DomainStore<List<ServerDiskVolume>> volumesStore;
+  final List<DomainStore<Object>> _stores;
   final JobsReconciler _reconciler;
   final _subscriptions = <StreamSubscription<Object?>>[];
   final _observed = <String, ServerJob>{};
@@ -29,9 +53,7 @@ class JobsRepository {
   void restoreFrom(final JobsRepository previous) {
     _reconciler.restoreFrom(previous._reconciler);
     _observed.addAll(previous._observed);
-    final stores = {
-      for (final domain in connection.stores) domain.name: domain,
-    };
+    final stores = {for (final domain in _stores) domain.name: domain};
     for (final entry in previous._effects.entries) {
       _effects[entry.key] = {
         for (final domain in entry.value) stores[domain.name]!,
@@ -39,11 +61,31 @@ class JobsRepository {
     }
   }
 
-  CachedValue<List<ServerJob>> get value => connection.snapshot(store);
+  CachedValue<List<ServerJob>> get value => reader.value;
+  JobsSnapshot get snapshot => JobsSnapshot(
+    value: value,
+    jobs: value.data ?? confirmedBeforeLoad.values,
+  );
+  Stream<JobsSnapshot> get changes => Stream<JobsSnapshot>.multi((
+    final output,
+  ) {
+    void publish() {
+      if (commands.isAttached) {
+        output.add(snapshot);
+      }
+    }
+
+    final reads = reader.changes.listen((_) => publish(), onDone: output.close);
+    final accepted = _reconciler.changes.listen((_) => publish());
+    output.onCancel = () async {
+      await reads.cancel();
+      await accepted.cancel();
+    };
+  }).distinct();
   Map<String, ServerJob> get confirmedBeforeLoad =>
       _reconciler.confirmedBeforeLoad;
   Future<RefreshResult> refresh({final bool force = false}) =>
-      connection.refresh(store, force: force);
+      reader.refresh(force: force);
 
   void applyConfirmed(
     final ServerJob job, {
@@ -63,7 +105,7 @@ class JobsRepository {
   }
 
   void _trackCompletions() {
-    if (!connection.isAttached) {
+    if (!commands.isAttached) {
       return;
     }
     final after = [...?store.value.data, ...confirmedBeforeLoad.values];
@@ -91,25 +133,25 @@ class JobsRepository {
   Iterable<DomainStore<Object>> _externalEffects(final ServerJob job) {
     final type = job.typeId;
     if (type.contains('restore')) {
-      return [connection.backups.store, connection.services.store];
+      return [backupsStore, servicesStore];
     }
     if (type.contains('backup')) {
-      return [connection.backups.store];
+      return [backupsStore];
     }
     if (type.contains('move') || type.contains('migrate_to_binds')) {
-      return [connection.services.store, connection.volumesStore];
+      return [servicesStore, volumesStore];
     }
     if (type.contains('collect_garbage')) {
-      return [connection.volumesStore];
+      return [volumesStore];
     }
-    return connection.stores.where((final domain) => domain != store);
+    return _stores.where((final domain) => domain != store);
   }
 
   bool _finished(final ServerJob job) =>
       job.status == JobStatusEnum.finished || job.status == JobStatusEnum.error;
 
   Future<ServerMutationResult<void>> removeJob(final String uid) =>
-      connection.mutate(
+      commands.mutate(
         domains: [store],
         send: (final api) => api.removeApiJob(uid),
         applyConfirmed: (_) {
@@ -137,7 +179,7 @@ class JobsRepository {
   Future<ServerMutationResult<ServerJob>> _start(
     final Future<ServerMutationResult<ServerJob>> Function(ServerApi) send,
     final Iterable<DomainStore<Object>> domains,
-  ) => connection.mutate(
+  ) => commands.mutate(
     domains: domains,
     send: send,
     applyConfirmed: (final result) {
@@ -154,26 +196,30 @@ class JobsRepository {
       _start((final api) => api.upgrade(), _systemDomains);
   Future<ServerMutationResult<ServerJob>> apply() =>
       _start((final api) => api.apply(), _systemDomains);
-  Iterable<DomainStore<Object>> get _systemDomains => [
-    store,
-    ...connection.stores.where(
+  Iterable<DomainStore<Object>> get _systemDomains sync* {
+    yield store;
+    yield* _stores.where(
       (final domain) =>
           domain != store && domain.value.support == DomainSupport.supported,
-    ),
-  ];
-  Future<ServerMutationResult<ServerJob>> collectNixGarbage() => _start(
-    (final api) => api.collectNixGarbage(),
-    [store, connection.volumesStore],
-  );
+    );
+  }
+
+  Future<ServerMutationResult<ServerJob>> collectNixGarbage() =>
+      _start((final api) => api.collectNixGarbage(), [store, volumesStore]);
   Future<ServerMutationResult<ServerJob>> migrateToBinds(
     final Map<String, String> serviceToDisk,
-    final String fallbackDrive,
   ) {
     final submitted = Map<String, String>.unmodifiable(serviceToDisk);
+    final fallbackDrive =
+        volumesStore.value.data
+            ?.where((final volume) => volume.root)
+            .firstOrNull
+            ?.name ??
+        'sda1';
     return _start((final api) => api.migrateToBinds(submitted, fallbackDrive), [
       store,
-      connection.services.store,
-      connection.volumesStore,
+      servicesStore,
+      volumesStore,
     ]);
   }
 

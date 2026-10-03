@@ -4,10 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/buttons/period_selector.dart';
@@ -21,7 +26,11 @@ class MemoryUsageByServicePage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => BlocProvider(
-    create: (final context) => MetricsCubit()..restart(),
+    create: (final context) => createMetricsCubit(
+      getIt<ServerConnectionHub>(),
+      resources: getIt<ResourcesModel>(),
+      serverProvider: () => ProvidersController.currentServerProvider,
+    ),
     child: const _MemoryUsageByServiceContents(),
   );
 }

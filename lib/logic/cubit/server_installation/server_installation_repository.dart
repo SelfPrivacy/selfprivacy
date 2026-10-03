@@ -8,6 +8,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -210,10 +211,10 @@ class ServerInstallationRepository {
   }
 
   Future<void> clearAppConfig() async {
+    getIt<ServerConnectionHub>().clear();
     await box.clear();
     await getIt<ResourcesModel>().clear();
     await getIt<WizardDataModel>().clear();
-    await getIt<ApiConnectionRepository>().clear();
   }
 
   Future<ServerHostingDetails> startServer(

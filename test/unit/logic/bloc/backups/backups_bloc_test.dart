@@ -5,33 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 
 import '../../../../helpers/fixtures/backup_fixtures.dart';
 import '../../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
+import '../../../../helpers/fixtures/server_fixtures.dart';
 import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
-
-class _Repository extends Mock implements ApiConnectionRepository {}
 
 class _Api extends Mock implements ServerApi {}
 
 class _Resources extends Mock implements ResourcesModel {}
 
-class _Navigation extends Mock implements NavigationService {}
+class _Provider extends Mock implements BackupsProvider {}
 
 class _Input extends Fake implements InitializeRepositoryInput {}
 
@@ -39,33 +40,28 @@ void main() {
   setUpAll(() async {
     await setUpWidgetTestHarness();
     registerFallbackValue(_Input());
+    registerFallbackValue(aBackblazeBucket());
     registerFallbackValue(aBackupConfiguration().autobackupQuotas);
   });
 
-  late _Repository repository;
   late _Api api;
   late _Resources resources;
-  late _Navigation navigation;
-  late ApiData data;
+  late _Provider provider;
+  late List<String> messages;
+  late BackblazeBucket? bucket;
+  late ServerConnectionHub hub;
   late ServerConnection connection;
-  late ServerStateOrigin? origin;
-  late StreamController<ApiData> controller;
   late BackupsBloc bloc;
   late List<Service> services;
 
   setUp(() {
-    repository = _Repository();
     api = _Api();
     resources = _Resources();
-    navigation = _Navigation();
-    data = ApiData(connection: () => connection);
-    origin = ServerStateOrigin('server');
-    connection = ServerConnection(
-      api: api,
-      origin: origin!,
-      currentOrigin: () => origin,
-    )..setVersion(Version(3, 6, 0));
-    controller = StreamController<ApiData>.broadcast();
+    provider = _Provider();
+    messages = [];
+    bucket = aBackblazeBucket();
+    hub = fixtureHub(api);
+    connection = hub.active!;
     final fixtures = loadJsonFixture('graphql/domain_reads.json');
     connection.backups.configStore.push(aBackupConfiguration());
     connection.backups.store.push(
@@ -78,32 +74,27 @@ void main() {
     services = Query$AllServices.fromJson(
       fixtures['AllServices'] as Map<String, dynamic>,
     ).services.allServices.map(Service.fromGraphQL).toList();
-    when(() => repository.connection).thenReturn(connection);
-    stubOperations(repository, connection);
-    when(() => repository.api).thenReturn(api);
-    when(() => repository.apiData).thenReturn(data);
-    when(
-      () => repository.connectionStatus,
-    ).thenReturn(ConnectionStatus.offline);
-    when(
-      () => repository.connectionStatusStream,
-    ).thenAnswer((_) => const Stream.empty());
-    when(() => repository.dataStream).thenAnswer((_) => controller.stream);
-    when(repository.emitData).thenAnswer((_) => controller.add(data));
-    when(() => resources.backblazeBucket).thenReturn(aBackblazeBucket());
-    when(resources.removeBackblazeBucket).thenAnswer((_) async {});
-    getIt
-      ..registerSingleton<ApiConnectionRepository>(repository)
-      ..registerSingleton<ResourcesModel>(resources)
-      ..registerSingleton<NavigationService>(navigation);
-    bloc = BackupsBloc();
+    when(() => resources.servers).thenReturn([aServer()]);
+    when(() => resources.backblazeBucket).thenAnswer((_) => bucket);
+    when(() => resources.setBackblazeBucket(any())).thenAnswer((
+      final call,
+    ) async {
+      bucket = call.positionalArguments.single as BackblazeBucket;
+    });
+    when(resources.removeBackblazeBucket).thenAnswer((_) async {
+      bucket = null;
+    });
+    bloc = createBackupsBloc(
+      hub,
+      resources: resources,
+      showMessage: messages.add,
+      createProvider: (_) => provider,
+    );
   });
 
   tearDown(() async {
     await bloc.close();
-    connection.dispose();
-    await controller.close();
-    await getIt.reset();
+    hub.dispose();
   });
 
   Future<void> ready({
@@ -116,14 +107,11 @@ void main() {
     connection.backups.configStore.push(
       aBackupConfiguration().copyWith(isInitialized: initialized),
     );
-    final loaded = bloc.stream.first;
-    bloc.add(
-      BackupsStateChanged(
-        connection.backups.value.data!,
-        connection.backups.configValue.data,
-      ),
+    await pumpEventQueue();
+    expect(
+      bloc.state,
+      initialized ? isA<BackupsInitialized>() : isA<BackupsUninitialized>(),
     );
-    await loaded;
   }
 
   Future<void> dispatch(final BackupsEvent event) async {
@@ -133,6 +121,224 @@ void main() {
     bloc.add(event);
     await settled;
     await pumpEventQueue();
+  }
+
+  testWidgets(
+    'failed bucket persistence settles initialization without configuring the server',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      await tester.runAsync(() async {
+        bucket = null;
+        await ready(initialized: false);
+        when(() => provider.createStorage(any())).thenAnswer(
+          (_) async => GenericResult(success: true, data: 'bucket-id'),
+        );
+        when(() => provider.createApplicationKey('bucket-id')).thenAnswer(
+          (_) async =>
+              GenericResult(success: true, data: aBackupsApplicationKey()),
+        );
+        when(
+          () => resources.setBackblazeBucket(any()),
+        ).thenThrow(Exception('secret-sentinel'));
+        bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+        await pumpEventQueue();
+        expect(bloc.state, isA<BackupsUninitialized>());
+        verifyNever(() => api.initializeRepository(any()));
+        expect(messages, contains('server_mutation.outcome_unknown'.tr()));
+        expect(messages, isNot(contains('secret-sentinel')));
+      });
+    },
+  );
+
+  testWidgets('closing the presentation suppresses late mutation feedback', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    await tester.runAsync(() async {
+      await ready();
+      final pending = Completer<ServerMutationResult<BackupConfiguration>>();
+      when(
+        () => api.setAutobackupPeriod(period: 15),
+      ).thenAnswer((_) => pending.future);
+      bloc.add(const SetAutobackupPeriod(Duration(minutes: 15)));
+      await pumpEventQueue();
+      final closing = bloc.close();
+      pending.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.rejected,
+          payload: const ServerMutationPayload.missing(),
+        ),
+      );
+      await closing;
+      expect(messages, isEmpty);
+    });
+  });
+
+  testWidgets('encryption-key persistence failure retains server backup data', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    await tester.runAsync(() async {
+      await ready();
+      bucket = aBackblazeBucket().copyWith(encryptionKey: 'previous-key');
+      when(
+        () => resources.setBackblazeBucket(any()),
+      ).thenThrow(Exception('secret-sentinel'));
+      connection.backups.configStore.push(aBackupConfiguration());
+      await pumpEventQueue();
+      expect(bloc.state, isA<BackupsInitialized>());
+      expect(bloc.state.encryptionKey, aBackupConfiguration().encryptionKey);
+      expect(messages, contains('backup.save_storage_failed'.tr()));
+      expect(messages, isNot(contains('secret-sentinel')));
+    });
+  });
+
+  for (final unsupported in [false, true]) {
+    test('initial backup read settles: unsupported=$unsupported', () async {
+      hub
+        ..clear()
+        ..resume();
+      hub.active!.setVersion(unsupported ? Version(1, 0, 0) : Version(3, 6, 0));
+      when(api.getBackups).thenThrow(StateError('unavailable'));
+      when(api.getBackupsConfiguration).thenThrow(StateError('unavailable'));
+      await hub.active!.backups.refresh(force: true);
+      await pumpEventQueue();
+      expect(bloc.state, isNot(isA<BackupsLoading>()));
+      expect(bloc.state, isNot(isA<BackupsUninitialized>()));
+      expect((bloc.state as BackupsUnavailable).isUnsupported, unsupported);
+    });
+  }
+
+  testWidgets(
+    'reset clears backup presentation while metadata persistence is held',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      await tester.runAsync(() async {
+        await ready();
+        final persisted = Completer<void>();
+        final saving = Completer<void>();
+        bucket = aBackblazeBucket().copyWith(encryptionKey: 'previous-key');
+        when(() => resources.setBackblazeBucket(any())).thenAnswer((_) {
+          saving.complete();
+          return persisted.future;
+        });
+        connection.backups.configStore.push(aBackupConfiguration());
+        await saving.future;
+        hub.clear();
+        await pumpEventQueue();
+        try {
+          expect(bloc.state, isA<BackupsInitial>());
+          expect(bloc.state.encryptionKey, isNull);
+          expect(bloc.state.backups, isEmpty);
+        } finally {
+          persisted.complete();
+          await pumpEventQueue();
+        }
+      });
+    },
+  );
+
+  testWidgets(
+    'initialization waits for local storage before configuring the server',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      await tester.runAsync(() async {
+        bucket = null;
+        await ready(initialized: false);
+        when(() => provider.createStorage(any())).thenAnswer(
+          (_) async => GenericResult(success: true, data: 'bucket-id'),
+        );
+        when(() => provider.createApplicationKey('bucket-id')).thenAnswer(
+          (_) async =>
+              GenericResult(success: true, data: aBackupsApplicationKey()),
+        );
+        final persisted = Completer<void>();
+        when(() => resources.setBackblazeBucket(any())).thenAnswer((
+          final call,
+        ) async {
+          await persisted.future;
+          bucket = call.positionalArguments.single as BackblazeBucket;
+        });
+        when(() => api.initializeRepository(any())).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: ServerMutationPayload.available(aBackupConfiguration()),
+          ),
+        );
+        bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+        await pumpEventQueue();
+        expect(bloc.state, isA<BackupsInitializing>());
+        verifyNever(() => api.initializeRepository(any()));
+        persisted.complete();
+        await pumpEventQueue();
+        expect(bloc.state, isA<BackupsInitialized>());
+        final input =
+            verify(() => api.initializeRepository(captureAny())).captured.single
+                as InitializeRepositoryInput;
+        expect(input.locationId, bucket!.bucketId);
+        expect(input.password, aBackupsApplicationKey().applicationKey);
+      });
+    },
+  );
+
+  testWidgets(
+    'reset after creating storage stops before creating its application key',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      await tester.runAsync(() async {
+        bucket = null;
+        await ready(initialized: false);
+        final created = Completer<GenericResult<String>>();
+        when(
+          () => provider.createStorage(any()),
+        ).thenAnswer((_) => created.future);
+        bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+        await pumpEventQueue();
+        hub.clear();
+        created.complete(GenericResult(success: true, data: 'bucket-id'));
+        await pumpEventQueue();
+        expect(bloc.state, isA<BackupsInitial>());
+        verifyNever(() => provider.createApplicationKey(any()));
+        verifyNever(() => resources.setBackblazeBucket(any()));
+        verifyNever(() => api.initializeRepository(any()));
+      });
+    },
+  );
+
+  for (final rejected in [false, true]) {
+    testWidgets(
+      'unusable backup application key never reaches the server, rejected=$rejected',
+      (final tester) async {
+        await pumpForTest(tester, const SizedBox.shrink());
+        await tester.runAsync(() async {
+          bucket = null;
+          await ready(initialized: false);
+          when(() => provider.createStorage(any())).thenAnswer(
+            (_) async => GenericResult(success: true, data: 'bucket-id'),
+          );
+          final credential = aBackupsApplicationKey();
+          when(() => provider.createApplicationKey('bucket-id')).thenAnswer(
+            (_) async => GenericResult(
+              success: !rejected,
+              data: rejected
+                  ? credential
+                  : BackupsApplicationKey(
+                      applicationKeyId: credential.applicationKeyId,
+                      applicationKey: '',
+                    ),
+            ),
+          );
+          await dispatch(InitializeBackupsRepository(aBackupsCredential()));
+          expect(bloc.state, isA<BackupsUninitialized>());
+          verifyNever(() => resources.setBackblazeBucket(any()));
+          verifyNever(() => api.initializeRepository(any()));
+          expect(
+            messages,
+            contains('backup.create_application_key_failed'.tr()),
+          );
+        });
+      },
+    );
   }
 
   for (final operation in ['period', 'quotas', 'initialize', 'remove']) {
@@ -190,7 +396,6 @@ void main() {
             );
             expect(bloc.state, isNot(isA<BackupsBusy>()));
             expect(bloc.state, isNot(isA<BackupsInitializing>()));
-            verifyNever(() => repository.reload(any()));
             if (operation == 'remove' && confirmed) {
               verify(resources.removeBackblazeBucket).called(1);
               expect(
@@ -209,9 +414,12 @@ void main() {
                   ? 'server_mutation.rejected'
                   : 'server_mutation.payload_unavailable';
               expect(key.tr(), isNot(key));
-              verify(() => navigation.showSnackBar(key.tr())).called(1);
+              expect(
+                messages.where((final message) => message == key.tr()),
+                hasLength(1),
+              );
             }
-            verifyNever(() => navigation.showSnackBar('secret-sentinel'));
+            expect(messages, isNot(contains('secret-sentinel')));
           });
         });
       }
@@ -247,7 +455,6 @@ void main() {
       await dispatch(const SetAutobackupPeriod(null));
       expect(connection.backups.configValue.data!.autobackupPeriod, isNull);
       expect(bloc.state.autobackupPeriod, isNull);
-      verifyNever(() => repository.reload(any()));
     });
   });
 
@@ -425,24 +632,20 @@ void main() {
     await pumpForTest(tester, const SizedBox.shrink());
     await tester.runAsync(() async {
       await ready(initialized: false);
-      final emptyOrigin = ServerStateOrigin('empty');
-      connection.dispose();
-      origin = emptyOrigin;
-      connection = ServerConnection(
-        api: api,
-        origin: emptyOrigin,
-        currentOrigin: () => origin,
-      )..setVersion(Version(3, 6, 0));
-      when(() => repository.connection).thenReturn(connection);
-      stubOperations(repository, connection);
+      connection.backups.configStore.push(
+        aBackupConfiguration().copyWith(
+          isInitialized: false,
+          encryptionKey: '',
+        ),
+      );
+      await pumpEventQueue();
       await dispatch(InitializeBackupsRepository(aBackupsCredential()));
       expect(bloc.state, isA<BackupsUninitialized>());
       verifyNever(() => api.initializeRepository(any()));
-      verify(
-        () => navigation.showSnackBar(
-          'backup.backups_encryption_key_not_found'.tr(),
-        ),
-      ).called(1);
+      expect(
+        messages,
+        contains('backup.backups_encryption_key_not_found'.tr()),
+      );
     });
   });
 
@@ -451,6 +654,8 @@ void main() {
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
     await tester.runAsync(() async {
+      hub.clear();
+      await pumpEventQueue();
       for (final event in <BackupsEvent>[
         const SetAutobackupPeriod(null),
         SetAutobackupQuotas(aBackupConfiguration().autobackupQuotas),
@@ -515,17 +720,10 @@ void main() {
       ).thenAnswer((_) => first.future);
       bloc.add(CreateBackups(services));
       await pumpEventQueue();
-      final replacementApi = _Api();
-      final replacementOrigin = ServerStateOrigin('replacement');
-      final replacement = ServerConnection(
-        api: replacementApi,
-        origin: replacementOrigin,
-        currentOrigin: () => origin,
-      )..setVersion(Version(3, 6, 0));
-      addTearDown(replacement.dispose);
-      origin = replacementOrigin;
-      when(() => repository.connection).thenReturn(replacement);
-      bloc.add(const BackupsServerReset());
+      hub
+        ..clear()
+        ..resume();
+      final replacement = hub.active!;
       await pumpEventQueue();
       first.complete(
         ServerMutationResult(
@@ -534,14 +732,13 @@ void main() {
         ),
       );
       await pumpEventQueue();
-      expect(bloc.state, isA<BackupsInitial>());
+      expect(bloc.state, isA<BackupsLoading>());
       expect(connection.jobs.value.data, isEmpty);
       expect(replacement.jobs.value.data, isNull);
       verify(() => api.startBackup(services.first.id)).called(1);
       for (final service in services.skip(1)) {
         verifyNever(() => api.startBackup(service.id));
       }
-      verifyZeroInteractions(replacementApi);
     });
   });
 }

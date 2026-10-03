@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:hive_ce/hive.dart';
+import 'package:pool/pool.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -43,7 +44,32 @@ class ClearedModel extends ResourcesModelEvent {
 }
 
 class ResourcesModel {
-  final Box _box = Hive.box(BNames.resourcesBox);
+  ResourcesModel({final Box? box})
+    : _box = box ?? Hive.box(BNames.resourcesBox);
+
+  final Box _box;
+  final _writes = Pool(1);
+
+  void _requireOpen() {
+    if (_writes.isClosed) {
+      throw StateError('Resources are disposed.');
+    }
+  }
+
+  Future<void> _persist(
+    final String key,
+    final Object? value, {
+    final ResourcesModelEvent? event,
+  }) {
+    final snapshot = value is List ? value.toList(growable: false) : value;
+    return _writes.withResource(() async {
+      await _box.put(key, snapshot);
+      await _box.flush();
+      if (event != null) {
+        _statusStreamController.add(event);
+      }
+    });
+  }
 
   final _statusStreamController =
       StreamController<ResourcesModelEvent>.broadcast();
@@ -92,39 +118,49 @@ class ResourcesModel {
   Future<void> addServerProviderToken(
     final ServerProviderCredential token,
   ) async {
+    _requireOpen();
     _serverProviderTokens.add(token);
-    await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
-    await _box.flush();
-    _statusStreamController.add(const ChangedServerProviderCredentials());
+    await _persist(
+      BNames.serverProviderTokens,
+      _serverProviderTokens,
+      event: const ChangedServerProviderCredentials(),
+    );
   }
 
   Future<void> associateServerWithCredential(
     final String serverUuid,
     final String credentialUuid,
   ) async {
+    _requireOpen();
     _serverProviderTokens
         .firstWhere((final credential) => credential.uuid == credentialUuid)
         .associatedServerUuids
         .add(serverUuid);
-    await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
-    await _box.flush();
-    _statusStreamController.add(const ChangedServerProviderCredentials());
+    await _persist(
+      BNames.serverProviderTokens,
+      _serverProviderTokens,
+      event: const ChangedServerProviderCredentials(),
+    );
   }
 
   Future<void> removeServerProviderToken(
     final ServerProviderCredential token,
   ) async {
+    _requireOpen();
     _serverProviderTokens.removeWhere(
       (final storedCredential) => storedCredential.uuid == token.uuid,
     );
-    await _box.put(BNames.serverProviderTokens, _serverProviderTokens);
-    await _box.flush();
-    _statusStreamController.add(const ChangedServerProviderCredentials());
+    await _persist(
+      BNames.serverProviderTokens,
+      _serverProviderTokens,
+      event: const ChangedServerProviderCredentials(),
+    );
   }
 
   Future<void> addDnsProviderToken(
     final DnsProviderCredential newCredential,
   ) async {
+    _requireOpen();
     // Check if this token already exists
     if (_dnsProviderTokens.any(
       (final credential) => credential.token == newCredential.token,
@@ -132,109 +168,126 @@ class ResourcesModel {
       throw Exception('Token already exists');
     }
     _dnsProviderTokens.add(newCredential);
-    await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
-    await _box.flush();
-    _statusStreamController.add(const ChangedDnsProviderCredentials());
+    await _persist(
+      BNames.dnsProviderTokens,
+      _dnsProviderTokens,
+      event: const ChangedDnsProviderCredentials(),
+    );
   }
 
   Future<void> associateDomainWithCredential(
     final String domain,
     final DnsProviderCredential newCredential,
   ) async {
+    _requireOpen();
     _dnsProviderTokens
         .firstWhere(
           (final credential) => credential.token == newCredential.token,
         )
         .associatedDomainNames
         .add(domain);
-    await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
-    await _box.flush();
-    _statusStreamController.add(const ChangedDnsProviderCredentials());
+    await _persist(
+      BNames.dnsProviderTokens,
+      _dnsProviderTokens,
+      event: const ChangedDnsProviderCredentials(),
+    );
   }
 
   Future<void> removeDnsProviderToken(
     final DnsProviderCredential credential,
   ) async {
+    _requireOpen();
     _dnsProviderTokens.removeWhere(
       (final storedCredential) => storedCredential.uuid == credential.uuid,
     );
-    await _box.put(BNames.dnsProviderTokens, _dnsProviderTokens);
-    await _box.flush();
-    _statusStreamController.add(const ChangedDnsProviderCredentials());
+    await _persist(
+      BNames.dnsProviderTokens,
+      _dnsProviderTokens,
+      event: const ChangedDnsProviderCredentials(),
+    );
   }
 
   Future<void> addBackupsCredential(final BackupsCredential credential) async {
+    _requireOpen();
     _backupsCredentials.add(credential);
-    await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
-    await _box.flush();
-    _statusStreamController.add(const ChangedBackupsCredentials());
+    await _persist(
+      BNames.backupsProviderTokens,
+      _backupsCredentials,
+      event: const ChangedBackupsCredentials(),
+    );
   }
 
   Future<void> removeBackupsCredential(
     final BackupsCredential credential,
   ) async {
+    _requireOpen();
     _backupsCredentials.removeWhere(
       (final storedCredential) => storedCredential.uuid == credential.uuid,
     );
-    await _box.put(BNames.backupsProviderTokens, _backupsCredentials);
-    await _box.flush();
-    _statusStreamController.add(const ChangedBackupsCredentials());
+    await _persist(
+      BNames.backupsProviderTokens,
+      _backupsCredentials,
+      event: const ChangedBackupsCredentials(),
+    );
   }
 
   Future<void> addServer(final Server server) async {
+    _requireOpen();
     _servers.add(server);
-    await _box.put(BNames.servers, _servers);
-    await _box.flush();
-    _statusStreamController.add(const ChangedServers());
+    await _persist(BNames.servers, _servers, event: const ChangedServers());
   }
 
   Future<void> removeServer(final Server server) async {
+    _requireOpen();
     _servers.removeWhere(
       (final storedServer) => storedServer.uuid == server.uuid,
     );
-    await _box.put(BNames.servers, _servers);
-    await _box.flush();
-    _statusStreamController.add(const ChangedServers());
+    await _persist(BNames.servers, _servers, event: const ChangedServers());
   }
 
   Future<void> updateServerByUuid(final Server server) async {
+    _requireOpen();
     final index = _servers.indexWhere(
       (final storedServer) => storedServer.uuid == server.uuid,
     );
     if (index != -1) {
       _servers[index] = server;
-      await _box.put(BNames.servers, _servers);
-      await _box.flush();
-      _statusStreamController.add(const ChangedServers());
+      await _persist(BNames.servers, _servers, event: const ChangedServers());
     }
   }
 
   Future<void> setBackblazeBucket(final BackblazeBucket bucket) async {
+    _requireOpen();
     _backblazeBucket = bucket;
-    await _box.put(BNames.backblazeBucket, _backblazeBucket);
-    await _box.flush();
+    await _persist(BNames.backblazeBucket, bucket);
   }
 
   Future<void> removeBackblazeBucket() async {
+    _requireOpen();
     _backblazeBucket = null;
-    await _box.delete(BNames.backblazeBucket);
-    await _box.flush();
+    await _writes.withResource(() async {
+      await _box.delete(BNames.backblazeBucket);
+      await _box.flush();
+    });
   }
 
   Future<void> clear() async {
+    _requireOpen();
     _servers.clear();
     _serverProviderTokens.clear();
     _dnsProviderTokens.clear();
     _backupsCredentials.clear();
     _backblazeBucket = null;
 
-    await _box.clear();
-    await _box.compact();
-
-    _statusStreamController.add(const ClearedModel());
+    await _writes.withResource(() async {
+      await _box.clear();
+      await _box.compact();
+      _statusStreamController.add(const ClearedModel());
+    });
   }
 
   Future<void> dispose() async {
+    await _writes.close();
     await _statusStreamController.close();
   }
 

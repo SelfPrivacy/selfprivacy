@@ -77,16 +77,14 @@ void main() {
           return [users];
         },
       );
-      final completion = await handle.completion;
+      final completion = await handle;
       expect(completion.application, CommandApplication.applied);
       expect(completion.result, same(confirmed));
-      expect(await handle.remoteResult, same(confirmed));
       expect(users.value.data, 2);
       expect(users.value.updatedAt, previous);
       expect(users.value.freshness, Freshness.fresh);
       expect(users.value.needsReconciliation, isFalse);
       expect(coordinator.isReserved(users), isFalse);
-      expect(coordinator.pending, isEmpty);
     },
   );
 
@@ -98,7 +96,7 @@ void main() {
         (_) => Completer<ServerMutationResult<int>>(),
       );
       final sent = <int>[];
-      CommandHandle<int> submit(
+      Future<CommandCompletion<int>> submit(
         final int id,
         final List<DomainStore<Object>> domains,
       ) => coordinator.submit(
@@ -113,26 +111,19 @@ void main() {
       final third = submit(2, [jobs]);
       final disjoint = submit(3, [settings]);
       expect(sent, [0, 3]);
-      expect(coordinator.pending.map((final command) => command.phase), [
-        CommandPhase.running,
-        CommandPhase.queued,
-        CommandPhase.queued,
-        CommandPhase.running,
-      ]);
       responses[3].complete(result());
-      await disjoint.completion;
+      await disjoint;
       expect(sent, [0, 3]);
       responses[0].complete(result());
-      await first.completion;
+      await first;
       expect(sent, [0, 3, 1]);
       expect(coordinator.isReserved(users), isTrue);
       expect(coordinator.isReserved(jobs), isTrue);
       responses[1].complete(result());
-      await second.completion;
+      await second;
       expect(sent, [0, 3, 1, 2]);
       responses[2].complete(result());
-      await third.completion;
-      expect(coordinator.pending, isEmpty);
+      await third;
     },
   );
 
@@ -153,7 +144,7 @@ void main() {
         },
         applyConfirmed: (_) => fail('must not publish an unconfirmed payload'),
       );
-      final completion = await handle.completion;
+      final completion = await handle;
       expect(completion.result, same(response));
       expect(completion.application, CommandApplication.notApplied);
       expect(users.value.data, 1);
@@ -162,7 +153,6 @@ void main() {
       expect(settings.value.needsReconciliation, isFalse);
       await tester.pump(const Duration(seconds: 30));
       expect(calls, 1);
-      expect(coordinator.pending, isEmpty);
     });
   }
 
@@ -173,12 +163,10 @@ void main() {
     testCoordinator(
       'confirmed ${payload.status} reconciles without a reducer',
       (final tester) async {
-        final completion = await coordinator
-            .submit<int>(
-              domains: [users],
-              send: (_) async => result(payload: payload),
-            )
-            .completion;
+        final completion = await coordinator.submit<int>(
+          domains: [users],
+          send: (_) async => result(payload: payload),
+        );
         expect(completion.result!.outcome, ServerMutationOutcome.confirmed);
         expect(completion.application, CommandApplication.notApplied);
         expect(users.value.needsReconciliation, isTrue);
@@ -189,16 +177,14 @@ void main() {
   testCoordinator('only uncovered domains are invalidated after confirmation', (
     final tester,
   ) async {
-    await coordinator
-        .submit<int>(
-          domains: [users, jobs],
-          send: (_) async => result(),
-          applyConfirmed: (final response) {
-            users.push(response.payload.value!);
-            return [users];
-          },
-        )
-        .completion;
+    await coordinator.submit<int>(
+      domains: [users, jobs],
+      send: (_) async => result(),
+      applyConfirmed: (final response) {
+        users.push(response.payload.value!);
+        return [users];
+      },
+    );
     expect(users.value.needsReconciliation, isFalse);
     expect(jobs.value.needsReconciliation, isTrue);
   });
@@ -216,7 +202,7 @@ void main() {
       },
     );
     expect(await read, RefreshResult.superseded);
-    await command.completion;
+    await command;
     expect(users.value.data, 2);
     expect(users.value.needsReconciliation, isTrue);
   });
@@ -225,16 +211,14 @@ void main() {
     'complete command payload satisfies a fenced read obligation',
     (final tester) async {
       final read = users.refresh(force: true);
-      await coordinator
-          .submit<int>(
-            domains: [users],
-            send: (_) async => result(),
-            applyConfirmed: (final response) {
-              users.push(response.payload.value!);
-              return [users];
-            },
-          )
-          .completion;
+      await coordinator.submit<int>(
+        domains: [users],
+        send: (_) async => result(),
+        applyConfirmed: (final response) {
+          users.push(response.payload.value!);
+          return [users];
+        },
+      );
       expect(await read, RefreshResult.superseded);
       expect(users.value.data, 2);
       expect(users.value.needsReconciliation, isFalse);
@@ -261,23 +245,17 @@ void main() {
         current = removed ? null : ServerStateOrigin(origin.serverId);
         final confirmed = result();
         response.complete(confirmed);
-        final completion = await handle.completion;
+        final completion = await handle;
         expect(completion.application, CommandApplication.detached);
         expect(completion.result, same(confirmed));
-        expect(await handle.remoteResult, same(confirmed));
-        expect(
-          (await queued.completion).application,
-          CommandApplication.detached,
-        );
-        expect(await queued.remoteResult, isNull);
+        expect((await queued).application, CommandApplication.detached);
         expect(users.value.data, 1);
-        expect(coordinator.pending, isEmpty);
       },
     );
   }
 
   testCoordinator(
-    'disposal resolves local waiters but preserves the eventual remote outcome',
+    'disposal resolves waiters and ignores late remote completion',
     (final tester) async {
       final response = Completer<ServerMutationResult<int>>();
       final running = coordinator.submit<int>(
@@ -290,28 +268,20 @@ void main() {
         send: (_) => fail('must not send'),
       );
       coordinator.dispose();
-      final completion = await running.completion;
+      final completion = await running;
       expect(completion.application, CommandApplication.detached);
       expect(completion.result, isNull);
-      expect(
-        (await queued.completion).application,
-        CommandApplication.detached,
-      );
-      expect(await queued.remoteResult, isNull);
+      expect((await queued).application, CommandApplication.detached);
       expect(coordinator.isReserved(users), isFalse);
       final confirmed = result();
       response.complete(confirmed);
-      expect(await running.remoteResult, same(confirmed));
+      await tester.pump();
       expect(users.value.data, 1);
       final afterDisposal = coordinator.submit<int>(
         domains: [users],
         send: (_) => fail('must not send'),
       );
-      expect(
-        (await afterDisposal.completion).application,
-        CommandApplication.detached,
-      );
-      expect(await afterDisposal.remoteResult, isNull);
+      expect((await afterDisposal).application, CommandApplication.detached);
     },
   );
 
@@ -324,12 +294,10 @@ void main() {
         send: (_) async => confirmed,
         applyConfirmed: (_) => throw StateError('secret-sentinel'),
       );
-      final completion = await handle.completion;
+      final completion = await handle;
       expect(completion.application, CommandApplication.failed);
       expect(completion.result, same(confirmed));
-      expect(await handle.remoteResult, same(confirmed));
       expect(users.value.needsReconciliation, isTrue);
-      expect(coordinator.pending, isEmpty);
       expect(coordinator.isReserved(users), isFalse);
       expect(completion.toString(), isNot(contains('secret-sentinel')));
     },
@@ -349,50 +317,17 @@ void main() {
           },
           applyConfirmed: (_) => fail('must not publish'),
         );
-        final completion = await handle.completion;
+        final completion = await handle;
         expect(completion.result!.outcome, ServerMutationOutcome.indeterminate);
         expect(completion.result!.message, isNull);
         expect(
           completion.result.toString(),
           isNot(contains('secret-sentinel')),
         );
-        expect(await handle.remoteResult, same(completion.result));
         expect(users.value.needsReconciliation, isTrue);
-        expect(coordinator.pending, isEmpty);
       },
     );
   }
-
-  testCoordinator('pending snapshots contain only immutable safe metadata', (
-    final tester,
-  ) async {
-    final snapshots = <List<PendingCommand>>[];
-    final subscription = coordinator.changes.listen(snapshots.add);
-    final response = Completer<ServerMutationResult<String>>();
-    final handle = coordinator.submit<String>(
-      domains: [users],
-      send: (_) => response.future,
-    );
-    final running = coordinator.pending;
-    expect(running.single.id, same(handle.id));
-    expect(running.single.domains, {'users'});
-    expect(running.clear, throwsUnsupportedError);
-    expect(() => running.single.domains.clear(), throwsUnsupportedError);
-    response.complete(
-      ServerMutationResult(
-        outcome: ServerMutationOutcome.confirmed,
-        payload: const ServerMutationPayload.available('secret-sentinel'),
-        message: 'secret-sentinel',
-      ),
-    );
-    final completion = await handle.completion;
-    await tester.pump();
-    expect(completion.result!.payload.value, 'secret-sentinel');
-    expect(snapshots.last, isEmpty);
-    expect(snapshots.toString(), isNot(contains('secret-sentinel')));
-    expect(running.single.phase, CommandPhase.running);
-    unawaited(subscription.cancel());
-  });
 
   testCoordinator('rejects unknown or empty affected sets', (
     final tester,
@@ -420,7 +355,7 @@ void main() {
     final tester,
   ) async {
     final response = Completer<ServerMutationResult<int>>();
-    late CommandHandle<int> nested;
+    late Future<CommandCompletion<int>> nested;
     var nestedSent = false;
     final first = coordinator.submit<int>(
       domains: [users],
@@ -437,10 +372,10 @@ void main() {
     );
     await tester.pump();
     expect(nestedSent, isTrue);
-    await nested.completion;
+    await nested;
     expect(coordinator.isReserved(users), isTrue);
     response.complete(result());
-    await first.completion;
+    await first;
   });
 
   testCoordinator(
@@ -451,11 +386,7 @@ void main() {
         domains: [users],
         send: (_) => fail('must not send without the originating cache'),
       );
-      expect(
-        (await handle.completion).application,
-        CommandApplication.detached,
-      );
-      expect(await handle.remoteResult, isNull);
+      expect((await handle).application, CommandApplication.detached);
     },
   );
 
@@ -463,18 +394,15 @@ void main() {
     'undeclared coverage fails locally and retains the remote outcome',
     (final tester) async {
       final confirmed = result();
-      final completion = await coordinator
-          .submit<int>(
-            domains: [users],
-            send: (_) async => confirmed,
-            applyConfirmed: (_) => [jobs],
-          )
-          .completion;
+      final completion = await coordinator.submit<int>(
+        domains: [users],
+        send: (_) async => confirmed,
+        applyConfirmed: (_) => [jobs],
+      );
       expect(completion.result, same(confirmed));
       expect(completion.application, CommandApplication.failed);
       expect(users.value.needsReconciliation, isTrue);
       expect(jobs.value.needsReconciliation, isFalse);
-      expect(coordinator.pending, isEmpty);
     },
   );
 
@@ -502,19 +430,17 @@ void main() {
         stores: [replacementStore],
       );
       try {
-        await replacement
-            .submit<int>(
-              domains: [replacementStore],
-              send: (_) async =>
-                  result(payload: const ServerMutationPayload.available(20)),
-              applyConfirmed: (final response) {
-                replacementStore.push(response.payload.value!);
-                return [replacementStore];
-              },
-            )
-            .completion;
+        await replacement.submit<int>(
+          domains: [replacementStore],
+          send: (_) async =>
+              result(payload: const ServerMutationPayload.available(20)),
+          applyConfirmed: (final response) {
+            replacementStore.push(response.payload.value!);
+            return [replacementStore];
+          },
+        );
         response.complete(result());
-        expect((await old.completion).application, CommandApplication.detached);
+        expect((await old).application, CommandApplication.detached);
         expect(replacementStore.value.data, 20);
         expect(users.value.data, 1);
       } finally {

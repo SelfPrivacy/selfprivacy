@@ -2,12 +2,12 @@ part of 'groups_bloc.dart';
 
 sealed class GroupsState extends Equatable {
   GroupsState({required final List<String> groups})
-    : _hashCode = Object.hashAll(groups);
+    : groups = List.unmodifiable(groups);
 
-  final int _hashCode;
+  final List<String> groups;
 
-  List<String> get groups =>
-      getIt<ApiConnectionRepository>().apiData.groups.data ?? const [];
+  @override
+  List<Object> get props => [groups];
 
   String get fullUsersGroup => 'sp.full_users';
 
@@ -40,21 +40,20 @@ sealed class GroupsState extends Equatable {
 
 class GroupsInitial extends GroupsState {
   GroupsInitial() : super(groups: const []);
-
-  @override
-  List<Object> get props => [_hashCode];
 }
 
 class GroupsRefreshing extends GroupsState {
   GroupsRefreshing({required super.groups});
-
-  @override
-  List<Object> get props => [_hashCode];
 }
 
 class GroupsLoaded extends GroupsState {
   GroupsLoaded({required super.groups});
+}
 
-  @override
-  List<Object> get props => [_hashCode];
+class GroupsUnsupported extends GroupsState {
+  GroupsUnsupported() : super(groups: const []);
+}
+
+class GroupsError extends GroupsState {
+  GroupsError() : super(groups: const []);
 }

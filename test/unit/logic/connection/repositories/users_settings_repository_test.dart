@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -348,4 +350,122 @@ void main() {
       isTrue,
     );
   });
+
+  final userCalls = <String, Future<ServerMutationResult<User>> Function(User)>{
+    'CreateUser': (final user) => connection.users.createUser(user),
+    'UpdateUser': (final user) => connection.users.updateUser(user),
+    'AddSshKey': (final user) =>
+        connection.users.addSshKey(user, 'fixture-key'),
+    'RemoveSshKey': (final user) =>
+        connection.users.deleteSshKey(user, 'fixture-key'),
+  };
+  for (final call in userCalls.entries) {
+    for (final outcome in [
+      ServerMutationOutcome.rejected,
+      ServerMutationOutcome.indeterminate,
+    ]) {
+      test('${call.key} never applies a $outcome payload', () async {
+        final user = aMutationUser(call.key);
+        final response = Future.value(
+          ServerMutationResult<User>(
+            outcome: outcome,
+            payload: ServerMutationPayload.available(user),
+          ),
+        );
+        when(
+          () => api.createUser(any(), any(), any()),
+        ).thenAnswer((_) => response);
+        when(
+          () => api.updateUser(any(), any(), any()),
+        ).thenAnswer((_) => response);
+        when(() => api.addSshKey(any(), any())).thenAnswer((_) => response);
+        when(() => api.removeSshKey(any(), any())).thenAnswer((_) => response);
+        connection.users.store.push([]);
+        expect((await call.value(user)).outcome, outcome);
+        expect(connection.users.knownUsers, isEmpty);
+        expect(connection.users.value.needsReconciliation, isTrue);
+      });
+    }
+  }
+
+  test('in-flight user update upserts against the latest snapshot', () async {
+    final user = aMutationUser('UpdateUser');
+    final response = Completer<ServerMutationResult<User>>();
+    when(
+      () => api.updateUser(any(), any(), any()),
+    ).thenAnswer((_) => response.future);
+    connection.users.store.push([]);
+    final pending = connection.users.updateUser(user);
+    final other = User.fake(login: 'other');
+    connection.users.store.push([aMutationUser('CreateUser'), other]);
+    final changed = connection.users.changes.firstWhere(
+      (final value) => value.data?.first == user,
+    );
+    response.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(user),
+      ),
+    );
+    await pending;
+    expect((await changed).data, [user, other]);
+  });
+
+  test('detached user completion cannot publish into its old store', () async {
+    final user = aMutationUser('UpdateUser');
+    final response = Completer<ServerMutationResult<User>>();
+    when(
+      () => api.updateUser(any(), any(), any()),
+    ).thenAnswer((_) => response.future);
+    final pending = connection.users.updateUser(user);
+    connection.dispose();
+    response.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(user),
+      ),
+    );
+    expect((await pending).outcome, ServerMutationOutcome.indeterminate);
+    expect(connection.users.knownUsers, isEmpty);
+  });
+
+  for (final outcome in [
+    ServerMutationOutcome.rejected,
+    ServerMutationOutcome.indeterminate,
+  ]) {
+    test('$outcome settings payload never changes the cache', () async {
+      final original = SystemSettings.fromGraphQL(
+        Query$SystemSettings.fromJson(
+          loadJsonFixture('graphql/domain_reads.json')['SystemSettings']
+              as Map<String, dynamic>,
+        ).system,
+      );
+      connection.settings.store.push(original);
+      when(() => api.setTimezone(any())).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: outcome,
+          payload: const ServerMutationPayload.available('UTC'),
+        ),
+      );
+      await connection.settings.setServerTimezone('UTC');
+      expect(connection.settings.value.data, same(original));
+      expect(connection.settings.value.needsReconciliation, isTrue);
+    });
+
+    test('$outcome email-password deletion preserves metadata', () async {
+      final user = aUserWithEmailPasswords();
+      connection.users.store.push([user]);
+      when(() => api.deleteEmailPassword(user.login, 'remove')).thenAnswer(
+        (_) async => ServerMutationResult<void>(
+          outcome: outcome,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      await connection.users.deleteEmailPassword(user, 'remove');
+      expect(
+        connection.users.value.data!.single.emailPasswordMetadata,
+        user.emailPasswordMetadata,
+      );
+    });
+  }
 }

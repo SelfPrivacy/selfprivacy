@@ -16,19 +16,19 @@ final class ServerLogsLoading extends ServerLogsState {
 
 final class ServerLogsLoaded extends ServerLogsState {
   ServerLogsLoaded({
-    required this.oldEntries,
-    required this.newEntries,
+    required final List<ServerLogEntry> oldEntries,
+    required final List<ServerLogEntry> newEntries,
     required this.meta,
     required this.loadingMore,
     this.slice,
     this.unit,
-  }) : _lastCursor = newEntries.isEmpty ? '' : newEntries.first.cursor;
+  }) : oldEntries = List.unmodifiable(oldEntries),
+       newEntries = List.unmodifiable(newEntries);
 
   final List<ServerLogEntry> oldEntries;
   final List<ServerLogEntry> newEntries;
   final ServerLogsPageMeta meta;
   final bool loadingMore;
-  final String _lastCursor;
   final String? slice;
   final String? unit;
 
@@ -68,7 +68,7 @@ final class ServerLogsLoaded extends ServerLogsState {
     oldEntries,
     newEntries,
     meta,
-    _lastCursor,
+    loadingMore,
     slice,
     unit,
   ];

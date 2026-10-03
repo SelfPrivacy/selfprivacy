@@ -4,20 +4,13 @@ sealed class UsersEvent extends Equatable {
   const UsersEvent();
 }
 
-class UsersListChanged extends UsersEvent {
-  const UsersListChanged(this.users);
+class _UsersObserved extends UsersEvent {
+  const _UsersObserved(this.observation);
 
-  final List<User> users;
-
-  @override
-  List<Object> get props => [users];
-}
-
-class UsersLoadFailed extends UsersEvent {
-  const UsersLoadFailed();
+  final ConnectionObservation<CachedValue<List<User>>> observation;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [observation];
 }
 
 class UsersListRefresh extends UsersEvent {
@@ -25,13 +18,4 @@ class UsersListRefresh extends UsersEvent {
 
   @override
   List<Object> get props => [];
-}
-
-class UsersConnectionStatusChanged extends UsersEvent {
-  const UsersConnectionStatusChanged(this.connectionStatus);
-
-  final ConnectionStatus connectionStatus;
-
-  @override
-  List<Object> get props => [connectionStatus];
 }

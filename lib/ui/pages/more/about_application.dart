@@ -4,8 +4,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/link_list_tile.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -39,6 +41,15 @@ class AboutApplicationPage extends StatelessWidget {
     }
 
     final deviceIcon = getPlatformIcon();
+    final apiVersion = switch (context
+        .watch<OutdatedServerCheckerBloc>()
+        .state) {
+      OutdatedServerCheckerOutdated(:final currentVersion) ||
+      OutdatedServerCheckerUpToDate(
+        :final currentVersion,
+      ) => currentVersion.toString(),
+      _ => null,
+    };
 
     return BrandHeroScreen(
       hasBackButton: true,
@@ -61,20 +72,17 @@ class AboutApplicationPage extends StatelessWidget {
             },
           ),
         ),
-        if (getIt<ApiConnectionRepository>().apiData.apiVersion.data != null)
-          FutureBuilder(
-            future: _apiVersion(),
-            builder: (final context, final snapshot) => ListTile(
-              title: Text('about_application_page.api_version_text'.tr()),
-              subtitle: Text(snapshot.data.toString()),
-              leading: const Icon(Icons.api_outlined),
-              onLongPress: () async {
-                await PlatformAdapter.setClipboard(snapshot.data.toString());
-                getIt<NavigationService>().showSnackBar(
-                  'basis.copied_to_clipboard'.tr(),
-                );
-              },
-            ),
+        if (apiVersion != null)
+          ListTile(
+            title: Text('about_application_page.api_version_text'.tr()),
+            subtitle: Text(apiVersion),
+            leading: const Icon(Icons.api_outlined),
+            onLongPress: () async {
+              await PlatformAdapter.setClipboard(apiVersion);
+              getIt<NavigationService>().showSnackBar(
+                'basis.copied_to_clipboard'.tr(),
+              );
+            },
           ),
         FutureBuilder(
           future: _packageVersion(),
@@ -194,12 +202,5 @@ class AboutApplicationPage extends StatelessWidget {
     }
 
     return packageVersion;
-  }
-
-  Future<String> _apiVersion() async {
-    final apiVersion =
-        getIt<ApiConnectionRepository>().apiData.apiVersion.data ?? 'unknown';
-
-    return apiVersion;
   }
 }

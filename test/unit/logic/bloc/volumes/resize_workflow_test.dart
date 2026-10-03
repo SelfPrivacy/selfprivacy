@@ -1,101 +1,144 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:pub_semver/pub_semver.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
+import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
-import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
 import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
-class _Repository extends Mock implements ApiConnectionRepository {}
-
 class _Api extends Mock implements ServerApi {}
-
-class _Navigation extends Mock implements NavigationService {}
-
-class _Resources extends Mock implements ResourcesModel {}
 
 class _Provider extends Mock implements ServerProvider {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
-  late _Repository repository;
   late _Api api;
-  late _Navigation navigation;
   late _Provider provider;
-  late ApiData data;
+  late ServerConnectionHub hub;
+  late List<String> messages;
   setUp(() {
-    repository = _Repository();
     api = _Api();
-    navigation = _Navigation();
     provider = _Provider();
-    final resources = _Resources();
-    final connection = seededConnection(api);
-    addTearDown(connection.dispose);
-    when(() => repository.connection).thenReturn(connection);
-    stubOperations(repository, connection);
-    data = ApiData(connection: () => connection);
-    connection.volumesStore.push(
+    messages = [];
+    hub = fixtureHub(api);
+    hub.active!.volumesStore.push(
       Query$GetServerDiskVolumes.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
             as Map<String, dynamic>,
       ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList(),
     );
-    when(() => repository.api).thenReturn(api);
-    when(() => repository.apiData).thenReturn(data);
-    when(() => repository.dataStream).thenAnswer((_) => const Stream.empty());
-    when(
-      () => repository.connectionStatusStream,
-    ).thenAnswer((_) => const Stream.empty());
-    when(
-      () => repository.currentConnectionStatus,
-    ).thenReturn(ConnectionStatus.connected);
-    when(() => resources.statusStream).thenAnswer((_) => const Stream.empty());
     when(() => provider.isAuthorized).thenReturn(true);
     when(
       () => provider.getVolumes(),
     ).thenAnswer((_) async => GenericResult(success: true, data: []));
-    getIt
-      ..registerSingleton<ApiConnectionRepository>(repository)
-      ..registerSingleton<NavigationService>(navigation)
-      ..registerSingleton<ResourcesModel>(resources);
   });
-  tearDown(getIt.reset);
+
+  VolumesBloc createBloc({final bool withoutProvider = false}) =>
+      createVolumesBloc(
+        hub,
+        providerChanges: const Stream.empty(),
+        serverProvider: () => withoutProvider ? null : provider,
+        showMessage: messages.add,
+      );
+
+  for (final unsupported in [false, true]) {
+    test('initial volume read settles: unsupported=$unsupported', () async {
+      hub
+        ..clear()
+        ..resume();
+      hub.active!.setVersion(unsupported ? Version(1, 0, 0) : Version(3, 6, 0));
+      when(api.getServerDiskVolumes).thenThrow(StateError('unavailable'));
+      final bloc = createBloc(withoutProvider: true);
+      addTearDown(bloc.close);
+      await hub.active!.volumes.refresh(force: true);
+      await pumpEventQueue();
+      expect(bloc.state, isNot(isA<VolumesLoading>()));
+      expect(bloc.state, isNot(isA<VolumesLoaded>()));
+      expect((bloc.state as VolumesUnavailable).isUnsupported, unsupported);
+    });
+  }
+
+  test('provider reads cannot repopulate state after reset', () async {
+    final pending = Completer<GenericResult<List<ServerProviderVolume>>>();
+    when(() => provider.getVolumes()).thenAnswer((_) => pending.future);
+    final bloc = createBloc();
+    await Future<void>.delayed(Duration.zero);
+    hub.clear();
+    await Future<void>.delayed(Duration.zero);
+    expect(bloc.state, isA<VolumesInitial>());
+    pending.complete(
+      GenericResult(success: true, data: [aServerProviderVolume()]),
+    );
+    await Future<void>.delayed(Duration.zero);
+    expect(bloc.state, isA<VolumesInitial>());
+    await bloc.close();
+  });
+
+  test('missing provider credentials have no price', () async {
+    final bloc = createBloc(withoutProvider: true);
+    await Future<void>.delayed(Duration.zero);
+    expect(await bloc.getPricePerGb(), isNull);
+    await bloc.close();
+  });
+
+  testWidgets(
+    'unexpected provider failure settles resize without leaking its error',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      final providerVolume = aServerProviderVolume();
+      const size = DiskSize(byte: 20000000000);
+      when(
+        () => provider.resizeVolume(providerVolume, size),
+      ).thenThrow(Exception('secret-sentinel'));
+      final bloc = createBloc();
+      await tester.pump();
+      bloc.add(
+        VolumeResize(
+          DiskVolume(name: 'sdb', providerVolume: providerVolume),
+          size,
+        ),
+      );
+      await tester.pump();
+      expect(bloc.state, isA<VolumesLoaded>());
+      expect(messages, contains('server_mutation.outcome_unknown'.tr()));
+      expect(messages, isNot(contains('secret-sentinel')));
+      await tester.runAsync(() async {
+        final closing = bloc.close();
+        await Future<void>.delayed(Duration.zero);
+        await tester.pump();
+        await closing;
+      });
+      hub.dispose();
+    },
+  );
 
   testWidgets('provider resize failure is not a successful operation', (
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
-    final hub = fixtureHub(api);
-    when(() => repository.connection).thenReturn(null);
-    when(() => repository.run<void>(any(), any())).thenAnswer(
-      (final call) => hub.run<void>(
-        call.positionalArguments[0] as OperationKind,
-        call.positionalArguments[1] as Future<void> Function(ServerConnection),
-      ),
-    );
     final providerVolume = aServerProviderVolume();
     const size = DiskSize(byte: 20000000000);
     when(
       () => provider.resizeVolume(providerVolume, size),
     ).thenAnswer((_) async => GenericResult(success: false, data: false));
-    final bloc = VolumesBloc(serverProvider: () => provider)
-      ..add(const VolumesServerLoaded());
+    final bloc = createBloc();
     await tester.pump();
     bloc.add(
       VolumeResize(
@@ -108,6 +151,8 @@ void main() {
       hub.operationsFor(hub.active!.origin.serverId).history.single.status,
       OperationStatus.failed,
     );
+    expect(messages, contains('storage.extending_volume_error'.tr()));
+    verifyNever(() => api.resizeVolume('sdb'));
     await tester.runAsync(() async {
       final closing = bloc.close();
       await Future<void>.delayed(Duration.zero);
@@ -115,13 +160,6 @@ void main() {
       await closing;
     });
     hub.dispose();
-  });
-
-  test('the default provider lookup handles missing credentials', () async {
-    ProvidersController.clearServerProvider();
-    final bloc = VolumesBloc();
-    expect(await bloc.getPricePerGb(), isNull);
-    await bloc.close();
   });
 
   for (final outcome in ServerMutationOutcome.values) {
@@ -147,9 +185,7 @@ void main() {
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      final bloc = VolumesBloc(serverProvider: () => provider)
-        ..add(const VolumesServerLoaded());
-
+      final bloc = createBloc();
       await tester.pump();
       expect(bloc.state, isA<VolumesLoaded>());
       bloc.add(VolumeResize(volume, size));
@@ -157,28 +193,68 @@ void main() {
       expect(bloc.state, isA<VolumesResizing>());
       await tester.pump(const Duration(seconds: 10));
       if (outcome == ServerMutationOutcome.confirmed) {
-        expect(data.volumes.isExpired, isTrue);
+        expect(hub.active!.volumes.value.needsReconciliation, isTrue);
         await tester.pump(const Duration(seconds: 20));
         verify(api.reboot).called(1);
-        verify(
-          () => navigation.showSnackBar('server_mutation.outcome_unknown'.tr()),
-        ).called(1);
+        expect(messages, contains('server_mutation.outcome_unknown'.tr()));
       } else {
         await tester.pump(const Duration(seconds: 60));
         verifyNever(api.reboot);
         final key = outcome == ServerMutationOutcome.rejected
             ? 'server_mutation.rejected'
             : 'server_mutation.outcome_unknown';
-        verify(() => navigation.showSnackBar(key.tr())).called(1);
+        expect(messages, contains(key.tr()));
       }
       expect(bloc.state, isA<VolumesLoaded>());
       verify(() => api.resizeVolume('sdb')).called(1);
+      expect(
+        hub.operationsFor(hub.active!.origin.serverId).history,
+        hasLength(1),
+      );
       await tester.runAsync(() async {
         final closing = bloc.close();
         await Future<void>.delayed(Duration.zero);
         await tester.pump();
         await closing;
       });
+      hub.dispose();
     });
   }
+
+  testWidgets(
+    'reset during provider wait prevents filesystem resize and reboot',
+    (final tester) async {
+      await pumpForTest(tester, const SizedBox.shrink());
+      final providerVolume = aServerProviderVolume();
+      const size = DiskSize(byte: 20000000000);
+      when(
+        () => provider.resizeVolume(providerVolume, size),
+      ).thenAnswer((_) async => GenericResult(success: true, data: true));
+      final bloc = createBloc();
+      await tester.pump();
+      bloc.add(
+        VolumeResize(
+          DiskVolume(name: 'sdb', providerVolume: providerVolume),
+          size,
+        ),
+      );
+      await tester.pump();
+      expect(bloc.state, isA<VolumesResizing>());
+      hub.clear();
+      await tester.pump();
+      final previousMessages = List<String>.of(messages);
+      await tester.pump(const Duration(seconds: 30));
+      expect(bloc.state, isA<VolumesInitial>());
+      expect(messages, previousMessages);
+      verifyNever(() => api.resizeVolume('sdb'));
+      verifyNever(api.reboot);
+      await tester.runAsync(() async {
+        final closing = bloc.close();
+        await Future<void>.delayed(Duration.zero);
+        await tester.pump();
+        await closing;
+      });
+      hub.dispose();
+    },
+  );
 }

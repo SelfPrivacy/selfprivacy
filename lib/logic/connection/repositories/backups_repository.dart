@@ -1,46 +1,60 @@
+import 'dart:async';
+
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
+typedef BackupsSnapshot = ({
+  CachedValue<List<Backup>> backups,
+  CachedValue<BackupConfiguration> configuration,
+});
+
 class BackupsRepository {
   BackupsRepository({
-    required this.connection,
-    required this.store,
-    required this.configStore,
-  }) {
-    if (!connection.commands.owns(store) ||
-        !connection.commands.owns(configStore)) {
-      throw ArgumentError('Backup stores belong to another connection.');
-    }
-  }
+    required this.commands,
+    required this.reader,
+    required this.configuration,
+    required this.jobs,
+    required this.servicesStore,
+  });
 
-  final ServerConnection connection;
-  final DomainStore<List<Backup>> store;
-  final DomainStore<BackupConfiguration> configStore;
-  final _removed = <String>{};
-  int _removedReadRevision = 0;
+  final ServerCommandCoordinator commands;
+  final DomainReader<List<Backup>> reader;
+  final DomainReader<BackupConfiguration> configuration;
+  final JobsRepository jobs;
+  final DomainStore<Object> servicesStore;
+  DomainStore<List<Backup>> get store => reader.store;
+  DomainStore<BackupConfiguration> get configStore => configuration.store;
+  CachedValue<List<Backup>> get value => reader.value;
+  CachedValue<BackupConfiguration> get configValue => configuration.value;
+  BackupsSnapshot get snapshot => (backups: value, configuration: configValue);
+  Stream<BackupsSnapshot> get changes =>
+      Stream<BackupsSnapshot>.multi((final output) {
+        void publish() {
+          if (commands.isAttached) {
+            output.addSync(snapshot);
+          }
+        }
 
-  void restoreFrom(final BackupsRepository previous) {
-    _removed.addAll(previous.confirmedRemovedSnapshotIds);
-    _removedReadRevision = store.readRevision;
-  }
-
-  CachedValue<List<Backup>> get value => connection.snapshot(store);
-  CachedValue<BackupConfiguration> get configValue =>
-      connection.snapshot(configStore);
-
-  Set<String> get confirmedRemovedSnapshotIds {
-    if (_removedReadRevision != store.readRevision) {
-      _removed.clear();
-      _removedReadRevision = store.readRevision;
-    }
-    return Set.unmodifiable(_removed);
-  }
+        final backups = reader.changes.listen(
+          (_) => publish(),
+          onDone: output.close,
+        );
+        final config = configuration.changes.listen((_) => publish());
+        output.onCancel = () async {
+          await backups.cancel();
+          await config.cancel();
+        };
+      }).distinct();
+  Future<RefreshResult> refresh({final bool force = false}) =>
+      reader.refresh(force: force);
 
   Future<ServerMutationResult<BackupConfiguration>> initializeRepository(
     final InitializeRepositoryInput input,
@@ -67,7 +81,7 @@ class BackupsRepository {
     final Future<ServerMutationResult<BackupConfiguration>> Function(ServerApi)
     send, {
     final bool repositoryChanged = false,
-  }) => connection.mutate(
+  }) => commands.mutate(
     domains: [configStore, if (repositoryChanged) store],
     send: send,
     applyConfirmed: (final result) {
@@ -80,11 +94,10 @@ class BackupsRepository {
     },
   );
 
-  Future<ServerMutationResult<void>> forceBackupListReload() =>
-      connection.mutate(
-        domains: [store],
-        send: (final api) => api.forceBackupListReload(),
-      );
+  Future<ServerMutationResult<void>> forceBackupListReload() => commands.mutate(
+    domains: [store],
+    send: (final api) => api.forceBackupListReload(),
+  );
 
   Future<ServerMutationResult<ServerJob>> startBackup(final String serviceId) =>
       _job((final api) => api.startBackup(serviceId));
@@ -100,42 +113,32 @@ class BackupsRepository {
   Future<ServerMutationResult<ServerJob>> _job(
     final Future<ServerMutationResult<ServerJob>> Function(ServerApi) send, {
     final bool restore = false,
-  }) => connection.mutate(
-    domains: [
-      store,
-      connection.jobs.store,
-      if (restore) connection.services.store,
-    ],
+  }) => commands.mutate(
+    domains: [store, jobs.store, if (restore) servicesStore],
     send: send,
     applyConfirmed: (final result) {
       final job = result.payload.value;
       if (job == null) {
         return const [];
       }
-      connection.jobs.applyConfirmed(
+      jobs.applyConfirmed(
         job,
-        affectedDomains: [store, if (restore) connection.services.store],
+        affectedDomains: [store, if (restore) servicesStore],
       );
-      return [connection.jobs.store];
+      return [jobs.store];
     },
   );
 
   Future<ServerMutationResult<void>> forgetSnapshot(final String snapshotId) =>
-      connection.mutate(
+      commands.mutate(
         domains: [store],
         send: (final api) => api.forgetSnapshot(snapshotId),
         applyConfirmed: (_) {
-          if (!store.patch(
+          store.patch(
             (final backups) => List.unmodifiable(
               backups.where((final backup) => backup.id != snapshotId),
             ),
-          )) {
-            if (_removedReadRevision != store.readRevision) {
-              _removed.clear();
-            }
-            _removedReadRevision = store.readRevision;
-            _removed.add(snapshotId);
-          }
+          );
           return [store];
         },
       );

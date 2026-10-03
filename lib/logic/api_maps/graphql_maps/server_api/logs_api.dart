@@ -8,43 +8,25 @@ mixin LogsApi on GraphQLApiMap {
     final String? slice,
     final String? unit,
   }) async {
-    QueryResult<Query$Logs> response;
-    List<ServerLogEntry> logsList = [];
-    ServerLogsPageMeta pageMeta = const ServerLogsPageMeta(
-      downCursor: null,
-      upCursor: null,
+    final client = await getClient();
+    final response = await client.query$Logs(
+      Options$Query$Logs(
+        variables: Variables$Query$Logs(
+          upCursor: upCursor,
+          downCursor: downCursor,
+          limit: limit,
+          filterBySlice: slice,
+          filterByUnit: unit,
+        ),
+      ),
     );
-
-    try {
-      final GraphQLClient client = await getClient();
-      final variables = Variables$Query$Logs(
-        upCursor: upCursor,
-        downCursor: downCursor,
-        limit: limit,
-        filterBySlice: slice,
-        filterByUnit: unit,
-      );
-      final query = Options$Query$Logs(variables: variables);
-      response = await client.query$Logs(query);
-      if (response.hasException) {
-        logger(response.exception.toString());
-      }
-      if (response.parsedData == null) {
-        return (logsList, pageMeta);
-      }
-      logsList =
-          response.parsedData?.logs.paginated.entries
-              .map<ServerLogEntry>(ServerLogEntry.fromGraphQL)
-              .toList() ??
-          [];
-      pageMeta = ServerLogsPageMeta.fromGraphQL(
-        response.parsedData!.logs.paginated.pageMeta,
-      );
-    } catch (e) {
-      logger("Couldn't load server logs", error: e);
-    }
-
-    return (logsList, pageMeta);
+    final page = requireServerApiData(response).logs.paginated;
+    return (
+      List<ServerLogEntry>.unmodifiable(
+        page.entries.map(ServerLogEntry.fromGraphQL),
+      ),
+      ServerLogsPageMeta.fromGraphQL(page.pageMeta),
+    );
   }
 
   // See the note on `getServerJobsStream` for why this is a manual

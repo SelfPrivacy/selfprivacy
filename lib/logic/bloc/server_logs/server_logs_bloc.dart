@@ -1,192 +1,226 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pub_semver/pub_semver.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 
 part 'server_logs_event.dart';
 part 'server_logs_state.dart';
 
+typedef FetchServerLogs =
+    Future<(List<ServerLogEntry>, ServerLogsPageMeta)> Function(
+      ServerStateOrigin origin, {
+      required int limit,
+      String? downCursor,
+      String? slice,
+      String? unit,
+    });
+
 class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
-  ServerLogsBloc() : super(ServerLogsInitial()) {
-    final hub = getIt<ApiConnectionRepository>().hub;
-    _connectionSubscription = hub.changes.listen((_) {
-      if (!isClosed && hub.canRead && _deferredRead != null) {
-        final event = _deferredRead!;
-        _deferredRead = null;
+  ServerLogsBloc({
+    required final Stream<ConnectionObservation<bool>> access,
+    required final FetchServerLogs fetch,
+    required final Stream<ServerLogEntry> Function(ServerStateOrigin) entries,
+  }) : _fetch = fetch,
+       _entries = entries,
+       super(ServerLogsInitial()) {
+    on<_ReadLogs>(_read, transformer: restartable());
+    on<_ResetLogs>((final event, final emit) {
+      if (identical(event.view, _view)) {
+        emit(ServerLogsInitial());
+      }
+    });
+    on<_LogReceived>(_receive);
+    _accessSubscription = access.listen((final observation) {
+      final previous = _access;
+      _access = observation;
+      if (!identical(
+        previous?.origin?.continuity,
+        observation.origin?.continuity,
+      )) {
+        final initialRequest = previous == null ? _deferred : null;
+        _reset();
+        _deferred = initialRequest;
+      } else if (!identical(previous?.origin, observation.origin) &&
+          _reading != null) {
+        _deferred = _reading!.event;
+      }
+      if ((observation.value ?? false) && _deferred != null) {
+        final event = _deferred!;
+        _deferred = null;
         add(event);
       }
     });
-    on<ServerLogsFetch>((final event, final emit) async {
-      _deferredRead = null;
-      final previous = state;
-      emit(ServerLogsLoading());
-      final String? slice = event.serviceId != null
-          ? '${event.serviceId?.replaceAll('-', '_')}.slice'
-          : null;
-      final String? unit = event.unitId;
-      try {
-        final (logsData, meta) = await _getLogs(
-          limit: 50,
-          slice: slice,
-          unit: unit,
-        );
-        emit(
-          ServerLogsLoaded(
-            oldEntries: logsData.sorted(
-              (final a, final b) => b.timestamp.compareTo(a.timestamp),
-            ),
-            newEntries: List<ServerLogEntry>.empty(growable: true),
-            meta: meta,
-            loadingMore: false,
-            slice: slice,
-            unit: unit,
-          ),
-        );
-        if (_apiLogsSubscription != null) {
-          await _apiLogsSubscription?.cancel();
-        }
-        _apiLogsSubscription = getIt<ApiConnectionRepository>().hub
-            .logs()
-            .listen((final ServerLogEntry logEntry) {
-              add(ServerLogsGotNewEntry(logEntry));
-            });
-      } on GraphQLDispatchDeferred {
-        _deferredRead = event;
-        if (previous is ServerLogsLoaded) {
-          emit(previous);
-        }
-      } catch (e) {
-        emit(ServerLogsError(e.toString()));
-      }
-    });
-
-    on<ServerLogsFetchMore>((final event, final emit) async {
-      final currentState = state;
-      if (currentState is ServerLogsLoaded &&
-          !currentState.loadingMore &&
-          currentState.meta.upCursor != null) {
-        try {
-          final (logsData, meta) = await _getLogs(
-            limit: 50,
-            downCursor: currentState.meta.upCursor,
-            slice: currentState.slice,
-            unit: currentState.unit,
-          );
-          final allEntries = currentState.oldEntries
-            ..addAll(logsData)
-            ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
-          emit(
-            ServerLogsLoaded(
-              oldEntries: allEntries.toSet().toList(),
-              newEntries: currentState.newEntries,
-              meta: meta,
-              loadingMore: false,
-              slice: currentState.slice,
-              unit: currentState.unit,
-            ),
-          );
-        } on GraphQLDispatchDeferred {
-          _deferredRead = event;
-        } catch (e) {
-          emit(ServerLogsError(e.toString()));
-        }
-      }
-    });
-
-    on<ServerLogsGotNewEntry>((final event, final emit) {
-      final currentState = state;
-      if (currentState is ServerLogsLoaded) {
-        if (currentState.slice != null &&
-            event.entry.systemdSlice != currentState.slice) {
-          return;
-        }
-        if (currentState.unit != null &&
-            event.entry.systemdUnit != currentState.unit) {
-          return;
-        }
-        final allEntries = currentState.newEntries
-          ..add(event.entry)
-          ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
-        emit(
-          ServerLogsLoaded(
-            oldEntries: currentState.oldEntries,
-            newEntries: allEntries.toSet().toList(),
-            meta: currentState.meta,
-            loadingMore: currentState.loadingMore,
-            slice: currentState.slice,
-            unit: currentState.unit,
-          ),
-        );
-      }
-    });
-
-    on<ServerLogsDisconnect>((final event, final emit) async {
-      _deferredRead = null;
-      await _apiLogsSubscription?.cancel();
-      emit(ServerLogsInitial());
-    });
   }
 
-  static const String logsSupportedVersion = '>=3.3.0';
-  ServerLogsEvent? _deferredRead;
-  late final StreamSubscription<void> _connectionSubscription;
+  final FetchServerLogs _fetch;
+  final Stream<ServerLogEntry> Function(ServerStateOrigin) _entries;
+  late final StreamSubscription<ConnectionObservation<bool>>
+  _accessSubscription;
+  StreamSubscription<ServerLogEntry>? _entriesSubscription;
+  ConnectionObservation<bool>? _access;
+  ServerLogsEvent? _deferred;
+  _ReadLogs? _reading;
+  Object _view = Object();
 
-  Future<(List<ServerLogEntry>, ServerLogsPageMeta)> _getLogs({
-    // No more than 50
-    required final int limit,
-    // All entries returned will be lesser than this cursor. Sets upper bound on results.
-    final String? upCursor,
-    // All entries returned will be greater than this cursor. Sets lower bound on results.
-    final String? downCursor,
-    // Only one cursor can be set at a time.
-    final String? slice,
-    final String? unit,
-  }) {
-    final String? apiVersion =
-        getIt<ApiConnectionRepository>().apiData.apiVersion.data;
-    if (apiVersion == null) {
-      throw Exception('basis.network_error'.tr());
+  @override
+  void add(final ServerLogsEvent event) {
+    if (event is ServerLogsDisconnect) {
+      _reset();
+    } else if (event is ServerLogsFetch || event is ServerLogsFetchMore) {
+      if (_access == null) {
+        _deferred = event;
+        return;
+      }
+      if (event is ServerLogsFetch) {
+        _view = Object();
+        unawaited(_entriesSubscription?.cancel());
+        _entriesSubscription = null;
+      } else if (_reading != null &&
+          identical(_reading!.origin, _access?.origin)) {
+        return;
+      }
+      super.add(_ReadLogs(event, _access?.origin, _view));
+    } else {
+      super.add(event);
     }
-    if (!VersionConstraint.parse(
-      logsSupportedVersion,
-    ).allows(Version.parse(apiVersion))) {
-      throw Exception(
-        'basis.feature_unsupported_on_api_version'.tr(
-          namedArgs: {
-            'versionConstraint': logsSupportedVersion,
-            'currentVersion': apiVersion,
-          },
+  }
+
+  void _reset() {
+    _view = Object();
+    _deferred = null;
+    _reading = null;
+    unawaited(_entriesSubscription?.cancel());
+    _entriesSubscription = null;
+    super.add(_ResetLogs(_view));
+  }
+
+  bool _isCurrent(final _ReadLogs request) =>
+      !isClosed &&
+      identical(request.view, _view) &&
+      identical(request.origin, _access?.origin);
+
+  Future<void> _read(
+    final _ReadLogs request,
+    final Emitter<ServerLogsState> emit,
+  ) async {
+    if (!_isCurrent(request) || request.origin == null) {
+      return;
+    }
+    final event = request.event;
+    final previous = state;
+    final more = event is ServerLogsFetchMore;
+    if (more &&
+        (previous is! ServerLogsLoaded || previous.meta.upCursor == null)) {
+      return;
+    }
+    _reading = request;
+    _deferred = null;
+    final access = _access;
+    final slice = event is ServerLogsFetch
+        ? event.serviceId?.replaceAll('-', '_')
+        : (previous as ServerLogsLoaded).slice;
+    final systemdSlice = event is ServerLogsFetch && slice != null
+        ? '$slice.slice'
+        : slice;
+    final unit = event is ServerLogsFetch
+        ? event.unitId
+        : (previous as ServerLogsLoaded).unit;
+    if (previous is! ServerLogsLoaded) {
+      emit(ServerLogsLoading());
+    }
+    try {
+      if (_access?.value != true) {
+        throw const GraphQLDispatchDeferred();
+      }
+      final (values, meta) = await _fetch(
+        request.origin!,
+        limit: 50,
+        downCursor: more ? (previous as ServerLogsLoaded).meta.upCursor : null,
+        slice: systemdSlice,
+        unit: unit,
+      );
+      if (!_isCurrent(request) || emit.isDone) {
+        return;
+      }
+      final current = state;
+      emit(
+        ServerLogsLoaded(
+          oldEntries: _sorted([
+            if (more) ...(previous as ServerLogsLoaded).oldEntries,
+            ...values,
+          ]),
+          newEntries: more && current is ServerLogsLoaded
+              ? current.newEntries
+              : const [],
+          meta: meta,
+          loadingMore: false,
+          slice: systemdSlice,
+          unit: unit,
         ),
       );
+      if (!more) {
+        unawaited(_entriesSubscription?.cancel());
+        _entriesSubscription = _entries(
+          request.origin!,
+        ).listen((final entry) => add(_LogReceived(entry, request.view)));
+      }
+    } on GraphQLDispatchDeferred {
+      if (_isCurrent(request) && !emit.isDone) {
+        _deferred = event;
+        if ((_access?.value ?? false) && !identical(access, _access)) {
+          _deferred = null;
+          scheduleMicrotask(() {
+            if (_isCurrent(request)) {
+              add(event);
+            }
+          });
+        }
+      }
+    } catch (error) {
+      if (_isCurrent(request) && !emit.isDone) {
+        emit(ServerLogsError(error.toString()));
+      }
+    } finally {
+      if (identical(_reading, request)) {
+        _reading = null;
+      }
     }
-    return getIt<ApiConnectionRepository>().hub.read(
-      (final connection) => connection.api.getServerLogs(
-        limit: limit,
-        upCursor: upCursor,
-        downCursor: downCursor,
-        slice: slice,
-        unit: unit,
+  }
+
+  List<ServerLogEntry> _sorted(final Iterable<ServerLogEntry> entries) =>
+      entries.toSet().toList()
+        ..sort((final a, final b) => b.timestamp.compareTo(a.timestamp));
+
+  void _receive(final _LogReceived event, final Emitter<ServerLogsState> emit) {
+    final current = state;
+    if (!identical(event.view, _view) ||
+        current is! ServerLogsLoaded ||
+        (current.slice != null && event.entry.systemdSlice != current.slice) ||
+        (current.unit != null && event.entry.systemdUnit != current.unit)) {
+      return;
+    }
+    emit(
+      ServerLogsLoaded(
+        oldEntries: current.oldEntries,
+        newEntries: _sorted([...current.newEntries, event.entry]),
+        meta: current.meta,
+        loadingMore: current.loadingMore,
+        slice: current.slice,
+        unit: current.unit,
       ),
     );
   }
 
   @override
   Future<void> close() async {
-    await _connectionSubscription.cancel();
-    await _apiLogsSubscription?.cancel();
+    _view = Object();
+    await _accessSubscription.cancel();
+    await _entriesSubscription?.cancel();
     return super.close();
   }
-
-  @override
-  void onChange(final Change<ServerLogsState> change) {
-    super.onChange(change);
-  }
-
-  StreamSubscription? _apiLogsSubscription;
 }

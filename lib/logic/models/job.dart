@@ -1,13 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
-import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 @immutable
 abstract class ClientJob extends Equatable {
@@ -29,7 +27,6 @@ abstract class ClientJob extends Equatable {
   final String? message;
 
   bool canAddTo(final List<ClientJob> jobs) => true;
-  Future<(bool, String)> execute();
 
   @override
   List<Object> get props => [id, title, status];
@@ -49,9 +46,6 @@ class UpgradeServerJob extends ClientJob {
       !jobs.any((final job) => job is UpgradeServerJob);
 
   @override
-  Future<(bool, String)> execute() async => (false, 'unimplemented');
-
-  @override
   UpgradeServerJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
@@ -69,9 +63,6 @@ class UpdateDnsRecordsJob extends ClientJob {
       !jobs.any((final job) => job is UpdateDnsRecordsJob);
 
   @override
-  Future<(bool, String)> execute() async => (false, 'unimplemented');
-
-  @override
   UpdateDnsRecordsJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
@@ -87,19 +78,6 @@ class CollectNixGarbageJob extends ClientJob {
       !jobs.any((final job) => job is CollectNixGarbageJob);
 
   @override
-  Future<(bool, String)> execute() async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return (false, 'Server connection unavailable');
-    }
-    final result = await connection.jobs.collectNixGarbage();
-    return (
-      result.outcome == ServerMutationOutcome.confirmed,
-      serverMutationMessage(result),
-    );
-  }
-
-  @override
   CollectNixGarbageJob copyWithNewStatus({
     required final JobStatusEnum status,
     final String? message,
@@ -113,9 +91,6 @@ class RebootServerJob extends ClientJob {
   @override
   bool canAddTo(final List<ClientJob> jobs) =>
       !jobs.any((final job) => job is RebootServerJob);
-
-  @override
-  Future<(bool, String)> execute() async => (false, 'unimplemented');
 
   @override
   RebootServerJob copyWithNewStatus({
@@ -134,10 +109,6 @@ class DeleteUserJob extends ClientJob {
   bool canAddTo(final List<ClientJob> jobs) => !jobs.any(
     (final job) => job is DeleteUserJob && job.user.login == user.login,
   );
-
-  @override
-  Future<(bool, String)> execute() =>
-      getIt<ApiConnectionRepository>().deleteUser(user);
 
   @override
   List<Object> get props => [...super.props, user];
@@ -171,22 +142,6 @@ class ServiceToggleJob extends ClientJob {
   );
 
   @override
-  Future<(bool, String)> execute() async {
-    final connection = getIt<ApiConnectionRepository>().connection;
-    if (connection == null) {
-      return (false, 'Server connection unavailable');
-    }
-    final result = await connection.services.switchService(
-      serviceId: service.id,
-      needTurnOn: needToTurnOn,
-    );
-    return (
-      result.outcome == ServerMutationOutcome.confirmed,
-      serverMutationMessage(result),
-    );
-  }
-
-  @override
   List<Object> get props => [...super.props, service];
 
   @override
@@ -213,10 +168,6 @@ class CreateSSHKeyJob extends ClientJob {
 
   final User user;
   final String publicKey;
-
-  @override
-  Future<(bool, String)> execute() =>
-      getIt<ApiConnectionRepository>().addSshKey(user, publicKey);
 
   @override
   List<Object> get props => [...super.props, user, publicKey];
@@ -255,10 +206,6 @@ class DeleteSSHKeyJob extends ClientJob {
   );
 
   @override
-  Future<(bool, String)> execute() =>
-      getIt<ApiConnectionRepository>().deleteSshKey(user, publicKey);
-
-  @override
   List<Object> get props => [...super.props, user, publicKey];
 
   @override
@@ -284,7 +231,7 @@ abstract class ReplaceableJob extends ClientJob {
     super.requiresDnsUpdate,
   });
 
-  bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) => false;
+  bool matchesSettings(final SystemSettings? settings) => false;
   bool get shouldReplaceOnlyIfSameId => false;
 }
 
@@ -301,16 +248,8 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJob {
   final bool allowReboot;
 
   @override
-  Future<(bool, String)> execute() => getIt<ApiConnectionRepository>()
-      .setAutoUpgradeSettings(enable: enable, allowReboot: allowReboot);
-
-  @override
-  bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    final currentSettings = getIt<ApiConnectionRepository>()
-        .apiData
-        .settings
-        .data
-        ?.autoUpgradeSettings;
+  bool matchesSettings(final SystemSettings? settings) {
+    final currentSettings = settings?.autoUpgradeSettings;
     if (currentSettings == null) {
       return false;
     }
@@ -345,13 +284,8 @@ class ChangeServerTimezoneJob extends ReplaceableJob {
   final String timezone;
 
   @override
-  Future<(bool, String)> execute() =>
-      getIt<ApiConnectionRepository>().setServerTimezone(timezone);
-
-  @override
-  bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    final currentSettings =
-        getIt<ApiConnectionRepository>().apiData.settings.data?.timezone;
+  bool matchesSettings(final SystemSettings? settings) {
+    final currentSettings = settings?.timezone;
     if (currentSettings == null) {
       return false;
     }
@@ -384,13 +318,8 @@ class ChangeSshSettingsJob extends ReplaceableJob {
   final bool enable;
 
   @override
-  Future<(bool, String)> execute() =>
-      getIt<ApiConnectionRepository>().setSshSettings(enable: enable);
-
-  @override
-  bool shouldRemoveInsteadOfAdd(final List<ClientJob> jobs) {
-    final currentSettings =
-        getIt<ApiConnectionRepository>().apiData.settings.data?.sshSettings;
+  bool matchesSettings(final SystemSettings? settings) {
+    final currentSettings = settings?.sshSettings;
     if (currentSettings == null) {
       return false;
     }
@@ -432,10 +361,6 @@ class ChangeServiceConfiguration extends ReplaceableJob {
 
   @override
   bool get shouldReplaceOnlyIfSameId => true;
-
-  @override
-  Future<(bool, String)> execute() => getIt<ApiConnectionRepository>()
-      .setServiceConfiguration(serviceId, settings);
 
   @override
   List<Object> get props => [...super.props, serviceId, settings];

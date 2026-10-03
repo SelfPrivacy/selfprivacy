@@ -2,49 +2,64 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 part 'metrics_state.dart';
 
 class MetricsCubit extends Cubit<MetricsState> {
-  MetricsCubit({final MetricsRepository? repository})
-    : repository = repository ?? MetricsRepository(),
-      super(const MetricsLoading(Period.day)) {
-    _connectionChanges = getIt<ApiConnectionRepository>().hub.changes.listen((
-      _,
-    ) {
-      if (!getIt<ApiConnectionRepository>().hub.canRead) {
+  MetricsCubit({
+    required final Stream<ConnectionObservation<bool>> access,
+    required final Future<MetricsStateUpdate> Function(
+      ServerStateOrigin,
+      Period,
+    )
+    loadMetrics,
+  }) : _loadMetrics = loadMetrics,
+       super(const MetricsLoading(Period.day)) {
+    _connectionChanges = access.listen((final observation) {
+      final previous = _access;
+      _access = observation;
+      if (!identical(previous?.origin, observation.origin)) {
+        _inFlight = null;
         closeTimer();
-      } else if (timer == null && !_loading) {
-        unawaited(load(state.period));
+        if (!identical(
+          previous?.origin?.continuity,
+          observation.origin?.continuity,
+        )) {
+          emit(MetricsLoading(_requestedPeriod));
+        }
+      }
+      if (!_canRead) {
+        closeTimer();
+      } else if (timer == null && _inFlight == null) {
+        unawaited(load(_requestedPeriod));
       }
     });
   }
 
-  final MetricsRepository repository;
-
+  final Future<MetricsStateUpdate> Function(ServerStateOrigin, Period)
+  _loadMetrics;
+  late final StreamSubscription<ConnectionObservation<bool>> _connectionChanges;
+  ConnectionObservation<bool>? _access;
+  Object? _inFlight;
   Timer? timer;
-  StreamSubscription<void>? _connectionChanges;
-  bool _loading = false;
   Period _requestedPeriod = Period.day;
-
-  static final logger = const AppLogger(name: 'metrics_cubit').log;
+  bool get _canRead => !isClosed && (_access?.value ?? false);
 
   @override
   Future<void> close() {
     closeTimer();
-    unawaited(_connectionChanges?.cancel());
+    unawaited(_connectionChanges.cancel());
     return super.close();
   }
 
   void closeTimer() {
-    if (timer != null && timer!.isActive) {
-      timer!.cancel();
-    }
+    timer?.cancel();
     timer = null;
   }
 
@@ -56,42 +71,40 @@ class MetricsCubit extends Cubit<MetricsState> {
     }
   }
 
-  void restart() {
-    unawaited(load(state.period));
-  }
+  void restart() => unawaited(load(state.period));
 
   Future<void> load(final Period period) async {
     _requestedPeriod = period;
-    final hub = getIt<ApiConnectionRepository>().hub;
-    if (isClosed || _loading || !hub.canRead) {
+    if (!_canRead || _inFlight != null) {
       return;
     }
-    final owner = hub.active;
-    _loading = true;
+    final access = _access!;
+    final origin = access.origin!;
+    final request = Object();
+    var deferred = false;
+    _inFlight = request;
     closeTimer();
     try {
-      final MetricsStateUpdate newStateUpdate = await repository
-          .getRelevantServerMetrics(period);
-
-      int duration = newStateUpdate.nextCheckInSeconds;
-      if (duration <= 0) {
-        duration = state.period.stepPeriodInSeconds;
-      }
-      if (!isClosed &&
-          (owner?.isAttached ?? false) &&
-          hub.canRead &&
+      final update = await _loadMetrics(origin, period);
+      if (_canRead &&
+          identical(origin, _access?.origin) &&
           period == _requestedPeriod) {
-        timer = Timer(Duration(seconds: duration), () => load(period));
-        emit(newStateUpdate.newState);
+        final delay = update.nextCheckInSeconds > 0
+            ? update.nextCheckInSeconds
+            : period.stepPeriodInSeconds;
+        timer = Timer(Duration(seconds: delay), () => unawaited(load(period)));
+        emit(update.newState);
       }
-    } on StateError {
-      logger('Tried to emit metrics when cubit is closed');
+    } on GraphQLDispatchDeferred {
+      deferred = true;
     } finally {
-      _loading = false;
-      if (!isClosed &&
-          hub.canRead &&
-          (period != _requestedPeriod || owner?.isAttached != true)) {
-        unawaited(load(_requestedPeriod));
+      if (identical(_inFlight, request)) {
+        _inFlight = null;
+        if (_canRead &&
+            (period != _requestedPeriod ||
+                (deferred && !identical(access, _access)))) {
+          unawaited(load(_requestedPeriod));
+        }
       }
     }
   }

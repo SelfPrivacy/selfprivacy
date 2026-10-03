@@ -15,7 +15,7 @@ import 'package:selfprivacy/ui/molecules/config_item_fields/basic_string_config_
 import 'package:selfprivacy/ui/molecules/config_item_fields/domain_string_config_item.dart';
 
 @RoutePage()
-class ServiceSettingsPage extends StatefulWidget {
+class ServiceSettingsPage extends StatelessWidget {
   const ServiceSettingsPage({
     required this.serviceId,
     this.isInstalling = false,
@@ -26,10 +26,36 @@ class ServiceSettingsPage extends StatefulWidget {
   final String serviceId;
 
   @override
-  State<ServiceSettingsPage> createState() => _ServiceSettingsPageState();
+  Widget build(final BuildContext context) {
+    final state = context.watch<ServicesBloc>().state;
+    if (state.continuity == null || state.getServiceById(serviceId) == null) {
+      return const BrandHeroScreen(
+        children: [Center(child: CircularProgressIndicator.adaptive())],
+      );
+    }
+    return _ServiceSettingsEditor(
+      key: ValueKey((serviceId, state.continuity)),
+      serviceId: serviceId,
+      isInstalling: isInstalling,
+    );
+  }
 }
 
-class _ServiceSettingsPageState extends State<ServiceSettingsPage> {
+class _ServiceSettingsEditor extends StatefulWidget {
+  const _ServiceSettingsEditor({
+    required this.serviceId,
+    required this.isInstalling,
+    super.key,
+  });
+
+  final String serviceId;
+  final bool isInstalling;
+
+  @override
+  State<_ServiceSettingsEditor> createState() => _ServiceSettingsEditorState();
+}
+
+class _ServiceSettingsEditorState extends State<_ServiceSettingsEditor> {
   Map<String, dynamic> settings = {};
   bool isFormValid = true;
   bool isJobAlreadyExists = false;

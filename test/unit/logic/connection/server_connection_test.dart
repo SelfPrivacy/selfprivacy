@@ -8,12 +8,15 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dar
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
 
+import '../../../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 
 class _Api extends Mock implements ServerApi {}
@@ -53,6 +56,101 @@ void main() {
   tearDown(() => connection.dispose());
 
   test(
+    'explicit reads use the observable dispatcher without starting passive reads',
+    () async {
+      connection.setVersion(Version(3, 6, 0));
+      final pending = Completer<List<String>>();
+      when(api.getAllGroups).thenAnswer((_) => pending.future);
+      final reading = connection.refresh(groups, force: true);
+      await pumpEventQueue();
+      expect(connection.scheduler.poolStatus.whereType<Object>(), hasLength(1));
+      expect(
+        connection.scheduler.poolStatus
+            .singleWhere((final slot) => slot != null)
+            ?.domain,
+        'groups',
+      );
+      verifyNever(api.getAllUsers);
+      pending.complete(groupNames);
+      expect(await reading, RefreshResult.applied);
+      expect(await connection.refresh(groups), RefreshResult.current);
+      verify(api.getAllGroups).called(1);
+      when(api.getAllGroups).thenAnswer((_) async => groupNames);
+      expect(
+        await connection.refresh(groups, force: true),
+        RefreshResult.applied,
+      );
+      verify(api.getAllGroups).called(1);
+    },
+  );
+
+  test(
+    'repository observations exclude unrelated domains but include prerequisite errors',
+    () async {
+      connection.setVersion(Version(3, 6, 0));
+      await pumpEventQueue();
+      final seen = <Object>[];
+      final subscription = connection.users.changes.listen(seen.add);
+      groups.push(groupNames);
+      await pumpEventQueue();
+      expect(seen, isEmpty);
+      when(api.fetchApiVersion).thenThrow(StateError('version unavailable'));
+      await connection.cache.apiVersion.refresh(force: true);
+      await pumpEventQueue();
+      expect(seen, hasLength(1));
+      expect(connection.users.value.lastError, isA<StateError>());
+      groups.push(groupNames);
+      await pumpEventQueue();
+      expect(seen, hasLength(1));
+      await subscription.cancel();
+    },
+  );
+
+  test(
+    'initial apply orders settings writes after version discovery',
+    () async {
+      final pending = Completer<ServerMutationResult<ServerJob>>();
+      when(api.apply).thenAnswer((_) => pending.future);
+      var timezoneSent = false;
+      when(() => api.setTimezone('UTC')).thenAnswer((_) async {
+        timezoneSent = true;
+        return ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('UTC'),
+        );
+      });
+      final applying = connection.jobs.apply();
+      await pumpEventQueue();
+      final changing = connection.settings.setServerTimezone('UTC');
+      await pumpEventQueue();
+      expect(timezoneSent, isFalse);
+      pending.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aServiceMoveJob()),
+        ),
+      );
+      await applying;
+      expect((await changing).outcome, ServerMutationOutcome.confirmed);
+      expect(timezoneSent, isTrue);
+    },
+  );
+
+  test(
+    'local publication failure preserves the confirmed remote receipt',
+    () async {
+      connection.setVersion(Version(3, 6, 0));
+      final result = await connection.commands.mutate<void>(
+        domains: [groups],
+        send: (_) async => confirmed,
+        applyConfirmed: (_) => throw StateError('local projection failed'),
+      );
+      expect(result, same(confirmed));
+      expect(groups.value.needsReconciliation, isTrue);
+    },
+  );
+
+  test(
     'construction is inert and shares version discovery across domains',
     () async {
       verifyZeroInteractions(api);
@@ -68,7 +166,7 @@ void main() {
       expect(await devicesRead, RefreshResult.applied);
       expect(await groupsRead, RefreshResult.applied);
       verify(api.fetchApiVersion).called(1);
-      expect(connection.snapshot(groups).data, groupNames);
+      expect(connection.groups.value.data, groupNames);
     },
   );
 
@@ -125,8 +223,8 @@ void main() {
       expect(await connection.refresh(groups), RefreshResult.deferred);
       expect(secondStarted, isFalse);
       both.complete(confirmed);
-      expect((await first.completion).application, CommandApplication.applied);
-      expect((await second.completion).application, CommandApplication.applied);
+      expect((await first).application, CommandApplication.applied);
+      expect((await second).application, CommandApplication.applied);
       expect(secondStarted, isTrue);
       verify(api.getApiTokens).called(1);
       verify(api.getAllGroups).called(1);
@@ -148,9 +246,9 @@ void main() {
       (await connection.devices.revoke(name))!.application,
       CommandApplication.applied,
     );
-    expect(connection.commands.pending, hasLength(1));
+    expect(connection.commands.isReserved(groups), isTrue);
     pendingGroups.complete(confirmed);
-    await first.completion;
+    await first;
   });
 
   test(
@@ -171,29 +269,25 @@ void main() {
         },
       );
       connection.dispose();
-      expect((await first.completion).application, CommandApplication.detached);
-      expect(
-        (await second.completion).application,
-        CommandApplication.detached,
-      );
+      expect((await first).application, CommandApplication.detached);
+      expect((await second).application, CommandApplication.detached);
       expect(queuedSent, isFalse);
       expect(
         connection.stores.every((final store) => store.isDisposed),
         isTrue,
       );
       pending.complete(confirmed);
-      expect(await first.remoteResult, same(confirmed));
-      expect(await second.remoteResult, isNull);
     },
   );
 
   for (final fails in [false, true]) {
     test('all domains reject detached read results: fails=$fails', () async {
       await connection.refresh(groups);
-      final before = connection.snapshot(groups);
+      final before = connection.groups.value;
       final pending = Completer<List<String>>();
       when(api.getAllGroups).thenAnswer((_) => pending.future);
       final reading = connection.refresh(groups, force: true);
+      await pumpEventQueue();
       currentOrigin = null;
       if (fails) {
         pending.completeError(StateError('late'));
@@ -201,8 +295,8 @@ void main() {
         pending.complete([]);
       }
       expect(await reading, RefreshResult.disposed);
-      expect(connection.snapshot(groups).data, before.data);
-      expect(connection.snapshot(groups).lastError, isNull);
+      expect(connection.groups.value.data, before.data);
+      expect(connection.groups.value.lastError, isNull);
     });
   }
 
@@ -222,9 +316,15 @@ void main() {
     );
     addTearDown(foreign.dispose);
     expect(() => connection.refresh(foreign), throwsArgumentError);
-    expect(() => connection.snapshot(foreign), throwsArgumentError);
     expect(
-      () => DevicesRepository(connection: connection, store: foreign),
+      () => DevicesRepository(
+        commands: connection.commands,
+        reader: DomainReader(
+          store: foreign,
+          apiVersion: connection.cache.apiVersion,
+          dispatcher: connection.scheduler,
+        ),
+      ),
       throwsArgumentError,
     );
   });

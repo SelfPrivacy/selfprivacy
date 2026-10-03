@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
@@ -20,28 +21,60 @@ import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/cards/radio_selection_card.dart';
 import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
+import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 import 'package:selfprivacy/utils/ui_helpers.dart';
 
 @RoutePage()
-class NewUserPage extends StatefulWidget {
+class NewUserPage extends StatelessWidget {
   const NewUserPage({this.user, super.key});
 
   final User? user;
 
   @override
-  State<NewUserPage> createState() => _NewUserPageState();
+  Widget build(final BuildContext context) {
+    final users = context.watch<UsersBloc>().state;
+    final continuity = users.continuity;
+    final editing = user == null
+        ? null
+        : users.users
+              .where((final candidate) => candidate.login == user!.login)
+              .firstOrNull;
+    if (continuity == null || (user != null && editing == null)) {
+      return BrandHeroScreen(
+        heroTitle: user == null
+            ? 'users.new_user'.tr()
+            : 'users.edit_user'.tr(),
+        children: [Text('basis.loading'.tr())],
+      );
+    }
+    return _UserEditor(
+      key: ValueKey(continuity),
+      user: editing,
+      continuity: continuity,
+    );
+  }
 }
 
-class _NewUserPageState extends State<NewUserPage> {
+class _UserEditor extends StatefulWidget {
+  const _UserEditor({required this.user, required this.continuity, super.key});
+  final User? user;
+  final Object continuity;
+
+  @override
+  State<_UserEditor> createState() => _UserEditorState();
+}
+
+class _UserEditorState extends State<_UserEditor> {
   late final UserForm _userForm;
+  late final UsersBloc _users;
 
   @override
   void initState() {
     super.initState();
-    final usersState = context.read<UsersBloc>().state;
+    _users = context.read<UsersBloc>();
     _userForm = UserForm(
       initialUser: widget.user,
-      isLoginRegistered: usersState.isLoginRegistered,
+      isLoginRegistered: (final login) => _users.state.isLoginRegistered(login),
       onSubmit: _submit,
     );
   }
@@ -77,29 +110,42 @@ class _NewUserPageState extends State<NewUserPage> {
   }
 
   Future<void> _submit(final User user) async {
-    final result = widget.user == null
-        ? await getIt<ApiConnectionRepository>().createUser(user)
-        : await getIt<ApiConnectionRepository>().updateUser(user);
-    if (!mounted) {
-      return;
-    }
-
-    final (success, message) = result;
-    if (!success) {
-      if (message.isNotEmpty) {
-        getIt<NavigationService>().showSnackBar(message);
+    final ServerMutationResult<User>? result;
+    try {
+      result = await _users.saveUser(
+        user,
+        continuity: widget.continuity,
+        create: widget.user == null,
+      );
+    } catch (_) {
+      if (mounted && identical(widget.continuity, _users.state.continuity)) {
+        getIt<NavigationService>().showSnackBar(
+          'server_mutation.outcome_unknown'.tr(),
+        );
       }
       return;
     }
+    if (!mounted || !identical(widget.continuity, _users.state.continuity)) {
+      return;
+    }
 
+    final message = result == null
+        ? 'server_mutation.not_sent'.tr()
+        : serverMutationMessage(result);
     if (message.isNotEmpty) {
-      getIt<NavigationService>().showSnackBar(message.tr());
+      getIt<NavigationService>().showSnackBar(message);
+    }
+    if (result?.outcome != ServerMutationOutcome.confirmed ||
+        result?.payload.value == null) {
+      return;
     }
     if (widget.user != null) {
       context.router.pop();
       return;
     }
-    await context.router.replace(UserDetailsRoute(login: user.login));
+    await context.router.replace(
+      UserDetailsRoute(login: result!.payload.value!.login),
+    );
   }
 }
 

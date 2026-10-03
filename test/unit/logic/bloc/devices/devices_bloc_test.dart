@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pub_semver/pub_semver.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
@@ -12,21 +12,17 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';
 import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
-class _MockRepository extends Mock implements ApiConnectionRepository {}
-
 class _MockApi extends Mock implements ServerApi {}
 
 class _MockNavigation extends Mock implements NavigationService {}
 
 void main() {
-  late _MockRepository repository;
   late _MockApi api;
   late _MockNavigation navigation;
   late DevicesRepository devices;
@@ -38,7 +34,6 @@ void main() {
 
   setUp(() async {
     await getIt.reset();
-    repository = _MockRepository();
     api = _MockApi();
     navigation = _MockNavigation();
     final data =
@@ -49,30 +44,11 @@ void main() {
     ).api.devices.map(ApiToken.fromGraphQL).toList();
     device = tokens.firstWhere((final token) => !token.isCaller);
     when(api.getApiTokens).thenAnswer((_) async => tokens);
-    final origin = ServerStateOrigin('server');
-    connection = ServerConnection(
-      api: api,
-      origin: origin,
-      currentOrigin: () => origin,
-    )..setVersion(Version(3, 6, 0));
+    final hub = fixtureHub(api);
+    connection = hub.active!;
     devices = connection.devices;
     await devices.refresh();
-    when(() => repository.api).thenReturn(api);
-    final hub = fixtureHub(api);
-    when(() => repository.hub).thenReturn(hub);
-    when(() => repository.devicesSnapshot).thenAnswer((_) => devices.value);
-    when(() => repository.devicesStream).thenAnswer((_) => devices.changes);
-    when(
-      repository.refreshDevices,
-    ).thenAnswer((_) => devices.refresh(force: true));
-    when(() => repository.revokeDevice(any())).thenAnswer(
-      (final invocation) =>
-          devices.revoke(invocation.positionalArguments.first as String),
-    );
-    getIt
-      ..registerSingleton<ApiConnectionRepository>(repository)
-      ..registerSingleton<NavigationService>(navigation);
-    bloc = DevicesBloc();
+    bloc = createDevicesBloc(hub, showMessage: navigation.showSnackBar);
     await bloc.stream.firstWhere((final state) => state.isLoaded);
   });
 
@@ -97,7 +73,6 @@ void main() {
     expect((await failed).devices, before.devices);
     expect(bloc.state.isLoaded, isTrue);
     expect(before.hasError, isFalse);
-    verifyNever(() => repository.reload(any()));
   });
 
   test('duplicate revoke events are dropped while pending', () async {
@@ -231,7 +206,6 @@ void main() {
           verify(() => navigation.showSnackBar(expected)).called(1);
         }
         verify(() => api.deleteApiToken(device.name)).called(1);
-        verifyNever(() => repository.reload(any()));
       });
     });
   }

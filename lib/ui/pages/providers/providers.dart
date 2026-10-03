@@ -125,6 +125,8 @@ class _ProvidersPageState extends State<ProvidersPage> {
             child: ProvidersPageCard(
               state: backupsState is BackupsInitialized
                   ? StateType.stable
+                  : backupsState is BackupsUnavailable
+                  ? StateType.error
                   : StateType.uninitialized,
               icon: BrandIcons.save,
               title: 'backup.card_title'.tr(),
@@ -140,7 +142,12 @@ class _ProvidersPageState extends State<ProvidersPage> {
   }
 
   String _backupsCardSubtitle(final BackupsState backupsState) {
-    if (backupsState is BackupsInitialized) {
+    if (backupsState is BackupsUnavailable) {
+      return (backupsState.isUnsupported
+              ? 'basis.feature_unsupported'
+              : 'basis.network_error')
+          .tr();
+    } else if (backupsState is BackupsInitialized) {
       final timeSince = backupsState.timeSinceLastBackup();
       if (timeSince == null) {
         return '';

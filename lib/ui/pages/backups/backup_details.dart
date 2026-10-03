@@ -64,6 +64,21 @@ class BackupDetailsPage extends StatelessWidget {
       );
     }
 
+    if (backupsState is BackupsUnavailable) {
+      return BrandHeroScreen(
+        heroIcon: BrandIcons.save,
+        heroTitle: 'backup.card_title'.tr(),
+        children: [
+          Text(
+            (backupsState.isUnsupported
+                    ? 'basis.feature_unsupported'
+                    : 'basis.network_error')
+                .tr(),
+          ),
+        ],
+      );
+    }
+
     if (!isBackupInitialized) {
       return BrandHeroScreen(
         heroIcon: BrandIcons.save,

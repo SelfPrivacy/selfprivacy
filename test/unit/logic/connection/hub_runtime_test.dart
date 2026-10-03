@@ -43,14 +43,16 @@ void main() {
   late void Function({required bool connected}) socketHealth;
   late bool foreground;
   late bool automatic;
+  late bool configured;
   late Server stored;
   late _Lifecycle lifecycle;
   late _Network network;
 
-  void start(final WidgetTester tester) {
+  void start(final WidgetTester tester, {final bool withServer = true}) {
     api = _Api();
     resources = _Resources();
     stored = aServer();
+    configured = withServer;
     automatic = false;
     foreground = true;
     events = {};
@@ -59,7 +61,7 @@ void main() {
     logSockets = [];
     visibility = StreamController<bool>.broadcast(sync: true);
     resourceChanges = StreamController<ResourcesModelEvent>.broadcast();
-    when(() => resources.servers).thenAnswer((_) => [stored]);
+    when(() => resources.servers).thenAnswer((_) => configured ? [stored] : []);
     when(
       () => resources.statusStream,
     ).thenAnswer((_) => resourceChanges.stream);
@@ -165,6 +167,85 @@ void main() {
       }
     });
   }
+
+  runtimeTest('foreground cannot resume probes while rotation drains work', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    final pending = Completer<void>();
+    final work = hub.submit(OperationKind.manageUsers, (_) => pending.future);
+    final rotation = hub.rotateToken();
+    await tester.pump();
+    clearInteractions(api);
+    foreground = false;
+    visibility.add(false);
+    await tester.pump();
+    foreground = true;
+    visibility.add(true);
+    await tester.pump();
+    expect(hub.rotation.status, RotationStatus.waiting);
+    verifyNever(api.getApiVersion);
+    hub.cancelRotation();
+    pending.complete();
+    await tester.pump();
+    await work.completion;
+    await rotation;
+  });
+
+  runtimeTest(
+    'startup without a server activates one runtime when installation supplies it',
+    (final tester) async {
+      start(tester, withServer: false);
+      await tester.pump();
+      expect(hub.active, isNull);
+      verifyNever(api.getApiVersion);
+      configured = true;
+      resourceChanges.add(const ChangedServers());
+      await tester.pump();
+      expect(hub.active, isNotNull);
+      expect(jobSockets, hasLength(1));
+      hub
+        ..resume()
+        ..start(lifecycle: lifecycle, connectivity: network);
+      await tester.pump();
+      expect(jobSockets, hasLength(1));
+      hub.clear();
+      configured = false;
+      resourceChanges.add(const ClearedModel());
+      await tester.pump();
+      expect(hub.active, isNull);
+      configured = true;
+      resourceChanges.add(const ChangedServers());
+      await tester.pump();
+      expect(hub.active, isNull);
+      hub.resume();
+      await tester.pump();
+      expect(jobSockets, hasLength(2));
+    },
+  );
+
+  runtimeTest('one store change is forwarded to the hub once', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    foreground = false;
+    visibility.add(false);
+    await tester.pump();
+    var connectionEvents = 0;
+    var hubEvents = 0;
+    final connectionSubscription = hub.active!.changes.listen(
+      (_) => connectionEvents++,
+    );
+    final hubSubscription = hub.changes.listen((_) => hubEvents++);
+    hub.active!.cache.groups.requestReconciliation();
+    await tester.pump();
+    expect(connectionEvents, 1);
+    expect(hubEvents, 1);
+    unawaited(connectionSubscription.cancel());
+    unawaited(hubSubscription.cancel());
+  });
 
   runtimeTest('healthy idle socket uses sixty-second polling; loss uses ten', (
     final tester,

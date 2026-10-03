@@ -1,119 +1,108 @@
 import 'dart:async';
 
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
-import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/models/timezone_settings.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
 
 part 'server_detailed_info_state.dart';
 
-class ServerDetailsCubit
-    extends ServerConnectionDependentCubit<ServerDetailsState> {
-  ServerDetailsCubit() : super(const ServerDetailsInitial()) {
-    final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
-      final ApiData apiData,
-    ) {
-      if (apiData.settings.data != null) {
-        _handleServerSettings(apiData.settings.data!);
-      }
-    });
+class ServerDetailsCubit extends Cubit<ServerDetailsState> {
+  ServerDetailsCubit({
+    required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
+    settings,
+    required final Future<List<ServerMetadataEntity>> Function(
+      ServerStateOrigin,
+    )
+    loadMetadata,
+    required final void Function() onMetadataFailure,
+  }) : _loadMetadata = loadMetadata,
+       _onMetadataFailure = onMetadataFailure,
+       super(ServerDetailsInitial()) {
+    _subscription = settings.listen(_observe);
   }
 
-  StreamSubscription? _apiDataSubscription;
+  final Future<List<ServerMetadataEntity>> Function(ServerStateOrigin)
+  _loadMetadata;
+  final void Function() _onMetadataFailure;
+  late final StreamSubscription<
+    ConnectionObservation<CachedValue<SystemSettings>>
+  >
+  _subscription;
+  ServerStateOrigin? _origin;
+  ServerStateOrigin? _requestedOrigin;
 
-  void _handleServerSettings(final SystemSettings settings) {
-    emit(
-      Loaded(
-        metadata: state.metadata,
-        serverTimezone: TimeZoneSettings.fromString(settings.timezone),
-        autoUpgradeSettings: settings.autoUpgradeSettings,
-        sshSettings: settings.sshSettings,
-      ),
-    );
-    if (state.metadata.isEmpty) {
-      unawaited(check());
+  void _observe(
+    final ConnectionObservation<CachedValue<SystemSettings>> observation,
+  ) {
+    final origin = observation.origin;
+    if (origin == null) {
+      _origin = null;
+      _requestedOrigin = null;
+      emit(ServerDetailsNotReady());
+      return;
     }
-  }
-
-  Future<List<ServerMetadataEntity>> get _metadata async {
-    final List<ServerMetadataEntity> data = [];
-
-    final Server? server = getIt<ResourcesModel>().servers.firstOrNull;
-
-    if (server == null) {
-      return data;
+    if (!identical(origin.continuity, _origin?.continuity)) {
+      emit(ServerDetailsLoading(continuity: origin.continuity));
     }
-
-    final serverProviderApi = ProvidersController.currentServerProvider;
-    final dnsProviderApi = ProvidersController.currentDnsProvider;
-    if (server.hostingDetails.serverLocation != null &&
-        (serverProviderApi?.isAuthorized ?? false)) {
-      final providerId = server.hostingDetails.providerId;
-      if (providerId == null) {
-        return data;
-      }
-      final metadataResult = await serverProviderApi?.getMetadata(
-        providerId,
-        server.hostingDetails.serverLocation!,
-      );
-
-      data.addAll(metadataResult?.data ?? []);
-    }
-
-    if (serverProviderApi == null || !serverProviderApi.isAuthorized) {
-      data.add(
-        ServerMetadataEntity(
-          type: MetadataType.other,
-          trId: 'server.server_provider',
-          value: server.hostingDetails.provider.displayName,
+    _origin = origin;
+    final settings = observation.value?.data;
+    if (settings != null) {
+      emit(
+        Loaded(
+          continuity: origin.continuity,
+          metadata: state.metadata,
+          serverTimezone: TimeZoneSettings.fromString(settings.timezone),
+          autoUpgradeSettings: settings.autoUpgradeSettings,
+          sshSettings: settings.sshSettings,
         ),
       );
-    }
-
-    if (dnsProviderApi != null && dnsProviderApi.isAuthorized) {
-      data.add(
-        ServerMetadataEntity(
-          trId: 'server.dns_provider',
-          value: dnsProviderApi.type.displayName,
-          type: MetadataType.other,
+      if (state.metadata.isEmpty && !identical(_requestedOrigin, origin)) {
+        unawaited(check());
+      }
+    } else if (observation.value?.support == DomainSupport.unsupported ||
+        observation.value?.lastError != null) {
+      emit(
+        ServerDetailsUnavailable(
+          isUnsupported:
+              observation.value?.support == DomainSupport.unsupported,
+          continuity: origin.continuity,
+          metadata: state.metadata,
         ),
       );
     } else {
-      data.add(
-        ServerMetadataEntity(
-          trId: 'server.dns_provider',
-          value: server.domain.provider.displayName,
-          type: MetadataType.other,
-        ),
-      );
+      emit(ServerDetailsLoading(continuity: origin.continuity));
     }
-
-    return data;
   }
 
   Future<void> check() async {
-    final List<ServerMetadataEntity> metadata = await _metadata;
-    emit(state.copyWith(metadata: metadata));
+    final origin = _origin;
+    if (origin == null || isClosed) {
+      return;
+    }
+    _requestedOrigin = origin;
+    try {
+      final metadata = await _loadMetadata(origin);
+      if (!isClosed && identical(origin, _origin)) {
+        emit(state.copyWith(metadata: metadata));
+      }
+    } catch (_) {
+      if (!isClosed && identical(origin, _origin)) {
+        _onMetadataFailure();
+      }
+    }
   }
-
-  @override
-  void clear() {
-    emit(const ServerDetailsNotReady());
-  }
-
-  @override
-  void load() {}
 
   @override
   Future<void> close() async {
-    await _apiDataSubscription?.cancel();
+    _origin = null;
+    await _subscription.cancel();
     return super.close();
   }
 }

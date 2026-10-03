@@ -1,33 +1,31 @@
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 
 class SettingsRepository {
-  SettingsRepository({required this.connection, required this.store}) {
-    if (!connection.commands.owns(store)) {
+  SettingsRepository({required this.commands, required this.reader}) {
+    if (!commands.owns(store)) {
       throw ArgumentError('Settings store belongs to another connection.');
     }
   }
 
-  final ServerConnection connection;
-  final DomainStore<SystemSettings> store;
+  final ServerCommandCoordinator commands;
+  final DomainReader<SystemSettings> reader;
+  DomainStore<SystemSettings> get store => reader.store;
 
-  static Future<SystemSettings> fetch(final ServerApi api) =>
-      api.getSystemSettings();
-
-  CachedValue<SystemSettings> get value => connection.snapshot(store);
-  Stream<CachedValue<SystemSettings>> get changes =>
-      connection.changes.map((_) => value);
+  CachedValue<SystemSettings> get value => reader.value;
+  Stream<CachedValue<SystemSettings>> get changes => reader.changes;
   Future<RefreshResult> refresh({final bool force = false}) =>
-      connection.refresh(store, force: force);
+      reader.refresh(force: force);
 
   void invalidate() {
-    if (connection.isAttached) {
+    if (commands.isAttached) {
       store.invalidate();
     }
   }
@@ -60,7 +58,7 @@ class SettingsRepository {
   Future<ServerMutationResult<T>> _patch<T>(
     final Future<ServerMutationResult<T>> Function(ServerApi) send,
     final SystemSettings Function(SystemSettings, T) reduce,
-  ) => connection.mutate(
+  ) => commands.mutate(
     domains: [store],
     send: send,
     applyConfirmed: (final result) {

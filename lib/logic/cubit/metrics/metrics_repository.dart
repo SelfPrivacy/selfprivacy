@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
 class MetricsLoadException implements Exception {
   MetricsLoadException(this.message);
@@ -24,16 +23,36 @@ class MetricsStateUpdate {
 }
 
 class MetricsRepository {
+  MetricsRepository({
+    required final ServerApi api,
+    required final Version? version,
+    required final bool Function() isAvailable,
+    final ServerProvider? provider,
+    final String? providerId,
+  }) : _api = api,
+       _version = version,
+       _isAvailable = isAvailable,
+       _provider = provider,
+       _providerId = providerId;
+
+  final ServerApi _api;
+  final Version? _version;
+  final bool Function() _isAvailable;
+  final ServerProvider? _provider;
+  final String? _providerId;
+
+  void _requireAvailable() {
+    if (!_isAvailable()) {
+      throw const GraphQLDispatchDeferred();
+    }
+  }
+
   static const String metricsSupportedVersion = '>=3.3.0';
 
   Future<MetricsStateUpdate> getRelevantServerMetrics(
     final Period period,
   ) async {
-    final hub = getIt<ApiConnectionRepository>().hub;
-    final owner = hub.active;
-    if (!hub.canRead || owner == null) {
-      throw StateError('Metrics paused');
-    }
+    _requireAvailable();
     MetricsLoaded? state;
     int nextUpdate = 0;
 
@@ -41,8 +60,11 @@ class MetricsRepository {
       final stateLoaded = await _getServerMetrics(period);
       nextUpdate = stateLoaded.metrics.stepsInSecond.toInt();
       state = stateLoaded;
+    } on GraphQLDispatchDeferred {
+      rethrow;
     } catch (_) {}
 
+    _requireAvailable();
     const minAmountForRendering = 20;
 
     if (state != null &&
@@ -52,15 +74,16 @@ class MetricsRepository {
       return MetricsStateUpdate(state, nextUpdate);
     }
 
-    if (!hub.canRead || !owner.isAttached) {
-      throw StateError('Metrics paused');
-    }
+    _requireAvailable();
     try {
       final stateLoaded = await _getLegacyMetrics(period);
       nextUpdate = stateLoaded.metrics.stepsInSecond.toInt();
       state = stateLoaded;
+    } on GraphQLDispatchDeferred {
+      rethrow;
     } catch (_) {}
 
+    _requireAvailable();
     if (state != null) {
       return MetricsStateUpdate(state, nextUpdate);
     }
@@ -69,20 +92,16 @@ class MetricsRepository {
   }
 
   Future<MetricsLoaded> _getServerMetrics(final Period period) async {
-    final api = getIt<ApiConnectionRepository>().api;
-    final String? apiVersion =
-        getIt<ApiConnectionRepository>().apiData.apiVersion.data;
+    final apiVersion = _version;
     if (apiVersion == null) {
       throw Exception('basis.network_error'.tr());
     }
-    if (!VersionConstraint.parse(
-      metricsSupportedVersion,
-    ).allows(Version.parse(apiVersion))) {
+    if (!VersionConstraint.parse(metricsSupportedVersion).allows(apiVersion)) {
       throw Exception(
         'basis.feature_unsupported_on_api_version'.tr(
           namedArgs: {
             'versionConstraint': metricsSupportedVersion,
-            'currentVersion': apiVersion,
+            'currentVersion': apiVersion.toString(),
           },
         ),
       );
@@ -100,29 +119,31 @@ class MetricsRepository {
         start = end.subtract(const Duration(days: 15));
     }
 
-    final result = await api.getServerMetrics(
+    final result = await _api.getServerMetrics(
       start: start,
       end: end,
       step: end.difference(start).inSeconds ~/ 120,
     );
 
+    _requireAvailable();
     if (result.data == null || !result.success) {
       throw MetricsLoadException('Metrics data is null');
     }
 
-    final memoryResult = await api.getMemoryMetrics(
+    final memoryResult = await _api.getMemoryMetrics(
       start: start,
       end: end,
       step: end.difference(start).inSeconds ~/ 120,
     );
 
-    final diskResult = await getIt<ApiConnectionRepository>().api
-        .getDiskMetrics(
-          start: start,
-          end: end,
-          step: end.difference(start).inSeconds ~/ 120,
-        );
+    _requireAvailable();
+    final diskResult = await _api.getDiskMetrics(
+      start: start,
+      end: end,
+      step: end.difference(start).inSeconds ~/ 120,
+    );
 
+    _requireAvailable();
     return MetricsLoaded(
       period: period,
       metrics: result.data!,
@@ -133,7 +154,7 @@ class MetricsRepository {
   }
 
   Future<MetricsLoaded> _getLegacyMetrics(final Period period) async {
-    if (!(ProvidersController.currentServerProvider?.isAuthorized ?? false)) {
+    if (!(_provider?.isAuthorized ?? false)) {
       throw MetricsUnsupportedException('Server Provider data is null');
     }
 
@@ -149,20 +170,17 @@ class MetricsRepository {
         start = end.subtract(const Duration(days: 15));
     }
 
-    final providerId = getIt<ResourcesModel>().serverDetails!.providerId;
+    final providerId = _providerId;
     if (providerId == null) {
       throw MetricsUnsupportedException('Server provider ID is null');
     }
-    final result = await ProvidersController.currentServerProvider!.getMetrics(
-      providerId,
-      start,
-      end,
-    );
+    final result = await _provider!.getMetrics(providerId, start, end);
 
     if (result.data == null || !result.success) {
       throw MetricsLoadException('Metrics data is null');
     }
 
+    _requireAvailable();
     return MetricsLoaded(
       period: period,
       metrics: result.data!,

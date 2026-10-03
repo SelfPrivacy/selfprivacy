@@ -4,13 +4,13 @@ sealed class GroupsEvent extends Equatable {
   const GroupsEvent();
 }
 
-class GroupsListChanged extends GroupsEvent {
-  const GroupsListChanged(this.groups);
+class _GroupsObserved extends GroupsEvent {
+  const _GroupsObserved(this.observation);
 
-  final List<String> groups;
+  final ConnectionObservation<CachedValue<List<String>>> observation;
 
   @override
-  List<Object> get props => [groups];
+  List<Object> get props => [observation];
 }
 
 class GroupsListRefresh extends GroupsEvent {
@@ -18,13 +18,4 @@ class GroupsListRefresh extends GroupsEvent {
 
   @override
   List<Object> get props => [];
-}
-
-class GroupsConnectionStatusChanged extends GroupsEvent {
-  const GroupsConnectionStatusChanged(this.connectionStatus);
-
-  final ConnectionStatus connectionStatus;
-
-  @override
-  List<Object?> get props => [connectionStatus];
 }

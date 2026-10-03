@@ -4,87 +4,68 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 
 part 'groups_event.dart';
 part 'groups_state.dart';
 
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
-  GroupsBloc() : super(GroupsInitial()) {
-    on<GroupsListChanged>(_updateList, transformer: sequential());
+  GroupsBloc({
+    required final Stream<ConnectionObservation<CachedValue<List<String>>>>
+    groups,
+    required final Future<void> Function() refresh,
+  }) : _refresh = refresh,
+       super(GroupsInitial()) {
+    on<_GroupsObserved>(_observe, transformer: sequential());
     on<GroupsListRefresh>(_reload, transformer: droppable());
-    on<GroupsConnectionStatusChanged>(
-      _mapConnectionStatusChangedToState,
-      transformer: sequential(),
-    );
-
-    final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiConnectionStatusSubscription = apiConnectionRepository
-        .connectionStatusStream
-        .listen((final ConnectionStatus connectionStatus) {
-          add(GroupsConnectionStatusChanged(connectionStatus));
-        });
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
-      final ApiData apiData,
-    ) {
-      add(GroupsListChanged(apiData.groups.data ?? []));
+    _subscription = groups.listen((final observation) {
+      _latest = observation;
+      add(_GroupsObserved(observation));
     });
   }
 
-  Future<void> _updateList(
-    final GroupsListChanged event,
-    final Emitter<GroupsState> emit,
-  ) async {
-    if (event.groups.isEmpty) {
-      emit(GroupsInitial());
+  final Future<void> Function() _refresh;
+  late final StreamSubscription<
+    ConnectionObservation<CachedValue<List<String>>>
+  >
+  _subscription;
+  ConnectionObservation<CachedValue<List<String>>>? _latest;
+
+  void _observe(final _GroupsObserved event, final Emitter<GroupsState> emit) {
+    if (!identical(event.observation.origin, _latest?.origin)) {
       return;
     }
-    final newState = GroupsLoaded(groups: event.groups);
-    emit(newState);
+    final value = event.observation.value;
+    if (value == null) {
+      emit(GroupsInitial());
+    } else if (value.support == DomainSupport.unsupported) {
+      emit(GroupsUnsupported());
+    } else if (value.data case final groups?) {
+      emit(GroupsLoaded(groups: groups));
+    } else if (value.lastError != null) {
+      emit(GroupsError());
+    } else {
+      emit(GroupsRefreshing(groups: const []));
+    }
   }
 
-  Future<void> refresh() async {
-    await getIt<ApiConnectionRepository>().refreshGroups();
-  }
+  Future<void> refresh() => _refresh();
 
   Future<void> _reload(
     final GroupsListRefresh event,
     final Emitter<GroupsState> emit,
   ) async {
+    if (_latest?.origin == null) {
+      return;
+    }
     emit(GroupsRefreshing(groups: state.groups));
     await refresh();
   }
 
-  Future<void> _mapConnectionStatusChangedToState(
-    final GroupsConnectionStatusChanged event,
-    final Emitter<GroupsState> emit,
-  ) async {
-    switch (event.connectionStatus) {
-      case ConnectionStatus.nonexistent:
-        emit(GroupsInitial());
-      case ConnectionStatus.reconnecting:
-      case ConnectionStatus.connected:
-        if (state is! GroupsLoaded) {
-          emit(GroupsRefreshing(groups: state.groups));
-        }
-      case ConnectionStatus.offline:
-      case ConnectionStatus.unauthorized:
-        break;
-    }
-  }
-
-  StreamSubscription? _apiDataSubscription;
-  StreamSubscription? _apiConnectionStatusSubscription;
-
-  @override
-  void onChange(final Change<GroupsState> change) {
-    super.onChange(change);
-  }
-
   @override
   Future<void> close() async {
-    await _apiDataSubscription?.cancel();
-    await _apiConnectionStatusSubscription?.cancel();
+    await _subscription.cancel();
     return super.close();
   }
 }

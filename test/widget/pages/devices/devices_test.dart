@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
-import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
@@ -22,13 +21,10 @@ import '../../../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
 
-class _Connection extends Mock implements ApiConnectionRepository {}
-
 class _Navigation extends Mock implements NavigationService {}
 
 void main() {
   late _Api api;
-  late DevicesRepository devices;
   late ServerConnection connection;
   late DevicesBloc bloc;
   late List<ApiToken> tokens;
@@ -42,27 +38,13 @@ void main() {
     ).api.devices.map(ApiToken.fromGraphQL).toList();
     when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
-    final origin = ServerStateOrigin('server');
-    connection = ServerConnection(
-      api: api,
-      origin: origin,
-      currentOrigin: () => origin,
-    );
-    devices = connection.devices;
-    final facade = _Connection();
     final hub = fixtureHub(api);
-    when(() => facade.hub).thenReturn(hub);
-    when(() => facade.devicesSnapshot).thenAnswer((_) => devices.value);
-    when(() => facade.devicesStream).thenAnswer((_) => devices.changes);
-    when(facade.refreshDevices).thenAnswer((_) => devices.refresh(force: true));
-    when(() => facade.revokeDevice(any())).thenAnswer(
-      (final invocation) =>
-          devices.revoke(invocation.positionalArguments.first as String),
+    connection = hub.active!;
+    getIt.registerSingleton<NavigationService>(_Navigation());
+    bloc = createDevicesBloc(
+      hub,
+      showMessage: getIt<NavigationService>().showSnackBar,
     );
-    getIt
-      ..registerSingleton<ApiConnectionRepository>(facade)
-      ..registerSingleton<NavigationService>(_Navigation());
-    bloc = DevicesBloc();
   });
   tearDown(() async {
     await bloc.close();
@@ -80,6 +62,48 @@ void main() {
       BlocProvider.value(value: bloc, child: const DevicesPage()),
     );
   }
+
+  testWidgets(
+    'confirming a device row dispatches once and retains it until confirmation',
+    (final tester) async {
+      final device = tokens.firstWhere((final token) => !token.isCaller);
+      final pending = Completer<ServerMutationResult<void>>();
+      when(
+        () => api.deleteApiToken(device.name),
+      ).thenAnswer((_) => pending.future);
+      await tester.runAsync(bloc.refresh);
+      await showPage(tester);
+      await tester.tap(find.text(device.name));
+      await tester.pumpAndSettle();
+      final confirm = find
+          .descendant(
+            of: find.byType(AlertDialog),
+            matching: find.byType(TextButton),
+          )
+          .last;
+      await tester.runAsync(() async {
+        await tester.tap(confirm);
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      verify(() => api.deleteApiToken(device.name)).called(1);
+      expect(bloc.state.pendingDeviceName, device.name);
+      expect(find.text(device.name), findsOneWidget);
+      await tester.runAsync(() async {
+        pending.complete(
+          ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: const ServerMutationPayload.notExpected(),
+          ),
+        );
+        await pumpEventQueue();
+      });
+      await tester.pumpAndSettle();
+      expect(find.text(device.name), findsNothing);
+      verifyNever(() => api.deleteApiToken(device.name));
+    },
+  );
 
   for (final outcome in ServerMutationOutcome.values) {
     testWidgets('visible list follows ${outcome.name} before polling', (

@@ -202,7 +202,7 @@ void main() {
           ),
         ),
       );
-      await command.completion;
+      await command;
       await tester.pump();
       expect(store.value.data!.single.progress, 75);
       expect(store.value.needsReconciliation, isTrue);
@@ -225,7 +225,7 @@ void main() {
         payload: const ServerMutationPayload.notExpected(),
       ),
     );
-    await command.completion;
+    await command;
     await tester.pump();
     expect(store.value.data, [job()]);
     expect(store.value.needsReconciliation, isTrue);

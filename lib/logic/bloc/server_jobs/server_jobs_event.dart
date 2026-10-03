@@ -7,13 +7,22 @@ sealed class ServerJobsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ServerJobsListChanged extends ServerJobsEvent {
-  const ServerJobsListChanged(this.serverJobList);
+class _JobsObserved extends ServerJobsEvent {
+  const _JobsObserved(this.observation);
 
-  final List<ServerJob> serverJobList;
+  final ConnectionObservation<JobsSnapshot> observation;
 
   @override
-  List<Object?> get props => [serverJobList];
+  List<Object?> get props => [observation];
+}
+
+class _JobsAction<T extends ServerJobsEvent> extends ServerJobsEvent {
+  const _JobsAction(this.event, this.origin);
+  final T event;
+  final ServerStateOrigin? origin;
+
+  @override
+  List<Object?> get props => [event, origin];
 }
 
 class RemoveServerJob extends ServerJobsEvent {

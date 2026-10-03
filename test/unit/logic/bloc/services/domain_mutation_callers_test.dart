@@ -12,6 +12,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/job.dart';
@@ -19,12 +21,10 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
+import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
-import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
-
-class _Repository extends Mock implements ApiConnectionRepository {}
 
 class _Api extends Mock implements ServerApi {}
 
@@ -32,17 +32,14 @@ class _Navigation extends Mock implements NavigationService {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
-  late _Repository repository;
   late _Api api;
   late _Navigation navigation;
-  late ApiData data;
   late Service service;
   late ServicesBloc services;
   late ServerJobsBloc jobs;
   late ServerConnection connection;
 
   setUp(() {
-    repository = _Repository();
     api = _Api();
     navigation = _Navigation();
     final origin = ServerStateOrigin('server');
@@ -51,27 +48,42 @@ void main() {
       origin: origin,
       currentOrigin: () => origin,
     )..setVersion(Version(3, 0, 0));
-    when(() => repository.connection).thenReturn(connection);
-    stubOperations(repository, connection);
-    data = ApiData(connection: () => connection);
     connection.services.store.push(
       Query$AllServices.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['AllServices']
             as Map<String, dynamic>,
       ).services.allServices.map(Service.fromGraphQL).toList(),
     );
-    service = data.services.data!.first;
-    when(() => repository.api).thenReturn(api);
-    when(() => repository.apiData).thenReturn(data);
-    when(() => repository.dataStream).thenAnswer((_) => const Stream.empty());
-    when(
-      () => repository.connectionStatus,
-    ).thenReturn(ConnectionStatus.connected);
-    getIt
-      ..registerSingleton<ApiConnectionRepository>(repository)
-      ..registerSingleton<NavigationService>(navigation);
-    services = ServicesBloc();
-    jobs = ServerJobsBloc();
+    service = connection.services.value.data!.first;
+    getIt.registerSingleton<NavigationService>(navigation);
+    services = ServicesBloc(
+      services: Stream.value(
+        ConnectionObservation.attached(
+          connection.origin,
+          connection.services.value,
+        ),
+      ),
+      refresh: () async {
+        await connection.services.refresh(force: true);
+      },
+      restart: (_, final id) => connection.services.restart(id),
+      move: (_, final id, final destination) =>
+          connection.services.move(id, destination),
+      showMessage: navigation.showSnackBar,
+    );
+    jobs = ServerJobsBloc(
+      jobs: Stream.value(
+        ConnectionObservation.attached(
+          connection.origin,
+          connection.jobs.snapshot,
+        ),
+      ),
+      removeJob: (_, final id) => connection.jobs.removeJob(id),
+      removeFinished: (_) => connection.jobs.removeAllFinished(),
+      migrate: (_, final destinations) =>
+          connection.jobs.migrateToBinds(destinations),
+      showMessage: navigation.showSnackBar,
+    );
   });
   tearDown(() async {
     await services.close();
@@ -95,7 +107,7 @@ void main() {
         services.add(ServiceRestart(service));
         await pumpEventQueue();
       });
-      expect(data.services.isExpired, isTrue);
+      expect(connection.services.value.freshness, Freshness.stale);
       expect(
         services.state.isServiceLocked(service.id),
         outcome == ServerMutationOutcome.confirmed,
@@ -127,7 +139,7 @@ void main() {
         await pumpEventQueue();
       });
       expect(
-        data.serverJobs.data,
+        connection.jobs.value.data,
         outcome == ServerMutationOutcome.confirmed ? [job] : isEmpty,
       );
       if (outcome != ServerMutationOutcome.confirmed) {
@@ -146,16 +158,15 @@ void main() {
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      final result = await ServiceToggleJob(
-        service: service,
-        needToTurnOn: true,
-      ).execute();
-      expect(result.$1, outcome == ServerMutationOutcome.confirmed);
-      expect(data.services.isExpired, isTrue);
+      final result = await clientJobWorkflow(
+        connection,
+      ).execute(ServiceToggleJob(service: service, needToTurnOn: true));
+      expect(result.outcome, outcome);
+      expect(connection.services.value.freshness, Freshness.stale);
     });
     testWidgets('job deletion reports $outcome', (final tester) async {
       await pumpForTest(tester, const SizedBox.shrink());
-      when(() => repository.removeServerJob('job-1')).thenAnswer(
+      when(() => api.removeApiJob('job-1')).thenAnswer(
         (_) async => ServerMutationResult(
           outcome: outcome,
           payload: const ServerMutationPayload.notExpected(),
@@ -188,8 +199,8 @@ void main() {
       services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
-    expect(data.serverJobs.data, isEmpty);
-    expect(data.serverJobs.isExpired, isTrue);
+    expect(connection.jobs.value.data, isEmpty);
+    expect(connection.jobs.value.freshness, Freshness.stale);
     const key = 'server_mutation.payload_unavailable';
     expect(key.tr(), isNot(key));
     verify(() => navigation.showSnackBar(key.tr())).called(1);
@@ -212,8 +223,8 @@ void main() {
       services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
-    expect(data.serverJobs.data, [updated]);
-    expect(data.serverJobs.isExpired, isTrue);
+    expect(connection.jobs.value.data, [updated]);
+    expect(connection.jobs.value.freshness, Freshness.stale);
   });
   testWidgets('move seeds unloaded jobs without marking the list complete', (
     final tester,
@@ -230,9 +241,9 @@ void main() {
       services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
-    expect(data.serverJobs.data, isNull);
+    expect(connection.jobs.value.data, isNull);
     expect(connection.jobs.confirmedBeforeLoad[job.uid], job);
-    expect(data.serverJobs.isExpired, isTrue);
+    expect(connection.jobs.value.freshness, Freshness.stale);
   });
 
   for (final outcome in ServerMutationOutcome.values) {
@@ -278,7 +289,9 @@ void main() {
             as Map<String, dynamic>,
       ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList(),
     );
-    final root = data.volumes.data!.firstWhere((final volume) => volume.root);
+    final root = connection.volumesStore.value.data!.firstWhere(
+      (final volume) => volume.root,
+    );
     final result = ServerMutationResult(
       outcome: ServerMutationOutcome.confirmed,
       payload: ServerMutationPayload.available(aServiceMoveJob()),
@@ -315,22 +328,22 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
-    when(repository.removeAllFinishedServerJobs).thenAnswer(
-      (_) async => {
-        'deleted': ServerMutationResult(
-          outcome: ServerMutationOutcome.confirmed,
+    connection.jobs.store.push([
+      for (final id in ['deleted', 'rejected', 'unknown'])
+        aServiceMoveJob(uid: id, status: 'FINISHED'),
+    ]);
+    for (final entry in {
+      'deleted': ServerMutationOutcome.confirmed,
+      'rejected': ServerMutationOutcome.rejected,
+      'unknown': ServerMutationOutcome.indeterminate,
+    }.entries) {
+      when(() => api.removeApiJob(entry.key)).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: entry.value,
           payload: const ServerMutationPayload.notExpected(),
         ),
-        'rejected': ServerMutationResult(
-          outcome: ServerMutationOutcome.rejected,
-          payload: const ServerMutationPayload.notExpected(),
-        ),
-        'unknown': ServerMutationResult(
-          outcome: ServerMutationOutcome.indeterminate,
-          payload: const ServerMutationPayload.notExpected(),
-        ),
-      },
-    );
+      );
+    }
     await tester.runAsync(() async {
       jobs.add(RemoveAllFinishedJobs());
       await pumpEventQueue();

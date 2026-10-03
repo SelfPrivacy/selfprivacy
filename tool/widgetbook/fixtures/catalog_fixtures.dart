@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -95,9 +96,11 @@ class CatalogFixtures {
     bind(
       details,
       variant == 'Loading'
-          ? const ServerDetailsLoading()
+          ? ServerDetailsLoading()
           : variant == 'Not ready'
-          ? const ServerDetailsNotReady()
+          ? ServerDetailsNotReady()
+          : variant == 'Error' || variant == 'Unsupported'
+          ? ServerDetailsUnavailable(isUnsupported: variant == 'Unsupported')
           : loaded,
     );
     bind(

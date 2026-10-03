@@ -17,20 +17,13 @@ class ConnectionRuntime {
     required final NetworkConnectivitySource connectivity,
     required this.operations,
     required this.onChanged,
-    final DateTime Function()? now,
   }) {
     reachability = Reachability(
       connectivity: connectivity,
       probe: () async => await connection.api.getApiVersion() != null,
     );
-    scheduler = SyncScheduler(
-      cache: connection.cache,
-      reachability: reachability,
-      lifecycle: lifecycle,
-      commands: connection.commands,
-      now: now,
-    );
-    connection.scheduler = scheduler;
+    scheduler = connection.scheduler;
+    scheduler.setReadAllowed(allowed: false);
   }
 
   static const socketGrace = Duration(seconds: 30);
@@ -60,17 +53,18 @@ class ConnectionRuntime {
         connection.changes.listen((_) {
           _connectJobs();
           _observeJobs();
-          onChanged();
         }),
       )
       ..add(
         reachability.stream.listen((_) {
+          _syncReadEligibility();
           _connectJobs();
           onChanged();
         }),
       )
       ..add(lifecycle.foregroundChanges.listen((_) => _visibilityChanged()))
       ..add(operations.changes.listen((_) => _observeJobs()));
+    reachability.start(paused: !lifecycle.isForeground || _suspended);
     scheduler.start();
     _setJobsHealth(false);
     _visibilityChanged();
@@ -101,20 +95,19 @@ class ConnectionRuntime {
       return;
     }
     _suspended = suspended;
-    scheduler.setSuspended(suspended: suspended);
+    _syncReachability();
+    _syncReadEligibility();
     if (suspended) {
-      reachability.pause();
       _closeJobs();
     } else {
-      if (lifecycle.isForeground) {
-        reachability.resume();
-      }
       _connectJobs();
       onChanged();
     }
   }
 
   void _visibilityChanged() {
+    _syncReachability();
+    _syncReadEligibility();
     if (lifecycle.isForeground) {
       _grace?.cancel();
       _grace = null;
@@ -129,6 +122,25 @@ class ConnectionRuntime {
       });
     }
     onChanged();
+  }
+
+  void _syncReachability() {
+    if (!_disposed && !_suspended && lifecycle.isForeground) {
+      reachability.resume();
+    } else {
+      reachability.pause();
+    }
+  }
+
+  void _syncReadEligibility() {
+    scheduler.setReadAllowed(
+      allowed:
+          !_disposed &&
+          !_suspended &&
+          lifecycle.isForeground &&
+          !reachability.isPaused &&
+          reachability.current == ReachabilityStatus.reachable,
+    );
   }
 
   void _setJobsHealth(final bool healthy) {
@@ -223,7 +235,7 @@ class ConnectionRuntime {
     for (final subscription in _subscriptions) {
       unawaited(subscription.cancel());
     }
-    scheduler.dispose();
+    scheduler.setReadAllowed(allowed: false);
     reachability.dispose();
   }
 }

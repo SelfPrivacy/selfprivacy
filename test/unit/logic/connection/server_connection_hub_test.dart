@@ -5,6 +5,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
@@ -12,6 +13,7 @@ import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/domain_mutation_fixtures.dart';
@@ -22,6 +24,8 @@ class _Api extends Mock implements ServerApi {}
 class _Lifecycle extends Mock implements AppLifecycle {}
 
 class _Network extends Mock implements NetworkConnectivitySource {}
+
+class _MockResources extends Mock implements ResourcesModel {}
 
 void main() {
   late ResourcesModel resources;
@@ -117,6 +121,66 @@ void main() {
     },
   );
 
+  for (final field in ['server', 'domain', 'credential']) {
+    test(
+      '$field replacement disposes old stores and rejects old dispatch',
+      () async {
+        var selected = aServer();
+        final dispatch = <void Function()>[];
+        final local = ServerConnectionHub(
+          resourcesModel: resources,
+          selectServer: () => selected,
+          createApi: (_, _, final beforeRequest) {
+            dispatch.add(beforeRequest);
+            return api;
+          },
+        );
+        addTearDown(local.dispose);
+        final old = local.active!;
+        selected = switch (field) {
+          'server' => aServer(uuid: 'replacement'),
+          'domain' => aServer(
+            domain: aServerDomain(domainName: 'replacement.example.org'),
+          ),
+          _ => aServer(
+            hostingDetails: aServerHostingDetails(
+              apiToken: 'replacement-secret',
+            ),
+          ),
+        };
+        expect(dispatch.single, throwsA(isA<GraphQLDispatchDeferred>()));
+        await local.run(OperationKind.manageUsers, (final owner) async {
+          expect(owner.origin.continuity, isNot(same(old.origin.continuity)));
+        });
+        expect(old.stores.every((final store) => store.isDisposed), isTrue);
+        expect(dispatch.last, returnsNormally);
+      },
+    );
+  }
+
+  test('clear stays detached until resume; disposal cannot resume', () async {
+    final old = hub.active!;
+    hub.clear();
+    await resources.updateServerByUuid(resources.servers.single);
+    expect(hub.active, isNull);
+    expect(old.stores.every((final store) => store.isDisposed), isTrue);
+    hub.resume();
+    expect(hub.active!.origin.continuity, isNot(same(old.origin.continuity)));
+    hub
+      ..dispose()
+      ..resume();
+    expect(hub.active, isNull);
+  });
+
+  test('hosting metadata changes do not replace the connection', () async {
+    final old = hub.active!;
+    await resources.updateServerByUuid(
+      aServer(hostingDetails: aServerHostingDetails(ip4: '203.0.113.20')),
+    );
+    await pumpEventQueue();
+    expect(hub.active, same(old));
+  });
+
   test(
     'run propagates unexpected failures without retaining them in history',
     () async {
@@ -147,6 +211,35 @@ void main() {
       await first.completion;
     },
   );
+
+  test('queued work cannot cross a same-UUID credential replacement', () async {
+    var selected = aServer();
+    final local = ServerConnectionHub(
+      resourcesModel: resources,
+      selectServer: () => selected,
+      createApi: (_, _, _) => api,
+    );
+    addTearDown(local.dispose);
+    final running = Completer<void>();
+    final first = local.submit(
+      OperationKind.manageUsers,
+      (_) => running.future,
+    );
+    final rotation = local.rotateToken();
+    var dispatched = false;
+    final waiting = local.submit(OperationKind.manageServices, (_) async {
+      dispatched = true;
+    });
+    selected = aServer(
+      hostingDetails: aServerHostingDetails(apiToken: 'manually-replaced'),
+    );
+    local.cancelRotation();
+    expect((await waiting.completion).status, OperationStatus.notSent);
+    expect(dispatched, isFalse);
+    running.complete();
+    await first.completion;
+    await rotation;
+  });
 
   test(
     'rotation preserves confirmed users and unfinished job effects before reads',
@@ -261,4 +354,242 @@ void main() {
       await visibility.close();
     },
   );
+  test('token rotation updates only the selected server', () async {
+    await resources.addServer(
+      aServer(
+        uuid: 'second-server',
+        domain: aServerDomain(domainName: 'second.example'),
+        hostingDetails: aServerHostingDetails(apiToken: 'second-token'),
+      ),
+    );
+    final selectedApi = _Api();
+    when(selectedApi.refreshDeviceApiToken).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available('rotated-token'),
+      ),
+    );
+    final selectedRepository = ServerConnectionHub(
+      resourcesModel: resources,
+      selectServer: () => resources.servers.firstWhere(
+        (final server) => server.uuid == 'second-server',
+      ),
+      createApi: (_, _, _) => selectedApi,
+    );
+    addTearDown(selectedRepository.dispose);
+
+    final result = await selectedRepository.rotateToken();
+
+    expect(result, RotationOutcome.succeeded);
+    expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+    expect(
+      resources.servers
+          .firstWhere((final server) => server.uuid == 'second-server')
+          .hostingDetails
+          .apiToken,
+      'rotated-token',
+    );
+  });
+  ServerConnectionHub realHub({final ResourcesModel? resourceOverride}) {
+    final result = ServerConnectionHub(
+      resourcesModel: resourceOverride ?? resources,
+      createApi: (_, _, _) => api,
+    );
+    addTearDown(result.dispose);
+    return result;
+  }
+
+  ServerMutationResult<String> confirmed(final String token) =>
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(token),
+        message: 'secret-sentinel',
+      );
+
+  test('rotation is single-flight and saves the replacement', () async {
+    final pending = Completer<ServerMutationResult<String>>();
+    when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
+    final connection = realHub();
+    final first = connection.rotateToken();
+    final second = connection.rotateToken();
+    pending.complete(confirmed('replacement'));
+    expect(await first, RotationOutcome.succeeded);
+    expect(await second, RotationOutcome.succeeded);
+    verify(api.refreshDeviceApiToken).called(1);
+    expect(resources.servers.first.hostingDetails.apiToken, 'replacement');
+    expect(
+      (Hive.box(BNames.resourcesBox).get(BNames.servers) as List<Server>)
+          .first
+          .hostingDetails
+          .apiToken,
+      'replacement',
+    );
+  });
+
+  for (final outcome in ServerMutationOutcome.values) {
+    test(
+      'unusable ${outcome.name} rotation keeps credentials and gates automatic retry',
+      () async {
+        final connection = realHub();
+        when(api.refreshDeviceApiToken).thenAnswer(
+          (_) async => ServerMutationResult<String>(
+            outcome: outcome,
+            payload: const ServerMutationPayload.missing(),
+            message: 'secret-sentinel',
+          ),
+        );
+        final result = await connection.rotateToken();
+        expect(result, isNot(RotationOutcome.succeeded));
+
+        expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+        await connection.rotateToken();
+        verify(
+          api.refreshDeviceApiToken,
+        ).called(outcome == ServerMutationOutcome.rejected ? 2 : 1);
+      },
+    );
+  }
+
+  test(
+    'recovery with another credential clears rotation suppression',
+    () async {
+      final connection = realHub();
+      when(api.refreshDeviceApiToken).thenAnswer(
+        (_) async => ServerMutationResult<String>(
+          outcome: ServerMutationOutcome.indeterminate,
+          payload: const ServerMutationPayload.unreadable(),
+        ),
+      );
+      await connection.rotateToken();
+      await connection.rotateToken();
+      verify(api.refreshDeviceApiToken).called(1);
+
+      final original = resources.servers.first;
+      await resources.updateServerByUuid(
+        aServer(
+          uuid: original.uuid,
+          hostingDetails: aServerHostingDetails(apiToken: 'recovered'),
+        ),
+      );
+      when(
+        api.refreshDeviceApiToken,
+      ).thenAnswer((_) async => confirmed('replacement'));
+      await connection.rotateToken();
+      await pumpEventQueue();
+      verify(api.refreshDeviceApiToken).called(1);
+      expect(resources.servers.first.hostingDetails.apiToken, 'replacement');
+    },
+  );
+
+  test('a late rotation does not overwrite a recovered credential', () async {
+    final connection = realHub();
+    final pending = Completer<ServerMutationResult<String>>();
+    when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
+    final rotation = connection.rotateToken();
+    final original = resources.servers.first;
+    await resources.updateServerByUuid(
+      aServer(
+        uuid: original.uuid,
+        hostingDetails: aServerHostingDetails(apiToken: 'recovered'),
+      ),
+    );
+    pending.complete(confirmed('obsolete-replacement'));
+    expect(await rotation, RotationOutcome.detached);
+    expect(resources.servers.first.hostingDetails.apiToken, 'recovered');
+  });
+
+  for (final updatesMemory in [false, true]) {
+    test(
+      'persistence failure suppresses retry, memory updated=$updatesMemory',
+      () async {
+        registerFallbackValue(aServer());
+        final resources = _MockResources();
+        when(
+          () => resources.statusStream,
+        ).thenAnswer((_) => const Stream.empty());
+        var stored = aServer();
+        when(() => resources.servers).thenAnswer((_) => [stored]);
+        when(() => resources.updateServerByUuid(any())).thenAnswer((
+          final invocation,
+        ) {
+          if (updatesMemory) {
+            final replacement = invocation.positionalArguments.single as Server;
+            stored = aServer(
+              uuid: replacement.uuid,
+              hostingDetails: aServerHostingDetails(
+                apiToken: replacement.hostingDetails.apiToken,
+              ),
+            );
+          }
+          throw StateError('secret-sentinel');
+        });
+        when(
+          api.refreshDeviceApiToken,
+        ).thenAnswer((_) async => confirmed('replacement'));
+        final connection = realHub(resourceOverride: resources);
+        connection.active!.setVersion(Version(3, 9, 0));
+        final result = await connection.rotateToken();
+        expect(result, isNot(RotationOutcome.succeeded));
+
+        verifyNever(
+          () => api.getServerJobsStream(
+            onConnectionLost: any(named: 'onConnectionLost'),
+          ),
+        );
+        await connection.rotateToken();
+        verify(api.refreshDeviceApiToken).called(1);
+      },
+    );
+  }
+
+  for (final outcome in [
+    ServerMutationOutcome.rejected,
+    ServerMutationOutcome.indeterminate,
+  ]) {
+    test('a returned token with ${outcome.name} is never saved', () async {
+      final connection = realHub();
+      when(api.refreshDeviceApiToken).thenAnswer(
+        (_) async => ServerMutationResult<String>(
+          outcome: outcome,
+          payload: const ServerMutationPayload.available('unconfirmed-token'),
+        ),
+      );
+      expect(await connection.rotateToken(), isNot(RotationOutcome.succeeded));
+      expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+    });
+  }
+
+  test(
+    'an empty confirmed rotation token suppresses automatic retry',
+    () async {
+      final connection = realHub();
+      when(api.refreshDeviceApiToken).thenAnswer((_) async => confirmed(''));
+      expect(await connection.rotateToken(), isNot(RotationOutcome.succeeded));
+      await connection.rotateToken();
+      verify(api.refreshDeviceApiToken).called(1);
+      expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+    },
+  );
+  test('an unsent rotation is detached when its selection changes', () async {
+    Server? selected = resources.servers.first;
+    final pending = Completer<ServerMutationResult<String>>();
+    when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
+    final connection = ServerConnectionHub(
+      resourcesModel: resources,
+      createApi: (_, _, _) => api,
+      selectServer: () => selected,
+    );
+    addTearDown(connection.dispose);
+    connection.active!.setVersion(Version(3, 9, 0));
+    final rotation = connection.rotateToken();
+    selected = null;
+    pending.complete(confirmed('replacement'));
+    expect(await rotation, RotationOutcome.detached);
+    expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+    verifyNever(
+      () => api.getServerJobsStream(
+        onConnectionLost: any(named: 'onConnectionLost'),
+      ),
+    );
+  });
 }

@@ -2,9 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
-import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -62,7 +66,19 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
       heroTitle: 'server.card_title'.tr(),
       heroSubtitle: 'server.description'.tr(),
       children: [
-        StorageCard(diskStatus: context.watch<VolumesBloc>().state.diskStatus),
+        if (context.watch<VolumesBloc>().state case VolumesUnavailable(
+          :final isUnsupported,
+        ))
+          Text(
+            (isUnsupported
+                    ? 'basis.feature_unsupported'
+                    : 'basis.network_error')
+                .tr(),
+          )
+        else
+          StorageCard(
+            diskStatus: context.watch<VolumesBloc>().state.diskStatus,
+          ),
         const SizedBox(height: 16),
         ListTile(
           title: Text('server.settings'.tr()),
@@ -78,7 +94,11 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
         SectionHeadline(title: 'server.resource_usage'.tr()),
         const SizedBox(height: 8),
         BlocProvider(
-          create: (final context) => MetricsCubit()..restart(),
+          create: (final context) => createMetricsCubit(
+            getIt<ServerConnectionHub>(),
+            resources: getIt<ResourcesModel>(),
+            serverProvider: () => ProvidersController.currentServerProvider,
+          ),
           child: const ServerCharts(),
         ),
         const SizedBox(height: 8),

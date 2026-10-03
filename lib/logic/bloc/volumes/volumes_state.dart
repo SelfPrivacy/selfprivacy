@@ -1,11 +1,12 @@
 part of 'volumes_bloc.dart';
 
 sealed class VolumesState extends Equatable {
-  const VolumesState({
+  VolumesState({
     required this.diskStatus,
     required final serverVolumesHashCode,
-    this.providerVolumes = const [],
-  }) : _serverVolumesHashCode = serverVolumesHashCode;
+    final List<ServerProviderVolume> providerVolumes = const [],
+  }) : providerVolumes = List.unmodifiable(providerVolumes),
+       _serverVolumesHashCode = serverVolumesHashCode;
 
   final DiskStatus diskStatus;
   final List<ServerProviderVolume> providerVolumes;
@@ -46,6 +47,26 @@ class VolumesInitial extends VolumesState {
   }) => VolumesInitial();
 }
 
+class VolumesUnavailable extends VolumesState {
+  VolumesUnavailable({required this.isUnsupported, super.providerVolumes})
+    : super(diskStatus: DiskStatus(), serverVolumesHashCode: null);
+
+  final bool isUnsupported;
+
+  @override
+  List<Object?> get props => [isUnsupported, providerVolumes];
+
+  @override
+  VolumesUnavailable copyWith({
+    required final int? serverVolumesHashCode,
+    final DiskStatus? diskStatus,
+    final List<ServerProviderVolume>? providerVolumes,
+  }) => VolumesUnavailable(
+    isUnsupported: isUnsupported,
+    providerVolumes: providerVolumes ?? this.providerVolumes,
+  );
+}
+
 class VolumesLoading extends VolumesState {
   VolumesLoading({
     super.serverVolumesHashCode,
@@ -72,7 +93,7 @@ class VolumesLoading extends VolumesState {
 }
 
 class VolumesLoaded extends VolumesState {
-  const VolumesLoaded({
+  VolumesLoaded({
     required super.serverVolumesHashCode,
     required super.diskStatus,
     final List<ServerProviderVolume>? providerVolumes,
@@ -94,7 +115,7 @@ class VolumesLoaded extends VolumesState {
 }
 
 class VolumesResizing extends VolumesState {
-  const VolumesResizing({
+  VolumesResizing({
     required super.serverVolumesHashCode,
     required super.diskStatus,
     final List<ServerProviderVolume>? providerVolumes,

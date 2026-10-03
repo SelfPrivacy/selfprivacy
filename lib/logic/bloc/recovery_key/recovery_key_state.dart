@@ -1,55 +1,37 @@
 part of 'recovery_key_bloc.dart';
 
 sealed class RecoveryKeyState extends Equatable {
-  RecoveryKeyState({required final RecoveryKeyStatus? keyStatus})
-    : _hashCode = keyStatus.hashCode;
+  const RecoveryKeyState({final RecoveryKeyStatus? keyStatus})
+    : _status =
+          keyStatus ?? const RecoveryKeyStatus(exists: false, valid: false);
 
-  final int _hashCode;
-
-  RecoveryKeyStatus get _status =>
-      getIt<ApiConnectionRepository>().apiData.recoveryKeyStatus.data ??
-      const RecoveryKeyStatus(exists: false, valid: false);
+  final RecoveryKeyStatus _status;
 
   bool get exists => _status.exists;
   bool get isValid => _status.valid;
   DateTime? get generatedAt => _status.date;
   DateTime? get expiresAt => _status.expiration;
   int? get usesLeft => _status.usesLeft;
-
   bool get isInvalidBecauseExpired =>
-      _status.expiration != null &&
-      _status.expiration!.isBefore(DateTime.now());
+      _status.expiration?.isBefore(DateTime.now()) ?? false;
+  bool get isInvalidBecauseUsed => _status.usesLeft == 0;
 
-  bool get isInvalidBecauseUsed =>
-      _status.usesLeft != null && _status.usesLeft == 0;
+  @override
+  List<Object> get props => [_status];
 }
 
 class RecoveryKeyInitial extends RecoveryKeyState {
-  RecoveryKeyInitial()
-    : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
-
-  @override
-  List<Object> get props => [_hashCode];
+  const RecoveryKeyInitial();
 }
 
 class RecoveryKeyRefreshing extends RecoveryKeyState {
-  RecoveryKeyRefreshing({required super.keyStatus});
-
-  @override
-  List<Object> get props => [_hashCode];
+  const RecoveryKeyRefreshing({super.keyStatus});
 }
 
 class RecoveryKeyLoaded extends RecoveryKeyState {
-  RecoveryKeyLoaded({required super.keyStatus});
-
-  @override
-  List<Object> get props => [_hashCode];
+  const RecoveryKeyLoaded({required super.keyStatus});
 }
 
 class RecoveryKeyError extends RecoveryKeyState {
-  RecoveryKeyError()
-    : super(keyStatus: const RecoveryKeyStatus(exists: false, valid: false));
-
-  @override
-  List<Object> get props => [_hashCode];
+  const RecoveryKeyError({super.keyStatus});
 }

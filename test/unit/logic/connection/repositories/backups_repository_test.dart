@@ -38,6 +38,21 @@ void main() {
   });
   tearDown(() => connection.dispose());
 
+  test(
+    'backup observations include configuration but exclude unrelated domains',
+    () async {
+      final changes = <Object>[];
+      final subscription = connection.backups.changes.listen(changes.add);
+      connection.backups.configStore.push(aBackupConfiguration());
+      await pumpEventQueue();
+      expect(changes, hasLength(1));
+      connection.cache.groups.push(['gitea']);
+      await pumpEventQueue();
+      expect(changes, hasLength(1));
+      await subscription.cancel();
+    },
+  );
+
   test('configuration response replaces the complete configuration', () async {
     final repository = connection.backups;
     repository.configStore.push(aBackupConfiguration());
@@ -93,10 +108,6 @@ void main() {
             );
           } else {
             expect(repository.value.data, isNull);
-            expect(
-              repository.confirmedRemovedSnapshotIds.contains(id),
-              outcome == ServerMutationOutcome.confirmed,
-            );
           }
           verifyNever(api.getBackups);
         },

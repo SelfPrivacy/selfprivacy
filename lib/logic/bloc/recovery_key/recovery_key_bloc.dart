@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
@@ -15,87 +15,125 @@ part 'recovery_key_event.dart';
 part 'recovery_key_state.dart';
 
 class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
-  RecoveryKeyBloc() : super(RecoveryKeyInitial()) {
-    on<RecoveryKeyStatusChanged>(
-      _mapRecoveryKeyStatusChangedToState,
-      transformer: sequential(),
-    );
-    on<RecoveryKeyStatusRefresh>(
-      _mapRecoveryKeyStatusRefreshToState,
-      transformer: droppable(),
-    );
-
-    final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
-      final ApiData apiData,
-    ) {
-      add(RecoveryKeyStatusChanged(apiData.recoveryKeyStatus.data));
+  RecoveryKeyBloc({
+    required final Stream<ConnectionObservation<CachedValue<RecoveryKeyStatus>>>
+    status,
+    required final Future<void> Function(ServerStateOrigin) refresh,
+    required final Future<ServerMutationResult<String>?> Function(
+      ServerStateOrigin,
+      SecretRecipient,
+      DateTime?,
+      int?,
+    )
+    generate,
+  }) : _refresh = refresh,
+       _generate = generate,
+       super(const RecoveryKeyInitial()) {
+    on<_RecoveryKeyObserved>(_observe, transformer: sequential());
+    on<_BoundRecoveryRefresh>((final event, _) async {
+      if (_isCurrent(event.origin)) {
+        await _refresh(event.origin!);
+      }
+    }, transformer: droppable());
+    _subscription = status.listen((final observation) {
+      _latest = observation;
+      add(_RecoveryKeyObserved(observation));
     });
   }
 
-  StreamSubscription? _apiDataSubscription;
+  final Future<void> Function(ServerStateOrigin) _refresh;
+  final Future<ServerMutationResult<String>?> Function(
+    ServerStateOrigin,
+    SecretRecipient,
+    DateTime?,
+    int?,
+  )
+  _generate;
+  late final StreamSubscription<
+    ConnectionObservation<CachedValue<RecoveryKeyStatus>>
+  >
+  _subscription;
+  ConnectionObservation<CachedValue<RecoveryKeyStatus>>? _latest;
+  ServerStateOrigin? _presentedOrigin;
+  final _recipients = <SecretRecipient>{};
 
-  Future<void> _mapRecoveryKeyStatusChangedToState(
-    final RecoveryKeyStatusChanged event,
+  @override
+  void add(final RecoveryKeyEvent event) => super.add(
+    event is RecoveryKeyStatusRefresh
+        ? _BoundRecoveryRefresh(_presentedOrigin)
+        : event,
+  );
+
+  void _observe(
+    final _RecoveryKeyObserved event,
     final Emitter<RecoveryKeyState> emit,
-  ) async {
-    if (event.recoveryKeyStatus == null) {
-      emit(RecoveryKeyError());
+  ) {
+    if (!identical(event.observation.origin, _latest?.origin)) {
       return;
     }
-    emit(RecoveryKeyLoaded(keyStatus: event.recoveryKeyStatus));
+    _presentedOrigin = event.observation.origin;
+    final snapshot = event.observation.value;
+    if (snapshot == null) {
+      emit(const RecoveryKeyInitial());
+    } else if (snapshot.isRefreshing) {
+      emit(RecoveryKeyRefreshing(keyStatus: snapshot.data));
+    } else if (snapshot.lastError != null ||
+        snapshot.support == DomainSupport.unsupported) {
+      emit(RecoveryKeyError(keyStatus: snapshot.data));
+    } else if (snapshot.data != null) {
+      emit(RecoveryKeyLoaded(keyStatus: snapshot.data));
+    } else {
+      emit(const RecoveryKeyInitial());
+    }
   }
+
+  bool _isCurrent(final ServerStateOrigin? origin) =>
+      !isClosed &&
+      origin != null &&
+      identical(origin.continuity, _latest?.origin?.continuity);
 
   Future<String> generateRecoveryKey({
     final DateTime? expirationDate,
     final int? numberOfUses,
     final SecretRecipient? recipient,
   }) async {
-    final target = recipient ?? SecretRecipient();
-    final response = await target.receive(
-      getIt<ApiConnectionRepository>().hub.submit(
-        OperationKind.generateRecoveryKey,
-        (final owner) => target.protect(() async {
-          final response = await owner.api.generateRecoveryToken(
-            expirationDate,
-            numberOfUses,
-          );
-          OperationExecution.current?.record(response);
-          if (response.outcome == ServerMutationOutcome.confirmed) {
-            owner.cache.recoveryKeyStatus.invalidate();
-          }
-          return response;
-        }),
-      ),
-    );
-    if (response == null) {
+    final origin = _presentedOrigin;
+    if (!_isCurrent(origin)) {
       throw GenerationError('server_mutation.not_sent');
     }
-    final secret = response.confirmedSecret;
-    if (secret != null) {
-      unawaited(getIt<ApiConnectionRepository>().refreshRecoveryKeyStatus());
-      return secret;
-    } else {
-      throw GenerationError(serverMutationMessage(response, sensitive: true));
+    final target = recipient ?? SecretRecipient();
+    if (recipient == null) {
+      _recipients.add(target);
     }
-  }
-
-  Future<void> _mapRecoveryKeyStatusRefreshToState(
-    final RecoveryKeyEvent event,
-    final Emitter<RecoveryKeyState> emit,
-  ) async {
-    emit(RecoveryKeyRefreshing(keyStatus: state._status));
-    await getIt<ApiConnectionRepository>().refreshRecoveryKeyStatus();
-  }
-
-  @override
-  void onChange(final Change<RecoveryKeyState> change) {
-    super.onChange(change);
+    try {
+      final response = await _generate(
+        origin!,
+        target,
+        expirationDate,
+        numberOfUses,
+      );
+      if (response == null || !_isCurrent(origin)) {
+        throw GenerationError('server_mutation.not_sent');
+      }
+      final secret = response.confirmedSecret;
+      if (secret == null) {
+        throw GenerationError(serverMutationMessage(response, sensitive: true));
+      }
+      return secret;
+    } finally {
+      if (_recipients.remove(target)) {
+        target.dispose();
+      }
+    }
   }
 
   @override
   Future<void> close() async {
-    await _apiDataSubscription?.cancel();
+    for (final recipient in _recipients) {
+      recipient.dispose();
+    }
+    _recipients.clear();
+    await _subscription.cancel();
     return super.close();
   }
 }

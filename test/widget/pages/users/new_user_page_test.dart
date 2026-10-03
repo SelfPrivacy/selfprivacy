@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -6,18 +8,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
+import 'package:selfprivacy/logic/forms/user_form.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/ui/forms/user_form_view.dart';
 import 'package:selfprivacy/ui/pages/users/new_user.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
 import '../../../helpers/widget_harness.dart';
 
-class _MockApiConnectionRepository extends Mock
-    implements ApiConnectionRepository {}
+class _Navigation extends Mock implements NavigationService {}
 
 class _MockUsersBloc extends Mock implements UsersBloc {}
 
@@ -41,7 +45,7 @@ void main() {
     registerFallbackValue(User.fake());
   });
 
-  late _MockApiConnectionRepository repository;
+  late Object continuity;
   late _MockUsersBloc usersBloc;
   late _MockGroupsBloc groupsBloc;
   late _MockServicesBloc servicesBloc;
@@ -49,18 +53,19 @@ void main() {
 
   setUp(() async {
     await getIt.reset();
-    repository = _MockApiConnectionRepository();
+    continuity = Object();
     usersBloc = _MockUsersBloc();
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
-    final apiData = ApiData(connection: () => null);
-    when(() => repository.apiData).thenReturn(apiData);
-    getIt.registerSingleton<ApiConnectionRepository>(repository);
+    getIt.registerSingleton<NavigationService>(_Navigation());
 
-    when(
-      () => usersBloc.state,
-    ).thenReturn(UsersLoaded(users: [User.fake(login: 'alice')]));
+    when(() => usersBloc.state).thenReturn(
+      UsersLoaded(
+        users: [User.fake(login: 'alice')],
+        continuity: continuity,
+      ),
+    );
     when(
       () => usersBloc.stream,
     ).thenAnswer((_) => const Stream<UsersState>.empty());
@@ -90,8 +95,13 @@ void main() {
     );
     final router = _TestRouter(GlobalKey<NavigatorState>());
     when(
-      () => repository.updateUser(any()),
-    ).thenAnswer((_) => Future.value((true, '')));
+      () => usersBloc.saveUser(any(), continuity: continuity, create: false),
+    ).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(user),
+      ),
+    );
 
     await _pumpRouter(
       tester,
@@ -108,7 +118,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(router.stack, isEmpty);
-    verify(() => repository.updateUser(any())).called(1);
+    verify(
+      () => usersBloc.saveUser(any(), continuity: continuity, create: false),
+    ).called(1);
   });
 
   testWidgets('group selection keeps explicit groups when primary changes', (
@@ -137,6 +149,104 @@ void main() {
 
     expect(groupsControl.value, ['sp.full_users', 'service.group']);
   });
+
+  testWidgets('login validation uses the current user snapshot', (
+    final tester,
+  ) async {
+    final router = _TestRouter(GlobalKey<NavigatorState>());
+    await _pumpRouter(
+      tester,
+      router: router,
+      routes: [NewUserRoute()],
+      usersBloc: usersBloc,
+      groupsBloc: groupsBloc,
+      servicesBloc: servicesBloc,
+      appReadinessCubit: appReadinessCubit,
+    );
+    final form = tester
+        .widget<UserFormView>(find.byType(UserFormView))
+        .userForm;
+    when(() => usersBloc.state).thenReturn(
+      UsersLoaded(
+        users: [User.fake(login: 'bob')],
+        continuity: continuity,
+      ),
+    );
+    final login = form.form.control(UserForm.loginControlName)
+      ..updateValue('bob');
+    expect(login.hasError(UserForm.errLoginTaken), isTrue);
+  });
+
+  testWidgets(
+    'form drafts survive rotation continuity and clear on reset or replacement',
+    (final tester) async {
+      final updates = StreamController<UsersState>.broadcast(sync: true);
+      when(() => usersBloc.stream).thenAnswer((_) => updates.stream);
+      final router = _TestRouter(GlobalKey<NavigatorState>());
+      await _pumpRouter(
+        tester,
+        router: router,
+        routes: [NewUserRoute()],
+        usersBloc: usersBloc,
+        groupsBloc: groupsBloc,
+        servicesBloc: servicesBloc,
+        appReadinessCubit: appReadinessCubit,
+      );
+      final original = tester
+          .widget<UserFormView>(find.byType(UserFormView))
+          .userForm;
+      original.form
+          .control(UserForm.loginControlName)
+          .updateValue('draft-user');
+      void publish(final UsersState state) {
+        when(() => usersBloc.state).thenReturn(state);
+        updates.add(state);
+      }
+
+      publish(
+        UsersLoaded(
+          users: [User.fake(login: 'bob')],
+          continuity: continuity,
+        ),
+      );
+      await tester.pump();
+      expect(
+        tester.widget<UserFormView>(find.byType(UserFormView)).userForm,
+        same(original),
+      );
+      expect(
+        original.form.control(UserForm.loginControlName).value,
+        'draft-user',
+      );
+      publish(UsersInitial());
+      await tester.pump();
+      expect(find.byType(UserFormView), findsNothing);
+      publish(
+        UsersLoaded(
+          users: [User.fake(login: 'carol')],
+          continuity: Object(),
+        ),
+      );
+      await tester.pump();
+      final replacement = tester
+          .widget<UserFormView>(find.byType(UserFormView))
+          .userForm;
+      expect(replacement, isNot(same(original)));
+      expect(
+        replacement.form.control(UserForm.loginControlName).value,
+        isEmpty,
+      );
+      replacement.form.control(UserForm.loginControlName).updateValue('carol');
+      expect(
+        replacement.form
+            .control(UserForm.loginControlName)
+            .hasError(UserForm.errLoginTaken),
+        isTrue,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.runAsync(updates.close);
+    },
+  );
 }
 
 Future<void> _pumpRouter(

@@ -34,6 +34,31 @@ void main() {
   tearDown(() => connection.dispose());
 
   test(
+    'jobs observation retains accepted jobs when the first list read fails',
+    () async {
+      final repository = connection.jobs;
+      final seen = <Object>[];
+      final subscription = repository.changes.listen(seen.add);
+      final job = aServiceMoveJob();
+      repository.applyConfirmed(job);
+      await pumpEventQueue();
+      expect(repository.snapshot.jobs, [job]);
+      expect(repository.snapshot.isComplete, isFalse);
+      expect(seen, hasLength(1));
+      connection.cache.users.push(const []);
+      await pumpEventQueue();
+      expect(seen, hasLength(1));
+      when(api.getServerJobs).thenThrow(StateError('list unavailable'));
+      await repository.refresh(force: true);
+      expect(repository.snapshot.jobs, [job]);
+      expect(repository.snapshot.isComplete, isFalse);
+      expect(repository.snapshot.value.lastError, isA<StateError>());
+      expect(repository.snapshot.jobs.clear, throwsUnsupportedError);
+      await subscription.cancel();
+    },
+  );
+
+  test(
     'queued service configuration keeps its original submitted values',
     () async {
       final pending = Completer<ServerMutationResult<void>>();
@@ -104,7 +129,8 @@ void main() {
   test('remove all preserves failed items and reports each outcome', () async {
     final removed = aServiceMoveJob(uid: 'removed', status: 'FINISHED');
     final retained = aServiceMoveJob(uid: 'retained', status: 'ERROR');
-    connection.jobs.store.push([removed, retained]);
+    final running = aServiceMoveJob(uid: 'running', status: 'RUNNING');
+    connection.jobs.store.push([removed, retained, running]);
     when(() => api.removeApiJob('removed')).thenAnswer(
       (_) async => ServerMutationResult<void>(
         outcome: ServerMutationOutcome.confirmed,
@@ -119,7 +145,8 @@ void main() {
     );
     final results = await connection.jobs.removeAllFinished();
     expect(results.keys, ['removed', 'retained']);
-    expect(connection.jobs.store.value.data, [retained]);
+    expect(connection.jobs.store.value.data, [retained, running]);
+    verifyNever(() => api.removeApiJob(running.uid));
   });
 
   test(

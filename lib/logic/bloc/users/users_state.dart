@@ -1,10 +1,11 @@
 part of 'users_bloc.dart';
 
 sealed class UsersState extends Equatable {
-  UsersState({required final List<User> users})
+  UsersState({required final List<User> users, this.continuity})
     : users = List.unmodifiable(users);
 
   final List<User> users;
+  final Object? continuity;
 
   User get rootUser =>
       users.firstWhere((final user) => user.type == UserType.root);
@@ -60,22 +61,22 @@ class UsersInitial extends UsersState {
 }
 
 class UsersRefreshing extends UsersState {
-  UsersRefreshing({required super.users});
+  UsersRefreshing({required super.users, super.continuity});
 
   @override
-  List<Object> get props => [users];
+  List<Object?> get props => [users, continuity];
 }
 
 class UsersLoaded extends UsersState {
-  UsersLoaded({required super.users});
+  UsersLoaded({required super.users, super.continuity});
 
   @override
-  List<Object> get props => [users];
+  List<Object?> get props => [users, continuity];
 }
 
 class UsersError extends UsersState {
-  UsersError() : super(users: const []);
+  UsersError({super.continuity}) : super(users: const []);
 
   @override
-  List<Object> get props => [users];
+  List<Object?> get props => [users, continuity];
 }

@@ -1,100 +1,77 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/models/ssh_settings.dart';
 
+import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
+import '../../../../helpers/fixtures/server_fixtures.dart';
 import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
-class _Repository extends Mock implements ApiConnectionRepository {}
-
 class _Api extends Mock implements ServerApi {}
 
-class _Navigation extends Mock implements NavigationService {}
-
-class _ActionJob extends ClientJob {
-  _ActionJob({
-    required this.succeeds,
-    required final String id,
-    super.requiresRebuild,
-    super.requiresDnsUpdate,
-    super.status,
-    super.message,
-    this.action,
-  }) : super(id: id, title: id);
-  final bool succeeds;
-  final Future<void> Function()? action;
-  @override
-  Future<(bool, String)> execute() async {
-    await action?.call();
-    return (succeeds, succeeds ? 'done' : 'uncertain');
-  }
-
-  @override
-  _ActionJob copyWithNewStatus({
-    required final JobStatusEnum status,
-    final String? message,
-  }) => _ActionJob(
-    succeeds: succeeds,
-    id: id,
-    requiresRebuild: requiresRebuild,
-    requiresDnsUpdate: requiresDnsUpdate,
-    status: status,
-    message: message,
-    action: action,
-  );
-}
+class _Resources extends Mock implements ResourcesModel {}
 
 void main() {
-  setUpAll(setUpWidgetTestHarness);
-  late _Repository repository;
+  setUpAll(() async {
+    await setUpWidgetTestHarness();
+    registerFallbackValue(SshSettings(enable: true));
+  });
   late _Api api;
-  late _Navigation navigation;
+  late List<String> messages;
+  late ServerConnectionHub hub;
   late JobsCubit cubit;
-  late ApiData data;
-  late StreamController<ApiData> stream;
   late ServerConnection connection;
-  setUp(() {
-    repository = _Repository();
+  setUp(() async {
     api = _Api();
-    final origin = ServerStateOrigin('server');
-    connection = ServerConnection(
-      api: api,
-      origin: origin,
-      currentOrigin: () => origin,
-    )..setVersion(Version(3, 0, 0));
-    when(() => repository.connection).thenReturn(connection);
-    stubOperations(repository, connection);
-    navigation = _Navigation();
-    data = ApiData(connection: () => connection);
-    stream = StreamController<ApiData>.broadcast();
-    when(() => repository.api).thenReturn(api);
-    when(() => repository.apiData).thenReturn(data);
-    when(() => repository.dataStream).thenAnswer((_) => stream.stream);
+    messages = [];
+    hub = fixtureHub(api);
+    connection = hub.active!..setVersion(Version(3, 0, 0));
+    final resources = _Resources();
+    when(() => resources.servers).thenReturn([aServer()]);
     when(api.getDnsRecords).thenAnswer((_) async => []);
-    getIt
-      ..registerSingleton<ApiConnectionRepository>(repository)
-      ..registerSingleton<NavigationService>(navigation);
-    cubit = JobsCubit();
+    when(() => api.setTimezone(any())).thenAnswer(
+      (final call) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(
+          call.positionalArguments.single as String,
+        ),
+      ),
+    );
+    cubit = createJobsCubit(
+      hub,
+      resources: resources,
+      dnsProvider: () => null,
+      showMessage: messages.add,
+    );
+    await pumpEventQueue();
   });
   tearDown(() async {
     await cubit.close();
-    connection.dispose();
-    await stream.close();
-    await getIt.reset();
+    hub.dispose();
   });
+
+  test(
+    'reset clears pending client jobs without waiting for another server',
+    () async {
+      cubit.addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
+      hub.clear();
+      await pumpEventQueue();
+      expect(cubit.state, isA<JobsStateEmpty>());
+    },
+  );
 
   for (final outcome in ServerMutationOutcome.values) {
     testWidgets(
@@ -106,8 +83,10 @@ void main() {
           payload: ServerMutationPayload.available(aServiceMoveJob()),
         );
         when(api.collectNixGarbage).thenAnswer((_) async => result);
-        final feedback = await CollectNixGarbageJob().execute();
-        expect(feedback.$1, outcome == ServerMutationOutcome.confirmed);
+        final feedback = await clientJobWorkflow(
+          connection,
+        ).execute(CollectNixGarbageJob());
+        expect(feedback.outcome, outcome);
         expect(
           connection.jobs.confirmedBeforeLoad.isNotEmpty,
           outcome == ServerMutationOutcome.confirmed,
@@ -183,11 +162,27 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
+    when(() => api.setServiceConfiguration('gitea', any())).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    when(() => api.setTimezone('Europe/Helsinki')).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.indeterminate,
+        payload: const ServerMutationPayload.missing(),
+      ),
+    );
     cubit
       ..addJob(
-        _ActionJob(succeeds: true, id: 'success', requiresDnsUpdate: true),
+        ChangeServiceConfiguration(
+          serviceId: 'gitea',
+          serviceDisplayName: 'Gitea',
+          settings: const {},
+        ),
       )
-      ..addJob(_ActionJob(succeeds: false, id: 'uncertain'));
+      ..addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
     await tester.runAsync(cubit.applyAll);
     final state = cubit.state as JobsStateFinished;
     expect(state.clientJobList.map((final job) => job.status), [
@@ -202,9 +197,13 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
-    cubit.addJob(
-      _ActionJob(succeeds: true, id: 'no-rebuild', requiresRebuild: false),
+    when(api.reboot).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
     );
+    cubit.addJob(RebootServerJob());
     await tester.runAsync(cubit.applyAll);
     expect(cubit.state, isA<JobsStateFinished>());
     verifyNever(api.apply);
@@ -221,8 +220,8 @@ void main() {
         await pumpForTest(tester, const SizedBox.shrink());
         final result = ServerMutationResult(outcome: outcome, payload: payload);
         when(api.apply).thenAnswer((_) async => result);
-        cubit.addJob(_ActionJob(succeeds: true, id: 'change'));
-        clearInteractions(navigation);
+        cubit.addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
+        messages.clear();
         await tester.runAsync(cubit.applyAll);
         expect(
           connection.jobs.confirmedBeforeLoad.isNotEmpty,
@@ -234,9 +233,9 @@ void main() {
         );
         if (outcome != ServerMutationOutcome.confirmed ||
             payload.status == ServerMutationPayloadStatus.missing) {
-          verify(() => navigation.showSnackBar(any())).called(1);
+          expect(messages, hasLength(1));
         } else {
-          verifyNever(() => navigation.showSnackBar(any()));
+          expect(messages, isEmpty);
         }
       });
     }
@@ -255,13 +254,11 @@ void main() {
     await cubit.upgradeServer();
     await tester.runAsync(() async {
       connection.jobs.store.push([aServiceMoveJob(uid: 'other')]);
-      stream.add(data);
       await pumpEventQueue();
     });
     expect(cubit.state, isA<JobsStateLoading>());
     await tester.runAsync(() async {
       connection.jobs.store.push([aServiceMoveJob(status: 'FINISHED')]);
-      stream.add(data);
       await pumpEventQueue();
     });
     expect(cubit.state, isA<JobsStateFinished>());
@@ -271,27 +268,19 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
-    var laterExecuted = false;
-    cubit
-      ..addJob(
-        _ActionJob(
-          succeeds: true,
-          id: 'first',
-          action: () async => connection.dispose(),
-        ),
-      )
-      ..addJob(
-        _ActionJob(
-          succeeds: true,
-          id: 'later',
-          action: () async {
-            laterExecuted = true;
-          },
-        ),
+    when(() => api.setTimezone('Europe/Helsinki')).thenAnswer((_) async {
+      hub.clear();
+      return ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available('Europe/Helsinki'),
       );
+    });
+    cubit
+      ..addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'))
+      ..addJob(ChangeSshSettingsJob(enable: true));
     await tester.runAsync(cubit.applyAll);
-    expect(laterExecuted, isFalse);
-    expect(cubit.state, isA<JobsStateFinished>());
+    verifyNever(() => api.setSshSettings(any()));
+    expect(cubit.state, isA<JobsStateEmpty>());
     verifyNever(api.apply);
   });
 }

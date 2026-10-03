@@ -9,8 +9,8 @@ import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/managed_subscription.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_connection_binding.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/server_connection_scope.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -198,7 +198,6 @@ class ServerConnectionHub {
       connectivity: _connectivity,
       operations: operationsFor(session.binding.serverId),
       onChanged: _notify,
-      now: _now,
     )..start();
   }
 
@@ -266,10 +265,14 @@ class ServerConnectionHub {
     final serverId = session?.binding.serverId ?? '';
     final execution = OperationExecution();
     return operationsFor(serverId).submit(kind, () {
-      final admitted = _synchronize();
+      final admitted = _session;
       if (session == null ||
           admitted == null ||
-          admitted.binding.serverId != serverId ||
+          !identical(
+            session.connection.origin.continuity,
+            admitted.connection.origin.continuity,
+          ) ||
+          !admitted.binding.matches(_selectServer()) ||
           _unsaved[serverId] == admitted.binding.token) {
         throw const OperationNotSent();
       }
@@ -310,9 +313,9 @@ class ServerConnectionHub {
     return _session;
   }
 
-  _Session _createSession(final Server server) {
+  _Session _createSession(final Server server, {final Object? continuity}) {
     final session = _Session(ServerConnectionBinding(server));
-    final origin = ServerStateOrigin(server.uuid);
+    final origin = ServerStateOrigin(server.uuid, continuity: continuity);
     session
       ..connection = ServerConnection(
         api: _createApi(
@@ -452,13 +455,17 @@ class ServerConnectionHub {
       await _resources.updateServerByUuid(updated);
       _savingRotation = false;
       if (!identical(_rotation, pending)) {
+        _synchronize();
         return;
       }
       if (!ServerConnectionBinding(updated).matches(_selectServer())) {
         _synchronize();
         return;
       }
-      final next = _createSession(updated);
+      final next = _createSession(
+        updated,
+        continuity: session.connection.origin.continuity,
+      );
       _session = next;
       next.connection.restoreFrom(session.connection);
       session.dispose();
@@ -468,15 +475,17 @@ class ServerConnectionHub {
       _finishRotation(pending, RotationOutcome.succeeded);
     } catch (_) {
       _savingRotation = false;
-      if (!identical(_rotation, pending)) {
-        return;
-      }
       _suppressed[session.binding.serverId] = {
         session.binding.token,
         ?replacement,
       };
       if (replacement != null) {
         _unsaved[session.binding.serverId] = replacement;
+      }
+      if (!identical(_rotation, pending)) {
+        _synchronize();
+        _notify();
+        return;
       }
       _finishRotation(pending, RotationOutcome.unknown);
       _synchronize();

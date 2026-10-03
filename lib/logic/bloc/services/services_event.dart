@@ -4,13 +4,22 @@ sealed class ServicesEvent extends Equatable {
   const ServicesEvent();
 }
 
-class ServicesListUpdate extends ServicesEvent {
-  const ServicesListUpdate(this.services);
+class _ServicesObserved extends ServicesEvent {
+  const _ServicesObserved(this.observation);
 
-  final List<Service> services;
+  final ConnectionObservation<CachedValue<List<Service>>> observation;
 
   @override
-  List<Object?> get props => [services];
+  List<Object?> get props => [observation];
+}
+
+class _ServiceAction<T extends ServicesEvent> extends ServicesEvent {
+  const _ServiceAction(this.event, this.origin);
+  final T event;
+  final ServerStateOrigin? origin;
+
+  @override
+  List<Object?> get props => [event, origin];
 }
 
 class ServicesReload extends ServicesEvent {

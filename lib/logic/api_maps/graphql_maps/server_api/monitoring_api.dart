@@ -19,26 +19,22 @@ mixin MonitoringApi on GraphQLApiMap {
         variables: variables,
       );
       response = await client.query$GetOverallCpuAndNetworkMetrics(query);
-      if (response.hasException) {
-        logger(response.exception.toString());
-        return GenericResult<ServerMetrics?>(success: false, data: null);
-      }
-      if (response.parsedData == null) {
-        return GenericResult<ServerMetrics?>(success: false, data: null);
-      }
-      if (response.parsedData?.monitoring.cpuUsage.overallUsage
+      final data = requireServerApiData(response);
+      if (data.monitoring.cpuUsage.overallUsage
               is Fragment$MonitoringQueryError ||
-          response.parsedData?.monitoring.networkUsage.overallUsage
+          data.monitoring.networkUsage.overallUsage
               is Fragment$MonitoringQueryError) {
         return GenericResult<ServerMetrics?>(success: false, data: null);
       }
       final metrics = ServerMetrics.fromGraphQL(
-        data: response.parsedData!.monitoring,
+        data: data.monitoring,
         stepsInSecond: step,
         start: start,
         end: end,
       );
       return GenericResult<ServerMetrics?>(success: true, data: metrics);
+    } on GraphQLDispatchDeferred {
+      rethrow;
     } catch (e) {
       logger("Couldn't load sever metrics", error: e);
       return GenericResult<ServerMetrics?>(
@@ -65,28 +61,24 @@ mixin MonitoringApi on GraphQLApiMap {
       );
       final query = Options$Query$GetMemoryMetrics(variables: variables);
       response = await client.query$GetMemoryMetrics(query);
-      if (response.hasException) {
-        logger(response.exception.toString());
-        return GenericResult<MemoryMetrics?>(success: false, data: null);
-      }
-      if (response.parsedData == null) {
-        return GenericResult<MemoryMetrics?>(success: false, data: null);
-      }
-      if (response.parsedData?.monitoring.memoryUsage.overallUsage
+      final data = requireServerApiData(response);
+      if (data.monitoring.memoryUsage.overallUsage
               is Fragment$MonitoringQueryError ||
-          response.parsedData?.monitoring.memoryUsage.averageUsageByService
+          data.monitoring.memoryUsage.averageUsageByService
               is Fragment$MonitoringQueryError ||
-          response.parsedData?.monitoring.memoryUsage.maxUsageByService
+          data.monitoring.memoryUsage.maxUsageByService
               is Fragment$MonitoringQueryError) {
         return GenericResult<MemoryMetrics?>(success: false, data: null);
       }
       final metrics = MemoryMetrics.fromGraphQL(
-        data: response.parsedData!.monitoring,
+        data: data.monitoring,
         stepsInSecond: step,
         start: start,
         end: end,
       );
       return GenericResult<MemoryMetrics?>(success: true, data: metrics);
+    } on GraphQLDispatchDeferred {
+      rethrow;
     } catch (e) {
       logger("Couldn't get memory metrics", error: e);
       return GenericResult<MemoryMetrics?>(
@@ -113,24 +105,20 @@ mixin MonitoringApi on GraphQLApiMap {
       );
       final query = Options$Query$GetDiskMetrics(variables: variables);
       response = await client.query$GetDiskMetrics(query);
-      if (response.hasException) {
-        logger(response.exception.toString());
-        return GenericResult<DiskMetrics?>(success: false, data: null);
-      }
-      if (response.parsedData == null) {
-        return GenericResult<DiskMetrics?>(success: false, data: null);
-      }
-      if (response.parsedData?.monitoring.diskUsage.overallUsage
+      final data = requireServerApiData(response);
+      if (data.monitoring.diskUsage.overallUsage
           is Fragment$MonitoringQueryError) {
         return GenericResult<DiskMetrics?>(success: false, data: null);
       }
       final metrics = DiskMetrics.fromGraphQL(
-        data: response.parsedData!.monitoring,
+        data: data.monitoring,
         stepsInSecond: step,
         start: start,
         end: end,
       );
       return GenericResult<DiskMetrics?>(success: true, data: metrics);
+    } on GraphQLDispatchDeferred {
+      rethrow;
     } catch (e) {
       logger("Couldn't get disk metrics", error: e);
       return GenericResult<DiskMetrics?>(

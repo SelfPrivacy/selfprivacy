@@ -1,11 +1,14 @@
 part of 'services_bloc.dart';
 
 sealed class ServicesState extends Equatable {
-  ServicesState({final List<ServiceLock> lockedServices = const []})
-    : _lockedServices = lockedServices
-          .where((final lock) => lock.isLocked)
-          .toList();
+  ServicesState({
+    this.continuity,
+    final List<ServiceLock> lockedServices = const [],
+  }) : _lockedServices = lockedServices
+           .where((final lock) => lock.isLocked)
+           .toList();
   final List<ServiceLock> _lockedServices;
+  final Object? continuity;
   List<Service> get services;
   List<String> get lockedServices => _lockedServices
       .where((final lock) => lock.isLocked)
@@ -79,17 +82,24 @@ class ServicesInitial extends ServicesState {
   }) => ServicesInitial();
 }
 
+class ServicesLoading extends ServicesInitial {}
+
+class ServicesUnsupported extends ServicesInitial {}
+
+class ServicesError extends ServicesInitial {}
+
 class ServicesLoaded extends ServicesState {
   ServicesLoaded({
     required final List<Service> services,
     required super.lockedServices,
+    super.continuity,
   }) : services = List.unmodifiable(services);
 
   @override
   final List<Service> services;
 
   @override
-  List<Object?> get props => [services, _lockedServices];
+  List<Object?> get props => [services, _lockedServices, continuity];
 
   @override
   ServicesLoaded copyWith({
@@ -98,15 +108,24 @@ class ServicesLoaded extends ServicesState {
   }) => ServicesLoaded(
     services: services ?? this.services,
     lockedServices: lockedServices ?? _lockedServices,
+    continuity: continuity,
   );
 }
 
 class ServicesReloading extends ServicesLoaded {
-  ServicesReloading({required super.services, required super.lockedServices});
+  ServicesReloading({
+    required super.services,
+    required super.lockedServices,
+    super.continuity,
+  });
 
   ServicesReloading.fromState(final ServicesLoaded state)
-    : super(services: state.services, lockedServices: state._lockedServices);
+    : super(
+        services: state.services,
+        lockedServices: state._lockedServices,
+        continuity: state.continuity,
+      );
 
   @override
-  List<Object?> get props => [services, lockedServices];
+  List<Object?> get props => [services, lockedServices, continuity];
 }

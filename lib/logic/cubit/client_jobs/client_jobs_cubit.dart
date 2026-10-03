@@ -4,16 +4,16 @@ import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_job_workflow.dart';
 import 'package:selfprivacy/logic/models/job.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
@@ -21,232 +21,243 @@ export 'package:provider/provider.dart';
 part 'client_jobs_state.dart';
 
 class JobsCubit extends Cubit<JobsState> {
-  JobsCubit() : super(JobsStateEmpty()) {
-    final apiConnectionRepository = getIt<ApiConnectionRepository>();
-    _apiDataSubscription = apiConnectionRepository.dataStream.listen((
-      final ApiData apiData,
-    ) {
-      if (apiData.serverJobs.data != null &&
-          apiData.serverJobs.data!.isNotEmpty) {
-        _handleServerJobs(apiData.serverJobs.data!);
-      }
+  JobsCubit({
+    required final Stream<ConnectionObservation<JobsSnapshot>> jobs,
+    required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
+    settings,
+    required final Future<OperationResult<void>> Function(
+      ServerStateOrigin,
+      OperationKind,
+      Future<void> Function(ClientJobWorkflow),
+    )
+    run,
+    required final Future<void> Function(ServerStateOrigin, String)
+    removeServerJob,
+    required final void Function(String) showMessage,
+  }) : _run = run,
+       _removeServerJob = removeServerJob,
+       _showMessage = showMessage,
+       super(JobsStateEmpty()) {
+    _jobsSubscription = jobs.listen(_observeJobs);
+    _settingsSubscription = settings.listen((final observation) {
+      _settings = observation;
     });
   }
 
-  StreamSubscription? _apiDataSubscription;
-  ServerConnection? _jobConnection;
+  final Future<OperationResult<void>> Function(
+    ServerStateOrigin,
+    OperationKind,
+    Future<void> Function(ClientJobWorkflow),
+  )
+  _run;
+  final Future<void> Function(ServerStateOrigin, String) _removeServerJob;
+  final void Function(String) _showMessage;
+  late final StreamSubscription<ConnectionObservation<JobsSnapshot>>
+  _jobsSubscription;
+  late final StreamSubscription<
+    ConnectionObservation<CachedValue<SystemSettings>>
+  >
+  _settingsSubscription;
+  ConnectionObservation<JobsSnapshot>? _jobs;
+  ConnectionObservation<CachedValue<SystemSettings>>? _settings;
 
-  void _handleServerJobs(final List<ServerJob> jobs) {
-    if (_jobConnection == null ||
-        getIt<ApiConnectionRepository>().connection?.origin.serverId !=
-            _jobConnection!.origin.serverId) {
+  bool _isCurrent(final ServerStateOrigin? origin) =>
+      !isClosed &&
+      origin != null &&
+      identical(origin.continuity, _jobs?.origin?.continuity);
+
+  void _observeJobs(final ConnectionObservation<JobsSnapshot> observation) {
+    if (!identical(_jobs?.origin?.continuity, observation.origin?.continuity)) {
+      emit(JobsStateEmpty());
+    }
+    _jobs = observation;
+    _handleServerJobs();
+  }
+
+  void _handleServerJobs() {
+    final current = state;
+    if (current is! JobsStateLoading || current.rebuildJobUid == null) {
       return;
     }
-    if (state is! JobsStateLoading) {
-      return;
-    }
-    if (state.rebuildJobUid == null) {
-      return;
-    }
-    // Find a job with the uid of the rebuild job
-    final ServerJob? rebuildJob = jobs.firstWhereOrNull(
-      (final job) => job.uid == state.rebuildJobUid,
+    final job = _jobs?.value?.jobs.firstWhereOrNull(
+      (final job) => job.uid == current.rebuildJobUid,
     );
-    if (rebuildJob == null) {
-      return;
-    }
-    if (rebuildJob.status == JobStatusEnum.error ||
-        rebuildJob.status == JobStatusEnum.finished) {
-      emit((state as JobsStateLoading).finished());
+    if (job?.status == JobStatusEnum.error ||
+        job?.status == JobStatusEnum.finished) {
+      emit(current.finished());
     }
   }
 
   void addJob(final ClientJob job) {
-    emit(state.addJob(job));
+    final origin = _jobs?.origin;
+    if (!_isCurrent(origin)) {
+      return;
+    }
+    final settings =
+        identical(_settings?.origin?.continuity, origin?.continuity)
+        ? _settings?.value?.data
+        : null;
+    final previous = state;
+    final next = previous.addJob(job, settings: settings);
+    if (identical(next, previous)) {
+      return;
+    }
+    emit(next);
+    _showMessage(
+      (job is ReplaceableJob && job.matchesSettings(settings)
+              ? 'jobs.job_removed'
+              : previous is JobsStateLoading
+              ? 'jobs.job_postponed'
+              : 'jobs.job_added')
+          .tr(),
+    );
   }
 
   void removeJob(final String id) {
-    final JobsState newState = (state as JobsStateWithJobs).removeById(id);
-    emit(newState);
+    if (state case final JobsStateWithJobs current) {
+      emit(current.removeById(id));
+    }
   }
 
-  Future<void> rebootServer() async {
-    await getIt<ApiConnectionRepository>().run<void>(
-      OperationKind.manageJobs,
-      _rebootServer,
-    );
-  }
-
-  Future<void> _rebootServer(final ServerConnection connection) async {
-    if (state is JobsStateEmpty) {
-      emit(
-        JobsStateLoading(
-          [RebootServerJob(status: JobStatusEnum.running)],
-          null,
-          const [],
-        ),
-      );
-      final rebootResult = await connection.volumes.reboot();
-      if (rebootResult.outcome == ServerMutationOutcome.confirmed) {
-        emit(
-          JobsStateFinished(
-            [
-              RebootServerJob(
-                status: JobStatusEnum.finished,
-                message: serverMutationMessage(rebootResult),
-              ),
-            ],
-            null,
-            const [],
-          ),
-        );
-      } else {
-        emit(
-          JobsStateFinished(
-            [
-              RebootServerJob(
-                status: JobStatusEnum.error,
-                message: serverMutationMessage(rebootResult),
-              ),
-            ],
-            null,
-            const [],
-          ),
-        );
+  Future<void> _perform(
+    final ServerStateOrigin origin,
+    final OperationKind kind,
+    final Future<void> Function(ClientJobWorkflow) action,
+  ) async {
+    try {
+      final result = await _run(origin, kind, (final workflow) async {
+        if (!_isCurrent(origin)) {
+          throw const OperationNotSent();
+        }
+        await action(workflow);
+      });
+      if (_isCurrent(origin) &&
+          (result.status == OperationStatus.notSent ||
+              result.status == OperationStatus.cancelled)) {
+        _failUnfinished(result.status.translationKey.tr());
+      }
+    } catch (_) {
+      if (_isCurrent(origin)) {
+        _failUnfinished('server_mutation.outcome_unknown'.tr());
       }
     }
   }
 
-  Future<void> upgradeServer() async {
-    await getIt<ApiConnectionRepository>().run<void>(
-      OperationKind.manageJobs,
-      _upgradeServer,
-    );
-  }
-
-  Future<void> _upgradeServer(final ServerConnection connection) async {
-    if (state is JobsStateEmpty) {
-      _jobConnection = connection;
+  void _failUnfinished(final String message) {
+    if (state case final JobsStateLoading current) {
       emit(
-        JobsStateLoading(
-          [UpgradeServerJob(status: JobStatusEnum.running)],
-          null,
-          const [],
+        JobsStateFinished(
+          current.clientJobList
+              .map(
+                (final job) =>
+                    job.status == JobStatusEnum.created ||
+                        job.status == JobStatusEnum.running
+                    ? job.copyWithNewStatus(
+                        status: JobStatusEnum.error,
+                        message: message,
+                      )
+                    : job,
+              )
+              .toList(),
+          current.rebuildJobUid,
+          current.postponedJobs,
         ),
       );
-      final result = await connection.jobs.upgrade();
+      _showMessage(message);
+    }
+  }
+
+  Future<void> rebootServer() => _single(RebootServerJob());
+  Future<void> upgradeServer() => _single(UpgradeServerJob());
+  Future<void> collectNixGarbage() => _single(CollectNixGarbageJob());
+
+  Future<void> _single(final ClientJob job) async {
+    final origin = _jobs?.origin;
+    if (!_isCurrent(origin) || state is! JobsStateEmpty) {
+      return;
+    }
+    emit(
+      JobsStateLoading(
+        [job.copyWithNewStatus(status: JobStatusEnum.running)],
+        null,
+        const [],
+      ),
+    );
+    await _perform(origin!, OperationKind.manageJobs, (final workflow) async {
+      final result = await workflow.execute(job);
+      if (!_isCurrent(origin)) {
+        return;
+      }
+      final current = state as JobsStateLoading;
+      final updated = current.updateJobStatus(
+        job.id,
+        result.outcome == ServerMutationOutcome.confirmed
+            ? JobStatusEnum.finished
+            : JobStatusEnum.error,
+        message: serverMutationMessage(result),
+      );
       if (result.outcome == ServerMutationOutcome.confirmed &&
-          result.payload.value != null) {
+          result.payload.value is ServerJob) {
         emit(
-          JobsStateLoading(
-            [
-              UpgradeServerJob(
-                status: JobStatusEnum.finished,
-                message: serverMutationMessage(result),
-              ),
-            ],
-            result.payload.value!.uid,
-            const [],
+          updated.copyWith(
+            rebuildJobUid: (result.payload.value! as ServerJob).uid,
           ),
         );
-      } else if (result.outcome == ServerMutationOutcome.confirmed) {
-        emit(
-          JobsStateFinished(
-            [
-              UpgradeServerJob(
-                status: JobStatusEnum.finished,
-                message: serverMutationMessage(result),
-              ),
-            ],
-            null,
-            const [],
-          ),
-        );
+        _handleServerJobs();
       } else {
-        emit(
-          JobsStateFinished(
-            [
-              UpgradeServerJob(
-                status: JobStatusEnum.error,
-                message: serverMutationMessage(result),
-              ),
-            ],
-            null,
-            const [],
-          ),
-        );
+        emit(updated.finished());
       }
-    }
+    });
   }
 
   Future<void> applyAll() async {
-    await getIt<ApiConnectionRepository>().run<void>(
-      OperationKind.applyChanges,
-      _applyAll,
+    final origin = _jobs?.origin;
+    final previous = state;
+    if (!_isCurrent(origin) || previous is! JobsStateWithJobs) {
+      return;
+    }
+    final jobs = previous.clientJobList;
+    final dnsRequired = previous.dnsUpdateRequired;
+    emit(
+      JobsStateLoading(
+        [...jobs, if (dnsRequired) UpdateDnsRecordsJob()],
+        null,
+        const [],
+      ),
     );
-  }
-
-  Future<void> _applyAll(final ServerConnection connection) async {
-    if (state is JobsStateWithJobs) {
-      _jobConnection = connection;
-      final jobs = [...(state as JobsStateWithJobs).clientJobList];
-
-      final rebuildRequired = jobs.any((final job) => job.requiresRebuild);
-      final dnsUpdateRequired = jobs.any((final job) => job.requiresDnsUpdate);
-
-      if (dnsUpdateRequired) {
-        jobs.add(UpdateDnsRecordsJob(status: JobStatusEnum.created));
+    await _perform(origin!, OperationKind.applyChanges, (final workflow) async {
+      final oldDns = dnsRequired ? await workflow.readDns() : null;
+      if (!_isCurrent(origin)) {
+        return;
       }
-
-      emit(JobsStateLoading(jobs, null, const []));
-
-      await Future<void>.delayed(Duration.zero);
-
-      final List<DnsRecord> oldDnsRecords =
-          await connection.api.getDnsRecords() ?? [];
-
-      for (final ClientJob job in jobs) {
-        if (!connection.isAttached) {
-          emit((state as JobsStateLoading).finished());
-          return;
-        }
-        if (job is UpdateDnsRecordsJob) {
-          continue;
-        }
-
+      for (final job in jobs) {
         emit(
           (state as JobsStateLoading).updateJobStatus(
             job.id,
             JobStatusEnum.running,
           ),
         );
-        final (result, message) = await job.execute();
-        OperationExecution.current?.recordCompletion(succeeded: result);
-        if (result) {
-          emit(
-            (state as JobsStateLoading).updateJobStatus(
-              job.id,
-              JobStatusEnum.finished,
-              message: message,
-            ),
-          );
-        } else {
-          emit(
-            (state as JobsStateLoading).updateJobStatus(
-              job.id,
-              JobStatusEnum.error,
-              message: message,
-            ),
-          );
+        final result = await workflow.execute(job);
+        if (!_isCurrent(origin)) {
+          return;
         }
+        emit(
+          (state as JobsStateLoading).updateJobStatus(
+            job.id,
+            result.outcome == ServerMutationOutcome.confirmed
+                ? JobStatusEnum.finished
+                : JobStatusEnum.error,
+            message: serverMutationMessage(
+              result,
+              sensitive: job is ChangeServiceConfiguration,
+            ),
+          ),
+        );
       }
-
-      await Future<void>.delayed(Duration.zero);
-
       if ((state as JobsStateLoading).clientJobList.any(
         (final job) => job.status == JobStatusEnum.error,
       )) {
-        if (dnsUpdateRequired) {
+        if (dnsRequired) {
           emit(
             (state as JobsStateLoading).updateJobStatus(
               UpdateDnsRecordsJob.jobId,
@@ -254,217 +265,81 @@ class JobsCubit extends Cubit<JobsState> {
               message: 'jobs.ignored_due_to_failures'.tr(),
             ),
           );
-          await Future.delayed(Duration.zero);
         }
         emit((state as JobsStateLoading).finished());
         return;
       }
-
-      if (dnsUpdateRequired) {
-        if (!connection.isAttached) {
-          emit((state as JobsStateLoading).finished());
+      if (oldDns != null) {
+        emit(
+          (state as JobsStateLoading).updateJobStatus(
+            UpdateDnsRecordsJob.jobId,
+            JobStatusEnum.running,
+          ),
+        );
+        final dns = await workflow.updateDns(oldDns);
+        if (!_isCurrent(origin)) {
           return;
         }
-        await updateDnsRecords(oldDnsRecords, connection: connection);
+        emit(
+          (state as JobsStateLoading).updateJobStatus(
+            UpdateDnsRecordsJob.jobId,
+            dns == DnsUpdateOutcome.updated || dns == DnsUpdateOutcome.unchanged
+                ? JobStatusEnum.finished
+                : JobStatusEnum.error,
+            message: switch (dns) {
+              DnsUpdateOutcome.updated => 'jobs.dns_records_changed'.tr(),
+              DnsUpdateOutcome.unchanged =>
+                'jobs.dns_records_did_not_change'.tr(),
+              DnsUpdateOutcome.unavailable ||
+              DnsUpdateOutcome.failed => 'jobs.failed_to_load_dns_records'.tr(),
+            },
+          ),
+        );
       }
-
-      if (!rebuildRequired) {
+      if (!previous.rebuildRequired) {
         emit((state as JobsStateLoading).finished());
         return;
       }
-      final rebuildResult = await connection.jobs.apply();
-      if (rebuildResult.outcome == ServerMutationOutcome.confirmed) {
-        if (rebuildResult.payload.value != null) {
-          emit(
-            (state as JobsStateLoading).copyWith(
-              rebuildJobUid: rebuildResult.payload.value!.uid,
-            ),
-          );
-        } else {
-          if (rebuildResult.payload.status !=
-              ServerMutationPayloadStatus.notExpected) {
-            getIt<NavigationService>().showSnackBar(
-              serverMutationMessage(rebuildResult),
-            );
-          }
-          emit((state as JobsStateLoading).finished());
-        }
+      final result = await workflow.apply();
+      if (!_isCurrent(origin)) {
+        return;
+      }
+      final job = result.payload.value;
+      if (result.outcome == ServerMutationOutcome.confirmed && job != null) {
+        emit((state as JobsStateLoading).copyWith(rebuildJobUid: job.uid));
+        _handleServerJobs();
       } else {
-        getIt<NavigationService>().showSnackBar(
-          serverMutationMessage(rebuildResult),
-        );
+        if (result.outcome != ServerMutationOutcome.confirmed ||
+            result.payload.status != ServerMutationPayloadStatus.notExpected) {
+          _showMessage(serverMutationMessage(result));
+        }
         emit((state as JobsStateLoading).finished());
       }
-    }
-  }
-
-  Future<void> updateDnsRecords(
-    final List<DnsRecord> oldDnsRecords, {
-    final ServerConnection? connection,
-  }) async {
-    final binding = connection ?? getIt<ApiConnectionRepository>().connection;
-    if (binding == null || !binding.isAttached) {
-      return;
-    }
-    emit(
-      (state as JobsStateLoading).updateJobStatus(
-        UpdateDnsRecordsJob.jobId,
-        JobStatusEnum.running,
-      ),
-    );
-    final List<DnsRecord> newDnsRecords =
-        await binding.api.getDnsRecords() ?? [];
-    if (!binding.isAttached) {
-      return;
-    }
-
-    // If any of the records have a null content, we don't want to update
-    // the DNS records
-    if (newDnsRecords.isEmpty || oldDnsRecords.isEmpty) {
-      OperationExecution.current?.recordCompletion(succeeded: false);
-      emit(
-        (state as JobsStateLoading).updateJobStatus(
-          UpdateDnsRecordsJob.jobId,
-          JobStatusEnum.error,
-          message: 'jobs.failed_to_load_dns_records'.tr(),
-        ),
-      );
-      return;
-    }
-
-    if (const UnorderedIterableEquality().equals(
-      oldDnsRecords,
-      newDnsRecords,
-    )) {
-      OperationExecution.current?.recordCompletion(succeeded: true);
-      emit(
-        (state as JobsStateLoading).updateJobStatus(
-          UpdateDnsRecordsJob.jobId,
-          JobStatusEnum.finished,
-          message: 'jobs.dns_records_did_not_change'.tr(),
-        ),
-      );
-    } else {
-      final ServerDomain? domain =
-          getIt<ApiConnectionRepository>().serverDomain;
-
-      final dnsCreateResult = await ProvidersController.currentDnsProvider!
-          .updateDnsRecords(
-            newRecords: newDnsRecords
-                .where((final r) => r.content != null)
-                .toList(),
-            oldRecords: oldDnsRecords,
-            domain: domain!,
-          );
-      OperationExecution.current?.recordCompletion(
-        succeeded: dnsCreateResult.success,
-      );
-
-      emit(
-        (state as JobsStateLoading).updateJobStatus(
-          UpdateDnsRecordsJob.jobId,
-          dnsCreateResult.success
-              ? JobStatusEnum.finished
-              : JobStatusEnum.error,
-          message: dnsCreateResult.message ?? 'jobs.dns_records_changed'.tr(),
-        ),
-      );
-    }
-  }
-
-  Future<void> collectNixGarbage() async {
-    await getIt<ApiConnectionRepository>().run<void>(
-      OperationKind.manageJobs,
-      _collectNixGarbage,
-    );
-  }
-
-  Future<void> _collectNixGarbage(final ServerConnection connection) async {
-    if (state is JobsStateEmpty) {
-      _jobConnection = connection;
-      emit(
-        JobsStateLoading(
-          [CollectNixGarbageJob(status: JobStatusEnum.running)],
-          null,
-          const [],
-        ),
-      );
-      final result = await connection.jobs.collectNixGarbage();
-      if (result.outcome == ServerMutationOutcome.confirmed &&
-          result.payload.value != null) {
-        emit(
-          JobsStateLoading(
-            [
-              CollectNixGarbageJob(
-                status: JobStatusEnum.finished,
-                message: serverMutationMessage(result),
-              ),
-            ],
-            result.payload.value!.uid,
-            const [],
-          ),
-        );
-      } else if (result.outcome == ServerMutationOutcome.confirmed) {
-        emit(
-          JobsStateFinished(
-            [
-              CollectNixGarbageJob(
-                status: JobStatusEnum.finished,
-                message: serverMutationMessage(result),
-              ),
-            ],
-            null,
-            const [],
-          ),
-        );
-      } else {
-        emit(
-          JobsStateFinished(
-            [
-              CollectNixGarbageJob(
-                status: JobStatusEnum.error,
-                message: serverMutationMessage(result),
-              ),
-            ],
-            null,
-            const [],
-          ),
-        );
-      }
-    }
+    });
   }
 
   Future<void> acknowledgeFinished() async {
-    if (state is! JobsStateFinished) {
+    final origin = _jobs?.origin;
+    final current = state;
+    if (current is! JobsStateFinished) {
       return;
     }
-    final rebuildJobUid = state.rebuildJobUid;
-    if ((state as JobsStateFinished).postponedJobs.isNotEmpty) {
-      emit(JobsStateWithJobs((state as JobsStateFinished).postponedJobs));
-    } else {
-      emit(JobsStateEmpty());
+    emit(
+      current.postponedJobs.isEmpty
+          ? JobsStateEmpty()
+          : JobsStateWithJobs(current.postponedJobs),
+    );
+    if (origin != null && current.rebuildJobUid != null) {
+      await _removeServerJob(origin, current.rebuildJobUid!);
     }
-    if (rebuildJobUid != null) {
-      final serverId = _jobConnection?.origin.serverId;
-      await getIt<ApiConnectionRepository>().run(OperationKind.manageJobs, (
-        final owner,
-      ) async {
-        if (owner.origin.serverId == serverId) {
-          await owner.jobs.removeJob(rebuildJobUid);
-        }
-      });
-    }
-    _jobConnection = null;
-  }
-
-  @override
-  void onChange(final Change<JobsState> change) {
-    super.onChange(change);
   }
 
   @override
   Future<void> close() async {
-    await _apiDataSubscription?.cancel();
+    _jobs = null;
+    _settings = null;
+    await _jobsSubscription.cancel();
+    await _settingsSubscription.cancel();
     return super.close();
   }
 }

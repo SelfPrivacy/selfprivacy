@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -428,7 +429,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       if (dkimCreated) {
         await repository.saveHasFinalChecked(finalCheckCompleted: true);
         emit(dataState.finish());
-        await getIt<ApiConnectionRepository>().init();
+        getIt<ServerConnectionHub>().resume();
       } else {
         unawaited(
           runDelayed(
@@ -764,7 +765,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       serverTypeIdentificator: serverType?.data?.identifier,
     );
     emit(updatedState.finish());
-    await getIt<ApiConnectionRepository>().init();
+    getIt<ServerConnectionHub>().resume();
   }
 
   @override

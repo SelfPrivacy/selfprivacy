@@ -1,9 +1,14 @@
 import 'package:graphql/client.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 
 /// Rejects partial responses and preserves the original request exception.
 T requireServerApiData<T extends Object>(final QueryResult<T> response) {
   final exception = response.exception;
   if (exception != null) {
+    if (exception.linkException?.originalException
+        case final GraphQLDispatchDeferred deferred) {
+      throw deferred;
+    }
     throw exception;
   }
   final data = response.parsedData;

@@ -108,6 +108,7 @@ class OperationQueue {
   final _records = <int, OperationSnapshot>{};
   final _pending = <int, _PendingOperation>{};
   final _remainingJobs = <int, Set<String>>{};
+  final _failedJobs = <int>{};
   final _changes = StreamController<List<OperationSnapshot>>.broadcast();
   final _idleWaiters = <Completer<void>>[];
   int _nextId = 0;
@@ -249,11 +250,16 @@ class OperationQueue {
       if (!entry.value.remove(uid)) {
         continue;
       }
-      if (!succeeded || entry.value.isEmpty) {
+      if (!succeeded) {
+        _failedJobs.add(entry.key);
+      }
+      if (entry.value.isEmpty) {
         _remainingJobs.remove(entry.key);
         _record(
           entry.key,
-          succeeded ? OperationStatus.succeeded : OperationStatus.failed,
+          _failedJobs.remove(entry.key)
+              ? OperationStatus.failed
+              : OperationStatus.succeeded,
         );
       }
     }
@@ -348,6 +354,7 @@ class OperationQueue {
       );
     }
     _remainingJobs.clear();
+    _failedJobs.clear();
     _pending.clear();
     _settleIdle();
     _paused = false;

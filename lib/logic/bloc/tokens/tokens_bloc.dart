@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -24,8 +25,10 @@ part 'tokens_state.dart';
 
 class TokensBloc extends Bloc<TokensEvent, TokensState> {
   TokensBloc({
+    required final Future<RotationOutcome> Function() rotateToken,
     final ServerProvider Function(ServerProviderSettings)? createServerProvider,
-  }) : _createServerProvider =
+  }) : _rotateToken = rotateToken,
+       _createServerProvider =
            createServerProvider ??
            ServerProviderFactory.createServerProviderInterface,
        super(const TokensInitial()) {
@@ -256,10 +259,18 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     final RefreshServerApiTokenEvent event,
     final Emitter<TokensState> emit,
   ) async {
-    final (bool success, String message) =
-        await getIt<ApiConnectionRepository>().refreshDeviceToken();
-    if (!success) {
-      getIt<NavigationService>().showSnackBar(message);
+    final outcome = await _rotateToken();
+    if (isClosed || emit.isDone) {
+      return;
+    }
+    if (outcome != RotationOutcome.succeeded) {
+      final message = switch (outcome) {
+        RotationOutcome.rejected => 'server_mutation.rejected',
+        RotationOutcome.cancelled ||
+        RotationOutcome.detached => 'server_mutation.not_sent',
+        _ => 'server_mutation.outcome_unknown',
+      };
+      getIt<NavigationService>().showSnackBar(message.tr());
       return;
     }
     getIt<NavigationService>().showSnackBar(
@@ -275,4 +286,5 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
 
   late StreamSubscription _resourcesModelSubscription;
   final ServerProvider Function(ServerProviderSettings) _createServerProvider;
+  final Future<RotationOutcome> Function() _rotateToken;
 }

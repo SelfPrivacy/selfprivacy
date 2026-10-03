@@ -52,6 +52,26 @@ class BackupsLoading extends BackupsState {
       BackupsLoading(backblazeBucket: backblazeBucket ?? this.backblazeBucket);
 }
 
+class BackupsUnavailable extends BackupsState {
+  const BackupsUnavailable({
+    required this.isUnsupported,
+    super.backblazeBucket,
+  });
+
+  final bool isUnsupported;
+
+  @override
+  List<Object?> get props => [isUnsupported, backblazeBucket];
+
+  @override
+  BackupsUnavailable copyWith({
+    required final BackblazeBucket backblazeBucket,
+  }) => BackupsUnavailable(
+    isUnsupported: isUnsupported,
+    backblazeBucket: backblazeBucket,
+  );
+}
+
 class BackupsUninitialized extends BackupsState {
   const BackupsUninitialized({super.backblazeBucket});
   @override

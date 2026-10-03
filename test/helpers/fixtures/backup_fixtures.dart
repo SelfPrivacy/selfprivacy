@@ -3,6 +3,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 
 import 'credential_fixtures.dart';
 import 'json_fixture.dart';
@@ -38,3 +39,8 @@ BackblazeBucket aBackblazeBucket() {
     encryptionKey: config.encryptionKey,
   );
 }
+
+BackupsApplicationKey aBackupsApplicationKey() => BackupsApplicationKey(
+  applicationKeyId: aBackupsCredential().keyId,
+  applicationKey: aBackupsCredential().applicationKey,
+);

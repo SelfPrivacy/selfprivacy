@@ -3,14 +3,12 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/api_config.dart';
-import 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 import 'package:selfprivacy/logic/get_it/console_model.dart';
 import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
 import 'package:selfprivacy/logic/get_it/navigation.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 
 export 'package:selfprivacy/logic/get_it/api_config.dart';
-export 'package:selfprivacy/logic/get_it/api_connection_repository.dart';
 export 'package:selfprivacy/logic/get_it/console_model.dart';
 export 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
 export 'package:selfprivacy/logic/get_it/navigation.dart';
@@ -60,11 +58,8 @@ Future<void> getItSetup() async {
     ..registerSingleton<ServerConnectionHub>(
       hub,
       dispose: (final hub) => hub.dispose(),
-    )
-    ..registerSingleton<ApiConnectionRepository>(
-      // ignore: unawaited_futures
-      ApiConnectionRepository(resourcesModel: resourcesModel, hub: hub)..init(),
     );
 
   await getIt.allReady();
+  hub.start();
 }

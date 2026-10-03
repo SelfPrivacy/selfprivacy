@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
@@ -17,8 +17,6 @@ import '../../helpers/widget_harness.dart';
 class _MockServerLogsBloc extends Mock implements ServerLogsBloc {}
 
 class _Api extends Mock implements ServerApi {}
-
-class _Repository extends Mock implements ApiConnectionRepository {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
@@ -55,13 +53,6 @@ void main() {
       () async {
         final api = _Api();
         final hub = fixtureHub(api);
-        final repository = _Repository();
-        when(() => repository.hub).thenReturn(hub);
-        when(
-          () => repository.apiData,
-        ).thenReturn(ApiData(connection: () => hub.active));
-        getIt.registerSingleton<ApiConnectionRepository>(repository);
-        addTearDown(() => getIt.unregister<ApiConnectionRepository>());
         final fixture = serverLogsBloc.state as ServerLogsLoaded;
         when(
           () => api.getServerLogs(
@@ -77,7 +68,7 @@ void main() {
             const ServerLogsPageMeta(downCursor: null, upCursor: 'cursor-1'),
           ),
         );
-        final bloc = ServerLogsBloc();
+        final bloc = createServerLogsBloc(hub);
         addTearDown(bloc.close);
         if (pagination) {
           bloc.add(const ServerLogsFetch());

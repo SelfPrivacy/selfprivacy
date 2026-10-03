@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/require_server_api_data.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -13,6 +14,40 @@ import '../../../helpers/connection_fixture.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 
 void main() {
+  final metricsReads = <String, Future<Object> Function(ServerApi)>{
+    'overall': (final api) => api.getServerMetrics(
+      step: 60,
+      start: DateTime.utc(2026),
+      end: DateTime.utc(2026, 1, 2),
+    ),
+    'memory': (final api) => api.getMemoryMetrics(
+      step: 60,
+      start: DateTime.utc(2026),
+      end: DateTime.utc(2026, 1, 2),
+    ),
+    'disk': (final api) => api.getDiskMetrics(
+      step: 60,
+      start: DateTime.utc(2026),
+      end: DateTime.utc(2026, 1, 2),
+    ),
+  };
+  for (final entry in metricsReads.entries) {
+    test('${entry.key} metrics preserve wrapped dispatch deferral', () async {
+      final api = ServerApi(
+        transport: transportWithLink(
+          Link.function(
+            (_, [final forward]) =>
+                Stream.error(const GraphQLDispatchDeferred()),
+          ),
+        ),
+      );
+      await expectLater(
+        entry.value(api),
+        throwsA(isA<GraphQLDispatchDeferred>()),
+      );
+    });
+  }
+
   final reads = <String, Future<Object> Function(ServerApi)>{
     'GetApiVersion': (final api) => api.fetchApiVersion(),
     'AllUsers': (final api) => api.getAllUsers(),

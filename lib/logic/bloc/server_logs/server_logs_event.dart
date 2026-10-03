@@ -19,13 +19,30 @@ final class ServerLogsFetchMore extends ServerLogsEvent {
   List<Object> get props => [];
 }
 
-final class ServerLogsGotNewEntry extends ServerLogsEvent {
-  const ServerLogsGotNewEntry(this.entry);
+final class _LogReceived extends ServerLogsEvent {
+  const _LogReceived(this.entry, this.view);
 
   final ServerLogEntry entry;
+  final Object view;
 
   @override
-  List<Object> get props => [entry];
+  List<Object> get props => [entry, view];
+}
+
+final class _ReadLogs extends ServerLogsEvent {
+  const _ReadLogs(this.event, this.origin, this.view);
+  final ServerLogsEvent event;
+  final ServerStateOrigin? origin;
+  final Object view;
+  @override
+  List<Object?> get props => [event, origin, view];
+}
+
+final class _ResetLogs extends ServerLogsEvent {
+  const _ResetLogs(this.view);
+  final Object view;
+  @override
+  List<Object> get props => [view];
 }
 
 final class ServerLogsDisconnect extends ServerLogsEvent {

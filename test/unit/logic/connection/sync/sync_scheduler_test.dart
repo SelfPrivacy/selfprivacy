@@ -9,7 +9,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -17,8 +16,6 @@ import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
 
 import '../../../../fakes/graphql/link_transport.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
-
-class _Lifecycle extends Mock implements AppLifecycle {}
 
 class _Network extends Mock implements NetworkConnectivitySource {}
 
@@ -56,11 +53,6 @@ void main() {
       failures = {};
       fixtures = loadJsonFixture('graphql/domain_reads.json');
       visibility = StreamController<bool>.broadcast(sync: true);
-      final lifecycle = _Lifecycle();
-      when(() => lifecycle.isForeground).thenAnswer((_) => foreground);
-      when(
-        () => lifecycle.foregroundChanges,
-      ).thenAnswer((_) => visibility.stream);
       final network = _Network();
       when(
         network.check,
@@ -69,7 +61,7 @@ void main() {
       reachability = Reachability(
         connectivity: network,
         probe: () async => true,
-      );
+      )..start();
       cache = ServerStateCache(
         now: tester.binding.clock.now,
         api: ServerApi(
@@ -101,8 +93,6 @@ void main() {
       );
       scheduler = SyncScheduler(
         cache: cache,
-        reachability: reachability,
-        lifecycle: lifecycle,
         commands: commands,
         now: tester.binding.clock.now,
         createTimer: (final delay, final callback) {
@@ -110,9 +100,24 @@ void main() {
           return Timer(delay, callback);
         },
       );
+      void updateEligibility() => scheduler.setReadAllowed(
+        allowed:
+            foreground &&
+            !reachability.isPaused &&
+            reachability.current == ReachabilityStatus.reachable,
+      );
+      final reachabilityChanges = reachability.stream.listen(
+        (_) => updateEligibility(),
+      );
+      final visibilityChanges = visibility.stream.listen(
+        (_) => updateEligibility(),
+      );
+      updateEligibility();
       try {
         await body(tester);
       } finally {
+        unawaited(reachabilityChanges.cancel());
+        unawaited(visibilityChanges.cancel());
         scheduler.dispose();
         commands.dispose();
         reachability.dispose();
@@ -131,13 +136,14 @@ void main() {
   testScheduler('suspension blocks dispatch until resumed', (
     final tester,
   ) async {
+    await tester.pump();
     scheduler
-      ..setSuspended(suspended: true)
+      ..setReadAllowed(allowed: false)
       ..start();
     await tester.pump();
     expect(calls, isEmpty);
-    expect(await scheduler.refresh('apiVersion'), RefreshResult.deferred);
-    scheduler.setSuspended(suspended: false);
+    expect(await scheduler.refresh(cache.apiVersion), RefreshResult.deferred);
+    scheduler.setReadAllowed(allowed: true);
     await tester.pump();
     expect(calls, contains('GetApiVersion'));
   });
@@ -201,16 +207,17 @@ void main() {
     await tester.pump();
     calls.clear();
     pending['AllUsers'] = Completer<Response>();
-    final first = scheduler.refresh('users');
-    final second = scheduler.refresh('users');
-    expect(second, same(first));
+    final first = scheduler.refresh(cache.users);
+    final second = scheduler.refresh(cache.users);
     await tester.pump();
-    final third = scheduler.refresh('users');
-    expect(third, same(first));
+    final third = scheduler.refresh(cache.users);
     expect(calls, ['AllUsers']);
     pending.remove('AllUsers')!.complete(response('AllUsers'));
     await tester.pump();
-    expect(await first, RefreshResult.applied);
+    expect(
+      await Future.wait([first, second, third]),
+      everyElement(RefreshResult.applied),
+    );
   });
 
   for (final background in [false, true]) {
@@ -225,7 +232,7 @@ void main() {
         } else {
           reachability.reportAuthFailure();
         }
-        expect(await scheduler.refresh('users'), RefreshResult.deferred);
+        expect(await scheduler.refresh(cache.users), RefreshResult.deferred);
         expect(cache.users.value.needsReconciliation, isTrue);
         expect(calls, isEmpty);
         if (background) {
@@ -239,15 +246,19 @@ void main() {
     );
   }
 
-  testScheduler('unknown support and pre-start policy return finite outcomes', (
-    final tester,
-  ) async {
-    expect(await scheduler.refresh('users'), RefreshResult.unsupported);
-    expect(await scheduler.refresh('apiVersion'), RefreshResult.deferred);
-    expect(() => scheduler.refresh('unknown'), throwsArgumentError);
-    scheduler.dispose();
-    expect(await scheduler.refresh('users'), RefreshResult.disposed);
-  });
+  testScheduler(
+    'manual reads bootstrap support without passive synchronization',
+    (final tester) async {
+      await tester.pump();
+      expect(calls, isEmpty);
+      final requested = scheduler.refresh(cache.users);
+      await tester.pump();
+      expect(await requested, RefreshResult.applied);
+      expect(calls, ['GetApiVersion', 'AllUsers']);
+      scheduler.dispose();
+      expect(await scheduler.refresh(cache.users), RefreshResult.disposed);
+    },
+  );
 
   testScheduler('commands block dispatch and reconcile only after release', (
     final tester,
@@ -260,7 +271,7 @@ void main() {
       domains: [cache.users],
       send: (_) => response.future,
     );
-    expect(await scheduler.refresh('users'), RefreshResult.deferred);
+    expect(await scheduler.refresh(cache.users), RefreshResult.deferred);
     await tester.pump();
     expect(calls, isEmpty);
     response.complete(
@@ -269,7 +280,7 @@ void main() {
         payload: const ServerMutationPayload.notExpected(),
       ),
     );
-    await command.completion;
+    await command;
     await tester.pump();
     expect(calls, ['AllUsers']);
   });
@@ -290,14 +301,14 @@ void main() {
           return [cache.users];
         },
       );
-      expect(await scheduler.refresh('users'), RefreshResult.deferred);
+      expect(await scheduler.refresh(cache.users), RefreshResult.deferred);
       response.complete(
         ServerMutationResult(
           outcome: ServerMutationOutcome.confirmed,
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      await command.completion;
+      await command;
       await tester.pump();
       expect(calls, isEmpty);
     },
@@ -309,7 +320,7 @@ void main() {
     scheduler.start();
     await tester.pump();
     calls.clear();
-    final refresh = scheduler.refresh('users');
+    final refresh = scheduler.refresh(cache.users);
     final response = Completer<ServerMutationResult<void>>();
     final command = commands.submit<void>(
       domains: [cache.users],
@@ -324,7 +335,7 @@ void main() {
         payload: const ServerMutationPayload.notExpected(),
       ),
     );
-    await command.completion;
+    await command;
   });
 
   testScheduler(
@@ -334,7 +345,7 @@ void main() {
       await tester.pump();
       calls.clear();
       failures.add('AllUsers');
-      final refresh = scheduler.refresh('users');
+      final refresh = scheduler.refresh(cache.users);
       await tester.pump();
       expect(await refresh, RefreshResult.failed);
       await tester.pump(const Duration(seconds: 59));
@@ -348,9 +359,9 @@ void main() {
       scheduler.start();
       await tester.pump();
       pending['AllUsers'] = Completer<Response>();
-      final active = scheduler.refresh('users');
+      final active = scheduler.refresh(cache.users);
       await tester.pump();
-      final queued = scheduler.refresh('settings');
+      final queued = scheduler.refresh(cache.settings);
       scheduler.dispose();
       expect(await active, RefreshResult.disposed);
       expect(await queued, RefreshResult.disposed);
@@ -363,13 +374,13 @@ void main() {
       scheduler.start();
       await tester.pump();
       for (var i = 0; i < SyncScheduler.poolSize; i++) {
-        final refresh = scheduler.refresh('users');
+        final refresh = scheduler.refresh(cache.users);
         await tester.pump();
         await refresh;
       }
       calls.clear();
       cache.settings.invalidate();
-      final refresh = scheduler.refresh('users');
+      final refresh = scheduler.refresh(cache.users);
       await tester.pump();
       await refresh;
       expect(calls.take(2), ['SystemSettings', 'AllUsers']);
@@ -583,7 +594,6 @@ void main() {
       scheduler.start();
       await tester.pump(const Duration(minutes: 5));
       expect(calls, isEmpty);
-      expect(reachability.isPaused, isTrue);
       show(visible: true);
       await tester.pump();
       calls.clear();
@@ -681,7 +691,6 @@ void main() {
       pending.remove('GetApiVersion')!.complete(response('GetApiVersion'));
       await tester.pump(const Duration(minutes: 5));
       expect(calls, ['GetApiVersion']);
-      expect(reachability.isPaused, isTrue);
       await cache.users.refresh();
       expect(cache.users.value.data, isNotEmpty);
       expect(scheduler.start, throwsStateError);
@@ -703,11 +712,15 @@ void main() {
         'backupConfig': 'BackupConfiguration',
       }.entries) {
         pending[entry.value] = Completer<Response>();
-        unawaited(scheduler.refresh(entry.key));
+        unawaited(
+          scheduler.refresh(
+            cache.stores.singleWhere((final store) => store.name == entry.key),
+          ),
+        );
       }
       await tester.pump();
       calls.clear();
-      final queued = scheduler.refresh('users');
+      final queued = scheduler.refresh(cache.users);
       await tester.pump();
       show(visible: false);
       await tester.pump();
@@ -732,7 +745,7 @@ void main() {
           return [cache.users];
         },
       );
-      expect(await scheduler.refresh('users'), RefreshResult.deferred);
+      expect(await scheduler.refresh(cache.users), RefreshResult.deferred);
       show(visible: false);
       response.complete(
         ServerMutationResult(
@@ -740,10 +753,7 @@ void main() {
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      expect(
-        (await command.completion).application,
-        CommandApplication.applied,
-      );
+      expect((await command).application, CommandApplication.applied);
       await tester.pump();
       expect(cache.users.value.data!.map((final user) => user.login), [
         'bob',
@@ -763,7 +773,7 @@ void main() {
     await tester.pump();
     calls.clear();
     pending['AllUsers'] = Completer<Response>();
-    final refresh = scheduler.refresh('users');
+    final refresh = scheduler.refresh(cache.users);
     await tester.pump();
     show(visible: false);
     pending.remove('AllUsers')!.complete(response('AllUsers'));
@@ -780,7 +790,7 @@ void main() {
     calls.clear();
     pending['AllUsers'] = Completer<Response>();
     final external = cache.users.refresh(force: true);
-    final requested = scheduler.refresh('users');
+    final requested = scheduler.refresh(cache.users);
     pending.remove('AllUsers')!.complete(response('AllUsers'));
     await tester.pump();
     expect(await external, RefreshResult.applied);
@@ -794,7 +804,7 @@ void main() {
     scheduler.start();
     await tester.pump();
     calls.clear();
-    final requested = scheduler.refresh('users');
+    final requested = scheduler.refresh(cache.users);
     cache.dispose();
     await tester.pump();
     expect(await requested, RefreshResult.disposed);
@@ -807,7 +817,7 @@ void main() {
       scheduler.start();
       await tester.pump();
       calls.clear();
-      final requested = scheduler.refresh('users');
+      final requested = scheduler.refresh(cache.users);
       commands.dispose();
       await tester.pump();
       expect(await requested, RefreshResult.disposed);
@@ -824,12 +834,7 @@ void main() {
       stores: [],
     );
     expect(
-      () => SyncScheduler(
-        cache: cache,
-        reachability: reachability,
-        lifecycle: _Lifecycle(),
-        commands: foreign,
-      ),
+      () => SyncScheduler(cache: cache, commands: foreign),
       throwsArgumentError,
     );
     foreign.dispose();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_text_details_card.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
+
 import '../../../catalog_case.dart';
 
 @UseCase(name: 'Loaded', type: ServerTextDetailsCard, path: '[Molecules]/cards')
@@ -46,3 +47,33 @@ Widget serverTextDetailsCardNotReady(final BuildContext context) => CatalogCase(
   builder: (final context, final fixtures, final controller, final update) =>
       const ServerTextDetailsCard(),
 );
+
+@UseCase(name: 'Error', type: ServerTextDetailsCard, path: '[Molecules]/cards')
+Widget serverTextDetailsCardError(final BuildContext context) => CatalogCase(
+  key: const ValueKey('ServerTextDetailsCard/Error'),
+  id: 'ServerTextDetailsCard/Error',
+  variant: 'Error',
+  host: PreviewHost.content,
+  width: 560,
+  height: 850,
+  builder: (final context, final fixtures, final controller, final update) =>
+      const ServerTextDetailsCard(),
+);
+
+@UseCase(
+  name: 'Unsupported',
+  type: ServerTextDetailsCard,
+  path: '[Molecules]/cards',
+)
+Widget serverTextDetailsCardUnsupported(final BuildContext context) =>
+    CatalogCase(
+      key: const ValueKey('ServerTextDetailsCard/Unsupported'),
+      id: 'ServerTextDetailsCard/Unsupported',
+      variant: 'Unsupported',
+      host: PreviewHost.content,
+      width: 560,
+      height: 850,
+      builder:
+          (final context, final fixtures, final controller, final update) =>
+              const ServerTextDetailsCard(),
+    );

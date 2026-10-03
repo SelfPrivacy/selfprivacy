@@ -4,11 +4,11 @@ sealed class OutdatedServerCheckerEvent extends Equatable {
   const OutdatedServerCheckerEvent();
 }
 
-class ServerApiVersionChanged extends OutdatedServerCheckerEvent {
-  const ServerApiVersionChanged(this.newVersion);
+class _ServerApiVersionObserved extends OutdatedServerCheckerEvent {
+  const _ServerApiVersionObserved(this.observation);
 
-  final String? newVersion;
+  final ConnectionObservation<CachedValue<Version>> observation;
 
   @override
-  List<Object?> get props => [newVersion];
+  List<Object> get props => [observation];
 }

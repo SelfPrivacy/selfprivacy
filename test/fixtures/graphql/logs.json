@@ -1,0 +1,25 @@
+{
+  "__typename": "Query",
+  "logs": {
+    "__typename": "Logs",
+    "paginated": {
+      "__typename": "PaginatedEntries",
+      "pageMeta": {
+        "__typename": "LogsPageMeta",
+        "upCursor": "s=journal-fixture;i=102",
+        "downCursor": null
+      },
+      "entries": [
+        {
+          "__typename": "LogEntry",
+          "message": "Started Gitea service.",
+          "timestamp": "2026-01-01T12:00:00Z",
+          "priority": 6,
+          "systemdUnit": "gitea.service",
+          "systemdSlice": "gitea.slice",
+          "cursor": "s=journal-fixture;i=103"
+        }
+      ]
+    }
+  }
+}

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
@@ -15,9 +14,6 @@ import 'package:selfprivacy/ui/router/router.dart';
 
 import '../../../helpers/fixtures/server_fixtures.dart';
 import '../../../helpers/widget_harness.dart';
-
-class _MockApiConnectionRepository extends Mock
-    implements ApiConnectionRepository {}
 
 class _MockUsersBloc extends Mock implements UsersBloc {}
 
@@ -44,26 +40,18 @@ class _TestRouter extends RootStackRouter {
 void main() {
   setUpAll(setUpWidgetTestHarness);
 
-  late _MockApiConnectionRepository repository;
-  late ApiData apiData;
   late _MockUsersBloc usersBloc;
   late _MockGroupsBloc groupsBloc;
   late _MockServicesBloc servicesBloc;
   late _MockAppReadinessCubit appReadinessCubit;
   late _MockOutdatedServerCheckerBloc outdatedServerCheckerBloc;
 
-  setUp(() async {
-    await getIt.reset();
-    repository = _MockApiConnectionRepository();
-    apiData = ApiData(connection: () => null);
+  setUp(() {
     usersBloc = _MockUsersBloc();
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
     outdatedServerCheckerBloc = _MockOutdatedServerCheckerBloc();
-
-    when(() => repository.apiData).thenReturn(apiData);
-    getIt.registerSingleton<ApiConnectionRepository>(repository);
 
     when(
       () => usersBloc.stream,
@@ -88,8 +76,6 @@ void main() {
       () => outdatedServerCheckerBloc.stream,
     ).thenAnswer((_) => const Stream<OutdatedServerCheckerState>.empty());
   });
-
-  tearDown(getIt.reset);
 
   Future<void> pumpRouter(
     final WidgetTester tester,
@@ -141,7 +127,9 @@ void main() {
     final tester,
   ) async {
     final rootUser = User.fake(login: 'root', type: UserType.root);
-    when(() => usersBloc.state).thenReturn(UsersLoaded(users: [rootUser]));
+    when(
+      () => usersBloc.state,
+    ).thenReturn(UsersLoaded(users: [rootUser], continuity: Object()));
     final router = _TestRouter(GlobalKey<NavigatorState>());
 
     await pumpRouter(tester, router);

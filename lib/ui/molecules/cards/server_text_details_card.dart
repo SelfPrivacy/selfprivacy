@@ -18,7 +18,15 @@ class ServerTextDetailsCard extends StatelessWidget {
 
     final isLoading = details is! Loaded;
 
-    if (details is ServerDetailsNotReady) {
+    if (details is ServerDetailsUnavailable) {
+      return _TempMessage(
+        message:
+            (details.isUnsupported
+                    ? 'basis.feature_unsupported'
+                    : 'basis.network_error')
+                .tr(),
+      );
+    } else if (details is ServerDetailsNotReady) {
       return _TempMessage(message: 'basis.no_data'.tr());
     } else {
       return Skeletonizer(

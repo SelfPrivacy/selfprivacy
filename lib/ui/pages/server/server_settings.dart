@@ -29,12 +29,16 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
     hasFlashButton: true,
     heroIcon: Icons.settings_outlined,
     heroTitle: 'server.settings'.tr(),
-    children: const [_ServerSettings()],
+    children: [
+      _ServerSettings(
+        key: ValueKey(context.watch<ServerDetailsCubit>().state.continuity),
+      ),
+    ],
   );
 }
 
 class _ServerSettings extends StatefulWidget {
-  const _ServerSettings();
+  const _ServerSettings({super.key});
 
   @override
   State<_ServerSettings> createState() => _ServerSettingsState();
@@ -48,7 +52,14 @@ class _ServerSettingsState extends State<_ServerSettings> {
   @override
   Widget build(final BuildContext context) {
     final serverDetailsState = context.watch<ServerDetailsCubit>().state;
-    if (serverDetailsState is ServerDetailsNotReady) {
+    if (serverDetailsState is ServerDetailsUnavailable) {
+      return Text(
+        (serverDetailsState.isUnsupported
+                ? 'basis.feature_unsupported'
+                : 'basis.network_error')
+            .tr(),
+      );
+    } else if (serverDetailsState is ServerDetailsNotReady) {
       return Text('basis.loading'.tr());
     } else if (serverDetailsState is! Loaded) {
       return BrandLoader.horizontal();

@@ -1,13 +1,18 @@
 part of 'server_jobs_bloc.dart';
 
 sealed class ServerJobsState extends Equatable {
-  ServerJobsState({final List<ServerJob> serverJobList = const []})
-    : serverJobList = List.unmodifiable(
-        <ServerJob>[...serverJobList]
-          ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt)),
-      );
+  ServerJobsState({
+    final List<ServerJob> serverJobList = const [],
+    this.isComplete = false,
+    this.hasError = false,
+  }) : serverJobList = List.unmodifiable(
+         <ServerJob>[...serverJobList]
+           ..sort((final a, final b) => b.createdAt.compareTo(a.createdAt)),
+       );
 
   final List<ServerJob> serverJobList;
+  final bool isComplete;
+  final bool hasError;
 
   List<ServerJob> get backupJobList => serverJobList
       .where(
@@ -42,7 +47,7 @@ sealed class ServerJobsState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [serverJobList];
+  List<Object?> get props => [serverJobList, isComplete, hasError];
 }
 
 class ServerJobsInitialState extends ServerJobsState {
@@ -50,9 +55,19 @@ class ServerJobsInitialState extends ServerJobsState {
 }
 
 class ServerJobsListEmptyState extends ServerJobsState {
-  ServerJobsListEmptyState();
+  ServerJobsListEmptyState() : super(isComplete: true);
 }
 
 class ServerJobsListWithJobsState extends ServerJobsState {
-  ServerJobsListWithJobsState({required super.serverJobList});
+  ServerJobsListWithJobsState({
+    required super.serverJobList,
+    super.isComplete = true,
+    super.hasError,
+  });
+}
+
+class ServerJobsUnsupportedState extends ServerJobsState {}
+
+class ServerJobsErrorState extends ServerJobsState {
+  ServerJobsErrorState() : super(hasError: true);
 }

@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -84,14 +84,12 @@ class _DevicesInfo extends StatelessWidget {
     children: [
       SectionTitle(title: 'devices.main_screen.this_device'.tr()),
       if (devicesStatus.thisDevice case final device?)
-        StreamBuilder<void>(
-          stream: getIt<ApiConnectionRepository>().hub.changes,
-          builder: (final context, _) => DeviceItem(
+        StreamBuilder<RotationStatus>(
+          stream: context.read<DevicesBloc>().rotationChanges,
+          builder: (final context, final snapshot) => DeviceItem(
             device: device,
-            rotationStatus:
-                getIt<ApiConnectionRepository>().hub.rotation.status,
-            onCancelRotation: () =>
-                getIt<ApiConnectionRepository>().hub.cancelRotation(),
+            rotationStatus: snapshot.data ?? RotationStatus.idle,
+            onCancelRotation: context.read<DevicesBloc>().cancelRotation,
           ),
         ),
       const SizedBox(height: 8),
@@ -109,6 +107,7 @@ class _DevicesInfo extends StatelessWidget {
           device: device,
           pending: devicesStatus.pendingDeviceName == device.name,
           enabled: devicesStatus.pendingDeviceName == null,
+          onRevoke: () => context.read<DevicesBloc>().add(DeleteDevice(device)),
         ),
       ),
     ],

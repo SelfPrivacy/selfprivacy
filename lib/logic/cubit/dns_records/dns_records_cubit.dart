@@ -1,217 +1,146 @@
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/generic_result.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
-import 'package:selfprivacy/logic/cubit/server_connection_dependent/server_connection_dependent_cubit.dart';
-import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/json/dns_records.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
-import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 
 part 'dns_records_state.dart';
 
-class DnsRecordsCubit extends ServerConnectionDependentCubit<DnsRecordsState> {
-  DnsRecordsCubit()
-    : super(const DnsRecordsState(dnsState: DnsRecordsStatus.refreshing));
+class DnsRecordsCubit extends Cubit<DnsRecordsState> {
+  DnsRecordsCubit({
+    required final Stream<ConnectionObservation<bool>> access,
+    required final Future<GenericResult<List<DesiredDnsRecord>>> Function(
+      ServerStateOrigin,
+    )
+    read,
+    required final Future<GenericResult<List<DesiredDnsRecord>>?> Function(
+      ServerStateOrigin,
+    )
+    repair,
+  }) : _read = read,
+       _repair = repair,
+       super(DnsRecordsState()) {
+    _subscription = access.listen((final observation) {
+      final previous = _access;
+      _access = observation;
+      if (!identical(
+        previous?.origin?.continuity,
+        observation.origin?.continuity,
+      )) {
+        _requestedOrigin = null;
+        _request = null;
+        _repairing = false;
+        emit(DnsRecordsState());
+      }
+      if ((observation.value ?? false) &&
+          !identical(_requestedOrigin, observation.origin) &&
+          !_repairing) {
+        unawaited(load());
+      }
+    });
+  }
 
-  ServerApi get api => getIt<ApiConnectionRepository>().api;
+  final Future<GenericResult<List<DesiredDnsRecord>>> Function(
+    ServerStateOrigin,
+  )
+  _read;
+  final Future<GenericResult<List<DesiredDnsRecord>>?> Function(
+    ServerStateOrigin,
+  )
+  _repair;
+  late final StreamSubscription<ConnectionObservation<bool>> _subscription;
+  ConnectionObservation<bool>? _access;
+  ServerStateOrigin? _requestedOrigin;
+  Object? _request;
+  bool _repairing = false;
 
-  static final logger = const AppLogger(name: 'dns_records_cubit').log;
+  bool _isCurrent(final ServerStateOrigin origin) =>
+      !isClosed && identical(origin.continuity, _access?.origin?.continuity);
 
-  @override
   Future<void> load() async {
-    emit(
-      const DnsRecordsState(
-        dnsState: DnsRecordsStatus.refreshing,
-        dnsRecords: [],
-      ),
-    );
-
-    final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;
-    final String? ipAddress =
-        getIt<ApiConnectionRepository>().serverDetails?.ip4;
-
-    if (domain == null || ipAddress == null) {
-      emit(const DnsRecordsState());
+    final access = _access;
+    final origin = access?.origin;
+    if (isClosed || _repairing || origin == null || !(access?.value ?? false)) {
       return;
     }
-
-    final List<DnsRecord> allDnsRecords = await api.getDnsRecords() ?? [];
-    final foundRecords = await validateDnsRecords(
-      domain,
-      extractDkimRecord(allDnsRecords)?.content ?? '',
-      allDnsRecords,
-    );
-
-    if (!foundRecords.success && foundRecords.message == 'link-local') {
-      emit(
-        DnsRecordsState(
-          dnsState: DnsRecordsStatus.error,
-          dnsRecords: foundRecords.data,
-        ),
-      );
-      return;
+    final request = _request = Object();
+    _requestedOrigin = origin;
+    emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
+    try {
+      final result = await _read(origin);
+      if (_isCurrent(origin) &&
+          identical(_request, request) &&
+          identical(origin, _access?.origin)) {
+        _publish(result);
+      }
+    } on GraphQLDispatchDeferred {
+      if (_isCurrent(origin) && identical(_request, request)) {
+        _requestedOrigin = null;
+        if ((_access?.value ?? false) && !identical(access, _access)) {
+          unawaited(load());
+        }
+      }
+    } catch (_) {
+      if (_isCurrent(origin) && identical(_request, request)) {
+        emit(state.copyWith(dnsState: DnsRecordsStatus.error));
+      }
     }
+  }
 
-    if (!foundRecords.success || foundRecords.data.isEmpty) {
-      emit(const DnsRecordsState());
-      return;
-    }
-
+  void _publish(final GenericResult<List<DesiredDnsRecord>> result) {
     emit(
       DnsRecordsState(
-        dnsRecords: foundRecords.data,
-        dnsState: foundRecords.data.any((final r) => !r.isSatisfied)
+        dnsRecords: result.data,
+        dnsState:
+            !result.success ||
+                result.data.any((final record) => !record.isSatisfied)
             ? DnsRecordsStatus.error
+            : result.data.isEmpty
+            ? DnsRecordsStatus.uninitialized
             : DnsRecordsStatus.good,
       ),
     );
   }
 
-  /// Tries to check whether all known DNS records on the domain by ip4
-  /// match expectations of SelfPrivacy in order to launch.
-  ///
-  /// Will return list of [DesiredDnsRecord] objects, which represent
-  /// only those records which have successfully passed validation.
-  Future<GenericResult<List<DesiredDnsRecord>>> validateDnsRecords(
-    final ServerDomain domain,
-    final String dkimPublicKey,
-    final List<DnsRecord> pendingDnsRecords,
-  ) async {
-    final result = await ProvidersController.currentDnsProvider!.getDnsRecords(
-      domain: domain,
-    );
-    if (result.data.isEmpty || !result.success) {
-      return GenericResult(
-        success: result.success,
-        data: [],
-        code: result.code,
-        message: result.message,
-      );
-    }
-
-    final List<DnsRecord> providerDnsRecords = result.data;
-    final List<DesiredDnsRecord> foundRecords = [];
-    try {
-      for (final DnsRecord pendingDnsRecord in pendingDnsRecords) {
-        if (pendingDnsRecord.type == 'AAAA' &&
-            (pendingDnsRecord.content?.startsWith('fe80::') ?? false)) {
-          continue;
-        }
-        if (pendingDnsRecord.name == 'selector._domainkey') {
-          final foundRecord = providerDnsRecords.firstWhere(
-            (final r) =>
-                (r.name == pendingDnsRecord.name) &&
-                r.type == pendingDnsRecord.type,
-            orElse: () => DnsRecord(
-              displayName: pendingDnsRecord.displayName,
-              name: pendingDnsRecord.name,
-              type: pendingDnsRecord.type,
-              content: pendingDnsRecord.content,
-              ttl: pendingDnsRecord.ttl,
-            ),
-          );
-          final String foundContent = foundRecord.content!
-              .replaceAll(RegExp(r'\s+'), '')
-              .trim();
-          final String desiredContent = pendingDnsRecord.content!
-              .replaceAll(RegExp(r'\s+'), '')
-              .trim();
-          final isSatisfied = (desiredContent == foundContent);
-          foundRecords.add(
-            DesiredDnsRecord(
-              name: pendingDnsRecord.name!,
-              displayName: pendingDnsRecord.displayName,
-              content: pendingDnsRecord.content!,
-              isSatisfied: isSatisfied,
-              type: pendingDnsRecord.type,
-            ),
-          );
-        } else {
-          final foundMatch = providerDnsRecords.any(
-            (final r) =>
-                r.name == pendingDnsRecord.name &&
-                r.type == pendingDnsRecord.type &&
-                r.content == pendingDnsRecord.content,
-          );
-          foundRecords.add(
-            DesiredDnsRecord(
-              name: pendingDnsRecord.name!,
-              displayName: pendingDnsRecord.displayName,
-              content: pendingDnsRecord.content!,
-              isSatisfied: foundMatch,
-              type: pendingDnsRecord.type,
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      logger('Error while validating DNS records: $e', error: e);
-      return GenericResult(data: [], success: false, message: e.toString());
-    }
-    // If providerDnsRecords contains a link-local ipv6 record, return an error
-    if (providerDnsRecords.any(
-      (final r) =>
-          r.type == 'AAAA' && (r.content?.trim().startsWith('fe80::') ?? false),
-    )) {
-      return GenericResult(
-        data: foundRecords,
-        success: false,
-        message: 'link-local',
-      );
-    }
-    return GenericResult(data: foundRecords, success: true);
-  }
-
-  @override
-  void onChange(final Change<DnsRecordsState> change) {
-    // print(change);
-    super.onChange(change);
-  }
-
-  @override
-  Future<void> clear() async {
-    emit(const DnsRecordsState(dnsState: DnsRecordsStatus.uninitialized));
-  }
-
-  Future<void> refresh() async {
-    emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
-    await load();
-  }
+  Future<void> refresh() => load();
 
   Future<void> fix() async {
-    emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
-    final List<DnsRecord> records = await api.getDnsRecords() ?? []
-      ..removeWhere(
-        // If there are explicit link-local ipv6 records, remove them from the list
-        (final r) =>
-            r.type == 'AAAA' &&
-            (r.content?.trim().startsWith('fe80::') ?? false),
-      );
-
-    // If there are no AAAA records, make empty copies of A records
-    if (!records.any((final r) => r.type == 'AAAA')) {
-      final recordsToAdd = records
-          .where((final r) => r.type == 'A')
-          .map(
-            (final r) => DnsRecord(name: r.name, type: 'AAAA', content: null),
-          )
-          .toList();
-      records.addAll(recordsToAdd);
+    final origin = _access?.origin;
+    if (isClosed || origin == null || _repairing) {
+      return;
     }
+    _repairing = true;
+    _request = Object();
+    emit(state.copyWith(dnsState: DnsRecordsStatus.refreshing));
+    try {
+      final result = await _repair(origin);
+      if (_isCurrent(origin)) {
+        if (result != null) {
+          _publish(result);
+        } else {
+          emit(state.copyWith(dnsState: DnsRecordsStatus.error));
+        }
+      }
+    } catch (_) {
+      if (_isCurrent(origin)) {
+        emit(state.copyWith(dnsState: DnsRecordsStatus.error));
+      }
+    } finally {
+      if (_isCurrent(origin)) {
+        _repairing = false;
+      }
+    }
+  }
 
-    // TODO(NaiJi): Error handling?
-    final ServerDomain? domain = getIt<ApiConnectionRepository>().serverDomain;
-    await ProvidersController.currentDnsProvider!.removeDomainRecords(
-      records: records,
-      domain: domain!,
-    );
-    await ProvidersController.currentDnsProvider!.createDomainRecords(
-      records: records.where((final r) => r.content != null).toList(),
-      domain: domain,
-    );
-
-    await load();
+  @override
+  Future<void> close() async {
+    _access = null;
+    _request = null;
+    await _subscription.cancel();
+    return super.close();
   }
 }

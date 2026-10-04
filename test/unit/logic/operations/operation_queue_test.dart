@@ -69,7 +69,7 @@ void main() {
         ..recordStep(
           OperationStep.fromMutation(
             id: 'backup',
-            titleKey: 'operations.kind.manageBackups',
+            titleKey: 'operations.kind.manage_backups',
             result: result,
           ),
         );

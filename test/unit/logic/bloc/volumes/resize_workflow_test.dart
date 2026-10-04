@@ -120,6 +120,41 @@ void main() {
     verifyNever(() => provider.resizeVolume(volume, size));
   });
 
+  test('a replacement UI cannot repeat a pending provider resize', () async {
+    final volume = aServerProviderVolume();
+    const size = DiskSize(byte: 20000000000);
+    final response = Completer<GenericResult<bool>>();
+    when(
+      () => provider.resizeVolume(volume, size),
+    ).thenAnswer((_) => response.future);
+    final first = createBloc();
+    await pumpEventQueue();
+    first.add(
+      VolumeResize(
+        origin: first.state.origin,
+        DiskVolume(name: 'sdb', providerVolume: volume),
+        size,
+      ),
+    );
+    await pumpEventQueue();
+    final closing = first.close();
+    final second = createBloc();
+    addTearDown(second.close);
+    await pumpEventQueue();
+    second.add(
+      VolumeResize(
+        origin: second.state.origin,
+        DiskVolume(name: 'sdb', providerVolume: volume),
+        size,
+      ),
+    );
+    await pumpEventQueue();
+    response.complete(GenericResult(success: false, data: false));
+    await closing;
+    await pumpEventQueue();
+    verify(() => provider.resizeVolume(volume, size)).called(1);
+  });
+
   test('missing provider credentials have no price', () async {
     final bloc = createBloc(withoutProvider: true);
     await Future<void>.delayed(Duration.zero);

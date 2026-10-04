@@ -117,6 +117,46 @@ void main() {
     );
   }
 
+  test('backup initialization is not repeated by a replacement UI', () async {
+    await ready(initialized: false);
+    final response = Completer<ServerMutationResult<BackupConfiguration>>();
+    when(
+      () => api.initializeRepository(any()),
+    ).thenAnswer((_) => response.future);
+    bloc.add(
+      InitializeBackupsRepository(
+        origin: bloc.state.origin,
+        aBackupsCredential(),
+      ),
+    );
+    await pumpEventQueue();
+    final closing = bloc.close();
+    bloc = createBackupsBloc(
+      connection,
+      resources: resources,
+      showMessage: messages.add,
+      createProvider: (_) => provider,
+    );
+    await pumpEventQueue();
+    bloc.add(
+      InitializeBackupsRepository(
+        origin: bloc.state.origin,
+        aBackupsCredential(),
+      ),
+    );
+    await pumpEventQueue();
+    response.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(aBackupConfiguration()),
+      ),
+    );
+    await closing;
+    await pumpEventQueue();
+    verify(() => api.initializeRepository(any())).called(1);
+    expect(bloc.state, isA<BackupsInitialized>());
+  });
+
   testWidgets('an open backup period draft cannot cross a reset', (
     final tester,
   ) async {
@@ -337,12 +377,29 @@ void main() {
         );
         await pumpEventQueue();
         expect(bloc.state, isA<BackupsInitializing>());
+        final steps = connection.operations.pending.single.steps;
+        expect(steps.map((final step) => step.id), [
+          'storage',
+          'credentials',
+          'persist',
+        ]);
+        expect(steps.map((final step) => step.status), [
+          OperationStatus.succeeded,
+          OperationStatus.succeeded,
+          OperationStatus.running,
+        ]);
         verifyNever(() => api.initializeRepository(any()));
         final closing = bloc.close();
         persisted.complete();
         await closing;
         await pumpEventQueue();
         expect(connection.backups.configValue.data?.isInitialized, isTrue);
+        expect(
+          connection.operations.history.single.steps.map(
+            (final step) => step.status,
+          ),
+          everyElement(OperationStatus.succeeded),
+        );
         final input =
             verify(() => api.initializeRepository(captureAny())).captured.single
                 as InitializeRepositoryInput;

@@ -17,7 +17,7 @@ import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';

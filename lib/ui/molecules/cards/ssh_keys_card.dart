@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/list_tile_on_surface_variant.dart';
 import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';

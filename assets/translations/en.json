@@ -2,19 +2,25 @@
     "test": "en-test",
     "locale": "en",
     "operations": {
+        "steps": {
+            "create_backup_storage": "Create backup storage",
+            "create_backup_credentials": "Create storage credentials",
+            "save_backup_credentials": "Save storage credentials",
+            "configure_backups": "Configure server backups"
+        },
         "kind": {
-            "manageUsers": "Update users",
-            "manageDevices": "Update devices",
-            "manageServices": "Update services",
-            "manageBackups": "Update backups",
-            "manageVolumes": "Update storage",
-            "manageSettings": "Update settings",
-            "manageJobs": "Manage server jobs",
-            "applyChanges": "Apply changes",
-            "generateDeviceKey": "Generate device key",
-            "generateRecoveryKey": "Generate recovery key",
-            "generatePasswordResetLink": "Generate password-reset link",
-            "rotateToken": "Refresh access token"
+            "manage_users": "Update users",
+            "manage_devices": "Update devices",
+            "manage_services": "Update services",
+            "manage_backups": "Update backups",
+            "manage_volumes": "Update storage",
+            "manage_settings": "Update settings",
+            "manage_jobs": "Manage server jobs",
+            "apply_changes": "Apply changes",
+            "generate_device_key": "Generate device key",
+            "generate_recovery_key": "Generate recovery key",
+            "generate_password_reset_link": "Generate password-reset link",
+            "rotate_token": "Refresh access token"
         },
         "status": {
             "queued": "Waiting",
@@ -25,11 +31,11 @@
             "failed": "Failed",
             "unknown": "Outcome unknown",
             "cancelled": "Cancelled before sending",
-            "notSent": "Not sent"
+            "not_sent": "Not sent"
         },
         "reason": {
-            "rotationFailed": "Access token refresh did not complete",
-            "connectionReplaced": "Server connection changed",
+            "rotation_failed": "Access token refresh did not complete",
+            "connection_replaced": "Server connection changed",
             "cancelled": "Cancelled by you",
             "unavailable": "Server connection unavailable"
         }

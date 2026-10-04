@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,7 +11,7 @@ import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
@@ -173,14 +172,13 @@ void main() {
         ),
       );
       await cubit.rebootServer();
-      final job = (cubit.state as JobsStateFinished).clientJobList.single;
-      expect(
-        job.status,
-        outcome == ServerMutationOutcome.confirmed
-            ? JobStatusEnum.finished
-            : JobStatusEnum.error,
-      );
-      expect(job.message, isNotEmpty);
+      final job = (cubit.state as JobsStateFinished).steps.single;
+      expect(job.status, switch (outcome) {
+        ServerMutationOutcome.confirmed => OperationStatus.succeeded,
+        ServerMutationOutcome.rejected => OperationStatus.rejected,
+        ServerMutationOutcome.indeterminate => OperationStatus.unknown,
+      });
+      expect(job.messageKey, isNotEmpty);
       await cubit.rebootServer();
       verify(api.reboot).called(1);
     });
@@ -209,19 +207,22 @@ void main() {
           if (outcome == ServerMutationOutcome.confirmed && hasJob) {
             expect(cubit.state, isA<JobsStateLoading>());
             expect(cubit.state.rebuildJobUid, job.uid);
+            final step = (cubit.state as JobsStateLoading).steps.single;
+            expect(step.status, OperationStatus.accepted);
+            expect(step.messageKey, 'operations.status.accepted');
           } else {
             final state = cubit.state as JobsStateFinished;
             expect(state.rebuildJobUid, isNull);
             expect(
-              state.clientJobList.single.status,
-              outcome == ServerMutationOutcome.confirmed
-                  ? JobStatusEnum.finished
-                  : JobStatusEnum.error,
+              state.steps.single.status,
+              outcome == ServerMutationOutcome.rejected
+                  ? OperationStatus.rejected
+                  : OperationStatus.unknown,
             );
             if (outcome == ServerMutationOutcome.confirmed) {
               expect(
-                state.clientJobList.single.message,
-                'server_mutation.payload_unavailable'.tr(),
+                state.steps.single.messageKey,
+                'server_mutation.payload_unavailable',
               );
             }
           }
@@ -266,6 +267,101 @@ void main() {
     },
   );
 
+  test(
+    'recreating the UI cannot start another configuration batch while a job runs',
+    () async {
+      when(api.apply).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aServiceMoveJob()),
+        ),
+      );
+      cubit.addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
+      await cubit.applyAll();
+      await cubit.close();
+      cubit = createJobsCubit(
+        connection,
+        resources: resources,
+        dnsProvider: () => dnsProvider,
+        showMessage: messages.add,
+      );
+      await pumpEventQueue();
+      cubit.addJob(ChangeServerTimezoneJob(timezone: 'Europe/Berlin'));
+      await cubit.applyAll();
+      expect(cubit.state, isA<JobsStateWithJobs>());
+      verifyNever(() => api.setTimezone('Europe/Berlin'));
+      verify(api.apply).called(1);
+      var independentRan = false;
+      await connection.run(OperationKind.manageUsers, (_) async {
+        independentRan = true;
+      });
+      expect(independentRan, isTrue);
+      connection.operations.observeJob(aServiceMoveJob().uid, succeeded: true);
+      await cubit.applyAll();
+      verify(() => api.setTimezone('Europe/Berlin')).called(1);
+    },
+  );
+
+  test(
+    'submitted changes leave only safe progress and a separate draft',
+    () async {
+      final response = Completer<ServerMutationResult<void>>();
+      when(
+        () => api.setServiceConfiguration('gitea', any()),
+      ).thenAnswer((_) => response.future);
+      when(api.apply).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aServiceMoveJob()),
+        ),
+      );
+      cubit.addJob(
+        ChangeServiceConfiguration(
+          serviceId: 'gitea',
+          serviceDisplayName: 'Gitea',
+          settings: const {'password': 'secret-sentinel'},
+        ),
+      );
+      final applying = cubit.applyAll();
+      await pumpEventQueue();
+      cubit
+        ..addJob(
+          ChangeServiceConfiguration(
+            serviceId: 'gitea',
+            serviceDisplayName: 'Gitea',
+            settings: const {'port': 3000},
+          ),
+        )
+        ..addJob(
+          ChangeServiceConfiguration(
+            serviceId: 'nextcloud',
+            serviceDisplayName: 'Nextcloud',
+            settings: const {'port': 8080},
+          ),
+        );
+      final state = cubit.state as JobsStateLoading;
+      expect(state.postponedJobs.map((final change) => change.id), [
+        'change_settings_gitea',
+        'change_settings_nextcloud',
+      ]);
+      expect(state.steps.first.status, OperationStatus.running);
+      expect(state.steps.first.target, 'Gitea');
+      response.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      await applying;
+      verify(
+        () => api.setServiceConfiguration('gitea', const {
+          'password': 'secret-sentinel',
+        }),
+      ).called(1);
+      verifyNever(() => api.setServiceConfiguration('nextcloud', any()));
+    },
+  );
+
   testWidgets('mixed command results still apply the saved configuration', (
     final tester,
   ) async {
@@ -299,10 +395,10 @@ void main() {
       ..addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
     await tester.runAsync(cubit.applyAll);
     final state = cubit.state as JobsStateLoading;
-    expect(state.clientJobList.map((final job) => job.status), [
-      JobStatusEnum.finished,
-      JobStatusEnum.error,
-      JobStatusEnum.error,
+    expect(state.steps.map((final job) => job.status), [
+      OperationStatus.succeeded,
+      OperationStatus.unknown,
+      OperationStatus.failed,
     ]);
     verify(api.apply).called(1);
     verify(api.getDnsRecords).called(2);

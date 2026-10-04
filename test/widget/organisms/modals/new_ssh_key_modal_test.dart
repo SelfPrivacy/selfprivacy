@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/ui/organisms/modals/new_ssh_key_modal.dart';
 
 import '../../../helpers/widget_harness.dart';

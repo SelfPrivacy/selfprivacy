@@ -6,7 +6,7 @@ import 'package:selfprivacy/logic/connection/repositories/settings_repository.da
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
@@ -16,6 +16,42 @@ import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 enum DnsUpdateOutcome { unchanged, updated, unavailable, failed }
 
 enum ConfigurationStage { change, dns, rebuild }
+
+OperationStep configurationStep(
+  final JobDraft change, {
+  final OperationStatus status = OperationStatus.queued,
+  final String? jobId,
+  final String? messageKey,
+}) => OperationStep(
+  id: change.id,
+  titleKey: switch (change) {
+    ChangeServerTimezoneJob() => 'jobs.change_server_timezone',
+    ChangeSshSettingsJob() => 'jobs.change_ssh_settings',
+    ChangeAutoUpgradeSettingsJob() => 'jobs.change_auto_upgrade_settings',
+    ChangeServiceConfiguration() => 'jobs.change_service_settings',
+    ServiceToggleJob(:final needToTurnOn) =>
+      needToTurnOn ? 'jobs.service_turn_on' : 'jobs.service_turn_off',
+    DeleteUserJob() => 'jobs.delete_user',
+    CreateSSHKeyJob() => 'jobs.create_ssh_key',
+    DeleteSSHKeyJob() => 'jobs.delete_ssh_key',
+    RebootServerJob() => 'jobs.reboot_server',
+    UpgradeServerJob() => 'jobs.start_server_upgrade',
+    CollectNixGarbageJob() => 'jobs.collect_nix_garbage',
+    UpdateDnsRecordsJob() => 'jobs.update_dns_records',
+    _ => 'operations.kind.apply_changes',
+  },
+  target: switch (change) {
+    ChangeServiceConfiguration(:final serviceDisplayName) => serviceDisplayName,
+    ServiceToggleJob(:final service) => service.displayName,
+    DeleteUserJob(:final user) ||
+    CreateSSHKeyJob(:final user) ||
+    DeleteSSHKeyJob(:final user) => user.login,
+    _ => null,
+  },
+  status: status,
+  jobId: jobId,
+  messageKey: messageKey,
+);
 
 class ConfigurationProgress {
   const ConfigurationProgress({
@@ -33,7 +69,7 @@ class ConfigurationProgress {
   }) {
     final step = OperationStep.fromMutation(
       id: changeId ?? stage.name,
-      titleKey: 'operations.kind.applyChanges',
+      titleKey: 'operations.kind.apply_changes',
       result: result,
     );
     return ConfigurationProgress(
@@ -81,50 +117,31 @@ class ApplyChangesOperation {
   final ServerDomain _domain;
 
   Future<void> run(
-    final List<ClientJob> changes, {
+    final List<JobDraft> changes, {
     required final void Function(ConfigurationProgress) onProgress,
   }) async {
-    final submitted = List<ClientJob>.unmodifiable(changes);
+    final submitted = List<JobDraft>.unmodifiable(changes);
     void publish(final ConfigurationProgress progress) {
       final change = submitted.firstWhereOrNull(
         (final change) => change.id == progress.changeId,
       );
       OperationExecution.current?.recordStep(
-        OperationStep(
-          id: progress.changeId ?? progress.stage.name,
-          titleKey: switch (progress.stage) {
-            ConfigurationStage.dns => 'jobs.update_dns_records',
-            ConfigurationStage.rebuild => 'operations.kind.applyChanges',
-            ConfigurationStage.change => switch (change) {
-              ChangeServerTimezoneJob() => 'jobs.change_server_timezone',
-              ChangeSshSettingsJob() => 'jobs.change_ssh_settings',
-              ChangeAutoUpgradeSettingsJob() =>
-                'jobs.change_auto_upgrade_settings',
-              ChangeServiceConfiguration() => 'jobs.change_service_settings',
-              ServiceToggleJob(:final needToTurnOn) =>
-                needToTurnOn ? 'jobs.service_turn_on' : 'jobs.service_turn_off',
-              DeleteUserJob() => 'jobs.delete_user',
-              CreateSSHKeyJob() => 'jobs.create_ssh_key',
-              DeleteSSHKeyJob() => 'jobs.delete_ssh_key',
-              RebootServerJob() => 'jobs.reboot_server',
-              UpgradeServerJob() => 'jobs.start_server_upgrade',
-              CollectNixGarbageJob() => 'jobs.collect_nix_garbage',
-              _ => 'operations.kind.applyChanges',
-            },
-          },
-          status: progress.status,
-          jobId: progress.jobId,
-          messageKey: progress.messageKey,
-          target: switch (change) {
-            ChangeServiceConfiguration(:final serviceDisplayName) =>
-              serviceDisplayName,
-            ServiceToggleJob(:final service) => service.displayName,
-            DeleteUserJob(:final user) ||
-            CreateSSHKeyJob(:final user) ||
-            DeleteSSHKeyJob(:final user) => user.login,
-            _ => null,
-          },
-        ),
+        change == null
+            ? OperationStep(
+                id: progress.stage.name,
+                titleKey: progress.stage == ConfigurationStage.dns
+                    ? 'jobs.update_dns_records'
+                    : 'jobs.rebuild_system',
+                status: progress.status,
+                jobId: progress.jobId,
+                messageKey: progress.messageKey,
+              )
+            : configurationStep(
+                change,
+                status: progress.status,
+                jobId: progress.jobId,
+                messageKey: progress.messageKey,
+              ),
       );
       onProgress(progress);
     }
@@ -203,7 +220,7 @@ class ApplyChangesOperation {
     }
   }
 
-  Future<ServerMutationResult<Object?>> execute(final ClientJob job) {
+  Future<ServerMutationResult<Object?>> execute(final JobDraft job) {
     _requireAttached();
     return switch (job) {
       DeleteUserJob(:final user) => _users.deleteUser(user),

@@ -2,182 +2,147 @@ part of 'client_jobs_cubit.dart';
 
 sealed class JobsState extends Equatable {
   String? get rebuildJobUid => null;
-
-  JobsState addJob(final ClientJob job, {final SystemSettings? settings});
-
+  JobsState addJob(final JobDraft change, {final SystemSettings? settings});
   @override
   List<Object?> get props => [];
 }
+
+List<JobDraft> _updatedDraft(
+  final List<JobDraft> draft,
+  final JobDraft change,
+  final SystemSettings? settings,
+) {
+  if (change is ReplaceableJobDraft) {
+    return [
+      ...draft.where(
+        (final existing) => change.shouldReplaceOnlyIfSameId
+            ? existing.runtimeType != change.runtimeType ||
+                  existing.id != change.id
+            : existing.runtimeType != change.runtimeType,
+      ),
+      if (!change.matchesSettings(settings)) change,
+    ];
+  }
+  return change.canAddTo(draft) ? [...draft, change] : draft;
+}
+
+JobsState _draftState(final List<JobDraft> changes) =>
+    changes.isEmpty ? JobsStateEmpty() : JobsStateWithJobs(changes);
 
 class JobsStateEmpty extends JobsState {
   @override
-  JobsStateWithJobs addJob(
-    final ClientJob job, {
+  JobsState addJob(
+    final JobDraft change, {
     final SystemSettings? settings,
-  }) => JobsStateWithJobs([job]);
-
-  @override
-  List<Object?> get props => [];
+  }) => _draftState(_updatedDraft(const [], change, settings));
 }
 
 class JobsStateWithJobs extends JobsState {
-  JobsStateWithJobs(final List<ClientJob> clientJobList)
-    : clientJobList = List.unmodifiable(clientJobList);
-  final List<ClientJob> clientJobList;
-
+  JobsStateWithJobs(final List<JobDraft> changes)
+    : clientJobList = List.unmodifiable(changes);
+  final List<JobDraft> clientJobList;
   bool get rebuildRequired =>
-      clientJobList.any((final job) => job.requiresRebuild);
-
+      clientJobList.any((final change) => change.requiresRebuild);
   bool get dnsUpdateRequired =>
-      clientJobList.any((final job) => job.requiresDnsUpdate);
+      clientJobList.any((final change) => change.requiresDnsUpdate);
 
-  JobsState removeById(final String id) {
-    final List<ClientJob> newJobsList = clientJobList
-        .where((final element) => element.id != id)
-        .toList();
-    if (newJobsList.isEmpty) {
-      return JobsStateEmpty();
-    }
-    return JobsStateWithJobs(newJobsList);
+  JobsState removeById(final String id) => _draftState(
+    clientJobList.where((final change) => change.id != id).toList(),
+  );
+
+  @override
+  JobsState addJob(final JobDraft change, {final SystemSettings? settings}) {
+    final updated = _updatedDraft(clientJobList, change, settings);
+    return identical(updated, clientJobList) ? this : _draftState(updated);
   }
 
   @override
   List<Object?> get props => [clientJobList];
-
-  @override
-  JobsState addJob(final ClientJob job, {final SystemSettings? settings}) {
-    if (job is ReplaceableJob) {
-      final List<ClientJob> newJobsList = clientJobList
-          .where(
-            (final element) => job.shouldReplaceOnlyIfSameId
-                ? element.runtimeType != job.runtimeType || element.id != job.id
-                : element.runtimeType != job.runtimeType,
-          )
-          .toList();
-      if (!job.matchesSettings(settings)) {
-        newJobsList.add(job);
-      }
-      if (newJobsList.isEmpty) {
-        return JobsStateEmpty();
-      }
-      return JobsStateWithJobs(newJobsList);
-    }
-    if (job.canAddTo(clientJobList)) {
-      final List<ClientJob> newJobsList = [...clientJobList, job];
-      return JobsStateWithJobs(newJobsList);
-    }
-    return this;
-  }
 }
 
-class JobsStateLoading extends JobsState {
-  JobsStateLoading(
-    final List<ClientJob> clientJobList,
+sealed class JobsStateWithProgress extends JobsState {
+  JobsStateWithProgress(
+    final List<OperationStep> steps,
     this.rebuildJobUid,
-    final List<ClientJob> postponedJobs,
-  ) : clientJobList = List.unmodifiable(clientJobList),
-      postponedJobs = List.unmodifiable(postponedJobs);
-  final List<ClientJob> clientJobList;
+    final List<JobDraft> postponedJobs, {
+    required this.rebuildRequired,
+  }) : steps = List.unmodifiable(steps),
+       postponedJobs = List.unmodifiable(postponedJobs);
+
+  final List<OperationStep> steps;
   @override
   final String? rebuildJobUid;
+  final List<JobDraft> postponedJobs;
+  final bool rebuildRequired;
 
-  bool get rebuildRequired =>
-      clientJobList.any((final job) => job.requiresRebuild);
+  @override
+  List<Object?> get props => [
+    steps,
+    rebuildJobUid,
+    postponedJobs,
+    rebuildRequired,
+  ];
+}
 
-  bool get dnsUpdateRequired =>
-      clientJobList.any((final job) => job.requiresDnsUpdate);
+class JobsStateLoading extends JobsStateWithProgress {
+  JobsStateLoading(
+    super.steps,
+    super.rebuildJobUid,
+    super.postponedJobs, {
+    super.rebuildRequired = true,
+  });
 
-  final List<ClientJob> postponedJobs;
-
-  JobsStateLoading updateJobStatus(
+  JobsStateLoading updateStep(
     final String id,
-    final JobStatusEnum status, {
-    final String? message,
-  }) {
-    final List<ClientJob> newJobsList = clientJobList.map((final job) {
-      if (job.id == id) {
-        return job.copyWithNewStatus(status: status, message: message);
-      }
-      return job;
-    }).toList();
-    return JobsStateLoading(newJobsList, rebuildJobUid, postponedJobs);
-  }
-
-  JobsStateLoading copyWith({
-    final List<ClientJob>? clientJobList,
-    final String? rebuildJobUid,
-    final List<ClientJob>? postponedJobs,
-  }) => JobsStateLoading(
-    clientJobList ?? this.clientJobList,
-    rebuildJobUid ?? this.rebuildJobUid,
-    postponedJobs ?? this.postponedJobs,
+    final OperationStatus status, {
+    final String? messageKey,
+    final String? jobId,
+  }) => copyWith(
+    steps: [
+      for (final step in steps)
+        if (step.id == id)
+          step.withStatus(status, messageKey: messageKey, jobId: jobId)
+        else
+          step,
+    ],
   );
 
-  JobsStateFinished finished() =>
-      JobsStateFinished(clientJobList, rebuildJobUid, postponedJobs);
+  JobsStateLoading copyWith({
+    final List<OperationStep>? steps,
+    final String? rebuildJobUid,
+    final List<JobDraft>? postponedJobs,
+  }) => JobsStateLoading(
+    steps ?? this.steps,
+    rebuildJobUid ?? this.rebuildJobUid,
+    postponedJobs ?? this.postponedJobs,
+    rebuildRequired: rebuildRequired,
+  );
+
+  JobsStateFinished finished() => JobsStateFinished(
+    steps,
+    rebuildJobUid,
+    postponedJobs,
+    rebuildRequired: rebuildRequired,
+  );
 
   @override
-  List<Object?> get props => [clientJobList, rebuildJobUid, postponedJobs];
-
-  @override
-  JobsState addJob(final ClientJob job, {final SystemSettings? settings}) {
-    if (job is ReplaceableJob) {
-      final List<ClientJob> newPostponedJobs = postponedJobs
-          .where((final element) => element.runtimeType != job.runtimeType)
-          .toList();
-      if (!job.matchesSettings(settings)) {
-        newPostponedJobs.add(job);
-      }
-      return JobsStateLoading(clientJobList, rebuildJobUid, newPostponedJobs);
-    }
-    if (job.canAddTo(postponedJobs)) {
-      final List<ClientJob> newPostponedJobs = [...postponedJobs, job];
-      return JobsStateLoading(clientJobList, rebuildJobUid, newPostponedJobs);
-    }
-    return this;
-  }
+  JobsState addJob(
+    final JobDraft change, {
+    final SystemSettings? settings,
+  }) => copyWith(postponedJobs: _updatedDraft(postponedJobs, change, settings));
 }
 
-class JobsStateFinished extends JobsState {
+class JobsStateFinished extends JobsStateWithProgress {
   JobsStateFinished(
-    final List<ClientJob> clientJobList,
-    this.rebuildJobUid,
-    final List<ClientJob> postponedJobs,
-  ) : clientJobList = List.unmodifiable(clientJobList),
-      postponedJobs = List.unmodifiable(postponedJobs);
-  final List<ClientJob> clientJobList;
-  @override
-  final String? rebuildJobUid;
-
-  bool get rebuildRequired =>
-      clientJobList.any((final job) => job.requiresRebuild);
-
-  bool get dnsUpdateRequired =>
-      clientJobList.any((final job) => job.requiresDnsUpdate);
-
-  final List<ClientJob> postponedJobs;
+    super.steps,
+    super.rebuildJobUid,
+    super.postponedJobs, {
+    super.rebuildRequired = true,
+  });
 
   @override
-  List<Object?> get props => [clientJobList, rebuildJobUid, postponedJobs];
-
-  @override
-  JobsState addJob(final ClientJob job, {final SystemSettings? settings}) {
-    if (job is ReplaceableJob) {
-      final List<ClientJob> newPostponedJobs = postponedJobs
-          .where((final element) => element.runtimeType != job.runtimeType)
-          .toList();
-      if (!job.matchesSettings(settings)) {
-        newPostponedJobs.add(job);
-      }
-      if (newPostponedJobs.isEmpty) {
-        return JobsStateEmpty();
-      }
-      return JobsStateWithJobs(newPostponedJobs);
-    }
-    if (job.canAddTo(postponedJobs)) {
-      final List<ClientJob> newPostponedJobs = [...postponedJobs, job];
-      return JobsStateWithJobs(newPostponedJobs);
-    }
-    return this;
-  }
+  JobsState addJob(
+    final JobDraft change, {
+    final SystemSettings? settings,
+  }) => _draftState(_updatedDraft(postponedJobs, change, settings));
 }

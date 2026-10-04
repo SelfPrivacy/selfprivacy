@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/forms/ssh_key_form.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/ui/forms/ssh_key_form_view.dart';
 
 class NewSshKeyModal extends StatefulWidget {

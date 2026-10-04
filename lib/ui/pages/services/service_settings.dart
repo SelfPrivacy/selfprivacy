@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/config_item_fields/basic_bool_config_item.dart';
@@ -154,14 +154,14 @@ class _ServiceSettingsEditorState extends State<_ServiceSettingsEditor> {
     if (state is JobsStateWithJobs) {
       final ChangeServiceConfiguration? existingJob =
           state.clientJobList.firstWhereOrNull(
-                (final ClientJob job) =>
+                (final JobDraft job) =>
                     job is ChangeServiceConfiguration &&
                     job.serviceId == widget.serviceId,
               )
               as ChangeServiceConfiguration?;
       if (existingJob != null) {
         setState(() {
-          settings = existingJob.settings;
+          settings = Map.of(existingJob.settings);
           isJobAlreadyExists = true;
         });
       }

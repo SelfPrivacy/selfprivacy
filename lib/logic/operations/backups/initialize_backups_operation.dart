@@ -35,13 +35,39 @@ class InitializeBackupsOperation {
     }
   }
 
+  Future<T> _step<T>(
+    final String id,
+    final String titleKey,
+    final Future<T> Function() action, {
+    final bool Function(T)? isSuccessful,
+  }) async {
+    void record(final OperationStatus status) => OperationExecution.current
+        ?.recordStep(OperationStep(id: id, titleKey: titleKey, status: status));
+    record(OperationStatus.running);
+    try {
+      final result = await action();
+      record(
+        (isSuccessful?.call(result) ?? true)
+            ? OperationStatus.succeeded
+            : OperationStatus.failed,
+      );
+      return result;
+    } on OperationNotSent {
+      record(OperationStatus.notSent);
+      rethrow;
+    } catch (_) {
+      record(OperationStatus.unknown);
+      rethrow;
+    }
+  }
+
   Future<ServerMutationResult<BackupConfiguration>> run() async {
     final bucket = await _prepare();
     _requireAttached();
     OperationExecution.current?.recordStep(
       const OperationStep(
         id: 'configure',
-        titleKey: 'operations.kind.manageBackups',
+        titleKey: 'operations.steps.configure_backups',
         status: OperationStatus.running,
       ),
     );
@@ -57,7 +83,7 @@ class InitializeBackupsOperation {
     OperationExecution.current?.recordStep(
       OperationStep.fromMutation(
         id: 'configure',
-        titleKey: 'operations.kind.manageBackups',
+        titleKey: 'operations.steps.configure_backups',
         result: result,
       ),
     );
@@ -74,14 +100,27 @@ class InitializeBackupsOperation {
     if (existingBucket case final bucket?) {
       return bucket;
     }
-    final storage = await provider.createStorage(bucketName);
+    final storage = await _step(
+      'storage',
+      'operations.steps.create_backup_storage',
+      () => provider.createStorage(bucketName),
+      isSuccessful: (final result) => result.success && result.data.isNotEmpty,
+    );
     final created = storage.success && storage.data.isNotEmpty;
     OperationExecution.current?.recordCompletion(succeeded: created);
     _requireAttached();
     if (!created) {
       throw BackupStorageFailure.createStorage;
     }
-    final key = await provider.createApplicationKey(storage.data);
+    final key = await _step(
+      'credentials',
+      'operations.steps.create_backup_credentials',
+      () => provider.createApplicationKey(storage.data),
+      isSuccessful: (final result) =>
+          result.success &&
+          (result.data?.applicationKey.isNotEmpty ?? false) &&
+          (result.data?.applicationKeyId.isNotEmpty ?? false),
+    );
     final credential = key.data;
     final usable =
         key.success &&
@@ -100,7 +139,11 @@ class InitializeBackupsOperation {
       applicationKeyId: credential.applicationKeyId,
       encryptionKey: encryptionKey,
     );
-    await saveBucket(bucket);
+    await _step(
+      'persist',
+      'operations.steps.save_backup_credentials',
+      () => saveBucket(bucket),
+    );
     _requireAttached();
     return bucket;
   }

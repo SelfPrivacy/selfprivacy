@@ -25,6 +25,7 @@ part 'backups_state.dart';
 typedef AdmitBackupOperation =
     Future<OperationResult<void>> Function(
       ServerStateOrigin origin,
+      OperationKind kind,
       Future<void> Function(BackupsRepository) action,
     );
 
@@ -103,6 +104,11 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       try {
         result = await _admitOperation(
           event.origin!,
+          switch (event) {
+            InitializeBackupsRepository() => OperationKind.initializeBackups,
+            RemoveBackupsRepository() => OperationKind.removeBackups,
+            _ => OperationKind.manageBackups,
+          },
           (final repository) => action(event, repository, (final value) {
             if (!emit.isDone && _isCurrent(event.origin)) {
               emit(value);

@@ -10,12 +10,37 @@ enum OperationKind {
   manageSettings,
   manageJobs,
   applyChanges,
+  rebootServer,
+  upgradeServer,
+  collectGarbage,
+  initializeBackups,
+  removeBackups,
+  resizeVolume,
   generateDeviceKey,
   generateRecoveryKey,
   generatePasswordResetLink,
   rotateToken;
 
-  String get translationKey => 'operations.kind.$name';
+  String get translationKey => switch (this) {
+    rebootServer => 'jobs.reboot_server',
+    upgradeServer => 'jobs.start_server_upgrade',
+    collectGarbage => 'jobs.collect_nix_garbage',
+    initializeBackups => 'backup.initialize',
+    removeBackups => 'backup.detach_repository',
+    resizeVolume => 'storage.extending_volume_title',
+    manageUsers => 'operations.kind.manage_users',
+    manageDevices => 'operations.kind.manage_devices',
+    manageServices => 'operations.kind.manage_services',
+    manageBackups => 'operations.kind.manage_backups',
+    manageVolumes => 'operations.kind.manage_volumes',
+    manageSettings => 'operations.kind.manage_settings',
+    manageJobs => 'operations.kind.manage_jobs',
+    applyChanges => 'operations.kind.apply_changes',
+    generateDeviceKey => 'operations.kind.generate_device_key',
+    generateRecoveryKey => 'operations.kind.generate_recovery_key',
+    generatePasswordResetLink => 'operations.kind.generate_password_reset_link',
+    rotateToken => 'operations.kind.rotate_token',
+  };
 }
 
 enum OperationStatus {
@@ -30,7 +55,9 @@ enum OperationStatus {
   notSent;
 
   bool get isPending => this == queued || this == running || this == accepted;
-  String get translationKey => 'operations.status.$name';
+  String get translationKey => this == notSent
+      ? 'operations.status.not_sent'
+      : 'operations.status.$name';
 }
 
 enum OperationReason {
@@ -39,7 +66,12 @@ enum OperationReason {
   cancelled,
   unavailable;
 
-  String get translationKey => 'operations.reason.$name';
+  String get translationKey => switch (this) {
+    rotationFailed => 'operations.reason.rotation_failed',
+    connectionReplaced => 'operations.reason.connection_replaced',
+    cancelled => 'operations.reason.cancelled',
+    unavailable => 'operations.reason.unavailable',
+  };
 }
 
 class OperationEvent {
@@ -115,6 +147,8 @@ class OperationStep {
           'server_mutation.outcome_unknown',
         ServerMutationOutcome.confirmed when unavailable =>
           'server_mutation.payload_unavailable',
+        ServerMutationOutcome.confirmed when job != null =>
+          'operations.status.accepted',
         ServerMutationOutcome.confirmed => 'basis.done',
       },
     );
@@ -127,13 +161,17 @@ class OperationStep {
   final String? jobId;
   final String? messageKey;
 
-  OperationStep withStatus(final OperationStatus status) => OperationStep(
+  OperationStep withStatus(
+    final OperationStatus status, {
+    final String? messageKey,
+    final String? jobId,
+  }) => OperationStep(
     id: id,
     titleKey: titleKey,
     status: status,
     target: target,
-    jobId: jobId,
-    messageKey: status.translationKey,
+    jobId: jobId ?? this.jobId,
+    messageKey: messageKey ?? status.translationKey,
   );
 }
 

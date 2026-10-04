@@ -7,8 +7,9 @@ import 'package:selfprivacy/config/brand_theme.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/operations/operation.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/icons/job_icon.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
@@ -52,9 +53,8 @@ class JobsContent extends StatelessWidget {
           ];
         } else if (state is JobsStateLoading) {
           widgets = [
-            ...state.clientJobList.map(
-              (final j) =>
-                  _ClientJobStatusCard(clientJob: j, key: ValueKey(j.id)),
+            ...state.steps.map(
+              (final j) => _ClientJobStatusCard.step(j, key: ValueKey(j.id)),
             ),
             if (state.rebuildRequired)
               Builder(
@@ -70,9 +70,7 @@ class JobsContent extends StatelessWidget {
           ];
         } else if (state is JobsStateFinished) {
           widgets = [
-            ...state.clientJobList.map(
-              (final j) => _ClientJobStatusCard(clientJob: j),
-            ),
+            ...state.steps.map(_ClientJobStatusCard.step),
             if (state.rebuildRequired)
               Builder(
                 builder: (final context) {
@@ -193,13 +191,41 @@ class _JobsEmptyActions extends StatelessWidget {
 }
 
 class _ClientJobStatusCard extends StatelessWidget {
-  const _ClientJobStatusCard({
-    required this.clientJob,
+  _ClientJobStatusCard({
+    required final JobDraft clientJob,
     this.showRemoveButton = false,
-    super.key,
-  });
+  }) : id = clientJob.id,
+       title = clientJob.title,
+       status = JobStatusEnum.created,
+       message = null;
 
-  final ClientJob clientJob;
+  _ClientJobStatusCard.step(final OperationStep step, {super.key})
+    : id = step.id,
+      title = switch (step.titleKey) {
+        'jobs.create_ssh_key' ||
+        'jobs.delete_ssh_key' ||
+        'jobs.change_service_settings' => step.titleKey.tr(
+          args: [step.target ?? ''],
+        ),
+        _ => [
+          step.titleKey.tr(),
+          if (step.target != null) step.target!,
+        ].join(' '),
+      },
+      status = switch (step.status) {
+        OperationStatus.queued => JobStatusEnum.created,
+        OperationStatus.running ||
+        OperationStatus.accepted => JobStatusEnum.running,
+        OperationStatus.succeeded => JobStatusEnum.finished,
+        _ => JobStatusEnum.error,
+      },
+      message = step.messageKey?.tr(),
+      showRemoveButton = false;
+
+  final String id;
+  final String title;
+  final JobStatusEnum status;
+  final String? message;
   final bool showRemoveButton;
 
   @override
@@ -208,10 +234,7 @@ class _ClientJobStatusCard extends StatelessWidget {
       if (!showRemoveButton)
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Icon(
-            getJobIcon(clientJob.status),
-            color: getJobColor(clientJob.status, context),
-          ),
+          child: Icon(getJobIcon(status), color: getJobColor(status, context)),
         ),
       Expanded(
         child: Card(
@@ -222,16 +245,13 @@ class _ClientJobStatusCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  clientJob.title,
+                  title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
-                if (clientJob.message != null)
-                  Text(
-                    clientJob.message!,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
+                if (message != null)
+                  Text(message!, style: Theme.of(context).textTheme.bodySmall),
               ],
             ),
           ),
@@ -243,7 +263,7 @@ class _ClientJobStatusCard extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.errorContainer,
           ),
-          onPressed: () => context.read<JobsCubit>().removeJob(clientJob.id),
+          onPressed: () => context.read<JobsCubit>().removeJob(id),
           child: Text(
             'basis.remove'.tr(),
             style: TextStyle(

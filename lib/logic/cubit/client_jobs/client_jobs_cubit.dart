@@ -9,12 +9,11 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
-import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
 
@@ -81,11 +80,27 @@ class JobsCubit extends Cubit<JobsState> {
     );
     if (job?.status == JobStatusEnum.error ||
         job?.status == JobStatusEnum.finished) {
-      emit(current.finished());
+      emit(
+        current
+            .copyWith(
+              steps: [
+                for (final step in current.steps)
+                  if (step.jobId == job!.uid)
+                    step.withStatus(
+                      job.status == JobStatusEnum.finished
+                          ? OperationStatus.succeeded
+                          : OperationStatus.failed,
+                    )
+                  else
+                    step,
+              ],
+            )
+            .finished(),
+      );
     }
   }
 
-  void addJob(final ClientJob job) {
+  void addJob(final JobDraft job) {
     final origin = _jobs?.origin;
     if (!_isCurrent(origin)) {
       return;
@@ -101,7 +116,7 @@ class JobsCubit extends Cubit<JobsState> {
     }
     emit(next);
     _showMessage(
-      (job is ReplaceableJob && job.matchesSettings(settings)
+      (job is ReplaceableJobDraft && job.matchesSettings(settings)
               ? 'jobs.job_removed'
               : previous is JobsStateLoading
               ? 'jobs.job_postponed'
@@ -119,47 +134,44 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> _perform(
     final ServerStateOrigin origin,
     final OperationKind kind,
-    final Future<void> Function(ApplyChangesOperation) action,
-  ) async {
+    final Future<void> Function(ApplyChangesOperation) action, {
+    required final void Function() onNotSent,
+  }) async {
     try {
-      final result = await _admitOperation(origin, kind, (
-        final operation,
-      ) async {
-        await action(operation);
-      });
+      final result = await _admitOperation(origin, kind, action);
       if (_isCurrent(origin) &&
           (result.status == OperationStatus.notSent ||
               result.status == OperationStatus.cancelled)) {
-        _failUnfinished(result.status.translationKey.tr());
+        onNotSent();
+        _showMessage(result.status.translationKey.tr());
       }
     } catch (_) {
       if (_isCurrent(origin)) {
-        _failUnfinished('server_mutation.outcome_unknown'.tr());
+        _failUnfinished('server_mutation.outcome_unknown');
       }
     }
   }
 
-  void _failUnfinished(final String message) {
+  void _failUnfinished(final String messageKey) {
     if (state case final JobsStateLoading current) {
       emit(
         JobsStateFinished(
-          current.clientJobList
+          current.steps
               .map(
-                (final job) =>
-                    job.status == JobStatusEnum.created ||
-                        job.status == JobStatusEnum.running
-                    ? job.copyWithNewStatus(
-                        status: JobStatusEnum.error,
-                        message: message,
+                (final job) => job.status.isPending
+                    ? job.withStatus(
+                        OperationStatus.unknown,
+                        messageKey: messageKey,
                       )
                     : job,
               )
               .toList(),
           current.rebuildJobUid,
           current.postponedJobs,
+          rebuildRequired: current.rebuildRequired,
         ),
       );
-      _showMessage(message);
+      _showMessage(messageKey.tr());
     }
   }
 
@@ -167,30 +179,40 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> upgradeServer() => _single(UpgradeServerJob());
   Future<void> collectNixGarbage() => _single(CollectNixGarbageJob());
 
-  Future<void> _single(final ClientJob job) async {
+  Future<void> _single(final JobDraft job) async {
     final origin = _jobs?.origin;
     if (!_isCurrent(origin) || state is! JobsStateEmpty) {
       return;
     }
     emit(
       JobsStateLoading(
-        [job.copyWithNewStatus(status: JobStatusEnum.running)],
+        [configurationStep(job, status: OperationStatus.running)],
         null,
         const [],
+        rebuildRequired: job.requiresRebuild,
       ),
     );
-    await _perform(origin!, OperationKind.manageJobs, (final operation) async {
+    final kind = switch (job) {
+      RebootServerJob() => OperationKind.rebootServer,
+      UpgradeServerJob() => OperationKind.upgradeServer,
+      CollectNixGarbageJob() => OperationKind.collectGarbage,
+      _ => throw ArgumentError('Unsupported maintenance action'),
+    };
+    await _perform(origin!, kind, (final operation) async {
       final result = await operation.execute(job);
       if (!_isCurrent(origin)) {
         return;
       }
       final current = state as JobsStateLoading;
-      final updated = current.updateJobStatus(
+      final feedback = ConfigurationProgress.fromResult(
+        ConfigurationStage.change,
+        result,
+      );
+      final updated = current.updateStep(
         job.id,
-        result.outcome == ServerMutationOutcome.confirmed
-            ? JobStatusEnum.finished
-            : JobStatusEnum.error,
-        message: serverMutationMessage(result),
+        feedback.status,
+        messageKey: feedback.messageKey,
+        jobId: feedback.jobId,
       );
       if (result.outcome == ServerMutationOutcome.confirmed &&
           result.payload.value is ServerJob) {
@@ -203,7 +225,7 @@ class JobsCubit extends Cubit<JobsState> {
       } else {
         emit(updated.finished());
       }
-    });
+    }, onNotSent: () => emit(JobsStateEmpty()));
   }
 
   Future<void> applyAll() async {
@@ -212,12 +234,17 @@ class JobsCubit extends Cubit<JobsState> {
     if (!_isCurrent(origin) || previous is! JobsStateWithJobs) {
       return;
     }
-    final jobs = List<ClientJob>.unmodifiable(previous.clientJobList);
+    final jobs = List<JobDraft>.unmodifiable(previous.clientJobList);
     emit(
       JobsStateLoading(
-        [...jobs, if (previous.dnsUpdateRequired) UpdateDnsRecordsJob()],
+        [
+          ...jobs.map(configurationStep),
+          if (previous.dnsUpdateRequired)
+            configurationStep(UpdateDnsRecordsJob()),
+        ],
         null,
         const [],
+        rebuildRequired: previous.rebuildRequired,
       ),
     );
     await _perform(
@@ -234,15 +261,11 @@ class JobsCubit extends Cubit<JobsState> {
             case ConfigurationStage.change:
             case ConfigurationStage.dns:
               emit(
-                current.updateJobStatus(
+                current.updateStep(
                   progress.changeId ?? UpdateDnsRecordsJob.jobId,
-                  switch (progress.status) {
-                    OperationStatus.running => JobStatusEnum.running,
-                    OperationStatus.succeeded ||
-                    OperationStatus.accepted => JobStatusEnum.finished,
-                    _ => JobStatusEnum.error,
-                  },
-                  message: progress.messageKey?.tr(),
+                  progress.status,
+                  messageKey: progress.messageKey,
+                  jobId: progress.jobId,
                 ),
               );
             case ConfigurationStage.rebuild:
@@ -261,6 +284,19 @@ class JobsCubit extends Cubit<JobsState> {
           }
         },
       ),
+      onNotSent: () {
+        final current = state;
+        var restored = previous as JobsState;
+        if (current is JobsStateLoading) {
+          for (final change in current.postponedJobs) {
+            restored = restored.addJob(
+              change,
+              settings: _settings?.value?.data,
+            );
+          }
+        }
+        emit(restored);
+      },
     );
     if (_isCurrent(origin) && state is JobsStateLoading) {
       final current = state as JobsStateLoading;

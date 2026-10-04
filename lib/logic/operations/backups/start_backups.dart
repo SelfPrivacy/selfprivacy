@@ -17,7 +17,7 @@ Future<List<ServerMutationResult<ServerJob>>> startBackups(
     OperationExecution.current?.recordStep(
       OperationStep(
         id: id,
-        titleKey: 'operations.kind.manageBackups',
+        titleKey: 'operations.kind.manage_backups',
         target: id,
         status: OperationStatus.running,
       ),
@@ -26,7 +26,7 @@ Future<List<ServerMutationResult<ServerJob>>> startBackups(
     OperationExecution.current?.recordStep(
       OperationStep.fromMutation(
         id: id,
-        titleKey: 'operations.kind.manageBackups',
+        titleKey: 'operations.kind.manage_backups',
         target: id,
         result: result,
       ),

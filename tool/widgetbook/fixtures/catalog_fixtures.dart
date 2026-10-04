@@ -18,10 +18,12 @@ import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_inf
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
-import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
+import 'package:selfprivacy/logic/operations/operation.dart';
 
 import 'constants.dart';
 import 'metrics.dart';
@@ -112,21 +114,22 @@ class CatalogFixtures {
           : demoMetrics(legacy: variant == 'Legacy'),
     );
     bind(support, const SupportSystemState('how_backblaze'));
-    final clientJob = UpgradeServerJob(
-      id: 'catalog-upgrade',
+    final clientJob = UpgradeServerJob(id: 'catalog-upgrade');
+    final step = configurationStep(
+      clientJob,
       status: variant == 'Finished'
-          ? JobStatusEnum.finished
+          ? OperationStatus.succeeded
           : variant == 'Failed'
-          ? JobStatusEnum.error
-          : JobStatusEnum.created,
-      message: variant == 'Failed' ? 'Upgrade could not be completed' : null,
+          ? OperationStatus.failed
+          : OperationStatus.queued,
+      messageKey: variant == 'Failed' ? 'Upgrade could not be completed' : null,
     );
     final pendingJob = UpdateDnsRecordsJob();
     bind(jobs, switch (variant) {
-      'Loading' => JobsStateLoading([clientJob], null, const []),
-      'Finished' || 'Failed' => JobsStateFinished([clientJob], null, const []),
+      'Loading' => JobsStateLoading([step], null, const []),
+      'Finished' || 'Failed' => JobsStateFinished([step], null, const []),
       'Queued' || 'Blocked' => JobsStateWithJobs([clientJob]),
-      'Postponed' => JobsStateLoading([clientJob], 'catalog-job', [pendingJob]),
+      'Postponed' => JobsStateLoading([step], 'catalog-job', [pendingJob]),
       _ => JobsStateEmpty(),
     });
     devices.record = record;

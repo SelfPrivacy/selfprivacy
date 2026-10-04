@@ -237,27 +237,40 @@ JobsCubit createJobsCubit(
     read: (final owner) => owner.settings.value,
     changes: (final owner) => owner.settings.changes,
   ),
-  admitOperation: (final origin, final kind, final action) =>
-      connection.submit<void>(kind, (final owner) {
-        final server = resources.servers
-            .where((final server) => server.uuid == owner.origin.serverId)
-            .firstOrNull;
-        if (server == null) {
-          throw const OperationNotSent();
-        }
-        return action(
-          ApplyChangesOperation(
-            users: owner.users,
-            settings: owner.settings,
-            services: owner.services,
-            jobs: owner.jobs,
-            volumes: owner.volumes,
-            readDns: () => owner.api.getDnsRecords(),
-            dnsProvider: dnsProvider(),
-            domain: server.domain,
-          ),
-        );
-      }, origin: origin).result,
+  admitOperation: (final origin, final kind, final action) {
+    final busy = connection.operations.pending.any(
+      (final operation) => switch (operation.kind) {
+        OperationKind.applyChanges ||
+        OperationKind.rebootServer ||
+        OperationKind.upgradeServer ||
+        OperationKind.collectGarbage => true,
+        _ => false,
+      },
+    );
+    if (busy) {
+      return Future.value(const OperationResult<void>(OperationStatus.notSent));
+    }
+    return connection.submit<void>(kind, (final owner) {
+      final server = resources.servers
+          .where((final server) => server.uuid == owner.origin.serverId)
+          .firstOrNull;
+      if (server == null) {
+        throw const OperationNotSent();
+      }
+      return action(
+        ApplyChangesOperation(
+          users: owner.users,
+          settings: owner.settings,
+          services: owner.services,
+          jobs: owner.jobs,
+          volumes: owner.volumes,
+          readDns: () => owner.api.getDnsRecords(),
+          dnsProvider: dnsProvider(),
+          domain: server.domain,
+        ),
+      );
+    }, origin: origin).result;
+  },
   removeServerJob: (final origin, final uid) async {
     await connection.run<void>(OperationKind.manageJobs, (final owner) async {
       await owner.jobs.removeJob(uid);
@@ -277,13 +290,24 @@ BackupsBloc createBackupsBloc(
     read: (final owner) => owner.backups.snapshot,
     changes: (final owner) => owner.backups.changes,
   ),
-  admitOperation: (final origin, final action) => connection
-      .submit<void>(
-        OperationKind.manageBackups,
-        (final owner) => action(owner.backups),
-        origin: origin,
-      )
-      .result,
+  admitOperation: (final origin, final kind, final action) {
+    if ((kind == OperationKind.initializeBackups ||
+            kind == OperationKind.removeBackups) &&
+        connection.operations.pending.any(
+          (final operation) =>
+              operation.kind == OperationKind.initializeBackups ||
+              operation.kind == OperationKind.removeBackups,
+        )) {
+      return Future.value(const OperationResult<void>(OperationStatus.notSent));
+    }
+    return connection
+        .submit<void>(
+          kind,
+          (final owner) => action(owner.backups),
+          origin: origin,
+        )
+        .result;
+  },
   currentBucket: (final origin) =>
       connection.isAttached && identical(origin, connection.origin)
       ? resources.backblazeBucket
@@ -390,29 +414,39 @@ VolumesBloc createVolumesBloc(
     }
     return result.data!.perVolumeGb;
   },
-  resize: (final origin, final volume, final size, final onProgress) =>
-      connection.submit<ServerMutationResult<void>?>(
-        OperationKind.manageVolumes,
-        (final owner) {
-          final provider = serverProvider();
-          final providerVolume = volume.providerVolume;
-          if (provider == null ||
-              !provider.isAuthorized ||
-              providerVolume == null) {
-            throw const OperationNotSent();
-          }
-          return ResizeVolumeOperation(
-            volumes: owner.volumes,
-            provider: provider,
-          ).resize(
-            name: volume.name,
-            providerVolume: providerVolume,
-            size: size,
-            onProgress: onProgress,
-          );
-        },
-        origin: origin,
-      ).result,
+  resize: (final origin, final volume, final size, final onProgress) {
+    if (connection.operations.pending.any(
+      (final operation) => operation.kind == OperationKind.resizeVolume,
+    )) {
+      return Future.value(
+        const OperationResult<ServerMutationResult<void>?>(
+          OperationStatus.notSent,
+        ),
+      );
+    }
+    return connection.submit<ServerMutationResult<void>?>(
+      OperationKind.resizeVolume,
+      (final owner) {
+        final provider = serverProvider();
+        final providerVolume = volume.providerVolume;
+        if (provider == null ||
+            !provider.isAuthorized ||
+            providerVolume == null) {
+          throw const OperationNotSent();
+        }
+        return ResizeVolumeOperation(
+          volumes: owner.volumes,
+          provider: provider,
+        ).resize(
+          name: volume.name,
+          providerVolume: providerVolume,
+          size: size,
+          onProgress: onProgress,
+        );
+      },
+      origin: origin,
+    ).result;
+  },
   showMessage: showMessage,
 );
 

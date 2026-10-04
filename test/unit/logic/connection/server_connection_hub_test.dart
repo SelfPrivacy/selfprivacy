@@ -50,7 +50,7 @@ void main() {
   });
 
   test(
-    'manual rotation drains a workflow and admits queued work on its replacement',
+    'manual rotation drains a workflow and preserves its connection',
     () async {
       final active = Completer<void>();
       final first = hub.submit(OperationKind.manageUsers, (final owner) async {
@@ -61,6 +61,8 @@ void main() {
         });
       });
       final old = hub.active!;
+      final users = old.users;
+      final scheduler = old.scheduler;
       old.cache.groups.push(const ['sp.full_users']);
       final timestamp = old.cache.groups.value.updatedAt;
       when(api.refreshDeviceApiToken).thenAnswer(
@@ -75,7 +77,9 @@ void main() {
         final connection,
       ) async {
         sent = true;
-        expect(connection, isNot(same(old)));
+        expect(connection, same(old));
+        expect(connection.users, same(users));
+        expect(connection.scheduler, same(scheduler));
         return 2;
       }, origin: old.origin);
       expect(hub.rotation.status, RotationStatus.waiting);
@@ -87,10 +91,47 @@ void main() {
       expect(resources.servers.single.hostingDetails.apiToken, 'replacement');
       expect(hub.active!.cache.groups.value.data, ['sp.full_users']);
       expect(hub.active!.cache.groups.value.updatedAt, timestamp);
-      expect(hub.active!.cache.groups.value.needsReconciliation, isTrue);
-      expect(old.isAttached, isFalse);
+      expect(hub.active!.cache.groups.value.needsReconciliation, isFalse);
+      expect(old.isAttached, isTrue);
     },
   );
+
+  test('retained readers and repositories use the rotated API', () async {
+    final replacement = _Api();
+    final user = aMutationUser('CreateUser');
+    when(api.refreshDeviceApiToken).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available('replacement'),
+      ),
+    );
+    when(replacement.getAllGroups).thenAnswer((_) async => ['sp.full_users']);
+    when(() => replacement.createUser(any(), any(), any())).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(user),
+      ),
+    );
+    final local = ServerConnectionHub(
+      resourcesModel: resources,
+      createApi: (final binding, _, _) =>
+          binding.token == 'replacement' ? replacement : api,
+    );
+    addTearDown(local.dispose);
+    final connection = local.active!;
+    connection.cache.setVersion(Version(3, 6, 0));
+    final groups = connection.groups;
+    final users = connection.users;
+
+    expect(await local.rotateToken(), RotationOutcome.succeeded);
+    await groups.refresh(force: true);
+    final result = await users.createUser(user);
+
+    expect(local.active, same(connection));
+    expect(groups.value.data, ['sp.full_users']);
+    expect(result.outcome, ServerMutationOutcome.confirmed);
+    expect(users.knownUsers, [user]);
+  });
 
   test(
     'reading active does not replace a session before an admission boundary',

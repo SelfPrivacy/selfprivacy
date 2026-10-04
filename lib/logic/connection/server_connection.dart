@@ -25,7 +25,11 @@ class ServerConnection {
     final DateTime Function()? now,
     final CacheTimerFactory? createTimer,
   }) : _currentOrigin = currentOrigin {
-    cache = ServerStateCache(api: api, now: now, createTimer: createTimer);
+    cache = ServerStateCache(
+      api: () => api,
+      now: now,
+      createTimer: createTimer,
+    );
     final deviceStore = cache.devices;
     final jobsStore = cache.serverJobs;
     final usersStore = cache.users;
@@ -35,7 +39,7 @@ class ServerConnection {
     final configStore = cache.backupConfig;
     final volumesStore = cache.volumes;
     commands = ServerCommandCoordinator(
-      api: api,
+      api: () => api,
       origin: origin,
       currentOrigin: () => isAttached ? origin : null,
       stores: cache.stores,
@@ -98,7 +102,7 @@ class ServerConnection {
     }
   }
 
-  final ServerApi api;
+  ServerApi api;
   final ServerStateOrigin origin;
   final ServerStateOrigin? Function() _currentOrigin;
   late final ServerStateCache cache;
@@ -116,15 +120,6 @@ class ServerConnection {
   final _subscriptions = <StreamSubscription<Object?>>[];
   bool _disposed = false;
   late final SyncScheduler scheduler;
-
-  void restoreFrom(final ServerConnection previous) {
-    if (origin.serverId != previous.origin.serverId) {
-      throw ArgumentError('Cannot restore another server.');
-    }
-    cache.restoreFrom(previous.cache);
-    users.restoreFrom(previous.users);
-    jobs.restoreFrom(previous.jobs);
-  }
 
   Stream<void> get changes => _changes.stream;
   bool get isAttached => !_disposed && identical(_currentOrigin(), origin);

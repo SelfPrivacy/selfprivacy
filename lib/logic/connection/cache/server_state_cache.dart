@@ -20,7 +20,7 @@ import 'package:selfprivacy/logic/models/system_settings.dart';
 /// to establish which domains the server supports.
 class ServerStateCache {
   ServerStateCache({
-    required final ServerApi api,
+    required final ServerApi Function() api,
     final DateTime Function()? now,
     final CacheTimerFactory? createTimer,
     final Map<String, Duration> staleAfterOverrides = const {},
@@ -45,7 +45,7 @@ class ServerStateCache {
 
     apiVersion = DomainStore<Version>(
       name: 'apiVersion',
-      fetch: () async => Version.parse(await api.fetchApiVersion()),
+      fetch: () async => Version.parse(await api().fetchApiVersion()),
       refreshInterval: const Duration(seconds: 60),
       staleAfter: staleAfterOverrides['apiVersion'],
       support: DomainSupport.supported,
@@ -54,50 +54,50 @@ class ServerStateCache {
     );
     serverJobs = domain(
       name: 'serverJobs',
-      fetch: () async => List.unmodifiable(await api.getServerJobs()),
+      fetch: () async => List.unmodifiable(await api().getServerJobs()),
     );
     backupConfig = domain(
       name: 'backupConfig',
-      fetch: api.getBackupsConfiguration,
+      fetch: () => api().getBackupsConfiguration(),
       refreshSeconds: 120,
       requiredApiVersion: '>=2.4.2',
     );
     backups = domain(
       name: 'backups',
-      fetch: () async => List.unmodifiable(await api.getBackups()),
+      fetch: () async => List.unmodifiable(await api().getBackups()),
       refreshSeconds: 120,
       requiredApiVersion: '>=2.4.2',
     );
     services = domain(
       name: 'services',
-      fetch: () async => List.unmodifiable(await api.getAllServices()),
+      fetch: () async => List.unmodifiable(await api().getAllServices()),
       requiredApiVersion: '>=2.4.3',
     );
     volumes = domain(
       name: 'volumes',
-      fetch: () async => List.unmodifiable(await api.getServerDiskVolumes()),
+      fetch: () async => List.unmodifiable(await api().getServerDiskVolumes()),
     );
     recoveryKeyStatus = domain(
       name: 'recoveryKeyStatus',
-      fetch: api.getRecoveryTokenStatus,
+      fetch: () => api().getRecoveryTokenStatus(),
       refreshSeconds: 300,
     );
     devices = domain(
       name: 'devices',
-      fetch: () => DevicesRepository.fetch(api),
+      fetch: () => DevicesRepository.fetch(api()),
     );
     users = domain(
       name: 'users',
-      fetch: () async => List.unmodifiable(await api.getAllUsers()),
+      fetch: () async => List.unmodifiable(await api().getAllUsers()),
     );
     groups = domain(
       name: 'groups',
-      fetch: () async => List.unmodifiable(await api.getAllGroups()),
+      fetch: () async => List.unmodifiable(await api().getAllGroups()),
       requiredApiVersion: '>=3.6.0',
     );
     settings = domain(
       name: 'settings',
-      fetch: api.getSystemSettings,
+      fetch: () => api().getSystemSettings(),
       refreshSeconds: 600,
     );
     stores = List.unmodifiable([apiVersion, ..._constraints.keys]);
@@ -133,16 +133,6 @@ class ServerStateCache {
   void setVersion(final Version version) {
     apiVersion.push(version);
     _updateSupport();
-  }
-
-  void restoreFrom(final ServerStateCache previous) {
-    final snapshots = {
-      for (final store in previous.stores) store.name: store.value,
-    };
-    for (final store in stores) {
-      store.restore(snapshots[store.name]!);
-    }
-    _supportedVersion = apiVersion.value.data;
   }
 
   void _updateSupport() {

@@ -19,12 +19,6 @@ class UsersRepository {
   final Map<String, User> _known = {};
   int _knownReadRevision = 0;
 
-  void restoreFrom(final UsersRepository previous) {
-    previous._clearReconciled();
-    _known.addAll(previous._known);
-    _knownReadRevision = store.readRevision;
-  }
-
   CachedValue<List<User>> get value => reader.value;
   Stream<CachedValue<List<User>>> get changes => reader.changes;
   List<User> get knownUsers {

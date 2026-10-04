@@ -61,7 +61,7 @@ void main() {
       commands = ServerCommandCoordinator(
         origin: origin,
         currentOrigin: () => origin,
-        api: _Api(),
+        api: _Api.new,
         stores: [store],
       );
       reconciler = JobsReconciler(store: store, commands: commands);
@@ -94,7 +94,7 @@ void main() {
     final foreign = ServerCommandCoordinator(
       origin: origin,
       currentOrigin: () => origin,
-      api: _Api(),
+      api: _Api.new,
       stores: [],
     );
     expect(

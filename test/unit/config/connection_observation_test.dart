@@ -204,7 +204,7 @@ void main() {
   });
 
   test(
-    'confirmed rotation preserves presentation continuity but replaces generation',
+    'confirmed rotation preserves the observed connection and snapshot',
     () async {
       hub.active!.cache.groups.push(const ['sp.full_users']);
       when(api.refreshDeviceApiToken).thenAnswer(
@@ -218,7 +218,8 @@ void main() {
       final before = observed.last;
       await hub.rotateToken();
       await pumpEventQueue();
-      expect(observed.last.origin, isNot(same(before.origin)));
+      expect(observed.last.origin, same(before.origin));
+      expect(observed.last.value, same(before.value));
       expect(observed.last.origin!.continuity, same(before.origin!.continuity));
       expect(observed.last.value!.data, ['sp.full_users']);
     },

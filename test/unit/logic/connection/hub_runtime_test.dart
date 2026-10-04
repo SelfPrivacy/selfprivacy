@@ -317,6 +317,29 @@ void main() {
     },
   );
 
+  runtimeTest('rotation ignores health callbacks from the previous socket', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    final oldHealth = socketHealth;
+    final connection = hub.active;
+    final rotation = hub.rotateToken();
+    await tester.pump();
+    expect(await rotation, RotationOutcome.succeeded);
+    expect(hub.active, same(connection));
+    socketHealth(connected: true);
+    await tester.pump();
+    clearInteractions(api);
+
+    oldHealth(connected: false);
+    await tester.pump(const Duration(seconds: 10));
+
+    verifyNever(api.getServerJobs);
+    expect(jobSockets, hasLength(2));
+    expect(jobSockets.last.hasListener, isTrue);
+  });
+
   runtimeTest('rotation drains HTTP and fences old feedback after saving', (
     final tester,
   ) async {

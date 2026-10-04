@@ -65,7 +65,7 @@ void main() {
       )..start();
       cache = ServerStateCache(
         now: tester.binding.clock.now,
-        api: ServerApi(
+        api: () => ServerApi(
           transport: transportWithLink(
             Link.function((final request, [final forward]) {
               final name = request.operation.document.definitions
@@ -89,7 +89,7 @@ void main() {
       commands = ServerCommandCoordinator(
         origin: origin,
         currentOrigin: () => origin,
-        api: _Api(),
+        api: _Api.new,
         stores: cache.stores,
       );
       scheduler = SyncScheduler(
@@ -851,7 +851,7 @@ void main() {
     final foreign = ServerCommandCoordinator(
       origin: origin,
       currentOrigin: () => origin,
-      api: _Api(),
+      api: _Api.new,
       stores: [],
     );
     expect(

@@ -44,7 +44,7 @@ void main() {
       coordinator = ServerCommandCoordinator(
         origin: origin,
         currentOrigin: () => current,
-        api: api,
+        api: () => api,
         stores: [users, jobs, settings],
       );
       try {
@@ -427,7 +427,7 @@ void main() {
       final replacement = ServerCommandCoordinator(
         origin: replacementOrigin,
         currentOrigin: () => current,
-        api: _Api(),
+        api: _Api.new,
         stores: [replacementStore],
       );
       try {

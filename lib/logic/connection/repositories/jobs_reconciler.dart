@@ -36,14 +36,6 @@ class JobsReconciler {
   bool _requiresRead = false;
   bool _disposed = false;
 
-  void restoreFrom(final JobsReconciler previous) {
-    previous._syncRead();
-    _beforeLoad.addAll(previous._beforeLoad);
-    _deleted.addAll(previous._deleted);
-    _requiresRead = previous._requiresRead;
-    _readRevision = store.readRevision;
-  }
-
   /// Confirmed entities do not imply that the complete jobs list has loaded.
   Map<String, ServerJob> get confirmedBeforeLoad {
     _syncRead();

@@ -50,17 +50,6 @@ class JobsRepository {
   final _observed = <String, ServerJob>{};
   final _effects = <String, Set<DomainStore<Object>>>{};
 
-  void restoreFrom(final JobsRepository previous) {
-    _reconciler.restoreFrom(previous._reconciler);
-    _observed.addAll(previous._observed);
-    final stores = {for (final domain in _stores) domain.name: domain};
-    for (final entry in previous._effects.entries) {
-      _effects[entry.key] = {
-        for (final domain in entry.value) stores[domain.name]!,
-      };
-    }
-  }
-
   CachedValue<List<ServerJob>> get value => reader.value;
   JobsSnapshot get snapshot => JobsSnapshot(
     value: value,

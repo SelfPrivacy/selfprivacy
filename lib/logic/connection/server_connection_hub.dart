@@ -45,7 +45,7 @@ typedef HubApiFactory =
 
 class _Session {
   _Session(this.binding);
-  final ServerConnectionBinding binding;
+  ServerConnectionBinding binding;
   late final ServerConnection connection;
   StreamSubscription<void>? subscription;
   int requests = 0;
@@ -322,27 +322,12 @@ class ServerConnectionHub {
     return _session;
   }
 
-  _Session _createSession(
-    final Server server, {
-    final ConnectionContinuity? continuity,
-  }) {
+  _Session _createSession(final Server server) {
     final session = _Session(ServerConnectionBinding(server));
-    final origin = ServerStateOrigin(server.uuid, continuity: continuity);
+    final origin = ServerStateOrigin(server.uuid);
     session
       ..connection = ServerConnection(
-        api: _createApi(
-          session.binding,
-          (final event) => _event(session, event),
-          () {
-            if (!identical(_session, session) ||
-                !session.binding.matches(_selectServer()) ||
-                _unsaved[session.binding.serverId] == session.binding.token ||
-                ((session.exclusive || !isForeground) &&
-                    !identical(Zone.current[_admissionKey], session))) {
-              throw const GraphQLDispatchDeferred();
-            }
-          },
-        ),
+        api: _sessionApi(session),
         origin: origin,
         now: _now,
         currentOrigin: () =>
@@ -354,6 +339,28 @@ class ServerConnectionHub {
       )
       ..subscription = session.connection.changes.listen((_) => _notify());
     return session;
+  }
+
+  ServerApi _sessionApi(final _Session session) {
+    final binding = session.binding;
+    return _createApi(
+      binding,
+      (final event) {
+        if (identical(session.binding, binding)) {
+          _event(session, event);
+        }
+      },
+      () {
+        if (!identical(_session, session) ||
+            !identical(session.binding, binding) ||
+            !binding.matches(_selectServer()) ||
+            _unsaved[binding.serverId] == binding.token ||
+            ((session.exclusive || !isForeground) &&
+                !identical(Zone.current[_admissionKey], session))) {
+          throw const GraphQLDispatchDeferred();
+        }
+      },
+    );
   }
 
   void _event(final _Session session, final GraphQLTransportEvent event) {
@@ -474,14 +481,8 @@ class ServerConnectionHub {
         _synchronize();
         return;
       }
-      final next = _createSession(
-        updated,
-        continuity: session.connection.origin.continuity,
-      );
-      _session = next;
-      next.connection.restoreFrom(session.connection);
-      session.dispose();
-      _startRuntime(next);
+      session.binding = ServerConnectionBinding(updated);
+      session.connection.api = _sessionApi(session);
       _suppressed.remove(updated.uuid);
       _unsaved.remove(updated.uuid);
       _finishRotation(pending, RotationOutcome.succeeded);

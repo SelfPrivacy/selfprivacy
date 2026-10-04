@@ -74,32 +74,6 @@ class DomainStore<T extends Object> {
           _value.freshness == Freshness.stale ||
           !_now().isBefore(_value.updatedAt!.add(refreshInterval)));
 
-  void restore(final CachedValue<T> snapshot) {
-    _ensureOpen();
-    if (_refresh != null || _value.data != null) {
-      throw StateError('Only an empty idle store can restore a snapshot.');
-    }
-    _revision++;
-    final expires = snapshot.updatedAt?.add(staleAfter);
-    final remaining = expires?.difference(_now());
-    _emit(
-      snapshot.copyWith(
-        isRefreshing: false,
-        needsReconciliation: true,
-        freshness: remaining != null && remaining > Duration.zero
-            ? snapshot.freshness
-            : Freshness.stale,
-      ),
-    );
-    if (remaining != null && remaining > Duration.zero) {
-      _expiryTimer = _createTimer(remaining, () {
-        if (!_disposed) {
-          _emit(_value.copyWith(freshness: Freshness.stale));
-        }
-      });
-    }
-  }
-
   /// Performs at most one read. Calls for the same revision share its future.
   ///
   /// Fetch failures are recorded in [value] and do not escape this future.

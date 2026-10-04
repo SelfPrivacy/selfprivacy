@@ -44,7 +44,7 @@ void main() {
   );
 
   ServerStateCache cache(final WidgetTester tester) {
-    final result = ServerStateCache(api: api(), now: tester.binding.clock.now);
+    final result = ServerStateCache(api: api, now: tester.binding.clock.now);
     addTearDown(result.dispose);
     return result;
   }
@@ -127,7 +127,7 @@ void main() {
 
   test('validates and applies per-domain stale deadlines', () {
     final state = ServerStateCache(
-      api: api(),
+      api: api,
       staleAfterOverrides: const {
         'apiVersion': Duration(minutes: 5),
         'serverJobs': Duration(seconds: 145),
@@ -138,14 +138,14 @@ void main() {
     state.dispose();
     expect(
       () => ServerStateCache(
-        api: api(),
+        api: api,
         staleAfterOverrides: const {'typo': Duration(minutes: 5)},
       ),
       throwsArgumentError,
     );
     expect(
       () => ServerStateCache(
-        api: api(),
+        api: api,
         staleAfterOverrides: const {'users': Duration(seconds: 60)},
       ),
       throwsArgumentError,
@@ -291,11 +291,11 @@ void main() {
   ) async {
     final sharedApi = api();
     final first = ServerStateCache(
-      api: sharedApi,
+      api: () => sharedApi,
       now: tester.binding.clock.now,
     );
     final second = ServerStateCache(
-      api: sharedApi,
+      api: () => sharedApi,
       now: tester.binding.clock.now,
     );
     addTearDown(first.dispose);

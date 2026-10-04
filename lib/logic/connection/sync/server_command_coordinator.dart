@@ -35,7 +35,7 @@ class ServerCommandCoordinator {
   ServerCommandCoordinator({
     required this.origin,
     required final ServerStateOrigin? Function() currentOrigin,
-    required final ServerApi api,
+    required final ServerApi Function() api,
     required final Iterable<DomainStore<Object>> stores,
     final DomainStore<Version>? apiVersion,
   }) : _currentOrigin = currentOrigin,
@@ -45,7 +45,7 @@ class ServerCommandCoordinator {
 
   final ServerStateOrigin origin;
   final ServerStateOrigin? Function() _currentOrigin;
-  final ServerApi _api;
+  final ServerApi Function() _api;
   final DomainStore<Version>? _apiVersion;
   final Set<DomainStore<Object>> _stores;
   final _commands = <_Command>[];
@@ -220,7 +220,7 @@ class ServerCommandCoordinator {
         domain.fenceReads();
       }
       try {
-        result = await send(_api);
+        result = await send(_api());
       } catch (_) {
         result = ServerMutationResult<T>(
           outcome: ServerMutationOutcome.indeterminate,

@@ -35,6 +35,7 @@ class ConnectionRuntime {
   late final SyncScheduler scheduler;
   final _subscriptions = <StreamSubscription<Object?>>[];
   StreamSubscription<List<ServerJob>>? _jobs;
+  int _jobsRevision = 0;
   InterestHandle? _jobsFallback;
   Timer? _grace;
   Timer? _socketRetry;
@@ -171,22 +172,34 @@ class ConnectionRuntime {
         !lifecycle.isForeground) {
       return;
     }
+    final revision = _jobsRevision;
+    bool isCurrent() =>
+        !_disposed &&
+        !_suspended &&
+        revision == _jobsRevision &&
+        connection.isAttached;
+    void lost() {
+      if (isCurrent()) {
+        _jobsLost();
+      }
+    }
+
     _jobs = connection.api
         .getServerJobsStream(
           onConnectionState: ({required final bool connected}) {
-            if (!_disposed && !_suspended && connection.isAttached) {
+            if (isCurrent()) {
               _setJobsHealth(connected);
             }
           },
         )
         .listen(
           (final jobs) {
-            if (connection.isAttached && !_disposed) {
+            if (isCurrent()) {
               connection.jobs.receiveSnapshot(jobs);
             }
           },
-          onError: (final Object _) => _jobsLost(),
-          onDone: _jobsLost,
+          onError: (final Object _) => lost(),
+          onDone: lost,
         );
   }
 
@@ -217,6 +230,7 @@ class ConnectionRuntime {
   }
 
   void _closeJobs() {
+    _jobsRevision++;
     final subscription = _jobs;
     _jobs = null;
     unawaited(subscription?.cancel());

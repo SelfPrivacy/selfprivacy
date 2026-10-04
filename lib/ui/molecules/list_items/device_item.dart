@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 

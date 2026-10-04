@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -50,14 +51,41 @@ void main() {
   });
 
   test(
+    'a retained command owner cannot dispatch through its replacement',
+    () async {
+      final original = hub.active!;
+      await resources.updateServerByUuid(
+        aServer(hostingDetails: aServerHostingDetails(apiToken: 'new-token')),
+      );
+      await pumpEventQueue();
+      var sent = false;
+      final result = await original.run(
+        OperationKind.manageUsers,
+        (_) async => sent = true,
+      );
+      expect(result, isNull);
+      expect(sent, isFalse);
+      expect(await original.rotateToken(), RotationOutcome.detached);
+      verifyNever(api.refreshDeviceApiToken);
+      expect(hub.active, isNot(same(original)));
+      expect(
+        await hub.active!.run(OperationKind.manageUsers, (_) async => 'new'),
+        'new',
+      );
+    },
+  );
+
+  test(
     'manual rotation drains a workflow and preserves its connection',
     () async {
       final active = Completer<void>();
-      final first = hub.submit(OperationKind.manageUsers, (final owner) async {
+      final first = hub.active!.submit(OperationKind.manageUsers, (
+        final owner,
+      ) async {
         await active.future;
-        await hub.run(OperationKind.manageUsers, (final nested) async {
+        await hub.active!.run(OperationKind.manageUsers, (final nested) async {
           expect(nested, same(owner));
-          expect(hub.rotation.status, RotationStatus.waiting);
+          expect(hub.active!.rotation.status, RotationStatus.waiting);
         });
       });
       final old = hub.active!;
@@ -71,9 +99,9 @@ void main() {
           payload: const ServerMutationPayload.available('replacement'),
         ),
       );
-      final rotation = hub.rotateToken();
+      final rotation = hub.active!.rotateToken();
       var sent = false;
-      final second = hub.submit(OperationKind.manageServices, (
+      final second = hub.active!.submit(OperationKind.manageServices, (
         final connection,
       ) async {
         sent = true;
@@ -82,7 +110,7 @@ void main() {
         expect(connection.scheduler, same(scheduler));
         return 2;
       }, origin: old.origin);
-      expect(hub.rotation.status, RotationStatus.waiting);
+      expect(hub.active!.rotation.status, RotationStatus.waiting);
       expect(sent, isFalse);
       active.complete();
       await first.completion.timeout(const Duration(seconds: 1));
@@ -123,7 +151,7 @@ void main() {
     final groups = connection.groups;
     final users = connection.users;
 
-    expect(await local.rotateToken(), RotationOutcome.succeeded);
+    expect(await local.active!.rotateToken(), RotationOutcome.succeeded);
     await groups.refresh(force: true);
     final result = await users.createUser(user);
 
@@ -134,7 +162,7 @@ void main() {
   });
 
   test(
-    'reading active does not replace a session before an admission boundary',
+    'reading active does not replace a connection before resource notification',
     () async {
       var selected = aServer();
       var creations = 0;
@@ -151,10 +179,13 @@ void main() {
       selected = aServer(
         hostingDetails: aServerHostingDetails(apiToken: 'new-token'),
       );
+      final updating = resources.updateServerByUuid(selected);
       expect(local.active, isNull);
       expect(creations, 1);
       expect(previous.cache.apiVersion.isDisposed, isFalse);
-      await local.run(OperationKind.manageUsers, (final owner) async {
+      await updating;
+      await pumpEventQueue();
+      await local.active!.run(OperationKind.manageUsers, (final owner) async {
         expect(owner, isNot(same(previous)));
       });
       expect(creations, 2);
@@ -189,8 +220,15 @@ void main() {
             ),
           ),
         };
-        expect(dispatch.single, throwsA(isA<GraphQLDispatchDeferred>()));
-        await local.run(OperationKind.manageUsers, (final owner) async {
+        if (field == 'server') {
+          await resources.removeServer(resources.servers.single);
+          await resources.addServer(selected);
+        } else {
+          await resources.updateServerByUuid(selected);
+        }
+        await pumpEventQueue();
+        expect(dispatch.first, throwsA(isA<GraphQLDispatchDeferred>()));
+        await local.active!.run(OperationKind.manageUsers, (final owner) async {
           expect(owner.origin.continuity, isNot(same(old.origin.continuity)));
         });
         expect(
@@ -230,11 +268,14 @@ void main() {
     () async {
       final error = StateError('private failure detail');
       await expectLater(
-        hub.run<void>(OperationKind.manageUsers, (_) async => throw error),
+        hub.active!.run<void>(
+          OperationKind.manageUsers,
+          (_) async => throw error,
+        ),
         throwsA(same(error)),
       );
       expect(
-        hub.operationsFor(resources.servers.single.uuid).history.single.status,
+        hub.active!.operations.history.single.status,
         OperationStatus.unknown,
       );
     },
@@ -244,10 +285,16 @@ void main() {
     'cancelling waiting rotation releases actions without rotating',
     () async {
       final active = Completer<void>();
-      final first = hub.submit(OperationKind.manageUsers, (_) => active.future);
-      final rotation = hub.rotateToken();
-      final next = hub.submit(OperationKind.manageServices, (_) async => 2);
-      expect(hub.cancelRotation(), isTrue);
+      final first = hub.active!.submit(
+        OperationKind.manageUsers,
+        (_) => active.future,
+      );
+      final rotation = hub.active!.rotateToken();
+      final next = hub.active!.submit(
+        OperationKind.manageServices,
+        (_) async => 2,
+      );
+      expect(hub.active!.cancelRotation(), isTrue);
       expect(await rotation, RotationOutcome.cancelled);
       expect((await next.completion).value, 2);
       verifyNever(api.refreshDeviceApiToken);
@@ -265,19 +312,22 @@ void main() {
     );
     addTearDown(local.dispose);
     final running = Completer<void>();
-    final first = local.submit(
+    final first = local.active!.submit(
       OperationKind.manageUsers,
       (_) => running.future,
     );
-    final rotation = local.rotateToken();
+    final rotation = local.active!.rotateToken();
     var dispatched = false;
-    final waiting = local.submit(OperationKind.manageServices, (_) async {
+    final waiting = local.active!.submit(OperationKind.manageServices, (
+      _,
+    ) async {
       dispatched = true;
     });
     selected = aServer(
       hostingDetails: aServerHostingDetails(apiToken: 'manually-replaced'),
     );
-    local.cancelRotation();
+    await resources.updateServerByUuid(selected);
+    await pumpEventQueue();
     expect((await waiting.completion).status, OperationStatus.notSent);
     expect(dispatched, isFalse);
     running.complete();
@@ -297,7 +347,7 @@ void main() {
           payload: ServerMutationPayload.available(user),
         ),
       );
-      await hub.run(
+      await hub.active!.run(
         OperationKind.manageUsers,
         (final owner) => owner.users.createUser(user),
       );
@@ -308,7 +358,7 @@ void main() {
           payload: const ServerMutationPayload.available('replacement'),
         ),
       );
-      expect(await hub.rotateToken(), RotationOutcome.succeeded);
+      expect(await hub.active!.rotateToken(), RotationOutcome.succeeded);
       final current = hub.active!;
       expect(current.users.value.data, isNull);
       expect(current.users.knownUsers, [user]);
@@ -329,9 +379,9 @@ void main() {
     () async {
       final response = Completer<ServerMutationResult<String>>();
       when(api.refreshDeviceApiToken).thenAnswer((_) => response.future);
-      final rotation = hub.rotateToken();
+      final rotation = hub.active!.rotateToken();
       await Future<void>.delayed(Duration.zero);
-      final waiting = hub.submit(
+      final waiting = hub.active!.submit(
         OperationKind.manageServices,
         (_) async => fail('must not dispatch'),
       );
@@ -343,16 +393,19 @@ void main() {
       );
       expect(await rotation, RotationOutcome.unknown);
       expect((await waiting.completion).status, OperationStatus.notSent);
-      expect(await hub.rotateToken(), RotationOutcome.suppressed);
+      expect(await hub.active!.rotateToken(), RotationOutcome.suppressed);
       verify(api.refreshDeviceApiToken).called(1);
     },
   );
 
   test('server removal rejects waiting actions without dispatch', () async {
     final active = Completer<void>();
-    final first = hub.submit(OperationKind.manageUsers, (_) => active.future);
-    final rotation = hub.rotateToken();
-    final next = hub.submit(
+    final first = hub.active!.submit(
+      OperationKind.manageUsers,
+      (_) => active.future,
+    );
+    final rotation = hub.active!.rotateToken();
+    final next = hub.active!.submit(
       OperationKind.manageServices,
       (_) async => fail('must not dispatch'),
     );
@@ -422,7 +475,7 @@ void main() {
     );
     addTearDown(selectedRepository.dispose);
 
-    final result = await selectedRepository.rotateToken();
+    final result = await selectedRepository.active!.rotateToken();
 
     expect(result, RotationOutcome.succeeded);
     expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
@@ -454,8 +507,8 @@ void main() {
     final pending = Completer<ServerMutationResult<String>>();
     when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
     final connection = realHub();
-    final first = connection.rotateToken();
-    final second = connection.rotateToken();
+    final first = connection.active!.rotateToken();
+    final second = connection.active!.rotateToken();
     pending.complete(confirmed('replacement'));
     expect(await first, RotationOutcome.succeeded);
     expect(await second, RotationOutcome.succeeded);
@@ -482,11 +535,11 @@ void main() {
             message: 'secret-sentinel',
           ),
         );
-        final result = await connection.rotateToken();
+        final result = await connection.active!.rotateToken();
         expect(result, isNot(RotationOutcome.succeeded));
 
         expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
-        await connection.rotateToken();
+        await connection.active!.rotateToken();
         verify(
           api.refreshDeviceApiToken,
         ).called(outcome == ServerMutationOutcome.rejected ? 2 : 1);
@@ -504,8 +557,8 @@ void main() {
           payload: const ServerMutationPayload.unreadable(),
         ),
       );
-      await connection.rotateToken();
-      await connection.rotateToken();
+      await connection.active!.rotateToken();
+      await connection.active!.rotateToken();
       verify(api.refreshDeviceApiToken).called(1);
 
       final original = resources.servers.first;
@@ -518,7 +571,7 @@ void main() {
       when(
         api.refreshDeviceApiToken,
       ).thenAnswer((_) async => confirmed('replacement'));
-      await connection.rotateToken();
+      await connection.active!.rotateToken();
       await pumpEventQueue();
       verify(api.refreshDeviceApiToken).called(1);
       expect(resources.servers.first.hostingDetails.apiToken, 'replacement');
@@ -529,7 +582,7 @@ void main() {
     final connection = realHub();
     final pending = Completer<ServerMutationResult<String>>();
     when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
-    final rotation = connection.rotateToken();
+    final rotation = connection.active!.rotateToken();
     final original = resources.servers.first;
     await resources.updateServerByUuid(
       aServer(
@@ -572,7 +625,7 @@ void main() {
         ).thenAnswer((_) async => confirmed('replacement'));
         final connection = realHub(resourceOverride: resources);
         connection.active!.cache.setVersion(Version(3, 9, 0));
-        final result = await connection.rotateToken();
+        final result = await connection.active!.rotateToken();
         expect(result, isNot(RotationOutcome.succeeded));
 
         verifyNever(
@@ -580,7 +633,7 @@ void main() {
             onConnectionLost: any(named: 'onConnectionLost'),
           ),
         );
-        await connection.rotateToken();
+        await connection.active!.rotateToken();
         verify(api.refreshDeviceApiToken).called(1);
       },
     );
@@ -598,7 +651,10 @@ void main() {
           payload: const ServerMutationPayload.available('unconfirmed-token'),
         ),
       );
-      expect(await connection.rotateToken(), isNot(RotationOutcome.succeeded));
+      expect(
+        await connection.active!.rotateToken(),
+        isNot(RotationOutcome.succeeded),
+      );
       expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
     });
   }
@@ -608,13 +664,16 @@ void main() {
     () async {
       final connection = realHub();
       when(api.refreshDeviceApiToken).thenAnswer((_) async => confirmed(''));
-      expect(await connection.rotateToken(), isNot(RotationOutcome.succeeded));
-      await connection.rotateToken();
+      expect(
+        await connection.active!.rotateToken(),
+        isNot(RotationOutcome.succeeded),
+      );
+      await connection.active!.rotateToken();
       verify(api.refreshDeviceApiToken).called(1);
       expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
     },
   );
-  test('an unsent rotation is detached when its selection changes', () async {
+  test('an unsent rotation is detached when its server is removed', () async {
     Server? selected = resources.servers.first;
     final pending = Completer<ServerMutationResult<String>>();
     when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
@@ -625,11 +684,13 @@ void main() {
     );
     addTearDown(connection.dispose);
     connection.active!.cache.setVersion(Version(3, 9, 0));
-    final rotation = connection.rotateToken();
+    final rotation = connection.active!.rotateToken();
+    final removing = resources.removeServer(selected);
     selected = null;
+    await removing;
     pending.complete(confirmed('replacement'));
     expect(await rotation, RotationOutcome.detached);
-    expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+    expect(resources.servers, isEmpty);
     verifyNever(
       () => api.getServerJobsStream(
         onConnectionLost: any(named: 'onConnectionLost'),

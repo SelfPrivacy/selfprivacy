@@ -1,10 +1,19 @@
 import 'dart:async';
 
+import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/connection_runtime.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/managed_subscription.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_connection_binding.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
@@ -13,8 +22,23 @@ import 'package:selfprivacy/logic/connection/repositories/services_repository.da
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
+import 'package:selfprivacy/logic/models/server_logs.dart';
+import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
+
+part 'server_connection_session.dart';
+
+typedef ConnectionApiFactory =
+    ServerApi Function(
+      ServerConnectionBinding binding,
+      void Function(GraphQLTransportEvent) onEvent,
+      void Function() beforeRequest,
+    );
 
 /// Owns domain stores and coordinates commands for one server connection.
 class ServerConnection {
@@ -25,6 +49,7 @@ class ServerConnection {
     final DateTime Function()? now,
     final CacheTimerFactory? createTimer,
   }) : _currentOrigin = currentOrigin {
+    operations = OperationQueue(serverId: origin.serverId, now: now);
     cache = ServerStateCache(
       api: () => api,
       now: now,
@@ -95,16 +120,51 @@ class ServerConnection {
       _subscriptions.add(
         store.stream.listen((_) {
           if (isAttached) {
-            _changes.add(null);
+            _notify();
           }
         }),
       );
     }
   }
 
+  factory ServerConnection.connect({
+    required final Server server,
+    required final ResourcesModel resources,
+    required final ConnectionApiFactory createApi,
+    required final TokenRotationHistory rotationHistory,
+    required final bool Function() automaticRotationEnabled,
+    required final DateTime Function() now,
+  }) {
+    final session = _Session(
+      server: server,
+      resources: resources,
+      createApiFactory: createApi,
+      history: rotationHistory,
+      automaticRotationEnabled: automaticRotationEnabled,
+      now: now,
+    );
+    final origin = ServerStateOrigin(server.uuid);
+    final connection = ServerConnection(
+      api: session.createApi(),
+      origin: origin,
+      currentOrigin: () => session.matches(session.server) ? origin : null,
+      now: now,
+    );
+    session.connection = connection;
+    connection._session = session;
+    connection._subscriptions.add(
+      connection.operations.changes.listen((_) => connection._notify()),
+    );
+    return connection;
+  }
+
   ServerApi api;
   final ServerStateOrigin origin;
   final ServerStateOrigin? Function() _currentOrigin;
+  bool get _canDispatch => !(_session?.hasUnsavedToken ?? false);
+  static final _admissionKey = Object();
+  late final OperationQueue operations;
+  _Session? _session;
   late final ServerStateCache cache;
   late final ServerCommandCoordinator commands;
   late final DevicesRepository devices;
@@ -123,6 +183,106 @@ class ServerConnection {
 
   Stream<void> get changes => _changes.stream;
   bool get isAttached => !_disposed && identical(_currentOrigin(), origin);
+  bool get _isAdmitted => identical(Zone.current[_admissionKey], this);
+
+  Future<T> _admit<T>(final Future<T> Function() action) =>
+      runZoned(action, zoneValues: {_admissionKey: this});
+
+  Future<T?> run<T>(
+    final OperationKind kind,
+    final Future<T> Function(ServerConnection) action, {
+    final ServerStateOrigin? origin,
+    final void Function()? onNotSent,
+  }) async {
+    if (_isAdmitted) {
+      _checkDispatch(origin);
+      return action(this);
+    }
+    final result = await submit(kind, action, origin: origin).completion;
+    if (result.status == OperationStatus.notSent ||
+        result.status == OperationStatus.cancelled) {
+      onNotSent?.call();
+    }
+    return result.value;
+  }
+
+  OperationHandle<T> submit<T>(
+    final OperationKind kind,
+    final Future<T> Function(ServerConnection) action, {
+    final ServerStateOrigin? origin,
+    final OperationReport Function(T)? describe,
+  }) {
+    final execution = OperationExecution();
+    return operations.submit(kind, () {
+      _checkDispatch(origin);
+      return _admit(
+        () => runZoned(
+          () => action(this),
+          zoneValues: {OperationExecution.zoneKey: execution},
+        ),
+      );
+    }, describe: describe ?? (_) => execution.report);
+  }
+
+  void _checkDispatch(final ServerStateOrigin? expected) {
+    if (!isAttached ||
+        !_canDispatch ||
+        (expected != null &&
+            !identical(expected.continuity, origin.continuity))) {
+      throw const OperationNotSent();
+    }
+  }
+
+  bool matches(final Server? server) => _session?.matches(server) ?? false;
+  ReachabilityStatus? get reachability =>
+      _session?.runtime?.reachability.current;
+  bool get isForeground => _session?.lifecycle?.isForeground ?? true;
+  bool get canRead =>
+      isAttached &&
+      isForeground &&
+      _session?._rotation == null &&
+      _canDispatch &&
+      (_session?.runtime == null ||
+          reachability == ReachabilityStatus.reachable);
+  RotationState get rotation =>
+      _session?.rotation ?? const RotationState(RotationStatus.idle);
+  Future<RotationOutcome> rotateToken() =>
+      _session?.rotateToken() ?? Future.value(RotationOutcome.detached);
+  bool cancelRotation() => _session?.cancelRotation() ?? false;
+
+  void start({
+    required final AppLifecycle lifecycle,
+    required final NetworkConnectivitySource connectivity,
+  }) {
+    _session?.start(lifecycle, connectivity);
+  }
+
+  Future<T> read<T>(final Future<T> Function(ServerConnection) fetch) async {
+    if (!canRead) {
+      throw const GraphQLDispatchDeferred();
+    }
+    final value = await fetch(this);
+    if (!isAttached) {
+      throw const GraphQLDispatchDeferred();
+    }
+    return value;
+  }
+
+  Stream<ServerLogEntry> logs() => managedSubscription(
+    changes: changes,
+    identity: () => this,
+    available: () => _session?.runtime?.canStream ?? false,
+    detached: () => !isAttached,
+    open: () => api.getServerLogsStream(),
+  );
+
+  void _notify() {
+    if (_disposed) {
+      return;
+    }
+    _changes.add(null);
+    scheduleMicrotask(() => _session?.rotateAutomatically());
+  }
 
   DomainReader<T> _reader<T extends Object>(final DomainStore<T> store) {
     _checkOwner(store);
@@ -150,6 +310,9 @@ class ServerConnection {
       return;
     }
     _disposed = true;
+    _changes.add(null);
+    _session?.dispose();
+    operations.dispose();
     scheduler.dispose();
     commands.dispose();
     jobs.dispose();

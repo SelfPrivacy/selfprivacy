@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';

@@ -8,6 +8,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -47,7 +48,10 @@ void main() {
         wrapForTest(
           child: BlocProvider<JobsCubit>.value(
             value: jobs,
-            child: ResetPasswordPage(user: User.fake(login: 'alex')),
+            child: RepositoryProvider<ServerConnection>.value(
+              value: hub.active!,
+              child: ResetPasswordPage(user: User.fake(login: 'alex')),
+            ),
           ),
         ),
       );

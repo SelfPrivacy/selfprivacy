@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -174,8 +175,11 @@ void main() {
     start(tester);
     await tester.pump();
     final pending = Completer<void>();
-    final work = hub.submit(OperationKind.manageUsers, (_) => pending.future);
-    final rotation = hub.rotateToken();
+    final work = hub.active!.submit(
+      OperationKind.manageUsers,
+      (_) => pending.future,
+    );
+    final rotation = hub.active!.rotateToken();
     await tester.pump();
     clearInteractions(api);
     foreground = false;
@@ -184,9 +188,9 @@ void main() {
     foreground = true;
     visibility.add(true);
     await tester.pump();
-    expect(hub.rotation.status, RotationStatus.waiting);
+    expect(hub.active!.rotation.status, RotationStatus.waiting);
     verifyNever(api.getApiVersion);
-    hub.cancelRotation();
+    hub.active!.cancelRotation();
     pending.complete();
     await tester.pump();
     await work.completion;
@@ -277,7 +281,7 @@ void main() {
       start(tester);
       await tester.pump();
       socketHealth(connected: true);
-      final logs = hub.logs().listen((_) {});
+      final logs = hub.active!.logs().listen((_) {});
       await tester.pump();
       expect(logSockets.single.hasListener, isTrue);
       clearInteractions(api);
@@ -324,7 +328,7 @@ void main() {
     await tester.pump();
     final oldHealth = socketHealth;
     final connection = hub.active;
-    final rotation = hub.rotateToken();
+    final rotation = hub.active!.rotateToken();
     await tester.pump();
     expect(await rotation, RotationOutcome.succeeded);
     expect(hub.active, same(connection));
@@ -354,20 +358,22 @@ void main() {
       resourceChanges.add(const ChangedServers());
     });
     events['api-token']!(GraphQLTransportEvent.requestStarted);
-    final rotation = hub.rotateToken();
+    final rotation = hub.active!.rotateToken();
     var actionSent = false;
     String? actionToken;
-    final queued = hub.submit(OperationKind.manageUsers, (final owner) async {
+    final queued = hub.active!.submit(OperationKind.manageUsers, (
+      final owner,
+    ) async {
       actionSent = true;
       actionToken = stored.hostingDetails.apiToken;
       dispatch['replacement']!();
     });
     await tester.pump();
     verifyNever(api.refreshDeviceApiToken);
-    expect(hub.rotation.status, RotationStatus.waiting);
+    expect(hub.active!.rotation.status, RotationStatus.waiting);
     events['api-token']!(GraphQLTransportEvent.requestFinished);
     await tester.pump();
-    expect(hub.rotation.status, RotationStatus.rotating);
+    expect(hub.active!.rotation.status, RotationStatus.rotating);
     expect(stored.hostingDetails.apiToken, 'api-token');
     expect(actionSent, isFalse);
     expect(dispatch.containsKey('replacement'), isFalse);
@@ -410,7 +416,7 @@ void main() {
       await tester.pump();
       verifyNever(api.refreshDeviceApiToken);
       final pending = Completer<void>();
-      final action = hub.submit(
+      final action = hub.active!.submit(
         OperationKind.manageBackups,
         (_) => pending.future,
       );

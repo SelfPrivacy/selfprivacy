@@ -13,6 +13,7 @@ import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -102,7 +103,7 @@ void main() {
         );
         hub.active!.cache.setVersion(Version(3, 6, 0));
         final cubit = createJobsCubit(
-          hub,
+          hub.active!,
           resources: resources,
           dnsProvider: () => null,
           showMessage: (_) {},
@@ -114,13 +115,13 @@ void main() {
             ..addJob(ChangeSshSettingsJob(enable: true));
           final applying = cubit.applyAll();
           await firstSent.future.timeout(const Duration(seconds: 5));
-          final rotation = hub.rotateToken();
-          final queued = hub.submit(
+          final rotation = hub.active!.rotateToken();
+          final queued = hub.active!.submit(
             OperationKind.manageVolumes,
             (final owner) => owner.volumes.reboot(),
           );
           await pumpEventQueue();
-          expect(hub.rotation.status, RotationStatus.waiting);
+          expect(hub.active!.rotation.status, RotationStatus.waiting);
           expect(requests.map((final request) => request.$1), [
             'ChangeTimezone',
           ]);
@@ -138,13 +139,9 @@ void main() {
             everyElement('Bearer api-token'),
           );
           expect(
-            hub
-                .operationsFor(stored.uuid)
-                .history
-                .where(
-                  (final operation) =>
-                      operation.kind == OperationKind.applyChanges,
-                ),
+            hub.active!.operations.history.where(
+              (final operation) => operation.kind == OperationKind.applyChanges,
+            ),
             hasLength(1),
           );
           saved.complete();

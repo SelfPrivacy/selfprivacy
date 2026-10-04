@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -67,7 +68,7 @@ void main() {
     connection = hub.active!;
     getIt.registerSingleton<NavigationService>(_Navigation());
     bloc = createDevicesBloc(
-      hub,
+      hub.active!,
       showMessage: getIt<NavigationService>().showSnackBar,
     );
   });
@@ -160,7 +161,7 @@ void main() {
                 payload: const ServerMutationPayload.available('rotated-token'),
               ),
             );
-            expect(await hub.rotateToken(), RotationOutcome.succeeded);
+            expect(await hub.active!.rotateToken(), RotationOutcome.succeeded);
           }
           await pumpEventQueue();
         });
@@ -169,11 +170,12 @@ void main() {
           await tester.tap(find.widgetWithText(TextButton, 'Revoke'));
           await pumpEventQueue();
         });
-        await tester.pumpAndSettle();
+        await tester.pump();
         if (replacement) {
           verifyNever(() => api.deleteApiToken(device.name));
-          expect(find.text(device.name), findsOneWidget);
+          expect(bloc.state, isA<DevicesInitial>());
         } else {
+          await tester.pumpAndSettle();
           verify(() => api.deleteApiToken(device.name)).called(1);
           expect(find.text(device.name), findsNothing);
         }

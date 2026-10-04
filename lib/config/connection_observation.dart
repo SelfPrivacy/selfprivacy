@@ -17,77 +17,59 @@ Stream<ReachabilityStatus?> observeReachability(
 }).distinct();
 
 Stream<ConnectionObservation<T>> observeConnection<T extends Object>({
-  required final ServerConnectionHub hub,
+  required final ServerConnection connection,
   required final T Function(ServerConnection) read,
   required final Stream<Object?> Function(ServerConnection) changes,
 }) => Stream.multi((final output) {
-  ServerConnection? observed;
   StreamSubscription<Object?>? domainSubscription;
-  var initialized = false;
-
-  void rebind() {
-    final connection = hub.active;
-    if (initialized && identical(connection, observed)) {
-      return;
-    }
-    initialized = true;
-    observed = connection;
-    unawaited(domainSubscription?.cancel());
-    domainSubscription = null;
-    if (connection == null) {
+  T? previous;
+  void publish() {
+    if (!connection.isAttached) {
       output.addSync(const ConnectionObservation.absent());
       return;
     }
-    T? previous;
-    void publish() {
-      if (!identical(observed, connection) || !connection.isAttached) {
-        return;
-      }
-      final value = read(connection);
-      if (!identical(value, previous)) {
-        previous = value;
-        output.addSync(
-          ConnectionObservation.attached(connection.origin, value),
-        );
-      }
+    final value = read(connection);
+    if (!identical(value, previous)) {
+      previous = value;
+      output.addSync(ConnectionObservation.attached(connection.origin, value));
     }
-
-    domainSubscription = changes(connection).listen((_) => publish());
-    publish();
   }
 
-  final bindingSubscription = hub.changes.listen(
-    (_) => rebind(),
+  domainSubscription = changes(connection).listen((_) => publish());
+  final bindingSubscription = connection.changes.listen(
+    (_) => publish(),
     onDone: () {
-      rebind();
+      publish();
       unawaited(domainSubscription?.cancel());
       unawaited(output.close());
     },
   );
   output.onCancel = () async {
-    observed = null;
     await bindingSubscription.cancel();
     await domainSubscription?.cancel();
   };
-  rebind();
+  publish();
 });
 
 Stream<ConnectionObservation<bool>> observeReadAccess(
-  final ServerConnectionHub hub,
+  final ServerConnection connection,
 ) =>
     Stream<ConnectionObservation<bool>>.multi((final output) {
       void publish() {
-        final origin = hub.active?.origin;
+        final origin = connection.isAttached ? connection.origin : null;
         output.addSync(
           origin == null
               ? const ConnectionObservation.absent()
-              : ConnectionObservation.attached(origin, hub.canRead),
+              : ConnectionObservation.attached(origin, connection.canRead),
         );
       }
 
-      final subscription = hub.changes.listen(
+      final subscription = connection.changes.listen(
         (_) => publish(),
-        onDone: output.close,
+        onDone: () {
+          publish();
+          unawaited(output.close());
+        },
       );
       output.onCancel = subscription.cancel;
       publish();

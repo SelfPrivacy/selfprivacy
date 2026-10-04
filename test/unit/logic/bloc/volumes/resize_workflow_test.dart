@@ -9,6 +9,7 @@ import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
@@ -52,7 +53,7 @@ void main() {
 
   VolumesBloc createBloc({final bool withoutProvider = false}) =>
       createVolumesBloc(
-        hub,
+        hub.active!,
         providerChanges: const Stream.empty(),
         serverProvider: () => withoutProvider ? null : provider,
         showMessage: messages.add,
@@ -178,7 +179,7 @@ void main() {
     );
     await tester.pump();
     expect(
-      hub.operationsFor(hub.active!.origin.serverId).history.single.status,
+      hub.active!.operations.history.single.status,
       OperationStatus.failed,
     );
     expect(messages, contains('storage.extending_volume_error'.tr()));
@@ -237,10 +238,7 @@ void main() {
       }
       expect(bloc.state, isA<VolumesLoaded>());
       verify(() => api.resizeVolume('sdb')).called(1);
-      expect(
-        hub.operationsFor(hub.active!.origin.serverId).history,
-        hasLength(1),
-      );
+      expect(hub.active!.operations.history, hasLength(1));
       await tester.runAsync(() async {
         final closing = bloc.close();
         await Future<void>.delayed(Duration.zero);
@@ -255,36 +253,41 @@ void main() {
     'reset during provider wait prevents filesystem resize and reboot',
     (final tester) async {
       await pumpForTest(tester, const SizedBox.shrink());
+      await tester.runAsync(pumpEventQueue);
       final providerVolume = aServerProviderVolume();
       const size = DiskSize(byte: 20000000000);
       when(
         () => provider.resizeVolume(providerVolume, size),
       ).thenAnswer((_) async => GenericResult(success: true, data: true));
-      final bloc = createBloc();
-      await tester.pump();
-      bloc.add(
-        VolumeResize(
-          origin: bloc.state.origin,
-          DiskVolume(name: 'sdb', providerVolume: providerVolume),
-          size,
-        ),
+      final stages = <VolumeResizeStage>[];
+      final operation = hub.active!.submit(
+        OperationKind.manageVolumes,
+        (final connection) =>
+            VolumeResizeWorkflow(
+              volumes: connection.volumes,
+              provider: provider,
+            ).resize(
+              name: 'sdb',
+              providerVolume: providerVolume,
+              size: size,
+              onProgress: stages.add,
+            ),
       );
       await tester.pump();
-      expect(bloc.state, isA<VolumesResizing>());
+      expect(stages, [
+        VolumeResizeStage.started,
+        VolumeResizeStage.providerWaiting,
+      ]);
       hub.clear();
       await tester.pump();
-      final previousMessages = List<String>.of(messages);
       await tester.pump(const Duration(seconds: 30));
-      expect(bloc.state, isA<VolumesInitial>());
-      expect(messages, previousMessages);
+      expect((await operation.completion).status, OperationStatus.unknown);
+      expect(stages, [
+        VolumeResizeStage.started,
+        VolumeResizeStage.providerWaiting,
+      ]);
       verifyNever(() => api.resizeVolume('sdb'));
       verifyNever(api.reboot);
-      await tester.runAsync(() async {
-        final closing = bloc.close();
-        await Future<void>.delayed(Duration.zero);
-        await tester.pump();
-        await closing;
-      });
       hub.dispose();
     },
   );

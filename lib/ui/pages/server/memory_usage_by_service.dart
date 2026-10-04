@@ -8,7 +8,7 @@ import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -27,7 +27,7 @@ class MemoryUsageByServicePage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => BlocProvider(
     create: (final context) => createMetricsCubit(
-      getIt<ServerConnectionHub>(),
+      context.read<ServerConnection>(),
       resources: getIt<ResourcesModel>(),
       serverProvider: () => ProvidersController.currentServerProvider,
     ),

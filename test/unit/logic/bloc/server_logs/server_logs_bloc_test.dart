@@ -45,7 +45,7 @@ void main() {
           ),
         );
         final hub = fixtureHub(api);
-        final bloc = createServerLogsBloc(hub);
+        final bloc = createServerLogsBloc(hub.active!);
         addTearDown(bloc.close);
         final waiting = api.waiting = Completer<void>();
         final acquiring = api.acquiring = Completer<void>();
@@ -73,7 +73,7 @@ void main() {
       final api = _DelayedApi(
         transport: transportWithLink(
           Link.function((_, [final forward]) {
-            if (!hub.canRead) {
+            if (!hub.active!.canRead) {
               return Stream.error(const GraphQLDispatchDeferred());
             }
             pages++;
@@ -87,7 +87,7 @@ void main() {
         ),
       );
       hub = fixtureHub(api);
-      final bloc = createServerLogsBloc(hub);
+      final bloc = createServerLogsBloc(hub.active!);
       addTearDown(bloc.close);
       final initial = bloc.stream.firstWhere(
         (final state) => state is ServerLogsLoaded || state is ServerLogsError,
@@ -104,17 +104,17 @@ void main() {
       bloc.add(const ServerLogsFetch());
       await acquiring.future;
       final work = Completer<void>();
-      final operation = hub.submit(
+      final operation = hub.active!.submit(
         OperationKind.manageJobs,
         (_) => work.future,
       );
-      final rotation = hub.rotateToken();
+      final rotation = hub.active!.rotateToken();
       api.waiting = null;
       waiting.complete();
       await pumpEventQueue();
       expect(bloc.state, same(previous));
       expect(pages, 1);
-      hub.cancelRotation();
+      hub.active!.cancelRotation();
       await rotation;
       await pumpEventQueue();
       expect(pages, 2);

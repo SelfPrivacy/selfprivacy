@@ -21,7 +21,7 @@ void main() {
   setUp(() {
     api = _Api();
     hub = fixtureHub(api);
-    bloc = createResetPasswordBloc(hub, User.fake(login: 'alex'));
+    bloc = createResetPasswordBloc(hub.active!, User.fake(login: 'alex'));
   });
   tearDown(() => bloc.close());
 
@@ -74,7 +74,7 @@ void main() {
     when(
       () => api.updateUser(any(), any(), any()),
     ).thenAnswer((_) => blocker.future);
-    final active = hub.run(
+    final active = hub.active!.run(
       OperationKind.manageUsers,
       (final owner) => owner.users.updateUser(user),
     );
@@ -91,10 +91,7 @@ void main() {
     await active;
     await pumpEventQueue();
     verifyNever(() => api.generatePasswordResetLink(any()));
-    expect(
-      hub.operationsFor(hub.active!.origin.serverId).history.last.status,
-      OperationStatus.notSent,
-    );
+    expect(hub.active!.operations.history.last.status, OperationStatus.notSent);
   });
 
   test('cancellation does not publish a late secret', () async {
@@ -120,7 +117,7 @@ void main() {
     await pumpEventQueue();
     expect(bloc.state.passwordResetLink, isNull);
     expect(
-      hub.operationsFor(hub.active!.origin.serverId).history.last.status,
+      hub.active!.operations.history.last.status,
       OperationStatus.succeeded,
     );
   });

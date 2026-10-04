@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -103,7 +104,7 @@ void main() {
       );
       addTearDown(hub.dispose);
       held = Completer<void>();
-      final rotation = hub.rotateToken();
+      final rotation = hub.active!.rotateToken();
       await pumpEventQueue();
       expect(resources.servers.single.hostingDetails.apiToken, 'replacement');
       hub.clear();
@@ -112,19 +113,25 @@ void main() {
       await pumpEventQueue();
       hub.resume();
       var dispatched = false;
-      await hub.run(OperationKind.manageUsers, (_) async => dispatched = true);
+      await hub.active!.run(
+        OperationKind.manageUsers,
+        (_) async => dispatched = true,
+      );
       expect(dispatched, isFalse);
-      expect(hub.canRead, isFalse);
-      expect(hub.rotation.status, RotationStatus.suppressed);
+      expect(hub.active!.canRead, isFalse);
+      expect(hub.active!.rotation.status, RotationStatus.suppressed);
       held = null;
       await resources.updateServerByUuid(
         aServer(
           hostingDetails: aServerHostingDetails(apiToken: 'manually-replaced'),
         ),
       );
-      await hub.run(OperationKind.manageUsers, (_) async => dispatched = true);
+      await hub.active!.run(
+        OperationKind.manageUsers,
+        (_) async => dispatched = true,
+      );
       expect(dispatched, isTrue);
-      expect(hub.canRead, isTrue);
+      expect(hub.active!.canRead, isTrue);
     },
   );
 
@@ -145,7 +152,7 @@ void main() {
     final saved = resources.statusStream.firstWhere(
       (final event) => event is ChangedServers,
     );
-    final rotation = hub.rotateToken();
+    final rotation = hub.active!.rotateToken();
     await pumpEventQueue();
     hub.clear();
     expect(await rotation, RotationOutcome.detached);
@@ -175,7 +182,7 @@ void main() {
         );
         addTearDown(hub.dispose);
         held = Completer<void>();
-        final rotation = hub.rotateToken();
+        final rotation = hub.active!.rotateToken();
         await pumpEventQueue();
         final newer = remove
             ? resources.removeServer(resources.servers.single)

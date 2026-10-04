@@ -68,7 +68,7 @@ void main() {
             const ServerLogsPageMeta(downCursor: null, upCursor: 'cursor-1'),
           ),
         );
-        final bloc = createServerLogsBloc(hub);
+        final bloc = createServerLogsBloc(hub.active!);
         addTearDown(bloc.close);
         if (pagination) {
           bloc.add(const ServerLogsFetch());
@@ -77,18 +77,18 @@ void main() {
         }
         final before = bloc.state;
         final work = Completer<void>();
-        final operation = hub.submit(
+        final operation = hub.active!.submit(
           OperationKind.manageJobs,
           (_) => work.future,
         );
-        final rotation = hub.rotateToken();
+        final rotation = hub.active!.rotateToken();
         bloc.add(pagination ? ServerLogsFetchMore() : const ServerLogsFetch());
         await pumpEventQueue();
         expect(
           bloc.state,
           pagination ? same(before) : isA<ServerLogsLoading>(),
         );
-        expect(hub.cancelRotation(), isTrue);
+        expect(hub.active!.cancelRotation(), isTrue);
         await rotation;
         await pumpEventQueue();
         expect(bloc.state, isA<ServerLogsLoaded>());

@@ -31,7 +31,7 @@ void main() {
           const RecoveryKeyStatus(exists: true, valid: true, usesLeft: 3),
     );
     await hub.active!.recoveryKey.refresh();
-    bloc = createRecoveryKeyBloc(hub);
+    bloc = createRecoveryKeyBloc(hub.active!);
     await bloc.stream.firstWhere((final state) => state is RecoveryKeyLoaded);
   });
 

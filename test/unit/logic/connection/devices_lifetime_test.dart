@@ -82,7 +82,7 @@ void main() {
       final changed = hub.active!.devices.changes.firstWhere(
         (final value) => value.data?.length == 1,
       );
-      await hub.run(
+      await hub.active!.run(
         OperationKind.manageDevices,
         (final connection) => connection.devices.revoke(name),
       );
@@ -108,7 +108,7 @@ void main() {
       final name = tokens.firstWhere((final token) => !token.isCaller).name;
       final mutation = Completer<ServerMutationResult<void>>();
       when(() => api.deleteApiToken(name)).thenAnswer((_) => mutation.future);
-      final deleting = hub.run(
+      final deleting = hub.active!.run(
         OperationKind.manageDevices,
         (final connection) => connection.devices.revoke(name),
       );

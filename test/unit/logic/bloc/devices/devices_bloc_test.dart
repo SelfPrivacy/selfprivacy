@@ -48,7 +48,7 @@ void main() {
     connection = hub.active!;
     devices = connection.devices;
     await devices.refresh();
-    bloc = createDevicesBloc(hub, showMessage: navigation.showSnackBar);
+    bloc = createDevicesBloc(hub.active!, showMessage: navigation.showSnackBar);
     await bloc.stream.firstWhere((final state) => state.isLoaded);
   });
 

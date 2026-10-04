@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
@@ -95,7 +95,7 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
         const SizedBox(height: 8),
         BlocProvider(
           create: (final context) => createMetricsCubit(
-            getIt<ServerConnectionHub>(),
+            context.read<ServerConnection>(),
             resources: getIt<ResourcesModel>(),
             serverProvider: () => ProvidersController.currentServerProvider,
           ),

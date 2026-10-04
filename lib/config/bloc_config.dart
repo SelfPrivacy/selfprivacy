@@ -17,6 +17,8 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
@@ -27,18 +29,55 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_metadata.dart';
 
-class BlocAndProviderConfig extends StatefulWidget {
+class BlocAndProviderConfig extends StatelessWidget {
   const BlocAndProviderConfig({super.key, this.child});
 
   final Widget? child;
 
   @override
-  BlocAndProviderConfigState createState() => BlocAndProviderConfigState();
+  Widget build(final BuildContext context) => MultiProvider(
+    providers: [
+      BlocProvider(create: (_) => SupportSystemCubit()),
+      BlocProvider(
+        create: (_) {
+          final cubit = ServerInstallationCubit();
+          unawaited(cubit.load());
+          return cubit;
+        },
+        lazy: false,
+      ),
+      BlocProvider(create: (_) => AppReadinessCubit()),
+    ],
+    child: StreamBuilder<void>(
+      stream: getIt<ServerConnectionHub>().changes,
+      builder: (final context, final snapshot) {
+        final connection = getIt<ServerConnectionHub>().active;
+        if (connection == null) {
+          return BlocProvider(
+            create: (_) =>
+                TokensBloc(rotateToken: () async => RotationOutcome.detached),
+            child: child,
+          );
+        }
+        return _ServerBlocConfig(
+          key: ObjectKey(connection),
+          connection: connection,
+          child: child,
+        );
+      },
+    ),
+  );
 }
 
-class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
-  late final ServerInstallationCubit serverInstallationCubit;
-  late final SupportSystemCubit supportSystemCubit;
+class _ServerBlocConfig extends StatefulWidget {
+  const _ServerBlocConfig({required this.connection, this.child, super.key});
+  final ServerConnection connection;
+  final Widget? child;
+  @override
+  State<_ServerBlocConfig> createState() => _ServerBlocConfigState();
+}
+
+class _ServerBlocConfigState extends State<_ServerBlocConfig> {
   late final UsersBloc usersBloc;
   late final GroupsBloc groupsBloc;
   late final ServicesBloc servicesBloc;
@@ -52,59 +91,55 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
   late final ServerLogsBloc serverLogsBloc;
   late final OutdatedServerCheckerBloc outdatedServerCheckerBloc;
   late final TokensBloc tokensBloc;
-  late final AppReadinessCubit appReadinessCubit;
 
   @override
   void initState() {
     super.initState();
-    serverInstallationCubit = ServerInstallationCubit();
-    unawaited(serverInstallationCubit.load());
-    supportSystemCubit = SupportSystemCubit();
-    final hub = getIt<ServerConnectionHub>();
-    usersBloc = createUsersBloc(hub);
+    final connection = widget.connection;
+    usersBloc = createUsersBloc(connection);
     groupsBloc = GroupsBloc(
       groups: observeConnection(
-        hub: hub,
+        connection: connection,
         read: (final connection) => connection.groups.value,
         changes: (final connection) => connection.groups.changes,
       ),
       refresh: () async {
-        await hub.active?.groups.refresh(force: true);
+        await connection.groups.refresh(force: true);
       },
     );
     servicesBloc = createServicesBloc(
-      hub,
+      connection,
       showMessage: getIt<NavigationService>().showSnackBar,
     );
     backupsBloc = createBackupsBloc(
-      hub,
+      connection,
       resources: getIt<ResourcesModel>(),
       showMessage: getIt<NavigationService>().showSnackBar,
     );
     dnsRecordsCubit = createDnsRecordsCubit(
-      hub,
+      connection,
       resources: getIt<ResourcesModel>(),
       dnsProvider: () => ProvidersController.currentDnsProvider,
     );
-    recoveryKeyBloc = createRecoveryKeyBloc(hub);
+    recoveryKeyBloc = createRecoveryKeyBloc(connection);
     devicesBloc = createDevicesBloc(
-      hub,
+      connection,
       showMessage: getIt<NavigationService>().showSnackBar,
     );
     serverJobsBloc = createServerJobsBloc(
-      hub,
+      connection,
       showMessage: getIt<NavigationService>().showSnackBar,
     );
     serverDetailsCubit = ServerDetailsCubit(
       onMetadataFailure: () =>
           getIt<NavigationService>().showSnackBar('basis.network_error'.tr()),
       settings: observeConnection(
-        hub: hub,
+        connection: connection,
         read: (final connection) => connection.settings.value,
         changes: (final connection) => connection.settings.changes,
       ),
       loadMetadata: (final origin) async {
-        if (!identical(hub.active?.origin, origin)) {
+        if (!connection.isAttached || !identical(connection.origin, origin)) {
           return [];
         }
         final server = getIt<ResourcesModel>().servers
@@ -121,52 +156,49 @@ class BlocAndProviderConfigState extends State<BlocAndProviderConfig> {
       },
     );
     volumesBloc = createVolumesBloc(
-      hub,
+      connection,
       providerChanges: getIt<ResourcesModel>().statusStream.where(
         (final event) => event is ChangedServerProviderCredentials,
       ),
       serverProvider: () => ProvidersController.currentServerProvider,
       showMessage: getIt<NavigationService>().showSnackBar,
     );
-    serverLogsBloc = createServerLogsBloc(hub);
+    serverLogsBloc = createServerLogsBloc(connection);
     outdatedServerCheckerBloc = OutdatedServerCheckerBloc(
       versions: observeConnection(
-        hub: hub,
+        connection: connection,
         read: (final connection) => connection.cache.apiVersion.value,
         changes: (final connection) => connection.cache.apiVersion.stream,
       ),
     );
-    tokensBloc = TokensBloc(rotateToken: hub.rotateToken);
-    appReadinessCubit = AppReadinessCubit();
+    tokensBloc = TokensBloc(rotateToken: connection.rotateToken);
   }
 
   @override
   Widget build(final BuildContext context) => MultiProvider(
     providers: [
-      BlocProvider(create: (final _) => supportSystemCubit),
-      BlocProvider(create: (final _) => serverInstallationCubit, lazy: false),
+      Provider<ServerConnection>.value(value: widget.connection),
       BlocProvider(create: (final _) => usersBloc, lazy: false),
-      BlocProvider(create: (final _) => groupsBloc),
-      BlocProvider(create: (final _) => servicesBloc),
-      BlocProvider(create: (final _) => backupsBloc),
-      BlocProvider(create: (final _) => dnsRecordsCubit),
-      BlocProvider(create: (final _) => recoveryKeyBloc),
-      BlocProvider(create: (final _) => devicesBloc),
-      BlocProvider(create: (final _) => serverJobsBloc),
-      BlocProvider(create: (final _) => serverDetailsCubit),
-      BlocProvider(create: (final _) => volumesBloc),
+      BlocProvider(create: (final _) => groupsBloc, lazy: false),
+      BlocProvider(create: (final _) => servicesBloc, lazy: false),
+      BlocProvider(create: (final _) => backupsBloc, lazy: false),
+      BlocProvider(create: (final _) => dnsRecordsCubit, lazy: false),
+      BlocProvider(create: (final _) => recoveryKeyBloc, lazy: false),
+      BlocProvider(create: (final _) => devicesBloc, lazy: false),
+      BlocProvider(create: (final _) => serverJobsBloc, lazy: false),
+      BlocProvider(create: (final _) => serverDetailsCubit, lazy: false),
+      BlocProvider(create: (final _) => volumesBloc, lazy: false),
       BlocProvider(
         create: (final _) => createJobsCubit(
-          getIt<ServerConnectionHub>(),
+          widget.connection,
           resources: getIt<ResourcesModel>(),
           dnsProvider: () => ProvidersController.currentDnsProvider,
           showMessage: getIt<NavigationService>().showSnackBar,
         ),
       ),
-      BlocProvider(create: (final _) => serverLogsBloc),
-      BlocProvider(create: (final _) => outdatedServerCheckerBloc),
-      BlocProvider(create: (final _) => tokensBloc),
-      BlocProvider(create: (final _) => appReadinessCubit),
+      BlocProvider(create: (final _) => serverLogsBloc, lazy: false),
+      BlocProvider(create: (final _) => outdatedServerCheckerBloc, lazy: false),
+      BlocProvider(create: (final _) => tokensBloc, lazy: false),
     ],
     child: widget.child,
   );

@@ -61,7 +61,7 @@ void main() {
       ),
     );
     cubit = createJobsCubit(
-      hub,
+      hub.active!,
       resources: resources,
       dnsProvider: () => dnsProvider,
       showMessage: messages.add,

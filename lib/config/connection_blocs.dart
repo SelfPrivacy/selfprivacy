@@ -18,8 +18,8 @@ import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -38,16 +38,16 @@ import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
-UsersBloc createUsersBloc(final ServerConnectionHub hub) => UsersBloc(
+UsersBloc createUsersBloc(final ServerConnection connection) => UsersBloc(
   users: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final owner) => owner.users.value,
     changes: (final owner) => owner.users.changes,
   ),
   refresh: () async {
-    await hub.active?.users.refresh(force: true);
+    await connection.users.refresh(force: true);
   },
-  save: (final origin, final user, {required final create}) => hub.run(
+  save: (final origin, final user, {required final create}) => connection.run(
     OperationKind.manageUsers,
     (final owner) =>
         create ? owner.users.createUser(user) : owner.users.updateUser(user),
@@ -56,30 +56,29 @@ UsersBloc createUsersBloc(final ServerConnectionHub hub) => UsersBloc(
 );
 
 DevicesBloc createDevicesBloc(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final void Function(String) showMessage,
 }) => DevicesBloc(
   devices: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final connection) => connection.devices.value,
     changes: (final connection) => connection.devices.changes,
   ),
   refresh: () async {
-    await hub.active?.devices.refresh(force: true);
+    await connection.devices.refresh(force: true);
   },
-  revoke: (final origin, final name) => hub.run<CommandCompletion<void>?>(
-    OperationKind.manageDevices,
-    (final owner) async {
-      final completion = await owner.devices.revoke(name);
-      if (completion?.result case final result?) {
-        OperationExecution.current?.record(result);
-      }
-      return completion;
-    },
-    origin: origin,
-  ),
+  revoke: (final origin, final name) =>
+      connection.run<CommandCompletion<void>?>(OperationKind.manageDevices, (
+        final owner,
+      ) async {
+        final completion = await owner.devices.revoke(name);
+        if (completion?.result case final result?) {
+          OperationExecution.current?.record(result);
+        }
+        return completion;
+      }, origin: origin),
   generateKey: (final origin, final recipient) => recipient.receive(
-    hub.submit(
+    connection.submit(
       OperationKind.generateDeviceKey,
       (final owner) =>
           recipient.protect(() => owner.devices.createAuthorizationKey()),
@@ -88,26 +87,26 @@ DevicesBloc createDevicesBloc(
   ),
   showMessage: showMessage,
   rotationChanges: Stream<RotationStatus>.multi((final output) {
-    output.addSync(hub.rotation.status);
-    final subscription = hub.changes.listen(
-      (_) => output.addSync(hub.rotation.status),
+    output.addSync(connection.rotation.status);
+    final subscription = connection.changes.listen(
+      (_) => output.addSync(connection.rotation.status),
       onDone: output.close,
     );
     output.onCancel = subscription.cancel;
   }).distinct(),
-  cancelRotation: hub.cancelRotation,
+  cancelRotation: connection.cancelRotation,
 );
 
-RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnectionHub hub) =>
+RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnection connection) =>
     RecoveryKeyBloc(
       status: observeConnection(
-        hub: hub,
+        connection: connection,
         read: (final connection) => connection.recoveryKey.value,
         changes: (final connection) => connection.recoveryKey.changes,
       ),
       refresh: (final origin) async {
-        final owner = hub.active;
-        if (owner != null &&
+        final owner = connection;
+        if (owner.isAttached &&
             identical(origin.continuity, owner.origin.continuity)) {
           await owner.recoveryKey.refresh(force: true);
         }
@@ -119,7 +118,7 @@ RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnectionHub hub) =>
             final expirationDate,
             final numberOfUses,
           ) => recipient.receive(
-            hub.submit(
+            connection.submit(
               OperationKind.generateRecoveryKey,
               (final owner) => recipient.protect(
                 () => owner.recoveryKey.generate(
@@ -133,26 +132,23 @@ RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnectionHub hub) =>
     );
 
 ResetPasswordBloc createResetPasswordBloc(
-  final ServerConnectionHub hub,
+  final ServerConnection connection,
   final User user,
 ) {
-  final origin = hub.active?.origin;
+  final origin = connection.origin;
   return ResetPasswordBloc(
     origin: origin,
     versions: observeConnection(
-      hub: hub,
+      connection: connection,
       read: (final connection) => connection.cache.apiVersion.value,
       changes: (final connection) => connection.cache.apiVersion.stream,
     ),
     generate: (final recipient) => recipient.receive(
-      hub.submit(
+      connection.submit(
         OperationKind.generatePasswordResetLink,
-        (final owner) => recipient.protect(() {
-          if (origin == null) {
-            throw const OperationNotSent();
-          }
-          return owner.users.generatePasswordResetLink(user);
-        }),
+        (final owner) => recipient.protect(
+          () => owner.users.generatePasswordResetLink(user),
+        ),
         origin: origin,
       ),
     ),
@@ -160,13 +156,13 @@ ResetPasswordBloc createResetPasswordBloc(
 }
 
 MetricsCubit createMetricsCubit(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final ResourcesModel resources,
   required final ServerProvider? Function() serverProvider,
 }) => MetricsCubit(
-  access: observeReadAccess(hub),
+  access: observeReadAccess(connection),
   loadMetrics: (final origin, final period) =>
-      hub.read((final connection) async {
+      connection.read((final connection) async {
         if (!identical(origin, connection.origin)) {
           throw const GraphQLDispatchDeferred();
         }
@@ -178,16 +174,16 @@ MetricsCubit createMetricsCubit(
         return MetricsRepository(
           api: connection.api,
           version: connection.cache.apiVersion.value.data,
-          isAvailable: () => connection.isAttached && hub.canRead,
+          isAvailable: () => connection.isAttached && connection.canRead,
           provider: provider,
           providerId: server?.hostingDetails.providerId,
         ).getRelevantServerMetrics(period);
       }),
 );
 
-ServerLogsBloc createServerLogsBloc(final ServerConnectionHub hub) =>
+ServerLogsBloc createServerLogsBloc(final ServerConnection connection) =>
     ServerLogsBloc(
-      access: observeReadAccess(hub),
+      access: observeReadAccess(connection),
       fetch:
           (
             final origin, {
@@ -195,7 +191,7 @@ ServerLogsBloc createServerLogsBloc(final ServerConnectionHub hub) =>
             final downCursor,
             final slice,
             final unit,
-          }) => hub.read((final connection) async {
+          }) => connection.read((final connection) async {
             if (!identical(origin, connection.origin)) {
               throw const GraphQLDispatchDeferred();
             }
@@ -222,27 +218,27 @@ ServerLogsBloc createServerLogsBloc(final ServerConnectionHub hub) =>
               unit: unit,
             );
           }),
-      entries: (_) => hub.logs(),
+      entries: (_) => connection.logs(),
     );
 
 JobsCubit createJobsCubit(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final ResourcesModel resources,
   required final DnsProvider? Function() dnsProvider,
   required final void Function(String) showMessage,
 }) => JobsCubit(
   jobs: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final owner) => owner.jobs.snapshot,
     changes: (final owner) => owner.jobs.changes,
   ),
   settings: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final owner) => owner.settings.value,
     changes: (final owner) => owner.settings.changes,
   ),
   admitWorkflow: (final origin, final kind, final action) =>
-      hub.submit<void>(kind, (final owner) {
+      connection.submit<void>(kind, (final owner) {
         final server = resources.servers
             .where((final server) => server.uuid == owner.origin.serverId)
             .firstOrNull;
@@ -263,7 +259,7 @@ JobsCubit createJobsCubit(
         );
       }, origin: origin).completion,
   removeServerJob: (final origin, final uid) async {
-    await hub.run<void>(OperationKind.manageJobs, (final owner) async {
+    await connection.run<void>(OperationKind.manageJobs, (final owner) async {
       await owner.jobs.removeJob(uid);
     }, origin: origin);
   },
@@ -271,17 +267,17 @@ JobsCubit createJobsCubit(
 );
 
 BackupsBloc createBackupsBloc(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final ResourcesModel resources,
   required final void Function(String) showMessage,
   final BackupsProvider Function(BackupsCredential)? createProvider,
 }) => BackupsBloc(
   backups: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final owner) => owner.backups.snapshot,
     changes: (final owner) => owner.backups.changes,
   ),
-  admitWorkflow: (final origin, final action) => hub
+  admitWorkflow: (final origin, final action) => connection
       .submit<void>(
         OperationKind.manageBackups,
         (final owner) => action(owner.backups),
@@ -289,22 +285,26 @@ BackupsBloc createBackupsBloc(
       )
       .completion,
   currentBucket: (final origin) =>
-      identical(origin, hub.active?.origin) ? resources.backblazeBucket : null,
+      connection.isAttached && identical(origin, connection.origin)
+      ? resources.backblazeBucket
+      : null,
   saveBucket: (final origin, final bucket) async {
-    if (identical(origin, hub.active?.origin) &&
+    if (connection.isAttached &&
+        identical(origin, connection.origin) &&
         resources.backblazeBucket?.bucketId == bucket.bucketId) {
       await resources.setBackblazeBucket(bucket);
     }
   },
   removeBucket: (final origin, final bucket) async {
-    if (identical(origin, hub.admittedConnection?.origin) &&
+    if (connection.isAttached &&
+        identical(origin, connection.origin) &&
         identical(resources.backblazeBucket, bucket)) {
       await resources.removeBackblazeBucket();
     }
   },
   prepareStorage: (final repository, final credential) {
-    final owner = hub.admittedConnection;
-    if (owner == null || !identical(owner.backups, repository)) {
+    final owner = connection;
+    if (!owner.isAttached || !identical(owner.backups, repository)) {
       throw const OperationNotSent();
     }
     final server = resources.servers
@@ -348,19 +348,19 @@ BackupsBloc createBackupsBloc(
 );
 
 VolumesBloc createVolumesBloc(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final Stream<void> providerChanges,
   required final ServerProvider? Function() serverProvider,
   required final void Function(String) showMessage,
 }) => VolumesBloc(
   volumes: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final owner) => owner.volumes.value,
     changes: (final owner) => owner.volumes.changes,
   ),
   providerChanges: providerChanges,
   loadProviderVolumes: (final origin) async {
-    if (!identical(origin, hub.active?.origin)) {
+    if (!connection.isAttached || !identical(origin, connection.origin)) {
       throw const GraphQLDispatchDeferred();
     }
     final provider = serverProvider();
@@ -374,7 +374,7 @@ VolumesBloc createVolumesBloc(
     return result.data;
   },
   loadPrice: (final origin, final location) async {
-    if (!identical(origin, hub.active?.origin)) {
+    if (!connection.isAttached || !identical(origin, connection.origin)) {
       throw const GraphQLDispatchDeferred();
     }
     final provider = serverProvider();
@@ -391,31 +391,33 @@ VolumesBloc createVolumesBloc(
     return result.data!.perVolumeGb;
   },
   resize: (final origin, final volume, final size, final onProgress) =>
-      hub.submit<ServerMutationResult<void>?>(OperationKind.manageVolumes, (
-        final owner,
-      ) {
-        final provider = serverProvider();
-        final providerVolume = volume.providerVolume;
-        if (provider == null ||
-            !provider.isAuthorized ||
-            providerVolume == null) {
-          throw const OperationNotSent();
-        }
-        return VolumeResizeWorkflow(
-          volumes: owner.volumes,
-          provider: provider,
-        ).resize(
-          name: volume.name,
-          providerVolume: providerVolume,
-          size: size,
-          onProgress: onProgress,
-        );
-      }, origin: origin).completion,
+      connection.submit<ServerMutationResult<void>?>(
+        OperationKind.manageVolumes,
+        (final owner) {
+          final provider = serverProvider();
+          final providerVolume = volume.providerVolume;
+          if (provider == null ||
+              !provider.isAuthorized ||
+              providerVolume == null) {
+            throw const OperationNotSent();
+          }
+          return VolumeResizeWorkflow(
+            volumes: owner.volumes,
+            provider: provider,
+          ).resize(
+            name: volume.name,
+            providerVolume: providerVolume,
+            size: size,
+            onProgress: onProgress,
+          );
+        },
+        origin: origin,
+      ).completion,
   showMessage: showMessage,
 );
 
 DnsRecordsCubit createDnsRecordsCubit(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final ResourcesModel resources,
   required final DnsProvider? Function() dnsProvider,
 }) {
@@ -433,51 +435,52 @@ DnsRecordsCubit createDnsRecordsCubit(
       api: owner.api,
       domain: server.domain,
       provider: dnsProvider(),
-      canContinue: () => owner.isAttached && (admitted || hub.canRead),
+      canContinue: () => owner.isAttached && (admitted || connection.canRead),
     );
   }
 
   return DnsRecordsCubit(
-    access: observeReadAccess(hub),
-    read: (final origin) => hub.read((final owner) async {
+    access: observeReadAccess(connection),
+    read: (final origin) => connection.read((final owner) async {
       if (!identical(origin, owner.origin)) {
         throw const GraphQLDispatchDeferred();
       }
       return await repository(owner, admitted: false)?.read() ??
           GenericResult(success: false, data: []);
     }),
-    repair: (final origin) => hub.run<GenericResult<List<DesiredDnsRecord>>?>(
-      OperationKind.applyChanges,
-      (final owner) {
-        final bound = repository(owner, admitted: true);
-        if (bound == null) {
-          throw const OperationNotSent();
-        }
-        return bound.repair();
-      },
-      origin: origin,
-    ),
+    repair: (final origin) =>
+        connection.run<GenericResult<List<DesiredDnsRecord>>?>(
+          OperationKind.applyChanges,
+          (final owner) {
+            final bound = repository(owner, admitted: true);
+            if (bound == null) {
+              throw const OperationNotSent();
+            }
+            return bound.repair();
+          },
+          origin: origin,
+        ),
   );
 }
 
 ServicesBloc createServicesBloc(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final void Function(String) showMessage,
 }) => ServicesBloc(
   services: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final connection) => connection.services.value,
     changes: (final connection) => connection.services.changes,
   ),
   refresh: () async {
-    await hub.active?.services.refresh(force: true);
+    await connection.services.refresh(force: true);
   },
-  restart: (final origin, final id) => hub.run(
+  restart: (final origin, final id) => connection.run(
     OperationKind.manageServices,
     (final owner) => owner.services.restart(id),
     origin: origin,
   ),
-  move: (final origin, final id, final destination) => hub.run(
+  move: (final origin, final id, final destination) => connection.run(
     OperationKind.manageServices,
     (final owner) => owner.services.move(id, destination),
     origin: origin,
@@ -486,26 +489,26 @@ ServicesBloc createServicesBloc(
 );
 
 ServerJobsBloc createServerJobsBloc(
-  final ServerConnectionHub hub, {
+  final ServerConnection connection, {
   required final void Function(String, {SnackBarBehavior? behavior})
   showMessage,
 }) => ServerJobsBloc(
   jobs: observeConnection(
-    hub: hub,
+    connection: connection,
     read: (final connection) => connection.jobs.snapshot,
     changes: (final connection) => connection.jobs.changes,
   ),
-  removeJob: (final origin, final uid) => hub.run(
+  removeJob: (final origin, final uid) => connection.run(
     OperationKind.manageJobs,
     (final owner) => owner.jobs.removeJob(uid),
     origin: origin,
   ),
-  removeFinished: (final origin) => hub.run(
+  removeFinished: (final origin) => connection.run(
     OperationKind.manageJobs,
     (final owner) => owner.jobs.removeAllFinished(),
     origin: origin,
   ),
-  migrate: (final origin, final destinations) => hub.run(
+  migrate: (final origin, final destinations) => connection.run(
     OperationKind.manageJobs,
     (final owner) => owner.jobs.migrateToBinds(destinations),
     origin: origin,

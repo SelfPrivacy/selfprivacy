@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/atoms/buttons/outlined_button.dart';
@@ -26,8 +26,10 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => BlocProvider(
     create: (final BuildContext context) {
-      final bloc = createResetPasswordBloc(getIt<ServerConnectionHub>(), user)
-        ..add(const RequestNewPassword());
+      final bloc = createResetPasswordBloc(
+        context.read<ServerConnection>(),
+        user,
+      )..add(const RequestNewPassword());
       return bloc;
     },
     child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(

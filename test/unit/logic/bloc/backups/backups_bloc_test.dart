@@ -88,7 +88,7 @@ void main() {
       bucket = null;
     });
     bloc = createBackupsBloc(
-      hub,
+      hub.active!,
       resources: resources,
       showMessage: messages.add,
       createProvider: (_) => provider,
@@ -139,7 +139,8 @@ void main() {
       connection = hub.active!;
       connection.cache.setVersion(Version(3, 6, 0));
       connection.backups.store.push(const []);
-      await ready();
+      await pumpEventQueue();
+      expect(bloc.state, isA<BackupsInitial>());
     });
     await tester.pump();
     when(
@@ -254,6 +255,13 @@ void main() {
         ..resume();
       hub.active!.cache.setVersion(
         unsupported ? Version(1, 0, 0) : Version(3, 6, 0),
+      );
+      await bloc.close();
+      bloc = createBackupsBloc(
+        hub.active!,
+        resources: resources,
+        showMessage: messages.add,
+        createProvider: (_) => provider,
       );
       when(api.getBackups).thenThrow(StateError('unavailable'));
       when(api.getBackupsConfiguration).thenThrow(StateError('unavailable'));
@@ -614,7 +622,7 @@ void main() {
           );
         }
         await dispatch(CreateBackups(selected, origin: bloc.state.origin));
-        final queue = hub.operationsFor(connection.origin.serverId);
+        final queue = hub.active!.operations;
         expect(queue.pending.single.jobIds, {'first', 'second'});
         queue.observeJob('first', succeeded: false);
         expect(queue.pending.single.status, OperationStatus.accepted);
@@ -846,7 +854,7 @@ void main() {
     });
   });
 
-  testWidgets('server switch stops a backup batch at its original connection', (
+  testWidgets('reset stops a backup batch at its original connection', (
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
@@ -870,7 +878,7 @@ void main() {
         ),
       );
       await pumpEventQueue();
-      expect(bloc.state, isA<BackupsLoading>());
+      expect(bloc.state, isA<BackupsInitial>());
       expect(connection.jobs.value.data, isEmpty);
       expect(replacement.jobs.value.data, isNull);
       verify(() => api.startBackup(services.first.id)).called(1);

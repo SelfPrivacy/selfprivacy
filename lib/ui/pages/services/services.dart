@@ -44,17 +44,19 @@ class _ServicesPageState extends State<ServicesPage> {
     final isReady =
         context.watch<AppReadinessCubit>().state is ServerConfigured;
 
-    final OutdatedServerCheckerState outdatedServerCheckerState = context
-        .watch<OutdatedServerCheckerBloc>()
-        .state;
+    final outdatedServerCheckerState = isReady
+        ? context.watch<OutdatedServerCheckerBloc>().state
+        : null;
 
-    final services = context
-        .watch<ServicesBloc>()
-        .state
-        .installedServices
-        .sorted((final a, final b) => a.status.index.compareTo(b.status.index));
+    final services = !isReady
+        ? <Service>[]
+        : context.watch<ServicesBloc>().state.installedServices.sorted(
+            (final a, final b) => a.status.index.compareTo(b.status.index),
+          );
 
-    final systemServices = context.watch<ServicesBloc>().state.systemServices;
+    final systemServices = !isReady
+        ? <Service>[]
+        : context.watch<ServicesBloc>().state.systemServices;
 
     final isLoading = isReady && services.isEmpty && systemServices.isEmpty;
     final fakeServices = List.generate(7, (final int index) => Service.empty);

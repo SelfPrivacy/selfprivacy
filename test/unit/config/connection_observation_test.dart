@@ -66,7 +66,7 @@ void main() {
 
   void observe() {
     subscription = observeConnection(
-      hub: hub,
+      connection: hub.active!,
       read: (final connection) => connection.cache.groups.value,
       changes: (final connection) => connection.cache.groups.stream,
     ).listen(observed.add);
@@ -116,13 +116,13 @@ void main() {
         when(
           () => api.generateRecoveryToken(null, null),
         ).thenAnswer((_) => response('recovery-secret'));
-        final services = createServicesBloc(hub, showMessage: (_) {});
+        final services = createServicesBloc(hub.active!, showMessage: (_) {});
         final jobs = createServerJobsBloc(
-          hub,
+          hub.active!,
           showMessage: (_, {final behavior}) {},
         );
-        final devices = createDevicesBloc(hub, showMessage: (_) {});
-        final recovery = createRecoveryKeyBloc(hub);
+        final devices = createDevicesBloc(hub.active!, showMessage: (_) {});
+        final recovery = createRecoveryKeyBloc(hub.active!);
         addTearDown(services.close);
         addTearDown(jobs.close);
         addTearDown(devices.close);
@@ -196,11 +196,15 @@ void main() {
     selected = aServer();
     changes.add(const ChangedServers());
     await pumpEventQueue();
-    expect(
-      observed.last.origin!.continuity,
-      isNot(same(observed.first.origin!.continuity)),
-    );
-    expect(observed.last.value!.data, isNull);
+    expect(observed.last.origin, isNull);
+    expect(observed.last.value, isNull);
+    final replacement = await observeConnection(
+      connection: hub.active!,
+      read: (final connection) => connection.cache.groups.value,
+      changes: (final connection) => connection.cache.groups.stream,
+    ).first;
+    expect(replacement.origin, isNot(same(observed.first.origin)));
+    expect(replacement.value!.data, isNull);
   });
 
   test(
@@ -216,7 +220,7 @@ void main() {
       observe();
       await pumpEventQueue();
       final before = observed.last;
-      await hub.rotateToken();
+      await hub.active!.rotateToken();
       await pumpEventQueue();
       expect(observed.last.origin, same(before.origin));
       expect(observed.last.value, same(before.value));
@@ -228,7 +232,10 @@ void main() {
   test(
     'reset link survives confirmed rotation but not same-server reselection',
     () async {
-      final bloc = createResetPasswordBloc(hub, User.fake(login: 'alex'));
+      final bloc = createResetPasswordBloc(
+        hub.active!,
+        User.fake(login: 'alex'),
+      );
       addTearDown(bloc.close);
       when(() => api.generatePasswordResetLink('alex')).thenAnswer(
         (_) async => ServerMutationResult(
@@ -249,7 +256,7 @@ void main() {
           payload: const ServerMutationPayload.available('replacement'),
         ),
       );
-      await hub.rotateToken();
+      await hub.active!.rotateToken();
       await pumpEventQueue();
       expect(bloc.state.passwordResetLink, link);
       selected = null;
@@ -267,7 +274,7 @@ void main() {
   );
 
   test('reset discards an in-flight password link', () async {
-    final bloc = createResetPasswordBloc(hub, User.fake(login: 'alex'));
+    final bloc = createResetPasswordBloc(hub.active!, User.fake(login: 'alex'));
     addTearDown(bloc.close);
     final pending = Completer<ServerMutationResult<String>>();
     final sent = Completer<void>();

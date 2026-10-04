@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
@@ -21,18 +19,12 @@ part 'server_jobs_state.dart';
 
 class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
   ServerJobsBloc({
-    required final Stream<ConnectionObservation<JobsSnapshot>> jobs,
-    required final Future<ServerMutationResult<void>?> Function(
-      ServerStateOrigin,
-      String,
-    )
+    required final Stream<JobsSnapshot?> jobs,
+    required final Future<ServerMutationResult<void>?> Function(String)
     removeJob,
-    required final Future<Map<String, ServerMutationResult<void>>?> Function(
-      ServerStateOrigin,
-    )
+    required final Future<Map<String, ServerMutationResult<void>>?> Function()
     removeFinished,
     required final Future<ServerMutationResult<ServerJob>?> Function(
-      ServerStateOrigin,
       Map<String, String>,
     )
     migrate,
@@ -44,49 +36,28 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
        _showMessage = showMessage,
        super(ServerJobsInitialState()) {
     on<_JobsObserved>(_observe, transformer: sequential());
-    on<_JobsAction<RemoveServerJob>>(_act, transformer: sequential());
-    on<_JobsAction<RemoveAllFinishedJobs>>(_act, transformer: droppable());
+    on<RemoveServerJob>(_act, transformer: sequential());
+    on<RemoveAllFinishedJobs>(_act, transformer: droppable());
     _subscription = jobs.listen((final observation) {
       _latest = observation;
       add(_JobsObserved(observation));
     });
   }
 
-  final Future<ServerMutationResult<void>?> Function(ServerStateOrigin, String)
-  _removeJob;
-  final Future<Map<String, ServerMutationResult<void>>?> Function(
-    ServerStateOrigin,
-  )
+  final Future<ServerMutationResult<void>?> Function(String) _removeJob;
+  final Future<Map<String, ServerMutationResult<void>>?> Function()
   _removeFinished;
-  final Future<ServerMutationResult<ServerJob>?> Function(
-    ServerStateOrigin,
-    Map<String, String>,
-  )
+  final Future<ServerMutationResult<ServerJob>?> Function(Map<String, String>)
   _migrate;
   final void Function(String, {SnackBarBehavior? behavior}) _showMessage;
-  late final StreamSubscription<ConnectionObservation<JobsSnapshot>>
-  _subscription;
-  ConnectionObservation<JobsSnapshot>? _latest;
-  ServerStateOrigin? _presentedOrigin;
-
-  @override
-  void add(final ServerJobsEvent event) {
-    super.add(switch (event) {
-      RemoveServerJob() => _JobsAction(event, _presentedOrigin),
-      RemoveAllFinishedJobs() => _JobsAction(event, _presentedOrigin),
-      _ => event,
-    });
-  }
+  late final StreamSubscription<JobsSnapshot?> _subscription;
+  JobsSnapshot? _latest;
 
   void _observe(
     final _JobsObserved event,
     final Emitter<ServerJobsState> emit,
   ) {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    _presentedOrigin = event.observation.origin;
-    final snapshot = event.observation.value;
+    final snapshot = event.observation;
     if (snapshot == null) {
       emit(ServerJobsInitialState());
     } else if (snapshot.value.support == DomainSupport.unsupported) {
@@ -108,27 +79,24 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     }
   }
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _latest?.origin?.continuity);
+  bool get _isActive => !isClosed && _latest != null;
 
   Future<void> _act(
-    final _JobsAction<ServerJobsEvent> action,
+    final ServerJobsEvent action,
     final Emitter<ServerJobsState> emit,
   ) async {
-    if (!_isCurrent(action.origin)) {
+    if (!_isActive) {
       return;
     }
-    switch (action.event) {
+    switch (action) {
       case RemoveServerJob(:final uid):
-        final result = await _removeJob(action.origin!, uid);
-        if (_isCurrent(action.origin)) {
+        final result = await _removeJob(uid);
+        if (_isActive) {
           _report(result);
         }
       case RemoveAllFinishedJobs():
-        final results = await _removeFinished(action.origin!);
-        if (!_isCurrent(action.origin)) {
+        final results = await _removeFinished();
+        if (!_isActive) {
           return;
         }
         if (results == null) {
@@ -157,16 +125,12 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     }
   }
 
-  Future<void> migrateToBinds(
-    final Map<String, String> serviceToDisk, {
-    required final ConnectionContinuity? continuity,
-  }) async {
-    final origin = _presentedOrigin;
-    if (!_isCurrent(origin) || !identical(continuity, origin?.continuity)) {
+  Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+    if (!_isActive) {
       return;
     }
-    final result = await _migrate(origin!, Map.unmodifiable(serviceToDisk));
-    if (_isCurrent(origin)) {
+    final result = await _migrate(Map.unmodifiable(serviceToDisk));
+    if (_isActive) {
       _report(
         result,
         requirePayload: true,
@@ -177,6 +141,7 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
 
   @override
   Future<void> close() async {
+    _latest = null;
     await _subscription.cancel();
     return super.close();
   }

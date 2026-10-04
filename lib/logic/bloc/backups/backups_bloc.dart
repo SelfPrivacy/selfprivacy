@@ -6,8 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -24,20 +22,17 @@ part 'backups_state.dart';
 
 typedef AdmitBackupOperation =
     Future<OperationResult<void>> Function(
-      ServerStateOrigin origin,
       OperationKind kind,
       Future<void> Function(BackupsRepository) action,
     );
 
 class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   BackupsBloc({
-    required final Stream<ConnectionObservation<BackupsSnapshot>> backups,
+    required final Stream<BackupsSnapshot?> backups,
     required final AdmitBackupOperation admitOperation,
-    required final BackblazeBucket? Function(ServerStateOrigin) currentBucket,
-    required final Future<void> Function(ServerStateOrigin, BackblazeBucket)
-    saveBucket,
-    required final Future<void> Function(ServerStateOrigin, BackblazeBucket?)
-    removeBucket,
+    required final BackblazeBucket? Function() currentBucket,
+    required final Future<void> Function(BackblazeBucket) saveBucket,
+    required final Future<void> Function(BackblazeBucket?) removeBucket,
     required final Future<ServerMutationResult<BackupConfiguration>> Function(
       BackupsRepository,
       BackupsCredential,
@@ -67,25 +62,19 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   }
 
   final AdmitBackupOperation _admitOperation;
-  final BackblazeBucket? Function(ServerStateOrigin) _currentBucket;
-  final Future<void> Function(ServerStateOrigin, BackblazeBucket) _saveBucket;
-  final Future<void> Function(ServerStateOrigin, BackblazeBucket?)
-  _removeBucket;
+  final BackblazeBucket? Function() _currentBucket;
+  final Future<void> Function(BackblazeBucket) _saveBucket;
+  final Future<void> Function(BackblazeBucket?) _removeBucket;
   final Future<ServerMutationResult<BackupConfiguration>> Function(
     BackupsRepository,
     BackupsCredential,
   )
   _initialize;
   final void Function(String) _showMessage;
-  late final StreamSubscription<ConnectionObservation<BackupsSnapshot>>
-  _subscription;
-  ConnectionObservation<BackupsSnapshot>? _latest;
-  ServerStateOrigin? _presentedOrigin;
+  late final StreamSubscription<BackupsSnapshot?> _subscription;
+  BackupsSnapshot? _latest;
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _latest?.origin?.continuity);
+  bool get _isActive => !isClosed && _latest != null;
 
   void _register<T extends BackupsEvent>(
     final Future<void> Function(
@@ -97,33 +86,32 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final EventTransformer<T> transformer,
   ) {
     on<T>((final event, final emit) async {
-      if (!_isCurrent(event.origin)) {
+      if (!_isActive) {
         return;
       }
       final OperationResult<void> result;
       try {
         result = await _admitOperation(
-          event.origin!,
           switch (event) {
             InitializeBackupsRepository() => OperationKind.initializeBackups,
             RemoveBackupsRepository() => OperationKind.removeBackups,
             _ => OperationKind.manageBackups,
           },
           (final repository) => action(event, repository, (final value) {
-            if (!emit.isDone && _isCurrent(event.origin)) {
+            if (!emit.isDone && _isActive) {
               emit(value);
             }
           }),
         );
       } catch (_) {
-        if (!_isCurrent(event.origin) || emit.isDone) {
+        if (!_isActive || emit.isDone) {
           return;
         }
         _settleInterrupted(emit);
         _showMessage('server_mutation.outcome_unknown'.tr());
         return;
       }
-      if (!_isCurrent(event.origin) || emit.isDone) {
+      if (!_isActive || emit.isDone) {
         return;
       }
       if (state is BackupsBusy || state is BackupsInitializing) {
@@ -137,21 +125,17 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   }
 
   void _settleInterrupted(final Emitter<BackupsState> emit) {
-    final snapshot = _latest!.value!;
+    final snapshot = _latest!;
     final configuration = snapshot.configuration.data;
-    final bucket = _currentBucket(_latest!.origin!);
+    final bucket = _currentBucket();
     emit(
       (configuration?.isInitialized ?? false)
           ? BackupsInitialized(
-              origin: _presentedOrigin,
               backupConfig: configuration,
               backups: snapshot.backups.data ?? const [],
               backblazeBucket: bucket,
             )
-          : BackupsUninitialized(
-              origin: _presentedOrigin,
-              backblazeBucket: bucket,
-            ),
+          : BackupsUninitialized(backblazeBucket: bucket),
     );
   }
 
@@ -159,35 +143,26 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final _BackupsObserved event,
     final Emitter<BackupsState> emit,
   ) async {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    final origin = event.observation.origin;
-    final sameBinding = identical(
-      origin?.continuity,
-      _presentedOrigin?.continuity,
-    );
-    _presentedOrigin = origin;
-    if (origin == null) {
+    if (event.observation == null) {
       emit(const BackupsInitial());
       return;
     }
-    final snapshot = event.observation.value!;
+    final snapshot = event.observation!;
     final configuration = snapshot.configuration.data;
-    var bucket = _currentBucket(origin);
+    var bucket = _currentBucket();
     if (configuration != null &&
         configuration.encryptionKey.isNotEmpty &&
         bucket != null &&
         configuration.encryptionKey != bucket.encryptionKey) {
       bucket = bucket.copyWith(encryptionKey: configuration.encryptionKey);
       try {
-        await _saveBucket(origin, bucket);
+        await _saveBucket(bucket);
       } catch (_) {
-        if (!emit.isDone && _isCurrent(origin)) {
+        if (!emit.isDone && _isActive) {
           _showMessage('backup.save_storage_failed'.tr());
         }
       }
-      if (!_isCurrent(origin) || emit.isDone) {
+      if (!_isActive || emit.isDone) {
         return;
       }
     }
@@ -201,31 +176,23 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(
         unsupported || failed
             ? BackupsUnavailable(
-                origin: _presentedOrigin,
                 isUnsupported: unsupported,
                 backblazeBucket: bucket,
               )
-            : BackupsLoading(origin: _presentedOrigin, backblazeBucket: bucket),
+            : BackupsLoading(backblazeBucket: bucket),
       );
     } else if (!configuration.isInitialized) {
-      if (sameBinding && state is BackupsInitializing) {
+      if (state is BackupsInitializing) {
         return;
       }
-      emit(
-        BackupsUninitialized(origin: _presentedOrigin, backblazeBucket: bucket),
-      );
+      emit(BackupsUninitialized(backblazeBucket: bucket));
     } else {
       final loaded = BackupsInitialized(
-        origin: _presentedOrigin,
         backups: snapshot.backups.data!,
         backupConfig: configuration,
         backblazeBucket: bucket,
       );
-      emit(
-        sameBinding && state is BackupsBusy
-            ? BackupsBusy.fromState(loaded)
-            : loaded,
-      );
+      emit(state is BackupsBusy ? BackupsBusy.fromState(loaded) : loaded);
     }
   }
 
@@ -240,26 +207,17 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final previous = state;
     emit(
       BackupsInitializing(
-        origin: _presentedOrigin,
-        backblazeBucket:
-            previous.backblazeBucket ??
-            _currentBucket(repository.commands.origin),
+        backblazeBucket: previous.backblazeBucket ?? _currentBucket(),
       ),
     );
     final ServerMutationResult<BackupConfiguration> result;
     try {
       result = await _initialize(repository, event.credential);
     } on BackupStorageFailure catch (failure) {
-      if (!repository.commands.isAttached ||
-          !_isCurrent(repository.commands.origin)) {
+      if (!repository.commands.isAttached || !_isActive) {
         return;
       }
-      emit(
-        BackupsUninitialized(
-          origin: _presentedOrigin,
-          backblazeBucket: previous.backblazeBucket,
-        ),
-      );
+      emit(BackupsUninitialized(backblazeBucket: previous.backblazeBucket));
       _showMessage(switch (failure) {
         BackupStorageFailure.missingEncryptionKey =>
           'backup.backups_encryption_key_not_found'.tr(),
@@ -270,15 +228,12 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       });
       return;
     }
-    if (!repository.commands.isAttached ||
-        !_isCurrent(repository.commands.origin)) {
+    if (!repository.commands.isAttached || !_isActive) {
       return;
     }
-    final bucket = _currentBucket(repository.commands.origin);
+    final bucket = _currentBucket();
     if (!_configurationConfirmed(result)) {
-      emit(
-        BackupsUninitialized(origin: _presentedOrigin, backblazeBucket: bucket),
-      );
+      emit(BackupsUninitialized(backblazeBucket: bucket));
       return;
     }
     emit(
@@ -299,8 +254,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(BackupsBusy.fromState(currentState));
       _showMessage('backup.refetching_list'.tr());
       final result = await repository.forceBackupListReload();
-      if (!repository.commands.isAttached ||
-          !_isCurrent(repository.commands.origin)) {
+      if (!repository.commands.isAttached || !_isActive) {
         return;
       }
       _isConfirmed(result);
@@ -320,8 +274,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         repository,
         event.services.map((final service) => service.id),
       );
-      if (!repository.commands.isAttached ||
-          !_isCurrent(repository.commands.origin)) {
+      if (!repository.commands.isAttached || !_isActive) {
         return;
       }
       for (final result in results) {
@@ -345,8 +298,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
         event.backupId,
         event.restoreStrategy,
       );
-      if (!repository.commands.isAttached ||
-          !_isCurrent(repository.commands.origin)) {
+      if (!repository.commands.isAttached || !_isActive) {
         return;
       }
       if (_isConfirmed(result) && result.payload.value == null) {
@@ -391,8 +343,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     }
     emit(BackupsBusy.fromState(currentState));
     final result = await change(repository);
-    if (!repository.commands.isAttached ||
-        !_isCurrent(repository.commands.origin)) {
+    if (!repository.commands.isAttached || !_isActive) {
       return;
     }
     _configurationConfirmed(result);
@@ -408,8 +359,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     if (currentState is BackupsInitialized) {
       emit(BackupsBusy.fromState(currentState));
       final result = await repository.forgetSnapshot(event.backupId);
-      if (!repository.commands.isAttached ||
-          !_isCurrent(repository.commands.origin)) {
+      if (!repository.commands.isAttached || !_isActive) {
         return;
       }
       _isConfirmed(result);
@@ -429,13 +379,9 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     emit(BackupsBusy.fromState(currentState));
     final result = await removeBackups(
       repository,
-      removeBucket: () => _removeBucket(
-        repository.commands.origin,
-        currentState.backblazeBucket,
-      ),
+      removeBucket: () => _removeBucket(currentState.backblazeBucket),
     );
-    if (!repository.commands.isAttached ||
-        !_isCurrent(repository.commands.origin)) {
+    if (!repository.commands.isAttached || !_isActive) {
       return;
     }
     if (!_configurationConfirmed(result)) {
@@ -481,15 +427,11 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     }
     return config.isInitialized
         ? BackupsInitialized(
-            origin: _presentedOrigin,
             backups: previous.backups,
             backupConfig: config,
             backblazeBucket: previous.backblazeBucket,
           )
-        : BackupsUninitialized(
-            origin: _presentedOrigin,
-            backblazeBucket: previous.backblazeBucket,
-          );
+        : BackupsUninitialized(backblazeBucket: previous.backblazeBucket);
   }
 
   BackupsState _currentState(
@@ -497,7 +439,6 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final BackupsInitialized previous,
   ) => _configuredState(
     BackupsInitialized(
-      origin: _presentedOrigin,
       backups: repository.value.data ?? previous.backups,
       backupConfig: repository.configValue.data,
       backblazeBucket: previous.backblazeBucket,
@@ -508,7 +449,6 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   @override
   Future<void> close() async {
     _latest = null;
-    _presentedOrigin = null;
     await _subscription.cancel();
     return super.close();
   }

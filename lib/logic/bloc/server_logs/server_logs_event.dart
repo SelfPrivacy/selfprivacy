@@ -30,12 +30,12 @@ final class _LogReceived extends ServerLogsEvent {
 }
 
 final class _ReadLogs extends ServerLogsEvent {
-  const _ReadLogs(this.event, this.origin, this.view);
+  const _ReadLogs(this.event, this.view);
   final ServerLogsEvent event;
-  final ServerStateOrigin? origin;
+
   final Object view;
   @override
-  List<Object?> get props => [event, origin, view];
+  List<Object?> get props => [event, view];
 }
 
 final class _ResetLogs extends ServerLogsEvent {

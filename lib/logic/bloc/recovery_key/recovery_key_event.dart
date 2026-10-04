@@ -7,7 +7,7 @@ sealed class RecoveryKeyEvent extends Equatable {
 class _RecoveryKeyObserved extends RecoveryKeyEvent {
   const _RecoveryKeyObserved(this.observation);
 
-  final ConnectionObservation<CachedValue<RecoveryKeyStatus>> observation;
+  final CachedValue<RecoveryKeyStatus>? observation;
 
   @override
   List<Object?> get props => [observation];
@@ -18,12 +18,4 @@ class RecoveryKeyStatusRefresh extends RecoveryKeyEvent {
 
   @override
   List<Object?> get props => [];
-}
-
-class _BoundRecoveryRefresh extends RecoveryKeyEvent {
-  const _BoundRecoveryRefresh(this.origin);
-  final ServerStateOrigin? origin;
-
-  @override
-  List<Object?> get props => [origin];
 }

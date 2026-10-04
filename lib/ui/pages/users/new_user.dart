@@ -10,7 +10,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/forms/user_form.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -34,13 +33,12 @@ class NewUserPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final users = context.watch<UsersBloc>().state;
-    final continuity = users.continuity;
     final editing = user == null
         ? null
         : users.users
               .where((final candidate) => candidate.login == user!.login)
               .firstOrNull;
-    if (continuity == null || (user != null && editing == null)) {
+    if (user != null && editing == null) {
       return BrandHeroScreen(
         heroTitle: user == null
             ? 'users.new_user'.tr()
@@ -48,18 +46,13 @@ class NewUserPage extends StatelessWidget {
         children: [Text('basis.loading'.tr())],
       );
     }
-    return _UserEditor(
-      key: ValueKey(continuity),
-      user: editing,
-      continuity: continuity,
-    );
+    return _UserEditor(user: editing);
   }
 }
 
 class _UserEditor extends StatefulWidget {
-  const _UserEditor({required this.user, required this.continuity, super.key});
+  const _UserEditor({required this.user});
   final User? user;
-  final ConnectionContinuity continuity;
 
   @override
   State<_UserEditor> createState() => _UserEditorState();
@@ -113,20 +106,16 @@ class _UserEditorState extends State<_UserEditor> {
   Future<void> _submit(final User user) async {
     final ServerMutationResult<User>? result;
     try {
-      result = await _users.saveUser(
-        user,
-        continuity: widget.continuity,
-        create: widget.user == null,
-      );
+      result = await _users.saveUser(user, create: widget.user == null);
     } catch (_) {
-      if (mounted && identical(widget.continuity, _users.state.continuity)) {
+      if (mounted) {
         getIt<NavigationService>().showSnackBar(
           'server_mutation.outcome_unknown'.tr(),
         );
       }
       return;
     }
-    if (!mounted || !identical(widget.continuity, _users.state.continuity)) {
+    if (!mounted) {
       return;
     }
 

@@ -7,10 +7,10 @@ sealed class GroupsEvent extends Equatable {
 class _GroupsObserved extends GroupsEvent {
   const _GroupsObserved(this.observation);
 
-  final ConnectionObservation<CachedValue<List<String>>> observation;
+  final CachedValue<List<String>>? observation;
 
   @override
-  List<Object> get props => [observation];
+  List<Object?> get props => [observation];
 }
 
 class GroupsListRefresh extends GroupsEvent {

@@ -3,23 +3,19 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 void main() {
-  late StreamController<ConnectionObservation<CachedValue<List<User>>>> source;
+  late StreamController<CachedValue<List<User>>?> source;
   late UsersBloc bloc;
-  late ServerStateOrigin origin;
   late int refreshes;
 
   setUp(() {
     source = StreamController.broadcast(sync: true);
-    origin = ServerStateOrigin('server');
     refreshes = 0;
     bloc = UsersBloc(
       users: source.stream,
-      save: (_, _, {required final create}) async => null,
+      save: (_, {required final create}) async => null,
       refresh: () async {
         refreshes++;
       },
@@ -32,7 +28,7 @@ void main() {
   });
 
   Future<void> publish(final CachedValue<List<User>> value) async {
-    source.add(ConnectionObservation.attached(origin, value));
+    source.add(value);
     await pumpEventQueue();
   }
 
@@ -77,13 +73,8 @@ void main() {
     final seen = <UsersState>[];
     final subscription = bloc.stream.listen(seen.add);
     source
-      ..add(
-        ConnectionObservation.attached(
-          origin,
-          CachedValue(data: [User.fake(login: 'old')]),
-        ),
-      )
-      ..add(const ConnectionObservation.absent());
+      ..add(CachedValue(data: [User.fake(login: 'old')]))
+      ..add(null);
     await pumpEventQueue();
     expect(bloc.state, isA<UsersInitial>());
     expect(seen.whereType<UsersLoaded>(), isEmpty);

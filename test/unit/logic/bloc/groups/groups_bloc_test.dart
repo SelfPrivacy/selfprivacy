@@ -3,18 +3,13 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 
 void main() {
-  late StreamController<ConnectionObservation<CachedValue<List<String>>>>
-  source;
+  late StreamController<CachedValue<List<String>>?> source;
   late GroupsBloc bloc;
-  late ServerStateOrigin origin;
 
   setUp(() {
     source = StreamController.broadcast(sync: true);
-    origin = ServerStateOrigin('server');
     bloc = GroupsBloc(groups: source.stream, refresh: () async {});
   });
   tearDown(() async {
@@ -34,22 +29,14 @@ void main() {
     'an empty loaded collection is distinct from absent and unsupported',
     () async {
       source.add(
-        ConnectionObservation.attached(
-          origin,
-          const CachedValue(data: <String>[], support: DomainSupport.supported),
-        ),
+        const CachedValue(data: <String>[], support: DomainSupport.supported),
       );
       await pumpEventQueue();
       expect(bloc.state, isA<GroupsLoaded>());
-      source.add(
-        ConnectionObservation.attached(
-          origin,
-          const CachedValue(support: DomainSupport.unsupported),
-        ),
-      );
+      source.add(const CachedValue(support: DomainSupport.unsupported));
       await pumpEventQueue();
       expect(bloc.state, isA<GroupsUnsupported>());
-      source.add(const ConnectionObservation.absent());
+      source.add(null);
       await pumpEventQueue();
       expect(bloc.state, isA<GroupsInitial>());
     },
@@ -59,13 +46,8 @@ void main() {
     final seen = <GroupsState>[];
     final subscription = bloc.stream.listen(seen.add);
     source
-      ..add(
-        ConnectionObservation.attached(
-          origin,
-          const CachedValue(data: ['old']),
-        ),
-      )
-      ..add(const ConnectionObservation.absent());
+      ..add(const CachedValue(data: ['old']))
+      ..add(null);
     await pumpEventQueue();
     expect(bloc.state, isA<GroupsInitial>());
     expect(seen.whereType<GroupsLoaded>(), isEmpty);

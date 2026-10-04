@@ -239,7 +239,6 @@ class ExtendingVolumeRoute extends PageRouteInfo<ExtendingVolumeRouteArgs> {
   ExtendingVolumeRoute({
     required DiskVolume diskVolumeToResize,
     required DiskStatus diskStatus,
-    required ServerStateOrigin? origin,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -247,7 +246,6 @@ class ExtendingVolumeRoute extends PageRouteInfo<ExtendingVolumeRouteArgs> {
          args: ExtendingVolumeRouteArgs(
            diskVolumeToResize: diskVolumeToResize,
            diskStatus: diskStatus,
-           origin: origin,
            key: key,
          ),
          initialChildren: children,
@@ -262,7 +260,6 @@ class ExtendingVolumeRoute extends PageRouteInfo<ExtendingVolumeRouteArgs> {
       return ExtendingVolumePage(
         diskVolumeToResize: args.diskVolumeToResize,
         diskStatus: args.diskStatus,
-        origin: args.origin,
         key: args.key,
       );
     },
@@ -273,7 +270,6 @@ class ExtendingVolumeRouteArgs {
   const ExtendingVolumeRouteArgs({
     required this.diskVolumeToResize,
     required this.diskStatus,
-    required this.origin,
     this.key,
   });
 
@@ -281,13 +277,11 @@ class ExtendingVolumeRouteArgs {
 
   final DiskStatus diskStatus;
 
-  final ServerStateOrigin? origin;
-
   final Key? key;
 
   @override
   String toString() {
-    return 'ExtendingVolumeRouteArgs{diskVolumeToResize: $diskVolumeToResize, diskStatus: $diskStatus, origin: $origin, key: $key}';
+    return 'ExtendingVolumeRouteArgs{diskVolumeToResize: $diskVolumeToResize, diskStatus: $diskStatus, key: $key}';
   }
 
   @override
@@ -296,16 +290,12 @@ class ExtendingVolumeRouteArgs {
     if (other is! ExtendingVolumeRouteArgs) return false;
     return diskVolumeToResize == other.diskVolumeToResize &&
         diskStatus == other.diskStatus &&
-        origin == other.origin &&
         key == other.key;
   }
 
   @override
   int get hashCode =>
-      diskVolumeToResize.hashCode ^
-      diskStatus.hashCode ^
-      origin.hashCode ^
-      key.hashCode;
+      diskVolumeToResize.hashCode ^ diskStatus.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -805,7 +795,6 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
     required bool isMigration,
     List<Service>? services,
     DiskStatus? diskStatus,
-    ConnectionContinuity? continuity,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
@@ -814,7 +803,6 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
            isMigration: isMigration,
            services: services,
            diskStatus: diskStatus,
-           continuity: continuity,
            key: key,
          ),
          initialChildren: children,
@@ -830,7 +818,6 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
         isMigration: args.isMigration,
         services: args.services,
         diskStatus: args.diskStatus,
-        continuity: args.continuity,
         key: args.key,
       );
     },
@@ -842,7 +829,6 @@ class ServicesMigrationRouteArgs {
     required this.isMigration,
     this.services,
     this.diskStatus,
-    this.continuity,
     this.key,
   });
 
@@ -852,13 +838,11 @@ class ServicesMigrationRouteArgs {
 
   final DiskStatus? diskStatus;
 
-  final ConnectionContinuity? continuity;
-
   final Key? key;
 
   @override
   String toString() {
-    return 'ServicesMigrationRouteArgs{isMigration: $isMigration, services: $services, diskStatus: $diskStatus, continuity: $continuity, key: $key}';
+    return 'ServicesMigrationRouteArgs{isMigration: $isMigration, services: $services, diskStatus: $diskStatus, key: $key}';
   }
 
   @override
@@ -868,7 +852,6 @@ class ServicesMigrationRouteArgs {
     return isMigration == other.isMigration &&
         const ListEquality<Service>().equals(services, other.services) &&
         diskStatus == other.diskStatus &&
-        continuity == other.continuity &&
         key == other.key;
   }
 
@@ -877,7 +860,6 @@ class ServicesMigrationRouteArgs {
       isMigration.hashCode ^
       const ListEquality<Service>().hash(services) ^
       diskStatus.hashCode ^
-      continuity.hashCode ^
       key.hashCode;
 }
 

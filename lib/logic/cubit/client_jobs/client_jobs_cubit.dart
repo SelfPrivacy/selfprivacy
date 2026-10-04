@@ -6,8 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -21,16 +19,14 @@ part 'client_jobs_state.dart';
 
 typedef AdmitConfigurationOperation =
     Future<OperationResult<void>> Function(
-      ServerStateOrigin origin,
       OperationKind kind,
       Future<void> Function(ApplyChangesOperation) action,
     );
 
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
-    required final Stream<ConnectionObservation<JobsSnapshot>> jobs,
-    required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
-    settings,
+    required final Stream<JobsSnapshot?> jobs,
+    required final Stream<CachedValue<SystemSettings>?> settings,
     required final AdmitConfigurationOperation admitOperation,
     required final void Function(String) showMessage,
   }) : _admitOperation = admitOperation,
@@ -44,23 +40,17 @@ class JobsCubit extends Cubit<JobsState> {
 
   final AdmitConfigurationOperation _admitOperation;
   final void Function(String) _showMessage;
-  late final StreamSubscription<ConnectionObservation<JobsSnapshot>>
-  _jobsSubscription;
-  late final StreamSubscription<
-    ConnectionObservation<CachedValue<SystemSettings>>
-  >
+  late final StreamSubscription<JobsSnapshot?> _jobsSubscription;
+  late final StreamSubscription<CachedValue<SystemSettings>?>
   _settingsSubscription;
-  ConnectionObservation<JobsSnapshot>? _jobs;
-  ConnectionObservation<CachedValue<SystemSettings>>? _settings;
+  JobsSnapshot? _jobs;
+  CachedValue<SystemSettings>? _settings;
   bool _submitting = false;
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _jobs?.origin?.continuity);
+  bool get _isActive => !isClosed && _jobs != null;
 
-  void _observeJobs(final ConnectionObservation<JobsSnapshot> observation) {
-    if (!identical(_jobs?.origin?.continuity, observation.origin?.continuity)) {
+  void _observeJobs(final JobsSnapshot? observation) {
+    if (observation == null) {
       emit(JobsStateEmpty());
     }
     _jobs = observation;
@@ -72,7 +62,7 @@ class JobsCubit extends Cubit<JobsState> {
     if (current is! JobsStateLoading || current.rebuildJobUid == null) {
       return;
     }
-    final job = _jobs?.value?.jobs.firstWhereOrNull(
+    final job = _jobs?.jobs.firstWhereOrNull(
       (final job) => job.uid == current.rebuildJobUid,
     );
     if (job?.status == JobStatusEnum.error ||
@@ -98,14 +88,10 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   void addJob(final JobDraft job) {
-    final origin = _jobs?.origin;
-    if (!_isCurrent(origin)) {
+    if (!_isActive) {
       return;
     }
-    final settings =
-        identical(_settings?.origin?.continuity, origin?.continuity)
-        ? _settings?.value?.data
-        : null;
+    final settings = _settings?.data;
     final previous = state;
     final next = previous.addJob(job, settings: settings);
     if (identical(next, previous)) {
@@ -131,22 +117,21 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> _perform(
-    final ServerStateOrigin origin,
     final OperationKind kind,
     final Future<void> Function(ApplyChangesOperation) action, {
     required final void Function() onNotSent,
   }) async {
     _submitting = true;
     try {
-      final result = await _admitOperation(origin, kind, action);
-      if (_isCurrent(origin) &&
+      final result = await _admitOperation(kind, action);
+      if (_isActive &&
           (result.status == OperationStatus.notSent ||
               result.status == OperationStatus.cancelled)) {
         onNotSent();
         _showMessage(result.status.translationKey.tr());
       }
     } catch (_) {
-      if (_isCurrent(origin)) {
+      if (_isActive) {
         _failUnfinished('server_mutation.outcome_unknown');
       }
     } finally {
@@ -182,8 +167,7 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> collectNixGarbage() => _single(CollectNixGarbageJob());
 
   Future<void> _single(final JobDraft job) async {
-    final origin = _jobs?.origin;
-    if (!_isCurrent(origin) || _submitting || state.draft.isNotEmpty) {
+    if (!_isActive || _submitting || state.draft.isNotEmpty) {
       return;
     }
     emit(
@@ -200,9 +184,9 @@ class JobsCubit extends Cubit<JobsState> {
       CollectNixGarbageJob() => OperationKind.collectGarbage,
       _ => throw ArgumentError('Unsupported maintenance action'),
     };
-    await _perform(origin!, kind, (final operation) async {
+    await _perform(kind, (final operation) async {
       final result = await operation.execute(job);
-      if (!_isCurrent(origin)) {
+      if (!_isActive) {
         return;
       }
       final current = state as JobsStateLoading;
@@ -231,9 +215,8 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> applyAll() async {
-    final origin = _jobs?.origin;
     final previous = _draftState(state.draft);
-    if (!_isCurrent(origin) || _submitting || previous is! JobsStateWithJobs) {
+    if (!_isActive || _submitting || previous is! JobsStateWithJobs) {
       return;
     }
     final jobs = List<JobDraft>.unmodifiable(previous.clientJobList);
@@ -250,12 +233,11 @@ class JobsCubit extends Cubit<JobsState> {
       ),
     );
     await _perform(
-      origin!,
       OperationKind.applyChanges,
       (final operation) => operation.run(
         jobs,
         onProgress: (final progress) {
-          if (!_isCurrent(origin) || state is! JobsStateLoading) {
+          if (!_isActive || state is! JobsStateLoading) {
             return;
           }
           final current = state as JobsStateLoading;
@@ -291,16 +273,13 @@ class JobsCubit extends Cubit<JobsState> {
         var restored = previous as JobsState;
         if (current is JobsStateLoading) {
           for (final change in current.postponedJobs) {
-            restored = restored.addJob(
-              change,
-              settings: _settings?.value?.data,
-            );
+            restored = restored.addJob(change, settings: _settings?.data);
           }
         }
         emit(restored);
       },
     );
-    if (_isCurrent(origin) && state is JobsStateLoading) {
+    if (_isActive && state is JobsStateLoading) {
       final current = state as JobsStateLoading;
       if (current.rebuildJobUid == null) {
         emit(current.finished());

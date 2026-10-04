@@ -7,15 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/operations/secret_recipient.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   ResetPasswordBloc({
-    required final ServerStateOrigin? origin,
-    required final Stream<ConnectionObservation<CachedValue<Version>>> versions,
+    required final Stream<CachedValue<Version>?> versions,
     required final Future<ServerMutationResult<String>?> Function(
       SecretRecipient,
     )
@@ -32,10 +29,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       emit(ResetPasswordState(errorMessage: 'server_mutation.not_sent'.tr()));
     });
     _subscription = versions.listen((final observation) {
-      _valid =
-          origin != null &&
-          identical(origin.continuity, observation.origin?.continuity);
-      _version = _valid ? observation.value?.data : null;
+      _valid = observation != null;
+      _version = _valid ? observation?.data : null;
       if (!_valid) {
         _recipient.dispose();
         add(const _BindingLost());
@@ -46,8 +41,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   static const String ssoSupportedVersion = '>=3.6.0';
   final Future<ServerMutationResult<String>?> Function(SecretRecipient)
   _generate;
-  late final StreamSubscription<ConnectionObservation<CachedValue<Version>>>
-  _subscription;
+  late final StreamSubscription<CachedValue<Version>?> _subscription;
   SecretRecipient _recipient = SecretRecipient();
   Version? _version;
   bool _valid = false;

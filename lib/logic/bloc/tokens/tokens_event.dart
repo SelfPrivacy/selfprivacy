@@ -52,10 +52,3 @@ class ServerSelectedForProviderToken extends TokensEvent {
   @override
   List<Object> get props => [providerServer, server, serverProviderCredential];
 }
-
-class RefreshServerApiTokenEvent extends TokensEvent {
-  const RefreshServerApiTokenEvent();
-
-  @override
-  List<Object> get props => [];
-}

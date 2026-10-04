@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
@@ -44,8 +43,9 @@ void main() {
     navigation = _Navigation();
     final origin = ServerStateOrigin('server');
     connection = ServerConnection(
-      api: api,
       origin: origin,
+      api: api,
+
       currentOrigin: () => origin,
     )..cache.setVersion(Version(3, 0, 0));
     connection.services.store.push(
@@ -57,30 +57,20 @@ void main() {
     service = connection.services.value.data!.first;
     getIt.registerSingleton<NavigationService>(navigation);
     services = ServicesBloc(
-      services: Stream.value(
-        ConnectionObservation.attached(
-          connection.origin,
-          connection.services.value,
-        ),
-      ),
+      services: Stream.value(connection.services.value),
       refresh: () async {
         await connection.services.refresh(force: true);
       },
-      restart: (_, final id) => connection.services.restart(id),
-      move: (_, final id, final destination) =>
+      restart: (final id) => connection.services.restart(id),
+      move: (final id, final destination) =>
           connection.services.move(id, destination),
       showMessage: navigation.showSnackBar,
     );
     jobs = ServerJobsBloc(
-      jobs: Stream.value(
-        ConnectionObservation.attached(
-          connection.origin,
-          connection.jobs.snapshot,
-        ),
-      ),
-      removeJob: (_, final id) => connection.jobs.removeJob(id),
-      removeFinished: (_) => connection.jobs.removeAllFinished(),
-      migrate: (_, final destinations) =>
+      jobs: Stream.value(connection.jobs.snapshot),
+      removeJob: (final id) => connection.jobs.removeJob(id),
+      removeFinished: () => connection.jobs.removeAllFinished(),
+      migrate: (final destinations) =>
           connection.jobs.migrateToBinds(destinations),
       showMessage: navigation.showSnackBar,
     );
@@ -135,9 +125,7 @@ void main() {
         ),
       );
       await tester.runAsync(() async {
-        services.add(
-          ServiceMove(continuity: services.state.continuity, service, 'sdb'),
-        );
+        services.add(ServiceMove(service, 'sdb'));
         await pumpEventQueue();
       });
       expect(
@@ -198,9 +186,7 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(
-        ServiceMove(continuity: services.state.continuity, service, 'sdb'),
-      );
+      services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, isEmpty);
@@ -224,9 +210,7 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(
-        ServiceMove(continuity: services.state.continuity, service, 'sdb'),
-      );
+      services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, [updated]);
@@ -244,9 +228,7 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(
-        ServiceMove(continuity: services.state.continuity, service, 'sdb'),
-      );
+      services.add(ServiceMove(service, 'sdb'));
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, isNull);
@@ -267,9 +249,7 @@ void main() {
       when(
         () => api.migrateToBinds({'gitea': 'sdb'}, 'sda1'),
       ).thenAnswer((_) async => result);
-      await jobs.migrateToBinds(continuity: connection.origin.continuity, {
-        'gitea': 'sdb',
-      });
+      await jobs.migrateToBinds({'gitea': 'sdb'});
       expect(
         connection.jobs.confirmedBeforeLoad.isNotEmpty,
         outcome == ServerMutationOutcome.confirmed,
@@ -309,7 +289,7 @@ void main() {
     when(
       () => api.migrateToBinds({}, root.name),
     ).thenAnswer((_) async => result);
-    await jobs.migrateToBinds(continuity: connection.origin.continuity, {});
+    await jobs.migrateToBinds({});
     verify(() => api.migrateToBinds({}, root.name)).called(1);
   });
 
@@ -324,7 +304,7 @@ void main() {
       when(
         () => api.migrateToBinds({}, 'sda1'),
       ).thenAnswer((_) async => result);
-      await jobs.migrateToBinds(continuity: connection.origin.continuity, {});
+      await jobs.migrateToBinds({});
       verify(
         () => navigation.showSnackBar(
           'server_mutation.payload_unavailable'.tr(),

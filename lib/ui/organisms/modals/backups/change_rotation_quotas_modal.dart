@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/quota_selection_tile.dart';
@@ -20,7 +19,6 @@ class ChangeRotationQuotasModal extends StatefulWidget {
 enum QuotaUnits { last, daily, weekly, monthly, yearly }
 
 class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
-  late final ServerStateOrigin? origin;
   AutobackupQuotas selectedQuotas = const AutobackupQuotas(
     last: 3,
     daily: 7,
@@ -33,7 +31,6 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
   @override
   void initState() {
     super.initState();
-    origin = context.read<BackupsBloc>().state.origin;
     selectedQuotas =
         context.read<BackupsBloc>().state.autobackupQuotas ?? selectedQuotas;
   }
@@ -189,7 +186,7 @@ class _ChangeRotationQuotasModalState extends State<ChangeRotationQuotasModal> {
               ? null
               : () {
                   context.read<BackupsBloc>().add(
-                    SetAutobackupQuotas(selectedQuotas, origin: origin),
+                    SetAutobackupQuotas(selectedQuotas),
                   );
                   Navigator.of(context).pop();
                 },

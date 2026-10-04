@@ -29,16 +29,12 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
     hasFlashButton: true,
     heroIcon: Icons.settings_outlined,
     heroTitle: 'server.settings'.tr(),
-    children: [
-      _ServerSettings(
-        key: ValueKey(context.watch<ServerDetailsCubit>().state.continuity),
-      ),
-    ],
+    children: const [_ServerSettings()],
   );
 }
 
 class _ServerSettings extends StatefulWidget {
-  const _ServerSettings({super.key});
+  const _ServerSettings();
 
   @override
   State<_ServerSettings> createState() => _ServerSettingsState();

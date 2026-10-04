@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
@@ -24,55 +22,44 @@ void main() {
     initializeTimeZones();
   });
 
-  testWidgets(
-    'settings drafts survive confirmed rotation but reset for a new binding',
-    (final tester) async {
-      final source =
-          StreamController<
-            ConnectionObservation<CachedValue<SystemSettings>>
-          >.broadcast(sync: true);
-      final details = ServerDetailsCubit(
-        settings: source.stream,
-        loadMetadata: (_) async => [],
-        onMetadataFailure: () {},
-      );
-      final jobs = _Jobs();
-      when(() => jobs.state).thenReturn(JobsStateEmpty());
-      when(() => jobs.stream).thenAnswer((_) => const Stream.empty());
-      final origin = ServerStateOrigin('server');
-      void publish(final ServerStateOrigin origin) => source.add(
-        ConnectionObservation.attached(
-          origin,
-          CachedValue(data: aSystemSettings()),
-        ),
-      );
-      publish(origin);
-      await pumpForTest(
-        tester,
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<ServerDetailsCubit>.value(value: details),
-            BlocProvider<JobsCubit>.value(value: jobs),
-          ],
-          child: const ServerSettingsPage(),
-        ),
-      );
-      final toggle = find.byType(SwitchListTile).first;
-      expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
-      await tester.tap(toggle);
-      await tester.pump();
-      expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
-      publish(ServerStateOrigin('server', continuity: origin.continuity));
-      await tester.pump();
-      expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
-      publish(ServerStateOrigin('server'));
-      await tester.pump();
-      expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
-      await tester.pumpWidget(const SizedBox.shrink());
-      await tester.runAsync(() async {
-        await details.close();
-        await source.close();
-      });
-    },
-  );
+  testWidgets('settings drafts survive refreshed server data', (
+    final tester,
+  ) async {
+    final source = StreamController<CachedValue<SystemSettings>?>.broadcast(
+      sync: true,
+    );
+    final details = ServerDetailsCubit(
+      settings: source.stream,
+      loadMetadata: () async => [],
+      onMetadataFailure: () {},
+    );
+    final jobs = _Jobs();
+    when(() => jobs.state).thenReturn(JobsStateEmpty());
+    when(() => jobs.stream).thenAnswer((_) => const Stream.empty());
+    void publish() => source.add(CachedValue(data: aSystemSettings()));
+    publish();
+    await pumpForTest(
+      tester,
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<ServerDetailsCubit>.value(value: details),
+          BlocProvider<JobsCubit>.value(value: jobs),
+        ],
+        child: const ServerSettingsPage(),
+      ),
+    );
+    final toggle = find.byType(SwitchListTile).first;
+    expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
+    await tester.tap(toggle);
+    await tester.pump();
+    expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+    publish();
+    await tester.pump();
+    expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.runAsync(() async {
+      await details.close();
+      await source.close();
+    });
+  });
 }

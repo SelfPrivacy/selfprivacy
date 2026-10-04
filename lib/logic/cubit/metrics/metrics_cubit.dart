@@ -4,8 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 
@@ -13,27 +11,13 @@ part 'metrics_state.dart';
 
 class MetricsCubit extends Cubit<MetricsState> {
   MetricsCubit({
-    required final Stream<ConnectionObservation<bool>> access,
-    required final Future<MetricsStateUpdate> Function(
-      ServerStateOrigin,
-      Period,
-    )
-    loadMetrics,
+    required final Stream<bool?> access,
+    required final Future<MetricsStateUpdate> Function(Period) loadMetrics,
   }) : _loadMetrics = loadMetrics,
        super(const MetricsLoading(Period.day)) {
     _connectionChanges = access.listen((final observation) {
-      final previous = _access;
       _access = observation;
-      if (!identical(previous?.origin, observation.origin)) {
-        _inFlight = null;
-        closeTimer();
-        if (!identical(
-          previous?.origin?.continuity,
-          observation.origin?.continuity,
-        )) {
-          emit(MetricsLoading(_requestedPeriod));
-        }
-      }
+      _accessRevision++;
       if (!_canRead) {
         closeTimer();
       } else if (timer == null && _inFlight == null) {
@@ -42,14 +26,14 @@ class MetricsCubit extends Cubit<MetricsState> {
     });
   }
 
-  final Future<MetricsStateUpdate> Function(ServerStateOrigin, Period)
-  _loadMetrics;
-  late final StreamSubscription<ConnectionObservation<bool>> _connectionChanges;
-  ConnectionObservation<bool>? _access;
+  final Future<MetricsStateUpdate> Function(Period) _loadMetrics;
+  late final StreamSubscription<bool?> _connectionChanges;
+  bool? _access;
+  int _accessRevision = 0;
   Object? _inFlight;
   Timer? timer;
   Period _requestedPeriod = Period.day;
-  bool get _canRead => !isClosed && (_access?.value ?? false);
+  bool get _canRead => !isClosed && (_access ?? false);
 
   @override
   Future<void> close() {
@@ -78,17 +62,14 @@ class MetricsCubit extends Cubit<MetricsState> {
     if (!_canRead || _inFlight != null) {
       return;
     }
-    final access = _access!;
-    final origin = access.origin!;
+    final revision = _accessRevision;
     final request = Object();
     var deferred = false;
     _inFlight = request;
     closeTimer();
     try {
-      final update = await _loadMetrics(origin, period);
-      if (_canRead &&
-          identical(origin, _access?.origin) &&
-          period == _requestedPeriod) {
+      final update = await _loadMetrics(period);
+      if (_canRead && period == _requestedPeriod) {
         final delay = update.nextCheckInSeconds > 0
             ? update.nextCheckInSeconds
             : period.stepPeriodInSeconds;
@@ -102,7 +83,7 @@ class MetricsCubit extends Cubit<MetricsState> {
         _inFlight = null;
         if (_canRead &&
             (period != _requestedPeriod ||
-                (deferred && !identical(access, _access)))) {
+                (deferred && revision != _accessRevision))) {
           unawaited(load(_requestedPeriod));
         }
       }

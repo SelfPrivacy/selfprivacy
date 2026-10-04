@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 import 'package:selfprivacy/logic/operations/secret_recipient.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
@@ -16,11 +14,9 @@ part 'recovery_key_state.dart';
 
 class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
   RecoveryKeyBloc({
-    required final Stream<ConnectionObservation<CachedValue<RecoveryKeyStatus>>>
-    status,
-    required final Future<void> Function(ServerStateOrigin) refresh,
+    required final Stream<CachedValue<RecoveryKeyStatus>?> status,
+    required final Future<void> Function() refresh,
     required final Future<ServerMutationResult<String>?> Function(
-      ServerStateOrigin,
       SecretRecipient,
       DateTime?,
       int?,
@@ -30,9 +26,9 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
        _generate = generate,
        super(const RecoveryKeyInitial()) {
     on<_RecoveryKeyObserved>(_observe, transformer: sequential());
-    on<_BoundRecoveryRefresh>((final event, _) async {
-      if (_isCurrent(event.origin)) {
-        await _refresh(event.origin!);
+    on<RecoveryKeyStatusRefresh>((final event, _) async {
+      if (_isActive) {
+        await _refresh();
       }
     }, transformer: droppable());
     _subscription = status.listen((final observation) {
@@ -41,38 +37,22 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     });
   }
 
-  final Future<void> Function(ServerStateOrigin) _refresh;
+  final Future<void> Function() _refresh;
   final Future<ServerMutationResult<String>?> Function(
-    ServerStateOrigin,
     SecretRecipient,
     DateTime?,
     int?,
   )
   _generate;
-  late final StreamSubscription<
-    ConnectionObservation<CachedValue<RecoveryKeyStatus>>
-  >
-  _subscription;
-  ConnectionObservation<CachedValue<RecoveryKeyStatus>>? _latest;
-  ServerStateOrigin? _presentedOrigin;
+  late final StreamSubscription<CachedValue<RecoveryKeyStatus>?> _subscription;
+  CachedValue<RecoveryKeyStatus>? _latest;
   final _recipients = <SecretRecipient>{};
-
-  @override
-  void add(final RecoveryKeyEvent event) => super.add(
-    event is RecoveryKeyStatusRefresh
-        ? _BoundRecoveryRefresh(_presentedOrigin)
-        : event,
-  );
 
   void _observe(
     final _RecoveryKeyObserved event,
     final Emitter<RecoveryKeyState> emit,
   ) {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    _presentedOrigin = event.observation.origin;
-    final snapshot = event.observation.value;
+    final snapshot = event.observation;
     if (snapshot == null) {
       emit(const RecoveryKeyInitial());
     } else if (snapshot.isRefreshing) {
@@ -87,18 +67,14 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     }
   }
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _latest?.origin?.continuity);
+  bool get _isActive => !isClosed && _latest != null;
 
   Future<String> generateRecoveryKey({
     final DateTime? expirationDate,
     final int? numberOfUses,
     final SecretRecipient? recipient,
   }) async {
-    final origin = _presentedOrigin;
-    if (!_isCurrent(origin)) {
+    if (!_isActive) {
       throw GenerationError('server_mutation.not_sent');
     }
     final target = recipient ?? SecretRecipient();
@@ -106,13 +82,8 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
       _recipients.add(target);
     }
     try {
-      final response = await _generate(
-        origin!,
-        target,
-        expirationDate,
-        numberOfUses,
-      );
-      if (response == null || !_isCurrent(origin)) {
+      final response = await _generate(target, expirationDate, numberOfUses);
+      if (response == null || !_isActive) {
         throw GenerationError('server_mutation.not_sent');
       }
       final secret = response.confirmedSecret;
@@ -129,6 +100,7 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
 
   @override
   Future<void> close() async {
+    _latest = null;
     for (final recipient in _recipients) {
       recipient.dispose();
     }

@@ -10,6 +10,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphq
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
@@ -58,6 +60,49 @@ void main() {
     await getIt.reset();
   });
 
+  for (final closeScope in [false, true]) {
+    test(
+      'rotation drops duplicates and late feedback: close=$closeScope',
+      () async {
+        final source = StreamController<CachedValue<List<ApiToken>>?>(
+          sync: true,
+        );
+        final pending = Completer<RotationOutcome>();
+        final feedback = <String>[];
+        var rotations = 0;
+        final scoped = DevicesBloc(
+          devices: source.stream,
+          refresh: () async {},
+          revoke: (_) async => null,
+          generateKey: (_) async => null,
+          showMessage: feedback.add,
+          rotationChanges: const Stream.empty(),
+          cancelRotation: () => false,
+          rotateToken: () {
+            rotations++;
+            return pending.future;
+          },
+        );
+        source.add(CachedValue(data: [device]));
+        scoped
+          ..add(const RotateDeviceToken())
+          ..add(const RotateDeviceToken());
+        await pumpEventQueue();
+        expect(rotations, 1);
+        final closing = closeScope ? scoped.close() : null;
+        if (!closeScope) {
+          source.add(null);
+        }
+        pending.complete(RotationOutcome.rejected);
+        await pumpEventQueue();
+        await closing;
+        expect(feedback, isEmpty);
+        await scoped.close();
+        await source.close();
+      },
+    );
+  }
+
   test('seeds immutable state from the current snapshot', () {
     expect(bloc.state.devices, devices.value.data);
     expect(bloc.state.isLoaded, isTrue);
@@ -84,8 +129,8 @@ void main() {
       (final state) => state is DevicesDeleting,
     );
     bloc
-      ..add(DeleteDevice(device, origin: bloc.state.origin))
-      ..add(DeleteDevice(device, origin: bloc.state.origin));
+      ..add(DeleteDevice(device))
+      ..add(DeleteDevice(device));
     await deleting;
     await pumpEventQueue();
     verify(() => api.deleteApiToken(device.name)).called(1);
@@ -111,7 +156,7 @@ void main() {
     final deleting = bloc.stream.firstWhere(
       (final state) => state is DevicesDeleting,
     );
-    bloc.add(DeleteDevice(device, origin: bloc.state.origin));
+    bloc.add(DeleteDevice(device));
     await deleting;
     final closing = bloc.close();
     await pumpEventQueue();
@@ -140,7 +185,7 @@ void main() {
       final deleting = bloc.stream.firstWhere(
         (final state) => state is DevicesDeleting,
       );
-      bloc.add(DeleteDevice(device, origin: bloc.state.origin));
+      bloc.add(DeleteDevice(device));
       await deleting;
       connection.dispose();
       pending.complete(
@@ -169,7 +214,7 @@ void main() {
         final deleting = bloc.stream.firstWhere(
           (final state) => state is DevicesDeleting,
         );
-        bloc.add(DeleteDevice(device, origin: bloc.state.origin));
+        bloc.add(DeleteDevice(device));
         await deleting;
         expect(bloc.state.devices, originalData);
         expect(bloc.state.pendingDeviceName, device.name);
@@ -224,7 +269,7 @@ void main() {
       final loaded = bloc.stream.firstWhere(
         (final state) => state is DevicesLoaded,
       );
-      bloc.add(DeleteDevice(device, origin: bloc.state.origin));
+      bloc.add(DeleteDevice(device));
       await loaded;
       final message = 'server_mutation.rejected'.tr();
       expect(message, isNot('server_mutation.rejected'));

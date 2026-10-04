@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 part 'users_event.dart';
@@ -14,10 +12,9 @@ part 'users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc({
-    required final Stream<ConnectionObservation<CachedValue<List<User>>>> users,
+    required final Stream<CachedValue<List<User>>?> users,
     required final Future<void> Function() refresh,
     required final Future<ServerMutationResult<User>?> Function(
-      ServerStateOrigin,
       User, {
       required bool create,
     })
@@ -33,33 +30,27 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     });
   }
 
+  bool get _isActive => !isClosed && _latest != null;
+
   final Future<void> Function() _refresh;
   final Future<ServerMutationResult<User>?> Function(
-    ServerStateOrigin,
     User, {
     required bool create,
   })
   _save;
-  ServerStateOrigin? _presentedOrigin;
-  late final StreamSubscription<ConnectionObservation<CachedValue<List<User>>>>
-  _subscription;
-  ConnectionObservation<CachedValue<List<User>>>? _latest;
+  late final StreamSubscription<CachedValue<List<User>>?> _subscription;
+  CachedValue<List<User>>? _latest;
 
   void _observe(final _UsersObserved event, final Emitter<UsersState> emit) {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    final value = event.observation.value;
-    final origin = event.observation.origin;
-    _presentedOrigin = origin;
+    final value = _latest == null ? null : event.observation;
     if (value == null) {
       emit(UsersInitial());
     } else if (value.data case final users?) {
-      emit(UsersLoaded(users: users, continuity: origin?.continuity));
+      emit(UsersLoaded(users: users));
     } else if (value.lastError != null) {
-      emit(UsersError(continuity: origin?.continuity));
+      emit(UsersError());
     } else {
-      emit(UsersRefreshing(users: const [], continuity: origin?.continuity));
+      emit(UsersRefreshing(users: const []));
     }
   }
 
@@ -67,38 +58,29 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
   Future<ServerMutationResult<User>?> saveUser(
     final User user, {
-    required final ConnectionContinuity continuity,
     required final bool create,
   }) async {
-    final origin = _presentedOrigin;
-    if (isClosed ||
-        origin == null ||
-        !identical(origin.continuity, continuity) ||
-        !identical(origin.continuity, _latest?.origin?.continuity)) {
+    if (!_isActive) {
       return null;
     }
-    final result = await _save(origin, user, create: create);
-    return !isClosed &&
-            identical(origin.continuity, _latest?.origin?.continuity)
-        ? result
-        : null;
+    final result = await _save(user, create: create);
+    return _isActive ? result : null;
   }
 
   Future<void> _reload(
     final UsersListRefresh event,
     final Emitter<UsersState> emit,
   ) async {
-    if (_latest?.origin == null) {
+    if (!_isActive) {
       return;
     }
-    emit(UsersRefreshing(users: state.users, continuity: state.continuity));
+    emit(UsersRefreshing(users: state.users));
     await refresh();
   }
 
   @override
   Future<void> close() async {
     _latest = null;
-    _presentedOrigin = null;
     await _subscription.cancel();
     return super.close();
   }

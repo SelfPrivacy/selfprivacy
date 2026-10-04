@@ -7,19 +7,10 @@ sealed class ServicesEvent extends Equatable {
 class _ServicesObserved extends ServicesEvent {
   const _ServicesObserved(this.observation);
 
-  final ConnectionObservation<CachedValue<List<Service>>> observation;
+  final CachedValue<List<Service>>? observation;
 
   @override
   List<Object?> get props => [observation];
-}
-
-class _ServiceAction<T extends ServicesEvent> extends ServicesEvent {
-  const _ServiceAction(this.event, this.origin);
-  final T event;
-  final ServerStateOrigin? origin;
-
-  @override
-  List<Object?> get props => [event, origin];
 }
 
 class ServicesReload extends ServicesEvent {
@@ -39,12 +30,11 @@ class ServiceRestart extends ServicesEvent {
 }
 
 class ServiceMove extends ServicesEvent {
-  const ServiceMove(this.service, this.destination, {required this.continuity});
+  const ServiceMove(this.service, this.destination);
 
   final Service service;
   final String destination;
-  final ConnectionContinuity? continuity;
 
   @override
-  List<Object?> get props => [service, destination, continuity];
+  List<Object?> get props => [service, destination];
 }

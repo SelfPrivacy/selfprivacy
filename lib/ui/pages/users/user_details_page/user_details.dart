@@ -26,8 +26,7 @@ class UserDetailsPage extends StatelessWidget {
 
     final User user = context.watch<UsersBloc>().state.users.firstWhere(
       (final User user) => user.login == login,
-      orElse: () =>
-          User(type: UserType.normal, login: 'error', note: 'ERROR'),
+      orElse: () => User(type: UserType.normal, login: 'error', note: 'ERROR'),
     );
 
     if (user.note == 'ERROR') {

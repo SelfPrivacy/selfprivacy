@@ -92,6 +92,11 @@ class _DevicesInfo extends StatelessWidget {
               device: device,
               rotationStatus: snapshot.data ?? RotationStatus.idle,
               onCancelRotation: context.read<DevicesBloc>().cancelRotation,
+              onRotate: () {
+                if (!bloc.isClosed) {
+                  bloc.add(const RotateDeviceToken());
+                }
+              },
             ),
           ),
         const SizedBox(height: 8),
@@ -111,7 +116,7 @@ class _DevicesInfo extends StatelessWidget {
             enabled: devicesStatus.pendingDeviceName == null,
             onRevoke: () {
               if (!bloc.isClosed) {
-                bloc.add(DeleteDevice(device, origin: devicesStatus.origin));
+                bloc.add(DeleteDevice(device));
               }
             },
           ),

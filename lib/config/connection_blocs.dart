@@ -49,11 +49,10 @@ UsersBloc createUsersBloc(final ServerConnection connection) => UsersBloc(
   refresh: () async {
     await connection.users.refresh(force: true);
   },
-  save: (final origin, final user, {required final create}) => connection.run(
+  save: (final user, {required final create}) => connection.run(
     OperationKind.manageUsers,
     (final owner) =>
         create ? owner.users.createUser(user) : owner.users.updateUser(user),
-    origin: origin,
   ),
 );
 
@@ -69,22 +68,21 @@ DevicesBloc createDevicesBloc(
   refresh: () async {
     await connection.devices.refresh(force: true);
   },
-  revoke: (final origin, final name) =>
-      connection.run<CommandCompletion<void>?>(OperationKind.manageDevices, (
-        final owner,
-      ) async {
-        final completion = await owner.devices.revoke(name);
-        if (completion?.result case final result?) {
-          OperationExecution.current?.record(result);
-        }
-        return completion;
-      }, origin: origin),
-  generateKey: (final origin, final recipient) => recipient.receive(
+  revoke: (final name) => connection.run<CommandCompletion<void>?>(
+    OperationKind.manageDevices,
+    (final owner) async {
+      final completion = await owner.devices.revoke(name);
+      if (completion?.result case final result?) {
+        OperationExecution.current?.record(result);
+      }
+      return completion;
+    },
+  ),
+  generateKey: (final recipient) => recipient.receive(
     connection.submit(
       OperationKind.generateDeviceKey,
       (final owner) =>
           recipient.protect(() => owner.devices.createAuthorizationKey()),
-      origin: origin,
     ),
   ),
   showMessage: showMessage,
@@ -97,6 +95,7 @@ DevicesBloc createDevicesBloc(
     output.onCancel = subscription.cancel;
   }).distinct(),
   cancelRotation: connection.cancelRotation,
+  rotateToken: connection.rotateToken,
 );
 
 RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnection connection) =>
@@ -106,20 +105,14 @@ RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnection connection) =>
         read: (final connection) => connection.recoveryKey.value,
         changes: (final connection) => connection.recoveryKey.changes,
       ),
-      refresh: (final origin) async {
+      refresh: () async {
         final owner = connection;
-        if (owner.isAttached &&
-            identical(origin.continuity, owner.origin.continuity)) {
+        if (owner.isAttached) {
           await owner.recoveryKey.refresh(force: true);
         }
       },
-      generate:
-          (
-            final origin,
-            final recipient,
-            final expirationDate,
-            final numberOfUses,
-          ) => recipient.receive(
+      generate: (final recipient, final expirationDate, final numberOfUses) =>
+          recipient.receive(
             connection.submit(
               OperationKind.generateRecoveryKey,
               (final owner) => recipient.protect(
@@ -128,7 +121,6 @@ RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnection connection) =>
                   numberOfUses: numberOfUses,
                 ),
               ),
-              origin: origin,
             ),
           ),
     );
@@ -136,26 +128,20 @@ RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnection connection) =>
 ResetPasswordBloc createResetPasswordBloc(
   final ServerConnection connection,
   final User user,
-) {
-  final origin = connection.origin;
-  return ResetPasswordBloc(
-    origin: origin,
-    versions: observeConnection(
-      connection: connection,
-      read: (final connection) => connection.cache.apiVersion.value,
-      changes: (final connection) => connection.cache.apiVersion.stream,
+) => ResetPasswordBloc(
+  versions: observeConnection(
+    connection: connection,
+    read: (final connection) => connection.cache.apiVersion.value,
+    changes: (final connection) => connection.cache.apiVersion.stream,
+  ),
+  generate: (final recipient) => recipient.receive(
+    connection.submit(
+      OperationKind.generatePasswordResetLink,
+      (final owner) =>
+          recipient.protect(() => owner.users.generatePasswordResetLink(user)),
     ),
-    generate: (final recipient) => recipient.receive(
-      connection.submit(
-        OperationKind.generatePasswordResetLink,
-        (final owner) => recipient.protect(
-          () => owner.users.generatePasswordResetLink(user),
-        ),
-        origin: origin,
-      ),
-    ),
-  );
-}
+  ),
+);
 
 MetricsCubit createMetricsCubit(
   final ServerConnection connection, {
@@ -163,64 +149,52 @@ MetricsCubit createMetricsCubit(
   required final ServerProvider? Function() serverProvider,
 }) => MetricsCubit(
   access: observeReadAccess(connection),
-  loadMetrics: (final origin, final period) =>
-      connection.read((final connection) async {
-        if (!identical(origin, connection.origin)) {
-          throw const GraphQLDispatchDeferred();
-        }
-        final server = resources.servers
-            .where((final server) => server.uuid == origin.serverId)
-            .firstOrNull;
-        final provider = serverProvider();
-        await connection.refresh(connection.cache.apiVersion);
-        return MetricsRepository(
-          api: connection.api,
-          version: connection.cache.apiVersion.value.data,
-          isAvailable: () => connection.isAttached && connection.canRead,
-          provider: provider,
-          providerId: server?.hostingDetails.providerId,
-        ).getRelevantServerMetrics(period);
-      }),
+  loadMetrics: (final period) => connection.read((final connection) async {
+    final server = resources.servers
+        .where((final server) => server.uuid == connection.origin.serverId)
+        .firstOrNull;
+    final provider = serverProvider();
+    await connection.refresh(connection.cache.apiVersion);
+    return MetricsRepository(
+      api: connection.api,
+      version: connection.cache.apiVersion.value.data,
+      isAvailable: () => connection.isAttached && connection.canRead,
+      provider: provider,
+      providerId: server?.hostingDetails.providerId,
+    ).getRelevantServerMetrics(period);
+  }),
 );
 
 ServerLogsBloc createServerLogsBloc(final ServerConnection connection) =>
     ServerLogsBloc(
       access: observeReadAccess(connection),
       fetch:
-          (
-            final origin, {
-            required final limit,
-            final downCursor,
-            final slice,
-            final unit,
-          }) => connection.read((final connection) async {
-            if (!identical(origin, connection.origin)) {
-              throw const GraphQLDispatchDeferred();
-            }
-            await connection.refresh(connection.cache.apiVersion);
-            final version = connection.cache.apiVersion.value.data;
-            const supported = '>=3.3.0';
-            if (version == null) {
-              throw Exception('basis.network_error'.tr());
-            }
-            if (!VersionConstraint.parse(supported).allows(version)) {
-              throw Exception(
-                'basis.feature_unsupported_on_api_version'.tr(
-                  namedArgs: {
-                    'versionConstraint': supported,
-                    'currentVersion': version.toString(),
-                  },
-                ),
-              );
-            }
-            return connection.api.getServerLogs(
-              limit: limit,
-              downCursor: downCursor,
-              slice: slice,
-              unit: unit,
-            );
-          }),
-      entries: (_) => connection.logs(),
+          ({required final limit, final downCursor, final slice, final unit}) =>
+              connection.read((final connection) async {
+                await connection.refresh(connection.cache.apiVersion);
+                final version = connection.cache.apiVersion.value.data;
+                const supported = '>=3.3.0';
+                if (version == null) {
+                  throw Exception('basis.network_error'.tr());
+                }
+                if (!VersionConstraint.parse(supported).allows(version)) {
+                  throw Exception(
+                    'basis.feature_unsupported_on_api_version'.tr(
+                      namedArgs: {
+                        'versionConstraint': supported,
+                        'currentVersion': version.toString(),
+                      },
+                    ),
+                  );
+                }
+                return connection.api.getServerLogs(
+                  limit: limit,
+                  downCursor: downCursor,
+                  slice: slice,
+                  unit: unit,
+                );
+              }),
+      entries: connection.logs,
     );
 
 JobsCubit createJobsCubit(
@@ -239,7 +213,7 @@ JobsCubit createJobsCubit(
     read: (final owner) => owner.settings.value,
     changes: (final owner) => owner.settings.changes,
   ),
-  admitOperation: (final origin, final kind, final action) {
+  admitOperation: (final kind, final action) {
     final busy = connection.operations.pending.any(
       (final operation) => switch (operation.kind) {
         OperationKind.applyChanges ||
@@ -271,7 +245,7 @@ JobsCubit createJobsCubit(
           domain: server.domain,
         ),
       );
-    }, origin: origin).result;
+    }).result;
   },
   showMessage: showMessage,
 );
@@ -287,7 +261,7 @@ BackupsBloc createBackupsBloc(
     read: (final owner) => owner.backups.snapshot,
     changes: (final owner) => owner.backups.changes,
   ),
-  admitOperation: (final origin, final kind, final action) {
+  admitOperation: (final kind, final action) {
     if ((kind == OperationKind.initializeBackups ||
             kind == OperationKind.removeBackups) &&
         connection.operations.pending.any(
@@ -298,28 +272,18 @@ BackupsBloc createBackupsBloc(
       return Future.value(const OperationResult<void>(OperationStatus.notSent));
     }
     return connection
-        .submit<void>(
-          kind,
-          (final owner) => action(owner.backups),
-          origin: origin,
-        )
+        .submit<void>(kind, (final owner) => action(owner.backups))
         .result;
   },
-  currentBucket: (final origin) =>
-      connection.isAttached && identical(origin, connection.origin)
-      ? resources.backblazeBucket
-      : null,
-  saveBucket: (final origin, final bucket) async {
+  currentBucket: () => connection.isAttached ? resources.backblazeBucket : null,
+  saveBucket: (final bucket) async {
     if (connection.isAttached &&
-        identical(origin, connection.origin) &&
         resources.backblazeBucket?.bucketId == bucket.bucketId) {
       await resources.setBackblazeBucket(bucket);
     }
   },
-  removeBucket: (final origin, final bucket) async {
-    if (connection.isAttached &&
-        identical(origin, connection.origin) &&
-        identical(resources.backblazeBucket, bucket)) {
+  removeBucket: (final bucket) async {
+    if (connection.isAttached && identical(resources.backblazeBucket, bucket)) {
       await resources.removeBackblazeBucket();
     }
   },
@@ -380,8 +344,8 @@ VolumesBloc createVolumesBloc(
     changes: (final owner) => owner.volumes.changes,
   ),
   providerChanges: providerChanges,
-  loadProviderVolumes: (final origin) async {
-    if (!connection.isAttached || !identical(origin, connection.origin)) {
+  loadProviderVolumes: () async {
+    if (!connection.isAttached) {
       throw const GraphQLDispatchDeferred();
     }
     final provider = serverProvider();
@@ -394,8 +358,8 @@ VolumesBloc createVolumesBloc(
     }
     return result.data;
   },
-  loadPrice: (final origin, final location) async {
-    if (!connection.isAttached || !identical(origin, connection.origin)) {
+  loadPrice: (final location) async {
+    if (!connection.isAttached) {
       throw const GraphQLDispatchDeferred();
     }
     final provider = serverProvider();
@@ -411,7 +375,7 @@ VolumesBloc createVolumesBloc(
     }
     return result.data!.perVolumeGb;
   },
-  resize: (final origin, final volume, final size, final onProgress) {
+  resize: (final volume, final size, final onProgress) {
     if (connection.operations.pending.any(
       (final operation) => operation.kind == OperationKind.resizeVolume,
     )) {
@@ -441,7 +405,6 @@ VolumesBloc createVolumesBloc(
           onProgress: onProgress,
         );
       },
-      origin: origin,
     ).result;
   },
   showMessage: showMessage,
@@ -472,25 +435,21 @@ DnsRecordsCubit createDnsRecordsCubit(
 
   return DnsRecordsCubit(
     access: observeReadAccess(connection),
-    read: (final origin) => connection.read((final owner) async {
-      if (!identical(origin, owner.origin)) {
-        throw const GraphQLDispatchDeferred();
-      }
-      return await repository(owner, admitted: false)?.read() ??
-          GenericResult(success: false, data: []);
-    }),
-    repair: (final origin) =>
-        connection.run<GenericResult<List<DesiredDnsRecord>>?>(
-          OperationKind.applyChanges,
-          (final owner) {
-            final bound = repository(owner, admitted: true);
-            if (bound == null) {
-              throw const OperationNotSent();
-            }
-            return bound.repair();
-          },
-          origin: origin,
-        ),
+    read: () => connection.read(
+      (final owner) async =>
+          await repository(owner, admitted: false)?.read() ??
+          GenericResult(success: false, data: []),
+    ),
+    repair: () => connection.run<GenericResult<List<DesiredDnsRecord>>?>(
+      OperationKind.applyChanges,
+      (final owner) {
+        final bound = repository(owner, admitted: true);
+        if (bound == null) {
+          throw const OperationNotSent();
+        }
+        return bound.repair();
+      },
+    ),
   );
 }
 
@@ -506,15 +465,13 @@ ServicesBloc createServicesBloc(
   refresh: () async {
     await connection.services.refresh(force: true);
   },
-  restart: (final origin, final id) => connection.run(
+  restart: (final id) => connection.run(
     OperationKind.manageServices,
     (final owner) => owner.services.restart(id),
-    origin: origin,
   ),
-  move: (final origin, final id, final destination) => connection.run(
+  move: (final id, final destination) => connection.run(
     OperationKind.manageServices,
     (final owner) => owner.services.move(id, destination),
-    origin: origin,
   ),
   showMessage: showMessage,
 );
@@ -529,20 +486,17 @@ ServerJobsBloc createServerJobsBloc(
     read: (final connection) => connection.jobs.snapshot,
     changes: (final connection) => connection.jobs.changes,
   ),
-  removeJob: (final origin, final uid) => connection.run(
+  removeJob: (final uid) => connection.run(
     OperationKind.manageJobs,
     (final owner) => owner.jobs.removeJob(uid),
-    origin: origin,
   ),
-  removeFinished: (final origin) => connection.run(
+  removeFinished: () => connection.run(
     OperationKind.manageJobs,
     (final owner) => owner.jobs.removeAllFinished(),
-    origin: origin,
   ),
-  migrate: (final origin, final destinations) => connection.run(
+  migrate: (final destinations) => connection.run(
     OperationKind.manageVolumes,
     (final owner) => owner.jobs.migrateToBinds(destinations),
-    origin: origin,
   ),
   showMessage: showMessage,
 );

@@ -45,10 +45,7 @@ class UsersPage extends StatelessWidget {
           final isLoading =
               users.isEmpty &&
               (state is UsersRefreshing || state is UsersInitial);
-          final fakeUsers = List.generate(
-            7,
-            (final int index) => User.fake(),
-          );
+          final fakeUsers = List.generate(7, (final int index) => User.fake());
           if (state is UsersError) {
             return const _UsersNotLoaded();
           }

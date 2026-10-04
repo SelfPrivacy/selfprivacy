@@ -28,13 +28,13 @@ class ServiceSettingsPage extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final state = context.watch<ServicesBloc>().state;
-    if (state.continuity == null || state.getServiceById(serviceId) == null) {
+    if (state.getServiceById(serviceId) == null) {
       return const BrandHeroScreen(
         children: [Center(child: CircularProgressIndicator.adaptive())],
       );
     }
     return _ServiceSettingsEditor(
-      key: ValueKey((serviceId, state.continuity)),
+      key: ValueKey(serviceId),
       serviceId: serviceId,
       isInstalling: isInstalling,
     );

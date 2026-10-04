@@ -12,7 +12,6 @@ import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
@@ -31,7 +30,7 @@ void main() {
   late StreamController<ResourcesModelEvent> changes;
   late ServerConnectionHub hub;
   late _Api api;
-  late List<ConnectionObservation<CachedValue<List<String>>>> observed;
+  late List<CachedValue<List<String>>?> observed;
   StreamSubscription<Object?>? subscription;
 
   setUpAll(() => registerFallbackValue(aServer()));
@@ -133,21 +132,13 @@ void main() {
           case 'restart':
             services.add(ServiceRestart(service));
           case 'move':
-            services.add(
-              ServiceMove(
-                continuity: services.state.continuity,
-                service,
-                'sdb',
-              ),
-            );
+            services.add(ServiceMove(service, 'sdb'));
           case 'removeJob':
             jobs.add(RemoveServerJob(job.uid));
           case 'removeFinished':
             jobs.add(RemoveAllFinishedJobs());
           case 'migrate':
-            await jobs.migrateToBinds(continuity: services.state.continuity, {
-              service.id: 'sdb',
-            });
+            await jobs.migrateToBinds({service.id: 'sdb'});
           case 'deviceKey':
             await devices.getNewDeviceKey();
           case 'recoveryKey':
@@ -174,8 +165,8 @@ void main() {
     expect(observed, hasLength(1));
     hub.active!.cache.groups.push(const ['sp.admin']);
     await pumpEventQueue();
-    expect(observed.last.value!.data, ['sp.admin']);
-    expect(first.value!.data, ['sp.full_users']);
+    expect(observed.last!.data, ['sp.admin']);
+    expect(first!.data, ['sp.full_users']);
   });
 
   test('removal emits absence and rejects queued old-domain events', () async {
@@ -185,26 +176,21 @@ void main() {
     selected = null;
     changes.add(const ChangedServers());
     await pumpEventQueue();
-    expect(observed.last.origin, isNull);
-    expect(observed.last.value, isNull);
+    expect(observed.last, isNull);
     expect(
-      observed.any(
-        (final event) => event.value?.data?.contains('old') ?? false,
-      ),
+      observed.any((final event) => event?.data?.contains('old') ?? false),
       isFalse,
     );
     selected = aServer();
     changes.add(const ChangedServers());
     await pumpEventQueue();
-    expect(observed.last.origin, isNull);
-    expect(observed.last.value, isNull);
+    expect(observed.last, isNull);
     final replacement = await observeConnection(
       connection: hub.active!,
       read: (final connection) => connection.cache.groups.value,
       changes: (final connection) => connection.cache.groups.stream,
     ).first;
-    expect(replacement.origin, isNot(same(observed.first.origin)));
-    expect(replacement.value!.data, isNull);
+    expect(replacement!.data, isNull);
   });
 
   test(
@@ -222,10 +208,8 @@ void main() {
       final before = observed.last;
       await hub.active!.rotateToken();
       await pumpEventQueue();
-      expect(observed.last.origin, same(before.origin));
-      expect(observed.last.value, same(before.value));
-      expect(observed.last.origin!.continuity, same(before.origin!.continuity));
-      expect(observed.last.value!.data, ['sp.full_users']);
+      expect(observed.last, same(before));
+      expect(observed.last!.data, ['sp.full_users']);
     },
   );
 

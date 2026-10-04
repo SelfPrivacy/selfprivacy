@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -23,14 +22,12 @@ class ServicesMigrationPage extends StatefulWidget {
     required this.isMigration,
     this.services,
     this.diskStatus,
-    this.continuity,
     super.key,
   });
 
   final DiskStatus? diskStatus;
   final List<Service>? services;
   final bool isMigration;
-  final ConnectionContinuity? continuity;
 
   @override
   State<ServicesMigrationPage> createState() => _ServicesMigrationPageState();
@@ -55,9 +52,6 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
           .toList();
   late final diskStatus =
       widget.diskStatus ?? context.read<VolumesBloc>().state.diskStatus;
-  late final continuity = widget.services == null
-      ? context.read<ServicesBloc>().state.continuity
-      : widget.continuity;
 
   /// Service id to target migration disk name
   final Map<String, String> serviceToDisk = {};
@@ -203,18 +197,13 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                   unawaited(
                     context.read<ServerJobsBloc>().migrateToBinds(
                       serviceToDisk,
-                      continuity: continuity,
                     ),
                   );
                 } else {
                   for (final service in services) {
                     if (serviceToDisk[service.id] != null) {
                       context.read<ServicesBloc>().add(
-                        ServiceMove(
-                          service,
-                          serviceToDisk[service.id]!,
-                          continuity: continuity,
-                        ),
+                        ServiceMove(service, serviceToDisk[service.id]!),
                       );
                     }
                   }

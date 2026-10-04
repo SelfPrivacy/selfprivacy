@@ -8,7 +8,6 @@ import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/router/router.dart';
@@ -128,9 +127,7 @@ void main() {
     final tester,
   ) async {
     final rootUser = User.fake(login: 'root', type: UserType.root);
-    when(() => usersBloc.state).thenReturn(
-      UsersLoaded(users: [rootUser], continuity: ConnectionContinuity()),
-    );
+    when(() => usersBloc.state).thenReturn(UsersLoaded(users: [rootUser]));
     final router = _TestRouter(GlobalKey<NavigatorState>());
 
     await pumpRouter(tester, router);

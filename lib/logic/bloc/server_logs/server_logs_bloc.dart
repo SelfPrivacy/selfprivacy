@@ -4,16 +4,13 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 
 part 'server_logs_event.dart';
 part 'server_logs_state.dart';
 
 typedef FetchServerLogs =
-    Future<(List<ServerLogEntry>, ServerLogsPageMeta)> Function(
-      ServerStateOrigin origin, {
+    Future<(List<ServerLogEntry>, ServerLogsPageMeta)> Function({
       required int limit,
       String? downCursor,
       String? slice,
@@ -22,9 +19,9 @@ typedef FetchServerLogs =
 
 class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   ServerLogsBloc({
-    required final Stream<ConnectionObservation<bool>> access,
+    required final Stream<bool?> access,
     required final FetchServerLogs fetch,
-    required final Stream<ServerLogEntry> Function(ServerStateOrigin) entries,
+    required final Stream<ServerLogEntry> Function() entries,
   }) : _fetch = fetch,
        _entries = entries,
        super(ServerLogsInitial()) {
@@ -36,20 +33,12 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     });
     on<_LogReceived>(_receive);
     _accessSubscription = access.listen((final observation) {
-      final previous = _access;
       _access = observation;
-      if (!identical(
-        previous?.origin?.continuity,
-        observation.origin?.continuity,
-      )) {
-        final initialRequest = previous == null ? _deferred : null;
+      _accessRevision++;
+      if (observation == null) {
         _reset();
-        _deferred = initialRequest;
-      } else if (!identical(previous?.origin, observation.origin) &&
-          _reading != null) {
-        _deferred = _reading!.event;
       }
-      if ((observation.value ?? false) && _deferred != null) {
+      if ((observation ?? false) && _deferred != null) {
         final event = _deferred!;
         _deferred = null;
         add(event);
@@ -58,11 +47,11 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   }
 
   final FetchServerLogs _fetch;
-  final Stream<ServerLogEntry> Function(ServerStateOrigin) _entries;
-  late final StreamSubscription<ConnectionObservation<bool>>
-  _accessSubscription;
+  final Stream<ServerLogEntry> Function() _entries;
+  late final StreamSubscription<bool?> _accessSubscription;
   StreamSubscription<ServerLogEntry>? _entriesSubscription;
-  ConnectionObservation<bool>? _access;
+  bool? _access;
+  int _accessRevision = 0;
   ServerLogsEvent? _deferred;
   _ReadLogs? _reading;
   Object _view = Object();
@@ -80,11 +69,10 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
         _view = Object();
         unawaited(_entriesSubscription?.cancel());
         _entriesSubscription = null;
-      } else if (_reading != null &&
-          identical(_reading!.origin, _access?.origin)) {
+      } else if (_reading != null) {
         return;
       }
-      super.add(_ReadLogs(event, _access?.origin, _view));
+      super.add(_ReadLogs(event, _view));
     } else {
       super.add(event);
     }
@@ -100,15 +88,13 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
   }
 
   bool _isCurrent(final _ReadLogs request) =>
-      !isClosed &&
-      identical(request.view, _view) &&
-      identical(request.origin, _access?.origin);
+      !isClosed && identical(request.view, _view) && _access != null;
 
   Future<void> _read(
     final _ReadLogs request,
     final Emitter<ServerLogsState> emit,
   ) async {
-    if (!_isCurrent(request) || request.origin == null) {
+    if (!_isCurrent(request)) {
       return;
     }
     final event = request.event;
@@ -120,7 +106,7 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
     }
     _reading = request;
     _deferred = null;
-    final access = _access;
+    final revision = _accessRevision;
     final slice = event is ServerLogsFetch
         ? event.serviceId?.replaceAll('-', '_')
         : (previous as ServerLogsLoaded).slice;
@@ -134,11 +120,10 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       emit(ServerLogsLoading());
     }
     try {
-      if (_access?.value != true) {
+      if (_access != true) {
         throw const GraphQLDispatchDeferred();
       }
       final (values, meta) = await _fetch(
-        request.origin!,
         limit: 50,
         downCursor: more ? (previous as ServerLogsLoaded).meta.upCursor : null,
         slice: systemdSlice,
@@ -165,14 +150,14 @@ class ServerLogsBloc extends Bloc<ServerLogsEvent, ServerLogsState> {
       );
       if (!more) {
         unawaited(_entriesSubscription?.cancel());
-        _entriesSubscription = _entries(
-          request.origin!,
-        ).listen((final entry) => add(_LogReceived(entry, request.view)));
+        _entriesSubscription = _entries().listen(
+          (final entry) => add(_LogReceived(entry, request.view)),
+        );
       }
     } on GraphQLDispatchDeferred {
       if (_isCurrent(request) && !emit.isDone) {
         _deferred = event;
-        if ((_access?.value ?? false) && !identical(access, _access)) {
+        if ((_access ?? false) && revision != _accessRevision) {
           _deferred = null;
           scheduleMicrotask(() {
             if (_isCurrent(request)) {

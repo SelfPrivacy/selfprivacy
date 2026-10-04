@@ -1,9 +1,8 @@
 part of 'backups_bloc.dart';
 
 sealed class BackupsState extends Equatable {
-  const BackupsState({this.backblazeBucket, this.origin});
+  const BackupsState({this.backblazeBucket});
   final BackblazeBucket? backblazeBucket;
-  final ServerStateOrigin? origin;
 
   @Deprecated('Infer the initializations status from state')
   bool get isInitialized => false;
@@ -30,22 +29,19 @@ sealed class BackupsState extends Equatable {
 }
 
 class BackupsInitial extends BackupsState {
-  const BackupsInitial({super.origin, super.backblazeBucket});
+  const BackupsInitial({super.backblazeBucket});
   @override
-  List<Object?> get props => [origin];
+  List<Object?> get props => [];
 
   @override
   BackupsInitial copyWith({final BackblazeBucket? backblazeBucket}) =>
-      BackupsInitial(
-        origin: origin,
-        backblazeBucket: backblazeBucket ?? this.backblazeBucket,
-      );
+      BackupsInitial(backblazeBucket: backblazeBucket ?? this.backblazeBucket);
 }
 
 class BackupsLoading extends BackupsState {
-  const BackupsLoading({super.origin, super.backblazeBucket});
+  const BackupsLoading({super.backblazeBucket});
   @override
-  List<Object?> get props => [origin];
+  List<Object?> get props => [];
 
   @override
   @Deprecated('Infer the loading status from state')
@@ -53,38 +49,33 @@ class BackupsLoading extends BackupsState {
 
   @override
   BackupsLoading copyWith({final BackblazeBucket? backblazeBucket}) =>
-      BackupsLoading(
-        origin: origin,
-        backblazeBucket: backblazeBucket ?? this.backblazeBucket,
-      );
+      BackupsLoading(backblazeBucket: backblazeBucket ?? this.backblazeBucket);
 }
 
 class BackupsUnavailable extends BackupsState {
   const BackupsUnavailable({
     required this.isUnsupported,
-    super.origin,
     super.backblazeBucket,
   });
 
   final bool isUnsupported;
 
   @override
-  List<Object?> get props => [origin, isUnsupported, backblazeBucket];
+  List<Object?> get props => [isUnsupported, backblazeBucket];
 
   @override
   BackupsUnavailable copyWith({
     required final BackblazeBucket backblazeBucket,
   }) => BackupsUnavailable(
     isUnsupported: isUnsupported,
-    origin: origin,
     backblazeBucket: backblazeBucket,
   );
 }
 
 class BackupsUninitialized extends BackupsState {
-  const BackupsUninitialized({super.origin, super.backblazeBucket});
+  const BackupsUninitialized({super.backblazeBucket});
   @override
-  List<Object?> get props => [origin];
+  List<Object?> get props => [];
 
   @override
   bool get preventActions => false;
@@ -92,20 +83,18 @@ class BackupsUninitialized extends BackupsState {
   @override
   BackupsUninitialized copyWith({final BackblazeBucket? backblazeBucket}) =>
       BackupsUninitialized(
-        origin: origin,
         backblazeBucket: backblazeBucket ?? this.backblazeBucket,
       );
 }
 
 class BackupsInitializing extends BackupsState {
-  const BackupsInitializing({super.origin, super.backblazeBucket});
+  const BackupsInitializing({super.backblazeBucket});
   @override
-  List<Object?> get props => [origin];
+  List<Object?> get props => [];
 
   @override
   BackupsInitializing copyWith({final BackblazeBucket? backblazeBucket}) =>
       BackupsInitializing(
-        origin: origin,
         backblazeBucket: backblazeBucket ?? this.backblazeBucket,
       );
 }
@@ -114,7 +103,6 @@ class BackupsInitialized extends BackupsState {
   BackupsInitialized({
     final List<Backup> backups = const [],
     final BackupConfiguration? backupConfig,
-    super.origin,
     super.backblazeBucket,
   }) : _backupList = List.unmodifiable(
          List<Backup>.of(backups)
@@ -165,19 +153,13 @@ class BackupsInitialized extends BackupsState {
       .toList(growable: false);
 
   @override
-  List<Object?> get props => [
-    origin,
-    _backupList,
-    _backupConfig,
-    backblazeBucket,
-  ];
+  List<Object?> get props => [_backupList, _backupConfig, backblazeBucket];
 
   @override
   BackupsState copyWith({required final BackblazeBucket backblazeBucket}) =>
       BackupsInitialized(
         backups: backups,
         backupConfig: _backupConfig,
-        origin: origin,
         backblazeBucket: backblazeBucket,
       );
 }
@@ -187,7 +169,6 @@ class BackupsBusy extends BackupsInitialized {
     : super(
         backups: state.backups,
         backupConfig: state._backupConfig,
-        origin: state.origin,
         backblazeBucket: state.backblazeBucket,
       );
 

@@ -7,8 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -23,7 +21,6 @@ part 'volumes_state.dart';
 
 typedef ResizeVolume =
     Future<OperationResult<ServerMutationResult<void>?>> Function(
-      ServerStateOrigin origin,
       DiskVolume volume,
       DiskSize size,
       void Function(VolumeResizeStage) onProgress,
@@ -31,17 +28,11 @@ typedef ResizeVolume =
 
 class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   VolumesBloc({
-    required final Stream<
-      ConnectionObservation<CachedValue<List<ServerDiskVolume>>>
-    >
-    volumes,
+    required final Stream<CachedValue<List<ServerDiskVolume>>?> volumes,
     required final Stream<void> providerChanges,
-    required final Future<List<ServerProviderVolume>> Function(
-      ServerStateOrigin,
-    )
+    required final Future<List<ServerProviderVolume>> Function()
     loadProviderVolumes,
-    required final Future<Price?> Function(ServerStateOrigin, String?)
-    loadPrice,
+    required final Future<Price?> Function(String?) loadPrice,
     required final ResizeVolume resize,
     required final void Function(String) showMessage,
   }) : _loadProviderVolumes = loadProviderVolumes,
@@ -57,52 +48,38 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       add(_VolumesObserved(observation));
     });
     _providerSubscription = providerChanges.listen((_) {
-      if (_presentedOrigin case final origin?) {
-        add(_LoadProviderVolumes(origin));
+      if (_isActive) {
+        add(const _LoadProviderVolumes());
       }
     });
   }
 
-  final Future<List<ServerProviderVolume>> Function(ServerStateOrigin)
-  _loadProviderVolumes;
-  final Future<Price?> Function(ServerStateOrigin, String?) _loadPrice;
+  final Future<List<ServerProviderVolume>> Function() _loadProviderVolumes;
+  final Future<Price?> Function(String?) _loadPrice;
   final ResizeVolume _resize;
   final void Function(String) _showMessage;
-  late final StreamSubscription<
-    ConnectionObservation<CachedValue<List<ServerDiskVolume>>>
-  >
+  late final StreamSubscription<CachedValue<List<ServerDiskVolume>>?>
   _subscription;
   late final StreamSubscription<void> _providerSubscription;
-  ConnectionObservation<CachedValue<List<ServerDiskVolume>>>? _latest;
-  ServerStateOrigin? _presentedOrigin;
+  CachedValue<List<ServerDiskVolume>>? _latest;
   bool _resizing = false;
+  bool _providerRequested = false;
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _latest?.origin?.continuity);
+  bool get _isActive => !isClosed && _latest != null;
 
   void _observe(
     final _VolumesObserved event,
     final Emitter<VolumesState> emit,
   ) {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    final origin = event.observation.origin;
-    final previous = _presentedOrigin;
-    if (!identical(previous?.continuity, origin?.continuity)) {
+    if (event.observation == null) {
       _resizing = false;
-      emit(VolumesInitial());
-    }
-    _presentedOrigin = origin;
-    if (origin == null) {
       emit(VolumesInitial());
       return;
     }
     _publish(emit);
-    if (!identical(previous, origin)) {
-      add(_LoadProviderVolumes(origin));
+    if (!_providerRequested) {
+      _providerRequested = true;
+      add(const _LoadProviderVolumes());
     }
   }
 
@@ -111,21 +88,17 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     final List<ServerProviderVolume>? providers,
   ]) {
     final providerVolumes = providers ?? state.providerVolumes;
-    final volumes = _latest?.value?.data;
+    final volumes = _latest?.data;
     if (volumes == null) {
-      final snapshot = _latest?.value;
+      final snapshot = _latest;
       final unsupported = snapshot?.support == DomainSupport.unsupported;
       emit(
         unsupported || snapshot?.lastError != null
             ? VolumesUnavailable(
-                origin: _presentedOrigin,
                 isUnsupported: unsupported,
                 providerVolumes: providerVolumes,
               )
-            : VolumesLoading(
-                origin: _presentedOrigin,
-                providerVolumes: providerVolumes,
-              ),
+            : VolumesLoading(providerVolumes: providerVolumes),
       );
       return;
     }
@@ -134,13 +107,11 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     emit(
       _resizing
           ? VolumesResizing(
-              origin: _presentedOrigin,
               diskStatus: diskStatus,
               providerVolumes: providerVolumes,
               serverVolumesHashCode: hash,
             )
           : VolumesLoaded(
-              origin: _presentedOrigin,
               diskStatus: diskStatus,
               providerVolumes: providerVolumes,
               serverVolumesHashCode: hash,
@@ -152,14 +123,12 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     final _LoadProviderVolumes event,
     final Emitter<VolumesState> emit,
   ) async {
-    if (!identical(event.origin, _latest?.origin)) {
+    if (!_isActive) {
       return;
     }
     try {
-      final providers = await _loadProviderVolumes(event.origin);
-      if (!emit.isDone &&
-          !isClosed &&
-          identical(event.origin, _latest?.origin)) {
+      final providers = await _loadProviderVolumes();
+      if (!emit.isDone && _isActive) {
         _publish(emit, providers);
       }
     } on Exception {
@@ -168,15 +137,14 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   }
 
   Future<Price?> getPricePerGb() async {
-    final origin = _presentedOrigin;
-    if (!_isCurrent(origin)) {
+    if (!_isActive) {
       return null;
     }
     try {
-      final price = await _loadPrice(origin!, state.location);
-      return _isCurrent(origin) ? price : null;
+      final price = await _loadPrice(state.location);
+      return _isActive ? price : null;
     } on Exception {
-      if (_isCurrent(origin)) {
+      if (_isActive) {
         _showMessage('server.pricing_error'.tr());
       }
       return null;
@@ -187,7 +155,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     final VolumeResize action,
     final Emitter<VolumesState> emit,
   ) async {
-    if (!_isCurrent(action.origin) ||
+    if (!_isActive ||
         state is! VolumesLoaded ||
         action.volume.providerVolume == null) {
       return;
@@ -196,10 +164,8 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     _publish(emit);
     final OperationResult<ServerMutationResult<void>?> result;
     try {
-      result = await _resize(action.origin!, action.volume, action.newSize, (
-        final stage,
-      ) {
-        if (_isCurrent(action.origin)) {
+      result = await _resize(action.volume, action.newSize, (final stage) {
+        if (_isActive) {
           _showMessage(switch (stage) {
             VolumeResizeStage.started =>
               'storage.extending_volume_started'.tr(),
@@ -213,14 +179,14 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
         }
       });
     } catch (_) {
-      if (_isCurrent(action.origin) && !emit.isDone) {
+      if (_isActive && !emit.isDone) {
         _resizing = false;
         _publish(emit);
         _showMessage('server_mutation.outcome_unknown'.tr());
       }
       return;
     }
-    if (!_isCurrent(action.origin) || emit.isDone) {
+    if (!_isActive || emit.isDone) {
       return;
     }
     _resizing = false;
@@ -241,7 +207,6 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   @override
   Future<void> close() async {
     _latest = null;
-    _presentedOrigin = null;
     await _subscription.cancel();
     await _providerSubscription.cancel();
     return super.close();

@@ -7,8 +7,8 @@ sealed class OutdatedServerCheckerEvent extends Equatable {
 class _ServerApiVersionObserved extends OutdatedServerCheckerEvent {
   const _ServerApiVersionObserved(this.observation);
 
-  final ConnectionObservation<CachedValue<Version>> observation;
+  final CachedValue<Version>? observation;
 
   @override
-  List<Object> get props => [observation];
+  List<Object?> get props => [observation];
 }

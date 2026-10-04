@@ -17,7 +17,6 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
@@ -48,10 +47,7 @@ class BlocAndProviderConfig extends StatelessWidget {
         lazy: false,
       ),
       BlocProvider(create: (_) => AppReadinessCubit()),
-      BlocProvider(
-        create: (_) =>
-            TokensBloc(rotateToken: () async => RotationOutcome.detached),
-      ),
+      BlocProvider(create: (_) => TokensBloc()),
     ],
     child: child,
   );
@@ -78,7 +74,6 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
   late final VolumesBloc volumesBloc;
   late final ServerLogsBloc serverLogsBloc;
   late final OutdatedServerCheckerBloc outdatedServerCheckerBloc;
-  late final TokensBloc tokensBloc;
 
   @override
   void initState() {
@@ -126,12 +121,12 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
         read: (final connection) => connection.settings.value,
         changes: (final connection) => connection.settings.changes,
       ),
-      loadMetadata: (final origin) async {
-        if (!connection.isAttached || !identical(connection.origin, origin)) {
+      loadMetadata: () async {
+        if (!connection.isAttached) {
           return [];
         }
         final server = getIt<ResourcesModel>().servers
-            .where((final server) => server.uuid == origin.serverId)
+            .where((final server) => server.uuid == connection.origin.serverId)
             .firstOrNull;
         if (server == null) {
           return [];
@@ -159,7 +154,6 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
         changes: (final connection) => connection.cache.apiVersion.stream,
       ),
     );
-    tokensBloc = TokensBloc(rotateToken: connection.rotateToken);
   }
 
   @override
@@ -193,7 +187,6 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
       ),
       BlocProvider(create: (final _) => serverLogsBloc, lazy: false),
       BlocProvider(create: (final _) => outdatedServerCheckerBloc, lazy: false),
-      BlocProvider(create: (final _) => tokensBloc, lazy: false),
     ],
     child: BlocListener<OperationsCubit, OperationsState>(
       listenWhen: (final previous, final next) =>

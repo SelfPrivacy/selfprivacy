@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
@@ -19,79 +18,56 @@ part 'devices_state.dart';
 
 class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   DevicesBloc({
-    required final Stream<ConnectionObservation<CachedValue<List<ApiToken>>>>
-    devices,
+    required final Stream<CachedValue<List<ApiToken>>?> devices,
     required final Future<void> Function() refresh,
-    required final Future<CommandCompletion<void>?> Function(
-      ServerStateOrigin,
-      String,
-    )
-    revoke,
+    required final Future<CommandCompletion<void>?> Function(String) revoke,
     required final Future<ServerMutationResult<String>?> Function(
-      ServerStateOrigin,
       SecretRecipient,
     )
     generateKey,
     required final void Function(String) showMessage,
     required this.rotationChanges,
     required this.cancelRotation,
-  }) : _refresh = refresh,
+    required final Future<RotationOutcome> Function() rotateToken,
+  }) : _rotateToken = rotateToken,
+       _refresh = refresh,
        _revoke = revoke,
        _generateKey = generateKey,
        _showMessage = showMessage,
        super(DevicesInitial()) {
     on<_DevicesObserved>(_observe, transformer: sequential());
     on<DeleteDevice>(_delete, transformer: droppable());
+    on<RotateDeviceToken>(_rotate, transformer: droppable());
     _subscription = devices.listen((final observation) {
-      if (!identical(
-        _latest?.origin?.continuity,
-        observation.origin?.continuity,
-      )) {
-        _pendingDeviceName = null;
-      }
       _latest = observation;
       add(_DevicesObserved(observation));
     });
   }
 
   final Future<void> Function() _refresh;
-  final Future<CommandCompletion<void>?> Function(ServerStateOrigin, String)
-  _revoke;
-  final Future<ServerMutationResult<String>?> Function(
-    ServerStateOrigin,
-    SecretRecipient,
-  )
+  final Future<RotationOutcome> Function() _rotateToken;
+  final Future<CommandCompletion<void>?> Function(String) _revoke;
+  final Future<ServerMutationResult<String>?> Function(SecretRecipient)
   _generateKey;
   final void Function(String) _showMessage;
   final Stream<RotationStatus> rotationChanges;
   final bool Function() cancelRotation;
   final _recipients = <SecretRecipient>{};
-  late final StreamSubscription<
-    ConnectionObservation<CachedValue<List<ApiToken>>>
-  >
-  _subscription;
-  ConnectionObservation<CachedValue<List<ApiToken>>>? _latest;
-  ServerStateOrigin? _presentedOrigin;
+  late final StreamSubscription<CachedValue<List<ApiToken>>?> _subscription;
+  CachedValue<List<ApiToken>>? _latest;
 
   void _observe(
     final _DevicesObserved event,
     final Emitter<DevicesState> emit,
   ) {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    _presentedOrigin = event.observation.origin;
     emit(
-      event.observation.value == null
+      event.observation == null
           ? DevicesInitial()
-          : _fromSnapshot(event.observation.value!),
+          : _fromSnapshot(event.observation!),
     );
   }
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _latest?.origin?.continuity);
+  bool get _isActive => !isClosed && _latest != null;
 
   String? _pendingDeviceName;
 
@@ -105,14 +81,12 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     }
     if (_pendingDeviceName case final String name) {
       return DevicesDeleting(
-        origin: _presentedOrigin,
         devices: devices,
         pendingDeviceName: name,
         hasError: snapshot.lastError != null,
       );
     }
     return DevicesLoaded(
-      origin: _presentedOrigin,
       devices: devices,
       hasError: snapshot.lastError != null,
       isRefreshing: snapshot.isRefreshing,
@@ -121,12 +95,34 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
 
   Future<void> refresh() => _refresh();
 
+  Future<void> _rotate(
+    final RotateDeviceToken event,
+    final Emitter<DevicesState> emit,
+  ) async {
+    if (!_isActive) {
+      return;
+    }
+    final outcome = await _rotateToken();
+    if (!_isActive || emit.isDone) {
+      return;
+    }
+    final message = switch (outcome) {
+      RotationOutcome.succeeded =>
+        'devices.refresh_token_alert.success_refresh_token',
+      RotationOutcome.rejected => 'server_mutation.rejected',
+      RotationOutcome.cancelled ||
+      RotationOutcome.detached => 'server_mutation.not_sent',
+      _ => 'server_mutation.outcome_unknown',
+    };
+    _showMessage(message.tr());
+  }
+
   Future<void> _delete(
     final DeleteDevice event,
     final Emitter<DevicesState> emit,
   ) async {
-    if (!_isCurrent(event.origin) ||
-        !(_latest?.value?.data?.any(
+    if (!_isActive ||
+        !(_latest?.data?.any(
               (final device) =>
                   device.name == event.device.name && !device.isCaller,
             ) ??
@@ -134,9 +130,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       return;
     }
     _pendingDeviceName = event.device.name;
-    emit(_fromSnapshot(_latest!.value!));
-    final completion = await _revoke(event.origin!, event.device.name);
-    if (!_isCurrent(event.origin) || emit.isDone) {
+    emit(_fromSnapshot(_latest!));
+    final completion = await _revoke(event.device.name);
+    if (!_isActive || emit.isDone) {
       return;
     }
     _pendingDeviceName = null;
@@ -146,12 +142,11 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         response.outcome != ServerMutationOutcome.confirmed) {
       _showMessage(serverMutationMessage(response));
     }
-    emit(_fromSnapshot(_latest!.value!));
+    emit(_fromSnapshot(_latest!));
   }
 
   Future<String?> getNewDeviceKey({final SecretRecipient? recipient}) async {
-    final origin = _presentedOrigin;
-    if (!_isCurrent(origin)) {
+    if (!_isActive) {
       return null;
     }
     final target = recipient ?? SecretRecipient();
@@ -159,8 +154,8 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       _recipients.add(target);
     }
     try {
-      final response = await _generateKey(origin!, target);
-      if (response == null || !_isCurrent(origin)) {
+      final response = await _generateKey(target);
+      if (response == null || !_isActive) {
         return null;
       }
       final secret = response.confirmedSecret;
@@ -177,6 +172,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
 
   @override
   Future<void> close() async {
+    _latest = null;
     for (final recipient in _recipients) {
       recipient.dispose();
     }

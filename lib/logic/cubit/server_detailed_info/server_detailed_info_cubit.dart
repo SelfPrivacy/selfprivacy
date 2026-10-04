@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
@@ -15,12 +13,8 @@ part 'server_detailed_info_state.dart';
 
 class ServerDetailsCubit extends Cubit<ServerDetailsState> {
   ServerDetailsCubit({
-    required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
-    settings,
-    required final Future<List<ServerMetadataEntity>> Function(
-      ServerStateOrigin,
-    )
-    loadMetadata,
+    required final Stream<CachedValue<SystemSettings>?> settings,
+    required final Future<List<ServerMetadataEntity>> Function() loadMetadata,
     required final void Function() onMetadataFailure,
   }) : _loadMetadata = loadMetadata,
        _onMetadataFailure = onMetadataFailure,
@@ -28,72 +22,56 @@ class ServerDetailsCubit extends Cubit<ServerDetailsState> {
     _subscription = settings.listen(_observe);
   }
 
-  final Future<List<ServerMetadataEntity>> Function(ServerStateOrigin)
-  _loadMetadata;
+  final Future<List<ServerMetadataEntity>> Function() _loadMetadata;
   final void Function() _onMetadataFailure;
-  late final StreamSubscription<
-    ConnectionObservation<CachedValue<SystemSettings>>
-  >
-  _subscription;
-  ServerStateOrigin? _origin;
-  ServerStateOrigin? _requestedOrigin;
+  late final StreamSubscription<CachedValue<SystemSettings>?> _subscription;
+  bool _attached = false;
+  bool _metadataRequested = false;
 
-  void _observe(
-    final ConnectionObservation<CachedValue<SystemSettings>> observation,
-  ) {
-    final origin = observation.origin;
-    if (origin == null) {
-      _origin = null;
-      _requestedOrigin = null;
+  void _observe(final CachedValue<SystemSettings>? observation) {
+    _attached = observation != null;
+    if (!_attached) {
       emit(ServerDetailsNotReady());
       return;
     }
-    if (!identical(origin.continuity, _origin?.continuity)) {
-      emit(ServerDetailsLoading(continuity: origin.continuity));
-    }
-    _origin = origin;
-    final settings = observation.value?.data;
+    final settings = observation?.data;
     if (settings != null) {
       emit(
         Loaded(
-          continuity: origin.continuity,
           metadata: state.metadata,
           serverTimezone: TimeZoneSettings.fromString(settings.timezone),
           autoUpgradeSettings: settings.autoUpgradeSettings,
           sshSettings: settings.sshSettings,
         ),
       );
-      if (state.metadata.isEmpty && !identical(_requestedOrigin, origin)) {
+      if (state.metadata.isEmpty && !_metadataRequested) {
         unawaited(check());
       }
-    } else if (observation.value?.support == DomainSupport.unsupported ||
-        observation.value?.lastError != null) {
+    } else if (observation?.support == DomainSupport.unsupported ||
+        observation?.lastError != null) {
       emit(
         ServerDetailsUnavailable(
-          isUnsupported:
-              observation.value?.support == DomainSupport.unsupported,
-          continuity: origin.continuity,
+          isUnsupported: observation?.support == DomainSupport.unsupported,
           metadata: state.metadata,
         ),
       );
     } else {
-      emit(ServerDetailsLoading(continuity: origin.continuity));
+      emit(ServerDetailsLoading());
     }
   }
 
   Future<void> check() async {
-    final origin = _origin;
-    if (origin == null || isClosed) {
+    if (!_attached || isClosed) {
       return;
     }
-    _requestedOrigin = origin;
+    _metadataRequested = true;
     try {
-      final metadata = await _loadMetadata(origin);
-      if (!isClosed && identical(origin, _origin)) {
+      final metadata = await _loadMetadata();
+      if (!isClosed && _attached) {
         emit(state.copyWith(metadata: metadata));
       }
     } catch (_) {
-      if (!isClosed && identical(origin, _origin)) {
+      if (!isClosed && _attached) {
         _onMetadataFailure();
       }
     }
@@ -101,7 +79,7 @@ class ServerDetailsCubit extends Cubit<ServerDetailsState> {
 
   @override
   Future<void> close() async {
-    _origin = null;
+    _attached = false;
     await _subscription.cancel();
     return super.close();
   }

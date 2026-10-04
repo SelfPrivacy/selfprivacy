@@ -101,7 +101,6 @@ void main() {
     final volume = aServerProviderVolume();
     const size = DiskSize(byte: 20000000000);
     final choice = VolumeResize(
-      origin: bloc.state.origin,
       DiskVolume(name: 'sdb', providerVolume: volume),
       size,
     );
@@ -130,11 +129,7 @@ void main() {
     final first = createBloc();
     await pumpEventQueue();
     first.add(
-      VolumeResize(
-        origin: first.state.origin,
-        DiskVolume(name: 'sdb', providerVolume: volume),
-        size,
-      ),
+      VolumeResize(DiskVolume(name: 'sdb', providerVolume: volume), size),
     );
     await pumpEventQueue();
     final closing = first.close();
@@ -142,11 +137,7 @@ void main() {
     addTearDown(second.close);
     await pumpEventQueue();
     second.add(
-      VolumeResize(
-        origin: second.state.origin,
-        DiskVolume(name: 'sdb', providerVolume: volume),
-        size,
-      ),
+      VolumeResize(DiskVolume(name: 'sdb', providerVolume: volume), size),
     );
     await pumpEventQueue();
     response.complete(GenericResult(success: false, data: false));
@@ -175,7 +166,6 @@ void main() {
       await tester.pump();
       bloc.add(
         VolumeResize(
-          origin: bloc.state.origin,
           DiskVolume(name: 'sdb', providerVolume: providerVolume),
           size,
         ),
@@ -207,7 +197,6 @@ void main() {
     await tester.pump();
     bloc.add(
       VolumeResize(
-        origin: bloc.state.origin,
         DiskVolume(name: 'sdb', providerVolume: providerVolume),
         size,
       ),
@@ -254,7 +243,7 @@ void main() {
       final bloc = createBloc();
       await tester.pump();
       expect(bloc.state, isA<VolumesLoaded>());
-      bloc.add(VolumeResize(origin: bloc.state.origin, volume, size));
+      bloc.add(VolumeResize(volume, size));
       await tester.pump();
       expect(bloc.state, isA<VolumesResizing>());
       await tester.pump(const Duration(seconds: 10));

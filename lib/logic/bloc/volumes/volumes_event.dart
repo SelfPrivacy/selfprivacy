@@ -6,23 +6,22 @@ sealed class VolumesEvent extends Equatable {
 
 class _VolumesObserved extends VolumesEvent {
   const _VolumesObserved(this.observation);
-  final ConnectionObservation<CachedValue<List<ServerDiskVolume>>> observation;
+  final CachedValue<List<ServerDiskVolume>>? observation;
   @override
   List<Object?> get props => [observation];
 }
 
 class _LoadProviderVolumes extends VolumesEvent {
-  const _LoadProviderVolumes(this.origin);
-  final ServerStateOrigin origin;
+  const _LoadProviderVolumes();
   @override
-  List<Object> get props => [origin];
+  List<Object> get props => [];
 }
 
 class VolumeResize extends VolumesEvent {
-  const VolumeResize(this.volume, this.newSize, {required this.origin});
-  final ServerStateOrigin? origin;
+  const VolumeResize(this.volume, this.newSize);
+
   final DiskVolume volume;
   final DiskSize newSize;
   @override
-  List<Object?> get props => [volume, newSize, origin];
+  List<Object?> get props => [volume, newSize];
 }

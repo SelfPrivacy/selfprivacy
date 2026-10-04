@@ -92,6 +92,39 @@ void main() {
   }
 
   testWidgets(
+    'the current device rotates its token without provider credential state',
+    (final tester) async {
+      when(api.refreshDeviceApiToken).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('rotated-token'),
+        ),
+      );
+      await tester.runAsync(bloc.refresh);
+      await showPage(tester);
+      await tester.tap(
+        find.text(tokens.firstWhere((final token) => token.isCaller).name),
+      );
+      await tester.pumpAndSettle();
+      await tester.runAsync(() async {
+        await tester.tap(
+          find
+              .descendant(
+                of: find.byType(AlertDialog),
+                matching: find.byType(TextButton),
+              )
+              .last,
+        );
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      expect(selected.hostingDetails.apiToken, 'rotated-token');
+      expect(hub.active, same(connection));
+    },
+  );
+
+  testWidgets(
     'confirming a device row dispatches once and retains it until confirmation',
     (final tester) async {
       final device = tokens.firstWhere((final token) => !token.isCaller);
@@ -200,7 +233,7 @@ void main() {
         final deleting = bloc.stream.firstWhere(
           (final state) => state is DevicesDeleting,
         );
-        bloc.add(DeleteDevice(device, origin: bloc.state.origin));
+        bloc.add(DeleteDevice(device));
         await deleting;
       });
       await tester.pump();

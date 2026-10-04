@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -75,7 +74,6 @@ void main() {
   });
 
   TokensBloc createBloc() => bloc = TokensBloc(
-    rotateToken: () async => RotationOutcome.succeeded,
     createServerProvider: (final ServerProviderSettings settings) {
       expect(
         settings.credentials,

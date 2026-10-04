@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
@@ -25,10 +23,8 @@ part 'tokens_state.dart';
 
 class TokensBloc extends Bloc<TokensEvent, TokensState> {
   TokensBloc({
-    required final Future<RotationOutcome> Function() rotateToken,
     final ServerProvider Function(ServerProviderSettings)? createServerProvider,
-  }) : _rotateToken = rotateToken,
-       _createServerProvider =
+  }) : _createServerProvider =
            createServerProvider ??
            ServerProviderFactory.createServerProviderInterface,
        super(const TokensInitial()) {
@@ -37,10 +33,6 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     on<AddBackupsProviderCredential>(addBackupsProviderCredential);
     on<RemoveBackupsProviderCredential>(removeBackupsProviderCredential);
     on<ServerSelectedForProviderToken>(connectServerToProviderToken);
-    on<RefreshServerApiTokenEvent>(
-      refreshServerApiToken,
-      transformer: droppable(),
-    );
 
     add(const RevalidateTokens());
 
@@ -255,29 +247,6 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     await getIt<ResourcesModel>().updateServerByUuid(newServerData);
   }
 
-  Future<void> refreshServerApiToken(
-    final RefreshServerApiTokenEvent event,
-    final Emitter<TokensState> emit,
-  ) async {
-    final outcome = await _rotateToken();
-    if (isClosed || emit.isDone) {
-      return;
-    }
-    if (outcome != RotationOutcome.succeeded) {
-      final message = switch (outcome) {
-        RotationOutcome.rejected => 'server_mutation.rejected',
-        RotationOutcome.cancelled ||
-        RotationOutcome.detached => 'server_mutation.not_sent',
-        _ => 'server_mutation.outcome_unknown',
-      };
-      getIt<NavigationService>().showSnackBar(message.tr());
-      return;
-    }
-    getIt<NavigationService>().showSnackBar(
-      'devices.refresh_token_alert.success_refresh_token'.tr(),
-    );
-  }
-
   @override
   Future<void> close() async {
     await _resourcesModelSubscription.cancel();
@@ -286,5 +255,4 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
 
   late StreamSubscription _resourcesModelSubscription;
   final ServerProvider Function(ServerProviderSettings) _createServerProvider;
-  final Future<RotationOutcome> Function() _rotateToken;
 }

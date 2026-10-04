@@ -7,10 +7,10 @@ sealed class UsersEvent extends Equatable {
 class _UsersObserved extends UsersEvent {
   const _UsersObserved(this.observation);
 
-  final ConnectionObservation<CachedValue<List<User>>> observation;
+  final CachedValue<List<User>>? observation;
 
   @override
-  List<Object> get props => [observation];
+  List<Object?> get props => [observation];
 }
 
 class UsersListRefresh extends UsersEvent {

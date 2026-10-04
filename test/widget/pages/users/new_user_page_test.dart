@@ -12,7 +12,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/forms/user_form.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -45,8 +44,6 @@ void main() {
     await setUpWidgetTestHarness();
     registerFallbackValue(User.fake());
   });
-
-  late ConnectionContinuity continuity;
   late _MockUsersBloc usersBloc;
   late _MockGroupsBloc groupsBloc;
   late _MockServicesBloc servicesBloc;
@@ -54,19 +51,15 @@ void main() {
 
   setUp(() async {
     await getIt.reset();
-    continuity = ConnectionContinuity();
     usersBloc = _MockUsersBloc();
     groupsBloc = _MockGroupsBloc();
     servicesBloc = _MockServicesBloc();
     appReadinessCubit = _MockAppReadinessCubit();
     getIt.registerSingleton<NavigationService>(_Navigation());
 
-    when(() => usersBloc.state).thenReturn(
-      UsersLoaded(
-        users: [User.fake(login: 'alice')],
-        continuity: continuity,
-      ),
-    );
+    when(
+      () => usersBloc.state,
+    ).thenReturn(UsersLoaded(users: [User.fake(login: 'alice')]));
     when(
       () => usersBloc.stream,
     ).thenAnswer((_) => const Stream<UsersState>.empty());
@@ -95,9 +88,7 @@ void main() {
       directmemberof: const ['sp.full_users'],
     );
     final router = _TestRouter(GlobalKey<NavigatorState>());
-    when(
-      () => usersBloc.saveUser(any(), continuity: continuity, create: false),
-    ).thenAnswer(
+    when(() => usersBloc.saveUser(any(), create: false)).thenAnswer(
       (_) async => ServerMutationResult(
         outcome: ServerMutationOutcome.confirmed,
         payload: ServerMutationPayload.available(user),
@@ -119,9 +110,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(router.stack, isEmpty);
-    verify(
-      () => usersBloc.saveUser(any(), continuity: continuity, create: false),
-    ).called(1);
+    verify(() => usersBloc.saveUser(any(), create: false)).called(1);
   });
 
   testWidgets('group selection keeps explicit groups when primary changes', (
@@ -167,19 +156,16 @@ void main() {
     final form = tester
         .widget<UserFormView>(find.byType(UserFormView))
         .userForm;
-    when(() => usersBloc.state).thenReturn(
-      UsersLoaded(
-        users: [User.fake(login: 'bob')],
-        continuity: continuity,
-      ),
-    );
+    when(
+      () => usersBloc.state,
+    ).thenReturn(UsersLoaded(users: [User.fake(login: 'bob')]));
     final login = form.form.control(UserForm.loginControlName)
       ..updateValue('bob');
     expect(login.hasError(UserForm.errLoginTaken), isTrue);
   });
 
   testWidgets(
-    'form drafts survive rotation continuity and clear on reset or replacement',
+    'form drafts survive data refresh and are discarded with the route',
     (final tester) async {
       final updates = StreamController<UsersState>.broadcast(sync: true);
       when(() => usersBloc.stream).thenAnswer((_) => updates.stream);
@@ -204,12 +190,7 @@ void main() {
         updates.add(state);
       }
 
-      publish(
-        UsersLoaded(
-          users: [User.fake(login: 'bob')],
-          continuity: continuity,
-        ),
-      );
+      publish(UsersLoaded(users: [User.fake(login: 'bob')]));
       await tester.pump();
       expect(
         tester.widget<UserFormView>(find.byType(UserFormView)).userForm,
@@ -219,16 +200,18 @@ void main() {
         original.form.control(UserForm.loginControlName).value,
         'draft-user',
       );
-      publish(UsersInitial());
-      await tester.pump();
+      await tester.pumpWidget(const SizedBox.shrink());
       expect(find.byType(UserFormView), findsNothing);
-      publish(
-        UsersLoaded(
-          users: [User.fake(login: 'carol')],
-          continuity: ConnectionContinuity(),
-        ),
+      publish(UsersLoaded(users: [User.fake(login: 'carol')]));
+      await _pumpRouter(
+        tester,
+        router: _TestRouter(GlobalKey<NavigatorState>()),
+        routes: [NewUserRoute()],
+        usersBloc: usersBloc,
+        groupsBloc: groupsBloc,
+        servicesBloc: servicesBloc,
+        appReadinessCubit: appReadinessCubit,
       );
-      await tester.pump();
       final replacement = tester
           .widget<UserFormView>(find.byType(UserFormView))
           .userForm;

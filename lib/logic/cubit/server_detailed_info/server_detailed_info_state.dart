@@ -1,65 +1,52 @@
 part of 'server_detailed_info_cubit.dart';
 
 abstract class ServerDetailsState extends Equatable {
-  ServerDetailsState({
-    required final List<ServerMetadataEntity> metadata,
-    this.continuity,
-  }) : metadata = List.unmodifiable(metadata);
+  ServerDetailsState({required final List<ServerMetadataEntity> metadata})
+    : metadata = List.unmodifiable(metadata);
 
   final List<ServerMetadataEntity> metadata;
-  final ConnectionContinuity? continuity;
 
   @override
-  List<Object?> get props => [metadata, continuity];
+  List<Object?> get props => [metadata];
 
   ServerDetailsState copyWith({final List<ServerMetadataEntity>? metadata});
 }
 
 class ServerDetailsInitial extends ServerDetailsState {
-  ServerDetailsInitial({super.metadata = const [], super.continuity});
+  ServerDetailsInitial({super.metadata = const []});
 
   @override
   ServerDetailsInitial copyWith({final List<ServerMetadataEntity>? metadata}) =>
-      ServerDetailsInitial(
-        metadata: metadata ?? this.metadata,
-        continuity: continuity,
-      );
+      ServerDetailsInitial(metadata: metadata ?? this.metadata);
 }
 
 class ServerDetailsLoading extends ServerDetailsState {
-  ServerDetailsLoading({super.metadata = const [], super.continuity});
+  ServerDetailsLoading({super.metadata = const []});
 
   @override
   ServerDetailsLoading copyWith({final List<ServerMetadataEntity>? metadata}) =>
-      ServerDetailsLoading(
-        metadata: metadata ?? this.metadata,
-        continuity: continuity,
-      );
+      ServerDetailsLoading(metadata: metadata ?? this.metadata);
 }
 
 class ServerDetailsNotReady extends ServerDetailsState {
-  ServerDetailsNotReady({super.metadata = const [], super.continuity});
+  ServerDetailsNotReady({super.metadata = const []});
 
   @override
   ServerDetailsNotReady copyWith({
     final List<ServerMetadataEntity>? metadata,
-  }) => ServerDetailsNotReady(
-    metadata: metadata ?? this.metadata,
-    continuity: continuity,
-  );
+  }) => ServerDetailsNotReady(metadata: metadata ?? this.metadata);
 }
 
 class ServerDetailsUnavailable extends ServerDetailsState {
   ServerDetailsUnavailable({
     required this.isUnsupported,
     super.metadata = const [],
-    super.continuity,
   });
 
   final bool isUnsupported;
 
   @override
-  List<Object?> get props => [isUnsupported, metadata, continuity];
+  List<Object?> get props => [isUnsupported, metadata];
 
   @override
   ServerDetailsUnavailable copyWith({
@@ -67,7 +54,6 @@ class ServerDetailsUnavailable extends ServerDetailsState {
   }) => ServerDetailsUnavailable(
     isUnsupported: isUnsupported,
     metadata: metadata ?? this.metadata,
-    continuity: continuity,
   );
 }
 
@@ -77,7 +63,6 @@ class Loaded extends ServerDetailsState {
     required this.serverTimezone,
     required this.autoUpgradeSettings,
     required this.sshSettings,
-    super.continuity,
   });
   final TimeZoneSettings serverTimezone;
   final AutoUpgradeSettings autoUpgradeSettings;
@@ -85,7 +70,6 @@ class Loaded extends ServerDetailsState {
 
   @override
   List<Object?> get props => [
-    continuity,
     metadata,
     serverTimezone,
     autoUpgradeSettings,
@@ -100,7 +84,6 @@ class Loaded extends ServerDetailsState {
     final SshSettings? sshSettings,
   }) => Loaded(
     metadata: metadata ?? this.metadata,
-    continuity: continuity,
     serverTimezone: serverTimezone ?? this.serverTimezone,
     autoUpgradeSettings: autoUpgradeSettings ?? this.autoUpgradeSettings,
     sshSettings: sshSettings ?? this.sshSettings,

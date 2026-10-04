@@ -6,8 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
@@ -18,16 +16,10 @@ part 'services_state.dart';
 
 class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   ServicesBloc({
-    required final Stream<ConnectionObservation<CachedValue<List<Service>>>>
-    services,
+    required final Stream<CachedValue<List<Service>>?> services,
     required final Future<void> Function() refresh,
-    required final Future<ServerMutationResult<void>?> Function(
-      ServerStateOrigin,
-      String,
-    )
-    restart,
+    required final Future<ServerMutationResult<void>?> Function(String) restart,
     required final Future<ServerMutationResult<ServerJob>?> Function(
-      ServerStateOrigin,
       String,
       String,
     )
@@ -39,9 +31,9 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
        _showMessage = showMessage,
        super(ServicesInitial()) {
     on<_ServicesObserved>(_observe, transformer: sequential());
-    on<_ServiceAction<ServicesReload>>(_act, transformer: droppable());
-    on<_ServiceAction<ServiceRestart>>(_act, transformer: sequential());
-    on<_ServiceAction<ServiceMove>>(_act, transformer: sequential());
+    on<ServicesReload>(_act, transformer: droppable());
+    on<ServiceRestart>(_act, transformer: sequential());
+    on<ServiceMove>(_act, transformer: sequential());
     _subscription = services.listen((final observation) {
       _latest = observation;
       add(_ServicesObserved(observation));
@@ -49,64 +41,24 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   }
 
   final Future<void> Function() _refresh;
-  final Future<ServerMutationResult<void>?> Function(ServerStateOrigin, String)
-  _restart;
-  final Future<ServerMutationResult<ServerJob>?> Function(
-    ServerStateOrigin,
-    String,
-    String,
-  )
-  _move;
+  final Future<ServerMutationResult<void>?> Function(String) _restart;
+  final Future<ServerMutationResult<ServerJob>?> Function(String, String) _move;
   final void Function(String) _showMessage;
-  late final StreamSubscription<
-    ConnectionObservation<CachedValue<List<Service>>>
-  >
-  _subscription;
-  ConnectionObservation<CachedValue<List<Service>>>? _latest;
-  ConnectionContinuity? _presentedContinuity;
-  ServerStateOrigin? _presentedOrigin;
-
-  @override
-  void add(final ServicesEvent event) {
-    super.add(switch (event) {
-      ServicesReload() => _ServiceAction(event, _presentedOrigin),
-      ServiceRestart() => _ServiceAction(event, _presentedOrigin),
-      ServiceMove() => _ServiceAction(
-        event,
-        identical(event.continuity, _presentedOrigin?.continuity)
-            ? _presentedOrigin
-            : null,
-      ),
-      _ => event,
-    });
-  }
+  late final StreamSubscription<CachedValue<List<Service>>?> _subscription;
+  CachedValue<List<Service>>? _latest;
 
   void _observe(
     final _ServicesObserved event,
     final Emitter<ServicesState> emit,
   ) {
-    if (!identical(event.observation.origin, _latest?.origin)) {
-      return;
-    }
-    final continuity = event.observation.origin?.continuity;
-    _presentedOrigin = event.observation.origin;
-    final locks = identical(continuity, _presentedContinuity)
-        ? state._lockedServices
-        : <ServiceLock>[];
-    _presentedContinuity = continuity;
-    final value = event.observation.value;
+    final locks = state._lockedServices;
+    final value = event.observation;
     if (value == null) {
       emit(ServicesInitial());
     } else if (value.support == DomainSupport.unsupported) {
       emit(ServicesUnsupported());
     } else if (value.data case final services?) {
-      emit(
-        ServicesLoaded(
-          services: services,
-          lockedServices: locks,
-          continuity: continuity,
-        ),
-      );
+      emit(ServicesLoaded(services: services, lockedServices: locks));
     } else if (value.lastError != null) {
       emit(ServicesError());
     } else {
@@ -114,19 +66,16 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     }
   }
 
-  bool _isCurrent(final ServerStateOrigin? origin) =>
-      !isClosed &&
-      origin != null &&
-      identical(origin.continuity, _latest?.origin?.continuity);
+  bool get _isActive => !isClosed && _latest != null;
 
   Future<void> _act(
-    final _ServiceAction<ServicesEvent> action,
+    final ServicesEvent action,
     final Emitter<ServicesState> emit,
   ) async {
-    if (!_isCurrent(action.origin)) {
+    if (!_isActive) {
       return;
     }
-    switch (action.event) {
+    switch (action) {
       case ServicesReload():
         if (state case final ServicesLoaded loaded) {
           emit(ServicesReloading.fromState(loaded));
@@ -144,8 +93,8 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
             ],
           ),
         );
-        final result = await _restart(action.origin!, service.id);
-        if (!_isCurrent(action.origin) || emit.isDone) {
+        final result = await _restart(service.id);
+        if (!_isActive || emit.isDone) {
           return;
         }
         if (result?.outcome != ServerMutationOutcome.confirmed) {
@@ -159,8 +108,8 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
           _report(result);
         }
       case ServiceMove(:final service, :final destination):
-        final result = await _move(action.origin!, service.id, destination);
-        if (_isCurrent(action.origin) &&
+        final result = await _move(service.id, destination);
+        if (_isActive &&
             (result?.outcome != ServerMutationOutcome.confirmed ||
                 result?.payload.value == null)) {
           _report(result);
@@ -180,6 +129,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
 
   @override
   Future<void> close() async {
+    _latest = null;
     await _subscription.cancel();
     return super.close();
   }

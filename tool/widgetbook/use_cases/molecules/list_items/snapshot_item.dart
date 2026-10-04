@@ -14,7 +14,6 @@ Widget snapshotItemDefault(final BuildContext context) => CatalogCase(
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
       SnapshotItem(
-        origin: null,
         backup: demoBackup(),
         preventActions: false,
         overrideColor: null,
@@ -31,7 +30,6 @@ Widget snapshotItemDisabled(final BuildContext context) => CatalogCase(
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
       SnapshotItem(
-        origin: null,
         backup: demoBackup(),
         preventActions: true,
         overrideColor: null,
@@ -52,7 +50,6 @@ Widget snapshotItemMissingService(final BuildContext context) => CatalogCase(
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
       SnapshotItem(
-        origin: null,
         backup: demoBackup(),
         preventActions: false,
         overrideColor: null,
@@ -73,7 +70,6 @@ Widget snapshotItemCustomColor(final BuildContext context) => CatalogCase(
   height: 180,
   builder: (final context, final fixtures, final controller, final update) =>
       SnapshotItem(
-        origin: null,
         backup: demoBackup(),
         preventActions: false,
         overrideColor: Theme.of(context).colorScheme.error,

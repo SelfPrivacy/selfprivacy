@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
@@ -13,25 +11,22 @@ import '../../../../helpers/fixtures/system_settings_fixtures.dart';
 
 void main() {
   setUpAll(initializeTimeZones);
-  late StreamController<ConnectionObservation<CachedValue<SystemSettings>>>
-  source;
+  late StreamController<CachedValue<SystemSettings>?> source;
   late ServerDetailsCubit cubit;
-  late ServerStateOrigin origin;
   late Completer<List<ServerMetadataEntity>> metadata;
-  late List<ServerStateOrigin> requested;
+  late int requested;
   late int failures;
 
   setUp(() {
     source = StreamController.broadcast(sync: true);
-    origin = ServerStateOrigin('server');
     metadata = Completer();
-    requested = [];
+    requested = 0;
     failures = 0;
     cubit = ServerDetailsCubit(
       onMetadataFailure: () => failures++,
       settings: source.stream,
-      loadMetadata: (final origin) {
-        requested.add(origin);
+      loadMetadata: () {
+        requested++;
         return metadata.future;
       },
     );
@@ -41,24 +36,16 @@ void main() {
     await source.close();
   });
 
-  void publish() => source.add(
-    ConnectionObservation.attached(
-      origin,
-      CachedValue(data: aSystemSettings()),
-    ),
-  );
+  void publish() => source.add(CachedValue(data: aSystemSettings()));
 
   for (final unsupported in [false, true]) {
     test('initial settings failure settles: unsupported=$unsupported', () {
       source.add(
-        ConnectionObservation.attached(
-          origin,
-          CachedValue<SystemSettings>(
-            support: unsupported
-                ? DomainSupport.unsupported
-                : DomainSupport.supported,
-            lastError: unsupported ? null : StateError('unavailable'),
-          ),
+        CachedValue<SystemSettings>(
+          support: unsupported
+              ? DomainSupport.unsupported
+              : DomainSupport.supported,
+          lastError: unsupported ? null : StateError('unavailable'),
         ),
       );
       expect(cubit.state, isNot(isA<ServerDetailsLoading>()));
@@ -75,7 +62,7 @@ void main() {
     () async {
       publish();
       publish();
-      expect(requested, [origin]);
+      expect(requested, 1);
       final input = [
         ServerMetadataEntity(trId: 'server.server_provider', value: 'Hetzner'),
       ];
@@ -85,30 +72,21 @@ void main() {
       input.clear();
       expect(saved.metadata.single.value, 'Hetzner');
       publish();
-      expect(requested, hasLength(1));
+      expect(requested, 1);
       expect(cubit.state.metadata, saved.metadata);
     },
   );
 
-  test(
-    'reset rejects held metadata and permits a fresh same-UUID binding',
-    () async {
-      publish();
-      source.add(const ConnectionObservation.absent());
-      metadata.complete([
-        ServerMetadataEntity(trId: 'server.server_provider', value: 'old'),
-      ]);
-      await pumpEventQueue();
-      expect(cubit.state, isA<ServerDetailsNotReady>());
-      expect(cubit.state.metadata, isEmpty);
-      metadata = Completer();
-      origin = ServerStateOrigin('server');
-      publish();
-      expect(requested, hasLength(2));
-      expect(cubit.state.metadata, isEmpty);
-      metadata.complete([]);
-    },
-  );
+  test('detachment rejects held metadata', () async {
+    publish();
+    source.add(null);
+    metadata.complete([
+      ServerMetadataEntity(trId: 'server.server_provider', value: 'old'),
+    ]);
+    await pumpEventQueue();
+    expect(cubit.state, isA<ServerDetailsNotReady>());
+    expect(cubit.state.metadata, isEmpty);
+  });
 
   test('close discards metadata that is already in flight', () async {
     publish();

@@ -2,20 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/molecules/list_items/create_backup_checkbox_item.dart';
 
 class CreateBackupsModal extends StatefulWidget {
   const CreateBackupsModal({
     required this.services,
-    required this.origin,
     required this.scrollController,
     super.key,
   });
 
   final List<Service> services;
-  final ServerStateOrigin? origin;
+
   final ScrollController scrollController;
 
   @override
@@ -112,7 +110,7 @@ class _CreateBackupsModalState extends State<CreateBackupsModal> {
               ? null
               : () {
                   context.read<BackupsBloc>().add(
-                    CreateBackups(selectedServices, origin: widget.origin),
+                    CreateBackups(selectedServices),
                   );
                   Navigator.of(context).pop();
                 },

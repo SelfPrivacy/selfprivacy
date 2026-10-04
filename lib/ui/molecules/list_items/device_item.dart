@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
-import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 
 class DeviceItem extends StatelessWidget {
@@ -153,13 +151,7 @@ class DeviceItem extends StatelessWidget {
         TextButton(
           child: Text('devices.refresh_token_alert.yes'.tr()),
           onPressed: () {
-            if (onRotate case final callback?) {
-              callback();
-            } else {
-              context.read<TokensBloc>().add(
-                const RefreshServerApiTokenEvent(),
-              );
-            }
+            onRotate?.call();
             Navigator.of(context).pop();
           },
         ),

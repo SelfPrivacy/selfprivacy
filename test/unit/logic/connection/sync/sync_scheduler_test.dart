@@ -260,6 +260,26 @@ void main() {
     },
   );
 
+  testScheduler('nonforced reads refresh due data before it becomes stale', (
+    final tester,
+  ) async {
+    await tester.pump();
+    final initial = scheduler.refresh(cache.users);
+    await tester.pump();
+    expect(await initial, RefreshResult.applied);
+    calls.clear();
+    expect(
+      await scheduler.refresh(cache.users, force: false),
+      RefreshResult.current,
+    );
+    await tester.pump(const Duration(seconds: 61));
+    expect(cache.users.value.freshness, Freshness.fresh);
+    final requested = scheduler.refresh(cache.users, force: false);
+    await tester.pump();
+    expect(await requested, RefreshResult.applied);
+    expect(calls, ['AllUsers']);
+  });
+
   testScheduler('commands block dispatch and reconcile only after release', (
     final tester,
   ) async {

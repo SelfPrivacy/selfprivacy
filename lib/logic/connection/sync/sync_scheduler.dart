@@ -210,8 +210,10 @@ class SyncScheduler {
     }
     final value = entry.store.value;
     if (!force &&
-        value.freshness == Freshness.fresh &&
-        !value.needsReconciliation &&
+        value.support == DomainSupport.supported &&
+        !entry.store.isDue &&
+        !value.isRefreshing &&
+        entry.request == null &&
         value.lastError == null) {
       return RefreshResult.current;
     }

@@ -1,10 +1,20 @@
 import 'dart:async';
 
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/operations/operation.dart';
 
 class OperationExecution {
+  OperationExecution({this.onStepsChanged});
+
+  final void Function(List<OperationStep>)? onStepsChanged;
+  final _steps = <String, OperationStep>{};
+
+  void recordStep(final OperationStep step) {
+    _steps[step.id] = step;
+    onStepsChanged?.call(List.unmodifiable(_steps.values));
+  }
+
   static final zoneKey = Object();
   static OperationExecution? get current =>
       Zone.current[zoneKey] as OperationExecution?;

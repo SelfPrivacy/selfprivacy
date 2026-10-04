@@ -1,7 +1,7 @@
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 
 enum BackupStorageFailure implements Exception {

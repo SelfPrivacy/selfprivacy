@@ -10,12 +10,12 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'backups_event.dart';

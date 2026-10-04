@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
-import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
+import '../../../helpers/fixtures/domain_mutation_fixtures.dart';
 
 void main() {
   test('no work is not reported as success', () {

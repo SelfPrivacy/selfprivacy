@@ -7,8 +7,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../../helpers/operation_fixture.dart';
 

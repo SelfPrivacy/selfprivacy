@@ -9,9 +9,9 @@ import 'package:http/testing.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/secret_recipient.dart';
 
 class _MockTlsContext extends Mock implements TlsContext {}
 

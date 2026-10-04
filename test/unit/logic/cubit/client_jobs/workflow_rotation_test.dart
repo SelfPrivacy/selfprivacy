@@ -15,10 +15,10 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/job.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
@@ -146,7 +146,7 @@ void main() {
           );
           saved.complete();
           expect(await rotation, RotationOutcome.succeeded);
-          await queued.completion;
+          await queued.result;
           expect(requests.last, ('RebootSystem', 'Bearer fixture-secret'));
         } finally {
           if (!releaseFirst.isCompleted) {

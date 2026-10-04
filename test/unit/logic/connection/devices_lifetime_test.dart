@@ -14,9 +14,9 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/json_fixture.dart';

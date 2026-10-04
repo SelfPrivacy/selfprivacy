@@ -10,12 +10,12 @@ import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/price.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'volumes_event.dart';

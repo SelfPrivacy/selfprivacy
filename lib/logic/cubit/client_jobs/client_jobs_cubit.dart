@@ -9,11 +9,11 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_job_workflow.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';

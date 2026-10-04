@@ -12,9 +12,9 @@ import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/domain_mutation_fixtures.dart';
@@ -113,9 +113,9 @@ void main() {
       expect(hub.active!.rotation.status, RotationStatus.waiting);
       expect(sent, isFalse);
       active.complete();
-      await first.completion.timeout(const Duration(seconds: 1));
+      await first.result.timeout(const Duration(seconds: 1));
       expect(await rotation, RotationOutcome.succeeded);
-      expect((await second.completion).value, 2);
+      expect((await second.result).value, 2);
       expect(resources.servers.single.hostingDetails.apiToken, 'replacement');
       expect(hub.active!.cache.groups.value.data, ['sp.full_users']);
       expect(hub.active!.cache.groups.value.updatedAt, timestamp);
@@ -296,10 +296,10 @@ void main() {
       );
       expect(hub.active!.cancelRotation(), isTrue);
       expect(await rotation, RotationOutcome.cancelled);
-      expect((await next.completion).value, 2);
+      expect((await next.result).value, 2);
       verifyNever(api.refreshDeviceApiToken);
       active.complete();
-      await first.completion;
+      await first.result;
     },
   );
 
@@ -328,10 +328,10 @@ void main() {
     );
     await resources.updateServerByUuid(selected);
     await pumpEventQueue();
-    expect((await waiting.completion).status, OperationStatus.notSent);
+    expect((await waiting.result).status, OperationStatus.notSent);
     expect(dispatched, isFalse);
     running.complete();
-    await first.completion;
+    await first.result;
     await rotation;
   });
 
@@ -392,7 +392,7 @@ void main() {
         ),
       );
       expect(await rotation, RotationOutcome.unknown);
-      expect((await waiting.completion).status, OperationStatus.notSent);
+      expect((await waiting.result).status, OperationStatus.notSent);
       expect(await hub.active!.rotateToken(), RotationOutcome.suppressed);
       verify(api.refreshDeviceApiToken).called(1);
     },
@@ -411,10 +411,10 @@ void main() {
     );
     await resources.removeServer(resources.servers.single);
     expect(hub.active, isNull);
-    expect((await next.completion).status, OperationStatus.notSent);
+    expect((await next.result).status, OperationStatus.notSent);
     expect(await rotation, RotationOutcome.detached);
     active.complete();
-    await first.completion;
+    await first.result;
   });
 
   test(

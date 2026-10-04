@@ -7,8 +7,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/ui/pages/server/logs.dart';
 
 import '../../helpers/operation_fixture.dart';

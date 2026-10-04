@@ -6,9 +6,9 @@ import 'package:selfprivacy/logic/connection/lifecycle/app_lifecycle.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 class ConnectionRuntime {
   ConnectionRuntime({

@@ -7,7 +7,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../../fakes/graphql/link_transport.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';

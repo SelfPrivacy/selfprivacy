@@ -9,9 +9,9 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
-import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/operations/secret_recipient.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 part 'devices_event.dart';

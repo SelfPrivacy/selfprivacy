@@ -12,11 +12,11 @@ import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../fakes/graphql/link_transport.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
@@ -193,7 +193,7 @@ void main() {
     hub.active!.cancelRotation();
     pending.complete();
     await tester.pump();
-    await work.completion;
+    await work.result;
     await rotation;
   });
 
@@ -382,7 +382,7 @@ void main() {
     saved.complete();
     await tester.pump();
     expect(await rotation, RotationOutcome.succeeded);
-    await queued.completion;
+    await queued.result;
     expect(actionSent, isTrue);
     expect(actionToken, 'replacement');
     expect(jobSockets, hasLength(2));
@@ -428,7 +428,7 @@ void main() {
       visibility.add(false);
       pending.complete();
       await tester.pump();
-      await action.completion;
+      await action.result;
       verifyNever(api.refreshDeviceApiToken);
       foreground = true;
       visibility.add(true);

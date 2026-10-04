@@ -1,9 +1,9 @@
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
 enum VolumeResizeStage { started, providerWaiting, serverWaiting, rebooting }

@@ -12,11 +12,11 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';
@@ -281,7 +281,7 @@ void main() {
       hub.clear();
       await tester.pump();
       await tester.pump(const Duration(seconds: 30));
-      expect((await operation.completion).status, OperationStatus.unknown);
+      expect((await operation.result).status, OperationStatus.unknown);
       expect(stages, [
         VolumeResizeStage.started,
         VolumeResizeStage.providerWaiting,

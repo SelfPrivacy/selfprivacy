@@ -22,14 +22,14 @@ import 'package:selfprivacy/logic/connection/repositories/services_repository.da
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 part 'server_connection_session.dart';
 
@@ -198,7 +198,7 @@ class ServerConnection {
       _checkDispatch(origin);
       return action(this);
     }
-    final result = await submit(kind, action, origin: origin).completion;
+    final result = await submit(kind, action, origin: origin).result;
     if (result.status == OperationStatus.notSent ||
         result.status == OperationStatus.cancelled) {
       onNotSent?.call();
@@ -211,18 +211,10 @@ class ServerConnection {
     final Future<T> Function(ServerConnection) action, {
     final ServerStateOrigin? origin,
     final OperationReport Function(T)? describe,
-  }) {
-    final execution = OperationExecution();
-    return operations.submit(kind, () {
-      _checkDispatch(origin);
-      return _admit(
-        () => runZoned(
-          () => action(this),
-          zoneValues: {OperationExecution.zoneKey: execution},
-        ),
-      );
-    }, describe: describe ?? (_) => execution.report);
-  }
+  }) => operations.submit(kind, () {
+    _checkDispatch(origin);
+    return _admit(() => action(this));
+  }, describe: describe ?? (_) => OperationExecution.current!.report);
 
   void _checkDispatch(final ServerStateOrigin? expected) {
     if (!isAttached ||

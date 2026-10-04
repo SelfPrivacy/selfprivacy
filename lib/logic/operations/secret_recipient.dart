@@ -1,5 +1,5 @@
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 class SecretRecipient {
   final _cancellations = <bool Function()>{};
@@ -28,7 +28,7 @@ class SecretRecipient {
     }
     _cancellations.add(handle.cancel);
     try {
-      final result = await handle.completion;
+      final result = await handle.result;
       return _disposed ? null : result.value;
     } finally {
       _cancellations.remove(handle.cancel);

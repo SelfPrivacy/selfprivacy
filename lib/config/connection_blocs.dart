@@ -20,8 +20,6 @@ import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_job_workflow.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
@@ -32,6 +30,8 @@ import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
@@ -257,7 +257,7 @@ JobsCubit createJobsCubit(
             domain: server.domain,
           ),
         );
-      }, origin: origin).completion,
+      }, origin: origin).result,
   removeServerJob: (final origin, final uid) async {
     await connection.run<void>(OperationKind.manageJobs, (final owner) async {
       await owner.jobs.removeJob(uid);
@@ -283,7 +283,7 @@ BackupsBloc createBackupsBloc(
         (final owner) => action(owner.backups),
         origin: origin,
       )
-      .completion,
+      .result,
   currentBucket: (final origin) =>
       connection.isAttached && identical(origin, connection.origin)
       ? resources.backblazeBucket
@@ -412,7 +412,7 @@ VolumesBloc createVolumesBloc(
           );
         },
         origin: origin,
-      ).completion,
+      ).result,
   showMessage: showMessage,
 );
 

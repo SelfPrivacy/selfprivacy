@@ -1,93 +1,15 @@
 import 'dart:async';
 
-enum OperationKind {
-  manageUsers,
-  manageDevices,
-  manageServices,
-  manageBackups,
-  manageVolumes,
-  manageSettings,
-  manageJobs,
-  applyChanges,
-  generateDeviceKey,
-  generateRecoveryKey,
-  generatePasswordResetLink,
-  rotateToken;
+import 'package:selfprivacy/logic/operations/operation.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
 
-  String get translationKey => 'operations.kind.$name';
-}
-
-enum OperationStatus {
-  queued,
-  running,
-  accepted,
-  succeeded,
-  rejected,
-  failed,
-  unknown,
-  cancelled,
-  notSent;
-
-  bool get isPending => this == queued || this == running || this == accepted;
-  String get translationKey => 'operations.status.$name';
-}
-
-enum OperationReason {
-  rotationFailed,
-  connectionReplaced,
-  cancelled,
-  unavailable;
-
-  String get translationKey => 'operations.reason.$name';
-}
-
-class OperationEvent {
-  const OperationEvent(this.at, this.status, {this.reason});
-  final DateTime at;
-  final OperationStatus status;
-  final OperationReason? reason;
-}
-
-class OperationSnapshot {
-  OperationSnapshot({
-    required this.id,
-    required this.serverId,
-    required this.kind,
-    required final Iterable<OperationEvent> events,
-    final Iterable<String> jobIds = const [],
-  }) : events = List.unmodifiable(events),
-       jobIds = Set.unmodifiable(jobIds);
-
-  final int id;
-  final String serverId;
-  final OperationKind kind;
-  final List<OperationEvent> events;
-  final Set<String> jobIds;
-  OperationStatus get status => events.last.status;
-  bool get canCancel => status == OperationStatus.queued;
-}
-
-class OperationReport {
-  OperationReport(this.status, {final Iterable<String> jobIds = const []})
-    : jobIds = Set.unmodifiable(jobIds);
-  final OperationStatus status;
-  final Set<String> jobIds;
-}
-
-class OperationResult<T> {
-  const OperationResult(this.status, {this.value});
-  final OperationStatus status;
-  final T? value;
-}
-
-class OperationNotSent implements Exception {
-  const OperationNotSent();
-}
+export 'package:selfprivacy/logic/operations/operation.dart';
 
 class OperationHandle<T> {
-  OperationHandle._(this.id, this.completion, this.cancel);
+  OperationHandle._(this.id, this.result, this.completion, this.cancel);
   final int id;
-  final Future<OperationResult<T>> completion;
+  final Future<OperationResult<T>> result;
+  final Future<OperationStatus> completion;
   final bool Function() cancel;
 }
 
@@ -108,7 +30,9 @@ class OperationQueue {
   final _records = <int, OperationSnapshot>{};
   final _pending = <int, _PendingOperation>{};
   final _remainingJobs = <int, Set<String>>{};
+  final _jobReports = <int, OperationStatus>{};
   final _failedJobs = <int>{};
+  final _completions = <int, Completer<OperationStatus>>{};
   final _changes = StreamController<List<OperationSnapshot>>.broadcast();
   final _idleWaiters = <Completer<void>>[];
   int _nextId = 0;
@@ -139,10 +63,18 @@ class OperationQueue {
   }) {
     final id = _nextId++;
     final completion = Completer<OperationResult<T>>();
+    final finished = Completer<OperationStatus>();
     if (_disposed) {
       completion.complete(const OperationResult(OperationStatus.notSent));
-      return OperationHandle._(id, completion.future, () => false);
+      finished.complete(OperationStatus.notSent);
+      return OperationHandle._(
+        id,
+        completion.future,
+        finished.future,
+        () => false,
+      );
     }
+    _completions[id] = finished;
     _records[id] = OperationSnapshot(
       id: id,
       serverId: serverId,
@@ -151,41 +83,66 @@ class OperationQueue {
     );
     _pending[id] = _PendingOperation(
       () {
-        unawaited(() async {
-          try {
-            final value = await action();
-            if (completion.isCompleted) {
-              return;
+        final execution = OperationExecution(
+          onStepsChanged: (final steps) => _updateSteps(id, steps),
+        );
+        unawaited(
+          runZoned(() async {
+            try {
+              final value = await action();
+              if (completion.isCompleted) {
+                return;
+              }
+              final report =
+                  describe?.call(value) ??
+                  OperationReport(OperationStatus.succeeded);
+              if (report.jobIds.isNotEmpty) {
+                _remainingJobs[id] = {...report.jobIds};
+                _jobReports[id] = report.status;
+              }
+              _record(
+                id,
+                report.jobIds.isNotEmpty
+                    ? OperationStatus.accepted
+                    : report.status,
+                jobIds: report.jobIds,
+              );
+              completion.complete(OperationResult(report.status, value: value));
+            } on OperationNotSent {
+              if (completion.isCompleted) {
+                return;
+              }
+              _record(
+                id,
+                OperationStatus.notSent,
+                reason: OperationReason.unavailable,
+              );
+              completion.complete(
+                const OperationResult(OperationStatus.notSent),
+              );
+            } catch (error, stackTrace) {
+              if (completion.isCompleted) {
+                return;
+              }
+              final jobs = execution.report.jobIds;
+              if (jobs.isNotEmpty) {
+                _remainingJobs[id] = {...jobs};
+                _jobReports[id] = OperationStatus.unknown;
+              }
+              _record(
+                id,
+                jobs.isEmpty
+                    ? OperationStatus.unknown
+                    : OperationStatus.accepted,
+                jobIds: jobs,
+              );
+              completion.completeError(error, stackTrace);
+            } finally {
+              _pending.remove(id);
+              _settleIdle();
             }
-            final report =
-                describe?.call(value) ??
-                OperationReport(OperationStatus.succeeded);
-            _record(id, report.status, jobIds: report.jobIds);
-            if (report.status == OperationStatus.accepted) {
-              _remainingJobs[id] = {...report.jobIds};
-            }
-            completion.complete(OperationResult(report.status, value: value));
-          } on OperationNotSent {
-            if (completion.isCompleted) {
-              return;
-            }
-            _record(
-              id,
-              OperationStatus.notSent,
-              reason: OperationReason.unavailable,
-            );
-            completion.complete(const OperationResult(OperationStatus.notSent));
-          } catch (error, stackTrace) {
-            if (completion.isCompleted) {
-              return;
-            }
-            _record(id, OperationStatus.unknown);
-            completion.completeError(error, stackTrace);
-          } finally {
-            _pending.remove(id);
-            _settleIdle();
-          }
-        }());
+          }, zoneValues: {OperationExecution.zoneKey: execution}),
+        );
       },
       (final status) {
         if (!completion.isCompleted) {
@@ -195,7 +152,12 @@ class OperationQueue {
     );
     _publish();
     _drain();
-    return OperationHandle._(id, completion.future, () => cancel(id));
+    return OperationHandle._(
+      id,
+      completion.future,
+      finished.future,
+      () => cancel(id),
+    );
   }
 
   bool cancel(final int id) {
@@ -253,14 +215,28 @@ class OperationQueue {
       if (!succeeded) {
         _failedJobs.add(entry.key);
       }
+      _updateSteps(
+        entry.key,
+        _records[entry.key]!.steps.map(
+          (final step) => step.jobId == uid
+              ? step.withStatus(
+                  succeeded
+                      ? OperationStatus.succeeded
+                      : OperationStatus.failed,
+                )
+              : step,
+        ),
+      );
       if (entry.value.isEmpty) {
         _remainingJobs.remove(entry.key);
-        _record(
-          entry.key,
-          _failedJobs.remove(entry.key)
-              ? OperationStatus.failed
-              : OperationStatus.succeeded,
-        );
+        final reported = _jobReports.remove(entry.key)!;
+        final failed = _failedJobs.remove(entry.key);
+        _record(entry.key, switch (reported) {
+          OperationStatus.unknown => OperationStatus.unknown,
+          _ when failed => OperationStatus.failed,
+          OperationStatus.accepted => OperationStatus.succeeded,
+          _ => reported,
+        });
       }
     }
   }
@@ -301,7 +277,11 @@ class OperationQueue {
         OperationEvent(_now(), status, reason: reason),
       ],
       jobIds: jobIds ?? previous.jobIds,
+      steps: previous.steps,
     );
+    if (!status.isPending) {
+      _completions.remove(id)?.complete(status);
+    }
     final completed =
         _records.values.where((final item) => !item.status.isPending).toList()
           ..sort(
@@ -321,6 +301,22 @@ class OperationQueue {
     if (!_disposed) {
       _changes.add(history);
     }
+  }
+
+  void _updateSteps(final int id, final Iterable<OperationStep> steps) {
+    final previous = _records[id];
+    if (_disposed || previous == null || !previous.status.isPending) {
+      return;
+    }
+    _records[id] = OperationSnapshot(
+      id: id,
+      serverId: serverId,
+      kind: previous.kind,
+      events: previous.events,
+      jobIds: previous.jobIds,
+      steps: steps,
+    );
+    _publish();
   }
 
   void _settleIdle() {
@@ -354,6 +350,7 @@ class OperationQueue {
       );
     }
     _remainingJobs.clear();
+    _jobReports.clear();
     _failedJobs.clear();
     _pending.clear();
     _settleIdle();

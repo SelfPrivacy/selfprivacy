@@ -8,8 +8,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';

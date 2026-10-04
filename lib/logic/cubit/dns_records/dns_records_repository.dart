@@ -1,9 +1,9 @@
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 class DnsRecordsRepository {

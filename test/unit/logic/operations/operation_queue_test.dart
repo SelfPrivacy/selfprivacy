@@ -1,12 +1,87 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
+
+import '../../../helpers/fixtures/backup_fixtures.dart';
 
 void main() {
   late OperationQueue queue;
   setUp(() => queue = OperationQueue(serverId: 'server'));
   tearDown(() => queue.dispose());
+
+  test('completion waits for server work without holding admission', () async {
+    final operation = queue.submit(
+      OperationKind.manageBackups,
+      () async => 'job-1',
+      describe: (final uid) =>
+          OperationReport(OperationStatus.accepted, jobIds: {uid}),
+    );
+    var completed = false;
+    unawaited(operation.completion.then((_) => completed = true));
+    await pumpEventQueue();
+
+    expect(completed, isFalse);
+    expect((await operation.result).value, 'job-1');
+    expect(queue.isIdle, isTrue);
+    queue.observeJob('job-1', succeeded: true);
+    expect(await operation.completion, OperationStatus.succeeded);
+    expect(completed, isTrue);
+  });
+
+  test('unknown dispatch does not abandon already accepted jobs', () async {
+    final operation = queue.submit(
+      OperationKind.manageBackups,
+      () async {},
+      describe: (_) =>
+          OperationReport(OperationStatus.unknown, jobIds: {'accepted-backup'}),
+    );
+    expect((await operation.result).status, OperationStatus.unknown);
+    expect(queue.pending.single.jobIds, {'accepted-backup'});
+    queue.observeJob('accepted-backup', succeeded: true);
+    expect(await operation.completion, OperationStatus.unknown);
+  });
+
+  test('detach settles completion of an accepted operation', () async {
+    final operation = queue.submit(
+      OperationKind.manageBackups,
+      () async {},
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+    );
+    await operation.result;
+    queue.detach();
+    expect(await operation.completion, OperationStatus.unknown);
+    queue.observeJob('backup', succeeded: true);
+    expect(queue.history.single.status, OperationStatus.unknown);
+  });
+
+  test('a later exception does not abandon an accepted job', () async {
+    final operation = queue.submit(OperationKind.manageBackups, () {
+      final result = ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(aBackupJob(uid: 'backup')),
+      );
+      OperationExecution.current!
+        ..record(result)
+        ..recordStep(
+          OperationStep.fromMutation(
+            id: 'backup',
+            titleKey: 'operations.kind.manageBackups',
+            result: result,
+          ),
+        );
+      return Future<void>.error(StateError('secret-sentinel'));
+    });
+    await expectLater(operation.result, throwsStateError);
+    expect(queue.pending.single.jobIds, {'backup'});
+    queue.observeJob('backup', succeeded: false);
+    expect(await operation.completion, OperationStatus.unknown);
+    expect(queue.history.single.steps.single.status, OperationStatus.failed);
+    expect(queue.history.single.steps.single.messageKey, isNot('basis.done'));
+  });
 
   test(
     'paused admission drains existing work without sending new actions',
@@ -28,10 +103,10 @@ void main() {
       ]);
       active.complete(1);
       await queue.whenIdle;
-      expect((await first.completion).value, 1);
+      expect((await first.result).value, 1);
       expect(sent, isFalse);
       queue.resume();
-      expect((await second.completion).value, 2);
+      expect((await second.result).value, 2);
       expect(sent, isTrue);
     },
   );
@@ -42,7 +117,8 @@ void main() {
     final handle = queue.submit(OperationKind.manageUsers, () async => ++calls);
     expect(handle.cancel(), isTrue);
     queue.resume();
-    expect((await handle.completion).status, OperationStatus.cancelled);
+    expect((await handle.result).status, OperationStatus.cancelled);
+    expect(await handle.completion, OperationStatus.cancelled);
     expect(calls, 0);
     final active = Completer<void>();
     final running = queue.submit(
@@ -51,7 +127,7 @@ void main() {
     );
     expect(running.cancel(), isFalse);
     active.complete();
-    await running.completion;
+    await running.result;
   });
 
   test('failed barrier settles queued work as not sent', () async {
@@ -61,7 +137,8 @@ void main() {
     queue
       ..rejectWaiting(OperationReason.rotationFailed)
       ..resume();
-    expect((await handle.completion).status, OperationStatus.notSent);
+    expect((await handle.result).status, OperationStatus.notSent);
+    expect(await handle.completion, OperationStatus.notSent);
     expect(
       queue.history.single.events.last.reason,
       OperationReason.rotationFailed,
@@ -80,7 +157,7 @@ void main() {
             OperationKind.generateDeviceKey,
             () async => 'SECRET_SENTINEL',
           )
-          .completion;
+          .result;
       expect(secret.value, 'SECRET_SENTINEL');
       final error = StateError('ERROR_SECRET');
       final stack = StackTrace.current;
@@ -89,7 +166,7 @@ void main() {
             OperationKind.manageUsers,
             () => Future<void>.error(error, stack),
           )
-          .completion;
+          .result;
       await expectLater(failed, throwsA(same(error)));
       await pumpEventQueue();
       expect(queue.history.last.status, OperationStatus.unknown);
@@ -131,14 +208,12 @@ void main() {
       () => active.future,
     );
     for (var i = 0; i < 102; i++) {
-      await queue
-          .submit(OperationKind.manageServices, () async => i)
-          .completion;
+      await queue.submit(OperationKind.manageServices, () async => i).result;
     }
     expect(queue.history.length, 101);
     expect(queue.history.any((final item) => item.id == running.id), isTrue);
     active.complete();
-    await running.completion;
+    await running.result;
     expect(queue.history.length, 100);
   });
 
@@ -152,7 +227,7 @@ void main() {
             describe: (final uid) =>
                 OperationReport(OperationStatus.accepted, jobIds: {uid}),
           )
-          .completion;
+          .result;
       expect(queue.pending.single.status, OperationStatus.accepted);
       queue.observeJob('job-1', succeeded: false);
       expect(queue.history.single.status, OperationStatus.failed);
@@ -168,8 +243,8 @@ void main() {
     queue.pause();
     final waiting = queue.submit(OperationKind.manageUsers, () async => 2);
     queue.dispose();
-    expect((await waiting.completion).status, OperationStatus.notSent);
-    expect((await running.completion).status, OperationStatus.unknown);
+    expect((await waiting.result).status, OperationStatus.notSent);
+    expect((await running.result).status, OperationStatus.unknown);
     final before = queue.history.singleWhere(
       (final item) => item.id == running.id,
     );
@@ -198,7 +273,7 @@ void main() {
               jobIds: {'first', 'second'},
             ),
           )
-          .completion;
+          .result;
       queue.observeJob('first', succeeded: false);
       expect(queue.pending.single.status, OperationStatus.accepted);
       queue.observeJob('second', succeeded: true);

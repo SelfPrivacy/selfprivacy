@@ -5,12 +5,12 @@ import 'package:selfprivacy/logic/connection/repositories/services_repository.da
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/operations/operation_execution.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 enum DnsUpdateOutcome { unchanged, updated, unavailable, failed }

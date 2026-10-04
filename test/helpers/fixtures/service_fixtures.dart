@@ -5,6 +5,7 @@ Service aService({
   final String id = 'gitea',
   final String displayName = 'Gitea',
   final ServiceStatus status = ServiceStatus.active,
+  final List<ServiceConfigItem> configuration = const [],
 }) => Service(
   id: id,
   displayName: displayName,
@@ -25,5 +26,5 @@ Service aService({
   license: const [],
   supportLevel: SupportLevel.unknown,
   dnsRecords: const [],
-  configuration: const [],
+  configuration: configuration,
 );

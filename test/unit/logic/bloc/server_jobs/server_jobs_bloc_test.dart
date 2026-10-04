@@ -5,8 +5,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
 
@@ -122,7 +122,7 @@ void main() {
   });
 
   test(
-    'migration cannot use a replacement not yet presented to the user',
+    'migration choices cannot cross a fully presented replacement',
     () async {
       final snapshot = JobsSnapshot(
         value: const CachedValue(data: []),
@@ -133,7 +133,10 @@ void main() {
       source.add(
         ConnectionObservation.attached(ServerStateOrigin('server'), snapshot),
       );
-      await bloc.migrateToBinds({'gitea': 'sdb'});
+      await pumpEventQueue();
+      await bloc.migrateToBinds(continuity: origin.continuity, {
+        'gitea': 'sdb',
+      });
       expect(migrations, 0);
     },
   );

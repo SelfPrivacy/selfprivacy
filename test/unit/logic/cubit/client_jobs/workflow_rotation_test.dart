@@ -100,7 +100,7 @@ void main() {
                 ),
               ),
         );
-        hub.active!.setVersion(Version(3, 6, 0));
+        hub.active!.cache.setVersion(Version(3, 6, 0));
         final cubit = createJobsCubit(
           hub,
           resources: resources,

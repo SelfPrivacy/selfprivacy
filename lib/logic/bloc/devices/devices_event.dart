@@ -13,20 +13,11 @@ class _DevicesObserved extends DevicesEvent {
   List<Object> get props => [observation];
 }
 
-class _RevokeDevice extends DevicesEvent {
-  const _RevokeDevice(this.device, this.origin);
+class DeleteDevice extends DevicesEvent {
+  const DeleteDevice(this.device, {required this.origin});
   final ApiToken device;
   final ServerStateOrigin? origin;
 
   @override
   List<Object?> get props => [device, origin];
-}
-
-class DeleteDevice extends DevicesEvent {
-  const DeleteDevice(this.device);
-
-  final ApiToken device;
-
-  @override
-  List<Object> get props => [device];
 }

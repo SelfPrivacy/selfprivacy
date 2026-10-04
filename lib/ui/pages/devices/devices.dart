@@ -107,7 +107,9 @@ class _DevicesInfo extends StatelessWidget {
           device: device,
           pending: devicesStatus.pendingDeviceName == device.name,
           enabled: devicesStatus.pendingDeviceName == null,
-          onRevoke: () => context.read<DevicesBloc>().add(DeleteDevice(device)),
+          onRevoke: () => context.read<DevicesBloc>().add(
+            DeleteDevice(device, origin: devicesStatus.origin),
+          ),
         ),
       ),
     ],

@@ -41,7 +41,7 @@ void main() {
       resourcesModel: resources,
       createApi: (_, _, _) => api,
     );
-    hub.active!.setVersion(Version(3, 6, 0));
+    hub.active!.cache.setVersion(Version(3, 6, 0));
   });
   tearDown(() async {
     hub.dispose();
@@ -77,7 +77,7 @@ void main() {
         sent = true;
         expect(connection, isNot(same(old)));
         return 2;
-      });
+      }, origin: old.origin);
       expect(hub.rotation.status, RotationStatus.waiting);
       expect(sent, isFalse);
       active.complete();
@@ -152,7 +152,10 @@ void main() {
         await local.run(OperationKind.manageUsers, (final owner) async {
           expect(owner.origin.continuity, isNot(same(old.origin.continuity)));
         });
-        expect(old.stores.every((final store) => store.isDisposed), isTrue);
+        expect(
+          old.cache.stores.every((final store) => store.isDisposed),
+          isTrue,
+        );
         expect(dispatch.last, returnsNormally);
       },
     );
@@ -163,7 +166,7 @@ void main() {
     hub.clear();
     await resources.updateServerByUuid(resources.servers.single);
     expect(hub.active, isNull);
-    expect(old.stores.every((final store) => store.isDisposed), isTrue);
+    expect(old.cache.stores.every((final store) => store.isDisposed), isTrue);
     hub.resume();
     expect(hub.active!.origin.continuity, isNot(same(old.origin.continuity)));
     hub
@@ -527,7 +530,7 @@ void main() {
           api.refreshDeviceApiToken,
         ).thenAnswer((_) async => confirmed('replacement'));
         final connection = realHub(resourceOverride: resources);
-        connection.active!.setVersion(Version(3, 9, 0));
+        connection.active!.cache.setVersion(Version(3, 9, 0));
         final result = await connection.rotateToken();
         expect(result, isNot(RotationOutcome.succeeded));
 
@@ -580,7 +583,7 @@ void main() {
       selectServer: () => selected,
     );
     addTearDown(connection.dispose);
-    connection.active!.setVersion(Version(3, 9, 0));
+    connection.active!.cache.setVersion(Version(3, 9, 0));
     final rotation = connection.rotateToken();
     selected = null;
     pending.complete(confirmed('replacement'));

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
@@ -15,7 +15,6 @@ import 'package:selfprivacy/logic/connection/repositories/users_repository.dart'
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/connection/sync/sync_scheduler.dart';
-import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 
 /// Owns domain stores and coordinates commands for one server connection.
 class ServerConnection {
@@ -34,7 +33,7 @@ class ServerConnection {
     final servicesStore = cache.services;
     final backupsStore = cache.backups;
     final configStore = cache.backupConfig;
-    volumesStore = cache.volumes;
+    final volumesStore = cache.volumes;
     commands = ServerCommandCoordinator(
       api: api,
       origin: origin,
@@ -113,7 +112,6 @@ class ServerConnection {
   late final ServicesRepository services;
   late final BackupsRepository backups;
   late final VolumesRepository volumes;
-  late final DomainStore<List<ServerDiskVolume>> volumesStore;
   final _changes = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription<Object?>>[];
   bool _disposed = false;
@@ -129,7 +127,6 @@ class ServerConnection {
   }
 
   Stream<void> get changes => _changes.stream;
-  Iterable<DomainStore<Object>> get stores => List.unmodifiable(cache.stores);
   bool get isAttached => !_disposed && identical(_currentOrigin(), origin);
 
   DomainReader<T> _reader<T extends Object>(final DomainStore<T> store) {
@@ -139,13 +136,6 @@ class ServerConnection {
       apiVersion: cache.apiVersion,
       dispatcher: scheduler,
     );
-  }
-
-  void setVersion(final Version version) {
-    if (!isAttached) {
-      return;
-    }
-    cache.setVersion(version);
   }
 
   Future<RefreshResult> refresh<T extends Object>(

@@ -1,89 +1,86 @@
 part of 'backups_bloc.dart';
 
 sealed class BackupsEvent extends Equatable {
-  const BackupsEvent();
+  const BackupsEvent({this.origin});
+  final ServerStateOrigin? origin;
 }
 
 class _BackupsObserved extends BackupsEvent {
   const _BackupsObserved(this.observation);
   final ConnectionObservation<BackupsSnapshot> observation;
   @override
-  List<Object?> get props => [observation];
-}
-
-class _BackupsAction<T extends BackupsEvent> extends BackupsEvent {
-  const _BackupsAction(this.event, this.origin);
-  final T event;
-  final ServerStateOrigin? origin;
-  @override
-  List<Object?> get props => [event, origin];
+  List<Object?> get props => [origin, observation];
 }
 
 class InitializeBackupsRepository extends BackupsEvent {
-  const InitializeBackupsRepository(this.credential);
+  const InitializeBackupsRepository(this.credential, {required super.origin});
 
   final BackupsCredential credential;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [origin];
 }
 
 class ForceSnapshotListUpdate extends BackupsEvent {
-  const ForceSnapshotListUpdate();
+  const ForceSnapshotListUpdate({required super.origin});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [origin];
 }
 
 class CreateBackups extends BackupsEvent {
-  const CreateBackups(this.services);
+  const CreateBackups(this.services, {required super.origin});
 
   final List<Service> services;
 
   @override
-  List<Object?> get props => [services];
+  List<Object?> get props => [origin, services];
 }
 
 class RestoreBackup extends BackupsEvent {
-  const RestoreBackup(this.backupId, this.restoreStrategy);
+  const RestoreBackup(
+    this.backupId,
+    this.restoreStrategy, {
+    required super.origin,
+  });
 
   final String backupId;
   final BackupRestoreStrategy restoreStrategy;
 
   @override
-  List<Object?> get props => [backupId, restoreStrategy];
+  List<Object?> get props => [origin, backupId, restoreStrategy];
 }
 
 class SetAutobackupPeriod extends BackupsEvent {
-  const SetAutobackupPeriod(this.period);
+  const SetAutobackupPeriod(this.period, {required super.origin});
 
   final Duration? period;
 
   @override
-  List<Object?> get props => [period];
+  List<Object?> get props => [origin, period];
 }
 
 class SetAutobackupQuotas extends BackupsEvent {
-  const SetAutobackupQuotas(this.quotas);
+  const SetAutobackupQuotas(this.quotas, {required super.origin});
 
   final AutobackupQuotas quotas;
 
   @override
-  List<Object?> get props => [quotas];
+  List<Object?> get props => [origin, quotas];
 }
 
 class ForgetSnapshot extends BackupsEvent {
-  const ForgetSnapshot(this.backupId);
+  const ForgetSnapshot(this.backupId, {required super.origin});
 
   final String backupId;
 
   @override
-  List<Object?> get props => [backupId];
+  List<Object?> get props => [origin, backupId];
 }
 
 class RemoveBackupsRepository extends BackupsEvent {
-  const RemoveBackupsRepository();
+  const RemoveBackupsRepository({required super.origin});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [origin];
 }

@@ -22,12 +22,6 @@ class VolumesRepository {
   Future<RefreshResult> refresh({final bool force = false}) =>
       reader.refresh(force: force);
 
-  void invalidate() {
-    if (commands.isAttached) {
-      store.invalidate();
-    }
-  }
-
   Future<ServerMutationResult<void>> resize(final String name) => commands
       .mutate(domains: [store], send: (final api) => api.resizeVolume(name));
 

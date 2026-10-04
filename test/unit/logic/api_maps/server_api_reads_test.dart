@@ -371,8 +371,7 @@ void main() {
     await settings.refresh();
     final previous = settings.value.data;
     fail = true;
-    settings.invalidate();
-    await settings.refresh();
+    await settings.refresh(force: true);
     expect(settings.value.data, same(previous));
     expect(settings.value.data!.timezone, 'Europe/Moscow');
     expect(settings.value.lastError, isA<OperationException>());

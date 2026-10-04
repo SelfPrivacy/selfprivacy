@@ -24,12 +24,6 @@ class SettingsRepository {
   Future<RefreshResult> refresh({final bool force = false}) =>
       reader.refresh(force: force);
 
-  void invalidate() {
-    if (commands.isAttached) {
-      store.invalidate();
-    }
-  }
-
   Future<ServerMutationResult<AutoUpgradeSettings>> setAutoUpgradeSettings({
     required final bool enable,
     required final bool allowReboot,

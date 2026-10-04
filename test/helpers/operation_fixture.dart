@@ -17,7 +17,7 @@ ServerConnectionHub fixtureHub(final ServerApi api) {
     resourcesModel: resources,
     createApi: (_, _, _) => api,
   );
-  hub.active!.setVersion(Version(3, 6, 0));
+  hub.active!.cache.setVersion(Version(3, 6, 0));
   addTearDown(hub.dispose);
   return hub;
 }

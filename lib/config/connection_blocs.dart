@@ -47,15 +47,12 @@ UsersBloc createUsersBloc(final ServerConnectionHub hub) => UsersBloc(
   refresh: () async {
     await hub.active?.users.refresh(force: true);
   },
-  save: (final origin, final user, {required final create}) =>
-      hub.run(OperationKind.manageUsers, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return create
-            ? owner.users.createUser(user)
-            : owner.users.updateUser(user);
-      }),
+  save: (final origin, final user, {required final create}) => hub.run(
+    OperationKind.manageUsers,
+    (final owner) =>
+        create ? owner.users.createUser(user) : owner.users.updateUser(user),
+    origin: origin,
+  ),
 );
 
 DevicesBloc createDevicesBloc(
@@ -73,25 +70,20 @@ DevicesBloc createDevicesBloc(
   revoke: (final origin, final name) => hub.run<CommandCompletion<void>?>(
     OperationKind.manageDevices,
     (final owner) async {
-      if (!identical(origin.continuity, owner.origin.continuity)) {
-        throw const OperationNotSent();
-      }
       final completion = await owner.devices.revoke(name);
       if (completion?.result case final result?) {
         OperationExecution.current?.record(result);
       }
       return completion;
     },
+    origin: origin,
   ),
   generateKey: (final origin, final recipient) => recipient.receive(
     hub.submit(
       OperationKind.generateDeviceKey,
-      (final owner) => recipient.protect(() {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return owner.devices.createAuthorizationKey();
-      }),
+      (final owner) =>
+          recipient.protect(() => owner.devices.createAuthorizationKey()),
+      origin: origin,
     ),
   ),
   showMessage: showMessage,
@@ -129,15 +121,13 @@ RecoveryKeyBloc createRecoveryKeyBloc(final ServerConnectionHub hub) =>
           ) => recipient.receive(
             hub.submit(
               OperationKind.generateRecoveryKey,
-              (final owner) => recipient.protect(() {
-                if (!identical(origin.continuity, owner.origin.continuity)) {
-                  throw const OperationNotSent();
-                }
-                return owner.recoveryKey.generate(
+              (final owner) => recipient.protect(
+                () => owner.recoveryKey.generate(
                   expirationDate: expirationDate,
                   numberOfUses: numberOfUses,
-                );
-              }),
+                ),
+              ),
+              origin: origin,
             ),
           ),
     );
@@ -158,11 +148,12 @@ ResetPasswordBloc createResetPasswordBloc(
       hub.submit(
         OperationKind.generatePasswordResetLink,
         (final owner) => recipient.protect(() {
-          if (!identical(origin?.continuity, owner.origin.continuity)) {
+          if (origin == null) {
             throw const OperationNotSent();
           }
           return owner.users.generatePasswordResetLink(user);
         }),
+        origin: origin,
       ),
     ),
   );
@@ -250,11 +241,8 @@ JobsCubit createJobsCubit(
     read: (final owner) => owner.settings.value,
     changes: (final owner) => owner.settings.changes,
   ),
-  run: (final origin, final kind, final action) =>
+  admitWorkflow: (final origin, final kind, final action) =>
       hub.submit<void>(kind, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
         final server = resources.servers
             .where((final server) => server.uuid == owner.origin.serverId)
             .firstOrNull;
@@ -273,14 +261,11 @@ JobsCubit createJobsCubit(
             domain: server.domain,
           ),
         );
-      }).completion,
+      }, origin: origin).completion,
   removeServerJob: (final origin, final uid) async {
     await hub.run<void>(OperationKind.manageJobs, (final owner) async {
-      if (!identical(origin.continuity, owner.origin.continuity)) {
-        throw const OperationNotSent();
-      }
       await owner.jobs.removeJob(uid);
-    });
+    }, origin: origin);
   },
   showMessage: showMessage,
 );
@@ -296,13 +281,13 @@ BackupsBloc createBackupsBloc(
     read: (final owner) => owner.backups.snapshot,
     changes: (final owner) => owner.backups.changes,
   ),
-  run: (final origin, final action) =>
-      hub.submit<void>(OperationKind.manageBackups, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return action(owner.backups);
-      }).completion,
+  admitWorkflow: (final origin, final action) => hub
+      .submit<void>(
+        OperationKind.manageBackups,
+        (final owner) => action(owner.backups),
+        origin: origin,
+      )
+      .completion,
   currentBucket: (final origin) =>
       identical(origin, hub.active?.origin) ? resources.backblazeBucket : null,
   saveBucket: (final origin, final bucket) async {
@@ -409,9 +394,6 @@ VolumesBloc createVolumesBloc(
       hub.submit<ServerMutationResult<void>?>(OperationKind.manageVolumes, (
         final owner,
       ) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
         final provider = serverProvider();
         final providerVolume = volume.providerVolume;
         if (provider == null ||
@@ -428,7 +410,7 @@ VolumesBloc createVolumesBloc(
           size: size,
           onProgress: onProgress,
         );
-      }).completion,
+      }, origin: origin).completion,
   showMessage: showMessage,
 );
 
@@ -467,15 +449,13 @@ DnsRecordsCubit createDnsRecordsCubit(
     repair: (final origin) => hub.run<GenericResult<List<DesiredDnsRecord>>?>(
       OperationKind.applyChanges,
       (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
         final bound = repository(owner, admitted: true);
         if (bound == null) {
           throw const OperationNotSent();
         }
         return bound.repair();
       },
+      origin: origin,
     ),
   );
 }
@@ -492,20 +472,16 @@ ServicesBloc createServicesBloc(
   refresh: () async {
     await hub.active?.services.refresh(force: true);
   },
-  restart: (final origin, final id) =>
-      hub.run(OperationKind.manageServices, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return owner.services.restart(id);
-      }),
-  move: (final origin, final id, final destination) =>
-      hub.run(OperationKind.manageServices, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return owner.services.move(id, destination);
-      }),
+  restart: (final origin, final id) => hub.run(
+    OperationKind.manageServices,
+    (final owner) => owner.services.restart(id),
+    origin: origin,
+  ),
+  move: (final origin, final id, final destination) => hub.run(
+    OperationKind.manageServices,
+    (final owner) => owner.services.move(id, destination),
+    origin: origin,
+  ),
   showMessage: showMessage,
 );
 
@@ -519,26 +495,20 @@ ServerJobsBloc createServerJobsBloc(
     read: (final connection) => connection.jobs.snapshot,
     changes: (final connection) => connection.jobs.changes,
   ),
-  removeJob: (final origin, final uid) =>
-      hub.run(OperationKind.manageJobs, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return owner.jobs.removeJob(uid);
-      }),
-  removeFinished: (final origin) =>
-      hub.run(OperationKind.manageJobs, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return owner.jobs.removeAllFinished();
-      }),
-  migrate: (final origin, final destinations) =>
-      hub.run(OperationKind.manageJobs, (final owner) {
-        if (!identical(origin.continuity, owner.origin.continuity)) {
-          throw const OperationNotSent();
-        }
-        return owner.jobs.migrateToBinds(destinations);
-      }),
+  removeJob: (final origin, final uid) => hub.run(
+    OperationKind.manageJobs,
+    (final owner) => owner.jobs.removeJob(uid),
+    origin: origin,
+  ),
+  removeFinished: (final origin) => hub.run(
+    OperationKind.manageJobs,
+    (final owner) => owner.jobs.removeAllFinished(),
+    origin: origin,
+  ),
+  migrate: (final origin, final destinations) => hub.run(
+    OperationKind.manageJobs,
+    (final owner) => owner.jobs.migrateToBinds(destinations),
+    origin: origin,
+  ),
   showMessage: showMessage,
 );

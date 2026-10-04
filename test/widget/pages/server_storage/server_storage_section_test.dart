@@ -47,6 +47,7 @@ void main() {
     await pumpForTest(
       tester,
       ServerStorageSection(
+        origin: null,
         volume: volume,
         diskStatus: DiskStatus(),
         services: [

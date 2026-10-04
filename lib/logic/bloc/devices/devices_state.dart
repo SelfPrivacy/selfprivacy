@@ -3,12 +3,14 @@ part of 'devices_bloc.dart';
 sealed class DevicesState extends Equatable {
   DevicesState({
     required final List<ApiToken> devices,
+    this.origin,
     this.hasError = false,
     this.isRefreshing = false,
     this.pendingDeviceName,
   }) : devices = List.unmodifiable(devices);
 
   final List<ApiToken> devices;
+  final ServerStateOrigin? origin;
   final bool hasError;
   final bool isRefreshing;
   final String? pendingDeviceName;
@@ -22,6 +24,7 @@ sealed class DevicesState extends Equatable {
 
   @override
   List<Object?> get props => [
+    origin,
     devices,
     hasError,
     isRefreshing,
@@ -34,7 +37,12 @@ class DevicesInitial extends DevicesState {
 }
 
 class DevicesLoaded extends DevicesState {
-  DevicesLoaded({required super.devices, super.hasError, super.isRefreshing});
+  DevicesLoaded({
+    required super.devices,
+    super.origin,
+    super.hasError,
+    super.isRefreshing,
+  });
 }
 
 class DevicesError extends DevicesState {
@@ -45,6 +53,7 @@ class DevicesDeleting extends DevicesState {
   DevicesDeleting({
     required super.devices,
     required super.pendingDeviceName,
+    super.origin,
     super.hasError,
   });
 }

@@ -8,9 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
@@ -157,9 +157,12 @@ class ServerJobsBloc extends Bloc<ServerJobsEvent, ServerJobsState> {
     }
   }
 
-  Future<void> migrateToBinds(final Map<String, String> serviceToDisk) async {
+  Future<void> migrateToBinds(
+    final Map<String, String> serviceToDisk, {
+    required final ConnectionContinuity? continuity,
+  }) async {
     final origin = _presentedOrigin;
-    if (!_isCurrent(origin)) {
+    if (!_isCurrent(origin) || !identical(continuity, origin?.continuity)) {
       return;
     }
     final result = await _migrate(origin!, Map.unmodifiable(serviceToDisk));

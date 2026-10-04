@@ -172,6 +172,7 @@ class _ServicePageState extends State<ServicePage> {
               // Open page ServicesMigrationPage
               onTap: () => context.pushRoute(
                 ServicesMigrationRoute(
+                  continuity: context.read<ServicesBloc>().state.continuity,
                   services: [service],
                   diskStatus: context.read<VolumesBloc>().state.diskStatus,
                   isMigration: false,

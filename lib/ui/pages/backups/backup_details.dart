@@ -103,6 +103,7 @@ class BackupDetailsPage extends StatelessWidget {
                       }
                       context.read<BackupsBloc>().add(
                         InitializeBackupsRepository(
+                          origin: backupsState.origin,
                           tokensState.backupsCredentials.first.data,
                         ),
                       );
@@ -140,6 +141,7 @@ class BackupDetailsPage extends StatelessWidget {
                           initialChildSize: 0.6,
                           builder: (final context, final scrollController) =>
                               CreateBackupsModal(
+                                origin: backupsState.origin,
                                 services: services,
                                 scrollController: scrollController,
                               ),
@@ -284,6 +286,7 @@ class BackupDetailsPage extends StatelessWidget {
                       .take(15)
                       .map(
                         (final Backup backup) => SnapshotItem(
+                          origin: backupsState.origin,
                           backup: backup,
                           preventActions: preventActions,
                           overrideColor: overrideColor,
@@ -320,7 +323,7 @@ class BackupDetailsPage extends StatelessWidget {
                 onTap: preventActions
                     ? null
                     : () => context.read<BackupsBloc>().add(
-                        const ForceSnapshotListUpdate(),
+                        ForceSnapshotListUpdate(origin: backupsState.origin),
                       ),
               ),
               ListTile(
@@ -353,7 +356,9 @@ class BackupDetailsPage extends StatelessWidget {
                               .tr(),
                           actionButtonOnPressed: () {
                             context.read<BackupsBloc>().add(
-                              const RemoveBackupsRepository(),
+                              RemoveBackupsRepository(
+                                origin: backupsState.origin,
+                              ),
                             );
                           },
                         );

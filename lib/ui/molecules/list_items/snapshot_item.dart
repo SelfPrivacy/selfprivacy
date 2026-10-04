@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
@@ -12,12 +13,14 @@ import 'package:selfprivacy/ui/organisms/modals/backups/snapshot_modal.dart';
 class SnapshotItem extends StatelessWidget {
   const SnapshotItem({
     required this.backup,
+    required this.origin,
     required this.preventActions,
     this.overrideColor,
     super.key,
   });
 
   final Backup backup;
+  final ServerStateOrigin? origin;
   final bool preventActions;
   final Color? overrideColor;
 
@@ -43,6 +46,7 @@ class SnapshotItem extends StatelessWidget {
                       initialChildSize: 0.7,
                       builder: (final context, final scrollController) =>
                           SnapshotModal(
+                            origin: origin,
                             snapshot: backup,
                             scrollController: scrollController,
                           ),
@@ -56,8 +60,9 @@ class SnapshotItem extends StatelessWidget {
                 alertTitle: 'backup.forget_snapshot'.tr(),
                 description: 'backup.forget_snapshot_alert'.tr(),
                 actionButtonTitle: 'backup.forget_snapshot'.tr(),
-                actionButtonOnPressed: () =>
-                    context.read<BackupsBloc>().add(ForgetSnapshot(backup.id)),
+                actionButtonOnPressed: () => context.read<BackupsBloc>().add(
+                  ForgetSnapshot(backup.id, origin: origin),
+                ),
               );
             },
       title: Text(

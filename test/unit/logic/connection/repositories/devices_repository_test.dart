@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -196,7 +197,7 @@ void main() {
   });
 
   test('unsupported versions do not fetch or revoke', () async {
-    connection.setVersion(Version(2, 2, 0));
+    connection.cache.setVersion(Version(2, 2, 0));
     expect(await repository.refresh(force: true), RefreshResult.unsupported);
     expect(await repository.revoke(tokens.last.name), isNull);
     verifyNever(api.getApiTokens);
@@ -251,16 +252,21 @@ void main() {
     },
   );
 
-  test('detachment preserves remote result without applying it', () async {
-    await repository.refresh();
-    final name = tokens.firstWhere((final token) => !token.isCaller).name;
-    final pending = Completer<ServerMutationResult<void>>();
-    when(() => api.deleteApiToken(name)).thenAnswer((_) => pending.future);
-    final command = repository.revoke(name);
-    origin = ServerStateOrigin('replacement');
-    pending.complete(result(ServerMutationOutcome.confirmed));
-    expect((await command)!.application, CommandApplication.detached);
-    expect(repository.value.data, tokens);
-    expect(await repository.refresh(), RefreshResult.disposed);
-  });
+  test(
+    'detachment preserves remote confirmation without applying it',
+    () async {
+      await repository.refresh();
+      final name = tokens.firstWhere((final token) => !token.isCaller).name;
+      final pending = Completer<ServerMutationResult<void>>();
+      when(() => api.deleteApiToken(name)).thenAnswer((_) => pending.future);
+      final command = repository.revoke(name);
+      origin = ServerStateOrigin('replacement');
+      pending.complete(result(ServerMutationOutcome.confirmed));
+      final completion = (await command)!;
+      expect(completion.application, CommandApplication.detached);
+      expect(completion.result!.outcome, ServerMutationOutcome.confirmed);
+      expect(repository.value.data, tokens);
+      expect(await repository.refresh(), RefreshResult.disposed);
+    },
+  );
 }

@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -58,7 +59,7 @@ void main() {
   test(
     'explicit reads use the observable dispatcher without starting passive reads',
     () async {
-      connection.setVersion(Version(3, 6, 0));
+      connection.cache.setVersion(Version(3, 6, 0));
       final pending = Completer<List<String>>();
       when(api.getAllGroups).thenAnswer((_) => pending.future);
       final reading = connection.refresh(groups, force: true);
@@ -87,7 +88,7 @@ void main() {
   test(
     'repository observations exclude unrelated domains but include prerequisite errors',
     () async {
-      connection.setVersion(Version(3, 6, 0));
+      connection.cache.setVersion(Version(3, 6, 0));
       await pumpEventQueue();
       final seen = <Object>[];
       final subscription = connection.users.changes.listen(seen.add);
@@ -139,7 +140,7 @@ void main() {
   test(
     'local publication failure preserves the confirmed remote receipt',
     () async {
-      connection.setVersion(Version(3, 6, 0));
+      connection.cache.setVersion(Version(3, 6, 0));
       final result = await connection.commands.mutate<void>(
         domains: [groups],
         send: (_) async => confirmed,
@@ -154,7 +155,6 @@ void main() {
     'construction is inert and shares version discovery across domains',
     () async {
       verifyZeroInteractions(api);
-      expect(connection.stores, connection.cache.stores);
       expect(connection.users.store, same(connection.cache.users));
       expect(connection.jobs.store, same(connection.cache.serverJobs));
       expect(connection.backups.store, same(connection.cache.backups));
@@ -196,17 +196,17 @@ void main() {
   test(
     'one command reserves both domains and orders overlapping work',
     () async {
-      connection.setVersion(Version(3, 6, 0));
+      connection.cache.setVersion(Version(3, 6, 0));
       await connection.devices.refresh();
       await connection.refresh(groups);
       final both = Completer<ServerMutationResult<void>>();
       final first = connection.commands.submit<void>(
-        domains: connection.stores,
+        domains: connection.cache.stores,
         send: (final boundApi) {
           expect(identical(boundApi, api), isTrue);
           return both.future;
         },
-        applyConfirmed: (_) => connection.stores,
+        applyConfirmed: (_) => connection.cache.stores,
       );
       var secondStarted = false;
       final second = connection.commands.submit<void>(
@@ -233,7 +233,7 @@ void main() {
   );
 
   test('disjoint domain commands can run concurrently', () async {
-    connection.setVersion(Version(3, 6, 0));
+    connection.cache.setVersion(Version(3, 6, 0));
     await connection.devices.refresh();
     final pendingGroups = Completer<ServerMutationResult<void>>();
     final first = connection.commands.submit<void>(
@@ -254,10 +254,10 @@ void main() {
   test(
     'disposal detaches all command waiters before destroying stores',
     () async {
-      connection.setVersion(Version(3, 6, 0));
+      connection.cache.setVersion(Version(3, 6, 0));
       final pending = Completer<ServerMutationResult<void>>();
       final first = connection.commands.submit<void>(
-        domains: connection.stores,
+        domains: connection.cache.stores,
         send: (_) => pending.future,
       );
       var queuedSent = false;
@@ -273,7 +273,7 @@ void main() {
       expect((await second).application, CommandApplication.detached);
       expect(queuedSent, isFalse);
       expect(
-        connection.stores.every((final store) => store.isDisposed),
+        connection.cache.stores.every((final store) => store.isDisposed),
         isTrue,
       );
       pending.complete(confirmed);
@@ -301,7 +301,7 @@ void main() {
   }
 
   test('domain support uses each registered requirement', () async {
-    connection.setVersion(Version(3, 5, 0));
+    connection.cache.setVersion(Version(3, 5, 0));
     expect(await connection.devices.refresh(), RefreshResult.applied);
     expect(await connection.refresh(groups), RefreshResult.unsupported);
     expect(groups.value.support, DomainSupport.unsupported);

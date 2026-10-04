@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/price.dart';
@@ -17,11 +18,13 @@ class ExtendingVolumePage extends StatefulWidget {
   const ExtendingVolumePage({
     required this.diskVolumeToResize,
     required this.diskStatus,
+    required this.origin,
     super.key,
   });
 
   final DiskVolume diskVolumeToResize;
   final DiskStatus diskStatus;
+  final ServerStateOrigin? origin;
 
   @override
   State<ExtendingVolumePage> createState() => _ExtendingVolumePageState();
@@ -201,6 +204,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                           actionButtonOnPressed: () {
                             context.read<VolumesBloc>().add(
                               VolumeResize(
+                                origin: widget.origin,
                                 widget.diskVolumeToResize,
                                 DiskSize.fromGibibyte(
                                   _currentSliderGbValue.truncate().toDouble(),

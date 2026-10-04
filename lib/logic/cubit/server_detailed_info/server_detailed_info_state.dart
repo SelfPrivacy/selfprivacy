@@ -7,7 +7,7 @@ abstract class ServerDetailsState extends Equatable {
   }) : metadata = List.unmodifiable(metadata);
 
   final List<ServerMetadataEntity> metadata;
-  final Object? continuity;
+  final ConnectionContinuity? continuity;
 
   @override
   List<Object?> get props => [metadata, continuity];

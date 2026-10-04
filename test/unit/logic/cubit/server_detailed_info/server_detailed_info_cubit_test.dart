@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';

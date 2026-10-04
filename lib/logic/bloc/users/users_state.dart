@@ -5,7 +5,7 @@ sealed class UsersState extends Equatable {
     : users = List.unmodifiable(users);
 
   final List<User> users;
-  final Object? continuity;
+  final ConnectionContinuity? continuity;
 
   User get rootUser =>
       users.firstWhere((final user) => user.type == UserType.root);

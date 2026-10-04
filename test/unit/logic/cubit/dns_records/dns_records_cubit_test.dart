@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 
 import '../../../../helpers/fixtures/dns_record_fixtures.dart';

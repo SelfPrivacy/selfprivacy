@@ -8,9 +8,9 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/backups/backup_storage_workflow.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -21,14 +21,16 @@ import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 part 'backups_event.dart';
 part 'backups_state.dart';
 
+typedef AdmitBackupWorkflow =
+    Future<OperationResult<void>> Function(
+      ServerStateOrigin origin,
+      Future<void> Function(BackupsRepository) action,
+    );
+
 class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   BackupsBloc({
     required final Stream<ConnectionObservation<BackupsSnapshot>> backups,
-    required final Future<OperationResult<void>> Function(
-      ServerStateOrigin,
-      Future<void> Function(BackupsRepository),
-    )
-    run,
+    required final AdmitBackupWorkflow admitWorkflow,
     required final BackblazeBucket? Function(ServerStateOrigin) currentBucket,
     required final Future<void> Function(ServerStateOrigin, BackblazeBucket)
     saveBucket,
@@ -40,7 +42,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     )
     prepareStorage,
     required final void Function(String) showMessage,
-  }) : _run = run,
+  }) : _admitWorkflow = admitWorkflow,
        _currentBucket = currentBucket,
        _saveBucket = saveBucket,
        _removeBucket = removeBucket,
@@ -62,11 +64,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     });
   }
 
-  final Future<OperationResult<void>> Function(
-    ServerStateOrigin,
-    Future<void> Function(BackupsRepository),
-  )
-  _run;
+  final AdmitBackupWorkflow _admitWorkflow;
   final BackblazeBucket? Function(ServerStateOrigin) _currentBucket;
   final Future<void> Function(ServerStateOrigin, BackblazeBucket) _saveBucket;
   final Future<void> Function(ServerStateOrigin, BackblazeBucket?)
@@ -78,19 +76,6 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   _subscription;
   ConnectionObservation<BackupsSnapshot>? _latest;
   ServerStateOrigin? _presentedOrigin;
-
-  @override
-  void add(final BackupsEvent event) => super.add(switch (event) {
-    InitializeBackupsRepository() => _BackupsAction(event, _presentedOrigin),
-    ForceSnapshotListUpdate() => _BackupsAction(event, _presentedOrigin),
-    CreateBackups() => _BackupsAction(event, _presentedOrigin),
-    RestoreBackup() => _BackupsAction(event, _presentedOrigin),
-    SetAutobackupPeriod() => _BackupsAction(event, _presentedOrigin),
-    SetAutobackupQuotas() => _BackupsAction(event, _presentedOrigin),
-    ForgetSnapshot() => _BackupsAction(event, _presentedOrigin),
-    RemoveBackupsRepository() => _BackupsAction(event, _presentedOrigin),
-    _ => event,
-  });
 
   bool _isCurrent(final ServerStateOrigin? origin) =>
       !isClosed &&
@@ -104,17 +89,17 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       void Function(BackupsState),
     )
     action,
-    final EventTransformer<_BackupsAction<T>> transformer,
+    final EventTransformer<T> transformer,
   ) {
-    on<_BackupsAction<T>>((final event, final emit) async {
+    on<T>((final event, final emit) async {
       if (!_isCurrent(event.origin)) {
         return;
       }
       final OperationResult<void> result;
       try {
-        result = await _run(
+        result = await _admitWorkflow(
           event.origin!,
-          (final repository) => action(event.event, repository, (final value) {
+          (final repository) => action(event, repository, (final value) {
             if (!emit.isDone && _isCurrent(event.origin)) {
               emit(value);
             }
@@ -148,11 +133,15 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     emit(
       (configuration?.isInitialized ?? false)
           ? BackupsInitialized(
+              origin: _presentedOrigin,
               backupConfig: configuration,
               backups: snapshot.backups.data ?? const [],
               backblazeBucket: bucket,
             )
-          : BackupsUninitialized(backblazeBucket: bucket),
+          : BackupsUninitialized(
+              origin: _presentedOrigin,
+              backblazeBucket: bucket,
+            ),
     );
   }
 
@@ -202,18 +191,22 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       emit(
         unsupported || failed
             ? BackupsUnavailable(
+                origin: _presentedOrigin,
                 isUnsupported: unsupported,
                 backblazeBucket: bucket,
               )
-            : BackupsLoading(backblazeBucket: bucket),
+            : BackupsLoading(origin: _presentedOrigin, backblazeBucket: bucket),
       );
     } else if (!configuration.isInitialized) {
       if (sameBinding && state is BackupsInitializing) {
         return;
       }
-      emit(BackupsUninitialized(backblazeBucket: bucket));
+      emit(
+        BackupsUninitialized(origin: _presentedOrigin, backblazeBucket: bucket),
+      );
     } else {
       final loaded = BackupsInitialized(
+        origin: _presentedOrigin,
         backups: snapshot.backups.data!,
         backupConfig: configuration,
         backblazeBucket: bucket,
@@ -237,6 +230,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final previous = state;
     emit(
       BackupsInitializing(
+        origin: _presentedOrigin,
         backblazeBucket:
             previous.backblazeBucket ??
             _currentBucket(repository.commands.origin),
@@ -250,7 +244,12 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
           !_isCurrent(repository.commands.origin)) {
         return;
       }
-      emit(BackupsUninitialized(backblazeBucket: previous.backblazeBucket));
+      emit(
+        BackupsUninitialized(
+          origin: _presentedOrigin,
+          backblazeBucket: previous.backblazeBucket,
+        ),
+      );
       _showMessage(switch (failure) {
         BackupStorageFailure.missingEncryptionKey =>
           'backup.backups_encryption_key_not_found'.tr(),
@@ -279,7 +278,9 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       return;
     }
     if (!_configurationConfirmed(result)) {
-      emit(BackupsUninitialized(backblazeBucket: bucket));
+      emit(
+        BackupsUninitialized(origin: _presentedOrigin, backblazeBucket: bucket),
+      );
       return;
     }
     emit(
@@ -485,11 +486,15 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     }
     return config.isInitialized
         ? BackupsInitialized(
+            origin: _presentedOrigin,
             backups: previous.backups,
             backupConfig: config,
             backblazeBucket: previous.backblazeBucket,
           )
-        : BackupsUninitialized(backblazeBucket: previous.backblazeBucket);
+        : BackupsUninitialized(
+            origin: _presentedOrigin,
+            backblazeBucket: previous.backblazeBucket,
+          );
   }
 
   BackupsState _currentState(
@@ -497,6 +502,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
     final BackupsInitialized previous,
   ) => _configuredState(
     BackupsInitialized(
+      origin: _presentedOrigin,
       backups: repository.value.data ?? previous.backups,
       backupConfig: repository.configValue.data,
       backblazeBucket: previous.backblazeBucket,

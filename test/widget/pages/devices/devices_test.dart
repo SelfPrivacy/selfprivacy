@@ -11,24 +11,35 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
 
 import '../../../helpers/fixtures/json_fixture.dart';
-import '../../../helpers/operation_fixture.dart';
+import '../../../helpers/fixtures/server_fixtures.dart';
 import '../../../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
 
 class _Navigation extends Mock implements NavigationService {}
 
+class _Resources extends Mock implements ResourcesModel {}
+
 void main() {
   late _Api api;
   late ServerConnection connection;
   late DevicesBloc bloc;
   late List<ApiToken> tokens;
-  setUpAll(setUpWidgetTestHarness);
+  late Server selected;
+  late ServerConnectionHub hub;
+  late StreamController<ResourcesModelEvent> changes;
+  setUpAll(() async {
+    await setUpWidgetTestHarness();
+    registerFallbackValue(aServer());
+  });
   setUp(() async {
     await getIt.reset();
     api = _Api();
@@ -38,7 +49,21 @@ void main() {
     ).api.devices.map(ApiToken.fromGraphQL).toList();
     when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
-    final hub = fixtureHub(api);
+    selected = aServer();
+    changes = StreamController<ResourcesModelEvent>.broadcast();
+    final resources = _Resources();
+    when(() => resources.servers).thenAnswer((_) => [selected]);
+    when(() => resources.statusStream).thenAnswer((_) => changes.stream);
+    when(() => resources.updateServerByUuid(any())).thenAnswer((
+      final call,
+    ) async {
+      selected = call.positionalArguments.single as Server;
+      changes.add(const ChangedServers());
+    });
+    hub = ServerConnectionHub(
+      resourcesModel: resources,
+      createApi: (_, _, _) => api,
+    );
     connection = hub.active!;
     getIt.registerSingleton<NavigationService>(_Navigation());
     bloc = createDevicesBloc(
@@ -49,6 +74,8 @@ void main() {
   tearDown(() async {
     await bloc.close();
     connection.dispose();
+    hub.dispose();
+    await changes.close();
     await getIt.reset();
   });
 
@@ -105,6 +132,55 @@ void main() {
     },
   );
 
+  for (final replacement in [true, false]) {
+    testWidgets(
+      'an open revoke dialog ${replacement ? 'rejects replacement' : 'survives confirmed rotation'}',
+      (final tester) async {
+        final device = tokens.firstWhere((final token) => !token.isCaller);
+        when(() => api.deleteApiToken(device.name)).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: const ServerMutationPayload.notExpected(),
+          ),
+        );
+        await tester.runAsync(bloc.refresh);
+        await showPage(tester);
+        await tester.tap(find.text(device.name));
+        await tester.pumpAndSettle();
+        await tester.runAsync(() async {
+          if (replacement) {
+            selected = aServer(uuid: 'replacement');
+            changes.add(const ChangedServers());
+            await pumpEventQueue();
+            await bloc.refresh();
+          } else {
+            when(api.refreshDeviceApiToken).thenAnswer(
+              (_) async => ServerMutationResult(
+                outcome: ServerMutationOutcome.confirmed,
+                payload: const ServerMutationPayload.available('rotated-token'),
+              ),
+            );
+            expect(await hub.rotateToken(), RotationOutcome.succeeded);
+          }
+          await pumpEventQueue();
+        });
+        await tester.pump();
+        await tester.runAsync(() async {
+          await tester.tap(find.widgetWithText(TextButton, 'Revoke'));
+          await pumpEventQueue();
+        });
+        await tester.pumpAndSettle();
+        if (replacement) {
+          verifyNever(() => api.deleteApiToken(device.name));
+          expect(find.text(device.name), findsOneWidget);
+        } else {
+          verify(() => api.deleteApiToken(device.name)).called(1);
+          expect(find.text(device.name), findsNothing);
+        }
+      },
+    );
+  }
+
   for (final outcome in ServerMutationOutcome.values) {
     testWidgets('visible list follows ${outcome.name} before polling', (
       final tester,
@@ -122,7 +198,7 @@ void main() {
         final deleting = bloc.stream.firstWhere(
           (final state) => state is DevicesDeleting,
         );
-        bloc.add(DeleteDevice(device));
+        bloc.add(DeleteDevice(device, origin: bloc.state.origin));
         await deleting;
       });
       await tester.pump();

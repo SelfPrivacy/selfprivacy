@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/service.dart';
@@ -21,12 +22,14 @@ class ServicesMigrationPage extends StatefulWidget {
     required this.services,
     required this.diskStatus,
     required this.isMigration,
+    required this.continuity,
     super.key,
   });
 
   final DiskStatus diskStatus;
   final List<Service> services;
   final bool isMigration;
+  final ConnectionContinuity? continuity;
 
   @override
   State<ServicesMigrationPage> createState() => _ServicesMigrationPageState();
@@ -180,13 +183,18 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                   unawaited(
                     context.read<ServerJobsBloc>().migrateToBinds(
                       serviceToDisk,
+                      continuity: widget.continuity,
                     ),
                   );
                 } else {
                   for (final service in widget.services) {
                     if (serviceToDisk[service.id] != null) {
                       context.read<ServicesBloc>().add(
-                        ServiceMove(service, serviceToDisk[service.id]!),
+                        ServiceMove(
+                          service,
+                          serviceToDisk[service.id]!,
+                          continuity: widget.continuity,
+                        ),
                       );
                     }
                   }

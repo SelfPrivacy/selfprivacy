@@ -61,10 +61,4 @@ class DevicesRepository {
       },
     );
   }
-
-  void invalidate() {
-    if (commands.isAttached) {
-      _store.invalidate();
-    }
-  }
 }

@@ -6,17 +6,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
-
-/// Identity of one server's cache and transport generation.
-/// Create a new instance when either binding is replaced, even for the same UUID.
-class ServerStateOrigin {
-  ServerStateOrigin(this.serverId, {final Object? continuity})
-    : continuity = continuity ?? Object();
-
-  final String serverId;
-  final Object continuity;
-}
 
 enum CommandApplication { applied, notApplied, failed, detached }
 

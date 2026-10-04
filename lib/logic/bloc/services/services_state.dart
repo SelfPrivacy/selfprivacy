@@ -8,7 +8,7 @@ sealed class ServicesState extends Equatable {
            .where((final lock) => lock.isLocked)
            .toList();
   final List<ServiceLock> _lockedServices;
-  final Object? continuity;
+  final ConnectionContinuity? continuity;
   List<Service> get services;
   List<String> get lockedServices => _lockedServices
       .where((final lock) => lock.isLocked)

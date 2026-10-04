@@ -4,6 +4,7 @@ import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
@@ -17,11 +18,13 @@ import 'package:selfprivacy/ui/molecules/info_box/info_box.dart';
 class SnapshotModal extends StatefulWidget {
   const SnapshotModal({
     required this.snapshot,
+    required this.origin,
     required this.scrollController,
     super.key,
   });
 
   final Backup snapshot;
+  final ServerStateOrigin? origin;
   final ScrollController scrollController;
 
   @override
@@ -111,7 +114,11 @@ class _SnapshotModalState extends State<SnapshotModal> {
                       ? null
                       : () {
                           context.read<BackupsBloc>().add(
-                            RestoreBackup(widget.snapshot.id, selectedStrategy),
+                            RestoreBackup(
+                              widget.snapshot.id,
+                              selectedStrategy,
+                              origin: widget.origin,
+                            ),
                           );
                           Navigator.of(context).pop();
                           getIt<NavigationService>().showSnackBar(

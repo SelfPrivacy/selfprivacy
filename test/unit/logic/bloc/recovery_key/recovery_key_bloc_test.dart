@@ -72,7 +72,7 @@ void main() {
     hub
       ..clear()
       ..resume();
-    hub.active!.setVersion(Version(3, 6, 0));
+    hub.active!.cache.setVersion(Version(3, 6, 0));
     await pumpEventQueue();
     verifyNever(api.getRecoveryTokenStatus);
   });

@@ -9,8 +9,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
@@ -51,7 +51,7 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
        super(VolumesInitial()) {
     on<_VolumesObserved>(_observe, transformer: sequential());
     on<_LoadProviderVolumes>(_loadProvider, transformer: restartable());
-    on<_ResizeVolume>(_resizeVolume, transformer: droppable());
+    on<VolumeResize>(_resizeVolume, transformer: droppable());
     _subscription = volumes.listen((final observation) {
       _latest = observation;
       add(_VolumesObserved(observation));
@@ -76,11 +76,6 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   ConnectionObservation<CachedValue<List<ServerDiskVolume>>>? _latest;
   ServerStateOrigin? _presentedOrigin;
   bool _resizing = false;
-
-  @override
-  void add(final VolumesEvent event) => super.add(
-    event is VolumeResize ? _ResizeVolume(event, _presentedOrigin) : event,
-  );
 
   bool _isCurrent(final ServerStateOrigin? origin) =>
       !isClosed &&
@@ -123,10 +118,14 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       emit(
         unsupported || snapshot?.lastError != null
             ? VolumesUnavailable(
+                origin: _presentedOrigin,
                 isUnsupported: unsupported,
                 providerVolumes: providerVolumes,
               )
-            : VolumesLoading(providerVolumes: providerVolumes),
+            : VolumesLoading(
+                origin: _presentedOrigin,
+                providerVolumes: providerVolumes,
+              ),
       );
       return;
     }
@@ -135,11 +134,13 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     emit(
       _resizing
           ? VolumesResizing(
+              origin: _presentedOrigin,
               diskStatus: diskStatus,
               providerVolumes: providerVolumes,
               serverVolumesHashCode: hash,
             )
           : VolumesLoaded(
+              origin: _presentedOrigin,
               diskStatus: diskStatus,
               providerVolumes: providerVolumes,
               serverVolumesHashCode: hash,
@@ -183,37 +184,34 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
   }
 
   Future<void> _resizeVolume(
-    final _ResizeVolume action,
+    final VolumeResize action,
     final Emitter<VolumesState> emit,
   ) async {
     if (!_isCurrent(action.origin) ||
         state is! VolumesLoaded ||
-        action.event.volume.providerVolume == null) {
+        action.volume.providerVolume == null) {
       return;
     }
     _resizing = true;
     _publish(emit);
     final OperationResult<ServerMutationResult<void>?> result;
     try {
-      result = await _resize(
-        action.origin!,
-        action.event.volume,
-        action.event.newSize,
-        (final stage) {
-          if (_isCurrent(action.origin)) {
-            _showMessage(switch (stage) {
-              VolumeResizeStage.started =>
-                'storage.extending_volume_started'.tr(),
-              VolumeResizeStage.providerWaiting =>
-                'storage.extending_volume_provider_waiting'.tr(),
-              VolumeResizeStage.serverWaiting =>
-                'storage.extending_volume_server_waiting'.tr(),
-              VolumeResizeStage.rebooting =>
-                'storage.extending_volume_rebooting'.tr(),
-            });
-          }
-        },
-      );
+      result = await _resize(action.origin!, action.volume, action.newSize, (
+        final stage,
+      ) {
+        if (_isCurrent(action.origin)) {
+          _showMessage(switch (stage) {
+            VolumeResizeStage.started =>
+              'storage.extending_volume_started'.tr(),
+            VolumeResizeStage.providerWaiting =>
+              'storage.extending_volume_provider_waiting'.tr(),
+            VolumeResizeStage.serverWaiting =>
+              'storage.extending_volume_server_waiting'.tr(),
+            VolumeResizeStage.rebooting =>
+              'storage.extending_volume_rebooting'.tr(),
+          });
+        }
+      });
     } catch (_) {
       if (_isCurrent(action.origin) && !emit.isDone) {
         _resizing = false;

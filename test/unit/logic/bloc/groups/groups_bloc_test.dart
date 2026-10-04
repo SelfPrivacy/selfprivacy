@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 
 void main() {
   late StreamController<ConnectionObservation<CachedValue<List<String>>>>

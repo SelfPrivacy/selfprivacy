@@ -39,11 +39,12 @@ class ServiceRestart extends ServicesEvent {
 }
 
 class ServiceMove extends ServicesEvent {
-  const ServiceMove(this.service, this.destination);
+  const ServiceMove(this.service, this.destination, {required this.continuity});
 
   final Service service;
   final String destination;
+  final ConnectionContinuity? continuity;
 
   @override
-  List<Object?> get props => [service, destination];
+  List<Object?> get props => [service, destination, continuity];
 }

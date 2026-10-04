@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
@@ -63,8 +64,11 @@ class _ServerStoragePageState extends State<ServerStoragePage> {
       hasFlashButton: true,
       children: [
         ...diskStatus.diskVolumes.map(
-          (final volume) =>
-              DiskConsumptionOverview(volume: volume, diskStatus: diskStatus),
+          (final volume) => DiskConsumptionOverview(
+            volume: volume,
+            diskStatus: diskStatus,
+            origin: volumeState.origin,
+          ),
         ),
         const Gap(8),
         Padding(
@@ -86,11 +90,13 @@ class DiskConsumptionOverview extends StatelessWidget {
   const DiskConsumptionOverview({
     required this.volume,
     required this.diskStatus,
+    required this.origin,
     super.key,
   });
 
   final DiskVolume volume;
   final DiskStatus diskStatus;
+  final ServerStateOrigin? origin;
 
   @override
   Widget build(final BuildContext context) {
@@ -99,6 +105,7 @@ class DiskConsumptionOverview extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ServerStorageSection(
+          origin: origin,
           volume: volume,
           diskStatus: diskStatus,
           services: services
@@ -117,6 +124,7 @@ class DiskConsumptionOverview extends StatelessWidget {
 
 class ServerStorageSection extends StatelessWidget {
   const ServerStorageSection({
+    required this.origin,
     required this.volume,
     required this.diskStatus,
     required this.services,
@@ -126,6 +134,7 @@ class ServerStorageSection extends StatelessWidget {
   final DiskVolume volume;
   final DiskStatus diskStatus;
   final List<Service> services;
+  final ServerStateOrigin? origin;
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -155,6 +164,7 @@ class ServerStorageSection extends StatelessWidget {
             title: 'storage.extend_volume_button.title'.tr(),
             onPressed: () => context.pushRoute(
               ExtendingVolumeRoute(
+                origin: origin,
                 diskVolumeToResize: volume,
                 diskStatus: diskStatus,
               ),

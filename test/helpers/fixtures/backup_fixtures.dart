@@ -15,17 +15,17 @@ BackupConfiguration aBackupConfiguration() => BackupConfiguration.fromGraphQL(
   ).backup.configuration,
 );
 
-ServerJob aBackupJob() {
+ServerJob aBackupJob({final String? uid}) {
   final data =
       loadJsonFixture('graphql/mutation_results.json')['StartBackup']
           as Map<String, dynamic>;
   final backup = data['backup'] as Map<String, dynamic>;
   final mutation = backup['startBackup'] as Map<String, dynamic>;
-  return ServerJob.fromGraphQL(
-    Fragment$basicApiJobsFields.fromJson(
-      mutation['job'] as Map<String, dynamic>,
-    ),
-  );
+  final json = mutation['job'] as Map<String, dynamic>;
+  if (uid != null) {
+    json['uid'] = uid;
+  }
+  return ServerJob.fromGraphQL(Fragment$basicApiJobsFields.fromJson(json));
 }
 
 BackblazeBucket aBackblazeBucket() {

@@ -14,8 +14,8 @@ import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -47,7 +47,7 @@ void main() {
       api: api,
       origin: origin,
       currentOrigin: () => origin,
-    )..setVersion(Version(3, 0, 0));
+    )..cache.setVersion(Version(3, 0, 0));
     connection.services.store.push(
       Query$AllServices.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['AllServices']
@@ -135,7 +135,9 @@ void main() {
         ),
       );
       await tester.runAsync(() async {
-        services.add(ServiceMove(service, 'sdb'));
+        services.add(
+          ServiceMove(continuity: services.state.continuity, service, 'sdb'),
+        );
         await pumpEventQueue();
       });
       expect(
@@ -196,7 +198,9 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(ServiceMove(service, 'sdb'));
+      services.add(
+        ServiceMove(continuity: services.state.continuity, service, 'sdb'),
+      );
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, isEmpty);
@@ -220,7 +224,9 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(ServiceMove(service, 'sdb'));
+      services.add(
+        ServiceMove(continuity: services.state.continuity, service, 'sdb'),
+      );
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, [updated]);
@@ -238,7 +244,9 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(ServiceMove(service, 'sdb'));
+      services.add(
+        ServiceMove(continuity: services.state.continuity, service, 'sdb'),
+      );
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, isNull);
@@ -251,7 +259,7 @@ void main() {
       final tester,
     ) async {
       await pumpForTest(tester, const SizedBox.shrink());
-      connection.volumesStore.push([]);
+      connection.cache.volumes.push([]);
       final result = ServerMutationResult(
         outcome: outcome,
         payload: ServerMutationPayload.available(aServiceMoveJob()),
@@ -259,7 +267,9 @@ void main() {
       when(
         () => api.migrateToBinds({'gitea': 'sdb'}, 'sda1'),
       ).thenAnswer((_) async => result);
-      await jobs.migrateToBinds({'gitea': 'sdb'});
+      await jobs.migrateToBinds(continuity: connection.origin.continuity, {
+        'gitea': 'sdb',
+      });
       expect(
         connection.jobs.confirmedBeforeLoad.isNotEmpty,
         outcome == ServerMutationOutcome.confirmed,
@@ -283,13 +293,13 @@ void main() {
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
-    connection.volumesStore.push(
+    connection.cache.volumes.push(
       Query$GetServerDiskVolumes.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
             as Map<String, dynamic>,
       ).storage.volumes.map(ServerDiskVolume.fromGraphQL).toList(),
     );
-    final root = connection.volumesStore.value.data!.firstWhere(
+    final root = connection.cache.volumes.value.data!.firstWhere(
       (final volume) => volume.root,
     );
     final result = ServerMutationResult(
@@ -299,7 +309,7 @@ void main() {
     when(
       () => api.migrateToBinds({}, root.name),
     ).thenAnswer((_) async => result);
-    await jobs.migrateToBinds({});
+    await jobs.migrateToBinds(continuity: connection.origin.continuity, {});
     verify(() => api.migrateToBinds({}, root.name)).called(1);
   });
 
@@ -314,7 +324,7 @@ void main() {
       when(
         () => api.migrateToBinds({}, 'sda1'),
       ).thenAnswer((_) async => result);
-      await jobs.migrateToBinds({});
+      await jobs.migrateToBinds(continuity: connection.origin.continuity, {});
       verify(
         () => navigation.showSnackBar(
           'server_mutation.payload_unavailable'.tr(),

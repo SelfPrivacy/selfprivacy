@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -13,6 +14,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -20,6 +22,7 @@ import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
+import 'package:selfprivacy/ui/organisms/modals/backups/change_period_modal.dart';
 
 import '../../../../helpers/fixtures/backup_fixtures.dart';
 import '../../../../helpers/fixtures/credential_fixtures.dart';
@@ -114,6 +117,47 @@ void main() {
     );
   }
 
+  testWidgets('an open backup period draft cannot cross a reset', (
+    final tester,
+  ) async {
+    final controller = ScrollController();
+    addTearDown(controller.dispose);
+    await tester.runAsync(ready);
+    await pumpForTest(
+      tester,
+      BlocProvider.value(
+        value: bloc,
+        child: ChangeAutobackupsPeriodModal(scrollController: controller),
+      ),
+    );
+    await tester.tap(find.byType(RadioListTile<Duration?>).at(1));
+    await tester.pump();
+    await tester.runAsync(() async {
+      hub
+        ..clear()
+        ..resume();
+      connection = hub.active!;
+      connection.cache.setVersion(Version(3, 6, 0));
+      connection.backups.store.push(const []);
+      await ready();
+    });
+    await tester.pump();
+    when(
+      () => api.setAutobackupPeriod(period: any(named: 'period')),
+    ).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(aBackupConfiguration()),
+      ),
+    );
+    await tester.runAsync(() async {
+      await tester.tap(find.byType(FilledButton));
+      await pumpEventQueue();
+    });
+    await tester.pump();
+    verifyNever(() => api.setAutobackupPeriod(period: any(named: 'period')));
+  });
+
   Future<void> dispatch(final BackupsEvent event) async {
     final settled = bloc.stream.firstWhere(
       (final state) => state is! BackupsBusy && state is! BackupsInitializing,
@@ -140,7 +184,12 @@ void main() {
         when(
           () => resources.setBackblazeBucket(any()),
         ).thenThrow(Exception('secret-sentinel'));
-        bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+        bloc.add(
+          InitializeBackupsRepository(
+            origin: bloc.state.origin,
+            aBackupsCredential(),
+          ),
+        );
         await pumpEventQueue();
         expect(bloc.state, isA<BackupsUninitialized>());
         verifyNever(() => api.initializeRepository(any()));
@@ -160,7 +209,12 @@ void main() {
       when(
         () => api.setAutobackupPeriod(period: 15),
       ).thenAnswer((_) => pending.future);
-      bloc.add(const SetAutobackupPeriod(Duration(minutes: 15)));
+      bloc.add(
+        SetAutobackupPeriod(
+          origin: bloc.state.origin,
+          const Duration(minutes: 15),
+        ),
+      );
       await pumpEventQueue();
       final closing = bloc.close();
       pending.complete(
@@ -198,7 +252,9 @@ void main() {
       hub
         ..clear()
         ..resume();
-      hub.active!.setVersion(unsupported ? Version(1, 0, 0) : Version(3, 6, 0));
+      hub.active!.cache.setVersion(
+        unsupported ? Version(1, 0, 0) : Version(3, 6, 0),
+      );
       when(api.getBackups).thenThrow(StateError('unavailable'));
       when(api.getBackupsConfiguration).thenThrow(StateError('unavailable'));
       await hub.active!.backups.refresh(force: true);
@@ -265,7 +321,12 @@ void main() {
             payload: ServerMutationPayload.available(aBackupConfiguration()),
           ),
         );
-        bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+        bloc.add(
+          InitializeBackupsRepository(
+            origin: bloc.state.origin,
+            aBackupsCredential(),
+          ),
+        );
         await pumpEventQueue();
         expect(bloc.state, isA<BackupsInitializing>());
         verifyNever(() => api.initializeRepository(any()));
@@ -292,7 +353,12 @@ void main() {
         when(
           () => provider.createStorage(any()),
         ).thenAnswer((_) => created.future);
-        bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+        bloc.add(
+          InitializeBackupsRepository(
+            origin: bloc.state.origin,
+            aBackupsCredential(),
+          ),
+        );
         await pumpEventQueue();
         hub.clear();
         created.complete(GenericResult(success: true, data: 'bucket-id'));
@@ -328,7 +394,12 @@ void main() {
                     ),
             ),
           );
-          await dispatch(InitializeBackupsRepository(aBackupsCredential()));
+          await dispatch(
+            InitializeBackupsRepository(
+              origin: bloc.state.origin,
+              aBackupsCredential(),
+            ),
+          );
           expect(bloc.state, isA<BackupsUninitialized>());
           verifyNever(() => resources.setBackblazeBucket(any()));
           verifyNever(() => api.initializeRepository(any()));
@@ -377,12 +448,19 @@ void main() {
             ).thenAnswer((_) async => result);
             when(api.removeRepository).thenAnswer((_) async => result);
             final event = switch (operation) {
-              'period' => const SetAutobackupPeriod(Duration(minutes: 15)),
+              'period' => SetAutobackupPeriod(
+                origin: bloc.state.origin,
+                const Duration(minutes: 15),
+              ),
               'quotas' => SetAutobackupQuotas(
+                origin: bloc.state.origin,
                 returned.autobackupQuotas.copyWith(last: 99),
               ),
-              'initialize' => InitializeBackupsRepository(aBackupsCredential()),
-              _ => const RemoveBackupsRepository(),
+              'initialize' => InitializeBackupsRepository(
+                origin: bloc.state.origin,
+                aBackupsCredential(),
+              ),
+              _ => RemoveBackupsRepository(origin: bloc.state.origin),
             };
             await dispatch(event);
             final confirmed = outcome == ServerMutationOutcome.confirmed;
@@ -452,7 +530,7 @@ void main() {
           payload: ServerMutationPayload.available(returned),
         ),
       );
-      await dispatch(const SetAutobackupPeriod(null));
+      await dispatch(SetAutobackupPeriod(origin: bloc.state.origin, null));
       expect(connection.backups.configValue.data!.autobackupPeriod, isNull);
       expect(bloc.state.autobackupPeriod, isNull);
     });
@@ -474,7 +552,7 @@ void main() {
         final busy = bloc.stream.firstWhere(
           (final state) => state is BackupsBusy,
         );
-        bloc.add(ForgetSnapshot(snapshotId));
+        bloc.add(ForgetSnapshot(origin: bloc.state.origin, snapshotId));
         await busy;
         expect(connection.backups.value.data, original);
         final done = bloc.stream.firstWhere(
@@ -498,23 +576,54 @@ void main() {
       });
     });
 
-    testWidgets('force reload invalidates only after ${outcome.name}', (
-      final tester,
-    ) async {
+    if (outcome == ServerMutationOutcome.confirmed) {
+      testWidgets('force reload requests snapshot reconciliation', (
+        final tester,
+      ) async {
+        await pumpForTest(tester, const SizedBox.shrink());
+        await tester.runAsync(() async {
+          await ready();
+          when(api.forceBackupListReload).thenAnswer(
+            (_) async => ServerMutationResult<void>(
+              outcome: outcome,
+              payload: const ServerMutationPayload.notExpected(),
+            ),
+          );
+          await dispatch(ForceSnapshotListUpdate(origin: bloc.state.origin));
+          expect(connection.backups.value.needsReconciliation, isTrue);
+        });
+      });
+    }
+  }
+
+  testWidgets(
+    'a backup batch tracks both jobs and retains an earlier failure',
+    (final tester) async {
       await pumpForTest(tester, const SizedBox.shrink());
       await tester.runAsync(() async {
         await ready();
-        when(api.forceBackupListReload).thenAnswer(
-          (_) async => ServerMutationResult<void>(
-            outcome: outcome,
-            payload: const ServerMutationPayload.notExpected(),
-          ),
-        );
-        await dispatch(const ForceSnapshotListUpdate());
-        expect(connection.backups.value.needsReconciliation, isTrue);
+        final selected = services.take(2).toList();
+        final jobs = [aBackupJob(uid: 'first'), aBackupJob(uid: 'second')];
+        for (var index = 0; index < selected.length; index++) {
+          final job = jobs[index];
+          when(() => api.startBackup(selected[index].id)).thenAnswer(
+            (_) async => ServerMutationResult(
+              outcome: ServerMutationOutcome.confirmed,
+              payload: ServerMutationPayload.available(job),
+            ),
+          );
+        }
+        await dispatch(CreateBackups(selected, origin: bloc.state.origin));
+        final queue = hub.operationsFor(connection.origin.serverId);
+        expect(queue.pending.single.jobIds, {'first', 'second'});
+        queue.observeJob('first', succeeded: false);
+        expect(queue.pending.single.status, OperationStatus.accepted);
+        queue.observeJob('second', succeeded: true);
+        expect(queue.pending, isEmpty);
+        expect(queue.history.single.status, OperationStatus.failed);
       });
-    });
-  }
+    },
+  );
 
   for (final restore in [false, true]) {
     for (final outcome in ServerMutationOutcome.values) {
@@ -541,11 +650,15 @@ void main() {
             ).thenAnswer((_) async => result);
             await dispatch(
               restore
-                  ? const RestoreBackup(
+                  ? RestoreBackup(
+                      origin: bloc.state.origin,
                       'snapshot-1',
                       BackupRestoreStrategy.inplace,
                     )
-                  : CreateBackups(services.take(1).toList()),
+                  : CreateBackups(
+                      origin: bloc.state.origin,
+                      services.take(1).toList(),
+                    ),
             );
             expect(
               connection.jobs.store.value.data,
@@ -581,7 +694,9 @@ void main() {
               payload: ServerMutationPayload.available(job),
             ),
           );
-          await dispatch(CreateBackups(services.take(1).toList()));
+          await dispatch(
+            CreateBackups(origin: bloc.state.origin, services.take(1).toList()),
+          );
           expect(connection.jobs.store.value.data, missingList ? null : [job]);
           if (missingList) {
             expect(connection.jobs.confirmedBeforeLoad, {job.uid: job});
@@ -605,7 +720,10 @@ void main() {
             payload: ServerMutationPayload.available(aBackupConfiguration()),
           ),
         );
-        final event = InitializeBackupsRepository(aBackupsCredential());
+        final event = InitializeBackupsRepository(
+          origin: bloc.state.origin,
+          aBackupsCredential(),
+        );
         await dispatch(event);
         expect(bloc.state, isA<BackupsUninitialized>());
         expect(
@@ -639,7 +757,12 @@ void main() {
         ),
       );
       await pumpEventQueue();
-      await dispatch(InitializeBackupsRepository(aBackupsCredential()));
+      await dispatch(
+        InitializeBackupsRepository(
+          origin: bloc.state.origin,
+          aBackupsCredential(),
+        ),
+      );
       expect(bloc.state, isA<BackupsUninitialized>());
       verifyNever(() => api.initializeRepository(any()));
       expect(
@@ -657,14 +780,24 @@ void main() {
       hub.clear();
       await pumpEventQueue();
       for (final event in <BackupsEvent>[
-        const SetAutobackupPeriod(null),
-        SetAutobackupQuotas(aBackupConfiguration().autobackupQuotas),
-        const RemoveBackupsRepository(),
-        InitializeBackupsRepository(aBackupsCredential()),
-        const ForceSnapshotListUpdate(),
-        const ForgetSnapshot('snapshot-1'),
-        const RestoreBackup('snapshot-1', BackupRestoreStrategy.inplace),
-        CreateBackups(services),
+        SetAutobackupPeriod(origin: bloc.state.origin, null),
+        SetAutobackupQuotas(
+          origin: bloc.state.origin,
+          aBackupConfiguration().autobackupQuotas,
+        ),
+        RemoveBackupsRepository(origin: bloc.state.origin),
+        InitializeBackupsRepository(
+          origin: bloc.state.origin,
+          aBackupsCredential(),
+        ),
+        ForceSnapshotListUpdate(origin: bloc.state.origin),
+        ForgetSnapshot(origin: bloc.state.origin, 'snapshot-1'),
+        RestoreBackup(
+          origin: bloc.state.origin,
+          'snapshot-1',
+          BackupRestoreStrategy.inplace,
+        ),
+        CreateBackups(origin: bloc.state.origin, services),
       ]) {
         bloc.add(event);
         await pumpEventQueue();
@@ -691,9 +824,14 @@ void main() {
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      bloc.add(const SetAutobackupPeriod(Duration(minutes: 15)));
+      bloc.add(
+        SetAutobackupPeriod(
+          origin: bloc.state.origin,
+          const Duration(minutes: 15),
+        ),
+      );
       await pumpEventQueue();
-      await dispatch(ForgetSnapshot(id));
+      await dispatch(ForgetSnapshot(origin: bloc.state.origin, id));
       pending.complete(
         ServerMutationResult(
           outcome: ServerMutationOutcome.confirmed,
@@ -718,7 +856,7 @@ void main() {
       when(
         () => api.startBackup(services.first.id),
       ).thenAnswer((_) => first.future);
-      bloc.add(CreateBackups(services));
+      bloc.add(CreateBackups(origin: bloc.state.origin, services));
       await pumpEventQueue();
       hub
         ..clear()

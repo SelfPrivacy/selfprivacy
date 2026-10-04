@@ -33,8 +33,11 @@ class BackupsListPage extends StatelessWidget {
           Center(child: Text('backup.no_backups'.tr()))
         else
           ...backups.map(
-            (final Backup backup) =>
-                SnapshotItem(backup: backup, preventActions: preventActions),
+            (final Backup backup) => SnapshotItem(
+              backup: backup,
+              origin: context.watch<BackupsBloc>().state.origin,
+              preventActions: preventActions,
+            ),
           ),
       ],
     );

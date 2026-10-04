@@ -19,7 +19,11 @@ Widget snapshotModalDefault(final BuildContext context) => CatalogCase(
   width: 600,
   height: 1000,
   builder: (final context, final fixtures, final controller, final update) =>
-      SnapshotModal(snapshot: demoBackup(), scrollController: controller),
+      SnapshotModal(
+        origin: null,
+        snapshot: demoBackup(),
+        scrollController: controller,
+      ),
 );
 
 @UseCase(name: 'Busy', type: SnapshotModal, path: '[Organisms]/modals/backups')
@@ -31,7 +35,11 @@ Widget snapshotModalBusy(final BuildContext context) => CatalogCase(
   width: 600,
   height: 1000,
   builder: (final context, final fixtures, final controller, final update) =>
-      SnapshotModal(snapshot: demoBackup(), scrollController: controller),
+      SnapshotModal(
+        origin: null,
+        snapshot: demoBackup(),
+        scrollController: controller,
+      ),
 );
 
 @UseCase(
@@ -47,7 +55,11 @@ Widget snapshotModalMissingService(final BuildContext context) => CatalogCase(
   width: 600,
   height: 1000,
   builder: (final context, final fixtures, final controller, final update) =>
-      SnapshotModal(snapshot: demoBackup(), scrollController: controller),
+      SnapshotModal(
+        origin: null,
+        snapshot: demoBackup(),
+        scrollController: controller,
+      ),
 );
 
 @UseCase(
@@ -64,5 +76,9 @@ Widget snapshotModalInplaceRestore(final BuildContext context) => CatalogCase(
   width: 600,
   height: 1000,
   builder: (final context, final fixtures, final controller, final update) =>
-      SnapshotModal(snapshot: demoBackup(), scrollController: controller),
+      SnapshotModal(
+        origin: null,
+        snapshot: demoBackup(),
+        scrollController: controller,
+      ),
 );

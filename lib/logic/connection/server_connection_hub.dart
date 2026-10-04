@@ -10,10 +10,10 @@ import 'package:selfprivacy/logic/connection/lifecycle/managed_subscription.dart
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_connection_binding.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_execution.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
@@ -216,16 +216,19 @@ class ServerConnectionHub {
   Future<T?> run<T>(
     final OperationKind kind,
     final Future<T> Function(ServerConnection) action, {
+    final ServerStateOrigin? origin,
     final void Function()? onNotSent,
   }) async {
     if (Zone.current[_admissionKey] != null) {
       final connection = admittedConnection;
-      if (connection == null) {
+      if (connection == null ||
+          (origin != null &&
+              !identical(origin.continuity, connection.origin.continuity))) {
         throw const OperationNotSent();
       }
       return action(connection);
     }
-    final result = await submit(kind, action).completion;
+    final result = await submit(kind, action, origin: origin).completion;
     if (result.status == OperationStatus.notSent ||
         result.status == OperationStatus.cancelled) {
       onNotSent?.call();
@@ -259,6 +262,7 @@ class ServerConnectionHub {
   OperationHandle<T> submit<T>(
     final OperationKind kind,
     final Future<T> Function(ServerConnection) action, {
+    final ServerStateOrigin? origin,
     final OperationReport Function(T)? describe,
   }) {
     final session = _synchronize();
@@ -268,6 +272,11 @@ class ServerConnectionHub {
       final admitted = _session;
       if (session == null ||
           admitted == null ||
+          (origin != null &&
+              !identical(
+                origin.continuity,
+                admitted.connection.origin.continuity,
+              )) ||
           !identical(
             session.connection.origin.continuity,
             admitted.connection.origin.continuity,
@@ -313,7 +322,10 @@ class ServerConnectionHub {
     return _session;
   }
 
-  _Session _createSession(final Server server, {final Object? continuity}) {
+  _Session _createSession(
+    final Server server, {
+    final ConnectionContinuity? continuity,
+  }) {
     final session = _Session(ServerConnectionBinding(server));
     final origin = ServerStateOrigin(server.uuid, continuity: continuity);
     session

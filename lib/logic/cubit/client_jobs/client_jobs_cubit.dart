@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_job_workflow.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -20,21 +20,23 @@ export 'package:provider/provider.dart';
 
 part 'client_jobs_state.dart';
 
+typedef AdmitClientJobWorkflow =
+    Future<OperationResult<void>> Function(
+      ServerStateOrigin origin,
+      OperationKind kind,
+      Future<void> Function(ClientJobWorkflow) action,
+    );
+
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
     required final Stream<ConnectionObservation<JobsSnapshot>> jobs,
     required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
     settings,
-    required final Future<OperationResult<void>> Function(
-      ServerStateOrigin,
-      OperationKind,
-      Future<void> Function(ClientJobWorkflow),
-    )
-    run,
+    required final AdmitClientJobWorkflow admitWorkflow,
     required final Future<void> Function(ServerStateOrigin, String)
     removeServerJob,
     required final void Function(String) showMessage,
-  }) : _run = run,
+  }) : _admitWorkflow = admitWorkflow,
        _removeServerJob = removeServerJob,
        _showMessage = showMessage,
        super(JobsStateEmpty()) {
@@ -44,12 +46,7 @@ class JobsCubit extends Cubit<JobsState> {
     });
   }
 
-  final Future<OperationResult<void>> Function(
-    ServerStateOrigin,
-    OperationKind,
-    Future<void> Function(ClientJobWorkflow),
-  )
-  _run;
+  final AdmitClientJobWorkflow _admitWorkflow;
   final Future<void> Function(ServerStateOrigin, String) _removeServerJob;
   final void Function(String) _showMessage;
   late final StreamSubscription<ConnectionObservation<JobsSnapshot>>
@@ -125,7 +122,7 @@ class JobsCubit extends Cubit<JobsState> {
     final Future<void> Function(ClientJobWorkflow) action,
   ) async {
     try {
-      final result = await _run(origin, kind, (final workflow) async {
+      final result = await _admitWorkflow(origin, kind, (final workflow) async {
         if (!_isCurrent(origin)) {
           throw const OperationNotSent();
         }

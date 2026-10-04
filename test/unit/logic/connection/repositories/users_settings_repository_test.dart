@@ -7,8 +7,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
@@ -35,7 +35,7 @@ void main() {
       api: api,
       origin: origin,
       currentOrigin: () => origin,
-    )..setVersion(Version(3, 6, 0));
+    )..cache.setVersion(Version(3, 6, 0));
   });
   tearDown(() => connection.dispose());
 

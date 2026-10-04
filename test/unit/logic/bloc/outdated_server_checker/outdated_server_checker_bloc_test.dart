@@ -5,7 +5,7 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 
 void main() {
   late StreamController<ConnectionObservation<CachedValue<Version>>> source;

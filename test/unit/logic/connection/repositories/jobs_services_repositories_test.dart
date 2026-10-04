@@ -5,8 +5,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
@@ -29,7 +29,7 @@ void main() {
       api: api,
       origin: origin,
       currentOrigin: () => origin,
-    )..setVersion(Version(3, 0, 0));
+    )..cache.setVersion(Version(3, 0, 0));
   });
   tearDown(() => connection.dispose());
 
@@ -92,7 +92,7 @@ void main() {
   test(
     'rebuild remains available when optional domains are unsupported',
     () async {
-      connection.setVersion(Version(2, 3, 0));
+      connection.cache.setVersion(Version(2, 3, 0));
       when(api.apply).thenAnswer((_) async => confirmed(aServiceMoveJob()));
       final result = await connection.jobs.apply();
       expect(result.outcome, ServerMutationOutcome.confirmed);

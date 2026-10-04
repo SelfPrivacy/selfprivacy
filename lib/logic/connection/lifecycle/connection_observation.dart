@@ -1,4 +1,4 @@
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 
 class ConnectionObservation<T extends Object> {
   const ConnectionObservation.absent() : origin = null, value = null;

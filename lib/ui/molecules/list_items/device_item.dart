@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -58,6 +57,8 @@ class DeviceItem extends StatelessWidget {
         ? null
         : device.isCaller
         ? () => _showTokenRefreshDialog(context, device)
+        : onRevoke == null
+        ? null
         : () => _showConfirmationDialog(context, device),
   );
 
@@ -104,11 +105,7 @@ class DeviceItem extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            if (onRevoke case final callback?) {
-              callback();
-            } else {
-              context.read<DevicesBloc>().add(DeleteDevice(device));
-            }
+            onRevoke?.call();
             Navigator.of(context).pop();
           },
         ),

@@ -42,12 +42,6 @@ class UsersRepository {
   Future<RefreshResult> refresh({final bool force = false}) =>
       reader.refresh(force: force);
 
-  void invalidate() {
-    if (commands.isAttached) {
-      store.invalidate();
-    }
-  }
-
   Future<ServerMutationResult<User>> createUser(final User user) => _upsert(
     (final api) =>
         knownUsers.any(

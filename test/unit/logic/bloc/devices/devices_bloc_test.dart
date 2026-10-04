@@ -84,8 +84,8 @@ void main() {
       (final state) => state is DevicesDeleting,
     );
     bloc
-      ..add(DeleteDevice(device))
-      ..add(DeleteDevice(device));
+      ..add(DeleteDevice(device, origin: bloc.state.origin))
+      ..add(DeleteDevice(device, origin: bloc.state.origin));
     await deleting;
     await pumpEventQueue();
     verify(() => api.deleteApiToken(device.name)).called(1);
@@ -111,7 +111,7 @@ void main() {
     final deleting = bloc.stream.firstWhere(
       (final state) => state is DevicesDeleting,
     );
-    bloc.add(DeleteDevice(device));
+    bloc.add(DeleteDevice(device, origin: bloc.state.origin));
     await deleting;
     final closing = bloc.close();
     await pumpEventQueue();
@@ -140,7 +140,7 @@ void main() {
       final deleting = bloc.stream.firstWhere(
         (final state) => state is DevicesDeleting,
       );
-      bloc.add(DeleteDevice(device));
+      bloc.add(DeleteDevice(device, origin: bloc.state.origin));
       await deleting;
       connection.dispose();
       pending.complete(
@@ -169,7 +169,7 @@ void main() {
         final deleting = bloc.stream.firstWhere(
           (final state) => state is DevicesDeleting,
         );
-        bloc.add(DeleteDevice(device));
+        bloc.add(DeleteDevice(device, origin: bloc.state.origin));
         await deleting;
         expect(bloc.state.devices, originalData);
         expect(bloc.state.pendingDeviceName, device.name);
@@ -224,7 +224,7 @@ void main() {
       final loaded = bloc.stream.firstWhere(
         (final state) => state is DevicesLoaded,
       );
-      bloc.add(DeleteDevice(device));
+      bloc.add(DeleteDevice(device, origin: bloc.state.origin));
       await loaded;
       final message = 'server_mutation.rejected'.tr();
       expect(message, isNot('server_mutation.rejected'));

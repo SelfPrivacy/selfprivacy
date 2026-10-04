@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,16 +15,21 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
+import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 import '../../../../helpers/connection_fixture.dart';
+import '../../../../helpers/fixtures/dns_record_fixtures.dart';
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
+import '../../../../helpers/fixtures/service_fixtures.dart';
 import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
 
 class _Resources extends Mock implements ResourcesModel {}
+
+class _DnsProvider extends Mock implements DnsProvider {}
 
 void main() {
   setUpAll(() async {
@@ -34,12 +41,15 @@ void main() {
   late ServerConnectionHub hub;
   late JobsCubit cubit;
   late ServerConnection connection;
+  late _Resources resources;
+  DnsProvider? dnsProvider;
   setUp(() async {
     api = _Api();
     messages = [];
     hub = fixtureHub(api);
-    connection = hub.active!..setVersion(Version(3, 0, 0));
-    final resources = _Resources();
+    connection = hub.active!..cache.setVersion(Version(3, 0, 0));
+    resources = _Resources();
+    dnsProvider = null;
     when(() => resources.servers).thenReturn([aServer()]);
     when(api.getDnsRecords).thenAnswer((_) async => []);
     when(() => api.setTimezone(any())).thenAnswer(
@@ -53,7 +63,7 @@ void main() {
     cubit = createJobsCubit(
       hub,
       resources: resources,
-      dnsProvider: () => null,
+      dnsProvider: () => dnsProvider,
       showMessage: messages.add,
     );
     await pumpEventQueue();
@@ -70,6 +80,66 @@ void main() {
       hub.clear();
       await pumpEventQueue();
       expect(cubit.state, isA<JobsStateEmpty>());
+    },
+  );
+
+  test(
+    'DNS update keeps the workflow provider and domain across a held command',
+    () async {
+      final original = _DnsProvider();
+      final replacement = _DnsProvider();
+      final domain = resources.servers.single.domain;
+      dnsProvider = original;
+      final before = [aDnsRecord()];
+      final after = [aDnsRecord(content: '203.0.113.11')];
+      var reads = 0;
+      when(
+        api.getDnsRecords,
+      ).thenAnswer((_) async => reads++ == 0 ? before : after);
+      when(() => original.isAuthorized).thenReturn(true);
+      when(
+        () => original.updateDnsRecords(
+          newRecords: after,
+          oldRecords: before,
+          domain: domain,
+        ),
+      ).thenAnswer((_) async => GenericResult(success: true, data: null));
+      final sent = Completer<void>();
+      final receipt = Completer<ServerMutationResult<void>>();
+      when(
+        () => api.switchService(serviceId: 'gitea', needTurnOn: false),
+      ).thenAnswer((_) {
+        sent.complete();
+        return receipt.future;
+      });
+      when(api.apply).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aServiceMoveJob()),
+        ),
+      );
+      cubit.addJob(ServiceToggleJob(service: aService(), needToTurnOn: false));
+      final applying = cubit.applyAll();
+      await sent.future;
+      dnsProvider = replacement;
+      when(() => resources.servers).thenReturn([
+        aServer(domain: aServerDomain(domainName: 'replacement.example.org')),
+      ]);
+      receipt.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.notExpected(),
+        ),
+      );
+      await applying;
+      verify(
+        () => original.updateDnsRecords(
+          newRecords: after,
+          oldRecords: before,
+          domain: domain,
+        ),
+      ).called(1);
+      verifyZeroInteractions(replacement);
     },
   );
 

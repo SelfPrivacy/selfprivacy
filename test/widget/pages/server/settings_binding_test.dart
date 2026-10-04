@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
@@ -59,7 +59,7 @@ void main() {
       );
       final toggle = find.byType(SwitchListTile).first;
       expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
-      tester.widget<SwitchListTile>(toggle).onChanged!(false);
+      await tester.tap(toggle);
       await tester.pump();
       expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
       publish(ServerStateOrigin('server', continuity: origin.continuity));

@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/sync/operation_queue.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
@@ -63,7 +63,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
   >
   _subscription;
   ConnectionObservation<CachedValue<List<Service>>>? _latest;
-  Object? _presentedContinuity;
+  ConnectionContinuity? _presentedContinuity;
   ServerStateOrigin? _presentedOrigin;
 
   @override
@@ -71,7 +71,12 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     super.add(switch (event) {
       ServicesReload() => _ServiceAction(event, _presentedOrigin),
       ServiceRestart() => _ServiceAction(event, _presentedOrigin),
-      ServiceMove() => _ServiceAction(event, _presentedOrigin),
+      ServiceMove() => _ServiceAction(
+        event,
+        identical(event.continuity, _presentedOrigin?.continuity)
+            ? _presentedOrigin
+            : null,
+      ),
       _ => event,
     });
   }

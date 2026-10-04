@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 
 part 'users_event.dart';
@@ -67,7 +67,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
   Future<ServerMutationResult<User>?> saveUser(
     final User user, {
-    required final Object continuity,
+    required final ConnectionContinuity continuity,
     required final bool create,
   }) async {
     final origin = _presentedOrigin;

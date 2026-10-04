@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/connection/sync/secret_recipient.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -40,7 +41,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
        _showMessage = showMessage,
        super(DevicesInitial()) {
     on<_DevicesObserved>(_observe, transformer: sequential());
-    on<_RevokeDevice>(_delete, transformer: droppable());
+    on<DeleteDevice>(_delete, transformer: droppable());
     _subscription = devices.listen((final observation) {
       if (!identical(
         _latest?.origin?.continuity,
@@ -71,13 +72,6 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   _subscription;
   ConnectionObservation<CachedValue<List<ApiToken>>>? _latest;
   ServerStateOrigin? _presentedOrigin;
-
-  @override
-  void add(final DevicesEvent event) => super.add(
-    event is DeleteDevice
-        ? _RevokeDevice(event.device, _presentedOrigin)
-        : event,
-  );
 
   void _observe(
     final _DevicesObserved event,
@@ -111,12 +105,14 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     }
     if (_pendingDeviceName case final String name) {
       return DevicesDeleting(
+        origin: _presentedOrigin,
         devices: devices,
         pendingDeviceName: name,
         hasError: snapshot.lastError != null,
       );
     }
     return DevicesLoaded(
+      origin: _presentedOrigin,
       devices: devices,
       hasError: snapshot.lastError != null,
       isRefreshing: snapshot.isRefreshing,
@@ -126,7 +122,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   Future<void> refresh() => _refresh();
 
   Future<void> _delete(
-    final _RevokeDevice event,
+    final DeleteDevice event,
     final Emitter<DevicesState> emit,
   ) async {
     if (!_isCurrent(event.origin) ||

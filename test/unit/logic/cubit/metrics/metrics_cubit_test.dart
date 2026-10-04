@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 

@@ -54,7 +54,7 @@ void main() {
       resourcesModel: resources,
       createApi: (_, _, _) => api,
     );
-    hub.active!.setVersion(Version(3, 6, 0));
+    hub.active!.cache.setVersion(Version(3, 6, 0));
     observed = [];
   });
   tearDown(() async {
@@ -133,13 +133,21 @@ void main() {
           case 'restart':
             services.add(ServiceRestart(service));
           case 'move':
-            services.add(ServiceMove(service, 'sdb'));
+            services.add(
+              ServiceMove(
+                continuity: services.state.continuity,
+                service,
+                'sdb',
+              ),
+            );
           case 'removeJob':
             jobs.add(RemoveServerJob(job.uid));
           case 'removeFinished':
             jobs.add(RemoveAllFinishedJobs());
           case 'migrate':
-            await jobs.migrateToBinds({service.id: 'sdb'});
+            await jobs.migrateToBinds(continuity: services.state.continuity, {
+              service.id: 'sdb',
+            });
           case 'deviceKey':
             await devices.getNewDeviceKey();
           case 'recoveryKey':

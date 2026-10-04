@@ -112,6 +112,7 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         subtitle: Text('storage.data_migration_notice'.tr()),
         onTap: () => context.pushRoute(
           ServicesMigrationRoute(
+            continuity: context.read<ServicesBloc>().state.continuity,
             diskStatus: context.read<VolumesBloc>().state.diskStatus,
             services: context
                 .read<ServicesBloc>()

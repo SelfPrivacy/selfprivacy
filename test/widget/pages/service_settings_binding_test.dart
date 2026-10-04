@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/services.graphql.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
-import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/pages/services/service_settings.dart';
 
-import '../../helpers/fixtures/json_fixture.dart';
+import '../../helpers/fixtures/service_fixtures.dart';
 import '../../helpers/widget_harness.dart';
 
 class _Jobs extends Mock implements JobsCubit {}
@@ -38,18 +37,17 @@ void main() {
       final jobs = _Jobs();
       when(() => jobs.state).thenReturn(JobsStateEmpty());
       when(() => jobs.stream).thenAnswer((_) => const Stream.empty());
-      final data =
-          loadJsonFixture('graphql/domain_reads.json')['AllServices']
-              as Map<String, dynamic>;
-      final rows =
-          (data['services'] as Map<String, dynamic>)['allServices'] as List;
-      final row = rows.first as Map<String, dynamic>;
-      row['configuration'] = (row['configuration'] as List)
-          .cast<Map<String, dynamic>>()
-          .where((final item) => item['__typename'] == 'BoolConfigItem')
-          .toList();
-      final service = Service.fromGraphQL(
-        Query$AllServices.fromJson(data).services.allServices.first,
+      final service = aService(
+        configuration: const [
+          BoolServiceConfigItem(
+            id: 'disableRegistration',
+            description: 'Disable registration',
+            widget: 'switch',
+            type: 'bool',
+            value: true,
+            defaultValue: true,
+          ),
+        ],
       );
       final origin = ServerStateOrigin('server');
       Future<void> publish(final ServerStateOrigin value) async {
@@ -73,7 +71,7 @@ void main() {
       );
       final toggle = find.byType(SwitchListTile);
       expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
-      tester.widget<SwitchListTile>(toggle).onChanged!(false);
+      await tester.tap(toggle);
       await tester.pump();
       expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
       await publish(ServerStateOrigin('server', continuity: origin.continuity));

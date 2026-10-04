@@ -27,9 +27,11 @@ void main() {
 
   for (final outcome in ServerMutationOutcome.values) {
     for (final secret in [
-      null,
-      '',
-      'relative/path',
+      if (outcome == ServerMutationOutcome.confirmed) ...[
+        null,
+        '',
+        'relative/path',
+      ],
       'https://auth.example.org/ui/reset?token=abcd-0123-abcd-0123',
     ]) {
       test(

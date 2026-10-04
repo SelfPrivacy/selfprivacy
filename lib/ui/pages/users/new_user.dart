@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
+import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/forms/user_form.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -58,7 +59,7 @@ class NewUserPage extends StatelessWidget {
 class _UserEditor extends StatefulWidget {
   const _UserEditor({required this.user, required this.continuity, super.key});
   final User? user;
-  final Object continuity;
+  final ConnectionContinuity continuity;
 
   @override
   State<_UserEditor> createState() => _UserEditorState();

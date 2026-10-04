@@ -38,7 +38,7 @@ void main() {
     provider = _Provider();
     messages = [];
     hub = fixtureHub(api);
-    hub.active!.volumesStore.push(
+    hub.active!.cache.volumes.push(
       Query$GetServerDiskVolumes.fromJson(
         loadJsonFixture('graphql/domain_reads.json')['GetServerDiskVolumes']
             as Map<String, dynamic>,
@@ -63,7 +63,9 @@ void main() {
       hub
         ..clear()
         ..resume();
-      hub.active!.setVersion(unsupported ? Version(1, 0, 0) : Version(3, 6, 0));
+      hub.active!.cache.setVersion(
+        unsupported ? Version(1, 0, 0) : Version(3, 6, 0),
+      );
       when(api.getServerDiskVolumes).thenThrow(StateError('unavailable'));
       final bloc = createBloc(withoutProvider: true);
       addTearDown(bloc.close);
@@ -91,6 +93,32 @@ void main() {
     await bloc.close();
   });
 
+  test('a retained resize choice cannot cross a reset', () async {
+    final bloc = createBloc();
+    addTearDown(bloc.close);
+    await pumpEventQueue();
+    final volume = aServerProviderVolume();
+    const size = DiskSize(byte: 20000000000);
+    final choice = VolumeResize(
+      origin: bloc.state.origin,
+      DiskVolume(name: 'sdb', providerVolume: volume),
+      size,
+    );
+    final volumes = hub.active!.cache.volumes.value.data!;
+    hub
+      ..clear()
+      ..resume();
+    hub.active!.cache.setVersion(Version(3, 6, 0));
+    hub.active!.cache.volumes.push(volumes);
+    await pumpEventQueue();
+    when(
+      () => provider.resizeVolume(volume, size),
+    ).thenAnswer((_) async => GenericResult(success: false, data: false));
+    bloc.add(choice);
+    await pumpEventQueue();
+    verifyNever(() => provider.resizeVolume(volume, size));
+  });
+
   test('missing provider credentials have no price', () async {
     final bloc = createBloc(withoutProvider: true);
     await Future<void>.delayed(Duration.zero);
@@ -111,6 +139,7 @@ void main() {
       await tester.pump();
       bloc.add(
         VolumeResize(
+          origin: bloc.state.origin,
           DiskVolume(name: 'sdb', providerVolume: providerVolume),
           size,
         ),
@@ -142,6 +171,7 @@ void main() {
     await tester.pump();
     bloc.add(
       VolumeResize(
+        origin: bloc.state.origin,
         DiskVolume(name: 'sdb', providerVolume: providerVolume),
         size,
       ),
@@ -188,7 +218,7 @@ void main() {
       final bloc = createBloc();
       await tester.pump();
       expect(bloc.state, isA<VolumesLoaded>());
-      bloc.add(VolumeResize(volume, size));
+      bloc.add(VolumeResize(origin: bloc.state.origin, volume, size));
       await tester.pump();
       expect(bloc.state, isA<VolumesResizing>());
       await tester.pump(const Duration(seconds: 10));
@@ -234,6 +264,7 @@ void main() {
       await tester.pump();
       bloc.add(
         VolumeResize(
+          origin: bloc.state.origin,
           DiskVolume(name: 'sdb', providerVolume: providerVolume),
           size,
         ),

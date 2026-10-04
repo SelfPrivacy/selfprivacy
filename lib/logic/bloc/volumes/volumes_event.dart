@@ -18,18 +18,11 @@ class _LoadProviderVolumes extends VolumesEvent {
   List<Object> get props => [origin];
 }
 
-class _ResizeVolume extends VolumesEvent {
-  const _ResizeVolume(this.event, this.origin);
-  final VolumeResize event;
-  final ServerStateOrigin? origin;
-  @override
-  List<Object?> get props => [event, origin];
-}
-
 class VolumeResize extends VolumesEvent {
-  const VolumeResize(this.volume, this.newSize);
+  const VolumeResize(this.volume, this.newSize, {required this.origin});
+  final ServerStateOrigin? origin;
   final DiskVolume volume;
   final DiskSize newSize;
   @override
-  List<Object> get props => [volume, newSize];
+  List<Object?> get props => [volume, newSize, origin];
 }

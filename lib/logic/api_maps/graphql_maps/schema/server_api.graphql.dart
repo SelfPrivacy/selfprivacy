@@ -3938,6 +3938,531 @@ class _CopyWithStubImpl$Query$GetApiJobs$jobs<TRes>
   getJobs(_fn) => _res;
 }
 
+class Variables$Query$GetApiJob {
+  factory Variables$Query$GetApiJob({required String jobId}) =>
+      Variables$Query$GetApiJob._({r'jobId': jobId});
+
+  Variables$Query$GetApiJob._(this._$data);
+
+  factory Variables$Query$GetApiJob.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$jobId = data['jobId'];
+    result$data['jobId'] = (l$jobId as String);
+    return Variables$Query$GetApiJob._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get jobId => (_$data['jobId'] as String);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$jobId = jobId;
+    result$data['jobId'] = l$jobId;
+    return result$data;
+  }
+
+  CopyWith$Variables$Query$GetApiJob<Variables$Query$GetApiJob> get copyWith =>
+      CopyWith$Variables$Query$GetApiJob(this, (i) => i);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Variables$Query$GetApiJob ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$jobId = jobId;
+    final lOther$jobId = other.jobId;
+    if (l$jobId != lOther$jobId) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$jobId = jobId;
+    return Object.hashAll([l$jobId]);
+  }
+}
+
+abstract class CopyWith$Variables$Query$GetApiJob<TRes> {
+  factory CopyWith$Variables$Query$GetApiJob(
+    Variables$Query$GetApiJob instance,
+    TRes Function(Variables$Query$GetApiJob) then,
+  ) = _CopyWithImpl$Variables$Query$GetApiJob;
+
+  factory CopyWith$Variables$Query$GetApiJob.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Query$GetApiJob;
+
+  TRes call({String? jobId});
+}
+
+class _CopyWithImpl$Variables$Query$GetApiJob<TRes>
+    implements CopyWith$Variables$Query$GetApiJob<TRes> {
+  _CopyWithImpl$Variables$Query$GetApiJob(this._instance, this._then);
+
+  final Variables$Query$GetApiJob _instance;
+
+  final TRes Function(Variables$Query$GetApiJob) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? jobId = _undefined}) => _then(
+    Variables$Query$GetApiJob._({
+      ..._instance._$data,
+      if (jobId != _undefined && jobId != null) 'jobId': (jobId as String),
+    }),
+  );
+}
+
+class _CopyWithStubImpl$Variables$Query$GetApiJob<TRes>
+    implements CopyWith$Variables$Query$GetApiJob<TRes> {
+  _CopyWithStubImpl$Variables$Query$GetApiJob(this._res);
+
+  TRes _res;
+
+  call({String? jobId}) => _res;
+}
+
+class Query$GetApiJob {
+  Query$GetApiJob({required this.jobs, this.$__typename = 'Query'});
+
+  factory Query$GetApiJob.fromJson(Map<String, dynamic> json) {
+    final l$jobs = json['jobs'];
+    final l$$__typename = json['__typename'];
+    return Query$GetApiJob(
+      jobs: Query$GetApiJob$jobs.fromJson((l$jobs as Map<String, dynamic>)),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Query$GetApiJob$jobs jobs;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$jobs = jobs;
+    _resultData['jobs'] = l$jobs.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$jobs = jobs;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$jobs, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetApiJob || runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$jobs = jobs;
+    final lOther$jobs = other.jobs;
+    if (l$jobs != lOther$jobs) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetApiJob on Query$GetApiJob {
+  CopyWith$Query$GetApiJob<Query$GetApiJob> get copyWith =>
+      CopyWith$Query$GetApiJob(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiJob<TRes> {
+  factory CopyWith$Query$GetApiJob(
+    Query$GetApiJob instance,
+    TRes Function(Query$GetApiJob) then,
+  ) = _CopyWithImpl$Query$GetApiJob;
+
+  factory CopyWith$Query$GetApiJob.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiJob;
+
+  TRes call({Query$GetApiJob$jobs? jobs, String? $__typename});
+  CopyWith$Query$GetApiJob$jobs<TRes> get jobs;
+}
+
+class _CopyWithImpl$Query$GetApiJob<TRes>
+    implements CopyWith$Query$GetApiJob<TRes> {
+  _CopyWithImpl$Query$GetApiJob(this._instance, this._then);
+
+  final Query$GetApiJob _instance;
+
+  final TRes Function(Query$GetApiJob) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? jobs = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Query$GetApiJob(
+          jobs: jobs == _undefined || jobs == null
+              ? _instance.jobs
+              : (jobs as Query$GetApiJob$jobs),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Query$GetApiJob$jobs<TRes> get jobs {
+    final local$jobs = _instance.jobs;
+    return CopyWith$Query$GetApiJob$jobs(local$jobs, (e) => call(jobs: e));
+  }
+}
+
+class _CopyWithStubImpl$Query$GetApiJob<TRes>
+    implements CopyWith$Query$GetApiJob<TRes> {
+  _CopyWithStubImpl$Query$GetApiJob(this._res);
+
+  TRes _res;
+
+  call({Query$GetApiJob$jobs? jobs, String? $__typename}) => _res;
+
+  CopyWith$Query$GetApiJob$jobs<TRes> get jobs =>
+      CopyWith$Query$GetApiJob$jobs.stub(_res);
+}
+
+const documentNodeQueryGetApiJob = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'GetApiJob'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'jobId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
+          FieldNode(
+            name: NameNode(value: 'jobs'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'getJob'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'jobId'),
+                      value: VariableNode(name: NameNode(value: 'jobId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicApiJobsFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ],
+      ),
+    ),
+    fragmentDefinitionbasicApiJobsFields,
+  ],
+);
+Query$GetApiJob _parserFn$Query$GetApiJob(Map<String, dynamic> data) =>
+    Query$GetApiJob.fromJson(data);
+typedef OnQueryComplete$Query$GetApiJob =
+    FutureOr<void> Function(Map<String, dynamic>?, Query$GetApiJob?);
+
+class Options$Query$GetApiJob extends graphql.QueryOptions<Query$GetApiJob> {
+  Options$Query$GetApiJob({
+    String? operationName,
+    required Variables$Query$GetApiJob variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$GetApiJob? typedOptimisticResult,
+    Duration? pollInterval,
+    graphql.Context? context,
+    OnQueryComplete$Query$GetApiJob? onComplete,
+    graphql.OnQueryError? onError,
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$GetApiJob(data),
+               ),
+         onError: onError,
+         document: documentNodeQueryGetApiJob,
+         parserFn: _parserFn$Query$GetApiJob,
+       );
+
+  final OnQueryComplete$Query$GetApiJob? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
+}
+
+class WatchOptions$Query$GetApiJob
+    extends graphql.WatchQueryOptions<Query$GetApiJob> {
+  WatchOptions$Query$GetApiJob({
+    String? operationName,
+    required Variables$Query$GetApiJob variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$GetApiJob? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryGetApiJob,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$GetApiJob,
+       );
+}
+
+class FetchMoreOptions$Query$GetApiJob extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$GetApiJob({
+    required graphql.UpdateQuery updateQuery,
+    required Variables$Query$GetApiJob variables,
+  }) : super(
+         updateQuery: updateQuery,
+         variables: variables.toJson(),
+         document: documentNodeQueryGetApiJob,
+       );
+}
+
+extension ClientExtension$Query$GetApiJob on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$GetApiJob>> query$GetApiJob(
+    Options$Query$GetApiJob options,
+  ) async => await this.query(options);
+
+  graphql.ObservableQuery<Query$GetApiJob> watchQuery$GetApiJob(
+    WatchOptions$Query$GetApiJob options,
+  ) => this.watchQuery(options);
+
+  void writeQuery$GetApiJob({
+    required Query$GetApiJob data,
+    required Variables$Query$GetApiJob variables,
+    bool broadcast = true,
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(document: documentNodeQueryGetApiJob),
+      variables: variables.toJson(),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
+
+  Query$GetApiJob? readQuery$GetApiJob({
+    required Variables$Query$GetApiJob variables,
+    bool optimistic = true,
+  }) {
+    final result = this.readQuery(
+      graphql.Request(
+        operation: graphql.Operation(document: documentNodeQueryGetApiJob),
+        variables: variables.toJson(),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Query$GetApiJob.fromJson(result);
+  }
+}
+
+class Query$GetApiJob$jobs {
+  Query$GetApiJob$jobs({this.getJob, this.$__typename = 'Job'});
+
+  factory Query$GetApiJob$jobs.fromJson(Map<String, dynamic> json) {
+    final l$getJob = json['getJob'];
+    final l$$__typename = json['__typename'];
+    return Query$GetApiJob$jobs(
+      getJob: l$getJob == null
+          ? null
+          : Fragment$basicApiJobsFields.fromJson(
+              (l$getJob as Map<String, dynamic>),
+            ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Fragment$basicApiJobsFields? getJob;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$getJob = getJob;
+    _resultData['getJob'] = l$getJob?.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$getJob = getJob;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$getJob, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetApiJob$jobs || runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$getJob = getJob;
+    final lOther$getJob = other.getJob;
+    if (l$getJob != lOther$getJob) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetApiJob$jobs on Query$GetApiJob$jobs {
+  CopyWith$Query$GetApiJob$jobs<Query$GetApiJob$jobs> get copyWith =>
+      CopyWith$Query$GetApiJob$jobs(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetApiJob$jobs<TRes> {
+  factory CopyWith$Query$GetApiJob$jobs(
+    Query$GetApiJob$jobs instance,
+    TRes Function(Query$GetApiJob$jobs) then,
+  ) = _CopyWithImpl$Query$GetApiJob$jobs;
+
+  factory CopyWith$Query$GetApiJob$jobs.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetApiJob$jobs;
+
+  TRes call({Fragment$basicApiJobsFields? getJob, String? $__typename});
+  CopyWith$Fragment$basicApiJobsFields<TRes> get getJob;
+}
+
+class _CopyWithImpl$Query$GetApiJob$jobs<TRes>
+    implements CopyWith$Query$GetApiJob$jobs<TRes> {
+  _CopyWithImpl$Query$GetApiJob$jobs(this._instance, this._then);
+
+  final Query$GetApiJob$jobs _instance;
+
+  final TRes Function(Query$GetApiJob$jobs) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? getJob = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Query$GetApiJob$jobs(
+          getJob: getJob == _undefined
+              ? _instance.getJob
+              : (getJob as Fragment$basicApiJobsFields?),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get getJob {
+    final local$getJob = _instance.getJob;
+    return local$getJob == null
+        ? CopyWith$Fragment$basicApiJobsFields.stub(_then(_instance))
+        : CopyWith$Fragment$basicApiJobsFields(
+            local$getJob,
+            (e) => call(getJob: e),
+          );
+  }
+}
+
+class _CopyWithStubImpl$Query$GetApiJob$jobs<TRes>
+    implements CopyWith$Query$GetApiJob$jobs<TRes> {
+  _CopyWithStubImpl$Query$GetApiJob$jobs(this._res);
+
+  TRes _res;
+
+  call({Fragment$basicApiJobsFields? getJob, String? $__typename}) => _res;
+
+  CopyWith$Fragment$basicApiJobsFields<TRes> get getJob =>
+      CopyWith$Fragment$basicApiJobsFields.stub(_res);
+}
+
 class Subscription$JobUpdates {
   Subscription$JobUpdates({required this.jobUpdates});
 

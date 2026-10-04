@@ -1,6 +1,22 @@
 part of 'server_api.dart';
 
 mixin JobsApi on GraphQLApiMap {
+  Future<ServerJob?> getServerJob(final String uid) async {
+    final client = await getClient();
+    final response = await client.query$GetApiJob(
+      Options$Query$GetApiJob(
+        variables: Variables$Query$GetApiJob(jobId: uid),
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    final job = requireServerApiData(response).jobs.getJob;
+    if (response.data?['jobs'] case final Map<String, dynamic> jobs
+        when jobs.containsKey('getJob')) {
+      return job == null ? null : ServerJob.fromGraphQL(job);
+    }
+    throw const MissingServerApiData();
+  }
+
   Future<List<ServerJob>> getServerJobs() async {
     final client = await getClient();
     return requireServerApiData(

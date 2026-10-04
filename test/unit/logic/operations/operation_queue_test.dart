@@ -58,6 +58,23 @@ void main() {
     expect(queue.history.single.status, OperationStatus.unknown);
   });
 
+  test('a missing job stays unknown after the other job succeeds', () async {
+    final operation = queue.submit(
+      OperationKind.manageBackups,
+      () async {},
+      describe: (_) => OperationReport(
+        OperationStatus.accepted,
+        jobIds: {'missing', 'running'},
+      ),
+    );
+    await operation.result;
+    queue.observeMissingJob('missing');
+    expect(queue.pending.single.status, OperationStatus.accepted);
+    queue.observeJob('running', succeeded: true);
+    expect(await operation.completion, OperationStatus.unknown);
+    expect(queue.pending, isEmpty);
+  });
+
   test('a later exception does not abandon an accepted job', () async {
     final operation = queue.submit(OperationKind.manageBackups, () {
       final result = ServerMutationResult(
@@ -82,6 +99,56 @@ void main() {
     expect(queue.history.single.steps.single.status, OperationStatus.failed);
     expect(queue.history.single.steps.single.messageKey, isNot('basis.done'));
   });
+
+  test('an unsent later step does not abandon an accepted job', () async {
+    final operation = queue.submit(OperationKind.manageBackups, () {
+      OperationExecution.current!.record(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(aBackupJob(uid: 'backup')),
+        ),
+      );
+      return Future<void>.error(const OperationNotSent());
+    });
+    expect((await operation.result).status, OperationStatus.unknown);
+    expect(queue.pending.single.jobIds, {'backup'});
+    queue.observeJob('backup', succeeded: true);
+    expect(await operation.completion, OperationStatus.unknown);
+  });
+
+  test(
+    'detachment settles pending steps without changing completed steps',
+    () async {
+      final release = Completer<void>();
+      final operation = queue.submit(OperationKind.initializeBackups, () async {
+        final execution = OperationExecution.current!;
+        for (final status in [
+          OperationStatus.succeeded,
+          OperationStatus.running,
+          OperationStatus.queued,
+        ]) {
+          execution.recordStep(
+            OperationStep(
+              id: status.name,
+              titleKey: 'backup.initialize',
+              status: status,
+            ),
+          );
+        }
+        await release.future;
+      });
+      await pumpEventQueue();
+      queue.detach();
+      expect(await operation.completion, OperationStatus.unknown);
+      expect(queue.history.single.steps.map((final step) => step.status), [
+        OperationStatus.succeeded,
+        OperationStatus.unknown,
+        OperationStatus.notSent,
+      ]);
+      release.complete();
+      await operation.result;
+    },
+  );
 
   test(
     'paused admission drains existing work without sending new actions',

@@ -48,11 +48,12 @@ void main() {
     });
   }
 
-  final reads = <String, Future<Object> Function(ServerApi)>{
+  final reads = <String, Future<Object?> Function(ServerApi)>{
     'GetApiVersion': (final api) => api.fetchApiVersion(),
     'AllUsers': (final api) => api.getAllUsers(),
     'AllGroups': (final api) => api.getAllGroups(),
     'GetApiJobs': (final api) => api.getServerJobs(),
+    'GetApiJob': (final api) => api.getServerJob('job-1'),
     'GetApiTokens': (final api) => api.getApiTokens(),
     'RecoveryKey': (final api) => api.getRecoveryTokenStatus(),
     'SystemSettings': (final api) => api.getSystemSettings(),
@@ -70,6 +71,44 @@ void main() {
       Link.function((final request, [final forward]) => Stream.value(response)),
     ),
   );
+
+  test('job lookup distinguishes authoritative absence from errors', () async {
+    final data = fixture('GetApiJob');
+    final jobs = data['jobs'] as Map<String, dynamic>;
+    final api = ServerApi(
+      transport: transportWithLink(
+        Link.function((final request, [final forward]) {
+          expect(request.variables, {'jobId': 'job-1'});
+          return Stream.value(Response(response: const {}, data: data));
+        }),
+      ),
+    );
+    expect((await api.getServerJob('job-1'))?.progress, 25);
+    jobs['getJob'] = null;
+    expect(
+      await apiReturning(
+        Response(response: const {}, data: data),
+      ).getServerJob('job-1'),
+      isNull,
+    );
+    await expectLater(
+      apiReturning(
+        Response(
+          response: const {},
+          data: data,
+          errors: const [GraphQLError(message: 'Not authorized')],
+        ),
+      ).getServerJob('job-1'),
+      throwsA(isA<OperationException>()),
+    );
+    jobs.remove('getJob');
+    await expectLater(
+      apiReturning(
+        Response(response: const {}, data: data),
+      ).getServerJob('job-1'),
+      throwsA(isA<MissingServerApiData>()),
+    );
+  });
 
   for (final entry in reads.entries) {
     group(entry.key, () {

@@ -33,6 +33,14 @@ query GetApiJobs {
   }
 }
 
+query GetApiJob($jobId: String!) {
+  jobs {
+    getJob(jobId: $jobId) {
+      ...basicApiJobsFields
+    }
+  }
+}
+
 subscription JobUpdates {
   jobUpdates {
     ...basicApiJobsFields

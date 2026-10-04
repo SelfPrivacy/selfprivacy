@@ -42,6 +42,8 @@ class ConnectionRuntime {
   bool _suspended = false;
   bool _disposed = false;
   bool _socketAllowed = true;
+  bool _checkingJobs = false;
+  final _checkedJobs = <String, List<ServerJob>>{};
   bool get canStream =>
       !_disposed &&
       !_suspended &&
@@ -225,6 +227,68 @@ class ConnectionRuntime {
           job.uid,
           succeeded: job.status == JobStatusEnum.finished,
         );
+      }
+    }
+    _checkedJobs.removeWhere(
+      (final uid, _) => !operations.pendingJobIds.contains(uid),
+    );
+    if (!_checkingJobs && !_disposed && !_suspended && connection.canRead) {
+      unawaited(_verifyMissingJobs());
+    }
+  }
+
+  Future<void> _verifyMissingJobs() async {
+    final snapshot = connection.jobs.value.data;
+    if (snapshot == null) {
+      return;
+    }
+    final known = {
+      ...snapshot.map((final job) => job.uid),
+      ...connection.jobs.confirmedBeforeLoad.keys,
+    };
+    final missing = operations.pendingJobIds
+        .where(
+          (final uid) =>
+              !known.contains(uid) && !identical(_checkedJobs[uid], snapshot),
+        )
+        .toList();
+    if (missing.isEmpty) {
+      return;
+    }
+    _checkingJobs = true;
+    try {
+      for (final uid in missing) {
+        if (_disposed || _suspended || !connection.canRead) {
+          break;
+        }
+        if (!operations.pendingJobIds.contains(uid)) {
+          continue;
+        }
+        _checkedJobs[uid] = snapshot;
+        try {
+          final job = await connection.read(
+            (final owner) => owner.api.getServerJob(uid),
+          );
+          if (_disposed ||
+              !operations.pendingJobIds.contains(uid) ||
+              connection.jobs.snapshot.jobs.any(
+                (final job) => job.uid == uid,
+              )) {
+            continue;
+          }
+          if (job == null) {
+            operations.observeMissingJob(uid);
+          } else {
+            connection.jobs.receiveVerifiedJob(job);
+          }
+        } catch (_) {
+          // Retry observation after the next jobs snapshot, never the command.
+        }
+      }
+    } finally {
+      _checkingJobs = false;
+      if (!_disposed) {
+        _observeJobs();
       }
     }
   }

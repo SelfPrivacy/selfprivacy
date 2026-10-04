@@ -44,6 +44,9 @@ class OperationQueue {
     _records.values.where((final item) => item.status.isPending),
   );
   Stream<List<OperationSnapshot>> get changes => _changes.stream;
+  Set<String> get pendingJobIds => {
+    for (final jobs in _remainingJobs.values) ...jobs,
+  };
   bool get isIdle => !_pending.values.any((final item) => item.running);
   bool get isPaused => _paused;
 
@@ -96,45 +99,32 @@ class OperationQueue {
               final report =
                   describe?.call(value) ??
                   OperationReport(OperationStatus.succeeded);
-              if (report.jobIds.isNotEmpty) {
-                _remainingJobs[id] = {...report.jobIds};
-                _jobReports[id] = report.status;
-              }
-              _record(
-                id,
-                report.jobIds.isNotEmpty
-                    ? OperationStatus.accepted
-                    : report.status,
-                jobIds: report.jobIds,
-              );
+              _recordReport(id, report);
               completion.complete(OperationResult(report.status, value: value));
             } on OperationNotSent {
               if (completion.isCompleted) {
                 return;
               }
-              _record(
+              final report = execution.report;
+              final status = report.status == OperationStatus.notSent
+                  ? OperationStatus.notSent
+                  : OperationStatus.unknown;
+              _recordReport(
                 id,
-                OperationStatus.notSent,
+                OperationReport(status, jobIds: report.jobIds),
                 reason: OperationReason.unavailable,
               );
-              completion.complete(
-                const OperationResult(OperationStatus.notSent),
-              );
+              completion.complete(OperationResult(status));
             } catch (error, stackTrace) {
               if (completion.isCompleted) {
                 return;
               }
-              final jobs = execution.report.jobIds;
-              if (jobs.isNotEmpty) {
-                _remainingJobs[id] = {...jobs};
-                _jobReports[id] = OperationStatus.unknown;
-              }
-              _record(
+              _recordReport(
                 id,
-                jobs.isEmpty
-                    ? OperationStatus.unknown
-                    : OperationStatus.accepted,
-                jobIds: jobs,
+                OperationReport(
+                  OperationStatus.unknown,
+                  jobIds: execution.report.jobIds,
+                ),
               );
               completion.completeError(error, stackTrace);
             } finally {
@@ -204,7 +194,16 @@ class OperationQueue {
     }
   }
 
-  void observeJob(final String uid, {required final bool succeeded}) {
+  void observeJob(final String uid, {required final bool succeeded}) =>
+      _settleJob(
+        uid,
+        succeeded ? OperationStatus.succeeded : OperationStatus.failed,
+      );
+
+  void observeMissingJob(final String uid) =>
+      _settleJob(uid, OperationStatus.unknown);
+
+  void _settleJob(final String uid, final OperationStatus status) {
     if (_disposed) {
       return;
     }
@@ -212,19 +211,16 @@ class OperationQueue {
       if (!entry.value.remove(uid)) {
         continue;
       }
-      if (!succeeded) {
+      if (status == OperationStatus.failed) {
         _failedJobs.add(entry.key);
+      }
+      if (status == OperationStatus.unknown) {
+        _jobReports[entry.key] = OperationStatus.unknown;
       }
       _updateSteps(
         entry.key,
         _records[entry.key]!.steps.map(
-          (final step) => step.jobId == uid
-              ? step.withStatus(
-                  succeeded
-                      ? OperationStatus.succeeded
-                      : OperationStatus.failed,
-                )
-              : step,
+          (final step) => step.jobId == uid ? step.withStatus(status) : step,
         ),
       );
       if (entry.value.isEmpty) {
@@ -277,7 +273,17 @@ class OperationQueue {
         OperationEvent(_now(), status, reason: reason),
       ],
       jobIds: jobIds ?? previous.jobIds,
-      steps: previous.steps,
+      steps: status.isPending
+          ? previous.steps
+          : previous.steps.map(
+              (final step) => step.status.isPending
+                  ? step.withStatus(
+                      step.status == OperationStatus.queued
+                          ? OperationStatus.notSent
+                          : OperationStatus.unknown,
+                    )
+                  : step,
+            ),
     );
     if (!status.isPending) {
       _completions.remove(id)?.complete(status);
@@ -295,6 +301,23 @@ class OperationQueue {
       }
     }
     _publish();
+  }
+
+  void _recordReport(
+    final int id,
+    final OperationReport report, {
+    final OperationReason? reason,
+  }) {
+    if (report.jobIds.isNotEmpty) {
+      _remainingJobs[id] = {...report.jobIds};
+      _jobReports[id] = report.status;
+    }
+    _record(
+      id,
+      report.jobIds.isEmpty ? report.status : OperationStatus.accepted,
+      reason: reason,
+      jobIds: report.jobIds,
+    );
   }
 
   void _publish() {

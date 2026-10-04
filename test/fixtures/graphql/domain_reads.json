@@ -131,6 +131,27 @@
       ]
     }
   },
+  "GetApiJob": {
+    "__typename": "Query",
+    "jobs": {
+      "__typename": "Job",
+      "getJob": {
+        "__typename": "ApiJob",
+        "createdAt": "2026-09-10T10:00:00Z",
+        "updatedAt": "2026-09-10T10:01:00Z",
+        "description": "Rebuild system",
+        "error": null,
+        "finishedAt": null,
+        "name": "Rebuild",
+        "progress": 25,
+        "result": null,
+        "status": "RUNNING",
+        "statusText": "Running",
+        "uid": "job-1",
+        "typeId": "system.rebuild"
+      }
+    }
+  },
   "JobUpdates": {
     "__typename": "Subscription",
     "jobUpdates": [

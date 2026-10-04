@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../fakes/graphql/link_transport.dart';
+import '../../../helpers/fixtures/backup_fixtures.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 
@@ -195,6 +196,181 @@ void main() {
     await tester.pump();
     await work.result;
     await rotation;
+  });
+
+  runtimeTest('missing jobs are verified once before becoming unknown', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    final lookup = Completer<ServerJob?>();
+    when(() => api.getServerJob('backup')).thenAnswer((_) => lookup.future);
+    final operation = hub.active!.submit(
+      OperationKind.manageBackups,
+      (final owner) async {},
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+    );
+    await tester.pump();
+    await operation.result;
+    expect(hub.active!.operations.pending, hasLength(1));
+    hub.active!.cache.groups.push(const ['sp.full_users']);
+    await tester.pump();
+    verify(() => api.getServerJob('backup')).called(1);
+    lookup.complete(null);
+    await tester.pump();
+    expect(await operation.completion, OperationStatus.unknown);
+    expect(hub.active!.operations.pending, isEmpty);
+  });
+
+  runtimeTest(
+    'failed job verification retries on a new snapshot without resending',
+    (final tester) async {
+      start(tester);
+      await tester.pump();
+      when(() => api.getServerJob('backup')).thenThrow(StateError('offline'));
+      var sent = 0;
+      final operation = hub.active!.submit(
+        OperationKind.manageBackups,
+        (_) async {
+          sent++;
+        },
+        describe: (_) =>
+            OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+      );
+      await tester.pump();
+      await operation.result;
+      expect(hub.active!.operations.pending, hasLength(1));
+      verify(() => api.getServerJob('backup')).called(1);
+      final completed = aBackupJob(
+        uid: 'backup',
+        status: JobStatusEnum.finished,
+      );
+      when(() => api.getServerJob('backup')).thenAnswer((_) async => completed);
+      jobSockets.single.add([]);
+      await tester.pump();
+      expect(await operation.completion, OperationStatus.succeeded);
+      expect(sent, 1);
+    },
+  );
+
+  runtimeTest('a newer running job supersedes a pending missing-job lookup', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    final lookup = Completer<ServerJob?>();
+    when(() => api.getServerJob('backup')).thenAnswer((_) => lookup.future);
+    final operation = hub.active!.submit(
+      OperationKind.manageBackups,
+      (_) async {},
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+    );
+    await tester.pump();
+    final running = aBackupJob(uid: 'backup', status: JobStatusEnum.running);
+    jobSockets.single.add([running]);
+    await tester.pump();
+    lookup.complete(null);
+    await tester.pump();
+    expect(hub.active!.operations.pending, hasLength(1));
+    jobSockets.single.add([
+      aBackupJob(uid: 'backup', status: JobStatusEnum.finished),
+    ]);
+    await tester.pump();
+    expect(await operation.completion, OperationStatus.succeeded);
+  });
+
+  runtimeTest(
+    'rotation and network loss preserve accepted jobs without resend',
+    (final tester) async {
+      start(tester);
+      await tester.pump();
+      final running = aBackupJob(uid: 'backup', status: JobStatusEnum.running);
+      hub.active!.cache.serverJobs.push([running]);
+      var sent = 0;
+      final operation = hub.active!.submit(
+        OperationKind.manageBackups,
+        (_) async {
+          sent++;
+        },
+        describe: (_) =>
+            OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+      );
+      await tester.pump();
+      final connection = hub.active!;
+      final rotation = connection.rotateToken();
+      await tester.pump();
+      expect(await rotation, RotationOutcome.succeeded);
+      expect(hub.active, same(connection));
+      expect(connection.operations.pending, hasLength(1));
+      events['replacement']!(GraphQLTransportEvent.networkFailure);
+      await tester.pump();
+      expect(connection.operations.pending, hasLength(1));
+      events['replacement']!(GraphQLTransportEvent.protectedSuccess);
+      jobSockets.last.add([
+        aBackupJob(uid: 'backup', status: JobStatusEnum.finished),
+      ]);
+      await tester.pump();
+      expect(await operation.completion, OperationStatus.succeeded);
+      expect(sent, 1);
+    },
+  );
+
+  runtimeTest('job completion before the dispatch receipt is not lost', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    final release = Completer<void>();
+    final operation = hub.active!.submit(
+      OperationKind.manageBackups,
+      (_) => release.future,
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+    );
+    jobSockets.single.add([
+      aBackupJob(uid: 'backup', status: JobStatusEnum.finished),
+    ]);
+    await tester.pump();
+    release.complete();
+    await tester.pump();
+    expect(await operation.completion, OperationStatus.succeeded);
+    verifyNever(() => api.getServerJob(any()));
+  });
+
+  runtimeTest('a late lookup cannot settle work on a replacement connection', (
+    final tester,
+  ) async {
+    start(tester);
+    await tester.pump();
+    final lookup = Completer<ServerJob?>();
+    when(() => api.getServerJob('backup')).thenAnswer((_) => lookup.future);
+    final old = hub.active!;
+    final original = old.submit(
+      OperationKind.manageBackups,
+      (_) async {},
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
+    );
+    await tester.pump();
+    stored = aServer(
+      hostingDetails: aServerHostingDetails(apiToken: 'new-token'),
+    );
+    resourceChanges.add(const ChangedServers());
+    await tester.pump();
+    expect(hub.active, isNot(same(old)));
+    final release = Completer<void>();
+    final replacement = hub.active!.submit(
+      OperationKind.manageUsers,
+      (_) => release.future,
+    );
+    lookup.complete(null);
+    await tester.pump();
+    expect(await original.completion, OperationStatus.unknown);
+    expect(hub.active!.operations.pending.single.id, replacement.id);
+    release.complete();
+    await tester.pump();
   });
 
   runtimeTest(

@@ -93,6 +93,11 @@ class JobsRepository {
     _trackCompletions();
   }
 
+  void receiveVerifiedJob(final ServerJob job) {
+    _reconciler.upsertConfirmed(job);
+    _trackCompletions();
+  }
+
   void _trackCompletions() {
     if (!commands.isAttached) {
       return;

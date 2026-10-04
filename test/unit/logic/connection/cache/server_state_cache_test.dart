@@ -82,10 +82,19 @@ void main() {
       expect(store.value.data, isNotNull, reason: store.name);
       expect(store.value.freshness, Freshness.fresh);
     }
-    expect(
-      requests.toSet(),
-      responses.keys.where((final name) => name != 'JobUpdates').toSet(),
-    );
+    expect(requests.toSet(), {
+      'GetApiVersion',
+      'AllUsers',
+      'AllGroups',
+      'GetApiJobs',
+      'GetApiTokens',
+      'RecoveryKey',
+      'SystemSettings',
+      'BackupConfiguration',
+      'AllBackupSnapshots',
+      'GetServerDiskVolumes',
+      'AllServices',
+    });
     expect(
       state.users.value.data!.map((final user) => user.login),
       contains('alice'),

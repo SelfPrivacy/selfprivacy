@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
+import 'package:selfprivacy/logic/operations/operation.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 
 enum CommandApplication { applied, notApplied, failed, detached }
@@ -221,6 +222,8 @@ class ServerCommandCoordinator {
       }
       try {
         result = await send(_api());
+      } on OperationNotSent {
+        rethrow;
       } catch (_) {
         result = ServerMutationResult<T>(
           outcome: ServerMutationOutcome.indeterminate,
@@ -242,6 +245,10 @@ class ServerCommandCoordinator {
         for (final domain in command.domains.difference(covered)) {
           domain.invalidate();
         }
+      }
+    } on OperationNotSent catch (error, stackTrace) {
+      if (!completion.isCompleted) {
+        completion.completeError(error, stackTrace);
       }
     } catch (_) {
       // Preserve remote confirmation if a local reducer fails.

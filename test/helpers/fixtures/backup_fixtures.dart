@@ -15,7 +15,7 @@ BackupConfiguration aBackupConfiguration() => BackupConfiguration.fromGraphQL(
   ).backup.configuration,
 );
 
-ServerJob aBackupJob({final String? uid}) {
+ServerJob aBackupJob({final String? uid, final JobStatusEnum? status}) {
   final data =
       loadJsonFixture('graphql/mutation_results.json')['StartBackup']
           as Map<String, dynamic>;
@@ -24,6 +24,9 @@ ServerJob aBackupJob({final String? uid}) {
   final json = mutation['job'] as Map<String, dynamic>;
   if (uid != null) {
     json['uid'] = uid;
+  }
+  if (status != null) {
+    json['status'] = status.name.toUpperCase();
   }
   return ServerJob.fromGraphQL(Fragment$basicApiJobsFields.fromJson(json));
 }

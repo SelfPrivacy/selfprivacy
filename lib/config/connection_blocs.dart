@@ -33,6 +33,7 @@ import 'package:selfprivacy/logic/operations/configuration/apply_changes_operati
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/operations/remove_operation_history.dart';
+import 'package:selfprivacy/logic/operations/volumes/move_services.dart';
 import 'package:selfprivacy/logic/operations/volumes/resize_volume_operation.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
@@ -469,9 +470,9 @@ ServicesBloc createServicesBloc(
     OperationKind.manageServices,
     (final owner) => owner.services.restart(id),
   ),
-  move: (final id, final destination) => connection.run(
-    OperationKind.manageServices,
-    (final owner) => owner.services.move(id, destination),
+  move: (final destinations) => connection.run(
+    OperationKind.moveServices,
+    (final owner) => moveServices(owner.services, destinations),
   ),
   showMessage: showMessage,
 );
@@ -495,7 +496,7 @@ ServerJobsBloc createServerJobsBloc(
     (final owner) => owner.jobs.removeAllFinished(),
   ),
   migrate: (final destinations) => connection.run(
-    OperationKind.manageVolumes,
+    OperationKind.migrateVolumes,
     (final owner) => owner.jobs.migrateToBinds(destinations),
   ),
   showMessage: showMessage,

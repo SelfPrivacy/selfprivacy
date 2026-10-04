@@ -33,6 +33,31 @@ void main() {
     expect(cubit.state.focusId, next);
   });
 
+  test('a late job ID does not request progress navigation', () async {
+    final queue = OperationQueue(serverId: 'server');
+    addTearDown(queue.dispose);
+    final cubit = OperationsCubit(
+      queue: queue,
+      remove: (_) async => true,
+      showMessage: (_) {},
+    );
+    addTearDown(cubit.close);
+    final response = Completer<void>();
+    final operation = queue.submit(
+      OperationKind.manageServices,
+      () => response.future,
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: ['late-job']),
+    );
+    await pumpEventQueue();
+    expect(cubit.state.focusId, isNull);
+    response.complete();
+    await operation.result;
+    await pumpEventQueue();
+    expect(cubit.state.operations.single.jobIds, {'late-job'});
+    expect(cubit.state.focusId, isNull);
+  });
+
   test(
     'history removal stays pending through failure without duplicate requests',
     () async {

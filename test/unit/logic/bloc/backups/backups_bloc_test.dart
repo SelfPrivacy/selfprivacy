@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
@@ -115,6 +116,28 @@ void main() {
       bloc.state,
       initialized ? isA<BackupsInitialized>() : isA<BackupsUninitialized>(),
     );
+  }
+
+  for (final restore in [false, true]) {
+    test('backup progress opens before dispatch: restore=$restore', () async {
+      await ready();
+      connection.operations.pause();
+      final history = OperationsCubit(
+        queue: connection.operations,
+        remove: (_) async => true,
+        showMessage: (_) {},
+      );
+      addTearDown(history.close);
+      addTearDown(connection.operations.dispose);
+      bloc.add(
+        restore
+            ? const RestoreBackup('snapshot', BackupRestoreStrategy.inplace)
+            : CreateBackups([services.first]),
+      );
+      await pumpEventQueue();
+      expect(history.state.operations.single.jobIds, isEmpty);
+      expect(history.state.focusId, history.state.operations.single.id);
+    });
   }
 
   test('backup initialization is not repeated by a replacement UI', () async {

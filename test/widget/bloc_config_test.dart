@@ -17,12 +17,14 @@ import 'package:selfprivacy/config/preferences_repository/inherited_preferences_
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/organisms/jobs/jobs_content.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
@@ -35,8 +37,10 @@ import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 import '../fakes/hive/in_memory_hive.dart';
+import '../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../helpers/fixtures/json_fixture.dart';
 import '../helpers/fixtures/server_fixtures.dart';
+import '../helpers/fixtures/service_fixtures.dart';
 import '../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
@@ -351,6 +355,75 @@ void main() {
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
       router.dispose();
+    },
+  );
+
+  testWidgets(
+    'moving services opens progress once for the submitted selection',
+    (final tester) async {
+      final router = RootRouter(getIt<NavigationService>().navigatorKey);
+      await pumpApp(tester, router);
+      await tester.runAsync(() async {
+        await resources.addServer(aServer());
+        await pumpEventQueue();
+      });
+      await waitForContent(
+        tester,
+        () =>
+            find.byType(UsersPage).evaluate().isNotEmpty &&
+            tester.element(find.byType(UsersPage)).read<UsersBloc?>() != null,
+        'The server branch must be ready',
+      );
+      final connection = hub.active!;
+      final service = aService();
+      final pending = Completer<ServerMutationResult<ServerJob>>();
+      when(
+        () => api.moveService(service.id, 'sdb'),
+      ).thenAnswer((_) => pending.future);
+      connection
+        ..cache.setVersion(Version(3, 6, 0))
+        ..services.store.push([service]);
+      await tester.runAsync(pumpEventQueue);
+      final services = tester
+          .element(find.byType(UsersPage))
+          .read<ServicesBloc>();
+      when(() => api.moveService('nextcloud', 'sdb')).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(
+            aServiceMoveJob(uid: 'move-nextcloud'),
+          ),
+        ),
+      );
+      services.add(ServicesMove({service.id: 'sdb', 'nextcloud': 'sdb'}));
+      await tester.runAsync(pumpEventQueue);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(JobsContent), findsOneWidget);
+      expect(connection.operations.history.single.jobIds, isEmpty);
+      Navigator.of(tester.element(find.byType(JobsContent))).pop();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      unawaited(router.push(const ConsoleRoute()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.runAsync(() async {
+        pending.complete(
+          ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: ServerMutationPayload.available(aServiceMoveJob()),
+          ),
+        );
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(connection.operations.history.single.jobIds, hasLength(2));
+      expect(find.byType(JobsContent, skipOffstage: false), findsNothing);
+      expect(router.current.name, ConsoleRoute.name);
+      await tester.pumpWidget(const SizedBox.shrink());
+      router.dispose();
+      hub.dispose();
     },
   );
 

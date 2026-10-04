@@ -30,7 +30,7 @@ void main() {
           services: source.stream,
           refresh: () async {},
           restart: (_) async => null,
-          move: (_, _) async => null,
+          move: (_) async => null,
           showMessage: (_) {},
         );
         final jobs = _Jobs();

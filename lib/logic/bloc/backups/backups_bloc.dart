@@ -95,6 +95,8 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
           switch (event) {
             InitializeBackupsRepository() => OperationKind.initializeBackups,
             RemoveBackupsRepository() => OperationKind.removeBackups,
+            CreateBackups() => OperationKind.createBackups,
+            RestoreBackup() => OperationKind.restoreBackup,
             _ => OperationKind.manageBackups,
           },
           (final repository) => action(event, repository, (final value) {

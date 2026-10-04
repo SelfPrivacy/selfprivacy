@@ -19,9 +19,8 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     required final Stream<CachedValue<List<Service>>?> services,
     required final Future<void> Function() refresh,
     required final Future<ServerMutationResult<void>?> Function(String) restart,
-    required final Future<ServerMutationResult<ServerJob>?> Function(
-      String,
-      String,
+    required final Future<List<ServerMutationResult<ServerJob>>?> Function(
+      Map<String, String>,
     )
     move,
     required final void Function(String) showMessage,
@@ -33,7 +32,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
     on<_ServicesObserved>(_observe, transformer: sequential());
     on<ServicesReload>(_act, transformer: droppable());
     on<ServiceRestart>(_act, transformer: sequential());
-    on<ServiceMove>(_act, transformer: sequential());
+    on<ServicesMove>(_act, transformer: sequential());
     _subscription = services.listen((final observation) {
       _latest = observation;
       add(_ServicesObserved(observation));
@@ -42,7 +41,10 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
 
   final Future<void> Function() _refresh;
   final Future<ServerMutationResult<void>?> Function(String) _restart;
-  final Future<ServerMutationResult<ServerJob>?> Function(String, String) _move;
+  final Future<List<ServerMutationResult<ServerJob>>?> Function(
+    Map<String, String>,
+  )
+  _move;
   final void Function(String) _showMessage;
   late final StreamSubscription<CachedValue<List<Service>>?> _subscription;
   CachedValue<List<Service>>? _latest;
@@ -107,12 +109,20 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
           );
           _report(result);
         }
-      case ServiceMove(:final service, :final destination):
-        final result = await _move(service.id, destination);
-        if (_isActive &&
-            (result?.outcome != ServerMutationOutcome.confirmed ||
-                result?.payload.value == null)) {
-          _report(result);
+      case ServicesMove(:final destinations):
+        final results = await _move(destinations);
+        if (!_isActive) {
+          return;
+        }
+        if (results == null) {
+          _report<ServerJob>(null);
+          return;
+        }
+        for (final result in results) {
+          if (result.outcome != ServerMutationOutcome.confirmed ||
+              result.payload.value == null) {
+            _report(result);
+          }
         }
       case _:
         throw StateError('Unsupported service action');

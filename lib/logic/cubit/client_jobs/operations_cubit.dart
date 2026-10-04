@@ -59,8 +59,11 @@ class OperationsCubit extends Cubit<OperationsState> {
   static bool _visible(final OperationSnapshot operation) =>
       operation.kind != OperationKind.manageJobs;
   static bool _longOperation(final OperationSnapshot operation) =>
-      operation.jobIds.isNotEmpty ||
       switch (operation.kind) {
+        OperationKind.createBackups ||
+        OperationKind.restoreBackup ||
+        OperationKind.moveServices ||
+        OperationKind.migrateVolumes ||
         OperationKind.applyChanges ||
         OperationKind.rebootServer ||
         OperationKind.upgradeServer ||

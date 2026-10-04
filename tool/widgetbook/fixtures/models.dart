@@ -117,7 +117,7 @@ OperationSnapshot demoOperation(final String variant) {
     kind: variant == 'Resize'
         ? OperationKind.resizeVolume
         : variant == 'Waiting'
-        ? OperationKind.manageBackups
+        ? OperationKind.createBackups
         : OperationKind.applyChanges,
     events: [OperationEvent(referenceTime, status)],
     jobIds: variant == 'Waiting' ? ['catalog-job'] : const [],

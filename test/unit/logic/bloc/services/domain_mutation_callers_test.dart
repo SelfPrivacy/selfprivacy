@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/operations/volumes/move_services.dart';
 
 import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
@@ -62,8 +63,8 @@ void main() {
         await connection.services.refresh(force: true);
       },
       restart: (final id) => connection.services.restart(id),
-      move: (final id, final destination) =>
-          connection.services.move(id, destination),
+      move: (final destinations) =>
+          moveServices(connection.services, destinations),
       showMessage: navigation.showSnackBar,
     );
     jobs = ServerJobsBloc(
@@ -125,7 +126,7 @@ void main() {
         ),
       );
       await tester.runAsync(() async {
-        services.add(ServiceMove(service, 'sdb'));
+        services.add(ServicesMove({service.id: 'sdb'}));
         await pumpEventQueue();
       });
       expect(
@@ -186,7 +187,7 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(ServiceMove(service, 'sdb'));
+      services.add(ServicesMove({service.id: 'sdb'}));
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, isEmpty);
@@ -210,7 +211,7 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(ServiceMove(service, 'sdb'));
+      services.add(ServicesMove({service.id: 'sdb'}));
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, [updated]);
@@ -228,7 +229,7 @@ void main() {
       ),
     );
     await tester.runAsync(() async {
-      services.add(ServiceMove(service, 'sdb'));
+      services.add(ServicesMove({service.id: 'sdb'}));
       await pumpEventQueue();
     });
     expect(connection.jobs.value.data, isNull);

@@ -128,7 +128,7 @@ void main() {
     addTearDown(operations.close);
     await queue
         .submit(
-          OperationKind.manageBackups,
+          OperationKind.createBackups,
           () async {},
           describe: (_) =>
               OperationReport(OperationStatus.accepted, jobIds: {'related'}),

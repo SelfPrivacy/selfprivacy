@@ -200,13 +200,7 @@ class _ServicesMigrationPageState extends State<ServicesMigrationPage> {
                     ),
                   );
                 } else {
-                  for (final service in services) {
-                    if (serviceToDisk[service.id] != null) {
-                      context.read<ServicesBloc>().add(
-                        ServiceMove(service, serviceToDisk[service.id]!),
-                      );
-                    }
-                  }
+                  context.read<ServicesBloc>().add(ServicesMove(serviceToDisk));
                 }
                 context.router.popUntilRoot();
                 unawaited(showModalJobsSheet(context: context));

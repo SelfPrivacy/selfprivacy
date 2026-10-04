@@ -29,12 +29,12 @@ class ServiceRestart extends ServicesEvent {
   List<Object?> get props => [service];
 }
 
-class ServiceMove extends ServicesEvent {
-  const ServiceMove(this.service, this.destination);
+class ServicesMove extends ServicesEvent {
+  ServicesMove(final Map<String, String> destinations)
+    : destinations = Map.unmodifiable(destinations);
 
-  final Service service;
-  final String destination;
+  final Map<String, String> destinations;
 
   @override
-  List<Object?> get props => [service, destination];
+  List<Object?> get props => [destinations];
 }

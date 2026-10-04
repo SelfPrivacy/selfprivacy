@@ -29,7 +29,7 @@ void main() {
         return refresh.future;
       },
       restart: (_) => pending.future,
-      move: (_, _) async => null,
+      move: (_) async => null,
       showMessage: feedback.add,
     );
   });

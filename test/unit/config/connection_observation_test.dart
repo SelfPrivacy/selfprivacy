@@ -13,9 +13,11 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/json/server_job.dart';
 
 import '../../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../../helpers/fixtures/server_fixtures.dart';
@@ -132,7 +134,7 @@ void main() {
           case 'restart':
             services.add(ServiceRestart(service));
           case 'move':
-            services.add(ServiceMove(service, 'sdb'));
+            services.add(ServicesMove({service.id: 'sdb'}));
           case 'removeJob':
             jobs.add(RemoveServerJob(job.uid));
           case 'removeFinished':
@@ -153,6 +155,89 @@ void main() {
       },
     );
   }
+
+  for (final detach in [false, true]) {
+    test(
+      'submitted moves survive UI close but stop on detach: detach=$detach',
+      () async {
+        final connection = hub.active!;
+        final pending = Completer<ServerMutationResult<ServerJob>>();
+        final calls = <String>[];
+        when(() => api.moveService(any(), any())).thenAnswer((final call) {
+          final id = call.positionalArguments.first as String;
+          calls.add(id);
+          return id == 'gitea'
+              ? pending.future
+              : Future.value(
+                  ServerMutationResult(
+                    outcome: ServerMutationOutcome.confirmed,
+                    payload: ServerMutationPayload.available(
+                      aServiceMoveJob(uid: id),
+                    ),
+                  ),
+                );
+        });
+        final feedback = <String>[];
+        final services = createServicesBloc(
+          connection,
+          showMessage: feedback.add,
+        );
+        await pumpEventQueue();
+        final selection = {'gitea': 'sdb', 'nextcloud': 'sdc'};
+        services.add(ServicesMove(selection));
+        selection.clear();
+        await pumpEventQueue();
+        expect(calls, ['gitea']);
+        final closing = services.close();
+        if (detach) {
+          connection.dispose();
+        }
+        pending.complete(
+          ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: ServerMutationPayload.available(
+              aServiceMoveJob(uid: 'gitea'),
+            ),
+          ),
+        );
+        await closing;
+        await pumpEventQueue();
+        expect(calls, detach ? ['gitea'] : ['gitea', 'nextcloud']);
+        expect(feedback, isEmpty);
+        if (!detach) {
+          expect(connection.operations.history.single.jobIds, {
+            'gitea',
+            'nextcloud',
+          });
+          verify(() => api.moveService('nextcloud', 'sdc')).called(1);
+        }
+      },
+    );
+  }
+
+  test('migration requests progress while queued before dispatch', () async {
+    final connection = hub.active!;
+    connection.operations.pause();
+    final jobs = createServerJobsBloc(
+      connection,
+      showMessage: (_, {final behavior}) {},
+    );
+    final history = OperationsCubit(
+      queue: connection.operations,
+      remove: (_) async => true,
+      showMessage: (_) {},
+    );
+    addTearDown(jobs.close);
+    addTearDown(history.close);
+    addTearDown(connection.operations.dispose);
+    await pumpEventQueue();
+    final migrating = jobs.migrateToBinds({'gitea': 'sdb'});
+    await pumpEventQueue();
+    expect(history.state.operations.single.jobIds, isEmpty);
+    expect(history.state.focusId, history.state.operations.single.id);
+    connection.operations.dispose();
+    await migrating;
+  });
 
   test('emits existing data and only updates for its domain', () async {
     hub.active!.cache.groups.push(const ['sp.full_users']);

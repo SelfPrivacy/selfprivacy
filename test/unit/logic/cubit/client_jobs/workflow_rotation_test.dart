@@ -36,7 +36,7 @@ void main() {
   });
 
   testWidgets(
-    'one admitted workflow finishes on its credential while rotation waits for dispatch and persistence',
+    'one admitted operation finishes on its credential while rotation waits for dispatch and persistence',
     (final tester) async {
       await pumpForTest(tester, const SizedBox.shrink());
       await tester.runAsync(() async {

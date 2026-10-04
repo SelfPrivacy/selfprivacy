@@ -15,6 +15,7 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
 import '../../../../helpers/connection_fixture.dart';
@@ -84,7 +85,7 @@ void main() {
   );
 
   test(
-    'DNS update keeps the workflow provider and domain across a held command',
+    'DNS update keeps the operation provider and domain across a held command',
     () async {
       final original = _DnsProvider();
       final replacement = _DnsProvider();
@@ -153,7 +154,7 @@ void main() {
           payload: ServerMutationPayload.available(aServiceMoveJob()),
         );
         when(api.collectNixGarbage).thenAnswer((_) async => result);
-        final feedback = await clientJobWorkflow(
+        final feedback = await configurationOperation(
           connection,
         ).execute(CollectNixGarbageJob());
         expect(feedback.outcome, outcome);
@@ -228,7 +229,44 @@ void main() {
       }
     }
   }
-  testWidgets('mixed command results stop DNS updates and rebuild', (
+  test(
+    'closing the cubit does not stop submitted configuration work',
+    () async {
+      final receipt = Completer<ServerMutationResult<String>>();
+      final sent = Completer<void>();
+      when(() => api.setTimezone('Europe/Helsinki')).thenAnswer((_) {
+        sent.complete();
+        return receipt.future;
+      });
+      final job = aServiceMoveJob();
+      when(api.apply).thenAnswer(
+        (_) async => ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(job),
+        ),
+      );
+      cubit.addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
+      final applying = cubit.applyAll();
+      await sent.future;
+      await cubit.close();
+      receipt.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('Europe/Helsinki'),
+        ),
+      );
+      await applying;
+      expect(connection.jobs.confirmedBeforeLoad.keys, contains(job.uid));
+      final steps = connection.operations.history.single.steps;
+      expect(steps.map((final step) => step.status), [
+        OperationStatus.succeeded,
+        OperationStatus.accepted,
+      ]);
+      expect(steps.last.jobId, job.uid);
+    },
+  );
+
+  testWidgets('mixed command results still apply the saved configuration', (
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());
@@ -244,6 +282,12 @@ void main() {
         payload: const ServerMutationPayload.missing(),
       ),
     );
+    when(api.apply).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(aServiceMoveJob()),
+      ),
+    );
     cubit
       ..addJob(
         ChangeServiceConfiguration(
@@ -254,15 +298,71 @@ void main() {
       )
       ..addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
     await tester.runAsync(cubit.applyAll);
-    final state = cubit.state as JobsStateFinished;
+    final state = cubit.state as JobsStateLoading;
     expect(state.clientJobList.map((final job) => job.status), [
       JobStatusEnum.finished,
       JobStatusEnum.error,
       JobStatusEnum.error,
     ]);
-    verifyNever(api.apply);
-    verify(api.getDnsRecords).called(1);
+    verify(api.apply).called(1);
+    verify(api.getDnsRecords).called(2);
   });
+  test('service configuration draft owns an immutable copy of its input', () {
+    final paths = ['original'];
+    final settings = <String, dynamic>{
+      'nested': <String, dynamic>{'paths': paths},
+    };
+    final change = ChangeServiceConfiguration(
+      serviceId: 'gitea',
+      serviceDisplayName: 'Gitea',
+      settings: settings,
+    );
+    paths.add('later');
+    settings.clear();
+    final nested = change.settings['nested'] as Map<String, dynamic>;
+    expect(nested['paths'], ['original']);
+    expect(change.settings.clear, throwsUnsupportedError);
+    expect(nested.clear, throwsUnsupportedError);
+    expect(() => (nested['paths'] as List).clear(), throwsUnsupportedError);
+  });
+
+  testWidgets('a failed DNS read does not prevent edits or rebuild', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    when(api.getDnsRecords).thenThrow(StateError('secret-sentinel'));
+    when(
+      () => api.switchService(serviceId: 'gitea', needTurnOn: false),
+    ).thenAnswer(
+      (_) async => ServerMutationResult<void>(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    when(api.apply).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(aServiceMoveJob()),
+      ),
+    );
+    cubit.addJob(ServiceToggleJob(service: aService(), needToTurnOn: false));
+    await tester.runAsync(cubit.applyAll);
+    verify(
+      () => api.switchService(serviceId: 'gitea', needTurnOn: false),
+    ).called(1);
+    verify(api.apply).called(1);
+    expect(
+      connection.operations.history.single.steps.map(
+        (final step) => step.status,
+      ),
+      [
+        OperationStatus.succeeded,
+        OperationStatus.failed,
+        OperationStatus.accepted,
+      ],
+    );
+  });
+
   testWidgets('successful commands without rebuild do not request one', (
     final tester,
   ) async {
@@ -334,7 +434,7 @@ void main() {
     expect(cubit.state, isA<JobsStateFinished>());
   });
 
-  testWidgets('a detached workflow never dispatches its later jobs', (
+  testWidgets('a detached operation never dispatches its later jobs', (
     final tester,
   ) async {
     await pumpForTest(tester, const SizedBox.shrink());

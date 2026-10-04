@@ -9,10 +9,10 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/connection_observation.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
-import 'package:selfprivacy/logic/cubit/client_jobs/client_job_workflow.dart';
 import 'package:selfprivacy/logic/models/job.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
@@ -20,11 +20,11 @@ export 'package:provider/provider.dart';
 
 part 'client_jobs_state.dart';
 
-typedef AdmitClientJobWorkflow =
+typedef AdmitConfigurationOperation =
     Future<OperationResult<void>> Function(
       ServerStateOrigin origin,
       OperationKind kind,
-      Future<void> Function(ClientJobWorkflow) action,
+      Future<void> Function(ApplyChangesOperation) action,
     );
 
 class JobsCubit extends Cubit<JobsState> {
@@ -32,11 +32,11 @@ class JobsCubit extends Cubit<JobsState> {
     required final Stream<ConnectionObservation<JobsSnapshot>> jobs,
     required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
     settings,
-    required final AdmitClientJobWorkflow admitWorkflow,
+    required final AdmitConfigurationOperation admitOperation,
     required final Future<void> Function(ServerStateOrigin, String)
     removeServerJob,
     required final void Function(String) showMessage,
-  }) : _admitWorkflow = admitWorkflow,
+  }) : _admitOperation = admitOperation,
        _removeServerJob = removeServerJob,
        _showMessage = showMessage,
        super(JobsStateEmpty()) {
@@ -46,7 +46,7 @@ class JobsCubit extends Cubit<JobsState> {
     });
   }
 
-  final AdmitClientJobWorkflow _admitWorkflow;
+  final AdmitConfigurationOperation _admitOperation;
   final Future<void> Function(ServerStateOrigin, String) _removeServerJob;
   final void Function(String) _showMessage;
   late final StreamSubscription<ConnectionObservation<JobsSnapshot>>
@@ -119,14 +119,13 @@ class JobsCubit extends Cubit<JobsState> {
   Future<void> _perform(
     final ServerStateOrigin origin,
     final OperationKind kind,
-    final Future<void> Function(ClientJobWorkflow) action,
+    final Future<void> Function(ApplyChangesOperation) action,
   ) async {
     try {
-      final result = await _admitWorkflow(origin, kind, (final workflow) async {
-        if (!_isCurrent(origin)) {
-          throw const OperationNotSent();
-        }
-        await action(workflow);
+      final result = await _admitOperation(origin, kind, (
+        final operation,
+      ) async {
+        await action(operation);
       });
       if (_isCurrent(origin) &&
           (result.status == OperationStatus.notSent ||
@@ -180,8 +179,8 @@ class JobsCubit extends Cubit<JobsState> {
         const [],
       ),
     );
-    await _perform(origin!, OperationKind.manageJobs, (final workflow) async {
-      final result = await workflow.execute(job);
+    await _perform(origin!, OperationKind.manageJobs, (final operation) async {
+      final result = await operation.execute(job);
       if (!_isCurrent(origin)) {
         return;
       }
@@ -213,106 +212,62 @@ class JobsCubit extends Cubit<JobsState> {
     if (!_isCurrent(origin) || previous is! JobsStateWithJobs) {
       return;
     }
-    final jobs = previous.clientJobList;
-    final dnsRequired = previous.dnsUpdateRequired;
+    final jobs = List<ClientJob>.unmodifiable(previous.clientJobList);
     emit(
       JobsStateLoading(
-        [...jobs, if (dnsRequired) UpdateDnsRecordsJob()],
+        [...jobs, if (previous.dnsUpdateRequired) UpdateDnsRecordsJob()],
         null,
         const [],
       ),
     );
-    await _perform(origin!, OperationKind.applyChanges, (final workflow) async {
-      final oldDns = dnsRequired ? await workflow.readDns() : null;
-      if (!_isCurrent(origin)) {
-        return;
+    await _perform(
+      origin!,
+      OperationKind.applyChanges,
+      (final operation) => operation.run(
+        jobs,
+        onProgress: (final progress) {
+          if (!_isCurrent(origin) || state is! JobsStateLoading) {
+            return;
+          }
+          final current = state as JobsStateLoading;
+          switch (progress.stage) {
+            case ConfigurationStage.change:
+            case ConfigurationStage.dns:
+              emit(
+                current.updateJobStatus(
+                  progress.changeId ?? UpdateDnsRecordsJob.jobId,
+                  switch (progress.status) {
+                    OperationStatus.running => JobStatusEnum.running,
+                    OperationStatus.succeeded ||
+                    OperationStatus.accepted => JobStatusEnum.finished,
+                    _ => JobStatusEnum.error,
+                  },
+                  message: progress.messageKey?.tr(),
+                ),
+              );
+            case ConfigurationStage.rebuild:
+              if (progress.status == OperationStatus.running) {
+                return;
+              }
+              if (progress.jobId case final uid?) {
+                emit(current.copyWith(rebuildJobUid: uid));
+                _handleServerJobs();
+              } else {
+                if (progress.status != OperationStatus.succeeded) {
+                  _showMessage(progress.messageKey!.tr());
+                }
+                emit(current.finished());
+              }
+          }
+        },
+      ),
+    );
+    if (_isCurrent(origin) && state is JobsStateLoading) {
+      final current = state as JobsStateLoading;
+      if (current.rebuildJobUid == null) {
+        emit(current.finished());
       }
-      for (final job in jobs) {
-        emit(
-          (state as JobsStateLoading).updateJobStatus(
-            job.id,
-            JobStatusEnum.running,
-          ),
-        );
-        final result = await workflow.execute(job);
-        if (!_isCurrent(origin)) {
-          return;
-        }
-        emit(
-          (state as JobsStateLoading).updateJobStatus(
-            job.id,
-            result.outcome == ServerMutationOutcome.confirmed
-                ? JobStatusEnum.finished
-                : JobStatusEnum.error,
-            message: serverMutationMessage(
-              result,
-              sensitive: job is ChangeServiceConfiguration,
-            ),
-          ),
-        );
-      }
-      if ((state as JobsStateLoading).clientJobList.any(
-        (final job) => job.status == JobStatusEnum.error,
-      )) {
-        if (dnsRequired) {
-          emit(
-            (state as JobsStateLoading).updateJobStatus(
-              UpdateDnsRecordsJob.jobId,
-              JobStatusEnum.error,
-              message: 'jobs.ignored_due_to_failures'.tr(),
-            ),
-          );
-        }
-        emit((state as JobsStateLoading).finished());
-        return;
-      }
-      if (oldDns != null) {
-        emit(
-          (state as JobsStateLoading).updateJobStatus(
-            UpdateDnsRecordsJob.jobId,
-            JobStatusEnum.running,
-          ),
-        );
-        final dns = await workflow.updateDns(oldDns);
-        if (!_isCurrent(origin)) {
-          return;
-        }
-        emit(
-          (state as JobsStateLoading).updateJobStatus(
-            UpdateDnsRecordsJob.jobId,
-            dns == DnsUpdateOutcome.updated || dns == DnsUpdateOutcome.unchanged
-                ? JobStatusEnum.finished
-                : JobStatusEnum.error,
-            message: switch (dns) {
-              DnsUpdateOutcome.updated => 'jobs.dns_records_changed'.tr(),
-              DnsUpdateOutcome.unchanged =>
-                'jobs.dns_records_did_not_change'.tr(),
-              DnsUpdateOutcome.unavailable ||
-              DnsUpdateOutcome.failed => 'jobs.failed_to_load_dns_records'.tr(),
-            },
-          ),
-        );
-      }
-      if (!previous.rebuildRequired) {
-        emit((state as JobsStateLoading).finished());
-        return;
-      }
-      final result = await workflow.apply();
-      if (!_isCurrent(origin)) {
-        return;
-      }
-      final job = result.payload.value;
-      if (result.outcome == ServerMutationOutcome.confirmed && job != null) {
-        emit((state as JobsStateLoading).copyWith(rebuildJobUid: job.uid));
-        _handleServerJobs();
-      } else {
-        if (result.outcome != ServerMutationOutcome.confirmed ||
-            result.payload.status != ServerMutationPayloadStatus.notExpected) {
-          _showMessage(serverMutationMessage(result));
-        }
-        emit((state as JobsStateLoading).finished());
-      }
-    });
+    }
   }
 
   Future<void> acknowledgeFinished() async {

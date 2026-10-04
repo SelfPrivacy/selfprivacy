@@ -9,7 +9,6 @@ import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/disk_volumes.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -17,6 +16,7 @@ import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/volumes/resize_volume_operation.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
 import '../../../../helpers/fixtures/json_fixture.dart';
@@ -239,6 +239,24 @@ void main() {
       expect(bloc.state, isA<VolumesLoaded>());
       verify(() => api.resizeVolume('sdb')).called(1);
       expect(hub.active!.operations.history, hasLength(1));
+      final steps = hub.active!.operations.history.single.steps;
+      expect(steps.map((final step) => step.id), [
+        'provider',
+        'providerWait',
+        'filesystem',
+        if (outcome == ServerMutationOutcome.confirmed) ...[
+          'serverWait',
+          'reboot',
+        ],
+      ]);
+      expect(
+        steps.firstWhere((final step) => step.id == 'filesystem').status,
+        switch (outcome) {
+          ServerMutationOutcome.confirmed => OperationStatus.succeeded,
+          ServerMutationOutcome.rejected => OperationStatus.rejected,
+          ServerMutationOutcome.indeterminate => OperationStatus.unknown,
+        },
+      );
       await tester.runAsync(() async {
         final closing = bloc.close();
         await Future<void>.delayed(Duration.zero);
@@ -263,7 +281,7 @@ void main() {
       final operation = hub.active!.submit(
         OperationKind.manageVolumes,
         (final connection) =>
-            VolumeResizeWorkflow(
+            ResizeVolumeOperation(
               volumes: connection.volumes,
               provider: provider,
             ).resize(

@@ -345,10 +345,15 @@ class ChangeServiceConfiguration extends ReplaceableJob {
   ChangeServiceConfiguration({
     required this.serviceId,
     required this.serviceDisplayName,
-    required this.settings,
+    required final Map<String, dynamic> settings,
     super.status,
     super.message,
-  }) : super(
+  }) : settings = Map<String, dynamic>.unmodifiable(
+         settings.map(
+           (final key, final value) => MapEntry(key, _copyConfiguration(value)),
+         ),
+       ),
+       super(
          title: 'jobs.change_service_settings'.tr(args: [serviceDisplayName]),
          id: 'change_settings_$serviceId',
          requiresDnsUpdate: true,
@@ -358,6 +363,16 @@ class ChangeServiceConfiguration extends ReplaceableJob {
   final String serviceId;
   final String serviceDisplayName;
   final Map<String, dynamic> settings;
+
+  static Object? _copyConfiguration(final Object? value) => switch (value) {
+    Map<String, dynamic>() => Map<String, dynamic>.unmodifiable(
+      value.map(
+        (final key, final value) => MapEntry(key, _copyConfiguration(value)),
+      ),
+    ),
+    List() => List<Object?>.unmodifiable(value.map(_copyConfiguration)),
+    _ => value,
+  };
 
   @override
   bool get shouldReplaceOnlyIfSameId => true;

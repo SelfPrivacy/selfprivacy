@@ -303,7 +303,7 @@ void main() {
   );
 
   testWidgets(
-    'initialization waits for local storage before configuring the server',
+    'initialization survives UI closure while waiting for local storage',
     (final tester) async {
       await pumpForTest(tester, const SizedBox.shrink());
       await tester.runAsync(() async {
@@ -338,9 +338,11 @@ void main() {
         await pumpEventQueue();
         expect(bloc.state, isA<BackupsInitializing>());
         verifyNever(() => api.initializeRepository(any()));
+        final closing = bloc.close();
         persisted.complete();
+        await closing;
         await pumpEventQueue();
-        expect(bloc.state, isA<BackupsInitialized>());
+        expect(connection.backups.configValue.data?.isInitialized, isTrue);
         final input =
             verify(() => api.initializeRepository(captureAny())).captured.single
                 as InitializeRepositoryInput;
@@ -419,6 +421,31 @@ void main() {
       },
     );
   }
+
+  testWidgets('repository removal finishes local cleanup after UI closure', (
+    final tester,
+  ) async {
+    await pumpForTest(tester, const SizedBox.shrink());
+    await tester.runAsync(() async {
+      await ready();
+      final response = Completer<ServerMutationResult<BackupConfiguration>>();
+      when(api.removeRepository).thenAnswer((_) => response.future);
+      bloc.add(RemoveBackupsRepository(origin: bloc.state.origin));
+      await pumpEventQueue();
+      final closing = bloc.close();
+      response.complete(
+        ServerMutationResult(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: ServerMutationPayload.available(
+            aBackupConfiguration().copyWith(isInitialized: false),
+          ),
+        ),
+      );
+      await closing;
+      verify(resources.removeBackblazeBucket).called(1);
+      expect(messages, isEmpty);
+    });
+  });
 
   for (final operation in ['period', 'quotas', 'initialize', 'remove']) {
     for (final outcome in ServerMutationOutcome.values) {
@@ -632,6 +659,41 @@ void main() {
       });
     },
   );
+
+  test('closing the bloc does not stop an admitted backup batch', () async {
+    await ready();
+    final selected = services.take(2).toList();
+    final first = Completer<ServerMutationResult<ServerJob>>();
+    final sent = Completer<void>();
+    when(() => api.startBackup(selected.first.id)).thenAnswer((_) {
+      sent.complete();
+      return first.future;
+    });
+    when(() => api.startBackup(selected.last.id)).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: ServerMutationPayload.available(aBackupJob(uid: 'second')),
+      ),
+    );
+    bloc.add(CreateBackups(selected, origin: bloc.state.origin));
+    await sent.future;
+    final closing = bloc.close();
+    first.complete(
+      ServerMutationResult(
+        outcome: ServerMutationOutcome.indeterminate,
+        payload: const ServerMutationPayload.missing(),
+      ),
+    );
+    await closing;
+    await connection.operations.whenIdle;
+    expect(connection.operations.pending.single.jobIds, {'second'});
+    connection.operations.observeJob('second', succeeded: true);
+    expect(
+      connection.operations.history.single.status,
+      OperationStatus.unknown,
+    );
+    expect(messages, isEmpty);
+  });
 
   for (final restore in [false, true]) {
     for (final outcome in ServerMutationOutcome.values) {

@@ -1,5 +1,9 @@
+import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
+import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
+import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
+import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
@@ -10,8 +14,8 @@ enum BackupStorageFailure implements Exception {
   createApplicationKey,
 }
 
-class BackupStorageWorkflow {
-  BackupStorageWorkflow({
+class InitializeBackupsOperation {
+  InitializeBackupsOperation({
     required this.repository,
     required this.provider,
     required this.bucketName,
@@ -31,7 +35,36 @@ class BackupStorageWorkflow {
     }
   }
 
-  Future<BackblazeBucket> prepare() async {
+  Future<ServerMutationResult<BackupConfiguration>> run() async {
+    final bucket = await _prepare();
+    _requireAttached();
+    OperationExecution.current?.recordStep(
+      const OperationStep(
+        id: 'configure',
+        titleKey: 'operations.kind.manageBackups',
+        status: OperationStatus.running,
+      ),
+    );
+    final result = await repository.initializeRepository(
+      InitializeRepositoryInput(
+        provider: BackupsProviderType.backblaze,
+        locationId: bucket.bucketId,
+        locationName: bucket.bucketName,
+        login: bucket.applicationKeyId,
+        password: bucket.applicationKey,
+      ),
+    );
+    OperationExecution.current?.recordStep(
+      OperationStep.fromMutation(
+        id: 'configure',
+        titleKey: 'operations.kind.manageBackups',
+        result: result,
+      ),
+    );
+    return result;
+  }
+
+  Future<BackblazeBucket> _prepare() async {
     _requireAttached();
     final encryptionKey = repository.configValue.data?.encryptionKey;
     if (encryptionKey == null || encryptionKey.isEmpty) {

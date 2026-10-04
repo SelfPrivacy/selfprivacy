@@ -7,7 +7,6 @@ import 'package:selfprivacy/config/connection_observation.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
-import 'package:selfprivacy/logic/bloc/backups/backup_storage_workflow.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
@@ -16,12 +15,10 @@ import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/reset_password_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
-import 'package:selfprivacy/logic/bloc/volumes/volume_resize_workflow.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
-import 'package:selfprivacy/logic/cubit/client_jobs/client_job_workflow.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_repository.dart';
@@ -30,8 +27,11 @@ import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/operations/backups/initialize_backups_operation.dart';
+import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/volumes/resize_volume_operation.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
@@ -237,7 +237,7 @@ JobsCubit createJobsCubit(
     read: (final owner) => owner.settings.value,
     changes: (final owner) => owner.settings.changes,
   ),
-  admitWorkflow: (final origin, final kind, final action) =>
+  admitOperation: (final origin, final kind, final action) =>
       connection.submit<void>(kind, (final owner) {
         final server = resources.servers
             .where((final server) => server.uuid == owner.origin.serverId)
@@ -246,13 +246,13 @@ JobsCubit createJobsCubit(
           throw const OperationNotSent();
         }
         return action(
-          ClientJobWorkflow(
+          ApplyChangesOperation(
             users: owner.users,
             settings: owner.settings,
             services: owner.services,
             jobs: owner.jobs,
             volumes: owner.volumes,
-            readDns: owner.api.getDnsRecords,
+            readDns: () => owner.api.getDnsRecords(),
             dnsProvider: dnsProvider(),
             domain: server.domain,
           ),
@@ -277,7 +277,7 @@ BackupsBloc createBackupsBloc(
     read: (final owner) => owner.backups.snapshot,
     changes: (final owner) => owner.backups.changes,
   ),
-  admitWorkflow: (final origin, final action) => connection
+  admitOperation: (final origin, final action) => connection
       .submit<void>(
         OperationKind.manageBackups,
         (final owner) => action(owner.backups),
@@ -302,7 +302,7 @@ BackupsBloc createBackupsBloc(
       await resources.removeBackblazeBucket();
     }
   },
-  prepareStorage: (final repository, final credential) {
+  initialize: (final repository, final credential) {
     final owner = connection;
     if (!owner.isAttached || !identical(owner.backups, repository)) {
       throw const OperationNotSent();
@@ -330,7 +330,7 @@ BackupsBloc createBackupsBloc(
     final providerId = server.hostingDetails.providerId ?? 'manual';
     final name = '${DateTime.now().millisecondsSinceEpoch}-$providerId-$domain';
     final previous = resources.backblazeBucket;
-    return BackupStorageWorkflow(
+    return InitializeBackupsOperation(
       repository: repository,
       provider: provider,
       bucketName: name.length > 49 ? name.substring(0, 49) : name,
@@ -342,7 +342,7 @@ BackupsBloc createBackupsBloc(
         }
         await resources.setBackblazeBucket(bucket);
       },
-    ).prepare();
+    ).run();
   },
   showMessage: showMessage,
 );
@@ -401,7 +401,7 @@ VolumesBloc createVolumesBloc(
               providerVolume == null) {
             throw const OperationNotSent();
           }
-          return VolumeResizeWorkflow(
+          return ResizeVolumeOperation(
             volumes: owner.volumes,
             provider: provider,
           ).resize(

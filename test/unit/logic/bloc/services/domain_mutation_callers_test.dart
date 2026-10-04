@@ -160,7 +160,7 @@ void main() {
           payload: const ServerMutationPayload.notExpected(),
         ),
       );
-      final result = await clientJobWorkflow(
+      final result = await configurationOperation(
         connection,
       ).execute(ServiceToggleJob(service: service, needToTurnOn: true));
       expect(result.outcome, outcome);

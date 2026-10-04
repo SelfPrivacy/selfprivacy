@@ -66,6 +66,7 @@ class DeviceItem extends StatelessWidget {
     final BuildContext context,
     final ApiToken device,
   ) => showDialog(
+    useRootNavigator: false,
     context: context,
     builder: (final context) => AlertDialog(
       title: Column(
@@ -117,6 +118,7 @@ class DeviceItem extends StatelessWidget {
     final BuildContext context,
     final ApiToken device,
   ) => showDialog(
+    useRootNavigator: false,
     context: context,
     builder: (final context) => AlertDialog(
       title: Column(

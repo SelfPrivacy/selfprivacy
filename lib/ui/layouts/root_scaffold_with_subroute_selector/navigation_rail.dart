@@ -1,9 +1,14 @@
 part of 'root_scaffold_with_subroute_selector.dart';
 
 class _NavigationRail extends SubrouteSelector {
-  const _NavigationRail({required super.subroutes, this.showFab = true});
+  const _NavigationRail({
+    required super.subroutes,
+    this.showFab = true,
+    this.jobsButton,
+  });
 
   final bool showFab;
+  final Widget? jobsButton;
 
   @override
   Widget build(final BuildContext context) {
@@ -21,7 +26,7 @@ class _NavigationRail extends SubrouteSelector {
                   : NavigationRailLabelType.all,
               extended: isExtended,
               leading: showFab
-                  ? const BrandFab(extended: false, elevation: 0)
+                  ? jobsButton ?? const BrandFab(extended: false, elevation: 0)
                   : null,
               groupAlignment: 0,
               destinations: [

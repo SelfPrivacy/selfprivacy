@@ -26,6 +26,18 @@ class JobsContent extends StatefulWidget {
 class _JobsContentState extends State<JobsContent> {
   final _focusedCard = GlobalKey();
   int? _focusId;
+  DialogRoute<void>? _rebootConfirmation;
+
+  @override
+  void dispose() {
+    final confirmation = _rebootConfirmation;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (confirmation?.isActive ?? false) {
+        confirmation!.navigator?.removeRoute(confirmation);
+      }
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -202,7 +214,8 @@ class _JobsContentState extends State<JobsContent> {
           const Gap(8),
           BrandButton.text(
             title: 'jobs.reboot_server'.tr(),
-            onPressed: () => showPopUpAlert(
+            onPressed: () => _rebootConfirmation = showPopUpAlert(
+              context: context,
               alertTitle: 'jobs.reboot_server'.tr(),
               description: 'modals.are_you_sure'.tr(),
               actionButtonTitle: 'modals.reboot'.tr(),

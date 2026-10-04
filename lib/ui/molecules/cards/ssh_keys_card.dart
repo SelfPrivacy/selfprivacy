@@ -43,7 +43,7 @@ class SshKeysCard extends StatelessWidget {
               await showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                useRootNavigator: true,
+                useRootNavigator: false,
                 builder: (final BuildContext context) =>
                     DraggableScrollableSheet(
                       expand: false,
@@ -75,6 +75,7 @@ class SshKeysCard extends StatelessWidget {
                 subtitle: publicKey,
                 onTap: () async {
                   await showDialog(
+                    useRootNavigator: false,
                     context: context,
                     builder: (final BuildContext context) =>
                         _DeleteSshKeyConfirmationDialog(

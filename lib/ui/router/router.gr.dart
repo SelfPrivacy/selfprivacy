@@ -802,18 +802,18 @@ class ServicesCatalogRoute extends PageRouteInfo<void> {
 /// [ServicesMigrationPage]
 class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
   ServicesMigrationRoute({
-    required List<Service> services,
-    required DiskStatus diskStatus,
     required bool isMigration,
-    required ConnectionContinuity? continuity,
+    List<Service>? services,
+    DiskStatus? diskStatus,
+    ConnectionContinuity? continuity,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
          ServicesMigrationRoute.name,
          args: ServicesMigrationRouteArgs(
+           isMigration: isMigration,
            services: services,
            diskStatus: diskStatus,
-           isMigration: isMigration,
            continuity: continuity,
            key: key,
          ),
@@ -827,9 +827,9 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
     builder: (data) {
       final args = data.argsAs<ServicesMigrationRouteArgs>();
       return ServicesMigrationPage(
+        isMigration: args.isMigration,
         services: args.services,
         diskStatus: args.diskStatus,
-        isMigration: args.isMigration,
         continuity: args.continuity,
         key: args.key,
       );
@@ -839,18 +839,18 @@ class ServicesMigrationRoute extends PageRouteInfo<ServicesMigrationRouteArgs> {
 
 class ServicesMigrationRouteArgs {
   const ServicesMigrationRouteArgs({
-    required this.services,
-    required this.diskStatus,
     required this.isMigration,
-    required this.continuity,
+    this.services,
+    this.diskStatus,
+    this.continuity,
     this.key,
   });
 
-  final List<Service> services;
-
-  final DiskStatus diskStatus;
-
   final bool isMigration;
+
+  final List<Service>? services;
+
+  final DiskStatus? diskStatus;
 
   final ConnectionContinuity? continuity;
 
@@ -858,25 +858,25 @@ class ServicesMigrationRouteArgs {
 
   @override
   String toString() {
-    return 'ServicesMigrationRouteArgs{services: $services, diskStatus: $diskStatus, isMigration: $isMigration, continuity: $continuity, key: $key}';
+    return 'ServicesMigrationRouteArgs{isMigration: $isMigration, services: $services, diskStatus: $diskStatus, continuity: $continuity, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ServicesMigrationRouteArgs) return false;
-    return const ListEquality<Service>().equals(services, other.services) &&
+    return isMigration == other.isMigration &&
+        const ListEquality<Service>().equals(services, other.services) &&
         diskStatus == other.diskStatus &&
-        isMigration == other.isMigration &&
         continuity == other.continuity &&
         key == other.key;
   }
 
   @override
   int get hashCode =>
+      isMigration.hashCode ^
       const ListEquality<Service>().hash(services) ^
       diskStatus.hashCode ^
-      isMigration.hashCode ^
       continuity.hashCode ^
       key.hashCode;
 }

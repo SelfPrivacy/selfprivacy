@@ -12,7 +12,7 @@ Widget brandFabDefault(final BuildContext context) => CatalogCase(
   width: 560,
   height: 170,
   builder: (final context, final fixtures, final controller, final update) =>
-      const BrandFab(extended: false),
+      BrandFab(onPressed: () => catalogActions.record('Open jobs')),
 );
 
 @UseCase(name: 'Extended', type: BrandFab, path: '[Molecules]/buttons')
@@ -24,5 +24,8 @@ Widget brandFabExtended(final BuildContext context) => CatalogCase(
   width: 560,
   height: 170,
   builder: (final context, final fixtures, final controller, final update) =>
-      const BrandFab(extended: true),
+      BrandFab(
+        extended: true,
+        onPressed: () => catalogActions.record('Open jobs'),
+      ),
 );

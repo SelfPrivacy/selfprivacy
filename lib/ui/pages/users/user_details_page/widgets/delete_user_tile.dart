@@ -18,7 +18,7 @@ class DeleteUserTile extends StatelessWidget {
     textColor: Theme.of(context).colorScheme.error,
     onTap: () => showDialog(
       context: context,
-      // useRootNavigator: false,
+      useRootNavigator: false,
       builder: (final BuildContext context) => AlertDialog(
         title: Text('basis.confirmation'.tr()),
         content: SingleChildScrollView(

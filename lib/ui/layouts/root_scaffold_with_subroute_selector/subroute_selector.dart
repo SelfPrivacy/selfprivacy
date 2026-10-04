@@ -6,13 +6,17 @@ abstract class SubrouteSelector extends StatelessWidget {
   final List<RouteDestination> subroutes;
 
   int getActiveIndex(final BuildContext context) {
+    final router = context.router;
+    final sectionRouter = identical(router, router.root)
+        ? router.innerRouterOf<StackRouter>(RootRoute.name) ?? router
+        : router;
     int activeIndex = subroutes.indexWhere(
       (final destination) =>
-          context.router.isRouteActive(destination.route.routeName),
+          sectionRouter.isRouteActive(destination.route.routeName),
     );
 
     final prevActiveIndex = subroutes.indexWhere(
-      (final destination) => context.router.stack.any(
+      (final destination) => sectionRouter.stack.any(
         (final route) => route.name == destination.route.routeName,
       ),
     );
@@ -26,6 +30,12 @@ abstract class SubrouteSelector extends StatelessWidget {
 
   ValueSetter<int> openSubpage(final BuildContext context) =>
       (final index) async {
-        await context.router.replaceAll([subroutes[index].route]);
+        final router = context.router;
+        final route = subroutes[index].route;
+        if (router.routeCollection.containsKey(route.routeName)) {
+          await router.replaceAll([route]);
+          return;
+        }
+        await router.root.navigate(RootRoute(children: [route]));
       };
 }

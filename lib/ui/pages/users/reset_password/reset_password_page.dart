@@ -92,7 +92,7 @@ class ResetPasswordPage extends StatelessWidget {
                     await showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      useRootNavigator: true,
+                      useRootNavigator: false,
                       builder: (final BuildContext context) =>
                           DraggableScrollableSheet(
                             expand: false,

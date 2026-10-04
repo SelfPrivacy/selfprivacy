@@ -130,7 +130,7 @@ class BackupDetailsPage extends StatelessWidget {
               ? null
               : () async {
                   await showModalBottomSheet(
-                    useRootNavigator: true,
+                    useRootNavigator: false,
                     context: context,
                     isScrollControlled: true,
                     builder: (final BuildContext context) =>
@@ -159,7 +159,7 @@ class BackupDetailsPage extends StatelessWidget {
               ? null
               : () async {
                   await showModalBottomSheet(
-                    useRootNavigator: true,
+                    useRootNavigator: false,
                     context: context,
                     isScrollControlled: true,
                     builder: (final BuildContext context) =>
@@ -196,7 +196,7 @@ class BackupDetailsPage extends StatelessWidget {
               ? null
               : () async {
                   await showModalBottomSheet(
-                    useRootNavigator: true,
+                    useRootNavigator: false,
                     context: context,
                     isScrollControlled: true,
                     builder: (final BuildContext context) =>
@@ -223,7 +223,7 @@ class BackupDetailsPage extends StatelessWidget {
               ? null
               : () async {
                   await showModalBottomSheet(
-                    useRootNavigator: true,
+                    useRootNavigator: false,
                     context: context,
                     isScrollControlled: true,
                     builder: (final BuildContext context) =>
@@ -350,6 +350,7 @@ class BackupDetailsPage extends StatelessWidget {
                     ? null
                     : () {
                         showPopUpAlert(
+                          context: context,
                           alertTitle: 'backup.detach_repository'.tr(),
                           description: 'backup.detach_repository_confirm'.tr(),
                           actionButtonTitle: 'backup.detach_repository_button'

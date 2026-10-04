@@ -775,6 +775,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
             change.nextState.installationDialoguePopUp) {
       final branching = change.nextState.installationDialoguePopUp;
       showPopUpAlert(
+        context: getIt<NavigationService>().navigatorKey.currentContext!,
         alertTitle: branching!.title,
         description: branching.description,
         actionButtonTitle: branching.choices[1].title,

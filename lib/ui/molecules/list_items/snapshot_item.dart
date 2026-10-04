@@ -35,7 +35,7 @@ class SnapshotItem extends StatelessWidget {
           ? null
           : () async {
               await showModalBottomSheet(
-                useRootNavigator: true,
+                useRootNavigator: false,
                 context: context,
                 isScrollControlled: true,
                 builder: (final BuildContext context) =>
@@ -57,6 +57,7 @@ class SnapshotItem extends StatelessWidget {
           ? null
           : () {
               showPopUpAlert(
+                context: context,
                 alertTitle: 'backup.forget_snapshot'.tr(),
                 description: 'backup.forget_snapshot_alert'.tr(),
                 actionButtonTitle: 'backup.forget_snapshot'.tr(),

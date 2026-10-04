@@ -215,6 +215,7 @@ class LogEntryWidget extends StatelessWidget {
           maxLines: 6,
         ),
         onTap: () => showDialog(
+          useRootNavigator: false,
           context: context,
           builder: (final BuildContext context) =>
               ServerLogEntryDialog(log: logEntry),

@@ -4,10 +4,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_checker_bloc.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/link_list_tile.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_title.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -20,6 +19,21 @@ class AboutApplicationPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final hub = getIt<ServerConnectionHub>();
+    return StreamBuilder(
+      stream: hub.changes,
+      builder: (final context, _) {
+        final versions = hub.active?.cache.apiVersion;
+        return StreamBuilder(
+          stream: versions?.stream,
+          builder: (final context, _) =>
+              _content(context, versions?.value.data?.toString()),
+        );
+      },
+    );
+  }
+
+  Widget _content(final BuildContext context, final String? apiVersion) {
     IconData getPlatformIcon() {
       if (Platform.isAndroid) {
         if (Breakpoints.small.isActive(context)) {
@@ -41,15 +55,6 @@ class AboutApplicationPage extends StatelessWidget {
     }
 
     final deviceIcon = getPlatformIcon();
-    final apiVersion = switch (context
-        .watch<OutdatedServerCheckerBloc>()
-        .state) {
-      OutdatedServerCheckerOutdated(:final currentVersion) ||
-      OutdatedServerCheckerUpToDate(
-        :final currentVersion,
-      ) => currentVersion.toString(),
-      _ => null,
-    };
 
     return BrandHeroScreen(
       hasBackButton: true,

@@ -19,7 +19,6 @@ import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
-import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
@@ -49,37 +48,24 @@ class BlocAndProviderConfig extends StatelessWidget {
         lazy: false,
       ),
       BlocProvider(create: (_) => AppReadinessCubit()),
+      BlocProvider(
+        create: (_) =>
+            TokensBloc(rotateToken: () async => RotationOutcome.detached),
+      ),
     ],
-    child: StreamBuilder<void>(
-      stream: getIt<ServerConnectionHub>().changes,
-      builder: (final context, final snapshot) {
-        final connection = getIt<ServerConnectionHub>().active;
-        if (connection == null) {
-          return BlocProvider(
-            create: (_) =>
-                TokensBloc(rotateToken: () async => RotationOutcome.detached),
-            child: child,
-          );
-        }
-        return _ServerBlocConfig(
-          key: ObjectKey(connection),
-          connection: connection,
-          child: child,
-        );
-      },
-    ),
+    child: child,
   );
 }
 
-class _ServerBlocConfig extends StatefulWidget {
-  const _ServerBlocConfig({required this.connection, this.child, super.key});
+class ServerBlocConfig extends StatefulWidget {
+  const ServerBlocConfig({required this.connection, this.child, super.key});
   final ServerConnection connection;
   final Widget? child;
   @override
-  State<_ServerBlocConfig> createState() => _ServerBlocConfigState();
+  State<ServerBlocConfig> createState() => _ServerBlocConfigState();
 }
 
-class _ServerBlocConfigState extends State<_ServerBlocConfig> {
+class _ServerBlocConfigState extends State<ServerBlocConfig> {
   late final UsersBloc usersBloc;
   late final GroupsBloc groupsBloc;
   late final ServicesBloc servicesBloc;
@@ -213,11 +199,7 @@ class _ServerBlocConfigState extends State<_ServerBlocConfig> {
       listenWhen: (final previous, final next) =>
           previous.focusId != next.focusId && next.focusId != null,
       listener: (final context, _) {
-        final navigationContext =
-            getIt<NavigationService>().navigatorKey.currentContext;
-        if (navigationContext != null) {
-          unawaited(showModalJobsSheet(context: navigationContext));
-        }
+        unawaited(showModalJobsSheet(context: context));
       },
       child: widget.child,
     ),

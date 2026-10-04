@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/ui/layouts/root_scaffold_with_subroute_selector/root_scaffold_with_subroute_selector.dart';
+import 'package:selfprivacy/ui/molecules/buttons/flash_fab.dart';
 import 'package:selfprivacy/ui/router/root_destinations.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
@@ -185,6 +186,11 @@ CatalogCase _example(final String variant, final double width) => CatalogCase(
               destinations: rootDestinations,
               showBottomBar: route != 'ServerDetailsRoute',
               showFab: !variant.endsWith('without configured server'),
+              jobsButton: BrandFab(
+                extended: width >= 840,
+                elevation: width >= 600 && width < 840 ? 0 : null,
+                onPressed: () => catalogActions.record('Open jobs'),
+              ),
               child: _NavigationBody(
                 route: route,
                 openSupport: variant == 'Support open',

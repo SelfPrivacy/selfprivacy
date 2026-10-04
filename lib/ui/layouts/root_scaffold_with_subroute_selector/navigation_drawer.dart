@@ -1,9 +1,14 @@
 part of 'root_scaffold_with_subroute_selector.dart';
 
 class _NavigationDrawer extends SubrouteSelector {
-  const _NavigationDrawer({required super.subroutes, this.showFab = true});
+  const _NavigationDrawer({
+    required super.subroutes,
+    this.showFab = true,
+    this.jobsButton,
+  });
 
   final bool showFab;
+  final Widget? jobsButton;
 
   @override
   Widget build(final BuildContext context) => SizedBox(
@@ -17,9 +22,9 @@ class _NavigationDrawer extends SubrouteSelector {
       onDestinationSelected: openSubpage(context),
       children: [
         if (showFab)
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: BrandFab(extended: true),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: jobsButton ?? const BrandFab(extended: true),
           ),
         const SizedBox(height: 16),
         for (final destination in subroutes)

@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/ui/atoms/buttons/dialog_action_button.dart';
 
-void showPopUpAlert({
+DialogRoute<void> showPopUpAlert({
+  required final BuildContext context,
   required final String description,
   required final String actionButtonTitle,
   required final void Function() actionButtonOnPressed,
@@ -11,8 +13,9 @@ void showPopUpAlert({
   final String? alertTitle,
   final String? cancelButtonTitle,
 }) {
-  getIt.get<NavigationService>().showPopUpDialog(
-    AlertDialog(
+  final route = DialogRoute<void>(
+    context: context,
+    builder: (_) => AlertDialog(
       title: Text(alertTitle ?? 'basis.alert'.tr()),
       content: Text(description),
       actions: [
@@ -28,4 +31,6 @@ void showPopUpAlert({
       ],
     ),
   );
+  unawaited(Navigator.of(context).push(route));
+  return route;
 }

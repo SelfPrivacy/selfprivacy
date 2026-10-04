@@ -22,6 +22,7 @@ class RootScaffoldWithSubrouteSelector extends StatelessWidget {
     required this.destinations,
     this.showBottomBar = true,
     this.showFab = true,
+    this.jobsButton,
     super.key,
   });
 
@@ -29,6 +30,7 @@ class RootScaffoldWithSubrouteSelector extends StatelessWidget {
   final bool showBottomBar;
   final List<RouteDestination> destinations;
   final bool showFab;
+  final Widget? jobsButton;
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -40,9 +42,17 @@ class RootScaffoldWithSubrouteSelector extends StatelessWidget {
     body: Row(
       children: [
         if (Breakpoints.medium.isActive(context))
-          _NavigationRail(subroutes: destinations, showFab: showFab)
+          _NavigationRail(
+            subroutes: destinations,
+            showFab: showFab,
+            jobsButton: jobsButton,
+          )
         else if (Breakpoints.large.isActive(context))
-          _NavigationDrawer(subroutes: destinations, showFab: showFab),
+          _NavigationDrawer(
+            subroutes: destinations,
+            showFab: showFab,
+            jobsButton: jobsButton,
+          ),
         Expanded(child: child),
       ],
     ),
@@ -53,7 +63,7 @@ class RootScaffoldWithSubrouteSelector extends StatelessWidget {
     ),
     floatingActionButton:
         showFab && Breakpoints.small.isActive(context) && showBottomBar
-        ? const BrandFab()
+        ? jobsButton ?? const BrandFab()
         : null,
   );
 }

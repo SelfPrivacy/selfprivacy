@@ -8,10 +8,16 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 class BrandFab extends StatefulWidget {
-  const BrandFab({this.extended = false, this.elevation, super.key});
+  const BrandFab({
+    this.extended = false,
+    this.elevation,
+    this.onPressed,
+    super.key,
+  });
 
   final bool extended;
   final double? elevation;
+  final VoidCallback? onPressed;
 
   @override
   State<BrandFab> createState() => _BrandFabState();
@@ -74,14 +80,14 @@ class _BrandFabState extends State<BrandFab>
       },
       child: widget.extended
           ? FloatingActionButton.extended(
-              onPressed: openJobs,
+              onPressed: widget.onPressed ?? openJobs,
               tooltip: 'jobs.title'.tr(),
               elevation: widget.elevation,
               icon: icon,
               label: Text('jobs.title'.tr()),
             )
           : FloatingActionButton(
-              onPressed: openJobs,
+              onPressed: widget.onPressed ?? openJobs,
               tooltip: 'jobs.title'.tr(),
               elevation: widget.elevation,
               child: icon,

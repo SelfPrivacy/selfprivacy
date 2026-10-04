@@ -14,30 +14,51 @@ Future<T?> showModalJobsSheet<T>({required final BuildContext context}) async {
   final jobs = context.read<JobsCubit>();
   final serverJobs = context.read<ServerJobsBloc>();
   final readiness = context.read<AppReadinessCubit>();
+  final navigator = Navigator.of(context, rootNavigator: true);
+  final localizations = MaterialLocalizations.of(context);
   operations.sheetOpen = true;
-  try {
-    return await showModalBottomSheet<T>(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      builder: (final BuildContext context) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: operations),
-          BlocProvider.value(value: jobs),
-          BlocProvider.value(value: serverJobs),
-          BlocProvider.value(value: readiness),
-        ],
-        child: DraggableScrollableSheet(
-          expand: false,
-          maxChildSize: 0.9,
-          minChildSize: 0.4,
-          initialChildSize: 0.6,
-          builder: (final context, final scrollController) =>
-              JobsContent(controller: scrollController),
-        ),
+  final route = ModalBottomSheetRoute<T>(
+    capturedThemes: InheritedTheme.capture(
+      from: context,
+      to: navigator.context,
+    ),
+    barrierLabel: localizations.scrimLabel,
+    barrierOnTapHint: localizations.scrimOnTapHint(
+      localizations.bottomSheetLabel,
+    ),
+    modalBarrierColor: Theme.of(context).bottomSheetTheme.modalBarrierColor,
+    isScrollControlled: true,
+    builder: (final BuildContext context) => MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: operations),
+        BlocProvider.value(value: jobs),
+        BlocProvider.value(value: serverJobs),
+        BlocProvider.value(value: readiness),
+      ],
+      child: DraggableScrollableSheet(
+        expand: false,
+        maxChildSize: 0.9,
+        minChildSize: 0.4,
+        initialChildSize: 0.6,
+        builder: (final context, final scrollController) =>
+            JobsContent(controller: scrollController),
       ),
-    );
+    ),
+  );
+  final subscription = operations.stream.listen(
+    (_) {},
+    onDone: () {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (route.isActive) {
+          route.navigator?.removeRoute(route);
+        }
+      });
+    },
+  );
+  try {
+    return await navigator.push(route);
   } finally {
     operations.sheetOpen = false;
+    await subscription.cancel();
   }
 }

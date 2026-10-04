@@ -33,28 +33,31 @@ class _ProvidersPageState extends State<ProvidersPage> {
   Widget build(final BuildContext context) {
     final bool isReady =
         context.watch<AppReadinessCubit>().state is ServerConfigured;
-    final BackupsState backupsState = context.watch<BackupsBloc>().state;
+    final BackupsState? backupsState = isReady
+        ? context.watch<BackupsBloc>().state
+        : null;
 
-    final DnsRecordsStatus dnsStatus = context
-        .watch<DnsRecordsCubit>()
-        .state
-        .dnsState;
+    final DnsRecordsStatus dnsStatus = !isReady
+        ? DnsRecordsStatus.uninitialized
+        : context.watch<DnsRecordsCubit>().state.dnsState;
 
-    final diskStatus = context.watch<VolumesBloc>().state.diskStatus;
+    final diskStatus = isReady
+        ? context.watch<VolumesBloc>().state.diskStatus
+        : null;
 
     final AppReadinessState appReadinessState = context
         .watch<AppReadinessCubit>()
         .state;
 
-    final OutdatedServerCheckerState outdatedServerCheckerState = context
-        .watch<OutdatedServerCheckerBloc>()
-        .state;
+    final OutdatedServerCheckerState? outdatedServerCheckerState = !isReady
+        ? null
+        : context.watch<OutdatedServerCheckerBloc>().state;
 
     StateType getServerStatus() {
       if (!isReady) {
         return StateType.uninitialized;
       }
-      if (!diskStatus.isDiskOkay) {
+      if (diskStatus?.isDiskOkay == false) {
         return StateType.warning;
       }
       return StateType.stable;
@@ -94,7 +97,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
             state: getServerStatus(),
             icon: BrandIcons.server,
             title: 'server.card_title'.tr(),
-            subtitle: diskStatus.isDiskOkay
+            subtitle: (diskStatus?.isDiskOkay ?? true)
                 ? 'storage.status_ok'.tr()
                 : 'storage.status_error'.tr(),
             onTap: isClickable()
@@ -141,7 +144,7 @@ class _ProvidersPageState extends State<ProvidersPage> {
     );
   }
 
-  String _backupsCardSubtitle(final BackupsState backupsState) {
+  String _backupsCardSubtitle(final BackupsState? backupsState) {
     if (backupsState is BackupsUnavailable) {
       return (backupsState.isUnsupported
               ? 'basis.feature_unsupported'

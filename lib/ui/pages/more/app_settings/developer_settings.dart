@@ -1,12 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/config/app_controller/inherited_app_controller.dart';
 import 'package:selfprivacy/config/connection_observation.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
-import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
-import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -25,7 +22,8 @@ class DeveloperSettingsPage extends StatefulWidget {
 
 class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
   DeveloperSettingsModel get _settings => getIt<DeveloperSettingsModel>();
-  late final _reachability = observeReachability(getIt<ServerConnectionHub>());
+  final _hub = getIt<ServerConnectionHub>();
+  late final _reachability = observeReachability(_hub);
 
   String? get _apiHost {
     final String? domain =
@@ -35,7 +33,12 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
   }
 
   @override
-  Widget build(final BuildContext context) => BrandHeroScreen(
+  Widget build(final BuildContext context) => StreamBuilder(
+    stream: _hub.changes,
+    builder: (final context, _) => _content(context),
+  );
+
+  Widget _content(final BuildContext context) => BrandHeroScreen(
     hasBackButton: true,
     hasFlashButton: false,
     heroTitle: 'developer_settings.title'.tr(),
@@ -91,10 +94,14 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
         subtitle: Text(
           'troubleshooting.configuration_switch_logs_description'.tr(),
         ),
-        enabled: !InheritedAppController.of(context).shouldShowOnboarding,
-        onTap: () => context.pushRoute(
-          ServerLogsRoute(
-            unitId: 'nixos-rebuild-switch-to-configuration.service',
+        enabled: _hub.active != null,
+        onTap: () => context.navigateTo(
+          RootRoute(
+            children: [
+              ServerLogsRoute(
+                unitId: 'nixos-rebuild-switch-to-configuration.service',
+              ),
+            ],
           ),
         ),
       ),
@@ -110,25 +117,9 @@ class _DeveloperSettingsPageState extends State<DeveloperSettingsPage> {
       ListTile(
         title: Text('storage.start_migration_button'.tr()),
         subtitle: Text('storage.data_migration_notice'.tr()),
-        onTap: () => context.pushRoute(
-          ServicesMigrationRoute(
-            continuity: context.read<ServicesBloc>().state.continuity,
-            diskStatus: context.read<VolumesBloc>().state.diskStatus,
-            services: context
-                .read<ServicesBloc>()
-                .state
-                .services
-                .where(
-                  (final service) =>
-                      service.id == 'bitwarden' ||
-                      service.id == 'gitea' ||
-                      service.id == 'pleroma' ||
-                      service.id == 'email' ||
-                      service.id == 'nextcloud',
-                )
-                .toList(),
-            isMigration: true,
-          ),
+        enabled: _hub.active != null,
+        onTap: () => context.navigateTo(
+          RootRoute(children: [ServicesMigrationRoute(isMigration: true)]),
         ),
       ),
       SectionTitle(title: 'developer_settings.cubit_statuses'.tr()),

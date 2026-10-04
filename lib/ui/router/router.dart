@@ -1,12 +1,20 @@
+import 'dart:async';
+
 import 'package:animations/animations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
+import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/models/disk_status.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/ui/layouts/root_scaffold_with_subroute_selector/root_scaffold_with_subroute_selector.dart';
+import 'package:selfprivacy/ui/molecules/buttons/flash_fab.dart';
 import 'package:selfprivacy/ui/pages/backups/backup_details.dart';
 import 'package:selfprivacy/ui/pages/backups/backups_list.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
@@ -41,6 +49,9 @@ import 'package:selfprivacy/ui/pages/users/new_user.dart';
 import 'package:selfprivacy/ui/pages/users/reset_password/reset_password_page.dart';
 import 'package:selfprivacy/ui/pages/users/user_details_page/user_details.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
+import 'package:selfprivacy/ui/router/root_destinations.dart';
+import 'package:selfprivacy/utils/breakpoints.dart';
+import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 part 'router.gr.dart';
 
@@ -102,15 +113,12 @@ class RootRouter extends RootStackRouter {
           transitionsBuilder: fadeThroughTransition,
           duration: const Duration(milliseconds: 400),
         ),
-        AutoRoute(page: AppSettingsRoute.page),
         AutoRoute(page: UserDetailsRoute.page),
         AutoRoute(page: NewUserRoute.page),
         AutoRoute(page: ResetPasswordRoute.page),
         AutoRoute(page: RecoveryKeyRoute.page),
         AutoRoute(page: DevicesRoute.page),
         AutoRoute(page: NewDeviceRoute.page),
-        AutoRoute(page: AboutApplicationRoute.page),
-        AutoRoute(page: DeveloperSettingsRoute.page),
         AutoRoute(page: ServiceRoute.page),
         AutoRoute(page: ServiceSettingsRoute.page),
         AutoRoute(page: ServicesCatalogRoute.page),
@@ -123,15 +131,63 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: ExtendingVolumeRoute.page),
         AutoRoute(page: ServerSettingsRoute.page),
         AutoRoute(page: ServerLogsRoute.page),
-        AutoRoute(page: TokensRoute.page),
         AutoRoute(page: MemoryUsageByServiceRoute.page),
-        AutoRoute(page: AddServerProviderTokenRoute.page),
-        AutoRoute(page: AddBackupsTokenRoute.page),
+        AutoRoute(page: ServicesMigrationRoute.page),
       ],
     ),
-    AutoRoute(page: ServicesMigrationRoute.page),
+    for (final page in [
+      AppSettingsRoute.page,
+      AboutApplicationRoute.page,
+      DeveloperSettingsRoute.page,
+      TokensRoute.page,
+      AddServerProviderTokenRoute.page,
+      AddBackupsTokenRoute.page,
+    ])
+      AutoRoute(page: _globalPage(page)),
     AutoRoute(page: ConsoleRoute.page),
   ];
+}
+
+PageInfo _globalPage(final PageInfo page) => page.copyWith(
+  builder: (final data) => StreamBuilder(
+    stream: getIt<ServerConnectionHub>().changes,
+    builder: (final context, _) => RootScaffoldWithSubrouteSelector(
+      destinations: rootDestinations,
+      showBottomBar: false,
+      showFab: getIt<ServerConnectionHub>().active != null,
+      jobsButton: _GlobalJobsButton(
+        key: ObjectKey(getIt<ServerConnectionHub>().active),
+      ),
+      child: page.builder(data),
+    ),
+  ),
+);
+
+class _GlobalJobsButton extends StatelessWidget {
+  const _GlobalJobsButton({super.key});
+
+  @override
+  Widget build(final BuildContext context) {
+    final serverContext = context.router.root
+        .innerRouterOf<StackRouter>(RootRoute.name)
+        ?.navigatorKey
+        .currentContext;
+    if (serverContext == null) {
+      return const SizedBox.shrink();
+    }
+    return BlocProvider.value(
+      value: serverContext.read<JobsCubit>(),
+      child: BrandFab(
+        extended: Breakpoints.large.isActive(context),
+        elevation: Breakpoints.medium.isActive(context) ? 0 : null,
+        onPressed: () {
+          if (serverContext.mounted) {
+            unawaited(showModalJobsSheet(context: serverContext));
+          }
+        },
+      ),
+    );
+  }
 }
 
 // Function to map route names to route titles
@@ -184,6 +240,8 @@ String getRouteTitle(final String routeName) {
       return 'backup.snapshots_title';
     case 'ServerStorageRoute':
       return 'storage.card_title';
+    case 'ServicesMigrationRoute':
+      return 'storage.data_migration_title';
     case 'ExtendingVolumeRoute':
       return 'storage.extending_volume_title';
     case 'TokensRoute':

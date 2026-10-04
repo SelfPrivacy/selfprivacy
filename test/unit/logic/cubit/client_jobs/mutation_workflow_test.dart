@@ -73,6 +73,18 @@ void main() {
     hub.dispose();
   });
 
+  test('maintenance can be submitted after a rejected operation', () async {
+    when(api.upgrade).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.rejected,
+        payload: const ServerMutationPayload.notExpected(),
+      ),
+    );
+    await cubit.upgradeServer();
+    await cubit.upgradeServer();
+    verify(api.upgrade).called(2);
+  });
+
   test(
     'reset clears pending client jobs without waiting for another server',
     () async {
@@ -179,7 +191,6 @@ void main() {
         ServerMutationOutcome.indeterminate => OperationStatus.unknown,
       });
       expect(job.messageKey, isNotEmpty);
-      await cubit.rebootServer();
       verify(api.reboot).called(1);
     });
     for (final action in ['upgrade', 'garbage']) {
@@ -346,6 +357,11 @@ void main() {
       ]);
       expect(state.steps.first.status, OperationStatus.running);
       expect(state.steps.first.target, 'Gitea');
+      cubit.removeJob('change_settings_nextcloud');
+      expect(cubit.state, isA<JobsStateLoading>());
+      expect(cubit.state.draft.map((final job) => job.id), [
+        'change_settings_gitea',
+      ]);
       response.complete(
         ServerMutationResult(
           outcome: ServerMutationOutcome.confirmed,

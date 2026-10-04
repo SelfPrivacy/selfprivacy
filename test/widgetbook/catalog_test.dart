@@ -13,6 +13,7 @@ import 'package:widgetbook/widgetbook.dart';
 import '../../tool/widgetbook/catalog_case.dart';
 import '../../tool/widgetbook/main.dart';
 import '../../tool/widgetbook/main.directories.g.dart';
+import '../helpers/widget_harness.dart' show waitForContent;
 
 class _Context extends Mock implements BuildContext {}
 
@@ -49,20 +50,6 @@ Future<void> loadCatalogFonts() async {
   }
 }
 
-Future<void> waitForContent(
-  final WidgetTester tester,
-  final bool Function() ready,
-  final String reason,
-) async {
-  for (var attempt = 0; attempt < 100 && !ready(); attempt++) {
-    await tester.runAsync(() async {
-      await Future<void>.delayed(const Duration(milliseconds: 10));
-    });
-    await tester.pump();
-  }
-  expect(ready(), isTrue, reason: reason);
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
@@ -88,6 +75,11 @@ void main() {
           );
         });
         await tester.pump();
+        await waitForContent(
+          tester,
+          () => find.byType(Scaffold).evaluate().isNotEmpty,
+          'Catalog localization must load before capture',
+        );
         for (var frame = 0; frame < 5; frame++) {
           await tester.pump(const Duration(milliseconds: 300));
         }

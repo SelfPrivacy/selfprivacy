@@ -21,6 +21,7 @@ import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
@@ -28,6 +29,7 @@ import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_metadata.dart';
+import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
 class BlocAndProviderConfig extends StatelessWidget {
   const BlocAndProviderConfig({super.key, this.child});
@@ -178,6 +180,13 @@ class _ServerBlocConfigState extends State<_ServerBlocConfig> {
   Widget build(final BuildContext context) => MultiProvider(
     providers: [
       Provider<ServerConnection>.value(value: widget.connection),
+      BlocProvider(
+        create: (_) => createOperationsCubit(
+          widget.connection,
+          showMessage: getIt<NavigationService>().showSnackBar,
+        ),
+        lazy: false,
+      ),
       BlocProvider(create: (final _) => usersBloc, lazy: false),
       BlocProvider(create: (final _) => groupsBloc, lazy: false),
       BlocProvider(create: (final _) => servicesBloc, lazy: false),
@@ -200,6 +209,17 @@ class _ServerBlocConfigState extends State<_ServerBlocConfig> {
       BlocProvider(create: (final _) => outdatedServerCheckerBloc, lazy: false),
       BlocProvider(create: (final _) => tokensBloc, lazy: false),
     ],
-    child: widget.child,
+    child: BlocListener<OperationsCubit, OperationsState>(
+      listenWhen: (final previous, final next) =>
+          previous.focusId != next.focusId && next.focusId != null,
+      listener: (final context, _) {
+        final navigationContext =
+            getIt<NavigationService>().navigatorKey.currentContext;
+        if (navigationContext != null) {
+          unawaited(showModalJobsSheet(context: navigationContext));
+        }
+      },
+      child: widget.child,
+    ),
   );
 }

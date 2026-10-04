@@ -20,6 +20,7 @@ import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_repository.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
@@ -31,6 +32,7 @@ import 'package:selfprivacy/logic/operations/backups/initialize_backups_operatio
 import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
+import 'package:selfprivacy/logic/operations/remove_operation_history.dart';
 import 'package:selfprivacy/logic/operations/volumes/resize_volume_operation.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.dart';
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
@@ -270,11 +272,6 @@ JobsCubit createJobsCubit(
         ),
       );
     }, origin: origin).result;
-  },
-  removeServerJob: (final origin, final uid) async {
-    await connection.run<void>(OperationKind.manageJobs, (final owner) async {
-      await owner.jobs.removeJob(uid);
-    }, origin: origin);
   },
   showMessage: showMessage,
 );
@@ -543,9 +540,28 @@ ServerJobsBloc createServerJobsBloc(
     origin: origin,
   ),
   migrate: (final origin, final destinations) => connection.run(
-    OperationKind.manageJobs,
+    OperationKind.manageVolumes,
     (final owner) => owner.jobs.migrateToBinds(destinations),
     origin: origin,
   ),
+  showMessage: showMessage,
+);
+
+OperationsCubit createOperationsCubit(
+  final ServerConnection connection, {
+  required final void Function(String) showMessage,
+}) => OperationsCubit(
+  queue: connection.operations,
+  remove: (final id) async =>
+      await connection.run(
+        OperationKind.manageJobs,
+        (final owner) => removeOperationHistory(
+          queue: owner.operations,
+          jobs: owner.jobs,
+          id: id,
+          readJob: (final uid) => owner.api.getServerJob(uid),
+        ),
+      ) ??
+      false,
   showMessage: showMessage,
 );

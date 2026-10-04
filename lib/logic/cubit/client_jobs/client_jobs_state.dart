@@ -1,6 +1,7 @@
 part of 'client_jobs_cubit.dart';
 
 sealed class JobsState extends Equatable {
+  List<JobDraft> get draft => const [];
   String? get rebuildJobUid => null;
   JobsState addJob(final JobDraft change, {final SystemSettings? settings});
   @override
@@ -31,16 +32,16 @@ JobsState _draftState(final List<JobDraft> changes) =>
 
 class JobsStateEmpty extends JobsState {
   @override
-  JobsState addJob(
-    final JobDraft change, {
-    final SystemSettings? settings,
-  }) => _draftState(_updatedDraft(const [], change, settings));
+  JobsState addJob(final JobDraft change, {final SystemSettings? settings}) =>
+      _draftState(_updatedDraft(const [], change, settings));
 }
 
 class JobsStateWithJobs extends JobsState {
   JobsStateWithJobs(final List<JobDraft> changes)
     : clientJobList = List.unmodifiable(changes);
   final List<JobDraft> clientJobList;
+  @override
+  List<JobDraft> get draft => clientJobList;
   bool get rebuildRequired =>
       clientJobList.any((final change) => change.requiresRebuild);
   bool get dnsUpdateRequired =>
@@ -73,6 +74,8 @@ sealed class JobsStateWithProgress extends JobsState {
   @override
   final String? rebuildJobUid;
   final List<JobDraft> postponedJobs;
+  @override
+  List<JobDraft> get draft => postponedJobs;
   final bool rebuildRequired;
 
   @override
@@ -126,10 +129,8 @@ class JobsStateLoading extends JobsStateWithProgress {
   );
 
   @override
-  JobsState addJob(
-    final JobDraft change, {
-    final SystemSettings? settings,
-  }) => copyWith(postponedJobs: _updatedDraft(postponedJobs, change, settings));
+  JobsState addJob(final JobDraft change, {final SystemSettings? settings}) =>
+      copyWith(postponedJobs: _updatedDraft(postponedJobs, change, settings));
 }
 
 class JobsStateFinished extends JobsStateWithProgress {
@@ -141,8 +142,6 @@ class JobsStateFinished extends JobsStateWithProgress {
   });
 
   @override
-  JobsState addJob(
-    final JobDraft change, {
-    final SystemSettings? settings,
-  }) => _draftState(_updatedDraft(postponedJobs, change, settings));
+  JobsState addJob(final JobDraft change, {final SystemSettings? settings}) =>
+      _draftState(_updatedDraft(postponedJobs, change, settings));
 }

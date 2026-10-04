@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
@@ -28,7 +29,8 @@ class ActionMock extends Mock {
           'applyAll',
           'rebootServer',
           'upgradeServer',
-          'acknowledgeFinished',
+          'remove',
+          'cancel',
           'changePeriod',
         ].any((final method) => name == 'Symbol("$method")')) {
       record!(
@@ -38,7 +40,7 @@ class ActionMock extends Mock {
         'applyAll',
         'rebootServer',
         'upgradeServer',
-        'acknowledgeFinished',
+        'remove',
         'changePeriod',
       ].any((final method) => name == 'Symbol("$method")')) {
         return Future<void>.value();
@@ -52,6 +54,11 @@ class ActionMock extends Mock {
 class DemoReadiness extends ActionMock implements AppReadinessCubit {}
 
 class DemoJobs extends ActionMock implements JobsCubit {}
+
+class DemoOperations extends ActionMock implements OperationsCubit {
+  @override
+  bool sheetOpen = false;
+}
 
 class DemoServices extends ActionMock implements ServicesBloc {}
 

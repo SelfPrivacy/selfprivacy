@@ -32,11 +32,8 @@ class JobsCubit extends Cubit<JobsState> {
     required final Stream<ConnectionObservation<CachedValue<SystemSettings>>>
     settings,
     required final AdmitConfigurationOperation admitOperation,
-    required final Future<void> Function(ServerStateOrigin, String)
-    removeServerJob,
     required final void Function(String) showMessage,
   }) : _admitOperation = admitOperation,
-       _removeServerJob = removeServerJob,
        _showMessage = showMessage,
        super(JobsStateEmpty()) {
     _jobsSubscription = jobs.listen(_observeJobs);
@@ -46,7 +43,6 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   final AdmitConfigurationOperation _admitOperation;
-  final Future<void> Function(ServerStateOrigin, String) _removeServerJob;
   final void Function(String) _showMessage;
   late final StreamSubscription<ConnectionObservation<JobsSnapshot>>
   _jobsSubscription;
@@ -56,6 +52,7 @@ class JobsCubit extends Cubit<JobsState> {
   _settingsSubscription;
   ConnectionObservation<JobsSnapshot>? _jobs;
   ConnectionObservation<CachedValue<SystemSettings>>? _settings;
+  bool _submitting = false;
 
   bool _isCurrent(final ServerStateOrigin? origin) =>
       !isClosed &&
@@ -126,9 +123,11 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   void removeJob(final String id) {
-    if (state case final JobsStateWithJobs current) {
-      emit(current.removeById(id));
-    }
+    final draft = state.draft.where((final job) => job.id != id).toList();
+    emit(switch (state) {
+      final JobsStateLoading current => current.copyWith(postponedJobs: draft),
+      _ => _draftState(draft),
+    });
   }
 
   Future<void> _perform(
@@ -137,6 +136,7 @@ class JobsCubit extends Cubit<JobsState> {
     final Future<void> Function(ApplyChangesOperation) action, {
     required final void Function() onNotSent,
   }) async {
+    _submitting = true;
     try {
       final result = await _admitOperation(origin, kind, action);
       if (_isCurrent(origin) &&
@@ -149,6 +149,8 @@ class JobsCubit extends Cubit<JobsState> {
       if (_isCurrent(origin)) {
         _failUnfinished('server_mutation.outcome_unknown');
       }
+    } finally {
+      _submitting = false;
     }
   }
 
@@ -181,7 +183,7 @@ class JobsCubit extends Cubit<JobsState> {
 
   Future<void> _single(final JobDraft job) async {
     final origin = _jobs?.origin;
-    if (!_isCurrent(origin) || state is! JobsStateEmpty) {
+    if (!_isCurrent(origin) || _submitting || state.draft.isNotEmpty) {
       return;
     }
     emit(
@@ -230,8 +232,8 @@ class JobsCubit extends Cubit<JobsState> {
 
   Future<void> applyAll() async {
     final origin = _jobs?.origin;
-    final previous = state;
-    if (!_isCurrent(origin) || previous is! JobsStateWithJobs) {
+    final previous = _draftState(state.draft);
+    if (!_isCurrent(origin) || _submitting || previous is! JobsStateWithJobs) {
       return;
     }
     final jobs = List<JobDraft>.unmodifiable(previous.clientJobList);
@@ -303,22 +305,6 @@ class JobsCubit extends Cubit<JobsState> {
       if (current.rebuildJobUid == null) {
         emit(current.finished());
       }
-    }
-  }
-
-  Future<void> acknowledgeFinished() async {
-    final origin = _jobs?.origin;
-    final current = state;
-    if (current is! JobsStateFinished) {
-      return;
-    }
-    emit(
-      current.postponedJobs.isEmpty
-          ? JobsStateEmpty()
-          : JobsStateWithJobs(current.postponedJobs),
-    );
-    if (origin != null && current.rebuildJobUid != null) {
-      await _removeServerJob(origin, current.rebuildJobUid!);
     }
   }
 

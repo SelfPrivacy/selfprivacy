@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
@@ -114,24 +115,39 @@ class CatalogFixtures {
           : demoMetrics(legacy: variant == 'Legacy'),
     );
     bind(support, const SupportSystemState('how_backblaze'));
-    final clientJob = UpgradeServerJob(id: 'catalog-upgrade');
-    final step = configurationStep(
-      clientJob,
-      status: variant == 'Finished'
-          ? OperationStatus.succeeded
-          : variant == 'Failed'
-          ? OperationStatus.failed
-          : OperationStatus.queued,
-      messageKey: variant == 'Failed' ? 'Upgrade could not be completed' : null,
-    );
-    final pendingJob = UpdateDnsRecordsJob();
-    bind(jobs, switch (variant) {
-      'Loading' => JobsStateLoading([step], null, const []),
-      'Finished' || 'Failed' => JobsStateFinished([step], null, const []),
-      'Queued' || 'Blocked' => JobsStateWithJobs([clientJob]),
-      'Postponed' => JobsStateLoading([step], 'catalog-job', [pendingJob]),
-      _ => JobsStateEmpty(),
+    bind(jobs, JobsStateEmpty());
+    when(() => jobs.state).thenAnswer((_) {
+      final clientJob = UpgradeServerJob(id: 'catalog-upgrade');
+      final step = configurationStep(
+        clientJob,
+        status: variant == 'Finished'
+            ? OperationStatus.succeeded
+            : variant == 'Failed'
+            ? OperationStatus.failed
+            : OperationStatus.queued,
+        messageKey: variant == 'Failed'
+            ? 'Upgrade could not be completed'
+            : null,
+      );
+      final pendingJob = UpdateDnsRecordsJob();
+      return switch (variant) {
+        'Loading' => JobsStateLoading([step], null, const []),
+        'Finished' || 'Failed' => JobsStateFinished([step], null, const []),
+        'Queued' || 'Blocked' => JobsStateWithJobs([clientJob]),
+        'Postponed' => JobsStateLoading([step], 'catalog-job', [pendingJob]),
+        _ => JobsStateEmpty(),
+      };
     });
+    bind(
+      operations,
+      OperationsState(
+        operations:
+            ['Loading', 'Finished', 'Failed', 'Postponed'].contains(variant)
+            ? [demoOperation(variant)]
+            : [],
+        focusId: 1,
+      ),
+    );
     devices.record = record;
     tokens.record = record;
     when(
@@ -155,6 +171,7 @@ class CatalogFixtures {
   final void Function(String) record;
   final readiness = DemoReadiness();
   final jobs = DemoJobs();
+  final operations = DemoOperations();
   final services = DemoServices();
   final groups = DemoGroups();
   final backups = DemoBackups();
@@ -179,6 +196,7 @@ class CatalogFixtures {
     providers: [
       BlocProvider<AppReadinessCubit>.value(value: readiness),
       BlocProvider<JobsCubit>.value(value: jobs),
+      BlocProvider<OperationsCubit>.value(value: operations),
       BlocProvider<ServicesBloc>.value(value: services),
       BlocProvider<GroupsBloc>.value(value: groups),
       BlocProvider<BackupsBloc>.value(value: backups),

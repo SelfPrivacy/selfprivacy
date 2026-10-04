@@ -2,6 +2,12 @@
     "test": "en-test",
     "locale": "en",
     "operations": {
+        "title": "Operations",
+        "drafts": "Unsent changes",
+        "remove_finished_jobs": "Remove finished server jobs",
+        "remove_history": "Remove from history",
+        "cleanup_failed": "Could not remove the history. No unfinished server jobs were deleted.",
+        "resize_unverified": "The final disk size has not been verified.",
         "steps": {
             "create_backup_storage": "Create backup storage",
             "create_backup_credentials": "Create storage credentials",
@@ -17,9 +23,9 @@
             "manage_settings": "Update settings",
             "manage_jobs": "Manage server jobs",
             "apply_changes": "Apply changes",
-            "generate_device_key": "Generate device key",
+            "generate_device_key": "Generate new device key",
             "generate_recovery_key": "Generate recovery key",
-            "generate_password_reset_link": "Generate password-reset link",
+            "generate_password_reset_link": "Generate password reset link",
             "rotate_token": "Refresh access token"
         },
         "status": {

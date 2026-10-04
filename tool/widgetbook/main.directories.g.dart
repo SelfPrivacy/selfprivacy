@@ -182,6 +182,8 @@ import 'use_cases/organisms/headers/brand_header.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_headers_brand_header;
 import 'use_cases/organisms/jobs/jobs_content.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_jobs_content;
+import 'use_cases/organisms/jobs/operation_card.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card;
 import 'use_cases/organisms/modals/backups/change_autobackups_period_modal.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_modals_backups_change_autobackups_period_modal;
 import 'use_cases/organisms/modals/backups/change_rotation_quotas_modal.dart'
@@ -2696,6 +2698,71 @@ final directories = <_widgetbook.WidgetbookNode>[
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_jobs_content
                         .jobsContentQueued,
+              ),
+            ],
+          ),
+          _widgetbook.WidgetbookComponent(
+            name: 'OperationCard',
+            useCases: [
+              _widgetbook.WidgetbookUseCase(
+                name: 'Cancelled',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationCancelled,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Collapsed',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationCollapsed,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Finished',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationFinished,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Partial failure',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationPartialfailure,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Queued',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationQueued,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Removing',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationRemoving,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Resize',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationResize,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Running',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationRunning,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Unknown',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationUnknown,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Waiting',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_organisms_jobs_operation_card
+                        .operationWaiting,
               ),
             ],
           ),

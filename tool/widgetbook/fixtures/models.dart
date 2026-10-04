@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/operations/operation.dart';
 
 import 'constants.dart';
 
@@ -99,3 +100,55 @@ ServerJob demoJob(final JobStatusEnum status) => ServerJob(
   result: status == JobStatusEnum.finished ? 'Backup created' : null,
   statusText: status == JobStatusEnum.running ? 'Uploading files' : null,
 );
+
+OperationSnapshot demoOperation(final String variant) {
+  final status = switch (variant) {
+    'Finished' || 'Resize' => OperationStatus.succeeded,
+    'Failed' || 'Partial failure' => OperationStatus.failed,
+    'Unknown' => OperationStatus.unknown,
+    'Queued' => OperationStatus.queued,
+    'Waiting' => OperationStatus.accepted,
+    'Cancelled' => OperationStatus.cancelled,
+    _ => OperationStatus.running,
+  };
+  return OperationSnapshot(
+    id: 1,
+    serverId: 'catalog-server',
+    kind: variant == 'Resize'
+        ? OperationKind.resizeVolume
+        : variant == 'Waiting'
+        ? OperationKind.manageBackups
+        : OperationKind.applyChanges,
+    events: [OperationEvent(referenceTime, status)],
+    jobIds: variant == 'Waiting' ? ['catalog-job'] : const [],
+    steps: [
+      if (variant == 'Resize') ...[
+        const OperationStep(
+          id: 'resize',
+          titleKey: 'storage.extending_volume_title',
+          status: OperationStatus.succeeded,
+        ),
+        const OperationStep(
+          id: 'reboot',
+          titleKey: 'storage.extending_volume_rebooting',
+          status: OperationStatus.succeeded,
+        ),
+      ] else if (variant != 'Waiting') ...[
+        OperationStep(
+          id: 'timezone',
+          titleKey: 'jobs.change_server_timezone',
+          status: variant == 'Queued' || variant == 'Cancelled'
+              ? status
+              : OperationStatus.succeeded,
+        ),
+        OperationStep(
+          id: 'dns',
+          titleKey: 'jobs.update_dns_records',
+          status: variant == 'Partial failure'
+              ? OperationStatus.failed
+              : status,
+        ),
+      ],
+    ],
+  );
+}

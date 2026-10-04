@@ -87,6 +87,11 @@ void main() {
         ),
       ),
     );
+    await waitForContent(
+      tester,
+      () => find.byType(InitializingPage).evaluate().isNotEmpty,
+      'Localized installation page must load',
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Create server'), findsWidgets);

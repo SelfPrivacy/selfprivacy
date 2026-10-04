@@ -1,12 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/atoms/icons/job_icon.dart';
 import 'package:selfprivacy/ui/atoms/progress_indicators/brand_linear_indicator.dart';
 
 class ServerJobCard extends StatelessWidget {
-  const ServerJobCard({required this.serverJob, super.key});
+  const ServerJobCard({required this.serverJob, this.onRemove, super.key});
 
   final ServerJob serverJob;
+  final VoidCallback? onRemove;
 
   @override
   Widget build(final BuildContext context) {
@@ -27,10 +29,14 @@ class ServerJobCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 16),
+                    child: Icon(icon, color: color),
+                  ),
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -45,7 +51,12 @@ class ServerJobCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(icon, color: color),
+                  if (onRemove != null)
+                    IconButton(
+                      tooltip: 'basis.remove'.tr(),
+                      onPressed: onRemove,
+                      icon: const Icon(Icons.close),
+                    ),
                 ],
               ),
               const SizedBox(height: 8),

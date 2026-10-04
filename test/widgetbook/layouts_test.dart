@@ -13,6 +13,7 @@ import '../../tool/widgetbook/main.dart';
 import '../../tool/widgetbook/use_cases/layouts/brand_hero_screen.dart';
 import '../../tool/widgetbook/use_cases/layouts/responsive_layout_with_infobox.dart';
 import '../../tool/widgetbook/use_cases/layouts/root_scaffold_with_subroute_selector.dart';
+import '../helpers/widget_harness.dart' show waitForContent;
 import 'behavior_test.dart' show pumpCase;
 
 class _Context extends Mock implements BuildContext {}
@@ -44,6 +45,11 @@ void main() {
         ),
       );
     });
+    await waitForContent(
+      tester,
+      () => find.byType(RootScaffoldWithSubrouteSelector).evaluate().isNotEmpty,
+      'Localized navigation must load',
+    );
     await tester.pumpAndSettle();
     expect(find.byType(RootScaffoldWithSubrouteSelector), findsOneWidget);
     expect(find.byType(NavigationDrawer), findsNothing);

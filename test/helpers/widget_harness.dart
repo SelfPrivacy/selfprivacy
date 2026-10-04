@@ -32,3 +32,17 @@ Future<void> pumpForTest(final WidgetTester tester, final Widget child) async {
   });
   await tester.pumpAndSettle();
 }
+
+Future<void> waitForContent(
+  final WidgetTester tester,
+  final bool Function() ready,
+  final String reason,
+) async {
+  for (var attempt = 0; attempt < 100 && !ready(); attempt++) {
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    });
+    await tester.pump();
+  }
+  expect(ready(), isTrue, reason: reason);
+}

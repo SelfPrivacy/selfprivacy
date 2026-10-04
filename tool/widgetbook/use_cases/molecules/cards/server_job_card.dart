@@ -37,7 +37,10 @@ Widget serverJobCardFinished(final BuildContext context) => CatalogCase(
   width: 560,
   height: 250,
   builder: (final context, final fixtures, final controller, final update) =>
-      ServerJobCard(serverJob: demoJob(JobStatusEnum.finished)),
+      ServerJobCard(
+        serverJob: demoJob(JobStatusEnum.finished),
+        onRemove: () => fixtures.record('Remove job'),
+      ),
 );
 
 @UseCase(name: 'error', type: ServerJobCard, path: '[Molecules]/cards')
@@ -49,5 +52,8 @@ Widget serverJobCardError(final BuildContext context) => CatalogCase(
   width: 560,
   height: 250,
   builder: (final context, final fixtures, final controller, final update) =>
-      ServerJobCard(serverJob: demoJob(JobStatusEnum.error)),
+      ServerJobCard(
+        serverJob: demoJob(JobStatusEnum.error),
+        onRemove: () => fixtures.record('Remove job'),
+      ),
 );

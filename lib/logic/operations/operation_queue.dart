@@ -161,6 +161,16 @@ class OperationQueue {
     return true;
   }
 
+  bool removeCompleted(final int id) {
+    final record = _records[id];
+    if (_disposed || record == null || record.status.isPending) {
+      return false;
+    }
+    _records.remove(id);
+    _publish();
+    return true;
+  }
+
   void pause() => _paused = true;
 
   int recordExternal(final OperationKind kind, final OperationStatus status) {
@@ -287,6 +297,9 @@ class OperationQueue {
     );
     if (!status.isPending) {
       _completions.remove(id)?.complete(status);
+      if (previous.kind == OperationKind.manageJobs) {
+        _records.remove(id);
+      }
     }
     final completed =
         _records.values.where((final item) => !item.status.isPending).toList()

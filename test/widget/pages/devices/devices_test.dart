@@ -17,7 +17,9 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/ui/molecules/list_items/device_item.dart';
+import 'package:selfprivacy/ui/organisms/displays/key_display.dart';
 import 'package:selfprivacy/ui/pages/devices/devices.dart';
+import 'package:selfprivacy/ui/pages/devices/new_device.dart';
 
 import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
@@ -80,16 +82,95 @@ void main() {
     await getIt.reset();
   });
 
-  Future<void> showPage(final WidgetTester tester) async {
+  Future<void> showPage(
+    final WidgetTester tester, {
+    final Widget page = const DevicesPage(),
+  }) async {
     tester.view.physicalSize = const Size(900, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    await pumpForTest(
-      tester,
-      BlocProvider.value(value: bloc, child: const DevicesPage()),
+    await pumpForTest(tester, BlocProvider.value(value: bloc, child: page));
+  }
+
+  for (final outcome in ServerMutationOutcome.values) {
+    testWidgets(
+      'new device ${outcome.name} without a key does not claim unsent',
+      (final tester) async {
+        when(api.createDeviceToken).thenAnswer(
+          (_) async => ServerMutationResult<String>(
+            outcome: outcome,
+            payload: const ServerMutationPayload.missing(),
+            message: 'secret-sentinel',
+          ),
+        );
+        await tester.runAsync(bloc.refresh);
+        await showPage(tester, page: const NewDevicePage());
+        await tester.runAsync(pumpEventQueue);
+        await tester.pumpAndSettle();
+
+        verify(api.createDeviceToken).called(1);
+        expect(
+          find.text('Operation was not sent to the server.'),
+          findsNothing,
+        );
+        expect(find.text('No data'), findsOneWidget);
+        expect(find.textContaining('secret-sentinel'), findsNothing);
+        expect(find.byType(KeyDisplay), findsNothing);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+      },
     );
   }
+
+  testWidgets('new device displays a confirmed key', (final tester) async {
+    when(api.createDeviceToken).thenAnswer(
+      (_) async => ServerMutationResult<String>(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available('fixture-device-key'),
+      ),
+    );
+    await tester.runAsync(bloc.refresh);
+    await showPage(tester, page: const NewDevicePage());
+    await tester.runAsync(pumpEventQueue);
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.widget<KeyDisplay>(find.byType(KeyDisplay)).keyToDisplay,
+      'fixture-device-key',
+    );
+    expect(find.text('No data'), findsNothing);
+  });
+
+  testWidgets('closing new device discards a late secret', (
+    final tester,
+  ) async {
+    final pending = Completer<ServerMutationResult<String>>();
+    when(api.createDeviceToken).thenAnswer((_) => pending.future);
+    await tester.runAsync(bloc.refresh);
+    await showPage(tester, page: const SizedBox.shrink());
+    await tester.pumpWidget(
+      wrapForTest(
+        child: BlocProvider.value(value: bloc, child: const NewDevicePage()),
+      ),
+    );
+    await tester.runAsync(pumpEventQueue);
+    verify(api.createDeviceToken).called(1);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.runAsync(() async {
+      pending.complete(
+        ServerMutationResult<String>(
+          outcome: ServerMutationOutcome.confirmed,
+          payload: const ServerMutationPayload.available('late-secret'),
+        ),
+      );
+      await pumpEventQueue();
+    });
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(KeyDisplay), findsNothing);
+    verifyNever(() => getIt<NavigationService>().showSnackBar(any()));
+  });
 
   testWidgets(
     'the current device rotates its token without provider credential state',

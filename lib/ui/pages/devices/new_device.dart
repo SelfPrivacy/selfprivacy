@@ -48,7 +48,7 @@ class _NewDevicePageState extends State<NewDevicePage> {
                   infoboxText: 'devices.add_new_device_screen.tip'.tr(),
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
-                return Text('server_mutation.not_sent'.tr());
+                return Text('basis.no_data'.tr());
               } else {
                 return const Center(
                   child: CircularProgressIndicator.adaptive(),

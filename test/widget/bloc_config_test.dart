@@ -133,103 +133,115 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
   }
 
-  testWidgets(
-    'replacement preserves a global route and resets server details',
-    (final tester) async {
-      final router = RootRouter(getIt<NavigationService>().navigatorKey);
-      await pumpApp(tester, router);
-      await tester.runAsync(() async {
-        await resources.addServer(aServer());
-        await pumpEventQueue();
-      });
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      await waitForContent(
-        tester,
-        () => find.byType(UsersPage).evaluate().isNotEmpty,
-        'The users section must survive installation',
-      );
-      final firstUsers = tester
-          .element(find.byType(UsersPage))
-          .read<UsersBloc>();
-      final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
-      unawaited(serverRouter.push(const DevicesRoute()));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      when(api.refreshDeviceApiToken).thenAnswer(
-        (_) async => ServerMutationResult(
-          outcome: ServerMutationOutcome.confirmed,
-          payload: const ServerMutationPayload.available('replacement'),
-        ),
-      );
-      await tester.runAsync(() async {
-        expect(await hub.active!.rotateToken(), RotationOutcome.succeeded);
-        final app = InheritedAppController.of(
-          tester.element(find.byType(UsersPage, skipOffstage: false)),
+  for (final switching in [false, true]) {
+    testWidgets(
+      'server change preserves global routes and resets details: switching=$switching',
+      (final tester) async {
+        final router = RootRouter(getIt<NavigationService>().navigatorKey);
+        await pumpApp(tester, router);
+        await tester.runAsync(() async {
+          await resources.addServer(aServer());
+          await pumpEventQueue();
+        });
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        await waitForContent(
+          tester,
+          () => find.byType(UsersPage).evaluate().isNotEmpty,
+          'The users section must survive installation',
         );
-        await app.setDarkThemeModeFlag(useDark: true);
-        await pumpEventQueue();
-      });
-      await tester.pump();
-      expect(
-        router.innerRouterOf<StackRouter>(RootRoute.name),
-        same(serverRouter),
-      );
-      expect(serverRouter.current.name, DevicesRoute.name);
-      expect(firstUsers.isClosed, isFalse);
-      unawaited(serverRouter.push(const ConsoleRoute()));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      final console = tester.state(find.byType(ConsolePage));
-      expect(
-        tester.element(find.byType(ConsolePage)).read<UsersBloc?>(),
-        isNull,
-      );
-      expect(router.current.name, ConsoleRoute.name);
-
-      await tester.runAsync(() async {
-        await resources.updateServerByUuid(
-          aServer(hostingDetails: aServerHostingDetails(apiToken: 'replaced')),
+        final original = hub.active!;
+        final firstUsers = tester
+            .element(find.byType(UsersPage))
+            .read<UsersBloc>();
+        final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
+        unawaited(serverRouter.push(const DevicesRoute()));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        when(api.refreshDeviceApiToken).thenAnswer(
+          (_) async => ServerMutationResult(
+            outcome: ServerMutationOutcome.confirmed,
+            payload: const ServerMutationPayload.available('replacement'),
+          ),
         );
-        await pumpEventQueue();
-      });
-      await tester.pump();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(tester.state(find.byType(ConsolePage)), same(console));
-      await waitForContent(
-        tester,
-        () => firstUsers.isClosed,
-        'The replaced server BLoC must close',
-      );
-      await waitForContent(
-        tester,
-        () =>
-            router.innerRouterOf<StackRouter>(RootRoute.name)?.current.name ==
-            UsersRoute.name,
-        'The replacement must restore the users section',
-      );
-      expect(firstUsers.isClosed, isTrue);
-      expect(
-        router
-            .innerRouterOf<StackRouter>(RootRoute.name)!
-            .stack
-            .map((final entry) => entry.name),
-        [UsersRoute.name],
-      );
+        await tester.runAsync(() async {
+          expect(await hub.active!.rotateToken(), RotationOutcome.succeeded);
+          final app = InheritedAppController.of(
+            tester.element(find.byType(UsersPage, skipOffstage: false)),
+          );
+          await app.setDarkThemeModeFlag(useDark: true);
+          await pumpEventQueue();
+        });
+        await tester.pump();
+        expect(
+          router.innerRouterOf<StackRouter>(RootRoute.name),
+          same(serverRouter),
+        );
+        expect(serverRouter.current.name, DevicesRoute.name);
+        expect(firstUsers.isClosed, isFalse);
+        unawaited(serverRouter.push(const ConsoleRoute()));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        final console = tester.state(find.byType(ConsolePage));
+        expect(
+          tester.element(find.byType(ConsolePage)).read<UsersBloc?>(),
+          isNull,
+        );
+        expect(router.current.name, ConsoleRoute.name);
 
-      await router.maybePop();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(
-        tester.element(find.byType(UsersPage)).read<UsersBloc>(),
-        isNot(same(firstUsers)),
-      );
-      expect(tester.takeException(), isNull);
-      await tester.pumpWidget(const SizedBox.shrink());
-      router.dispose();
-    },
-  );
+        await tester.runAsync(() async {
+          if (switching) {
+            await resources.addServer(aServer(uuid: 'other'));
+            await pumpEventQueue();
+            await hub.selectServer('other');
+          } else {
+            await resources.updateServerByUuid(
+              aServer(
+                hostingDetails: aServerHostingDetails(apiToken: 'replaced'),
+              ),
+            );
+          }
+          await pumpEventQueue();
+        });
+        await tester.pump();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(tester.state(find.byType(ConsolePage)), same(console));
+        await waitForContent(
+          tester,
+          () => firstUsers.isClosed,
+          'The replaced server BLoC must close',
+        );
+        await waitForContent(
+          tester,
+          () =>
+              router.innerRouterOf<StackRouter>(RootRoute.name)?.current.name ==
+              UsersRoute.name,
+          'The replacement must restore the users section',
+        );
+        expect(firstUsers.isClosed, isTrue);
+        expect(original.isAttached, switching);
+        expect(
+          router
+              .innerRouterOf<StackRouter>(RootRoute.name)!
+              .stack
+              .map((final entry) => entry.name),
+          [UsersRoute.name],
+        );
+
+        await router.maybePop();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(
+          tester.element(find.byType(UsersPage)).read<UsersBloc>(),
+          isNot(same(firstUsers)),
+        );
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        router.dispose();
+      },
+    );
+  }
 
   testWidgets('all main sections work without server providers', (
     final tester,

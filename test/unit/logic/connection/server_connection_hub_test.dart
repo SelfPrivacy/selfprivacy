@@ -50,6 +50,180 @@ void main() {
     await tearDownInMemoryHive();
   });
 
+  test('switching keeps the original operation and cache alive', () async {
+    final selected = resources.servers.first;
+    final other = aServer(uuid: 'other');
+    await resources.addServer(other);
+    final local = ServerConnectionHub(
+      resourcesModel: resources,
+      createApi: (_, _, _) => api,
+    );
+    addTearDown(local.dispose);
+    final first = local.active!;
+    first.cache.setVersion(Version(3, 6, 0));
+    first.cache.groups.push(const ['sp.full_users']);
+    final pending = Completer<String>();
+    final operation = first.submit(
+      OperationKind.manageUsers,
+      (_) => pending.future,
+    );
+    await local.selectServer(other.uuid);
+    await pumpEventQueue();
+    expect(local.active!.origin.serverId, 'other');
+    expect(first.isAttached, isTrue);
+    pending.complete('finished');
+    expect((await operation.result).value, 'finished');
+    await local.selectServer(selected.uuid);
+    await pumpEventQueue();
+    expect(local.active, same(first));
+    expect(local.active!.groups.value.data, ['sp.full_users']);
+  });
+
+  test('selection survives restart and falls back after removal', () async {
+    final settings = await Hive.openBox(BNames.appSettingsBox);
+    final other = aServer(uuid: 'other');
+    await resources.addServer(other);
+    ServerConnectionHub open() => ServerConnectionHub(
+      resourcesModel: resources,
+      activeServerUuid: settings.get(BNames.activeServerUuid) as String?,
+      persistSelection: (final uuid) =>
+          settings.put(BNames.activeServerUuid, uuid),
+      createApi: (_, _, _) => api,
+    );
+    final first = open();
+    await first.selectServer(other.uuid);
+    first.dispose();
+    final restarted = open();
+    addTearDown(restarted.dispose);
+    expect(restarted.active!.origin.serverId, 'other');
+    await resources.removeServer(other);
+    await pumpEventQueue();
+    expect(restarted.active!.origin.serverId, resources.servers.first.uuid);
+    await resources.removeServer(resources.servers.single);
+    await pumpEventQueue();
+    expect(restarted.active, isNull);
+    expect(restarted.connections, isEmpty);
+  });
+
+  test(
+    'failed selection persistence leaves the current branch selected',
+    () async {
+      await resources.addServer(aServer(uuid: 'other'));
+      final local = ServerConnectionHub(
+        resourcesModel: resources,
+        persistSelection: (_) async => throw StateError('write failed'),
+        createApi: (_, _, _) => api,
+      );
+      addTearDown(local.dispose);
+      final original = local.active;
+      await expectLater(local.selectServer('other'), throwsStateError);
+      expect(local.active, same(original));
+      await expectLater(local.selectServer('missing'), throwsArgumentError);
+      expect(local.active, same(original));
+    },
+  );
+
+  test('background rotation waits only for its own operations', () async {
+    final original = hub.active!;
+    await resources.addServer(aServer(uuid: 'other'));
+    await pumpEventQueue();
+    final other = hub.connections['other']!;
+    final pending = Completer<void>();
+    final work = original.submit(
+      OperationKind.manageUsers,
+      (_) => pending.future,
+    );
+    final rotation = original.rotateToken();
+    await hub.selectServer('other');
+    expect(
+      await other.run(OperationKind.manageUsers, (_) async => 'other'),
+      'other',
+    );
+    when(api.refreshDeviceApiToken).thenAnswer(
+      (_) async => ServerMutationResult(
+        outcome: ServerMutationOutcome.confirmed,
+        payload: const ServerMutationPayload.available('other-replacement'),
+      ),
+    );
+    expect(await other.rotateToken(), RotationOutcome.succeeded);
+    expect(original.rotation.status, RotationStatus.waiting);
+    expect(resources.servers.first.hostingDetails.apiToken, 'api-token');
+    expect(resources.servers.last.hostingDetails.apiToken, 'other-replacement');
+    original.cancelRotation();
+    pending.complete();
+    await work.result;
+    expect(await rotation, RotationOutcome.cancelled);
+    expect(hub.active, same(other));
+  });
+
+  for (final reset in [false, true]) {
+    test('aborted selection restores persisted choice: reset=$reset', () async {
+      await resources.addServer(aServer(uuid: 'other'));
+      final settings = await Hive.openBox(BNames.appSettingsBox);
+      await settings.put(BNames.activeServerUuid, resources.servers.first.uuid);
+      final saved = Completer<void>();
+      final local = ServerConnectionHub(
+        resourcesModel: resources,
+        persistSelection: (final uuid) async {
+          await saved.future;
+          await settings.put(BNames.activeServerUuid, uuid);
+        },
+        createApi: (_, _, _) => api,
+      );
+      addTearDown(local.dispose);
+      final selecting = local.selectServer('other');
+      await pumpEventQueue();
+      if (reset) {
+        local
+          ..clear()
+          ..resume();
+      } else {
+        await resources.updateServerByUuid(
+          aServer(
+            uuid: 'other',
+            hostingDetails: aServerHostingDetails(apiToken: 'replacement'),
+          ),
+        );
+        await pumpEventQueue();
+      }
+      saved.complete();
+      await selecting;
+      expect(local.active!.origin.serverId, resources.servers.first.uuid);
+      final reopened = ServerConnectionHub(
+        resourcesModel: resources,
+        activeServerUuid: settings.get(BNames.activeServerUuid) as String?,
+        createApi: (_, _, _) => api,
+      );
+      addTearDown(reopened.dispose);
+      expect(reopened.active!.origin.serverId, local.active!.origin.serverId);
+    });
+  }
+
+  test(
+    'replacing a background binding leaves the active connection intact',
+    () async {
+      final first = hub.active!;
+      await resources.addServer(aServer(uuid: 'other'));
+      await pumpEventQueue();
+      await hub.selectServer('other');
+      final active = hub.active!;
+      await resources.updateServerByUuid(
+        aServer(hostingDetails: aServerHostingDetails(apiToken: 'replacement')),
+      );
+      await pumpEventQueue();
+      expect(hub.active, same(active));
+      expect(first.isAttached, isFalse);
+      expect(first.cache.apiVersion.isDisposed, isTrue);
+      expect(hub.connections[first.origin.serverId], isNot(same(first)));
+      hub.clear();
+      expect(active.isAttached, isFalse);
+      expect(hub.connections, isEmpty);
+      hub.resume();
+      expect(hub.connections, hasLength(2));
+      expect(hub.connections['other'], isNot(same(active)));
+    },
+  );
+
   test(
     'a retained command owner cannot dispatch through its replacement',
     () async {
@@ -168,7 +342,6 @@ void main() {
       var creations = 0;
       final local = ServerConnectionHub(
         resourcesModel: resources,
-        selectServer: () => selected,
         createApi: (_, _, _) {
           creations++;
           return api;
@@ -201,7 +374,6 @@ void main() {
         final dispatch = <void Function()>[];
         final local = ServerConnectionHub(
           resourcesModel: resources,
-          selectServer: () => selected,
           createApi: (_, _, final beforeRequest) {
             dispatch.add(beforeRequest);
             return api;
@@ -307,7 +479,6 @@ void main() {
     var selected = aServer();
     final local = ServerConnectionHub(
       resourcesModel: resources,
-      selectServer: () => selected,
       createApi: (_, _, _) => api,
     );
     addTearDown(local.dispose);
@@ -468,9 +639,7 @@ void main() {
     );
     final selectedRepository = ServerConnectionHub(
       resourcesModel: resources,
-      selectServer: () => resources.servers.firstWhere(
-        (final server) => server.uuid == 'second-server',
-      ),
+      activeServerUuid: 'second-server',
       createApi: (_, _, _) => selectedApi,
     );
     addTearDown(selectedRepository.dispose);
@@ -674,19 +843,17 @@ void main() {
     },
   );
   test('an unsent rotation is detached when its server is removed', () async {
-    Server? selected = resources.servers.first;
+    final selected = resources.servers.first;
     final pending = Completer<ServerMutationResult<String>>();
     when(api.refreshDeviceApiToken).thenAnswer((_) => pending.future);
     final connection = ServerConnectionHub(
       resourcesModel: resources,
       createApi: (_, _, _) => api,
-      selectServer: () => selected,
     );
     addTearDown(connection.dispose);
     connection.active!.cache.setVersion(Version(3, 9, 0));
     final rotation = connection.active!.rotateToken();
     final removing = resources.removeServer(selected);
-    selected = null;
     await removing;
     pending.complete(confirmed('replacement'));
     expect(await rotation, RotationOutcome.detached);

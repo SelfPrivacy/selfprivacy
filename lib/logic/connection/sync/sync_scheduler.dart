@@ -143,6 +143,7 @@ class SyncScheduler {
   bool _wasAllowed = false;
   bool _waitingForPermit = false;
   bool _readAllowed = true;
+  bool _background = false;
   int _forcedStreak = 0;
 
   List<SyncPoolActivity?> get poolStatus => _poolStatus;
@@ -151,6 +152,14 @@ class SyncScheduler {
       _poolStatusChanges.stream;
 
   bool get _allowed => _readAllowed && _commands.isAttached;
+
+  void setBackground({required final bool background}) {
+    if (_disposed || _background == background) {
+      return;
+    }
+    _background = background;
+    _queue();
+  }
 
   void setReadAllowed({required final bool allowed}) {
     if (_disposed || _readAllowed == allowed) {
@@ -350,6 +359,10 @@ class SyncScheduler {
   bool _eligible(final _ScheduledDomain domain) {
     final value = domain.store.value;
     return (_started || domain.request != null) &&
+        (!_background ||
+            domain.request != null ||
+            identical(domain.store, _cache.apiVersion) ||
+            identical(domain.store, _cache.serverJobs)) &&
         !_active.contains(domain) &&
         !domain.store.isDisposed &&
         !_commands.isReserved(domain.store) &&

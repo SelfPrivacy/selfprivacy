@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
@@ -52,7 +54,14 @@ Future<void> getItSetup() async {
     ..registerSingleton<WizardDataModel>(WizardDataModel()..init());
 
   final apiConfigModel = ApiConfigModel();
-  final hub = ServerConnectionHub(resourcesModel: resourcesModel);
+  final settings = Hive.box(BNames.appSettingsBox);
+  final hub = ServerConnectionHub(
+    resourcesModel: resourcesModel,
+    activeServerUuid: settings.get(BNames.activeServerUuid) as String?,
+    persistSelection: (final uuid) => uuid == null
+        ? settings.delete(BNames.activeServerUuid)
+        : settings.put(BNames.activeServerUuid, uuid),
+  );
   getIt
     ..registerSingleton<ApiConfigModel>(apiConfigModel)
     ..registerSingleton<ServerConnectionHub>(

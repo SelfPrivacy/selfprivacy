@@ -50,7 +50,11 @@ void main() {
   late _Lifecycle lifecycle;
   late _Network network;
 
-  void start(final WidgetTester tester, {final bool withServer = true}) {
+  void start(
+    final WidgetTester tester, {
+    final bool withServer = true,
+    final List<Server> additionalServers = const [],
+  }) {
     api = _Api();
     resources = _Resources();
     stored = aServer();
@@ -63,7 +67,9 @@ void main() {
     logSockets = [];
     visibility = StreamController<bool>.broadcast(sync: true);
     resourceChanges = StreamController<ResourcesModelEvent>.broadcast();
-    when(() => resources.servers).thenAnswer((_) => configured ? [stored] : []);
+    when(
+      () => resources.servers,
+    ).thenAnswer((_) => configured ? [stored, ...additionalServers] : []);
     when(
       () => resources.statusStream,
     ).thenAnswer((_) => resourceChanges.stream);
@@ -169,6 +175,82 @@ void main() {
       }
     });
   }
+
+  runtimeTest('background servers poll jobs but not other domains', (
+    final tester,
+  ) async {
+    start(
+      tester,
+      additionalServers: [
+        aServer(
+          uuid: 'other',
+          hostingDetails: aServerHostingDetails(apiToken: 'other-token'),
+        ),
+      ],
+    );
+    await tester.pump();
+    final first = hub.active!;
+    final other = hub.connections['other']!;
+    expect(first.users.value.data, isNotNull);
+    expect(other.cache.apiVersion.value.data, isNotNull);
+    expect(other.jobs.value.data, isNotNull);
+    expect(other.users.value.data, isNull);
+    final firstRead = first.users.value.updatedAt;
+
+    final selection = hub.selectServer('other');
+    await tester.pump();
+    await selection;
+    expect(other.users.value.data, isNotNull);
+    await tester.pump(const Duration(minutes: 2));
+    expect(first.users.value.updatedAt, firstRead);
+    expect(first.isAttached, isTrue);
+    expect(jobSockets, hasLength(2));
+
+    final explicitRead = first.users.refresh(force: true);
+    await tester.pump();
+    await explicitRead;
+    expect(first.users.value.updatedAt, isNot(firstRead));
+  });
+
+  runtimeTest('background job completion stays with its operation owner', (
+    final tester,
+  ) async {
+    start(
+      tester,
+      additionalServers: [
+        aServer(
+          uuid: 'other',
+          hostingDetails: aServerHostingDetails(apiToken: 'other-token'),
+        ),
+      ],
+    );
+    await tester.pump();
+    final first = hub.active!;
+    final job = aBackupJob(uid: 'background-job');
+    first.jobs.receiveSnapshot([job]);
+    final operation = first.submit(
+      OperationKind.createBackups,
+      (_) async {},
+      describe: (_) =>
+          OperationReport(OperationStatus.accepted, jobIds: {job.uid}),
+    );
+    await tester.pump();
+    await operation.result;
+    final selection = hub.selectServer('other');
+    await tester.pump();
+    await selection;
+    jobSockets.first.add([
+      aBackupJob(uid: job.uid, status: JobStatusEnum.finished),
+    ]);
+    await tester.pump();
+    expect(await operation.completion, OperationStatus.succeeded);
+    expect(first.operations.history.single.status, OperationStatus.succeeded);
+    expect(hub.active!.operations.history, isEmpty);
+    events['other-token']!(GraphQLTransportEvent.authFailure);
+    await tester.pump();
+    expect(hub.active!.reachability, ReachabilityStatus.unauthorized);
+    expect(first.reachability, ReachabilityStatus.reachable);
+  });
 
   runtimeTest('foreground cannot resume probes while rotation drains work', (
     final tester,

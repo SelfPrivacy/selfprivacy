@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": [{"id": "zone-second", "name": "second.example", "status": "active", "paused": false, "type": "full", "name_servers": ["ada.ns.cloudflare.com", "bob.ns.cloudflare.com"]}],
+  "result_info": {"page": 1, "per_page": 20, "count": 1, "total_count": 1, "total_pages": 1}
+}

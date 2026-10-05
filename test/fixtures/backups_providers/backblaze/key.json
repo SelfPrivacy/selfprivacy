@@ -1,0 +1,10 @@
+{
+  "accountId": "authorized-account",
+  "applicationKeyId": "restricted-key-id",
+  "applicationKey": "restricted-key-secret",
+  "bucketId": "bucket-test",
+  "keyName": "selfprivacy-restricted-server-key",
+  "capabilities": ["listBuckets", "listFiles", "readFiles", "writeFiles"],
+  "expirationTimestamp": null,
+  "namePrefix": null
+}

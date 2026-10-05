@@ -39,6 +39,7 @@ import 'package:selfprivacy/logic/providers/backups_providers/backups_provider.d
 import 'package:selfprivacy/logic/providers/backups_providers/backups_provider_factory.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
+import 'package:selfprivacy/logic/providers/resolve_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
 UsersBloc createUsersBloc(final ServerConnection connection) => UsersBloc(
@@ -147,14 +148,16 @@ ResetPasswordBloc createResetPasswordBloc(
 MetricsCubit createMetricsCubit(
   final ServerConnection connection, {
   required final ResourcesModel resources,
-  required final ServerProvider? Function() serverProvider,
+  final ServerProvider? Function()? serverProvider,
 }) => MetricsCubit(
   access: observeReadAccess(connection),
   loadMetrics: (final period) => connection.read((final connection) async {
     final server = resources.servers
         .where((final server) => server.uuid == connection.origin.serverId)
         .firstOrNull;
-    final provider = serverProvider();
+    final provider = serverProvider != null
+        ? serverProvider()
+        : resolveServerProvider(resources, connection.origin.serverId);
     await connection.refresh(connection.cache.apiVersion);
     return MetricsRepository(
       api: connection.api,
@@ -276,16 +279,23 @@ BackupsBloc createBackupsBloc(
         .submit<void>(kind, (final owner) => action(owner.backups))
         .result;
   },
-  currentBucket: () => connection.isAttached ? resources.backblazeBucket : null,
+  currentBucket: () => connection.isAttached
+      ? resources.backblazeBucketFor(connection.origin.serverId)
+      : null,
   saveBucket: (final bucket) async {
     if (connection.isAttached &&
-        resources.backblazeBucket?.bucketId == bucket.bucketId) {
-      await resources.setBackblazeBucket(bucket);
+        resources.backblazeBucketFor(connection.origin.serverId)?.bucketId ==
+            bucket.bucketId) {
+      await resources.setBackblazeBucket(connection.origin.serverId, bucket);
     }
   },
   removeBucket: (final bucket) async {
-    if (connection.isAttached && identical(resources.backblazeBucket, bucket)) {
-      await resources.removeBackblazeBucket();
+    if (connection.isAttached &&
+        identical(
+          resources.backblazeBucketFor(connection.origin.serverId),
+          bucket,
+        )) {
+      await resources.removeBackblazeBucket(connection.origin.serverId);
     }
   },
   initialize: (final repository, final credential) {
@@ -315,7 +325,7 @@ BackupsBloc createBackupsBloc(
     );
     final providerId = server.hostingDetails.providerId ?? 'manual';
     final name = '${DateTime.now().millisecondsSinceEpoch}-$providerId-$domain';
-    final previous = resources.backblazeBucket;
+    final previous = resources.backblazeBucketFor(connection.origin.serverId);
     return InitializeBackupsOperation(
       repository: repository,
       provider: provider,
@@ -323,10 +333,13 @@ BackupsBloc createBackupsBloc(
       existingBucket: previous,
       saveBucket: (final bucket) async {
         if (!owner.isAttached ||
-            !identical(resources.backblazeBucket, previous)) {
+            !identical(
+              resources.backblazeBucketFor(connection.origin.serverId),
+              previous,
+            )) {
           throw const OperationNotSent();
         }
-        await resources.setBackblazeBucket(bucket);
+        await resources.setBackblazeBucket(connection.origin.serverId, bucket);
       },
     ).run();
   },

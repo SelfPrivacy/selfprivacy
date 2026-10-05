@@ -25,7 +25,7 @@ import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_inf
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
+import 'package:selfprivacy/logic/providers/resolve_provider.dart';
 import 'package:selfprivacy/logic/providers/server_metadata.dart';
 import 'package:selfprivacy/utils/show_jobs_modal.dart';
 
@@ -102,7 +102,10 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
     dnsRecordsCubit = createDnsRecordsCubit(
       connection,
       resources: getIt<ResourcesModel>(),
-      dnsProvider: () => ProvidersController.currentDnsProvider,
+      dnsProvider: () => resolveDnsProvider(
+        getIt<ResourcesModel>(),
+        connection.origin.serverId,
+      ),
     );
     recoveryKeyBloc = createRecoveryKeyBloc(connection);
     devicesBloc = createDevicesBloc(
@@ -133,8 +136,14 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
         }
         return fetchServerMetadata(
           server: server,
-          serverProvider: ProvidersController.currentServerProvider,
-          dnsProvider: ProvidersController.currentDnsProvider,
+          serverProvider: resolveServerProvider(
+            getIt<ResourcesModel>(),
+            connection.origin.serverId,
+          ),
+          dnsProvider: resolveDnsProvider(
+            getIt<ResourcesModel>(),
+            connection.origin.serverId,
+          ),
         );
       },
     );
@@ -143,7 +152,10 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
       providerChanges: getIt<ResourcesModel>().statusStream.where(
         (final event) => event is ChangedServerProviderCredentials,
       ),
-      serverProvider: () => ProvidersController.currentServerProvider,
+      serverProvider: () => resolveServerProvider(
+        getIt<ResourcesModel>(),
+        connection.origin.serverId,
+      ),
       showMessage: getIt<NavigationService>().showSnackBar,
     );
     serverLogsBloc = createServerLogsBloc(connection);
@@ -181,7 +193,10 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
         create: (final _) => createJobsCubit(
           widget.connection,
           resources: getIt<ResourcesModel>(),
-          dnsProvider: () => ProvidersController.currentDnsProvider,
+          dnsProvider: () => resolveDnsProvider(
+            getIt<ResourcesModel>(),
+            widget.connection.origin.serverId,
+          ),
           showMessage: getIt<NavigationService>().showSnackBar,
         ),
       ),

@@ -289,6 +289,7 @@
         "reuploaded_key": "Key reuploaded",
         "reupload_key_subtitle": "Will instruct the server to initialize backup storage again. Use if something is broken.",
         "initialize": "Initialize",
+        "ambiguous_credentials": "Cannot initialize backups: more than one backup account is configured.",
         "restore": "Restore from backup",
         "no_backups": "There are no backups yet",
         "create_new": "Create a new backup",

@@ -19,7 +19,7 @@ class HiveConfig {
   static final logger = const AppLogger(name: 'hive_config').log;
 
   /// bump on schema changes
-  static const version = 3;
+  static const version = 4;
 
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
@@ -134,6 +134,9 @@ class HiveConfig {
         }
         if (savedVersion < 3) {
           await migrateFrom2To3(localSettingsBox);
+        }
+        if (savedVersion < 4) {
+          await migrateFrom3To4();
         }
       }
 
@@ -250,6 +253,26 @@ class HiveConfig {
       }
     }
     logger('successfully migrated db from 1 to 2 version');
+  }
+
+  static Future<void> migrateFrom3To4() async {
+    final resources = Hive.box(BNames.resourcesBox);
+    final legacy = resources.get(BNames.backblazeBucket) as BackblazeBucket?;
+    final servers = List<Server>.from(
+      resources.get(BNames.servers, defaultValue: <Server>[]) as List,
+    );
+    if (legacy == null || servers.isEmpty) {
+      return;
+    }
+    final buckets = Map<String, BackblazeBucket>.from(
+      resources.get(
+            BNames.backblazeBuckets,
+            defaultValue: <String, BackblazeBucket>{},
+          )
+          as Map,
+    )..putIfAbsent(servers.first.uuid, () => legacy);
+    await resources.put(BNames.backblazeBuckets, buckets);
+    await resources.flush();
   }
 
   static Future<void> migrateFrom2To3(
@@ -461,6 +484,7 @@ class BNames {
 
   /// A [BackblazeBucket] field of [serverInstallationBox] box.
   static String backblazeBucket = 'backblazeBucket';
+  static String backblazeBuckets = 'backblazeBuckets';
 
   /// A boolean field of [serverInstallationBox] box.
   static String isLoading = 'isLoading';

@@ -187,6 +187,19 @@ void main() {
   });
 
   group('servers, backups and bucket', () {
+    test('bucket writes and removal are isolated by server UUID', () async {
+      final first = _aBackblazeBucket();
+      final second = first.copyWith(bucketId: 'second');
+      await Future.wait([
+        model.setBackblazeBucket('first', first),
+        model.setBackblazeBucket('second', second),
+      ]);
+      await model.removeBackblazeBucket('first');
+      final reloaded = ResourcesModel()..init();
+      addTearDown(reloaded.dispose);
+      expect(reloaded.backblazeBucketFor('first'), isNull);
+      expect(reloaded.backblazeBucketFor('second')!.bucketId, 'second');
+    });
     test('addServer and removeServer use the server UUID', () async {
       final server = aServer(uuid: 'server-a');
       await model.addServer(server);
@@ -246,15 +259,15 @@ void main() {
     );
 
     test('setBackblazeBucket / removeBackblazeBucket round-trips', () async {
-      await model.setBackblazeBucket(_aBackblazeBucket());
-      expect(model.backblazeBucket?.bucketName, 'bucket-name');
+      await model.setBackblazeBucket('server', _aBackblazeBucket());
+      expect(model.backblazeBucketFor('server')?.bucketName, 'bucket-name');
 
       final reloaded = ResourcesModel()..init();
       addTearDown(reloaded.dispose);
-      expect(reloaded.backblazeBucket?.bucketName, 'bucket-name');
+      expect(reloaded.backblazeBucketFor('server')?.bucketName, 'bucket-name');
 
-      await model.removeBackblazeBucket();
-      expect(model.backblazeBucket, isNull);
+      await model.removeBackblazeBucket('server');
+      expect(model.backblazeBucketFor('server'), isNull);
     });
   });
 
@@ -264,7 +277,7 @@ void main() {
       await model.addDnsProviderToken(aDnsProviderCredential());
       await model.addServer(aServer());
       await model.addBackupsCredential(aBackupsCredential());
-      await model.setBackblazeBucket(_aBackblazeBucket());
+      await model.setBackblazeBucket('server', _aBackblazeBucket());
 
       await model.clear();
 
@@ -272,7 +285,7 @@ void main() {
       expect(model.dnsProviderCredentials, isEmpty);
       expect(model.servers, isEmpty);
       expect(model.backupsCredentials, isEmpty);
-      expect(model.backblazeBucket, isNull);
+      expect(model.backblazeBucketFor('server'), isNull);
     });
   });
 }

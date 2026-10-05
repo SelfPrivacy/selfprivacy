@@ -1,0 +1,10 @@
+{
+  "accountId": "authorized-account",
+  "bucketId": "bucket-test",
+  "bucketName": "selfprivacy-example-backups",
+  "bucketType": "allPrivate",
+  "bucketInfo": {},
+  "corsRules": [],
+  "lifecycleRules": [],
+  "revision": 1
+}

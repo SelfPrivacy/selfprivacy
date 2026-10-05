@@ -12,7 +12,6 @@ import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
 import 'package:selfprivacy/ui/molecules/buttons/period_selector.dart';
@@ -29,7 +28,6 @@ class MemoryUsageByServicePage extends StatelessWidget {
     create: (final context) => createMetricsCubit(
       context.read<ServerConnection>(),
       resources: getIt<ResourcesModel>(),
-      serverProvider: () => ProvidersController.currentServerProvider,
     ),
     child: const _MemoryUsageByServiceContents(),
   );

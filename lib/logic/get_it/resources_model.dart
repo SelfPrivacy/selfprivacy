@@ -61,7 +61,11 @@ class ResourcesModel {
     final Object? value, {
     final ResourcesModelEvent? event,
   }) {
-    final snapshot = value is List ? value.toList(growable: false) : value;
+    final snapshot = switch (value) {
+      final List list => list.toList(growable: false),
+      final Map map => Map.of(map),
+      _ => value,
+    };
     return _writes.withResource(() async {
       await _box.put(key, snapshot);
       await _box.flush();
@@ -82,15 +86,14 @@ class ResourcesModel {
   List<DnsProviderCredential> get dnsProviderCredentials => _dnsProviderTokens;
   List<BackupsCredential> get backupsCredentials => _backupsCredentials;
   List<Server> get servers => _servers;
-  BackblazeBucket? get backblazeBucket => _backblazeBucket;
+  BackblazeBucket? backblazeBucketFor(final String serverUuid) =>
+      _backblazeBuckets[serverUuid];
 
   List<ServerProviderCredential> _serverProviderTokens = [];
   List<DnsProviderCredential> _dnsProviderTokens = [];
   List<BackupsCredential> _backupsCredentials = [];
   List<Server> _servers = [];
-  // TODO(inex): As we will add support for other backup storages, we should
-  // refactor this.
-  BackblazeBucket? _backblazeBucket;
+  Map<String, BackblazeBucket> _backblazeBuckets = {};
 
   @Deprecated('Compatibility getter')
   ServerHostingDetails? get serverDetails =>
@@ -256,19 +259,19 @@ class ResourcesModel {
     }
   }
 
-  Future<void> setBackblazeBucket(final BackblazeBucket bucket) async {
+  Future<void> setBackblazeBucket(
+    final String serverUuid,
+    final BackblazeBucket bucket,
+  ) async {
     _requireOpen();
-    _backblazeBucket = bucket;
-    await _persist(BNames.backblazeBucket, bucket);
+    _backblazeBuckets[serverUuid] = bucket;
+    await _persist(BNames.backblazeBuckets, _backblazeBuckets);
   }
 
-  Future<void> removeBackblazeBucket() async {
+  Future<void> removeBackblazeBucket(final String serverUuid) async {
     _requireOpen();
-    _backblazeBucket = null;
-    await _writes.withResource(() async {
-      await _box.delete(BNames.backblazeBucket);
-      await _box.flush();
-    });
+    _backblazeBuckets.remove(serverUuid);
+    await _persist(BNames.backblazeBuckets, _backblazeBuckets);
   }
 
   Future<void> clear() async {
@@ -277,7 +280,7 @@ class ResourcesModel {
     _serverProviderTokens.clear();
     _dnsProviderTokens.clear();
     _backupsCredentials.clear();
-    _backblazeBucket = null;
+    _backblazeBuckets.clear();
 
     await _writes.withResource(() async {
       await _box.clear();
@@ -313,7 +316,13 @@ class ResourcesModel {
         .get(BNames.servers, defaultValue: <Server>[])
         .map<Server>((final e) => e as Server)
         .toList();
-    _backblazeBucket = _box.get(BNames.backblazeBucket);
+    _backblazeBuckets = Map<String, BackblazeBucket>.from(
+      _box.get(
+            BNames.backblazeBuckets,
+            defaultValue: <String, BackblazeBucket>{},
+          )
+          as Map,
+    );
 
     _statusStreamController.add(const ResourcesModelLoaded());
   }

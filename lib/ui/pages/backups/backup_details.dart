@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
@@ -97,14 +98,22 @@ class BackupDetailsPage extends StatelessWidget {
               onPressed: preventActions
                   ? null
                   : () async {
-                      if (tokensState.backupsCredentials.isEmpty) {
+                      final credentials = context
+                          .read<TokensBloc>()
+                          .state
+                          .backupsCredentials;
+                      if (credentials.isEmpty) {
                         await context.pushRoute(const AddBackupsTokenRoute());
                         return;
                       }
+                      if (credentials.length != 1) {
+                        getIt<NavigationService>().showSnackBar(
+                          'backup.ambiguous_credentials'.tr(),
+                        );
+                        return;
+                      }
                       context.read<BackupsBloc>().add(
-                        InitializeBackupsRepository(
-                          tokensState.backupsCredentials.first.data,
-                        ),
+                        InitializeBackupsRepository(credentials.single.data),
                       );
                     },
               title: tokensState.backupsCredentials.isEmpty

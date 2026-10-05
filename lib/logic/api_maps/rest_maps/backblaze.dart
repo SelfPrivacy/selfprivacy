@@ -3,10 +3,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
-import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/hive/backblaze_bucket.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
@@ -15,8 +13,13 @@ import 'package:selfprivacy/utils/app_logger.dart';
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
 class BackblazeApiAuth {
-  BackblazeApiAuth({required this.authorizationToken, required this.apiUrl});
+  BackblazeApiAuth({
+    required this.accountId,
+    required this.authorizationToken,
+    required this.apiUrl,
+  });
 
+  final String accountId;
   final String authorizationToken;
   final String apiUrl;
 }
@@ -91,6 +94,7 @@ class BackblazeApi extends RestApiMap {
       throw Exception('code: ${response.statusCode}');
     }
     return BackblazeApiAuth(
+      accountId: response.data['accountId'],
       authorizationToken: response.data['authorizationToken'],
       apiUrl: response.data['apiUrl'],
     );
@@ -138,7 +142,7 @@ class BackblazeApi extends RestApiMap {
     final Response response = await client.post(
       '$apiPrefix/b2_create_bucket',
       data: {
-        'accountId': tokenId,
+        'accountId': auth.accountId,
         'bucketName': bucketName,
         'bucketType': 'allPrivate',
         'lifecycleRules': [
@@ -173,7 +177,7 @@ class BackblazeApi extends RestApiMap {
     final Response response = await client.post(
       '$apiPrefix/b2_create_key',
       data: {
-        'accountId': getIt<ResourcesModel>().backblazeCredential!.keyId,
+        'accountId': auth.accountId,
         'bucketId': bucketId,
         'capabilities': ['listBuckets', 'listFiles', 'readFiles', 'writeFiles'],
         'keyName': 'selfprivacy-restricted-server-key',
@@ -208,9 +212,7 @@ class BackblazeApi extends RestApiMap {
     client.options.baseUrl = auth.apiUrl;
     final Response response = await client.get(
       '$apiPrefix/b2_list_buckets',
-      queryParameters: {
-        'accountId': getIt<ResourcesModel>().backblazeCredential!.keyId,
-      },
+      queryParameters: {'accountId': auth.accountId},
       options: Options(headers: {'Authorization': auth.authorizationToken}),
     );
     close(client);

@@ -12,6 +12,7 @@ import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 import '../../../helpers/fixtures/credential_fixtures.dart';
+import '../../../helpers/fixtures/json_fixture.dart';
 
 class _RecordingClientFactory {
   final List<BaseOptions> options = [];
@@ -64,15 +65,9 @@ class _RecordingClientFactory {
       case '/api/json/v3/ping':
         return {'credentialsValid': true};
       case '/b2api/v2/b2_authorize_account':
-        return {
-          'authorizationToken': 'authorization-token',
-          'apiUrl': 'https://backblaze.example',
-          'allowed': {
-            'capabilities': ['listBuckets'],
-          },
-        };
+        return loadJsonFixture('backups_providers/backblaze/account.json');
       case '/b2api/v2/b2_create_bucket':
-        return {'bucketId': 'bucket-id'};
+        return loadJsonFixture('backups_providers/backblaze/bucket.json');
       default:
         throw StateError('Unexpected request: ${request.uri}');
     }
@@ -247,7 +242,7 @@ void main() {
     final createResult = await provider.createStorage('bucket-name');
 
     expect(createResult.success, isTrue);
-    expect(createResult.data, 'bucket-id');
+    expect(createResult.data, 'bucket-test');
     expect(
       clients.requests.first.headers['Authorization'],
       startsWith('Basic '),

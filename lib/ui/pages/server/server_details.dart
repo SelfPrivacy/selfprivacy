@@ -8,7 +8,6 @@ import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/ui/atoms/icons/brand_icons.dart';
 import 'package:selfprivacy/ui/atoms/list_tiles/section_headline.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -97,7 +96,6 @@ class _ServerDetailsPageState extends State<ServerDetailsPage>
           create: (final context) => createMetricsCubit(
             context.read<ServerConnection>(),
             resources: getIt<ResourcesModel>(),
-            serverProvider: () => ProvidersController.currentServerProvider,
           ),
           child: const ServerCharts(),
         ),

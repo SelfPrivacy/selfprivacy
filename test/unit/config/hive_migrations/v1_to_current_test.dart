@@ -113,7 +113,9 @@ void main() {
       servers.single.uuid,
     );
 
-    final BackblazeBucket bucket = resourcesBox.get(BNames.backblazeBucket);
+    final bucket =
+        (resourcesBox.get(BNames.backblazeBuckets) as Map)[servers.single.uuid]
+            as BackblazeBucket;
     expect(bucket.bucketId, 'backblaze-bucket-id');
     expect(bucket.bucketName, 'migration-bucket');
     expect(bucket.applicationKeyId, 'bucket-application-key-id');

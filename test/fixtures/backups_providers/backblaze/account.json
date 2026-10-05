@@ -1,0 +1,9 @@
+{
+  "accountId": "authorized-account",
+  "authorizationToken": "test-auth-token",
+  "apiUrl": "https://api001.backblazeb2.com",
+  "downloadUrl": "https://f001.backblazeb2.com",
+  "recommendedPartSize": 100000000,
+  "absoluteMinimumPartSize": 5000000,
+  "allowed": {"bucketId": null, "bucketName": null, "capabilities": ["listBuckets", "writeBuckets", "writeKeys"], "namePrefix": null}
+}

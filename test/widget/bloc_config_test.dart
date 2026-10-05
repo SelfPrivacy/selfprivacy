@@ -21,9 +21,11 @@ import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/ui/organisms/jobs/jobs_content.dart';
@@ -104,6 +106,8 @@ void main() {
                   }
                   return BlocAndProviderConfig(
                     child: MaterialApp.router(
+                      scaffoldMessengerKey:
+                          getIt<NavigationService>().scaffoldMessengerKey,
                       theme: app.lightTheme,
                       darkTheme: app.darkTheme,
                       themeMode: app.themeMode,
@@ -245,6 +249,56 @@ void main() {
       },
     );
   }
+
+  testWidgets(
+    'confirming user deletion closes the dialog and returns to users',
+    (final tester) async {
+      final router = RootRouter(getIt<NavigationService>().navigatorKey);
+      await pumpApp(tester, router);
+      await tester.runAsync(() async {
+        await resources.addServer(aServer());
+        await pumpEventQueue();
+      });
+      await waitForContent(
+        tester,
+        () =>
+            find.byType(UsersPage).evaluate().isNotEmpty &&
+            tester.element(find.byType(UsersPage)).read<UsersBloc?>() != null,
+        'The server branch must be ready',
+      );
+      final user = aUserWithEmailPasswords().copyWith(login: 'alice');
+      await tester.runAsync(() async {
+        hub.active!.cache
+          ..setVersion(Version(3, 6, 0))
+          ..users.push([user]);
+      });
+      final jobs = tester.element(find.byType(UsersPage)).read<JobsCubit>();
+      final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
+      unawaited(serverRouter.push(UserDetailsRoute(login: user.login)));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final deleteTile = find.text('users.delete_user'.tr());
+      await tester.scrollUntilVisible(
+        deleteTile,
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.tap(deleteTile);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(AlertDialog), findsOneWidget);
+      await tester.tap(find.widgetWithText(TextButton, 'basis.delete'.tr()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.takeException(), isNull);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(serverRouter.current.name, UsersRoute.name);
+      expect(jobs.state.draft, hasLength(1));
+      expect((jobs.state.draft.single as DeleteUserJob).user.login, 'alice');
+      await tester.pumpWidget(const SizedBox.shrink());
+      router.dispose();
+    },
+  );
 
   testWidgets('reset removes server UI before persistence completes', (
     final tester,

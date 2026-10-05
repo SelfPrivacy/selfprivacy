@@ -22,6 +22,7 @@ import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -44,6 +45,8 @@ import '../helpers/fixtures/service_fixtures.dart';
 import '../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
+
+class _Box extends Mock implements Box {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
@@ -242,6 +245,55 @@ void main() {
       },
     );
   }
+
+  testWidgets('reset removes server UI before persistence completes', (
+    final tester,
+  ) async {
+    final router = RootRouter(getIt<NavigationService>().navigatorKey);
+    await pumpApp(tester, router);
+    await tester.runAsync(() async {
+      await resources.addServer(aServer());
+      await pumpEventQueue();
+    });
+    await waitForContent(
+      tester,
+      () =>
+          find.byType(UsersPage).evaluate().isNotEmpty &&
+          tester.element(find.byType(UsersPage)).read<UsersBloc?>() != null,
+      'The server branch must be ready',
+    );
+    final pending = Completer<int>();
+    final box = _Box();
+    when(box.clear).thenAnswer((_) => pending.future);
+    final repository = ServerInstallationRepository()..box = box;
+    late Future<void> resetting;
+    await tester.runAsync(() async {
+      resetting = repository.clearAppConfig();
+    });
+    try {
+      await tester.runAsync(pumpEventQueue);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
+      for (final route in [
+        const ServicesRoute(),
+        const UsersRoute(),
+        const MoreRoute(),
+      ]) {
+        await serverRouter.replaceAll([route]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(tester.takeException(), isNull);
+      }
+      expect(find.byType(FloatingActionButton), findsNothing);
+      expect(resources.servers, isNotEmpty);
+    } finally {
+      pending.complete(0);
+      await tester.runAsync(() => resetting);
+      await tester.pumpWidget(const SizedBox.shrink());
+      router.dispose();
+    }
+  });
 
   testWidgets('all main sections work without server providers', (
     final tester,

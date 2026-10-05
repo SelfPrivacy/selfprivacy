@@ -64,6 +64,12 @@ class InitializeBackupsOperation {
   Future<ServerMutationResult<BackupConfiguration>> run() async {
     final bucket = await _prepare();
     _requireAttached();
+    await _step(
+      'persist',
+      'operations.steps.save_backup_credentials',
+      () => saveBucket(bucket),
+    );
+    _requireAttached();
     OperationExecution.current?.recordStep(
       const OperationStep(
         id: 'configure',
@@ -139,12 +145,6 @@ class InitializeBackupsOperation {
       applicationKeyId: credential.applicationKeyId,
       encryptionKey: encryptionKey,
     );
-    await _step(
-      'persist',
-      'operations.steps.save_backup_credentials',
-      () => saveBucket(bucket),
-    );
-    _requireAttached();
     return bucket;
   }
 }

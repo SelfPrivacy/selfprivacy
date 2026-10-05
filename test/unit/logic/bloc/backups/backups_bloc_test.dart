@@ -295,6 +295,80 @@ void main() {
     },
   );
 
+  for (final retryFails in [false, true]) {
+    testWidgets(
+      'initialization retry persists its retained bucket before configuring, retryFails=$retryFails',
+      (final tester) async {
+        await pumpForTest(tester, const SizedBox.shrink());
+        await tester.runAsync(() async {
+          bucket = null;
+          await ready(initialized: false);
+          when(() => provider.createStorage(any())).thenAnswer(
+            (_) async => GenericResult(success: true, data: 'bucket-id'),
+          );
+          when(() => provider.createApplicationKey('bucket-id')).thenAnswer(
+            (_) async =>
+                GenericResult(success: true, data: aBackupsApplicationKey()),
+          );
+          final persisted = Completer<void>();
+          var writes = 0;
+          when(
+            () => resources.setBackblazeBucket(connection.serverId, any()),
+          ).thenAnswer((final call) async {
+            bucket = call.positionalArguments.last as BackblazeBucket;
+            if (++writes == 1) {
+              throw StateError('Persistence failed after updating memory');
+            }
+            await persisted.future;
+            if (retryFails) {
+              throw StateError('Persistence still unavailable');
+            }
+          });
+          when(() => api.initializeRepository(any())).thenAnswer(
+            (_) async => ServerMutationResult(
+              outcome: ServerMutationOutcome.confirmed,
+              payload: ServerMutationPayload.available(aBackupConfiguration()),
+            ),
+          );
+          await dispatch(InitializeBackupsRepository(aBackupsCredential()));
+          expect(bloc.state, isA<BackupsUninitialized>());
+          expect(bucket?.bucketId, 'bucket-id');
+          verifyNever(() => api.initializeRepository(any()));
+
+          bloc.add(InitializeBackupsRepository(aBackupsCredential()));
+          await pumpEventQueue();
+          try {
+            verifyNever(() => api.initializeRepository(any()));
+            expect(writes, 2);
+            expect(bloc.state, isA<BackupsInitializing>());
+            expect(
+              connection.operations.pending.single.steps.single.id,
+              'persist',
+            );
+          } finally {
+            persisted.complete();
+            await pumpEventQueue();
+          }
+          verify(() => provider.createStorage(any())).called(1);
+          verify(() => provider.createApplicationKey('bucket-id')).called(1);
+          if (retryFails) {
+            verifyNever(() => api.initializeRepository(any()));
+            expect(bloc.state, isA<BackupsUninitialized>());
+          } else {
+            final input =
+                verify(
+                      () => api.initializeRepository(captureAny()),
+                    ).captured.single
+                    as InitializeRepositoryInput;
+            expect(input.locationId, 'bucket-id');
+            expect(input.password, aBackupsApplicationKey().applicationKey);
+            expect(bloc.state, isA<BackupsInitialized>());
+          }
+        });
+      },
+    );
+  }
+
   testWidgets('closing the presentation suppresses late mutation feedback', (
     final tester,
   ) async {

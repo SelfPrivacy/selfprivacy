@@ -69,7 +69,7 @@ void main() {
     );
     await local.selectServer(other.uuid);
     await pumpEventQueue();
-    expect(local.active!.origin.serverId, 'other');
+    expect(local.active!.serverId, 'other');
     expect(first.isAttached, isTrue);
     pending.complete('finished');
     expect((await operation.result).value, 'finished');
@@ -95,10 +95,10 @@ void main() {
     first.dispose();
     final restarted = open();
     addTearDown(restarted.dispose);
-    expect(restarted.active!.origin.serverId, 'other');
+    expect(restarted.active!.serverId, 'other');
     await resources.removeServer(other);
     await pumpEventQueue();
-    expect(restarted.active!.origin.serverId, resources.servers.first.uuid);
+    expect(restarted.active!.serverId, resources.servers.first.uuid);
     await resources.removeServer(resources.servers.single);
     await pumpEventQueue();
     expect(restarted.active, isNull);
@@ -188,14 +188,14 @@ void main() {
       }
       saved.complete();
       await selecting;
-      expect(local.active!.origin.serverId, resources.servers.first.uuid);
+      expect(local.active!.serverId, resources.servers.first.uuid);
       final reopened = ServerConnectionHub(
         resourcesModel: resources,
         activeServerUuid: settings.get(BNames.activeServerUuid) as String?,
         createApi: (_, _, _) => api,
       );
       addTearDown(reopened.dispose);
-      expect(reopened.active!.origin.serverId, local.active!.origin.serverId);
+      expect(reopened.active!.serverId, local.active!.serverId);
     });
   }
 
@@ -214,7 +214,7 @@ void main() {
       expect(hub.active, same(active));
       expect(first.isAttached, isFalse);
       expect(first.cache.apiVersion.isDisposed, isTrue);
-      expect(hub.connections[first.origin.serverId], isNot(same(first)));
+      expect(hub.connections[first.serverId], isNot(same(first)));
       hub.clear();
       expect(active.isAttached, isFalse);
       expect(hub.connections, isEmpty);
@@ -283,7 +283,7 @@ void main() {
         expect(connection.users, same(users));
         expect(connection.scheduler, same(scheduler));
         return 2;
-      }, origin: old.origin);
+      });
       expect(hub.active!.rotation.status, RotationStatus.waiting);
       expect(sent, isFalse);
       active.complete();
@@ -401,7 +401,7 @@ void main() {
         await pumpEventQueue();
         expect(dispatch.first, throwsA(isA<GraphQLDispatchDeferred>()));
         await local.active!.run(OperationKind.manageUsers, (final owner) async {
-          expect(owner.origin.continuity, isNot(same(old.origin.continuity)));
+          expect(owner, isNot(same(old)));
         });
         expect(
           old.cache.stores.every((final store) => store.isDisposed),
@@ -419,7 +419,8 @@ void main() {
     expect(hub.active, isNull);
     expect(old.cache.stores.every((final store) => store.isDisposed), isTrue);
     hub.resume();
-    expect(hub.active!.origin.continuity, isNot(same(old.origin.continuity)));
+    expect(hub.active, isNotNull);
+    expect(hub.active, isNot(same(old)));
     hub
       ..dispose()
       ..resume();

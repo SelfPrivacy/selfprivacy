@@ -102,10 +102,8 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
     dnsRecordsCubit = createDnsRecordsCubit(
       connection,
       resources: getIt<ResourcesModel>(),
-      dnsProvider: () => resolveDnsProvider(
-        getIt<ResourcesModel>(),
-        connection.origin.serverId,
-      ),
+      dnsProvider: () =>
+          resolveDnsProvider(getIt<ResourcesModel>(), connection.serverId),
     );
     recoveryKeyBloc = createRecoveryKeyBloc(connection);
     devicesBloc = createDevicesBloc(
@@ -129,7 +127,7 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
           return [];
         }
         final server = getIt<ResourcesModel>().servers
-            .where((final server) => server.uuid == connection.origin.serverId)
+            .where((final server) => server.uuid == connection.serverId)
             .firstOrNull;
         if (server == null) {
           return [];
@@ -138,11 +136,11 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
           server: server,
           serverProvider: resolveServerProvider(
             getIt<ResourcesModel>(),
-            connection.origin.serverId,
+            connection.serverId,
           ),
           dnsProvider: resolveDnsProvider(
             getIt<ResourcesModel>(),
-            connection.origin.serverId,
+            connection.serverId,
           ),
         );
       },
@@ -152,10 +150,8 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
       providerChanges: getIt<ResourcesModel>().statusStream.where(
         (final event) => event is ChangedServerProviderCredentials,
       ),
-      serverProvider: () => resolveServerProvider(
-        getIt<ResourcesModel>(),
-        connection.origin.serverId,
-      ),
+      serverProvider: () =>
+          resolveServerProvider(getIt<ResourcesModel>(), connection.serverId),
       showMessage: getIt<NavigationService>().showSnackBar,
     );
     serverLogsBloc = createServerLogsBloc(connection);
@@ -195,7 +191,7 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
           resources: getIt<ResourcesModel>(),
           dnsProvider: () => resolveDnsProvider(
             getIt<ResourcesModel>(),
-            widget.connection.origin.serverId,
+            widget.connection.serverId,
           ),
           showMessage: getIt<NavigationService>().showSnackBar,
         ),

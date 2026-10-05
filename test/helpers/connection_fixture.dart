@@ -1,16 +1,15 @@
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 
 import 'fixtures/server_fixtures.dart';
 
-ServerConnection seededConnection(final ServerApi api) {
-  final origin = ServerStateOrigin('fixture-server');
-  return ServerConnection(api: api, origin: origin, currentOrigin: () => origin)
-    ..cache.setVersion(Version(3, 6, 0));
-}
+ServerConnection seededConnection(final ServerApi api) => ServerConnection(
+  api: api,
+  serverId: 'fixture-server',
+  isAttached: () => true,
+)..cache.setVersion(Version(3, 6, 0));
 
 ApplyChangesOperation configurationOperation(
   final ServerConnection connection,

@@ -5,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 
@@ -24,11 +23,11 @@ void main() {
 
   setUp(() {
     api = _Api();
-    final origin = ServerStateOrigin('server');
+
     connection = ServerConnection(
       api: api,
-      origin: origin,
-      currentOrigin: () => origin,
+      serverId: 'server',
+      isAttached: () => true,
     )..cache.setVersion(Version(3, 0, 0));
   });
   tearDown(() => connection.dispose());

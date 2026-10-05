@@ -6,7 +6,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 
 class _Api extends Mock implements ServerApi {}
@@ -18,8 +17,7 @@ ServerMutationResult<int> result({
 }) => ServerMutationResult(outcome: outcome, payload: payload);
 
 void main() {
-  late ServerStateOrigin origin;
-  late ServerStateOrigin? current;
+  late bool attached;
   late ServerApi api;
   late DomainStore<int> users;
   late DomainStore<int> jobs;
@@ -28,8 +26,7 @@ void main() {
 
   void testCoordinator(final String name, final WidgetTesterCallback body) {
     testWidgets(name, (final tester) async {
-      origin = ServerStateOrigin('server-uuid');
-      current = origin;
+      attached = true;
       api = _Api();
       DomainStore<int> store(final String name) => DomainStore(
         name: name,
@@ -42,8 +39,7 @@ void main() {
       jobs = store('jobs');
       settings = store('settings');
       coordinator = ServerCommandCoordinator(
-        origin: origin,
-        currentOrigin: () => current,
+        isAttached: () => attached,
         api: () => api,
         stores: [users, jobs, settings],
       );
@@ -226,34 +222,29 @@ void main() {
     },
   );
 
-  for (final removed in [false, true]) {
-    testCoordinator(
-      'late result is detached after ${removed ? 'removal' : 'generation replacement'}',
-      (final tester) async {
-        final response = Completer<ServerMutationResult<int>>();
-        final handle = coordinator.submit<int>(
-          domains: [users],
-          send: (_) => response.future,
-          applyConfirmed: (_) =>
-              fail('must not publish to an obsolete generation'),
-        );
-        final queued = coordinator.submit<int>(
-          domains: [users],
-          send: (_) => fail(
-            'must not send a queued command from an obsolete generation',
-          ),
-        );
-        current = removed ? null : ServerStateOrigin(origin.serverId);
-        final confirmed = result();
-        response.complete(confirmed);
-        final completion = await handle;
-        expect(completion.application, CommandApplication.detached);
-        expect(completion.result, same(confirmed));
-        expect((await queued).application, CommandApplication.detached);
-        expect(users.value.data, 1);
-      },
+  testCoordinator('detachment prevents queued sends and late effects', (
+    final tester,
+  ) async {
+    final response = Completer<ServerMutationResult<int>>();
+    final handle = coordinator.submit<int>(
+      domains: [users],
+      send: (_) => response.future,
+      applyConfirmed: (_) => fail('must not publish to an obsolete generation'),
     );
-  }
+    final queued = coordinator.submit<int>(
+      domains: [users],
+      send: (_) =>
+          fail('must not send a queued command from an obsolete generation'),
+    );
+    attached = false;
+    final confirmed = result();
+    response.complete(confirmed);
+    final completion = await handle;
+    expect(completion.application, CommandApplication.detached);
+    expect(completion.result, same(confirmed));
+    expect((await queued).application, CommandApplication.detached);
+    expect(users.value.data, 1);
+  });
 
   testCoordinator(
     'disposal resolves waiters and ignores late remote completion',
@@ -416,8 +407,7 @@ void main() {
         send: (_) => response.future,
         applyConfirmed: (_) => fail('must not publish old effects'),
       );
-      final replacementOrigin = ServerStateOrigin(origin.serverId);
-      current = replacementOrigin;
+      attached = false;
       final replacementStore = DomainStore<int>(
         name: 'users',
         fetch: () async => 10,
@@ -425,8 +415,7 @@ void main() {
         refreshInterval: const Duration(seconds: 10),
       )..push(10);
       final replacement = ServerCommandCoordinator(
-        origin: replacementOrigin,
-        currentOrigin: () => current,
+        isAttached: () => true,
         api: _Api.new,
         stores: [replacementStore],
       );

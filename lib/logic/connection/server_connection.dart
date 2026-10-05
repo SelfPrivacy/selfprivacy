@@ -12,7 +12,6 @@ import 'package:selfprivacy/logic/connection/lifecycle/managed_subscription.dart
 import 'package:selfprivacy/logic/connection/lifecycle/network_connectivity.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_connection_binding.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
@@ -44,12 +43,12 @@ typedef ConnectionApiFactory =
 class ServerConnection {
   ServerConnection({
     required this.api,
-    required this.origin,
-    required final ServerStateOrigin? Function() currentOrigin,
+    required this.serverId,
+    required final bool Function() isAttached,
     final DateTime Function()? now,
     final CacheTimerFactory? createTimer,
-  }) : _currentOrigin = currentOrigin {
-    operations = OperationQueue(serverId: origin.serverId, now: now);
+  }) : _isAttached = isAttached {
+    operations = OperationQueue(serverId: serverId, now: now);
     cache = ServerStateCache(
       api: () => api,
       now: now,
@@ -65,8 +64,7 @@ class ServerConnection {
     final volumesStore = cache.volumes;
     commands = ServerCommandCoordinator(
       api: () => api,
-      origin: origin,
-      currentOrigin: () => isAttached ? origin : null,
+      isAttached: () => this.isAttached,
       stores: cache.stores,
       apiVersion: cache.apiVersion,
     );
@@ -119,7 +117,7 @@ class ServerConnection {
     for (final store in cache.stores) {
       _subscriptions.add(
         store.stream.listen((_) {
-          if (isAttached) {
+          if (this.isAttached) {
             _notify();
           }
         }),
@@ -143,11 +141,10 @@ class ServerConnection {
       automaticRotationEnabled: automaticRotationEnabled,
       now: now,
     );
-    final origin = ServerStateOrigin(server.uuid);
     final connection = ServerConnection(
       api: session.createApi(),
-      origin: origin,
-      currentOrigin: () => session.matches(session.server) ? origin : null,
+      serverId: server.uuid,
+      isAttached: () => session.matches(session.server),
       now: now,
     );
     session.connection = connection;
@@ -159,8 +156,8 @@ class ServerConnection {
   }
 
   ServerApi api;
-  final ServerStateOrigin origin;
-  final ServerStateOrigin? Function() _currentOrigin;
+  final String serverId;
+  final bool Function() _isAttached;
   bool get _canDispatch => !(_session?.hasUnsavedToken ?? false);
   static final _admissionKey = Object();
   late final OperationQueue operations;
@@ -182,7 +179,7 @@ class ServerConnection {
   late final SyncScheduler scheduler;
 
   Stream<void> get changes => _changes.stream;
-  bool get isAttached => !_disposed && identical(_currentOrigin(), origin);
+  bool get isAttached => !_disposed && _isAttached();
   bool get _isAdmitted => identical(Zone.current[_admissionKey], this);
 
   Future<T> _admit<T>(final Future<T> Function() action) =>
@@ -191,14 +188,13 @@ class ServerConnection {
   Future<T?> run<T>(
     final OperationKind kind,
     final Future<T> Function(ServerConnection) action, {
-    final ServerStateOrigin? origin,
     final void Function()? onNotSent,
   }) async {
     if (_isAdmitted) {
-      _checkDispatch(origin);
+      _checkDispatch();
       return action(this);
     }
-    final result = await submit(kind, action, origin: origin).result;
+    final result = await submit(kind, action).result;
     if (result.status == OperationStatus.notSent ||
         result.status == OperationStatus.cancelled) {
       onNotSent?.call();
@@ -209,18 +205,14 @@ class ServerConnection {
   OperationHandle<T> submit<T>(
     final OperationKind kind,
     final Future<T> Function(ServerConnection) action, {
-    final ServerStateOrigin? origin,
     final OperationReport Function(T)? describe,
   }) => operations.submit(kind, () {
-    _checkDispatch(origin);
+    _checkDispatch();
     return _admit(() => action(this));
   }, describe: describe ?? (_) => OperationExecution.current!.report);
 
-  void _checkDispatch(final ServerStateOrigin? expected) {
-    if (!isAttached ||
-        !_canDispatch ||
-        (expected != null &&
-            !identical(expected.continuity, origin.continuity))) {
+  void _checkDispatch() {
+    if (!isAttached || !_canDispatch) {
       throw const OperationNotSent();
     }
   }

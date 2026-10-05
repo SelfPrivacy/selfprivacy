@@ -80,18 +80,18 @@ void main() {
     ).services.allServices.map(Service.fromGraphQL).toList();
     when(() => resources.servers).thenReturn([aServer()]);
     when(
-      () => resources.backblazeBucketFor(connection.origin.serverId),
+      () => resources.backblazeBucketFor(connection.serverId),
     ).thenAnswer((_) => bucket);
     when(
-      () => resources.setBackblazeBucket(connection.origin.serverId, any()),
+      () => resources.setBackblazeBucket(connection.serverId, any()),
     ).thenAnswer((final call) async {
       bucket = call.positionalArguments.last as BackblazeBucket;
     });
-    when(
-      () => resources.removeBackblazeBucket(connection.origin.serverId),
-    ).thenAnswer((_) async {
-      bucket = null;
-    });
+    when(() => resources.removeBackblazeBucket(connection.serverId)).thenAnswer(
+      (_) async {
+        bucket = null;
+      },
+    );
     bloc = createBackupsBloc(
       hub.active!,
       resources: resources,
@@ -143,9 +143,7 @@ void main() {
     );
     await closing;
     await pumpEventQueue();
-    verify(
-      () => resources.removeBackblazeBucket(original.origin.serverId),
-    ).called(1);
+    verify(() => resources.removeBackblazeBucket(original.serverId)).called(1);
     verifyNever(() => resources.removeBackblazeBucket('second'));
     expect(resources.backblazeBucketFor('second'), same(secondBucket));
   });
@@ -285,7 +283,7 @@ void main() {
               GenericResult(success: true, data: aBackupsApplicationKey()),
         );
         when(
-          () => resources.setBackblazeBucket(connection.origin.serverId, any()),
+          () => resources.setBackblazeBucket(connection.serverId, any()),
         ).thenThrow(Exception('secret-sentinel'));
         bloc.add(InitializeBackupsRepository(aBackupsCredential()));
         await pumpEventQueue();
@@ -329,7 +327,7 @@ void main() {
       await ready();
       bucket = aBackblazeBucket().copyWith(encryptionKey: 'previous-key');
       when(
-        () => resources.setBackblazeBucket(connection.origin.serverId, any()),
+        () => resources.setBackblazeBucket(connection.serverId, any()),
       ).thenThrow(Exception('secret-sentinel'));
       connection.backups.configStore.push(aBackupConfiguration());
       await pumpEventQueue();
@@ -375,7 +373,7 @@ void main() {
         final saving = Completer<void>();
         bucket = aBackblazeBucket().copyWith(encryptionKey: 'previous-key');
         when(
-          () => resources.setBackblazeBucket(connection.origin.serverId, any()),
+          () => resources.setBackblazeBucket(connection.serverId, any()),
         ).thenAnswer((_) {
           saving.complete();
           return persisted.future;
@@ -412,7 +410,7 @@ void main() {
         );
         final persisted = Completer<void>();
         when(
-          () => resources.setBackblazeBucket(connection.origin.serverId, any()),
+          () => resources.setBackblazeBucket(connection.serverId, any()),
         ).thenAnswer((final call) async {
           await persisted.future;
           bucket = call.positionalArguments.last as BackblazeBucket;
@@ -477,7 +475,7 @@ void main() {
         expect(bloc.state, isA<BackupsInitial>());
         verifyNever(() => provider.createApplicationKey(any()));
         verifyNever(
-          () => resources.setBackblazeBucket(connection.origin.serverId, any()),
+          () => resources.setBackblazeBucket(connection.serverId, any()),
         );
         verifyNever(() => api.initializeRepository(any()));
       });
@@ -510,8 +508,7 @@ void main() {
           await dispatch(InitializeBackupsRepository(aBackupsCredential()));
           expect(bloc.state, isA<BackupsUninitialized>());
           verifyNever(
-            () =>
-                resources.setBackblazeBucket(connection.origin.serverId, any()),
+            () => resources.setBackblazeBucket(connection.serverId, any()),
           );
           verifyNever(() => api.initializeRepository(any()));
           expect(
@@ -544,7 +541,7 @@ void main() {
       );
       await closing;
       verify(
-        () => resources.removeBackblazeBucket(connection.origin.serverId),
+        () => resources.removeBackblazeBucket(connection.serverId),
       ).called(1);
       expect(messages, isEmpty);
     });
@@ -607,8 +604,7 @@ void main() {
             expect(bloc.state, isNot(isA<BackupsInitializing>()));
             if (operation == 'remove' && confirmed) {
               verify(
-                () =>
-                    resources.removeBackblazeBucket(connection.origin.serverId),
+                () => resources.removeBackblazeBucket(connection.serverId),
               ).called(1);
               expect(
                 bloc.state,
@@ -618,8 +614,7 @@ void main() {
               );
             } else {
               verifyNever(
-                () =>
-                    resources.removeBackblazeBucket(connection.origin.serverId),
+                () => resources.removeBackblazeBucket(connection.serverId),
               );
             }
             if (!confirmed || missing) {

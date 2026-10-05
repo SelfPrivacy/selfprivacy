@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.g
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/users.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -30,11 +29,11 @@ void main() {
   late ServerConnection connection;
   setUp(() {
     api = _Api();
-    final origin = ServerStateOrigin('server');
+
     connection = ServerConnection(
       api: api,
-      origin: origin,
-      currentOrigin: () => origin,
+      serverId: 'server',
+      isAttached: () => true,
     )..cache.setVersion(Version(3, 6, 0));
   });
   tearDown(() => connection.dispose());

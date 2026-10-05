@@ -7,7 +7,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/backups.graphql.d
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -20,16 +19,16 @@ class _Api extends Mock implements ServerApi {}
 void main() {
   late _Api api;
   late ServerConnection connection;
-  late ServerStateOrigin? origin;
+  late bool attached;
   late List<Backup> backups;
 
   setUp(() {
     api = _Api();
-    origin = ServerStateOrigin('server');
+    attached = true;
     connection = ServerConnection(
       api: api,
-      origin: origin!,
-      currentOrigin: () => origin,
+      serverId: 'server',
+      isAttached: () => attached,
     )..cache.setVersion(Version(3, 6, 0));
     backups = Query$AllBackupSnapshots.fromJson(
       loadJsonFixture('graphql/domain_reads.json')['AllBackupSnapshots']
@@ -124,7 +123,7 @@ void main() {
     ).thenAnswer((_) => pending.future);
     final command = repository.forgetSnapshot(backups.first.id);
     await pumpEventQueue();
-    origin = null;
+    attached = false;
     pending.complete(
       ServerMutationResult<void>(
         outcome: ServerMutationOutcome.confirmed,

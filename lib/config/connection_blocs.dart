@@ -153,11 +153,11 @@ MetricsCubit createMetricsCubit(
   access: observeReadAccess(connection),
   loadMetrics: (final period) => connection.read((final connection) async {
     final server = resources.servers
-        .where((final server) => server.uuid == connection.origin.serverId)
+        .where((final server) => server.uuid == connection.serverId)
         .firstOrNull;
     final provider = serverProvider != null
         ? serverProvider()
-        : resolveServerProvider(resources, connection.origin.serverId);
+        : resolveServerProvider(resources, connection.serverId);
     await connection.refresh(connection.cache.apiVersion);
     return MetricsRepository(
       api: connection.api,
@@ -232,7 +232,7 @@ JobsCubit createJobsCubit(
     }
     return connection.submit<void>(kind, (final owner) {
       final server = resources.servers
-          .where((final server) => server.uuid == owner.origin.serverId)
+          .where((final server) => server.uuid == owner.serverId)
           .firstOrNull;
       if (server == null) {
         throw const OperationNotSent();
@@ -280,22 +280,19 @@ BackupsBloc createBackupsBloc(
         .result;
   },
   currentBucket: () => connection.isAttached
-      ? resources.backblazeBucketFor(connection.origin.serverId)
+      ? resources.backblazeBucketFor(connection.serverId)
       : null,
   saveBucket: (final bucket) async {
     if (connection.isAttached &&
-        resources.backblazeBucketFor(connection.origin.serverId)?.bucketId ==
+        resources.backblazeBucketFor(connection.serverId)?.bucketId ==
             bucket.bucketId) {
-      await resources.setBackblazeBucket(connection.origin.serverId, bucket);
+      await resources.setBackblazeBucket(connection.serverId, bucket);
     }
   },
   removeBucket: (final bucket) async {
     if (connection.isAttached &&
-        identical(
-          resources.backblazeBucketFor(connection.origin.serverId),
-          bucket,
-        )) {
-      await resources.removeBackblazeBucket(connection.origin.serverId);
+        identical(resources.backblazeBucketFor(connection.serverId), bucket)) {
+      await resources.removeBackblazeBucket(connection.serverId);
     }
   },
   initialize: (final repository, final credential) {
@@ -304,7 +301,7 @@ BackupsBloc createBackupsBloc(
       throw const OperationNotSent();
     }
     final server = resources.servers
-        .where((final server) => server.uuid == owner.origin.serverId)
+        .where((final server) => server.uuid == owner.serverId)
         .firstOrNull;
     if (server == null) {
       throw const OperationNotSent();
@@ -325,7 +322,7 @@ BackupsBloc createBackupsBloc(
     );
     final providerId = server.hostingDetails.providerId ?? 'manual';
     final name = '${DateTime.now().millisecondsSinceEpoch}-$providerId-$domain';
-    final previous = resources.backblazeBucketFor(connection.origin.serverId);
+    final previous = resources.backblazeBucketFor(connection.serverId);
     return InitializeBackupsOperation(
       repository: repository,
       provider: provider,
@@ -334,12 +331,12 @@ BackupsBloc createBackupsBloc(
       saveBucket: (final bucket) async {
         if (!owner.isAttached ||
             !identical(
-              resources.backblazeBucketFor(connection.origin.serverId),
+              resources.backblazeBucketFor(connection.serverId),
               previous,
             )) {
           throw const OperationNotSent();
         }
-        await resources.setBackblazeBucket(connection.origin.serverId, bucket);
+        await resources.setBackblazeBucket(connection.serverId, bucket);
       },
     ).run();
   },
@@ -434,7 +431,7 @@ DnsRecordsCubit createDnsRecordsCubit(
     required final bool admitted,
   }) {
     final server = resources.servers
-        .where((final server) => server.uuid == owner.origin.serverId)
+        .where((final server) => server.uuid == owner.serverId)
         .firstOrNull;
     if (server == null) {
       return null;

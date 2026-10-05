@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
@@ -42,12 +41,12 @@ void main() {
   setUp(() {
     api = _Api();
     navigation = _Navigation();
-    final origin = ServerStateOrigin('server');
+
     connection = ServerConnection(
-      origin: origin,
+      serverId: 'server',
       api: api,
 
-      currentOrigin: () => origin,
+      isAttached: () => true,
     )..cache.setVersion(Version(3, 0, 0));
     connection.services.store.push(
       Query$AllServices.fromJson(

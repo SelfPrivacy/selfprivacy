@@ -6,7 +6,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/operations/operation.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 
@@ -34,18 +33,16 @@ class _Command {
 /// Dispose this coordinator before disposing or replacing its stores.
 class ServerCommandCoordinator {
   ServerCommandCoordinator({
-    required this.origin,
-    required final ServerStateOrigin? Function() currentOrigin,
+    required final bool Function() isAttached,
     required final ServerApi Function() api,
     required final Iterable<DomainStore<Object>> stores,
     final DomainStore<Version>? apiVersion,
-  }) : _currentOrigin = currentOrigin,
+  }) : _isAttached = isAttached,
        _api = api,
        _apiVersion = apiVersion,
        _stores = Set.unmodifiable(stores);
 
-  final ServerStateOrigin origin;
-  final ServerStateOrigin? Function() _currentOrigin;
+  final bool Function() _isAttached;
   final ServerApi Function() _api;
   final DomainStore<Version>? _apiVersion;
   final Set<DomainStore<Object>> _stores;
@@ -62,7 +59,7 @@ class ServerCommandCoordinator {
 
   bool get _attached =>
       !_disposed &&
-      identical(_currentOrigin(), origin) &&
+      _isAttached() &&
       _stores.every((final store) => !store.isDisposed);
 
   bool get isAttached => _attached;

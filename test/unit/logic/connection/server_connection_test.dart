@@ -10,7 +10,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -25,7 +24,7 @@ class _Api extends Mock implements ServerApi {}
 void main() {
   late _Api api;
   late ServerConnection connection;
-  late ServerStateOrigin? currentOrigin;
+  late bool attached;
   late DomainStore<List<String>> groups;
   late List<ApiToken> tokens;
   late List<String> groupNames;
@@ -46,11 +45,11 @@ void main() {
     when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
     when(api.getApiTokens).thenAnswer((_) async => tokens);
     when(api.getAllGroups).thenAnswer((_) async => groupNames);
-    currentOrigin = ServerStateOrigin('server');
+    attached = true;
     connection = ServerConnection(
       api: api,
-      origin: currentOrigin!,
-      currentOrigin: () => currentOrigin,
+      serverId: 'server',
+      isAttached: () => attached,
     );
     groups = connection.cache.groups;
   });
@@ -288,7 +287,7 @@ void main() {
       when(api.getAllGroups).thenAnswer((_) => pending.future);
       final reading = connection.refresh(groups, force: true);
       await pumpEventQueue();
-      currentOrigin = null;
+      attached = false;
       if (fails) {
         pending.completeError(StateError('late'));
       } else {

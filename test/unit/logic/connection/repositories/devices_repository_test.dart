@@ -8,7 +8,6 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
-import 'package:selfprivacy/logic/connection/lifecycle/server_state_origin.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -23,7 +22,7 @@ void main() {
   late DevicesRepository repository;
   late ServerConnection connection;
   late List<ApiToken> tokens;
-  late ServerStateOrigin? origin;
+  late bool attached;
 
   ServerMutationResult<void> result(final ServerMutationOutcome outcome) =>
       ServerMutationResult(
@@ -37,11 +36,11 @@ void main() {
       loadJsonFixture('graphql/domain_reads.json')['GetApiTokens']
           as Map<String, dynamic>,
     ).api.devices.map(ApiToken.fromGraphQL).toList();
-    origin = ServerStateOrigin('server');
+    attached = true;
     connection = ServerConnection(
       api: api,
-      origin: origin!,
-      currentOrigin: () => origin,
+      serverId: 'server',
+      isAttached: () => attached,
     );
     repository = connection.devices;
     when(api.fetchApiVersion).thenAnswer((_) async => '3.6.0');
@@ -224,7 +223,7 @@ void main() {
         when(api.getApiTokens).thenAnswer((_) => pending.future);
         final reading = repository.refresh(force: true);
         await pumpEventQueue();
-        origin = null;
+        attached = false;
         if (fails) {
           pending.completeError(StateError('old failure'));
         } else {
@@ -260,7 +259,7 @@ void main() {
       final pending = Completer<ServerMutationResult<void>>();
       when(() => api.deleteApiToken(name)).thenAnswer((_) => pending.future);
       final command = repository.revoke(name);
-      origin = ServerStateOrigin('replacement');
+      attached = false;
       pending.complete(result(ServerMutationOutcome.confirmed));
       final completion = (await command)!;
       expect(completion.application, CommandApplication.detached);

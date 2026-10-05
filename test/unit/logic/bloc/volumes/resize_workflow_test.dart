@@ -78,6 +78,36 @@ void main() {
     });
   }
 
+  test('provider discovery recovers after an offline failure', () async {
+    final volumes = hub.active!.cache.volumes.value.data!;
+    hub
+      ..clear()
+      ..resume();
+    hub.active!.cache.setVersion(Version(3, 6, 0));
+    when(provider.getVolumes).thenThrow(Exception('offline'));
+    final bloc = createBloc();
+    addTearDown(bloc.close);
+    await pumpEventQueue();
+    expect(bloc.state.providerVolumes, isEmpty);
+    final providerVolume = aServerProviderVolume(
+      linuxDevice: '/dev/disk/by-id/Virtual disk_fixture-disk',
+    );
+    when(provider.getVolumes).thenAnswer(
+      (_) async => GenericResult(success: true, data: [providerVolume]),
+    );
+    hub.active!.cache.volumes.push(volumes);
+    await pumpEventQueue();
+    expect(
+      (bloc.state as VolumesLoaded).diskStatus.diskVolumes.any(
+        (final volume) => volume.isResizable,
+      ),
+      isTrue,
+    );
+    hub.active!.cache.volumes.push(volumes);
+    await pumpEventQueue();
+    verify(provider.getVolumes).called(2);
+  });
+
   test('provider reads cannot repopulate state after reset', () async {
     final pending = Completer<GenericResult<List<ServerProviderVolume>>>();
     when(() => provider.getVolumes()).thenAnswer((_) => pending.future);

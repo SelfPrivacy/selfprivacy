@@ -77,7 +77,9 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
       return;
     }
     _publish(emit);
-    if (!_providerRequested) {
+    if (!_providerRequested &&
+        !event.observation!.isRefreshing &&
+        event.observation!.lastError == null) {
       _providerRequested = true;
       add(const _LoadProviderVolumes());
     }
@@ -126,13 +128,16 @@ class VolumesBloc extends Bloc<VolumesEvent, VolumesState> {
     if (!_isActive) {
       return;
     }
+    _providerRequested = true;
     try {
       final providers = await _loadProviderVolumes();
       if (!emit.isDone && _isActive) {
         _publish(emit, providers);
       }
     } on Exception {
-      // Server disk data remains available when provider metadata cannot load.
+      if (!emit.isDone && _isActive) {
+        _providerRequested = false;
+      }
     }
   }
 

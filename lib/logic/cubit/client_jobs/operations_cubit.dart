@@ -17,6 +17,18 @@ class OperationsState extends Equatable {
   final Set<int> removing;
   final int? focusId;
 
+  bool get hasPendingConfiguration => operations.any(
+    (final operation) =>
+        operation.status.isPending &&
+        switch (operation.kind) {
+          OperationKind.applyChanges ||
+          OperationKind.rebootServer ||
+          OperationKind.upgradeServer ||
+          OperationKind.collectGarbage => true,
+          _ => false,
+        },
+  );
+
   @override
   List<Object?> get props => [operations, removing, focusId];
 }

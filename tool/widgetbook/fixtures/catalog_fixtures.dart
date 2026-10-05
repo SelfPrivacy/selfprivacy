@@ -23,8 +23,6 @@ import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
-import 'package:selfprivacy/logic/operations/operation.dart';
 
 import 'constants.dart';
 import 'metrics.dart';
@@ -118,23 +116,10 @@ class CatalogFixtures {
     bind(jobs, JobsStateEmpty());
     when(() => jobs.state).thenAnswer((_) {
       final clientJob = UpgradeServerJob(id: 'catalog-upgrade');
-      final step = configurationStep(
-        clientJob,
-        status: variant == 'Finished'
-            ? OperationStatus.succeeded
-            : variant == 'Failed'
-            ? OperationStatus.failed
-            : OperationStatus.queued,
-        messageKey: variant == 'Failed'
-            ? 'Upgrade could not be completed'
-            : null,
-      );
       final pendingJob = UpdateDnsRecordsJob();
       return switch (variant) {
-        'Loading' => JobsStateLoading([step], null, const []),
-        'Finished' || 'Failed' => JobsStateFinished([step], null, const []),
         'Queued' || 'Blocked' => JobsStateWithJobs([clientJob]),
-        'Postponed' => JobsStateLoading([step], 'catalog-job', [pendingJob]),
+        'Postponed' => JobsStateWithJobs([pendingJob]),
         _ => JobsStateEmpty(),
       };
     });

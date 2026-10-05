@@ -184,7 +184,7 @@ void main() {
         ),
       );
       await cubit.rebootServer();
-      final job = (cubit.state as JobsStateFinished).steps.single;
+      final job = connection.operations.history.single.steps.single;
       expect(job.status, switch (outcome) {
         ServerMutationOutcome.confirmed => OperationStatus.succeeded,
         ServerMutationOutcome.rejected => OperationStatus.rejected,
@@ -216,14 +216,17 @@ void main() {
             outcome == ServerMutationOutcome.confirmed && hasJob,
           );
           if (outcome == ServerMutationOutcome.confirmed && hasJob) {
-            expect(cubit.state, isA<JobsStateLoading>());
-            expect(cubit.state.rebuildJobUid, job.uid);
-            final step = (cubit.state as JobsStateLoading).steps.single;
+            expect(
+              connection.operations.history.single.status,
+              OperationStatus.accepted,
+            );
+            expect(connection.operations.history.single.jobIds, {job.uid});
+            final step = connection.operations.history.single.steps.single;
             expect(step.status, OperationStatus.accepted);
             expect(step.messageKey, 'operations.status.accepted');
           } else {
-            final state = cubit.state as JobsStateFinished;
-            expect(state.rebuildJobUid, isNull);
+            final state = connection.operations.history.single;
+            expect(state.jobIds, isEmpty);
             expect(
               state.steps.single.status,
               outcome == ServerMutationOutcome.rejected
@@ -350,15 +353,18 @@ void main() {
             settings: const {'port': 8080},
           ),
         );
-      final state = cubit.state as JobsStateLoading;
-      expect(state.postponedJobs.map((final change) => change.id), [
+      expect(cubit.state.draft.map((final change) => change.id), [
         'change_settings_gitea',
         'change_settings_nextcloud',
       ]);
-      expect(state.steps.first.status, OperationStatus.running);
-      expect(state.steps.first.target, 'Gitea');
+      final operation = connection.operations.history.single;
+      expect(operation.steps.first.status, OperationStatus.running);
+      expect(operation.steps.first.target, 'Gitea');
       cubit.removeJob('change_settings_nextcloud');
-      expect(cubit.state, isA<JobsStateLoading>());
+      expect(
+        connection.operations.history.single.status,
+        OperationStatus.running,
+      );
       expect(cubit.state.draft.map((final job) => job.id), [
         'change_settings_gitea',
       ]);
@@ -410,11 +416,12 @@ void main() {
       )
       ..addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
     await tester.runAsync(cubit.applyAll);
-    final state = cubit.state as JobsStateLoading;
+    final state = connection.operations.history.single;
     expect(state.steps.map((final job) => job.status), [
       OperationStatus.succeeded,
       OperationStatus.unknown,
       OperationStatus.failed,
+      OperationStatus.accepted,
     ]);
     verify(api.apply).called(1);
     verify(api.getDnsRecords).called(2);
@@ -487,7 +494,11 @@ void main() {
     );
     cubit.addJob(RebootServerJob());
     await tester.runAsync(cubit.applyAll);
-    expect(cubit.state, isA<JobsStateFinished>());
+    expect(cubit.state.draft, isEmpty);
+    expect(
+      connection.operations.history.single.status,
+      OperationStatus.succeeded,
+    );
     verifyNever(api.apply);
   });
   for (final outcome in ServerMutationOutcome.values) {
@@ -510,7 +521,7 @@ void main() {
           outcome == ServerMutationOutcome.confirmed && payload.value != null,
         );
         expect(
-          cubit.state is JobsStateLoading,
+          connection.operations.history.single.status.isPending,
           outcome == ServerMutationOutcome.confirmed && payload.value != null,
         );
         if (outcome != ServerMutationOutcome.confirmed ||
@@ -538,12 +549,19 @@ void main() {
       connection.jobs.store.push([aServiceMoveJob(uid: 'other')]);
       await pumpEventQueue();
     });
-    expect(cubit.state, isA<JobsStateLoading>());
+    expect(
+      connection.operations.history.single.status,
+      OperationStatus.accepted,
+    );
     await tester.runAsync(() async {
       connection.jobs.store.push([aServiceMoveJob(status: 'FINISHED')]);
       await pumpEventQueue();
     });
-    expect(cubit.state, isA<JobsStateFinished>());
+    connection.operations.observeJob(job.uid, succeeded: true);
+    expect(
+      connection.operations.history.single.status,
+      OperationStatus.succeeded,
+    );
   });
 
   testWidgets('a detached operation never dispatches its later jobs', (

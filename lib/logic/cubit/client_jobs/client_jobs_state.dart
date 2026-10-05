@@ -2,7 +2,6 @@ part of 'client_jobs_cubit.dart';
 
 sealed class JobsState extends Equatable {
   List<JobDraft> get draft => const [];
-  String? get rebuildJobUid => null;
   JobsState addJob(final JobDraft change, {final SystemSettings? settings});
   @override
   List<Object?> get props => [];
@@ -42,10 +41,6 @@ class JobsStateWithJobs extends JobsState {
   final List<JobDraft> clientJobList;
   @override
   List<JobDraft> get draft => clientJobList;
-  bool get rebuildRequired =>
-      clientJobList.any((final change) => change.requiresRebuild);
-  bool get dnsUpdateRequired =>
-      clientJobList.any((final change) => change.requiresDnsUpdate);
 
   JobsState removeById(final String id) => _draftState(
     clientJobList.where((final change) => change.id != id).toList(),
@@ -59,89 +54,4 @@ class JobsStateWithJobs extends JobsState {
 
   @override
   List<Object?> get props => [clientJobList];
-}
-
-sealed class JobsStateWithProgress extends JobsState {
-  JobsStateWithProgress(
-    final List<OperationStep> steps,
-    this.rebuildJobUid,
-    final List<JobDraft> postponedJobs, {
-    required this.rebuildRequired,
-  }) : steps = List.unmodifiable(steps),
-       postponedJobs = List.unmodifiable(postponedJobs);
-
-  final List<OperationStep> steps;
-  @override
-  final String? rebuildJobUid;
-  final List<JobDraft> postponedJobs;
-  @override
-  List<JobDraft> get draft => postponedJobs;
-  final bool rebuildRequired;
-
-  @override
-  List<Object?> get props => [
-    steps,
-    rebuildJobUid,
-    postponedJobs,
-    rebuildRequired,
-  ];
-}
-
-class JobsStateLoading extends JobsStateWithProgress {
-  JobsStateLoading(
-    super.steps,
-    super.rebuildJobUid,
-    super.postponedJobs, {
-    super.rebuildRequired = true,
-  });
-
-  JobsStateLoading updateStep(
-    final String id,
-    final OperationStatus status, {
-    final String? messageKey,
-    final String? jobId,
-  }) => copyWith(
-    steps: [
-      for (final step in steps)
-        if (step.id == id)
-          step.withStatus(status, messageKey: messageKey, jobId: jobId)
-        else
-          step,
-    ],
-  );
-
-  JobsStateLoading copyWith({
-    final List<OperationStep>? steps,
-    final String? rebuildJobUid,
-    final List<JobDraft>? postponedJobs,
-  }) => JobsStateLoading(
-    steps ?? this.steps,
-    rebuildJobUid ?? this.rebuildJobUid,
-    postponedJobs ?? this.postponedJobs,
-    rebuildRequired: rebuildRequired,
-  );
-
-  JobsStateFinished finished() => JobsStateFinished(
-    steps,
-    rebuildJobUid,
-    postponedJobs,
-    rebuildRequired: rebuildRequired,
-  );
-
-  @override
-  JobsState addJob(final JobDraft change, {final SystemSettings? settings}) =>
-      copyWith(postponedJobs: _updatedDraft(postponedJobs, change, settings));
-}
-
-class JobsStateFinished extends JobsStateWithProgress {
-  JobsStateFinished(
-    super.steps,
-    super.rebuildJobUid,
-    super.postponedJobs, {
-    super.rebuildRequired = true,
-  });
-
-  @override
-  JobsState addJob(final JobDraft change, {final SystemSettings? settings}) =>
-      _draftState(_updatedDraft(postponedJobs, change, settings));
 }

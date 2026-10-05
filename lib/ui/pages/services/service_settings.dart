@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
@@ -181,9 +182,7 @@ class _ServiceSettingsEditorState extends State<_ServiceSettingsEditor> {
       );
     }
 
-    final JobsState state = context.watch<JobsCubit>().state;
-
-    if (state is JobsStateLoading) {
+    if (context.watch<OperationsCubit>().state.hasPendingConfiguration) {
       return BrandHeroScreen(
         hasBackButton: true,
         hasFlashButton: true,

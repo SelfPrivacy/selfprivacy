@@ -207,11 +207,6 @@ JobsCubit createJobsCubit(
   required final DnsProvider? Function() dnsProvider,
   required final void Function(String) showMessage,
 }) => JobsCubit(
-  jobs: observeConnection(
-    connection: connection,
-    read: (final owner) => owner.jobs.snapshot,
-    changes: (final owner) => owner.jobs.changes,
-  ),
   settings: observeConnection(
     connection: connection,
     read: (final owner) => owner.settings.value,

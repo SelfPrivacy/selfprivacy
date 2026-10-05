@@ -257,6 +257,25 @@ class ApplyChangesOperation {
     };
   }
 
+  Future<void> executeMaintenance(final JobDraft job) async {
+    OperationExecution.current?.recordStep(
+      configurationStep(job, status: OperationStatus.running),
+    );
+    final result = await execute(job);
+    final progress = ConfigurationProgress.fromResult(
+      ConfigurationStage.change,
+      result,
+    );
+    OperationExecution.current?.recordStep(
+      configurationStep(
+        job,
+        status: progress.status,
+        jobId: progress.jobId,
+        messageKey: progress.messageKey,
+      ),
+    );
+  }
+
   Future<ServerMutationResult<ServerJob>> apply() {
     _requireAttached();
     return _jobs.apply();

@@ -9,7 +9,6 @@ import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
-import 'package:selfprivacy/logic/operations/operation.dart';
 import 'package:selfprivacy/ui/atoms/buttons/brand_button.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/ui/molecules/cards/server_job_card.dart';
@@ -58,17 +57,7 @@ class _JobsContentState extends State<JobsContent> {
     final standalone = jobs.serverJobList.where(
       (final job) => !grouped.contains(job.uid),
     );
-    final busy = operations.any(
-      (final operation) =>
-          operation.status.isPending &&
-          switch (operation.kind) {
-            OperationKind.applyChanges ||
-            OperationKind.rebootServer ||
-            OperationKind.upgradeServer ||
-            OperationKind.collectGarbage => true,
-            _ => false,
-          },
-    );
+    final busy = history.hasPendingConfiguration;
     return ListView(
       controller: widget.controller,
       padding: paddingH16V0,

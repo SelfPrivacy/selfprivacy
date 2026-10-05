@@ -43,7 +43,10 @@ BackblazeBucket aBackblazeBucket() {
   );
 }
 
-BackupsApplicationKey aBackupsApplicationKey() => BackupsApplicationKey(
-  applicationKeyId: aBackupsCredential().keyId,
-  applicationKey: aBackupsCredential().applicationKey,
+BackupsApplicationKey aBackupsApplicationKey({
+  final String? applicationKeyId,
+  final String? applicationKey,
+}) => BackupsApplicationKey(
+  applicationKeyId: applicationKeyId ?? aBackupsCredential().keyId,
+  applicationKey: applicationKey ?? aBackupsCredential().applicationKey,
 );

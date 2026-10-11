@@ -46,6 +46,16 @@ class Fragment$basicMutationReturnFields {
           json,
         );
 
+      case "KanidmCredentialTypeMutationReturn":
+        return Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn.fromJson(
+          json,
+        );
+
+      case "OpenTelemetrySettingsMutationReturn":
+        return Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn.fromJson(
+          json,
+        );
+
       case "PasswordResetLinkReturn":
         return Fragment$basicMutationReturnFields$$PasswordResetLinkReturn.fromJson(
           json,
@@ -186,6 +196,14 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
     )
     genericMutationReturn,
     required _T Function(
+      Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn,
+    )
+    kanidmCredentialTypeMutationReturn,
+    required _T Function(
+      Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn,
+    )
+    openTelemetrySettingsMutationReturn,
+    required _T Function(
       Fragment$basicMutationReturnFields$$PasswordResetLinkReturn,
     )
     passwordResetLinkReturn,
@@ -242,6 +260,18 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
           this as Fragment$basicMutationReturnFields$$GenericMutationReturn,
         );
 
+      case "KanidmCredentialTypeMutationReturn":
+        return kanidmCredentialTypeMutationReturn(
+          this
+              as Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn,
+        );
+
+      case "OpenTelemetrySettingsMutationReturn":
+        return openTelemetrySettingsMutationReturn(
+          this
+              as Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn,
+        );
+
       case "PasswordResetLinkReturn":
         return passwordResetLinkReturn(
           this as Fragment$basicMutationReturnFields$$PasswordResetLinkReturn,
@@ -294,6 +324,14 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
     genericJobMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$GenericMutationReturn)?
     genericMutationReturn,
+    _T Function(
+      Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn,
+    )?
+    kanidmCredentialTypeMutationReturn,
+    _T Function(
+      Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn,
+    )?
+    openTelemetrySettingsMutationReturn,
     _T Function(Fragment$basicMutationReturnFields$$PasswordResetLinkReturn)?
     passwordResetLinkReturn,
     _T Function(Fragment$basicMutationReturnFields$$SSHSettingsMutationReturn)?
@@ -362,6 +400,26 @@ extension UtilityExtension$Fragment$basicMutationReturnFields
         if (genericMutationReturn != null) {
           return genericMutationReturn(
             this as Fragment$basicMutationReturnFields$$GenericMutationReturn,
+          );
+        } else {
+          return orElse();
+        }
+
+      case "KanidmCredentialTypeMutationReturn":
+        if (kanidmCredentialTypeMutationReturn != null) {
+          return kanidmCredentialTypeMutationReturn(
+            this
+                as Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn,
+          );
+        } else {
+          return orElse();
+        }
+
+      case "OpenTelemetrySettingsMutationReturn":
+        if (openTelemetrySettingsMutationReturn != null) {
+          return openTelemetrySettingsMutationReturn(
+            this
+                as Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn,
           );
         } else {
           return orElse();
@@ -1608,6 +1666,364 @@ class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationRetur
           TRes
         > {
   _CopyWithStubImpl$Fragment$basicMutationReturnFields$$GenericMutationReturn(
+    this._res,
+  );
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
+}
+
+class Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn
+    implements Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'KanidmCredentialTypeMutationReturn',
+  });
+
+  factory Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other
+            is! Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn
+    on Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn<
+    Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn
+  >
+  get copyWith =>
+      CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn<
+  TRes
+> {
+  factory CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn(
+    Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn
+    instance,
+    TRes Function(
+      Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn,
+    )
+    then,
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn;
+
+  factory CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn.stub(
+    TRes res,
+  ) = _CopyWithStubImpl$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn<
+  TRes
+>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn<
+          TRes
+        > {
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn
+  _instance;
+
+  final TRes Function(
+    Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn,
+  )
+  _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn<
+  TRes
+>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn<
+          TRes
+        > {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn(
+    this._res,
+  );
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
+}
+
+class Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn
+    implements Fragment$basicMutationReturnFields {
+  Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'OpenTelemetrySettingsMutationReturn',
+  });
+
+  factory Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other
+            is! Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn
+    on Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn {
+  CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn<
+    Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn
+  >
+  get copyWith =>
+      CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn<
+  TRes
+> {
+  factory CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn(
+    Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn
+    instance,
+    TRes Function(
+      Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn,
+    )
+    then,
+  ) = _CopyWithImpl$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn;
+
+  factory CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn.stub(
+    TRes res,
+  ) = _CopyWithStubImpl$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn<
+  TRes
+>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn<
+          TRes
+        > {
+  _CopyWithImpl$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn(
+    this._instance,
+    this._then,
+  );
+
+  final Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn
+  _instance;
+
+  final TRes Function(
+    Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn,
+  )
+  _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+}
+
+class _CopyWithStubImpl$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn<
+  TRes
+>
+    implements
+        CopyWith$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn<
+          TRes
+        > {
+  _CopyWithStubImpl$Fragment$basicMutationReturnFields$$OpenTelemetrySettingsMutationReturn(
     this._res,
   );
 

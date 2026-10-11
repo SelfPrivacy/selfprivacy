@@ -3950,6 +3950,9 @@ class Mutation$MigrateToBinds$storage {
     );
   }
 
+  @Deprecated(
+    'Installations without binds are no longer supported and support for migrating existing installations will be removed in next major release',
+  )
   final Mutation$MigrateToBinds$storage$migrateToBinds migrateToBinds;
 
   final String $__typename;

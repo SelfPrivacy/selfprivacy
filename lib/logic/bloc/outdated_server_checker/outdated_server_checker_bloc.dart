@@ -8,7 +8,7 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 part 'outdated_server_checker_event.dart';
 part 'outdated_server_checker_state.dart';
 
-const String requiredServerVersion = '>=3.8.3';
+const String requiredServerVersion = '>=3.9.0';
 
 class OutdatedServerCheckerBloc
     extends Bloc<OutdatedServerCheckerEvent, OutdatedServerCheckerState> {

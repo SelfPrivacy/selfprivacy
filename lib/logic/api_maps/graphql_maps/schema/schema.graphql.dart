@@ -793,6 +793,366 @@ class _CopyWithStubImpl$Input$MoveServiceInput<TRes>
   call({String? serviceId, String? location}) => _res;
 }
 
+class Input$OpenTelemetryHeaderInput {
+  factory Input$OpenTelemetryHeaderInput({
+    required String name,
+    String? value,
+  }) => Input$OpenTelemetryHeaderInput._({
+    r'name': name,
+    if (value != null) r'value': value,
+  });
+
+  Input$OpenTelemetryHeaderInput._(this._$data);
+
+  factory Input$OpenTelemetryHeaderInput.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$name = data['name'];
+    result$data['name'] = (l$name as String);
+    if (data.containsKey('value')) {
+      final l$value = data['value'];
+      result$data['value'] = (l$value as String?);
+    }
+    return Input$OpenTelemetryHeaderInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get name => (_$data['name'] as String);
+
+  String? get value => (_$data['value'] as String?);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$name = name;
+    result$data['name'] = l$name;
+    if (_$data.containsKey('value')) {
+      final l$value = value;
+      result$data['value'] = l$value;
+    }
+    return result$data;
+  }
+
+  CopyWith$Input$OpenTelemetryHeaderInput<Input$OpenTelemetryHeaderInput>
+  get copyWith => CopyWith$Input$OpenTelemetryHeaderInput(this, (i) => i);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Input$OpenTelemetryHeaderInput ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) {
+      return false;
+    }
+    final l$value = value;
+    final lOther$value = other.value;
+    if (_$data.containsKey('value') != other._$data.containsKey('value')) {
+      return false;
+    }
+    if (l$value != lOther$value) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$name = name;
+    final l$value = value;
+    return Object.hashAll([
+      l$name,
+      _$data.containsKey('value') ? l$value : const {},
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$OpenTelemetryHeaderInput<TRes> {
+  factory CopyWith$Input$OpenTelemetryHeaderInput(
+    Input$OpenTelemetryHeaderInput instance,
+    TRes Function(Input$OpenTelemetryHeaderInput) then,
+  ) = _CopyWithImpl$Input$OpenTelemetryHeaderInput;
+
+  factory CopyWith$Input$OpenTelemetryHeaderInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$OpenTelemetryHeaderInput;
+
+  TRes call({String? name, String? value});
+}
+
+class _CopyWithImpl$Input$OpenTelemetryHeaderInput<TRes>
+    implements CopyWith$Input$OpenTelemetryHeaderInput<TRes> {
+  _CopyWithImpl$Input$OpenTelemetryHeaderInput(this._instance, this._then);
+
+  final Input$OpenTelemetryHeaderInput _instance;
+
+  final TRes Function(Input$OpenTelemetryHeaderInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? name = _undefined, Object? value = _undefined}) => _then(
+    Input$OpenTelemetryHeaderInput._({
+      ..._instance._$data,
+      if (name != _undefined && name != null) 'name': (name as String),
+      if (value != _undefined) 'value': (value as String?),
+    }),
+  );
+}
+
+class _CopyWithStubImpl$Input$OpenTelemetryHeaderInput<TRes>
+    implements CopyWith$Input$OpenTelemetryHeaderInput<TRes> {
+  _CopyWithStubImpl$Input$OpenTelemetryHeaderInput(this._res);
+
+  TRes _res;
+
+  call({String? name, String? value}) => _res;
+}
+
+class Input$OpenTelemetrySettingsInput {
+  factory Input$OpenTelemetrySettingsInput({
+    required bool enable,
+    String? endpoint,
+    required bool uploadSystemLogs,
+    required bool uploadSystemMetrics,
+    List<Input$OpenTelemetryHeaderInput>? headers,
+  }) => Input$OpenTelemetrySettingsInput._({
+    r'enable': enable,
+    if (endpoint != null) r'endpoint': endpoint,
+    r'uploadSystemLogs': uploadSystemLogs,
+    r'uploadSystemMetrics': uploadSystemMetrics,
+    if (headers != null) r'headers': headers,
+  });
+
+  Input$OpenTelemetrySettingsInput._(this._$data);
+
+  factory Input$OpenTelemetrySettingsInput.fromJson(Map<String, dynamic> data) {
+    final result$data = <String, dynamic>{};
+    final l$enable = data['enable'];
+    result$data['enable'] = (l$enable as bool);
+    if (data.containsKey('endpoint')) {
+      final l$endpoint = data['endpoint'];
+      result$data['endpoint'] = (l$endpoint as String?);
+    }
+    final l$uploadSystemLogs = data['uploadSystemLogs'];
+    result$data['uploadSystemLogs'] = (l$uploadSystemLogs as bool);
+    final l$uploadSystemMetrics = data['uploadSystemMetrics'];
+    result$data['uploadSystemMetrics'] = (l$uploadSystemMetrics as bool);
+    if (data.containsKey('headers')) {
+      final l$headers = data['headers'];
+      result$data['headers'] = (l$headers as List<dynamic>?)
+          ?.map(
+            (e) => Input$OpenTelemetryHeaderInput.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList();
+    }
+    return Input$OpenTelemetrySettingsInput._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  bool get enable => (_$data['enable'] as bool);
+
+  String? get endpoint => (_$data['endpoint'] as String?);
+
+  bool get uploadSystemLogs => (_$data['uploadSystemLogs'] as bool);
+
+  bool get uploadSystemMetrics => (_$data['uploadSystemMetrics'] as bool);
+
+  List<Input$OpenTelemetryHeaderInput>? get headers =>
+      (_$data['headers'] as List<Input$OpenTelemetryHeaderInput>?);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$enable = enable;
+    result$data['enable'] = l$enable;
+    if (_$data.containsKey('endpoint')) {
+      final l$endpoint = endpoint;
+      result$data['endpoint'] = l$endpoint;
+    }
+    final l$uploadSystemLogs = uploadSystemLogs;
+    result$data['uploadSystemLogs'] = l$uploadSystemLogs;
+    final l$uploadSystemMetrics = uploadSystemMetrics;
+    result$data['uploadSystemMetrics'] = l$uploadSystemMetrics;
+    if (_$data.containsKey('headers')) {
+      final l$headers = headers;
+      result$data['headers'] = l$headers?.map((e) => e.toJson()).toList();
+    }
+    return result$data;
+  }
+
+  CopyWith$Input$OpenTelemetrySettingsInput<Input$OpenTelemetrySettingsInput>
+  get copyWith => CopyWith$Input$OpenTelemetrySettingsInput(this, (i) => i);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Input$OpenTelemetrySettingsInput ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$enable = enable;
+    final lOther$enable = other.enable;
+    if (l$enable != lOther$enable) {
+      return false;
+    }
+    final l$endpoint = endpoint;
+    final lOther$endpoint = other.endpoint;
+    if (_$data.containsKey('endpoint') !=
+        other._$data.containsKey('endpoint')) {
+      return false;
+    }
+    if (l$endpoint != lOther$endpoint) {
+      return false;
+    }
+    final l$uploadSystemLogs = uploadSystemLogs;
+    final lOther$uploadSystemLogs = other.uploadSystemLogs;
+    if (l$uploadSystemLogs != lOther$uploadSystemLogs) {
+      return false;
+    }
+    final l$uploadSystemMetrics = uploadSystemMetrics;
+    final lOther$uploadSystemMetrics = other.uploadSystemMetrics;
+    if (l$uploadSystemMetrics != lOther$uploadSystemMetrics) {
+      return false;
+    }
+    final l$headers = headers;
+    final lOther$headers = other.headers;
+    if (_$data.containsKey('headers') != other._$data.containsKey('headers')) {
+      return false;
+    }
+    if (l$headers != null && lOther$headers != null) {
+      if (l$headers.length != lOther$headers.length) {
+        return false;
+      }
+      for (int i = 0; i < l$headers.length; i++) {
+        final l$headers$entry = l$headers[i];
+        final lOther$headers$entry = lOther$headers[i];
+        if (l$headers$entry != lOther$headers$entry) {
+          return false;
+        }
+      }
+    } else if (l$headers != lOther$headers) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$enable = enable;
+    final l$endpoint = endpoint;
+    final l$uploadSystemLogs = uploadSystemLogs;
+    final l$uploadSystemMetrics = uploadSystemMetrics;
+    final l$headers = headers;
+    return Object.hashAll([
+      l$enable,
+      _$data.containsKey('endpoint') ? l$endpoint : const {},
+      l$uploadSystemLogs,
+      l$uploadSystemMetrics,
+      _$data.containsKey('headers')
+          ? l$headers == null
+                ? null
+                : Object.hashAll(l$headers.map((v) => v))
+          : const {},
+    ]);
+  }
+}
+
+abstract class CopyWith$Input$OpenTelemetrySettingsInput<TRes> {
+  factory CopyWith$Input$OpenTelemetrySettingsInput(
+    Input$OpenTelemetrySettingsInput instance,
+    TRes Function(Input$OpenTelemetrySettingsInput) then,
+  ) = _CopyWithImpl$Input$OpenTelemetrySettingsInput;
+
+  factory CopyWith$Input$OpenTelemetrySettingsInput.stub(TRes res) =
+      _CopyWithStubImpl$Input$OpenTelemetrySettingsInput;
+
+  TRes call({
+    bool? enable,
+    String? endpoint,
+    bool? uploadSystemLogs,
+    bool? uploadSystemMetrics,
+    List<Input$OpenTelemetryHeaderInput>? headers,
+  });
+  TRes headers(
+    Iterable<Input$OpenTelemetryHeaderInput>? Function(
+      Iterable<
+        CopyWith$Input$OpenTelemetryHeaderInput<Input$OpenTelemetryHeaderInput>
+      >?,
+    )
+    _fn,
+  );
+}
+
+class _CopyWithImpl$Input$OpenTelemetrySettingsInput<TRes>
+    implements CopyWith$Input$OpenTelemetrySettingsInput<TRes> {
+  _CopyWithImpl$Input$OpenTelemetrySettingsInput(this._instance, this._then);
+
+  final Input$OpenTelemetrySettingsInput _instance;
+
+  final TRes Function(Input$OpenTelemetrySettingsInput) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? enable = _undefined,
+    Object? endpoint = _undefined,
+    Object? uploadSystemLogs = _undefined,
+    Object? uploadSystemMetrics = _undefined,
+    Object? headers = _undefined,
+  }) => _then(
+    Input$OpenTelemetrySettingsInput._({
+      ..._instance._$data,
+      if (enable != _undefined && enable != null) 'enable': (enable as bool),
+      if (endpoint != _undefined) 'endpoint': (endpoint as String?),
+      if (uploadSystemLogs != _undefined && uploadSystemLogs != null)
+        'uploadSystemLogs': (uploadSystemLogs as bool),
+      if (uploadSystemMetrics != _undefined && uploadSystemMetrics != null)
+        'uploadSystemMetrics': (uploadSystemMetrics as bool),
+      if (headers != _undefined)
+        'headers': (headers as List<Input$OpenTelemetryHeaderInput>?),
+    }),
+  );
+
+  TRes headers(
+    Iterable<Input$OpenTelemetryHeaderInput>? Function(
+      Iterable<
+        CopyWith$Input$OpenTelemetryHeaderInput<Input$OpenTelemetryHeaderInput>
+      >?,
+    )
+    _fn,
+  ) => call(
+    headers: _fn(
+      _instance.headers?.map(
+        (e) => CopyWith$Input$OpenTelemetryHeaderInput(e, (i) => i),
+      ),
+    )?.toList(),
+  );
+}
+
+class _CopyWithStubImpl$Input$OpenTelemetrySettingsInput<TRes>
+    implements CopyWith$Input$OpenTelemetrySettingsInput<TRes> {
+  _CopyWithStubImpl$Input$OpenTelemetrySettingsInput(this._res);
+
+  TRes _res;
+
+  call({
+    bool? enable,
+    String? endpoint,
+    bool? uploadSystemLogs,
+    bool? uploadSystemMetrics,
+    List<Input$OpenTelemetryHeaderInput>? headers,
+  }) => _res;
+
+  headers(_fn) => _res;
+}
+
 class Input$RecoveryKeyLimitsInput {
   factory Input$RecoveryKeyLimitsInput({DateTime? expirationDate, int? uses}) =>
       Input$RecoveryKeyLimitsInput._({
@@ -2041,6 +2401,49 @@ Enum$DnsProvider fromJson$Enum$DnsProvider(String value) {
   }
 }
 
+enum Enum$KanidmCredentialType {
+  any,
+  mfa,
+  passkey,
+  attested_passkey,
+  $unknown;
+
+  factory Enum$KanidmCredentialType.fromJson(String value) =>
+      fromJson$Enum$KanidmCredentialType(value);
+
+  String toJson() => toJson$Enum$KanidmCredentialType(this);
+}
+
+String toJson$Enum$KanidmCredentialType(Enum$KanidmCredentialType e) {
+  switch (e) {
+    case Enum$KanidmCredentialType.any:
+      return r'any';
+    case Enum$KanidmCredentialType.mfa:
+      return r'mfa';
+    case Enum$KanidmCredentialType.passkey:
+      return r'passkey';
+    case Enum$KanidmCredentialType.attested_passkey:
+      return r'attested_passkey';
+    case Enum$KanidmCredentialType.$unknown:
+      return r'$unknown';
+  }
+}
+
+Enum$KanidmCredentialType fromJson$Enum$KanidmCredentialType(String value) {
+  switch (value) {
+    case r'any':
+      return Enum$KanidmCredentialType.any;
+    case r'mfa':
+      return Enum$KanidmCredentialType.mfa;
+    case r'passkey':
+      return Enum$KanidmCredentialType.passkey;
+    case r'attested_passkey':
+      return Enum$KanidmCredentialType.attested_passkey;
+    default:
+      return Enum$KanidmCredentialType.$unknown;
+  }
+}
+
 enum Enum$RestoreStrategy {
   INPLACE,
   DOWNLOAD_VERIFY_OVERWRITE,
@@ -2491,6 +2894,8 @@ const possibleTypesMap = <String, Set<String>>{
     'GenericBackupConfigReturn',
     'GenericJobMutationReturn',
     'GenericMutationReturn',
+    'KanidmCredentialTypeMutationReturn',
+    'OpenTelemetrySettingsMutationReturn',
     'PasswordResetLinkReturn',
     'SSHSettingsMutationReturn',
     'ServiceJobMutationReturn',

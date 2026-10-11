@@ -457,7 +457,8 @@ void main() {
     expect(calls, ['GetApiVersion']);
     pending.remove('GetApiVersion')!.complete(response('GetApiVersion'));
     await tester.pump();
-    expect(calls, hasLength(11));
+    expect(calls, hasLength(cache.stores.length));
+    expect(calls.toSet(), hasLength(cache.stores.length));
     expect(cache.users.value.freshness, Freshness.fresh);
   });
 
@@ -536,7 +537,7 @@ void main() {
       expect(calls, ['GetApiVersion']);
       failures.clear();
       await tester.pump(const Duration(seconds: 60));
-      expect(calls, hasLength(12));
+      expect(calls, hasLength(cache.stores.length + 1));
       failures.add('GetApiVersion');
       calls.clear();
       await tester.pump(const Duration(seconds: 60));

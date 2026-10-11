@@ -268,6 +268,20 @@ type JobMutations {
   removeJob(jobId: String!): GenericMutationReturn!
 }
 
+enum KanidmCredentialType {
+  any
+  mfa
+  passkey
+  attested_passkey
+}
+
+type KanidmCredentialTypeMutationReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+  minimumCredentialType: KanidmCredentialType
+}
+
 type LicenseType {
   deprecated: Boolean!
   free: Boolean!
@@ -406,6 +420,35 @@ type NetworkMonitoring {
   end: DateTime
   step: Int!
   overallUsage: MonitoringMetricsResult!
+}
+
+input OpenTelemetryHeaderInput {
+  name: String!
+  value: String
+}
+
+type OpenTelemetrySettings {
+  headerNames: [String!]!
+  enable: Boolean!
+  endpoint: String
+  uploadSystemLogs: Boolean!
+  uploadSystemMetrics: Boolean!
+  memoryTracingEnabled: Boolean!
+}
+
+input OpenTelemetrySettingsInput {
+  enable: Boolean!
+  endpoint: String
+  uploadSystemLogs: Boolean!
+  uploadSystemMetrics: Boolean!
+  headers: [OpenTelemetryHeaderInput!] = null
+}
+
+type OpenTelemetrySettingsMutationReturn implements MutationReturnInterface {
+  success: Boolean!
+  message: String!
+  code: Int!
+  settings: OpenTelemetrySettings!
 }
 
 type PaginatedEntries {
@@ -583,7 +626,7 @@ type StorageMutations {
   resizeVolume(name: String!): GenericMutationReturn!
   mountVolume(name: String!): GenericMutationReturn!
   unmountVolume(name: String!): GenericMutationReturn!
-  migrateToBinds(input: MigrateToBindsInput!): GenericJobMutationReturn!
+  migrateToBinds(input: MigrateToBindsInput!): GenericJobMutationReturn! @deprecated(reason: "Installations without binds are no longer supported and support for migrating existing installations will be removed in next major release")
 }
 
 interface StorageUsageInterface {
@@ -633,9 +676,9 @@ type System {
   domainInfo: SystemDomainInfo!
   settings: SystemSettings!
   info: SystemInfo!
+  updates: SystemUpdatesInfo!
   provider: SystemProviderInfo!
   busy: Boolean!
-  workingDirectory: String!
 }
 
 type SystemDomainInfo {
@@ -654,6 +697,7 @@ type SystemInfo {
 type SystemMutations {
   changeTimezone(timezone: String!): TimezoneMutationReturn!
   changeAutoUpgradeSettings(settings: AutoUpgradeSettingsInput!): AutoUpgradeSettingsMutationReturn!
+  changeOpenTelemetrySettings(settings: OpenTelemetrySettingsInput!): OpenTelemetrySettingsMutationReturn!
   changeSshSettings(settings: SSHSettingsInput!): SSHSettingsMutationReturn!
   runSystemRebuild: GenericJobMutationReturn!
   runSystemRollback: GenericMutationReturn!
@@ -662,6 +706,7 @@ type SystemMutations {
   pullRepositoryChanges: GenericMutationReturn!
   nixCollectGarbage: GenericJobMutationReturn!
   setDnsProvider(input: SetDnsProviderInput!): GenericMutationReturn!
+  setUpdateChannel(channelId: String!): GenericMutationReturn!
 }
 
 type SystemProviderInfo {
@@ -671,8 +716,14 @@ type SystemProviderInfo {
 
 type SystemSettings {
   autoUpgrade: AutoUpgradeOptions!
+  openTelemetry: OpenTelemetrySettings!
   ssh: SshSettings!
   timezone: String!
+}
+
+type SystemUpdatesInfo {
+  currentChannel: UpdateChannel!
+  channels: [UpdateChannel!]!
 }
 
 type TimezoneMutationReturn implements MutationReturnInterface {
@@ -680,6 +731,13 @@ type TimezoneMutationReturn implements MutationReturnInterface {
   message: String!
   code: Int!
   timezone: String
+}
+
+type UpdateChannel {
+  id: String!
+  updateUrl: String!
+  name: String!
+  description: String!
 }
 
 input UseNewDeviceKeyInput {
@@ -705,7 +763,7 @@ type User {
 
 input UserMutationInput {
   username: String!
-  directmemberof: [String!] = []
+  directmemberof: [String!] = null
   password: String = null
   displayName: String = null
 }
@@ -725,10 +783,12 @@ enum UserType {
 
 type Users {
   allUsers: [User!]!
+  minimumCredentialType: KanidmCredentialType!
   getUser(username: String!): User
 }
 
 type UsersMutations {
+  setKanidmMinimumCredentialType(minimumCredentialType: KanidmCredentialType!): KanidmCredentialTypeMutationReturn!
   createUser(user: UserMutationInput!): UserMutationReturn!
   deleteUser(username: String!): GenericMutationReturn!
   updateUser(user: UserMutationInput!): UserMutationReturn!

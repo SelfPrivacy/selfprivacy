@@ -19,19 +19,19 @@ void main() {
   });
 
   test('checks the observed version against the required version', () async {
-    source.add(CachedValue(data: Version(3, 8, 2)));
-    await pumpEventQueue();
-    expect(bloc.state, OutdatedServerCheckerOutdated(Version(3, 8, 2)));
     source.add(CachedValue(data: Version(3, 8, 3)));
     await pumpEventQueue();
-    expect(bloc.state, OutdatedServerCheckerUpToDate(Version(3, 8, 3)));
+    expect(bloc.state, OutdatedServerCheckerOutdated(Version(3, 8, 3)));
+    source.add(CachedValue(data: Version(3, 9, 0)));
+    await pumpEventQueue();
+    expect(bloc.state, OutdatedServerCheckerUpToDate(Version(3, 9, 0)));
   });
 
   test(
     'a retained version survives refresh failure, but not removal',
     () async {
       source.add(
-        CachedValue(data: Version(3, 8, 3), lastError: StateError('offline')),
+        CachedValue(data: Version(3, 9, 0), lastError: StateError('offline')),
       );
       await pumpEventQueue();
       expect(bloc.state, isA<OutdatedServerCheckerUpToDate>());

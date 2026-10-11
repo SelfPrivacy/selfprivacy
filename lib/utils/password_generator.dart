@@ -1,6 +1,6 @@
 import 'dart:math';
 
-Random _rnd = Random.secure();
+final Random _rnd = Random.secure();
 
 typedef StringGeneratorFunction = String Function();
 
@@ -86,7 +86,7 @@ class StringGenerators {
         ...genString(length - sum, chars),
       ];
     }
-    res.shuffle();
+    res.shuffle(_rnd);
     return res.join();
   }
 

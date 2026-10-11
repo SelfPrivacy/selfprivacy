@@ -6,7 +6,6 @@ import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
 import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 typedef DnsProviderCredentials = ({
   String token,
@@ -39,8 +38,6 @@ class DnsProviderForm {
   static const tenantControlName = 'tenant';
   static const secondaryTokenControlName = 'secondaryToken';
   static const validationTimeout = Duration(seconds: 30);
-
-  static final _logger = const AppLogger(name: 'dns_provider_form').log;
 
   final DnsProviderType providerType;
   final Future<CredentialValidationResult> Function(
@@ -127,10 +124,8 @@ class DnsProviderForm {
           _credentialCheckState.value = CredentialCheckFailed(result);
           _failedCredentials = credentials;
       }
-    } on TimeoutException catch (error, stackTrace) {
-      _handleUnexpectedFailure(error, stackTrace, credentials);
-    } catch (error, stackTrace) {
-      _handleUnexpectedFailure(error, stackTrace, credentials);
+    } catch (_) {
+      _handleUnexpectedFailure(credentials);
     } finally {
       if (!_isDisposed) {
         form.markAsEnabled();
@@ -141,19 +136,11 @@ class DnsProviderForm {
     }
   }
 
-  void _handleUnexpectedFailure(
-    final Object error,
-    final StackTrace stackTrace,
-    final DnsProviderCredentials credentials,
-  ) {
+  void _handleUnexpectedFailure(final DnsProviderCredentials credentials) {
     if (_isDisposed) {
       return;
     }
-    _logger(
-      'DNS provider credential check failed',
-      error: error,
-      stackTrace: stackTrace,
-    );
+
     _credentialCheckState.value = const CredentialCheckFailed(
       CredentialValidationUnavailable(),
     );

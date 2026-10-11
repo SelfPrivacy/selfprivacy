@@ -6,12 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/digital_ocean/digital_ocean_dns_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 class DigitalOceanDnsApi extends RestApiMap {
   DigitalOceanDnsApi({
     this.token = '',
-    this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
     super.clientFactory,
@@ -21,14 +19,10 @@ class DigitalOceanDnsApi extends RestApiMap {
        );
 
   @override
-  final bool hasLogger;
-  @override
   final bool isWithToken;
 
   final String token;
   final String? customToken;
-
-  static final logger = const AppLogger(name: 'digital_ocean_dns_api_map').log;
 
   @override
   BaseOptions get options {
@@ -74,7 +68,6 @@ class DigitalOceanDnsApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      logger('Error validating DigitalOcean DNS API token', error: e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -112,7 +105,6 @@ class DigitalOceanDnsApi extends RestApiMap {
           )
           .toList();
     } catch (e) {
-      logger('Error fetching DigitalOcean domains', error: e);
       return GenericResult(
         data: domains,
         success: false,
@@ -139,11 +131,9 @@ class DigitalOceanDnsApi extends RestApiMap {
         );
       }
       await Future.wait(allCreateFutures);
-    } on DioException catch (e) {
-      logger('DioException while creating multiple DNS records', error: e);
+    } on DioException {
       rethrow;
     } catch (e) {
-      logger('Error creating multiple DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -166,7 +156,6 @@ class DigitalOceanDnsApi extends RestApiMap {
       }
       await Future.wait(allDeleteFutures);
     } catch (e) {
-      logger('Error removing similar DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -200,7 +189,6 @@ class DigitalOceanDnsApi extends RestApiMap {
               .toList() ??
           [];
     } catch (e) {
-      logger('Error fetching DNS records for $domainName', error: e);
       GenericResult(data: allRecords, success: false, message: e.toString());
     } finally {
       close(client);

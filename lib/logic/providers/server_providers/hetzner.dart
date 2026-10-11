@@ -15,7 +15,6 @@ import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_providers/resource_creation_dialog.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -54,8 +53,6 @@ class HetznerServerProvider extends ServerProvider {
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.eur);
   int? cachedCoreAmount;
-
-  static final logger = const AppLogger(name: 'hetzner').log;
 
   @override
   bool get isAuthorized => _adapter.api().isWithToken;
@@ -129,7 +126,7 @@ class HetznerServerProvider extends ServerProvider {
 
     if (server == null) {
       const String msg = 'getServerType: no server!';
-      logger(msg);
+
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -142,7 +139,7 @@ class HetznerServerProvider extends ServerProvider {
 
     if (priceValue == null) {
       const String msg = 'getServerType: no price!';
-      logger(msg);
+
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -421,7 +418,6 @@ class HetznerServerProvider extends ServerProvider {
 
       await Future.wait(laterFutures);
     } catch (e) {
-      logger(e.toString());
       return GenericResult(
         success: false,
         data: CallbackDialogueBranching(
@@ -673,7 +669,6 @@ class HetznerServerProvider extends ServerProvider {
         linuxDevice: result.data!.linuxDevice,
       );
     } catch (e) {
-      logger(e.toString());
       return ResourceCreationResult(
         data: null,
         success: false,

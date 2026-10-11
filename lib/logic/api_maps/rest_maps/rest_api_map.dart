@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/models/console_log.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 /// Creates a REST client for [options].
 ///
@@ -15,27 +14,12 @@ abstract class RestApiMap {
   RestApiMap({final RestApiClientFactory? clientFactory})
     : _clientFactory = clientFactory ?? Dio.new;
 
-  static final logger = const AppLogger(name: 'rest_api_map').log;
-
   final RestApiClientFactory _clientFactory;
 
   Future<Dio> getClient({final BaseOptions? customOptions}) async {
     final Dio dio = _clientFactory(customOptions ?? (await options));
     dio.interceptors.add(ConsoleInterceptor());
 
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onError:
-            (
-              final DioException exception,
-              final ErrorInterceptorHandler handler,
-            ) {
-              logger('got dio exception:', error: exception);
-
-              return handler.next(exception);
-            },
-      ),
-    );
     return dio;
   }
 
@@ -43,7 +27,6 @@ abstract class RestApiMap {
 
   String get rootAddress;
 
-  abstract final bool hasLogger;
   abstract final bool isWithToken;
 
   ValidateStatus? validateStatus;

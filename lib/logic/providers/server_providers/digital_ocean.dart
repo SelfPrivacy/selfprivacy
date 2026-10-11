@@ -17,7 +17,6 @@ import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/server_providers/resource_creation_dialog.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
@@ -56,7 +55,6 @@ class DigitalOceanServerProvider extends ServerProvider {
   final ApiAdapter _adapter;
   final Currency currency = Currency.fromType(CurrencyType.usd);
 
-  static final logger = const AppLogger(name: 'digital_ocean').log;
   static const _missingSizeRegionsMessageKey =
       'initializing.digital_ocean_regions_permission_error';
 
@@ -157,7 +155,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     if (server == null) {
       const String msg = 'getServerType: no server!';
-      logger(msg);
+
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -180,7 +178,7 @@ class DigitalOceanServerProvider extends ServerProvider {
 
     if (location == null) {
       const String msg = 'getServerType: no location!';
-      logger(msg);
+
       return GenericResult(success: false, data: serverType, message: msg);
     }
 
@@ -448,7 +446,6 @@ class DigitalOceanServerProvider extends ServerProvider {
 
       await Future.wait(laterFutures);
     } catch (e) {
-      logger("Couldn't delete the server", error: e);
       return GenericResult(
         success: false,
         data: CallbackDialogueBranching(
@@ -655,7 +652,6 @@ class DigitalOceanServerProvider extends ServerProvider {
         volumes.add(volume);
       }
     } catch (e) {
-      logger("Couldn't parse volumes", error: e);
       return GenericResult(data: [], success: false, message: e.toString());
     }
 

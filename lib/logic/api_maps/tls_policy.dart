@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
+import 'package:selfprivacy/logic/models/console_log.dart';
 
 const List<String> _stagingRootAssets = [
   'assets/certs/letsencrypt-stg-root-x1.pem',
@@ -16,9 +16,12 @@ const List<String> _stagingRootAssets = [
 enum TlsPolicy { strict, allowUnverified }
 
 class TlsContext {
-  TlsContext(this._developerSettings);
+  TlsContext(
+    this._developerSettings, {
+    final void Function(ConsoleLog)? consoleLog,
+  }) : _consoleLog = consoleLog;
 
-  static final _log = const AppLogger(name: 'tls_context').log;
+  final void Function(ConsoleLog)? _consoleLog;
 
   final DeveloperSettingsModel _developerSettings;
 
@@ -35,8 +38,12 @@ class TlsContext {
         _stagingRoots.add(
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
         );
-      } catch (e) {
-        _log('failed to load the staging ACME root $asset', error: e);
+      } catch (_) {
+        _consoleLog?.call(
+          ManualConsoleLog.warning(
+            content: 'Failed to load staging ACME root: $asset',
+          ),
+        );
       }
     }
   }
@@ -88,8 +95,12 @@ class TlsContext {
     for (final Uint8List root in _stagingRoots) {
       try {
         context.setTrustedCertificatesBytes(root);
-      } on TlsException catch (e) {
-        _log('failed to trust a staging ACME root', error: e);
+      } on TlsException {
+        _consoleLog?.call(
+          ManualConsoleLog.warning(
+            content: 'Failed to trust a staging ACME root.',
+          ),
+        );
       }
     }
     return context;

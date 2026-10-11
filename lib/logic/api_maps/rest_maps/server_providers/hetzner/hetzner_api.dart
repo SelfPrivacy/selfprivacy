@@ -11,28 +11,19 @@ import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/dns_provider_credential.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 class HetznerApi extends RestApiMap {
-  HetznerApi({
-    this.token = '',
-    this.hasLogger = true,
-    this.isWithToken = true,
-    super.clientFactory,
-  }) : assert(
-         !isWithToken || token.isNotEmpty,
-         'Token must not be empty if isWithToken is true',
-       );
+  HetznerApi({this.token = '', this.isWithToken = true, super.clientFactory})
+    : assert(
+        !isWithToken || token.isNotEmpty,
+        'Token must not be empty if isWithToken is true',
+      );
 
-  @override
-  bool hasLogger;
   @override
   bool isWithToken;
 
   final String token;
-
-  static final logger = const AppLogger(name: 'hetzner_api_map').log;
 
   @override
   BaseOptions get options {
@@ -72,7 +63,6 @@ class HetznerApi extends RestApiMap {
         parseItem: HetznerServerInfo.fromJson,
       );
     } catch (e) {
-      logger('Error while fetching servers: $e');
       return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
@@ -129,7 +119,6 @@ class HetznerApi extends RestApiMap {
         'automount': true,
         'location': region,
       };
-      logger('Creating server with data: $data');
 
       serverCreateResponse = await client.post('/servers', data: data);
       final rawServer = serverCreateResponse.data['server'];
@@ -140,13 +129,8 @@ class HetznerApi extends RestApiMap {
       serverInfo = HetznerServerInfo.fromJson(rawServer);
       success = _isSuccessfulCreateResponse(serverCreateResponse);
     } on DioException catch (e) {
-      logger(
-        'Error while creating server: ${e.message} - ${e.response?.data}',
-        error: e,
-      );
       hetznerError = e;
     } catch (e) {
-      logger('Error while creating server: $e', error: e);
       parsingError = e;
     } finally {
       close(client);
@@ -185,7 +169,6 @@ class HetznerApi extends RestApiMap {
         data: {'ip': ip4, 'dns_ptr': dnsPtr},
       );
     } catch (e) {
-      logger('Error while creating reverse DNS: $e');
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -201,7 +184,6 @@ class HetznerApi extends RestApiMap {
     try {
       await client.delete('/servers/$serverId');
     } catch (e) {
-      logger('Error while deleting server: $e');
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -226,7 +208,6 @@ class HetznerApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      logger('Error while validating API token: $e');
       isValid = false;
       message = e.toString();
     } finally {
@@ -261,7 +242,6 @@ class HetznerApi extends RestApiMap {
         parseItem: HetznerLocation.fromJson,
       );
     } catch (e) {
-      logger('Error while fetching locations: $e');
       return GenericResult(success: false, data: [], message: e.toString());
     } finally {
       close(client);
@@ -283,7 +263,6 @@ class HetznerApi extends RestApiMap {
         parseItem: HetznerServerTypeInfo.fromJson,
       );
     } catch (e) {
-      logger('Error while fetching server types: $e');
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       close(client);
@@ -297,7 +276,6 @@ class HetznerApi extends RestApiMap {
     try {
       await client.post('/servers/$serverId/actions/poweron');
     } catch (e) {
-      logger('Error while powering on server: $e');
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -311,7 +289,6 @@ class HetznerApi extends RestApiMap {
     try {
       await client.post('/servers/$serverId/actions/reset');
     } catch (e) {
-      logger('Error while restarting server: $e');
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -349,7 +326,6 @@ class HetznerApi extends RestApiMap {
         double.parse(ipPrice!),
       );
     } catch (e) {
-      logger('Error while fetching pricing: $e');
       return GenericResult(
         success: false,
         data: pricing,
@@ -376,7 +352,6 @@ class HetznerApi extends RestApiMap {
         onResponse: (final response) => getVolumesResponse = response,
       );
     } catch (e) {
-      logger('Error while fetching volumes: $e');
       return GenericResult(data: [], success: false, message: e.toString());
     } finally {
       client.close();
@@ -456,7 +431,6 @@ class HetznerApi extends RestApiMap {
       }
       volume = HetznerVolume.fromJson(rawVolume);
     } catch (e) {
-      logger('Error while creating volume: $e');
       if (e is DioException) {
         createVolumeResponse ??= e.response;
       }
@@ -492,7 +466,6 @@ class HetznerApi extends RestApiMap {
     try {
       await client.delete('/volumes/$volumeId');
     } catch (e) {
-      logger('Error while deleting volume: $e');
       return GenericResult(success: false, data: false, message: e.toString());
     } finally {
       client.close();
@@ -510,7 +483,6 @@ class HetznerApi extends RestApiMap {
       getVolumeResponse = await client.get('/volumes/$volumeId');
       volume = HetznerVolume.fromJson(getVolumeResponse.data['volume']);
     } catch (e) {
-      logger('Error while fetching volume: $e');
       return GenericResult(data: null, success: false, message: e.toString());
     } finally {
       client.close();
@@ -531,7 +503,6 @@ class HetznerApi extends RestApiMap {
       success =
           detachVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while detaching volume: $e');
       return GenericResult(success: false, data: false, message: e.toString());
     } finally {
       client.close();
@@ -555,8 +526,8 @@ class HetznerApi extends RestApiMap {
       );
       success =
           attachVolumeResponse.data['action']['status'].toString() != 'error';
-    } catch (e) {
-      logger('Error while attaching volume: $e');
+    } catch (_) {
+      success = false;
     } finally {
       client.close();
     }
@@ -585,7 +556,6 @@ class HetznerApi extends RestApiMap {
       success =
           resizeVolumeResponse.data['action']['status'].toString() != 'error';
     } catch (e) {
-      logger('Error while resizing volume: $e');
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
       client.close();
@@ -614,7 +584,6 @@ class HetznerApi extends RestApiMap {
       );
       metrics = res.data['metrics'];
     } catch (e) {
-      logger('Error while fetching metrics: $e');
       return GenericResult(success: false, data: {}, message: e.toString());
     } finally {
       close(client);

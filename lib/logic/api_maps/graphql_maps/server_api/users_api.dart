@@ -21,27 +21,18 @@ mixin UsersApi on GraphQLApiMap {
 
   Future<User?> getUser(final String login) async {
     QueryResult<Query$GetUser> response;
-    User? user;
     try {
       final GraphQLClient client = await getClient();
       final variables = Variables$Query$GetUser(username: login);
       response = await client.query$GetUser(
         Options$Query$GetUser(variables: variables),
       );
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetUser request: ${response.exception}',
-          error: response.exception,
-        );
-      }
+
       final responseUser = response.parsedData?.users.getUser;
-      if (responseUser != null) {
-        user = User.fromGraphQL(responseUser);
-      }
-    } catch (e) {
-      logger('Error in GraphQL GetUser request: $e', error: e);
+      return responseUser == null ? null : User.fromGraphQL(responseUser);
+    } catch (_) {
+      return null;
     }
-    return user;
   }
 
   Future<ServerMutationResult<User>> createUser(

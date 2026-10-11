@@ -7,6 +7,7 @@ import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/get_it/developer_settings_model.dart';
+import 'package:selfprivacy/logic/models/console_log.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
 
@@ -59,11 +60,13 @@ void main() {
 
   late DeveloperSettingsModel settings;
   late TlsContext tls;
+  final logs = <ConsoleLog>[];
 
   setUp(() async {
     await Hive.openBox(BNames.appSettingsBox);
     settings = DeveloperSettingsModel();
-    tls = TlsContext(settings);
+    logs.clear();
+    tls = TlsContext(settings, consoleLog: logs.add);
   });
 
   tearDown(() async {
@@ -113,6 +116,12 @@ void main() {
     await settings.setStagingAcme(enabled: true);
 
     expect(() => tls.httpClientFor(host: 'api.example.org'), returnsNormally);
+    expect(logs, hasLength(4));
+    expect(logs.every((final log) => log.isError), isTrue);
+    expect(
+      logs.first.content,
+      startsWith('Failed to load staging ACME root: assets/certs/'),
+    );
   });
 
   test('a corrupt staging root is skipped rather than fatal', () async {
@@ -122,6 +131,12 @@ void main() {
     await settings.setStagingAcme(enabled: true);
 
     expect(() => tls.httpClientFor(host: 'api.example.org'), returnsNormally);
+    expect(logs, hasLength(4));
+    expect(logs.every((final log) => log.isError), isTrue);
+    expect(
+      logs.map((final log) => log.content),
+      everyElement('Failed to trust a staging ACME root.'),
+    );
   });
 
   test('loading twice does not accumulate roots', () async {

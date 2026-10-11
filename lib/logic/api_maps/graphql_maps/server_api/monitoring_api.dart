@@ -36,7 +36,6 @@ mixin MonitoringApi on GraphQLApiMap {
     } on GraphQLDispatchDeferred {
       rethrow;
     } catch (e) {
-      logger("Couldn't load sever metrics", error: e);
       return GenericResult<ServerMetrics?>(
         success: false,
         data: null,
@@ -80,7 +79,6 @@ mixin MonitoringApi on GraphQLApiMap {
     } on GraphQLDispatchDeferred {
       rethrow;
     } catch (e) {
-      logger("Couldn't get memory metrics", error: e);
       return GenericResult<MemoryMetrics?>(
         success: false,
         data: null,
@@ -120,7 +118,6 @@ mixin MonitoringApi on GraphQLApiMap {
     } on GraphQLDispatchDeferred {
       rethrow;
     } catch (e) {
-      logger("Couldn't get disk metrics", error: e);
       return GenericResult<DiskMetrics?>(
         success: false,
         data: null,

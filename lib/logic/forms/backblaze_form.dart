@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
 import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 typedef BackblazeCredentials = ({String keyId, String applicationKey});
 
@@ -26,8 +25,6 @@ class BackblazeForm {
   static const keyIdControlName = 'keyId';
   static const applicationKeyControlName = 'applicationKey';
   static const validationTimeout = Duration(seconds: 30);
-
-  static final _logger = const AppLogger(name: 'backblaze_form').log;
 
   final Future<CredentialValidationResult> Function(
     BackblazeCredentials credentials,
@@ -85,10 +82,8 @@ class BackblazeForm {
           _credentialCheckState.value = CredentialCheckFailed(result);
           _failedCredentials = credentials;
       }
-    } on TimeoutException catch (error, stackTrace) {
-      _handleUnexpectedFailure(error, stackTrace, credentials);
-    } catch (error, stackTrace) {
-      _handleUnexpectedFailure(error, stackTrace, credentials);
+    } catch (_) {
+      _handleUnexpectedFailure(credentials);
     } finally {
       if (!_isDisposed) {
         form.markAsEnabled();
@@ -99,19 +94,11 @@ class BackblazeForm {
     }
   }
 
-  void _handleUnexpectedFailure(
-    final Object error,
-    final StackTrace stackTrace,
-    final BackblazeCredentials credentials,
-  ) {
+  void _handleUnexpectedFailure(final BackblazeCredentials credentials) {
     if (_isDisposed) {
       return;
     }
-    _logger(
-      'Backblaze credential check failed',
-      error: error,
-      stackTrace: stackTrace,
-    );
+
     _credentialCheckState.value = const CredentialCheckFailed(
       CredentialValidationUnavailable(),
     );

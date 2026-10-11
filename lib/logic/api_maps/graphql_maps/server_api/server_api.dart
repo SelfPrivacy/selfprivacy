@@ -87,73 +87,51 @@ class ServerApi extends GraphQLApiMap
     try {
       return await _fetchApiVersion(clientTransport: clientTransport);
     } catch (e) {
-      logger('Error in GraphQL GetApiVersion request: $e', error: e);
       return null;
     }
   }
 
   Future<ServerProviderType> getServerProviderType() async {
     QueryResult<Query$SystemServerProvider> response;
-    ServerProviderType providerType = ServerProviderType.unknown;
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$SystemServerProvider();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL SystemServerProvider request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      providerType = ServerProviderType.fromGraphQL(
+
+      return ServerProviderType.fromGraphQL(
         response.parsedData!.system.provider.provider,
       );
-    } catch (e) {
-      logger('Error in GraphQL SystemServerProvider request: $e', error: e);
+    } catch (_) {
+      return ServerProviderType.unknown;
     }
-    return providerType;
   }
 
   Future<DnsProviderType> getDnsProviderType() async {
     QueryResult<Query$SystemDnsProvider> response;
-    DnsProviderType providerType = DnsProviderType.unknown;
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$SystemDnsProvider();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL SystemDnsProvider request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      providerType = DnsProviderType.fromGraphQL(
+
+      return DnsProviderType.fromGraphQL(
         response.parsedData!.system.domainInfo.provider,
       );
-    } catch (e) {
-      logger('Error in GraphQL SystemDnsProvider request: $e', error: e);
+    } catch (_) {
+      return DnsProviderType.unknown;
     }
-    return providerType;
   }
 
   Future<bool> isUsingBinds() async {
     QueryResult<Query$SystemIsUsingBinds> response;
-    bool usesBinds = false;
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$SystemIsUsingBinds();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL SystemIsUsingBinds request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      usesBinds = response.parsedData!.system.info.usingBinds;
-    } catch (e) {
-      logger('Error in GraphQL SystemIsUsingBinds request: $e', error: e);
+
+      return response.parsedData!.system.info.usingBinds;
+    } catch (_) {
+      return false;
     }
-    return usesBinds;
   }
 
   Future<ServerMutationResult<void>> switchService({
@@ -265,26 +243,18 @@ class ServerApi extends GraphQLApiMap
   }
 
   Future<List<DnsRecord>?> getDnsRecords() async {
-    List<DnsRecord>? records;
     QueryResult<Query$GetDnsRecords> response;
 
     try {
       final GraphQLClient client = await getClient();
       response = await client.query$GetDnsRecords();
-      if (response.hasException) {
-        logger(
-          'Exception in GraphQL GetDnsRecords request: ${response.exception}',
-          error: response.exception,
-        );
-      }
-      records = response.parsedData!.system.domainInfo.requiredDnsRecords
+
+      return response.parsedData!.system.domainInfo.requiredDnsRecords
           .map<DnsRecord>(DnsRecord.fromGraphQL)
           .toList();
-    } catch (e) {
-      logger('Error in GraphQL GetDnsRecords request: $e', error: e);
+    } catch (_) {
+      return null;
     }
-
-    return records;
   }
 
   Future<List<ApiToken>> getApiTokens() async {

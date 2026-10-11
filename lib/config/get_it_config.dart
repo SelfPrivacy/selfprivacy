@@ -38,7 +38,11 @@ GraphQLTransport createGraphQLTransport({
 
 Future<void> getItSetup() async {
   final developerSettings = DeveloperSettingsModel();
-  final tlsContext = TlsContext(developerSettings);
+  final consoleModel = ConsoleModel();
+  final tlsContext = TlsContext(
+    developerSettings,
+    consoleLog: consoleModel.log,
+  );
   final resourcesModel = ResourcesModel()..init();
   await tlsContext.loadStagingRoots();
 
@@ -46,7 +50,7 @@ Future<void> getItSetup() async {
     ..registerSingleton<DeveloperSettingsModel>(developerSettings)
     ..registerSingleton<TlsContext>(tlsContext)
     ..registerSingleton<NavigationService>(NavigationService())
-    ..registerSingleton<ConsoleModel>(ConsoleModel())
+    ..registerSingleton<ConsoleModel>(consoleModel)
     ..registerSingleton<ResourcesModel>(
       resourcesModel,
       dispose: (final ResourcesModel model) => model.dispose(),

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:selfprivacy/logic/forms/checks/credential_check_state.dart';
 import 'package:selfprivacy/logic/forms/checks/credential_validation_result.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 class ServerProviderForm {
   ServerProviderForm({
@@ -24,8 +23,6 @@ class ServerProviderForm {
 
   static const apiKeyControlName = 'apiKey';
   static const validationTimeout = Duration(seconds: 30);
-
-  static final _logger = const AppLogger(name: 'server_provider_form').log;
 
   final Future<CredentialValidationResult> Function(String credential)
   validateCredential;
@@ -74,10 +71,8 @@ class ServerProviderForm {
           _credentialCheckState.value = CredentialCheckFailed(result);
           _failedCredential = credential;
       }
-    } on TimeoutException catch (error, stackTrace) {
-      _handleUnexpectedFailure(error, stackTrace, credential);
-    } catch (error, stackTrace) {
-      _handleUnexpectedFailure(error, stackTrace, credential);
+    } catch (_) {
+      _handleUnexpectedFailure(credential);
     } finally {
       if (!_isDisposed) {
         form.markAsEnabled();
@@ -88,19 +83,11 @@ class ServerProviderForm {
     }
   }
 
-  void _handleUnexpectedFailure(
-    final Object error,
-    final StackTrace stackTrace,
-    final String credential,
-  ) {
+  void _handleUnexpectedFailure(final String credential) {
     if (_isDisposed) {
       return;
     }
-    _logger(
-      'Server provider credential check failed',
-      error: error,
-      stackTrace: stackTrace,
-    );
+
     _credentialCheckState.value = const CredentialCheckFailed(
       CredentialValidationUnavailable(),
     );

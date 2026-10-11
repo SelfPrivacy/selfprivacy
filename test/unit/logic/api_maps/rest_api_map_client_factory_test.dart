@@ -5,8 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner_api.dart';
+import 'package:selfprivacy/logic/models/console_log.dart';
 
 class _ResponseAdapter implements HttpClientAdapter {
+  _ResponseAdapter({this.body = '{"servers":[]}'});
+
+  final String body;
   bool wasClosed = false;
 
   @override
@@ -15,7 +19,7 @@ class _ResponseAdapter implements HttpClientAdapter {
     final Stream<Uint8List>? requestStream,
     final Future<void>? cancelFuture,
   ) async => ResponseBody.fromString(
-    '{"servers":[]}',
+    body,
     200,
     headers: {
       Headers.contentTypeHeader: [Headers.jsonContentType],
@@ -30,9 +34,6 @@ class _ResponseAdapter implements HttpClientAdapter {
 
 class _TestRestApiMap extends RestApiMap {
   _TestRestApiMap({required super.clientFactory});
-
-  @override
-  final bool hasLogger = false;
 
   @override
   final bool isWithToken = false;
@@ -52,6 +53,36 @@ void main() {
   tearDown(() async {
     await getIt.reset();
   });
+
+  test(
+    'Console retains request and response bodies for inspection and copying',
+    () async {
+      final api = _TestRestApiMap(
+        clientFactory: (final options) => Dio(options)
+          ..httpClientAdapter = _ResponseAdapter(
+            body: '{"authorizationToken":"secret-response"}',
+          ),
+      );
+      final client = await api.getClient();
+      addTearDown(client.close);
+      final response = await client.post(
+        '/authorize',
+        data: {'user_data': 'secret-request'},
+      );
+
+      expect(
+        response.data,
+        containsPair('authorizationToken', 'secret-response'),
+      );
+      final logs = getIt<ConsoleModel>().logs;
+      final requestLog = logs.whereType<RestApiRequestConsoleLog>().single;
+      final responseLog = logs.whereType<RestApiResponseConsoleLog>().single;
+      expect(requestLog.content, contains('secret-request'));
+      expect(requestLog.shareableData, contains('secret-request'));
+      expect(responseLog.content, contains('secret-response'));
+      expect(responseLog.shareableData, contains('secret-response'));
+    },
+  );
 
   test('provider operations create and close independent clients', () async {
     final receivedOptions = <BaseOptions>[];

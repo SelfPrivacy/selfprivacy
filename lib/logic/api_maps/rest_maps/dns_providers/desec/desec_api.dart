@@ -6,12 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/desec/desec_dns_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 class DesecApi extends RestApiMap {
   DesecApi({
     this.token = '',
-    this.hasLogger = false,
     this.isWithToken = true,
     this.customToken,
     super.clientFactory,
@@ -21,14 +19,10 @@ class DesecApi extends RestApiMap {
        );
 
   @override
-  final bool hasLogger;
-  @override
   final bool isWithToken;
 
   final String token;
   final String? customToken;
-
-  static final logger = const AppLogger(name: 'desec_api_map').log;
 
   @override
   BaseOptions get options {
@@ -75,7 +69,6 @@ class DesecApi extends RestApiMap {
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
-      logger('Error validating Desec API token', error: e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -114,7 +107,6 @@ class DesecApi extends RestApiMap {
               .map<DesecDomain>((final e) => DesecDomain.fromJson(e))
               .toList();
     } catch (e) {
-      logger('Error fetching Desec domains', error: e);
       return GenericResult(
         success: false,
         data: domains,
@@ -147,7 +139,6 @@ class DesecApi extends RestApiMap {
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
-      logger('Error creating multiple Desec DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -170,7 +161,6 @@ class DesecApi extends RestApiMap {
       );
       await Future.delayed(const Duration(seconds: 1));
     } catch (e) {
-      logger('Error updating Desec DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -197,7 +187,6 @@ class DesecApi extends RestApiMap {
               .map<DesecDnsRecord>((final e) => DesecDnsRecord.fromJson(e))
               .toList();
     } catch (e) {
-      logger('Error fetching Desec DNS records for $domainName', error: e);
       return GenericResult(
         data: allRecords,
         success: false,

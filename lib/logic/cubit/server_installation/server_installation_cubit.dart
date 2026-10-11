@@ -26,7 +26,6 @@ import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
@@ -46,8 +45,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   static const int certificateAttemptsBeforePrompt = 15;
 
   final DiskSize initialStorage = DiskSize.fromGibibyte(10);
-
-  static final logger = const AppLogger(name: 'server_installation_cubit').log;
 
   ServerApi _serverApi({
     required final GraphQLDomainProvider domainProvider,
@@ -640,7 +637,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
         validatedList = validated.toList();
       } catch (e) {
-        logger('Error while validating servers', error: e);
         getIt<NavigationService>().showSnackBar(
           'modals.server_validators_error'.tr(),
         );
@@ -664,7 +660,6 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
         );
         validatedList = validated.toList();
       } catch (e) {
-        logger('Error while validating servers', error: e);
         getIt<NavigationService>().showSnackBar(
           'modals.server_validators_error'.tr(),
         );

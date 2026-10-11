@@ -7,13 +7,11 @@ import 'package:dio/dio.dart';
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/models/json/dns_providers/porkbun/porkbun_dns_info.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 
 class PorkbunApi extends RestApiMap {
   PorkbunApi({
     this.token = '',
     this.tokenId = '',
-    this.hasLogger = false,
     this.isWithToken = true,
     super.clientFactory,
   }) : assert(
@@ -22,14 +20,10 @@ class PorkbunApi extends RestApiMap {
        );
 
   @override
-  final bool hasLogger;
-  @override
   final bool isWithToken;
 
   final String token;
   final String tokenId;
-
-  static final logger = const AppLogger(name: 'porkbun_dns_api_map').log;
 
   @override
   BaseOptions get options {
@@ -75,7 +69,6 @@ class PorkbunApi extends RestApiMap {
         ),
       );
     } catch (e) {
-      logger('Error validating Porkbun API token', error: e);
       isValid = false;
       message = e.toString();
     } finally {
@@ -124,7 +117,6 @@ class PorkbunApi extends RestApiMap {
           )
           .toList();
     } catch (e) {
-      logger('Error fetching Porkbun domains', error: e);
       return GenericResult(
         success: false,
         data: domains,
@@ -157,11 +149,9 @@ class PorkbunApi extends RestApiMap {
         );
       }
       await Future.wait(allCreateFutures);
-    } on DioException catch (e) {
-      logger('DioException while creating Porkbun DNS records', error: e);
+    } on DioException {
       rethrow;
     } catch (e) {
-      logger('Error creating Porkbun DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -184,11 +174,9 @@ class PorkbunApi extends RestApiMap {
         );
       }
       await Future.wait(allDeleteFutures);
-    } on DioException catch (e) {
-      logger('DioException while deleting Porkbun DNS records', error: e);
+    } on DioException {
       rethrow;
     } catch (e) {
-      logger('Error deleting Porkbun DNS records', error: e);
       return GenericResult(success: false, data: null, message: e.toString());
     } finally {
       close(client);
@@ -241,7 +229,6 @@ class PorkbunApi extends RestApiMap {
         message: response.statusMessage,
       );
     } catch (e) {
-      logger('Error fetching Porkbun DNS records', error: e);
       return GenericResult(
         success: false,
         data: records,

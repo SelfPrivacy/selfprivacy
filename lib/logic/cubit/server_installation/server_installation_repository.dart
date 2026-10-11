@@ -24,7 +24,6 @@ import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
@@ -68,10 +67,6 @@ class ServerInstallationRepository {
   final DeviceNameProvider _deviceName;
 
   Box box = Hive.box(BNames.serverInstallationBox);
-
-  static final logger = const AppLogger(
-    name: 'server_installation_repository',
-  ).log;
 
   Future<ServerInstallationState> load() async {
     final ServerInstallationWizardData? wizardData =
@@ -273,13 +268,9 @@ class ServerInstallationRepository {
           getIt<WizardDataModel>().serverInstallation!.serverDetails!.apiToken,
     );
 
-    late DnsRecord record;
-    try {
-      record = extractDkimRecord(await api.getDnsRecords() ?? [])!;
-    } catch (e) {
-      logger('Failed to extract DKIM record: $e');
-      rethrow;
-    }
+    final DnsRecord record = extractDkimRecord(
+      await api.getDnsRecords() ?? [],
+    )!;
 
     await ProvidersController.currentDnsProvider!.setDnsRecord(record, domain);
   }

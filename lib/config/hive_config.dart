@@ -10,20 +10,16 @@ import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/server_provider_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
-import 'package:selfprivacy/utils/app_logger.dart';
 import 'package:selfprivacy/utils/platform_adapter.dart';
 import 'package:selfprivacy/utils/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class HiveConfig {
-  static final logger = const AppLogger(name: 'hive_config').log;
-
   /// bump on schema changes
   static const version = 4;
 
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
-    logger('set custom storage path to: "$storagePath"');
 
     // Use a custom path if available, let Flutter to decide automatically if not
     if (storagePath != null) {
@@ -38,32 +34,22 @@ class HiveConfig {
   }
 
   static void registerAdapters() {
-    try {
-      Hive
-        ..registerAdapter(UserAdapter())
-        ..registerAdapter(ServerHostingDetailsAdapter())
-        ..registerAdapter(ServerDomainAdapter())
-        ..registerAdapter(BackupsCredentialAdapter())
-        ..registerAdapter(ServerProviderVolumeAdapter())
-        ..registerAdapter(BackblazeBucketAdapter())
-        ..registerAdapter(BearerTokenCredentialAdapter())
-        ..registerAdapter(ServerProviderCredentialAdapter())
-        ..registerAdapter(DnsProviderCredentialAdapter())
-        ..registerAdapter(ServerAdapter())
-        ..registerAdapter(DnsProviderTypeAdapter())
-        ..registerAdapter(ServerProviderTypeAdapter())
-        ..registerAdapter(UserTypeAdapter())
-        ..registerAdapter(BackupsProviderTypeAdapter())
-        ..registerAdapter(ServerInstallationWizardDataAdapter());
-      logger('successfully registered every adapter');
-    } catch (error, stackTrace) {
-      logger(
-        'error registering adapters',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
+    Hive
+      ..registerAdapter(UserAdapter())
+      ..registerAdapter(ServerHostingDetailsAdapter())
+      ..registerAdapter(ServerDomainAdapter())
+      ..registerAdapter(BackupsCredentialAdapter())
+      ..registerAdapter(ServerProviderVolumeAdapter())
+      ..registerAdapter(BackblazeBucketAdapter())
+      ..registerAdapter(BearerTokenCredentialAdapter())
+      ..registerAdapter(ServerProviderCredentialAdapter())
+      ..registerAdapter(DnsProviderCredentialAdapter())
+      ..registerAdapter(ServerAdapter())
+      ..registerAdapter(DnsProviderTypeAdapter())
+      ..registerAdapter(ServerProviderTypeAdapter())
+      ..registerAdapter(UserTypeAdapter())
+      ..registerAdapter(BackupsProviderTypeAdapter())
+      ..registerAdapter(ServerInstallationWizardDataAdapter());
   }
 
   static Future<HiveAesCipher> getCipher() async {
@@ -91,65 +77,43 @@ class HiveConfig {
       await Hive.boxExists(BNames.wizardRunsBox);
 
   static Future<void> decryptBoxes() async {
-    try {
-      // load encrypted boxes into memory
-      final HiveAesCipher cipher = await getCipher();
+    // load encrypted boxes into memory
+    final HiveAesCipher cipher = await getCipher();
 
-      await Hive.openBox(
-        BNames.serverInstallationBox,
-        encryptionCipher: cipher,
-      );
-      await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
-      await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
-      await Hive.openBox(BNames.wizardRunsBox, encryptionCipher: cipher);
-      logger('successfully decrypted boxes');
-    } catch (error, stackTrace) {
-      logger(
-        'error initializing encrypted boxes',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
+    await Hive.openBox(BNames.serverInstallationBox, encryptionCipher: cipher);
+    await Hive.openBox(BNames.resourcesBox, encryptionCipher: cipher);
+    await Hive.openBox(BNames.wizardDataBox, encryptionCipher: cipher);
+    await Hive.openBox(BNames.wizardRunsBox, encryptionCipher: cipher);
   }
 
   // migrations
 
   static Future<void> performMigrations() async {
-    try {
-      // perform migration check
-      final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
+    // perform migration check
+    final localSettingsBox = await Hive.openBox(BNames.appSettingsBox);
 
-      // if it is an initial app launch, we do not need to perform any migrations
-      final int savedVersion = localSettingsBox.isEmpty
-          ? version
-          // if box was initialized, but database version was not introduced in
-          // it yet, it means that we have initial value
-          : await localSettingsBox.get(BNames.databaseVersion, defaultValue: 1);
+    // if it is an initial app launch, we do not need to perform any migrations
+    final int savedVersion = localSettingsBox.isEmpty
+        ? version
+        // if box was initialized, but database version was not introduced in
+        // it yet, it means that we have initial value
+        : await localSettingsBox.get(BNames.databaseVersion, defaultValue: 1);
 
-      /// launch migrations based on version
-      if (savedVersion < version) {
-        if (savedVersion < 2) {
-          await migrateFrom1To2();
-        }
-        if (savedVersion < 3) {
-          await migrateFrom2To3(localSettingsBox);
-        }
-        if (savedVersion < 4) {
-          await migrateFrom3To4();
-        }
+    /// launch migrations based on version
+    if (savedVersion < version) {
+      if (savedVersion < 2) {
+        await migrateFrom1To2();
       }
-
-      /// update saved version after successfull migrations
-      await localSettingsBox.put(BNames.databaseVersion, version);
-    } catch (error, stackTrace) {
-      logger(
-        'error running db migrations',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      rethrow;
+      if (savedVersion < 3) {
+        await migrateFrom2To3(localSettingsBox);
+      }
+      if (savedVersion < 4) {
+        await migrateFrom3To4();
+      }
     }
+
+    /// update saved version after successfull migrations
+    await localSettingsBox.put(BNames.databaseVersion, version);
   }
 
   /// introduce and populate resourcesBox
@@ -252,7 +216,6 @@ class HiveConfig {
         await resourcesBox.put(BNames.backblazeBucket, backblazeBucket);
       }
     }
-    logger('successfully migrated db from 1 to 2 version');
   }
 
   static Future<void> migrateFrom3To4() async {
@@ -407,7 +370,6 @@ class HiveConfig {
         migratedServers.first.uuid,
       );
     }
-    logger('successfully migrated db from 2 to 3 version');
   }
 }
 

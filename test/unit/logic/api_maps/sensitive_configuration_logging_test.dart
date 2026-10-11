@@ -17,17 +17,6 @@ import '../../../helpers/fixtures/json_fixture.dart';
 
 class _TlsContext extends Mock implements TlsContext {}
 
-class _Api extends ServerApi {
-  _Api({required super.transport, required this.logs});
-
-  final List<ConsoleLog> logs;
-
-  @override
-  void Function(String, {Object? error, StackTrace? stackTrace}) get logger =>
-      (final message, {final error, final stackTrace}) =>
-          logs.add(ManualConsoleLog(content: '$message $error $stackTrace'));
-}
-
 void main() {
   setUpAll(() => registerFallbackValue(TlsPolicy.strict));
   final operations = <String, Future<Object?> Function(ServerApi)>{
@@ -102,8 +91,7 @@ void main() {
             ),
           ).thenThrow(StateError('input-secret response-secret'));
         }
-        final api = _Api(
-          logs: logs,
+        final api = ServerApi(
           transport: GraphQLTransport(
             domainProvider: () => 'example.test',
             localeProvider: () => 'en',

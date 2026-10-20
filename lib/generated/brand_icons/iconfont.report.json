@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 3,
+  "generator": "glyphpact",
+  "generatorVersion": "1.1.0",
+  "status": "success",
+  "quality": "lossless",
+  "policy": {
+    "lossy": "error",
+    "unrepresentable": "error"
+  },
+  "discoveredIconCount": 6,
+  "glyphCount": 6,
+  "losslessGlyphCount": 6,
+  "approximatedGlyphCount": 0,
+  "skippedIconCount": 0,
+  "issueCount": 0,
+  "issues": [],
+  "retiredCodepointCount": 0,
+  "codepointsRemaining": 6394,
+  "rangeUtilization": 0.0009375,
+  "textFonts": [],
+  "font": {
+    "family": "BrandIcons",
+    "format": "OpenType/CFF",
+    "file": "fonts/BrandIcons.otf",
+    "sha256": "f6d46dd0a8ab1693fb764c59427298e58578e6be1f0ea613d56e3b54daf47050",
+    "bytes": 2840,
+    "unitsPerEm": 1000,
+    "ascent": 1000,
+    "descent": 0,
+    "tables": [
+      "CFF ",
+      "OS/2",
+      "cmap",
+      "head",
+      "hhea",
+      "hmtx",
+      "maxp",
+      "name",
+      "post"
+    ]
+  },
+  "layerFonts": [],
+  "dart": {
+    "className": "BrandIcons",
+    "file": "brand_icons.dart",
+    "fontPackage": null
+  },
+  "lockFile": "iconfont.lock.json",
+  "attributionFile": "ATTRIBUTION.md",
+  "glyphs": [
+    {
+      "source": "box.svg",
+      "name": "box",
+      "codepoint": "0xE000",
+      "sourceSha256": "671f695ed3aa614b75f26dde5fe7ff12533add994192ff978b44159c7c298579",
+      "geometrySha256": "fbf4b5290d889bcb30ec3989441ec1e9066d3f9211538e742a55e4a18becf11f",
+      "sourceBytes": 574,
+      "sourceShapes": 1,
+      "pathCommands": 47,
+      "viewBox": [
+        0.0,
+        0.0,
+        24.0,
+        24.0
+      ],
+      "fontBounds": [
+        150.0,
+        85.5,
+        853.0,
+        916.75
+      ],
+      "advance": 1000,
+      "matchTextDirection": false,
+      "conversion": "lossless",
+      "issues": [],
+      "metadata": {
+        "author": "IconScout / Chamestudio Private Limited",
+        "license": "Apache-2.0",
+        "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/cube.svg"
+      }
+    },
+    {
+      "source": "globe.svg",
+      "name": "globe",
+      "codepoint": "0xE001",
+      "sourceSha256": "77b2fceafead21fdc0ee615199d93e9ae199315f7286c9ebb11a1208f0a01c7d",
+      "geometrySha256": "a4ca2ea5649b4ab6f9f48f5a5d33315ba4654531a8b805d2c561db8119073fd3",
+      "sourceBytes": 813,
+      "sourceShapes": 1,
+      "pathCommands": 70,
+      "viewBox": [
+        0.0,
+        0.0,
+        24.0,
+        24.0
+      ],
+      "fontBounds": [
+        85.25,
+        85.0,
+        916.75,
+        915.0
+      ],
+      "advance": 1000,
+      "matchTextDirection": false,
+      "conversion": "lossless",
+      "issues": [],
+      "metadata": {
+        "author": "IconScout / Chamestudio Private Limited",
+        "license": "Apache-2.0",
+        "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/globe.svg"
+      }
+    },
+    {
+      "source": "save.svg",
+      "name": "save",
+      "codepoint": "0xE002",
+      "sourceSha256": "9ff0c76c95095f86fbb5e44337f098217b5ffc7cc27f51d13b81dccd24f8a584",
+      "geometrySha256": "0df9a16da3d54f636e3e32e0e67dfeda4e06b074f893cea860a0e039e5c60675",
+      "sourceBytes": 413,
+      "sourceShapes": 1,
+      "pathCommands": 45,
+      "viewBox": [
+        0.0,
+        0.0,
+        24.0,
+        24.0
+      ],
+      "fontBounds": [
+        125.0,
+        125.0,
+        875.0,
+        875.0
+      ],
+      "advance": 1000,
+      "matchTextDirection": false,
+      "conversion": "lossless",
+      "issues": [],
+      "metadata": {
+        "author": "IconScout / Chamestudio Private Limited",
+        "license": "Apache-2.0",
+        "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/save.svg"
+      }
+    },
+    {
+      "source": "server.svg",
+      "name": "server",
+      "codepoint": "0xE003",
+      "sourceSha256": "a3f783797878f9ddd1ed274ea281e6b4d0d5b27b9ab41df261f02f2733051e72",
+      "geometrySha256": "06acf3292bba690b3a91ccda253a6b95c985e4d136831fdc7cfefd22086d1480",
+      "sourceBytes": 834,
+      "sourceShapes": 1,
+      "pathCommands": 90,
+      "viewBox": [
+        0.0,
+        0.0,
+        24.0,
+        24.0
+      ],
+      "fontBounds": [
+        83.0,
+        83.0,
+        917.0,
+        917.0
+      ],
+      "advance": 1000,
+      "matchTextDirection": false,
+      "conversion": "lossless",
+      "issues": [],
+      "metadata": {
+        "author": "IconScout / Chamestudio Private Limited",
+        "license": "Apache-2.0",
+        "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/server.svg"
+      }
+    },
+    {
+      "source": "terminal.svg",
+      "name": "terminal",
+      "codepoint": "0xE004",
+      "sourceSha256": "69165e8fe252817a3e21ae89aae035fa8caa7d3fdcaacd2a07bbb8596a61d0e9",
+      "geometrySha256": "dd78fca49726e987687b83ea66884d3ced5b312c30dfd653596ee214a6d188ec",
+      "sourceBytes": 335,
+      "sourceShapes": 1,
+      "pathCommands": 36,
+      "viewBox": [
+        0.0,
+        0.0,
+        24.0,
+        24.0
+      ],
+      "fontBounds": [
+        42.0,
+        42.0,
+        958.0,
+        958.0
+      ],
+      "advance": 1000,
+      "matchTextDirection": false,
+      "conversion": "lossless",
+      "issues": [],
+      "metadata": {
+        "author": "IconScout / Chamestudio Private Limited",
+        "license": "Apache-2.0",
+        "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/window.svg"
+      }
+    },
+    {
+      "source": "users.svg",
+      "name": "users",
+      "codepoint": "0xE005",
+      "sourceSha256": "6c0632df1368ab5762d1a432f1d721adbb54fa27233f241881aacdeea93bbf33",
+      "geometrySha256": "cdce09864a614c2d2d5a89cd69ae7358b2a3ca3767709c2d714a12d8b756ae1d",
+      "sourceBytes": 445,
+      "sourceShapes": 1,
+      "pathCommands": 27,
+      "viewBox": [
+        0.0,
+        0.0,
+        24.0,
+        24.0
+      ],
+      "fontBounds": [
+        42.0,
+        146.0,
+        957.011039,
+        854.0
+      ],
+      "advance": 1000,
+      "matchTextDirection": false,
+      "conversion": "lossless",
+      "issues": [],
+      "metadata": {
+        "author": "IconScout / Chamestudio Private Limited",
+        "license": "Apache-2.0",
+        "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/users-alt.svg"
+      }
+    }
+  ],
+  "skippedIcons": []
+}

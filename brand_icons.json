@@ -1,0 +1,54 @@
+{
+  "input": "assets/icons/brand",
+  "output": "lib/generated/brand_icons",
+  "fontFamily": "BrandIcons",
+  "className": "BrandIcons",
+  "fontPackage": null,
+  "startCodepoint": "0xE000",
+  "unitsPerEm": 1000,
+  "padding": 0,
+  "clipToViewBox": true,
+  "policy": {
+    "lossy": "error",
+    "unrepresentable": "error"
+  },
+  "jobs": 1,
+  "icons": {
+    "save.svg": {
+      "name": "save",
+      "author": "IconScout / Chamestudio Private Limited",
+      "license": "Apache-2.0",
+      "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/save.svg"
+    },
+    "globe.svg": {
+      "name": "globe",
+      "author": "IconScout / Chamestudio Private Limited",
+      "license": "Apache-2.0",
+      "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/globe.svg"
+    },
+    "server.svg": {
+      "name": "server",
+      "author": "IconScout / Chamestudio Private Limited",
+      "license": "Apache-2.0",
+      "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/server.svg"
+    },
+    "box.svg": {
+      "name": "box",
+      "author": "IconScout / Chamestudio Private Limited",
+      "license": "Apache-2.0",
+      "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/cube.svg"
+    },
+    "users.svg": {
+      "name": "users",
+      "author": "IconScout / Chamestudio Private Limited",
+      "license": "Apache-2.0",
+      "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/users-alt.svg"
+    },
+    "terminal.svg": {
+      "name": "terminal",
+      "author": "IconScout / Chamestudio Private Limited",
+      "license": "Apache-2.0",
+      "sourceUrl": "https://github.com/Iconscout/unicons/blob/d0859416ab8d8e60dcfa1c0b50716874fcf11778/svg/line/window.svg"
+    }
+  }
+}

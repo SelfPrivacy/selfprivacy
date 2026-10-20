@@ -105,10 +105,12 @@ flutter:
     - assets/images/gifs/
     - assets/translations/
     - assets/markdown/
+    - assets/icons/brand/LICENSE
+    - lib/generated/brand_icons/ATTRIBUTION.md
   fonts:
     - family: BrandIcons
       fonts:
-        - asset: assets/fonts/BrandIcons.ttf
+        - asset: lib/generated/brand_icons/fonts/BrandIcons.otf
     - family: RobotoMono
       fonts:
         - asset: assets/fonts/RobotoMono-VariableFont_wght.ttf

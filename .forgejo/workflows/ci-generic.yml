@@ -23,8 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - name: Check generated catalog
+      - name: Check generated files
         run: |
+          nix build .#checks.x86_64-linux.icons --no-link
           nix run .#generate-widgetbook
           git diff --exit-code -- tool/widgetbook/main.directories.g.dart
       - name: Build Linux catalog

@@ -25,6 +25,7 @@
       ];
 
       imports = [
+        ./flake-parts/icons.nix
         ./flake-parts/shared.nix
         ./flake-parts/packages.nix
         ./flake-parts/runnables.nix

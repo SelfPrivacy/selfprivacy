@@ -103,3 +103,14 @@ Each named example has English light/dark PNGs in `test/widgetbook/goldens`.
 Linux and UTC are the reference environment.
 After updating baselines, inspect text, icons, assets and layout, then rerun comparisons.
 Hard shadows are expected test artifacts. With FVM, use `TZ=UTC fvm flutter test test/widgetbook`.
+
+## Custom icons
+
+BrandIcons SVGs live in `assets/icons/brand/` (Unicons Outline 3.0.6, Apache-2.0; see the bundled `LICENSE`). Add or edit an SVG there and set its public Dart `name` and provenance under `icons` in `brand_icons.json`. To remove an icon, remove its consumers, SVG and config entry.
+
+```console
+nix run .#generate-icons
+nix run .#check-icons
+```
+
+Commit the SVG/config changes and the entire `lib/generated/brand_icons/` output. Keep `iconfont.lock.json` for stable codepoints and `.glyphpact.json` for output ownership; do not edit generated files. The check leaves the checkout unchanged and runs in the existing Widgetbook CI job. After artwork changes, review affected Widgetbook goldens and rerun comparisons.

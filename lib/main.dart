@@ -8,6 +8,7 @@ import 'package:selfprivacy/config/bloc_observer.dart';
 import 'package:selfprivacy/config/brand_colors.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
+import 'package:selfprivacy/config/licenses.dart';
 import 'package:selfprivacy/config/localization.dart';
 import 'package:selfprivacy/config/preferences_repository/datasources/preferences_hive_datasource.dart';
 import 'package:selfprivacy/config/preferences_repository/inherited_preferences_repository.dart';
@@ -17,6 +18,7 @@ import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  registerAppLicenses();
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // try {

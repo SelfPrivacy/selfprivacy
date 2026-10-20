@@ -27,6 +27,7 @@
             ../selfprivacy.metainfo.xml
             ../test
             ../tool/widgetbook
+            ../brand_icons.json
           ];
         };
 

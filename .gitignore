@@ -123,3 +123,5 @@ android/app/.cxx/
 # fastlane runtime artifacts
 fastlane/report.xml
 fastlane/README.md
+
+/lib/generated/.brand_icons.glyphpact.lock

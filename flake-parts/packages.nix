@@ -14,6 +14,8 @@
         {
           default = sp.applicationNix;
 
+          glyphpact = callPackage ./packages/glyphpact.nix { };
+
           flutter-deps = callPackage ./packages/flutter-deps.nix { inherit sp; };
 
           widgetbook = callPackage ./packages/widgetbook.nix { inherit sp; };

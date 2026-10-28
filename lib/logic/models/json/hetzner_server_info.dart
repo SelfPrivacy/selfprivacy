@@ -198,7 +198,7 @@ class HetznerLocation {
 ///
 /// Please see Hetzner Docs for more details about Volumes.
 /// https://docs.hetzner.cloud/#volumes
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class HetznerVolume {
   HetznerVolume(
     this.id,
@@ -215,9 +215,35 @@ class HetznerVolume {
   /// Size in GB of the Volume
   final int size;
 
-  /// ID of the Server the Volume is attached to, null if it is not attached at all
-  @JsonKey(name: 'server')
+  /// ID of the Server the Volume is attached to, null if it is not attached.
+  @JsonKey(name: 'assignee', readValue: _readServerId)
   final int? serverId;
+
+  static Object? _readServerId(
+    final Map<dynamic, dynamic> json,
+    final String key,
+  ) {
+    // Older responses (and recorded cassettes) only have `server`. An explicit
+    // null assignee must not fall back to a stale value of the deprecated field.
+    if (!json.containsKey(key)) {
+      if (!json.containsKey('server')) {
+        throw const FormatException('Hetzner volume has no attachment field.');
+      }
+      return json['server'];
+    }
+    final assignee = json[key];
+    if (assignee == null) {
+      return null;
+    }
+    if (assignee is! Map<String, dynamic> || assignee['type'] != 'server') {
+      throw const FormatException('Unsupported Hetzner volume assignee.');
+    }
+    final id = assignee['id'];
+    if (id is! int || id < 1 || id > 9007199254740991) {
+      throw const FormatException('Invalid Hetzner volume assignee ID.');
+    }
+    return id;
+  }
 
   /// Name of the Resource. Is unique per Project.
   final String name;

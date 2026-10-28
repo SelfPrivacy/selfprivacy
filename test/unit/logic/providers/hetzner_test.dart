@@ -456,7 +456,10 @@ void main() {
     final attachRequest = clients.requests.singleWhere(
       (final request) => request.path == '/volumes/41/actions/attach',
     );
-    expect((attachRequest.data as Map<String, dynamic>)['server'], 7);
+    expect(attachRequest.data, {
+      'automount': true,
+      'assignee': {'id': 7, 'type': 'server'},
+    });
   });
 
   test('maps normalized metrics and uses the provider ID', () async {

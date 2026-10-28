@@ -3,7 +3,7 @@
     {
       "id": 41,
       "name": "selfprivacy-volume",
-      "server": 7,
+      "assignee": {"id": 7, "type": "server"},
       "location": {
         "id": 1,
         "name": "fsn1",

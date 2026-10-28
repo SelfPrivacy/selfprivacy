@@ -522,7 +522,10 @@ class HetznerApi extends RestApiMap {
     try {
       attachVolumeResponse = await client.post(
         '/volumes/${volume.id}/actions/attach',
-        data: {'automount': true, 'server': serverId},
+        data: {
+          'automount': true,
+          'assignee': {'id': serverId, 'type': 'server'},
+        },
       );
       success =
           attachVolumeResponse.data['action']['status'].toString() != 'error';

@@ -57,37 +57,45 @@ class BrandHeroScreen extends StatelessWidget {
     return Scaffold(
       endDrawerEnableOpenDragGesture: false,
       endDrawer: hasSupportDrawer ? const SupportDrawer() : null,
-      body: CustomScrollView(
-        slivers: [
-          HeroSliverAppBar(
-            heroTitle: heroTitle,
-            hasHeroIcon: hasHeroIcon,
-            hasBackButton: hasBackButton,
-            onBackButtonPressed: onBackButtonPressed,
-            heroIconWidget: heroIconWidget,
-            hasFlashButton: hasFlashButton,
-            ignoreBreakpoints: ignoreBreakpoints,
-          ),
-          if (heroSubtitle != null)
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  Text(
-                    heroSubtitle!,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ]),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: CustomScrollView(
+            slivers: [
+              HeroSliverAppBar(
+                heroTitle: heroTitle,
+                hasHeroIcon: hasHeroIcon,
+                hasBackButton: hasBackButton,
+                onBackButtonPressed: onBackButtonPressed,
+                heroIconWidget: heroIconWidget,
+                hasFlashButton: hasFlashButton,
+                ignoreBreakpoints: ignoreBreakpoints,
               ),
-            ),
-          SliverPadding(
-            padding: bodyPadding,
-            sliver: SliverList(delegate: SliverChildListDelegate(children)),
+              if (heroSubtitle != null)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      Text(
+                        heroSubtitle!,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ]),
+                  ),
+                ),
+              SliverPadding(
+                padding: bodyPadding,
+                sliver: SliverList(delegate: SliverChildListDelegate(children)),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -204,6 +204,30 @@ void main() {
     },
   );
 
+  testWidgets('hero content stays centered and constrained on wide screens', (
+    final tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    for (final (builder, width) in [
+      (brandHeroScreenMobile, 390.0),
+      (brandHeroScreenDesktopNested, 640.0),
+      (brandHeroScreenDesktopStandalone, 640.0),
+    ]) {
+      final example = builder(_Context()) as CatalogCase;
+      await pumpCase(tester, example);
+      final viewport = find.descendant(
+        of: find.byType(BrandHeroScreen),
+        matching: find.byType(CustomScrollView),
+      );
+      expect(tester.getSize(viewport).width, width);
+      expect(tester.getCenter(viewport).dx, example.width / 2);
+      expect(tester.getSize(find.byType(ListTile).first).width, width - 16);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
+
   testWidgets('collapsed hero keeps a pinned mobile app bar', (
     final tester,
   ) async {

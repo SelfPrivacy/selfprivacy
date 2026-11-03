@@ -32,7 +32,7 @@ void main() {
     'RemoveSshKey': (final api) => api.removeSshKey('bob', 'fixture-key'),
     'DeleteEmailPassword': (final api) =>
         api.deleteEmailPassword('bob', 'password-id'),
-    'ChangeTimezone': (final api) => api.setTimezone('Europe/Moscow'),
+    'ChangeTimezone': (final api) => api.setTimezone('Europe/Berlin'),
     'ChangeAutoUpgradeSettings': (final api) => api.setAutoUpgradeSettings(
       AutoUpgradeSettings(enable: true, allowReboot: true),
     ),

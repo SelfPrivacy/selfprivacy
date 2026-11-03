@@ -1,4 +1,16 @@
 {
+  "SetUpdateChannel": {
+    "__typename": "Mutation",
+    "system": {
+      "__typename": "SystemMutations",
+      "setUpdateChannel": {
+        "__typename": "GenericMutationReturn",
+        "success": true,
+        "code": 200,
+        "message": "Update channel set"
+      }
+    }
+  },
   "DeleteDeviceApiToken": {
     "__typename": "Mutation",
     "api": {
@@ -458,7 +470,7 @@
         "success": true,
         "code": 200,
         "message": "",
-        "timezone": "Europe/Moscow"
+        "timezone": "Europe/Berlin"
       }
     }
   },

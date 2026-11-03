@@ -1,0 +1,25 @@
+{
+  "__typename": "Query",
+  "system": {
+    "__typename": "System",
+    "updates": {
+      "__typename": "SystemUpdatesInfo",
+      "currentChannel": {
+        "__typename": "UpdateChannel",
+        "id": "custom",
+        "updateUrl": "git+https://example.org/server.git?ref=custom",
+        "name": "git+https://example.org/server.git?ref=custom",
+        "description": "Custom update channel"
+      },
+      "channels": [
+        {
+          "__typename": "UpdateChannel",
+          "id": "stable",
+          "updateUrl": "git+https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-config.git?ref=flakes",
+          "name": "Stable channel",
+          "description": "Latest tested release of SelfPrivacy system"
+        }
+      ]
+    }
+  }
+}

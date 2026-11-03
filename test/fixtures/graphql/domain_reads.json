@@ -1,4 +1,29 @@
 {
+  "GetUpdateChannels": {
+    "__typename": "Query",
+    "system": {
+      "__typename": "System",
+      "updates": {
+        "__typename": "SystemUpdatesInfo",
+        "currentChannel": {
+          "__typename": "UpdateChannel",
+          "id": "stable",
+          "updateUrl": "git+https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-config.git?ref=flakes",
+          "name": "Stable channel",
+          "description": "Latest tested release of SelfPrivacy system"
+        },
+        "channels": [
+          {
+            "__typename": "UpdateChannel",
+            "id": "stable",
+            "updateUrl": "git+https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-config.git?ref=flakes",
+            "name": "Stable channel",
+            "description": "Latest tested release of SelfPrivacy system"
+          }
+        ]
+      }
+    }
+  },
   "GetApiVersion": {
     "__typename": "Query",
     "api": {
@@ -221,7 +246,7 @@
           "__typename": "SshSettings",
           "enable": true
         },
-        "timezone": "Europe/Moscow"
+        "timezone": "Europe/Berlin"
       }
     }
   },

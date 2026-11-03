@@ -13,6 +13,7 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/models/update_channels.dart';
 
 /// Owns the stores for one server, but does not own its API transport.
 ///
@@ -100,6 +101,12 @@ class ServerStateCache {
       fetch: () => api().getSystemSettings(),
       refreshSeconds: 600,
     );
+    updateChannels = domain(
+      name: 'updateChannels',
+      fetch: () => api().getUpdateChannels(),
+      refreshSeconds: 600,
+      requiredApiVersion: '>=3.9.0',
+    );
     stores = List.unmodifiable([apiVersion, ..._constraints.keys]);
     final names = stores.map((final store) => store.name).toSet();
     final unknownOverrides = staleAfterOverrides.keys.toSet().difference(names);
@@ -120,6 +127,7 @@ class ServerStateCache {
   late final DomainStore<List<User>> users;
   late final DomainStore<List<String>> groups;
   late final DomainStore<SystemSettings> settings;
+  late final DomainStore<UpdateChannels> updateChannels;
 
   /// Read-only registry for refresh, invalidation and lifecycle operations.
   /// Supply pushed data through the typed domain fields.

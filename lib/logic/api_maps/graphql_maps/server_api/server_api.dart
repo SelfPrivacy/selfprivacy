@@ -34,6 +34,7 @@ import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/models/update_channels.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 
@@ -207,6 +208,32 @@ class ServerApi extends GraphQLApiMap
     final client = await getClient();
     return SystemSettings.fromGraphQL(
       requireServerApiData(await client.query$SystemSettings()).system,
+    );
+  }
+
+  Future<UpdateChannels> getUpdateChannels() async {
+    final client = await getClient();
+    return UpdateChannels.fromGraphQL(
+      requireServerApiData(
+        await client.query$GetUpdateChannels(),
+      ).system.updates,
+    );
+  }
+
+  Future<ServerMutationResult<void>> setUpdateChannel(
+    final String channelId,
+  ) async {
+    final client = await getClient();
+    final response = await client.mutate$SetUpdateChannel(
+      Options$Mutation$SetUpdateChannel(
+        variables: Variables$Mutation$SetUpdateChannel(channelId: channelId),
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    return decodeServerMutation(
+      response,
+      select: (final data) => data.system.setUpdateChannel,
     );
   }
 

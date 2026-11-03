@@ -215,7 +215,7 @@ void main() {
     expect((await api.getApiTokens()).first.name, 'Laptop');
     expect((await api.getRecoveryTokenStatus()).exists, isFalse);
     final settings = await api.getSystemSettings();
-    expect(settings.timezone, 'Europe/Moscow');
+    expect(settings.timezone, 'Europe/Berlin');
     expect(settings.sshSettings.enable, isTrue);
     final backups = await api.getBackupsConfiguration();
     expect(backups.autobackupPeriod, const Duration(hours: 1));
@@ -412,7 +412,7 @@ void main() {
     fail = true;
     await settings.refresh(force: true);
     expect(settings.value.data, same(previous));
-    expect(settings.value.data!.timezone, 'Europe/Moscow');
+    expect(settings.value.data!.timezone, 'Europe/Berlin');
     expect(settings.value.lastError, isA<OperationException>());
   });
 

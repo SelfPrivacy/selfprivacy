@@ -70,3 +70,31 @@ mutation ChangeSshSettings($settings: SSHSettingsInput!) {
     }
   }
 }
+
+fragment updateChannelFields on UpdateChannel {
+  id
+  updateUrl
+  name
+  description
+}
+
+query GetUpdateChannels {
+  system {
+    updates {
+      currentChannel {
+        ...updateChannelFields
+      }
+      channels {
+        ...updateChannelFields
+      }
+    }
+  }
+}
+
+mutation SetUpdateChannel($channelId: String!) {
+  system {
+    setUpdateChannel(channelId: $channelId) {
+      ...basicMutationReturnFields
+    }
+  }
+}

@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/cache/server_state_cache.dart';
+import 'package:selfprivacy/logic/connection/server_connection.dart';
 
 import '../../../../fakes/graphql/link_transport.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
@@ -90,6 +91,7 @@ void main() {
       'GetApiTokens',
       'RecoveryKey',
       'SystemSettings',
+      'GetUpdateChannels',
       'BackupConfiguration',
       'AllBackupSnapshots',
       'GetServerDiskVolumes',
@@ -105,8 +107,110 @@ void main() {
     expect(state.devices.value.data, hasLength(2));
     expect(state.backups.value.data, hasLength(1));
     expect(state.serverJobs.value.data, hasLength(1));
+    final channels = state.updateChannels.value.data!;
+    expect(channels.currentChannel.id, 'stable');
+    expect(channels.currentChannel.name, 'Stable channel');
+    expect(
+      channels.currentChannel.description,
+      'Latest tested release of SelfPrivacy system',
+    );
+    expect(
+      channels.currentChannel.updateUrl,
+      'git+https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-config.git?ref=flakes',
+    );
+    expect(channels.channels.single.id, 'stable');
+    expect(channels.channels.clear, throwsUnsupportedError);
     state.dispose();
   });
+
+  for (final apiVersion in ['3.8.9', '3.9.0', '3.10.0']) {
+    testWidgets(
+      'channel reads respect API $apiVersion without blocking settings',
+      (final tester) async {
+        final connection = ServerConnection(
+          api: api(),
+          serverId: 'server',
+          isAttached: () => true,
+          now: tester.binding.clock.now,
+        );
+        addTearDown(connection.dispose);
+        connection.cache.setVersion(Version.parse(apiVersion));
+        await connection.settings.refresh();
+        expect(connection.settings.value.data, isNotNull);
+        final result = await connection.updateChannels.refresh(force: true);
+        if (apiVersion == '3.8.9') {
+          expect(result, RefreshResult.unsupported);
+          expect(
+            connection.updateChannels.value.support,
+            DomainSupport.unsupported,
+          );
+          expect(requests, ['SystemSettings']);
+        } else {
+          expect(
+            connection.updateChannels.value.data!.currentChannel.id,
+            'stable',
+          );
+          expect(requests, ['SystemSettings', 'GetUpdateChannels']);
+        }
+        connection.dispose();
+      },
+    );
+  }
+
+  testWidgets('channel read errors retain data and leave settings usable', (
+    final tester,
+  ) async {
+    final state = cache(tester)..setVersion(Version(3, 9, 0));
+    await state.updateChannels.refresh();
+    final previous = state.updateChannels.value.data;
+    intercept = (final name) => name == 'GetUpdateChannels'
+        ? Stream.error(StateError('offline'))
+        : Stream.value(
+            Response(
+              response: const {},
+              data: responses[name] as Map<String, dynamic>,
+            ),
+          );
+    await state.updateChannels.refresh(force: true);
+    await state.settings.refresh();
+    expect(state.updateChannels.value.data, same(previous));
+    expect(state.updateChannels.value.lastError, isNotNull);
+    expect(state.settings.value.data, isNotNull);
+    expect(state.settings.value.lastError, isNull);
+    state.dispose();
+  });
+
+  testWidgets('custom current channel is not added to available choices', (
+    final tester,
+  ) async {
+    responses['GetUpdateChannels'] = loadJsonFixture(
+      'graphql/custom_update_channels.json',
+    );
+    final state = cache(tester)..setVersion(Version(3, 9, 0));
+    await state.updateChannels.refresh();
+    final channels = state.updateChannels.value.data!;
+    expect(channels.currentChannel.id, 'custom');
+    expect(
+      channels.currentChannel.updateUrl,
+      'git+https://example.org/server.git?ref=custom',
+    );
+    expect(channels.channels.map((final channel) => channel.id), ['stable']);
+    state.dispose();
+  });
+
+  testWidgets(
+    'malformed channel response fails without fabricating a current channel',
+    (final tester) async {
+      final data = responses['GetUpdateChannels'] as Map<String, dynamic>;
+      final system = data['system'] as Map<String, dynamic>;
+      (system['updates'] as Map<String, dynamic>).remove('currentChannel');
+      final state = cache(tester)..setVersion(Version(3, 9, 0));
+      await state.updateChannels.refresh();
+      expect(state.updateChannels.value.data, isNull);
+      expect(state.updateChannels.value.lastError, isNotNull);
+      state.dispose();
+    },
+  );
 
   testWidgets('registry preserves refresh policies and is immutable', (
     final tester,
@@ -124,6 +228,7 @@ void main() {
       'users': 60,
       'groups': 60,
       'settings': 600,
+      'updateChannels': 600,
     };
     expect(state.stores.map((final store) => store.name), intervals.keys);
     for (final store in state.stores) {

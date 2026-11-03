@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/recovery_key_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/services_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
+import 'package:selfprivacy/logic/connection/repositories/update_channels_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
@@ -79,6 +80,10 @@ class ServerConnection {
       reader: _reader(deviceStore),
     );
     groups = _reader(cache.groups);
+    updateChannels = UpdateChannelsRepository(
+      commands: commands,
+      reader: _reader(cache.updateChannels),
+    );
     recoveryKey = RecoveryKeyRepository(
       commands: commands,
       reader: _reader(cache.recoveryKeyStatus),
@@ -170,6 +175,7 @@ class ServerConnection {
   late final JobsRepository jobs;
   late final UsersRepository users;
   late final SettingsRepository settings;
+  late final UpdateChannelsRepository updateChannels;
   late final ServicesRepository services;
   late final BackupsRepository backups;
   late final VolumesRepository volumes;

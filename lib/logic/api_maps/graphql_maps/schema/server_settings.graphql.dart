@@ -320,6 +320,271 @@ extension ClientExtension$Fragment$fragmentDnsRecords on graphql.GraphQLClient {
   }
 }
 
+class Fragment$updateChannelFields {
+  Fragment$updateChannelFields({
+    required this.id,
+    required this.updateUrl,
+    required this.name,
+    required this.description,
+    this.$__typename = 'UpdateChannel',
+  });
+
+  factory Fragment$updateChannelFields.fromJson(Map<String, dynamic> json) {
+    final l$id = json['id'];
+    final l$updateUrl = json['updateUrl'];
+    final l$name = json['name'];
+    final l$description = json['description'];
+    final l$$__typename = json['__typename'];
+    return Fragment$updateChannelFields(
+      id: (l$id as String),
+      updateUrl: (l$updateUrl as String),
+      name: (l$name as String),
+      description: (l$description as String),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final String id;
+
+  final String updateUrl;
+
+  final String name;
+
+  final String description;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$id = id;
+    _resultData['id'] = l$id;
+    final l$updateUrl = updateUrl;
+    _resultData['updateUrl'] = l$updateUrl;
+    final l$name = name;
+    _resultData['name'] = l$name;
+    final l$description = description;
+    _resultData['description'] = l$description;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$id = id;
+    final l$updateUrl = updateUrl;
+    final l$name = name;
+    final l$description = description;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$id,
+      l$updateUrl,
+      l$name,
+      l$description,
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Fragment$updateChannelFields ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
+      return false;
+    }
+    final l$updateUrl = updateUrl;
+    final lOther$updateUrl = other.updateUrl;
+    if (l$updateUrl != lOther$updateUrl) {
+      return false;
+    }
+    final l$name = name;
+    final lOther$name = other.name;
+    if (l$name != lOther$name) {
+      return false;
+    }
+    final l$description = description;
+    final lOther$description = other.description;
+    if (l$description != lOther$description) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Fragment$updateChannelFields
+    on Fragment$updateChannelFields {
+  CopyWith$Fragment$updateChannelFields<Fragment$updateChannelFields>
+  get copyWith => CopyWith$Fragment$updateChannelFields(this, (i) => i);
+}
+
+abstract class CopyWith$Fragment$updateChannelFields<TRes> {
+  factory CopyWith$Fragment$updateChannelFields(
+    Fragment$updateChannelFields instance,
+    TRes Function(Fragment$updateChannelFields) then,
+  ) = _CopyWithImpl$Fragment$updateChannelFields;
+
+  factory CopyWith$Fragment$updateChannelFields.stub(TRes res) =
+      _CopyWithStubImpl$Fragment$updateChannelFields;
+
+  TRes call({
+    String? id,
+    String? updateUrl,
+    String? name,
+    String? description,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Fragment$updateChannelFields<TRes>
+    implements CopyWith$Fragment$updateChannelFields<TRes> {
+  _CopyWithImpl$Fragment$updateChannelFields(this._instance, this._then);
+
+  final Fragment$updateChannelFields _instance;
+
+  final TRes Function(Fragment$updateChannelFields) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? id = _undefined,
+    Object? updateUrl = _undefined,
+    Object? name = _undefined,
+    Object? description = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Fragment$updateChannelFields(
+      id: id == _undefined || id == null ? _instance.id : (id as String),
+      updateUrl: updateUrl == _undefined || updateUrl == null
+          ? _instance.updateUrl
+          : (updateUrl as String),
+      name: name == _undefined || name == null
+          ? _instance.name
+          : (name as String),
+      description: description == _undefined || description == null
+          ? _instance.description
+          : (description as String),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+}
+
+class _CopyWithStubImpl$Fragment$updateChannelFields<TRes>
+    implements CopyWith$Fragment$updateChannelFields<TRes> {
+  _CopyWithStubImpl$Fragment$updateChannelFields(this._res);
+
+  TRes _res;
+
+  call({
+    String? id,
+    String? updateUrl,
+    String? name,
+    String? description,
+    String? $__typename,
+  }) => _res;
+}
+
+const fragmentDefinitionupdateChannelFields = FragmentDefinitionNode(
+  name: NameNode(value: 'updateChannelFields'),
+  typeCondition: TypeConditionNode(
+    on: NamedTypeNode(name: NameNode(value: 'UpdateChannel'), isNonNull: false),
+  ),
+  directives: [],
+  selectionSet: SelectionSetNode(
+    selections: [
+      FieldNode(
+        name: NameNode(value: 'id'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'updateUrl'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'name'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: 'description'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+      FieldNode(
+        name: NameNode(value: '__typename'),
+        alias: null,
+        arguments: [],
+        directives: [],
+        selectionSet: null,
+      ),
+    ],
+  ),
+);
+const documentNodeFragmentupdateChannelFields = DocumentNode(
+  definitions: [fragmentDefinitionupdateChannelFields],
+);
+
+extension ClientExtension$Fragment$updateChannelFields
+    on graphql.GraphQLClient {
+  void writeFragment$updateChannelFields({
+    required Fragment$updateChannelFields data,
+    required Map<String, dynamic> idFields,
+    bool broadcast = true,
+  }) => this.writeFragment(
+    graphql.FragmentRequest(
+      idFields: idFields,
+      fragment: const graphql.Fragment(
+        fragmentName: 'updateChannelFields',
+        document: documentNodeFragmentupdateChannelFields,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
+
+  Fragment$updateChannelFields? readFragment$updateChannelFields({
+    required Map<String, dynamic> idFields,
+    bool optimistic = true,
+  }) {
+    final result = this.readFragment(
+      graphql.FragmentRequest(
+        idFields: idFields,
+        fragment: const graphql.Fragment(
+          fragmentName: 'updateChannelFields',
+          document: documentNodeFragmentupdateChannelFields,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null
+        ? null
+        : Fragment$updateChannelFields.fromJson(result);
+  }
+}
+
 class Query$SystemSettings {
   Query$SystemSettings({required this.system, this.$__typename = 'Query'});
 
@@ -4750,4 +5015,1357 @@ class _CopyWithStubImpl$Mutation$ChangeSshSettings$system$changeSshSettings<
     String? $__typename,
     bool? enable,
   }) => _res;
+}
+
+class Query$GetUpdateChannels {
+  Query$GetUpdateChannels({required this.system, this.$__typename = 'Query'});
+
+  factory Query$GetUpdateChannels.fromJson(Map<String, dynamic> json) {
+    final l$system = json['system'];
+    final l$$__typename = json['__typename'];
+    return Query$GetUpdateChannels(
+      system: Query$GetUpdateChannels$system.fromJson(
+        (l$system as Map<String, dynamic>),
+      ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Query$GetUpdateChannels$system system;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$system, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetUpdateChannels || runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetUpdateChannels on Query$GetUpdateChannels {
+  CopyWith$Query$GetUpdateChannels<Query$GetUpdateChannels> get copyWith =>
+      CopyWith$Query$GetUpdateChannels(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetUpdateChannels<TRes> {
+  factory CopyWith$Query$GetUpdateChannels(
+    Query$GetUpdateChannels instance,
+    TRes Function(Query$GetUpdateChannels) then,
+  ) = _CopyWithImpl$Query$GetUpdateChannels;
+
+  factory CopyWith$Query$GetUpdateChannels.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetUpdateChannels;
+
+  TRes call({Query$GetUpdateChannels$system? system, String? $__typename});
+  CopyWith$Query$GetUpdateChannels$system<TRes> get system;
+}
+
+class _CopyWithImpl$Query$GetUpdateChannels<TRes>
+    implements CopyWith$Query$GetUpdateChannels<TRes> {
+  _CopyWithImpl$Query$GetUpdateChannels(this._instance, this._then);
+
+  final Query$GetUpdateChannels _instance;
+
+  final TRes Function(Query$GetUpdateChannels) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Query$GetUpdateChannels(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Query$GetUpdateChannels$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Query$GetUpdateChannels$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Query$GetUpdateChannels$system(
+      local$system,
+      (e) => call(system: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Query$GetUpdateChannels<TRes>
+    implements CopyWith$Query$GetUpdateChannels<TRes> {
+  _CopyWithStubImpl$Query$GetUpdateChannels(this._res);
+
+  TRes _res;
+
+  call({Query$GetUpdateChannels$system? system, String? $__typename}) => _res;
+
+  CopyWith$Query$GetUpdateChannels$system<TRes> get system =>
+      CopyWith$Query$GetUpdateChannels$system.stub(_res);
+}
+
+const documentNodeQueryGetUpdateChannels = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'GetUpdateChannels'),
+      variableDefinitions: [],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
+          FieldNode(
+            name: NameNode(value: 'system'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'updates'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FieldNode(
+                        name: NameNode(value: 'currentChannel'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'updateChannelFields'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'channels'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(
+                          selections: [
+                            FragmentSpreadNode(
+                              name: NameNode(value: 'updateChannelFields'),
+                              directives: [],
+                            ),
+                            FieldNode(
+                              name: NameNode(value: '__typename'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null,
+                            ),
+                          ],
+                        ),
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ],
+      ),
+    ),
+    fragmentDefinitionupdateChannelFields,
+  ],
+);
+Query$GetUpdateChannels _parserFn$Query$GetUpdateChannels(
+  Map<String, dynamic> data,
+) => Query$GetUpdateChannels.fromJson(data);
+typedef OnQueryComplete$Query$GetUpdateChannels =
+    FutureOr<void> Function(Map<String, dynamic>?, Query$GetUpdateChannels?);
+
+class Options$Query$GetUpdateChannels
+    extends graphql.QueryOptions<Query$GetUpdateChannels> {
+  Options$Query$GetUpdateChannels({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$GetUpdateChannels? typedOptimisticResult,
+    Duration? pollInterval,
+    graphql.Context? context,
+    OnQueryComplete$Query$GetUpdateChannels? onComplete,
+    graphql.OnQueryError? onError,
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null ? null : _parserFn$Query$GetUpdateChannels(data),
+               ),
+         onError: onError,
+         document: documentNodeQueryGetUpdateChannels,
+         parserFn: _parserFn$Query$GetUpdateChannels,
+       );
+
+  final OnQueryComplete$Query$GetUpdateChannels? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
+}
+
+class WatchOptions$Query$GetUpdateChannels
+    extends graphql.WatchQueryOptions<Query$GetUpdateChannels> {
+  WatchOptions$Query$GetUpdateChannels({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$GetUpdateChannels? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryGetUpdateChannels,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$GetUpdateChannels,
+       );
+}
+
+class FetchMoreOptions$Query$GetUpdateChannels
+    extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$GetUpdateChannels({
+    required graphql.UpdateQuery updateQuery,
+  }) : super(
+         updateQuery: updateQuery,
+         document: documentNodeQueryGetUpdateChannels,
+       );
+}
+
+extension ClientExtension$Query$GetUpdateChannels on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$GetUpdateChannels>> query$GetUpdateChannels([
+    Options$Query$GetUpdateChannels? options,
+  ]) async => await this.query(options ?? Options$Query$GetUpdateChannels());
+
+  graphql.ObservableQuery<Query$GetUpdateChannels>
+  watchQuery$GetUpdateChannels([
+    WatchOptions$Query$GetUpdateChannels? options,
+  ]) => this.watchQuery(options ?? WatchOptions$Query$GetUpdateChannels());
+
+  void writeQuery$GetUpdateChannels({
+    required Query$GetUpdateChannels data,
+    bool broadcast = true,
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(
+        document: documentNodeQueryGetUpdateChannels,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
+
+  Query$GetUpdateChannels? readQuery$GetUpdateChannels({
+    bool optimistic = true,
+  }) {
+    final result = this.readQuery(
+      graphql.Request(
+        operation: graphql.Operation(
+          document: documentNodeQueryGetUpdateChannels,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Query$GetUpdateChannels.fromJson(result);
+  }
+}
+
+class Query$GetUpdateChannels$system {
+  Query$GetUpdateChannels$system({
+    required this.updates,
+    this.$__typename = 'System',
+  });
+
+  factory Query$GetUpdateChannels$system.fromJson(Map<String, dynamic> json) {
+    final l$updates = json['updates'];
+    final l$$__typename = json['__typename'];
+    return Query$GetUpdateChannels$system(
+      updates: Query$GetUpdateChannels$system$updates.fromJson(
+        (l$updates as Map<String, dynamic>),
+      ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Query$GetUpdateChannels$system$updates updates;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$updates = updates;
+    _resultData['updates'] = l$updates.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$updates = updates;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$updates, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetUpdateChannels$system ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$updates = updates;
+    final lOther$updates = other.updates;
+    if (l$updates != lOther$updates) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetUpdateChannels$system
+    on Query$GetUpdateChannels$system {
+  CopyWith$Query$GetUpdateChannels$system<Query$GetUpdateChannels$system>
+  get copyWith => CopyWith$Query$GetUpdateChannels$system(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetUpdateChannels$system<TRes> {
+  factory CopyWith$Query$GetUpdateChannels$system(
+    Query$GetUpdateChannels$system instance,
+    TRes Function(Query$GetUpdateChannels$system) then,
+  ) = _CopyWithImpl$Query$GetUpdateChannels$system;
+
+  factory CopyWith$Query$GetUpdateChannels$system.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetUpdateChannels$system;
+
+  TRes call({
+    Query$GetUpdateChannels$system$updates? updates,
+    String? $__typename,
+  });
+  CopyWith$Query$GetUpdateChannels$system$updates<TRes> get updates;
+}
+
+class _CopyWithImpl$Query$GetUpdateChannels$system<TRes>
+    implements CopyWith$Query$GetUpdateChannels$system<TRes> {
+  _CopyWithImpl$Query$GetUpdateChannels$system(this._instance, this._then);
+
+  final Query$GetUpdateChannels$system _instance;
+
+  final TRes Function(Query$GetUpdateChannels$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? updates = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Query$GetUpdateChannels$system(
+          updates: updates == _undefined || updates == null
+              ? _instance.updates
+              : (updates as Query$GetUpdateChannels$system$updates),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Query$GetUpdateChannels$system$updates<TRes> get updates {
+    final local$updates = _instance.updates;
+    return CopyWith$Query$GetUpdateChannels$system$updates(
+      local$updates,
+      (e) => call(updates: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Query$GetUpdateChannels$system<TRes>
+    implements CopyWith$Query$GetUpdateChannels$system<TRes> {
+  _CopyWithStubImpl$Query$GetUpdateChannels$system(this._res);
+
+  TRes _res;
+
+  call({
+    Query$GetUpdateChannels$system$updates? updates,
+    String? $__typename,
+  }) => _res;
+
+  CopyWith$Query$GetUpdateChannels$system$updates<TRes> get updates =>
+      CopyWith$Query$GetUpdateChannels$system$updates.stub(_res);
+}
+
+class Query$GetUpdateChannels$system$updates {
+  Query$GetUpdateChannels$system$updates({
+    required this.currentChannel,
+    required this.channels,
+    this.$__typename = 'SystemUpdatesInfo',
+  });
+
+  factory Query$GetUpdateChannels$system$updates.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$currentChannel = json['currentChannel'];
+    final l$channels = json['channels'];
+    final l$$__typename = json['__typename'];
+    return Query$GetUpdateChannels$system$updates(
+      currentChannel: Fragment$updateChannelFields.fromJson(
+        (l$currentChannel as Map<String, dynamic>),
+      ),
+      channels: (l$channels as List<dynamic>)
+          .map(
+            (e) => Fragment$updateChannelFields.fromJson(
+              (e as Map<String, dynamic>),
+            ),
+          )
+          .toList(),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Fragment$updateChannelFields currentChannel;
+
+  final List<Fragment$updateChannelFields> channels;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$currentChannel = currentChannel;
+    _resultData['currentChannel'] = l$currentChannel.toJson();
+    final l$channels = channels;
+    _resultData['channels'] = l$channels.map((e) => e.toJson()).toList();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$currentChannel = currentChannel;
+    final l$channels = channels;
+    final l$$__typename = $__typename;
+    return Object.hashAll([
+      l$currentChannel,
+      Object.hashAll(l$channels.map((v) => v)),
+      l$$__typename,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetUpdateChannels$system$updates ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$currentChannel = currentChannel;
+    final lOther$currentChannel = other.currentChannel;
+    if (l$currentChannel != lOther$currentChannel) {
+      return false;
+    }
+    final l$channels = channels;
+    final lOther$channels = other.channels;
+    if (l$channels.length != lOther$channels.length) {
+      return false;
+    }
+    for (int i = 0; i < l$channels.length; i++) {
+      final l$channels$entry = l$channels[i];
+      final lOther$channels$entry = lOther$channels[i];
+      if (l$channels$entry != lOther$channels$entry) {
+        return false;
+      }
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetUpdateChannels$system$updates
+    on Query$GetUpdateChannels$system$updates {
+  CopyWith$Query$GetUpdateChannels$system$updates<
+    Query$GetUpdateChannels$system$updates
+  >
+  get copyWith =>
+      CopyWith$Query$GetUpdateChannels$system$updates(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetUpdateChannels$system$updates<TRes> {
+  factory CopyWith$Query$GetUpdateChannels$system$updates(
+    Query$GetUpdateChannels$system$updates instance,
+    TRes Function(Query$GetUpdateChannels$system$updates) then,
+  ) = _CopyWithImpl$Query$GetUpdateChannels$system$updates;
+
+  factory CopyWith$Query$GetUpdateChannels$system$updates.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetUpdateChannels$system$updates;
+
+  TRes call({
+    Fragment$updateChannelFields? currentChannel,
+    List<Fragment$updateChannelFields>? channels,
+    String? $__typename,
+  });
+  CopyWith$Fragment$updateChannelFields<TRes> get currentChannel;
+  TRes channels(
+    Iterable<Fragment$updateChannelFields> Function(
+      Iterable<
+        CopyWith$Fragment$updateChannelFields<Fragment$updateChannelFields>
+      >,
+    )
+    _fn,
+  );
+}
+
+class _CopyWithImpl$Query$GetUpdateChannels$system$updates<TRes>
+    implements CopyWith$Query$GetUpdateChannels$system$updates<TRes> {
+  _CopyWithImpl$Query$GetUpdateChannels$system$updates(
+    this._instance,
+    this._then,
+  );
+
+  final Query$GetUpdateChannels$system$updates _instance;
+
+  final TRes Function(Query$GetUpdateChannels$system$updates) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? currentChannel = _undefined,
+    Object? channels = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Query$GetUpdateChannels$system$updates(
+      currentChannel: currentChannel == _undefined || currentChannel == null
+          ? _instance.currentChannel
+          : (currentChannel as Fragment$updateChannelFields),
+      channels: channels == _undefined || channels == null
+          ? _instance.channels
+          : (channels as List<Fragment$updateChannelFields>),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+
+  CopyWith$Fragment$updateChannelFields<TRes> get currentChannel {
+    final local$currentChannel = _instance.currentChannel;
+    return CopyWith$Fragment$updateChannelFields(
+      local$currentChannel,
+      (e) => call(currentChannel: e),
+    );
+  }
+
+  TRes channels(
+    Iterable<Fragment$updateChannelFields> Function(
+      Iterable<
+        CopyWith$Fragment$updateChannelFields<Fragment$updateChannelFields>
+      >,
+    )
+    _fn,
+  ) => call(
+    channels: _fn(
+      _instance.channels.map(
+        (e) => CopyWith$Fragment$updateChannelFields(e, (i) => i),
+      ),
+    ).toList(),
+  );
+}
+
+class _CopyWithStubImpl$Query$GetUpdateChannels$system$updates<TRes>
+    implements CopyWith$Query$GetUpdateChannels$system$updates<TRes> {
+  _CopyWithStubImpl$Query$GetUpdateChannels$system$updates(this._res);
+
+  TRes _res;
+
+  call({
+    Fragment$updateChannelFields? currentChannel,
+    List<Fragment$updateChannelFields>? channels,
+    String? $__typename,
+  }) => _res;
+
+  CopyWith$Fragment$updateChannelFields<TRes> get currentChannel =>
+      CopyWith$Fragment$updateChannelFields.stub(_res);
+
+  channels(_fn) => _res;
+}
+
+class Variables$Mutation$SetUpdateChannel {
+  factory Variables$Mutation$SetUpdateChannel({required String channelId}) =>
+      Variables$Mutation$SetUpdateChannel._({r'channelId': channelId});
+
+  Variables$Mutation$SetUpdateChannel._(this._$data);
+
+  factory Variables$Mutation$SetUpdateChannel.fromJson(
+    Map<String, dynamic> data,
+  ) {
+    final result$data = <String, dynamic>{};
+    final l$channelId = data['channelId'];
+    result$data['channelId'] = (l$channelId as String);
+    return Variables$Mutation$SetUpdateChannel._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  String get channelId => (_$data['channelId'] as String);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$channelId = channelId;
+    result$data['channelId'] = l$channelId;
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$SetUpdateChannel<
+    Variables$Mutation$SetUpdateChannel
+  >
+  get copyWith => CopyWith$Variables$Mutation$SetUpdateChannel(this, (i) => i);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Variables$Mutation$SetUpdateChannel ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$channelId = channelId;
+    final lOther$channelId = other.channelId;
+    if (l$channelId != lOther$channelId) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$channelId = channelId;
+    return Object.hashAll([l$channelId]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$SetUpdateChannel<TRes> {
+  factory CopyWith$Variables$Mutation$SetUpdateChannel(
+    Variables$Mutation$SetUpdateChannel instance,
+    TRes Function(Variables$Mutation$SetUpdateChannel) then,
+  ) = _CopyWithImpl$Variables$Mutation$SetUpdateChannel;
+
+  factory CopyWith$Variables$Mutation$SetUpdateChannel.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$SetUpdateChannel;
+
+  TRes call({String? channelId});
+}
+
+class _CopyWithImpl$Variables$Mutation$SetUpdateChannel<TRes>
+    implements CopyWith$Variables$Mutation$SetUpdateChannel<TRes> {
+  _CopyWithImpl$Variables$Mutation$SetUpdateChannel(this._instance, this._then);
+
+  final Variables$Mutation$SetUpdateChannel _instance;
+
+  final TRes Function(Variables$Mutation$SetUpdateChannel) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? channelId = _undefined}) => _then(
+    Variables$Mutation$SetUpdateChannel._({
+      ..._instance._$data,
+      if (channelId != _undefined && channelId != null)
+        'channelId': (channelId as String),
+    }),
+  );
+}
+
+class _CopyWithStubImpl$Variables$Mutation$SetUpdateChannel<TRes>
+    implements CopyWith$Variables$Mutation$SetUpdateChannel<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$SetUpdateChannel(this._res);
+
+  TRes _res;
+
+  call({String? channelId}) => _res;
+}
+
+class Mutation$SetUpdateChannel {
+  Mutation$SetUpdateChannel({
+    required this.system,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$SetUpdateChannel.fromJson(Map<String, dynamic> json) {
+    final l$system = json['system'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetUpdateChannel(
+      system: Mutation$SetUpdateChannel$system.fromJson(
+        (l$system as Map<String, dynamic>),
+      ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$SetUpdateChannel$system system;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$system = system;
+    _resultData['system'] = l$system.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$system = system;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$system, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Mutation$SetUpdateChannel ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$system = system;
+    final lOther$system = other.system;
+    if (l$system != lOther$system) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetUpdateChannel
+    on Mutation$SetUpdateChannel {
+  CopyWith$Mutation$SetUpdateChannel<Mutation$SetUpdateChannel> get copyWith =>
+      CopyWith$Mutation$SetUpdateChannel(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$SetUpdateChannel<TRes> {
+  factory CopyWith$Mutation$SetUpdateChannel(
+    Mutation$SetUpdateChannel instance,
+    TRes Function(Mutation$SetUpdateChannel) then,
+  ) = _CopyWithImpl$Mutation$SetUpdateChannel;
+
+  factory CopyWith$Mutation$SetUpdateChannel.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetUpdateChannel;
+
+  TRes call({Mutation$SetUpdateChannel$system? system, String? $__typename});
+  CopyWith$Mutation$SetUpdateChannel$system<TRes> get system;
+}
+
+class _CopyWithImpl$Mutation$SetUpdateChannel<TRes>
+    implements CopyWith$Mutation$SetUpdateChannel<TRes> {
+  _CopyWithImpl$Mutation$SetUpdateChannel(this._instance, this._then);
+
+  final Mutation$SetUpdateChannel _instance;
+
+  final TRes Function(Mutation$SetUpdateChannel) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? system = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Mutation$SetUpdateChannel(
+          system: system == _undefined || system == null
+              ? _instance.system
+              : (system as Mutation$SetUpdateChannel$system),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Mutation$SetUpdateChannel$system<TRes> get system {
+    final local$system = _instance.system;
+    return CopyWith$Mutation$SetUpdateChannel$system(
+      local$system,
+      (e) => call(system: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetUpdateChannel<TRes>
+    implements CopyWith$Mutation$SetUpdateChannel<TRes> {
+  _CopyWithStubImpl$Mutation$SetUpdateChannel(this._res);
+
+  TRes _res;
+
+  call({Mutation$SetUpdateChannel$system? system, String? $__typename}) => _res;
+
+  CopyWith$Mutation$SetUpdateChannel$system<TRes> get system =>
+      CopyWith$Mutation$SetUpdateChannel$system.stub(_res);
+}
+
+const documentNodeMutationSetUpdateChannel = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'SetUpdateChannel'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'channelId')),
+          type: NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
+          FieldNode(
+            name: NameNode(value: 'system'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'setUpdateChannel'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'channelId'),
+                      value: VariableNode(name: NameNode(value: 'channelId')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ],
+      ),
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
+);
+Mutation$SetUpdateChannel _parserFn$Mutation$SetUpdateChannel(
+  Map<String, dynamic> data,
+) => Mutation$SetUpdateChannel.fromJson(data);
+typedef OnMutationCompleted$Mutation$SetUpdateChannel =
+    FutureOr<void> Function(Map<String, dynamic>?, Mutation$SetUpdateChannel?);
+
+class Options$Mutation$SetUpdateChannel
+    extends graphql.MutationOptions<Mutation$SetUpdateChannel> {
+  Options$Mutation$SetUpdateChannel({
+    String? operationName,
+    required Variables$Mutation$SetUpdateChannel variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$SetUpdateChannel? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$SetUpdateChannel? onCompleted,
+    graphql.OnMutationUpdate<Mutation$SetUpdateChannel>? update,
+    graphql.OnError? onError,
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$SetUpdateChannel(data),
+               ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationSetUpdateChannel,
+         parserFn: _parserFn$Mutation$SetUpdateChannel,
+       );
+
+  final OnMutationCompleted$Mutation$SetUpdateChannel? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
+}
+
+class WatchOptions$Mutation$SetUpdateChannel
+    extends graphql.WatchQueryOptions<Mutation$SetUpdateChannel> {
+  WatchOptions$Mutation$SetUpdateChannel({
+    String? operationName,
+    required Variables$Mutation$SetUpdateChannel variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$SetUpdateChannel? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationSetUpdateChannel,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$SetUpdateChannel,
+       );
+}
+
+extension ClientExtension$Mutation$SetUpdateChannel on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$SetUpdateChannel>>
+  mutate$SetUpdateChannel(Options$Mutation$SetUpdateChannel options) async =>
+      await this.mutate(options);
+
+  graphql.ObservableQuery<Mutation$SetUpdateChannel>
+  watchMutation$SetUpdateChannel(
+    WatchOptions$Mutation$SetUpdateChannel options,
+  ) => this.watchMutation(options);
+}
+
+class Mutation$SetUpdateChannel$system {
+  Mutation$SetUpdateChannel$system({
+    required this.setUpdateChannel,
+    this.$__typename = 'SystemMutations',
+  });
+
+  factory Mutation$SetUpdateChannel$system.fromJson(Map<String, dynamic> json) {
+    final l$setUpdateChannel = json['setUpdateChannel'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetUpdateChannel$system(
+      setUpdateChannel:
+          Mutation$SetUpdateChannel$system$setUpdateChannel.fromJson(
+            (l$setUpdateChannel as Map<String, dynamic>),
+          ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$SetUpdateChannel$system$setUpdateChannel setUpdateChannel;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$setUpdateChannel = setUpdateChannel;
+    _resultData['setUpdateChannel'] = l$setUpdateChannel.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$setUpdateChannel = setUpdateChannel;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$setUpdateChannel, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Mutation$SetUpdateChannel$system ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$setUpdateChannel = setUpdateChannel;
+    final lOther$setUpdateChannel = other.setUpdateChannel;
+    if (l$setUpdateChannel != lOther$setUpdateChannel) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetUpdateChannel$system
+    on Mutation$SetUpdateChannel$system {
+  CopyWith$Mutation$SetUpdateChannel$system<Mutation$SetUpdateChannel$system>
+  get copyWith => CopyWith$Mutation$SetUpdateChannel$system(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$SetUpdateChannel$system<TRes> {
+  factory CopyWith$Mutation$SetUpdateChannel$system(
+    Mutation$SetUpdateChannel$system instance,
+    TRes Function(Mutation$SetUpdateChannel$system) then,
+  ) = _CopyWithImpl$Mutation$SetUpdateChannel$system;
+
+  factory CopyWith$Mutation$SetUpdateChannel$system.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetUpdateChannel$system;
+
+  TRes call({
+    Mutation$SetUpdateChannel$system$setUpdateChannel? setUpdateChannel,
+    String? $__typename,
+  });
+  CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes>
+  get setUpdateChannel;
+}
+
+class _CopyWithImpl$Mutation$SetUpdateChannel$system<TRes>
+    implements CopyWith$Mutation$SetUpdateChannel$system<TRes> {
+  _CopyWithImpl$Mutation$SetUpdateChannel$system(this._instance, this._then);
+
+  final Mutation$SetUpdateChannel$system _instance;
+
+  final TRes Function(Mutation$SetUpdateChannel$system) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? setUpdateChannel = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Mutation$SetUpdateChannel$system(
+      setUpdateChannel:
+          setUpdateChannel == _undefined || setUpdateChannel == null
+          ? _instance.setUpdateChannel
+          : (setUpdateChannel
+                as Mutation$SetUpdateChannel$system$setUpdateChannel),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+
+  CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes>
+  get setUpdateChannel {
+    final local$setUpdateChannel = _instance.setUpdateChannel;
+    return CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel(
+      local$setUpdateChannel,
+      (e) => call(setUpdateChannel: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetUpdateChannel$system<TRes>
+    implements CopyWith$Mutation$SetUpdateChannel$system<TRes> {
+  _CopyWithStubImpl$Mutation$SetUpdateChannel$system(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$SetUpdateChannel$system$setUpdateChannel? setUpdateChannel,
+    String? $__typename,
+  }) => _res;
+
+  CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes>
+  get setUpdateChannel =>
+      CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel.stub(_res);
+}
+
+class Mutation$SetUpdateChannel$system$setUpdateChannel
+    implements Fragment$basicMutationReturnFields$$GenericMutationReturn {
+  Mutation$SetUpdateChannel$system$setUpdateChannel({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'GenericMutationReturn',
+  });
+
+  factory Mutation$SetUpdateChannel$system$setUpdateChannel.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetUpdateChannel$system$setUpdateChannel(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$code, l$message, l$success, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Mutation$SetUpdateChannel$system$setUpdateChannel ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetUpdateChannel$system$setUpdateChannel
+    on Mutation$SetUpdateChannel$system$setUpdateChannel {
+  CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<
+    Mutation$SetUpdateChannel$system$setUpdateChannel
+  >
+  get copyWith => CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel(
+    this,
+    (i) => i,
+  );
+}
+
+abstract class CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<
+  TRes
+> {
+  factory CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel(
+    Mutation$SetUpdateChannel$system$setUpdateChannel instance,
+    TRes Function(Mutation$SetUpdateChannel$system$setUpdateChannel) then,
+  ) = _CopyWithImpl$Mutation$SetUpdateChannel$system$setUpdateChannel;
+
+  factory CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel.stub(
+    TRes res,
+  ) = _CopyWithStubImpl$Mutation$SetUpdateChannel$system$setUpdateChannel;
+
+  TRes call({int? code, String? message, bool? success, String? $__typename});
+}
+
+class _CopyWithImpl$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes>
+    implements
+        CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes> {
+  _CopyWithImpl$Mutation$SetUpdateChannel$system$setUpdateChannel(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$SetUpdateChannel$system$setUpdateChannel _instance;
+
+  final TRes Function(Mutation$SetUpdateChannel$system$setUpdateChannel) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Mutation$SetUpdateChannel$system$setUpdateChannel(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+}
+
+class _CopyWithStubImpl$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes>
+    implements
+        CopyWith$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes> {
+  _CopyWithStubImpl$Mutation$SetUpdateChannel$system$setUpdateChannel(
+    this._res,
+  );
+
+  TRes _res;
+
+  call({int? code, String? message, bool? success, String? $__typename}) =>
+      _res;
 }

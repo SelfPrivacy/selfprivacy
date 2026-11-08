@@ -552,6 +552,22 @@ class SelectTimezoneRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SelectUpdateChannelPage]
+class SelectUpdateChannelRoute extends PageRouteInfo<void> {
+  const SelectUpdateChannelRoute({List<PageRouteInfo>? children})
+    : super(SelectUpdateChannelRoute.name, initialChildren: children);
+
+  static const String name = 'SelectUpdateChannelRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SelectUpdateChannelPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ServerDetailsPage]
 class ServerDetailsRoute extends PageRouteInfo<void> {
   const ServerDetailsRoute({List<PageRouteInfo>? children})

@@ -15,6 +15,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/config/preferences_repository/datasources/preferences_hive_datasource.dart';
 import 'package:selfprivacy/config/preferences_repository/inherited_preferences_repository.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_api.graphql.dart';
+import 'package:selfprivacy/logic/api_maps/graphql_maps/schema/server_settings.graphql.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
@@ -28,11 +29,15 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
+import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/models/update_channels.dart';
+import 'package:selfprivacy/ui/molecules/cards/radio_selection_card.dart';
 import 'package:selfprivacy/ui/organisms/jobs/jobs_content.dart';
 import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
+import 'package:selfprivacy/ui/pages/server/select_update_channel.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
@@ -44,6 +49,7 @@ import '../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../helpers/fixtures/json_fixture.dart';
 import '../helpers/fixtures/server_fixtures.dart';
 import '../helpers/fixtures/service_fixtures.dart';
+import '../helpers/fixtures/update_channels_fixtures.dart';
 import '../helpers/widget_harness.dart';
 
 class _Api extends Mock implements ServerApi {}
@@ -139,6 +145,104 @@ void main() {
     expect(find.byType(UsersPage), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 500));
   }
+
+  testWidgets(
+    'channel settings use actual state, queue locally and reset with the server',
+    (final tester) async {
+      final router = RootRouter(getIt<NavigationService>().navigatorKey);
+      await pumpApp(tester, router);
+      await tester.runAsync(() async {
+        await resources.addServer(aServer());
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final connection = hub.active!;
+      final current = anUpdateChannels().currentChannel;
+      final channels = UpdateChannels(
+        currentChannel: current,
+        channels: [current, testUpdateChannel],
+      );
+      when(api.getUpdateChannels).thenAnswer((_) async => channels);
+      final settings = SystemSettings.fromGraphQL(
+        Query$SystemSettings.fromJson(
+          loadJsonFixture('graphql/domain_reads.json')['SystemSettings']
+              as Map<String, dynamic>,
+        ).system,
+      );
+      when(api.getSystemSettings).thenAnswer((_) async => settings);
+      connection.cache
+        ..setVersion(Version(3, 8, 9))
+        ..settings.push(settings);
+      final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
+      unawaited(serverRouter.push(const ServerSettingsRoute()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Update channel'), findsNothing);
+      connection.cache
+        ..setVersion(Version(3, 9, 0))
+        ..updateChannels.push(channels);
+      await waitForContent(
+        tester,
+        () => find.text('Stable channel').evaluate().isNotEmpty,
+        'The settings row must display the current channel',
+      );
+      expect(find.text('Stable channel'), findsOneWidget);
+      await tester.tap(find.text('Update channel'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(SelectUpdateChannelPage), findsOneWidget);
+      final jobs = tester
+          .element(find.byType(SelectUpdateChannelPage))
+          .read<JobsCubit>();
+      await tester.tap(find.text('Test channel'));
+      await tester.pump();
+      await tester.ensureVisible(find.text('Create job'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Create job'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(
+        jobs.state.draft.whereType<ChangeUpdateChannelJob>().single.channelId,
+        'test-channel',
+      );
+      expect(find.textContaining('Test channel'), findsOneWidget);
+      verifyNever(() => api.setUpdateChannel(any()));
+      await tester.tap(find.text('Update channel'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(
+        tester
+            .widgetList<RadioSelectionCard>(find.byType(RadioSelectionCard))
+            .last
+            .isSelected,
+        isTrue,
+      );
+      expect(
+        tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+        isNull,
+      );
+      await tester.runAsync(() async {
+        await resources.addServer(aServer(uuid: 'replacement'));
+        await pumpEventQueue();
+        await hub.selectServer('replacement');
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(SelectUpdateChannelPage), findsNothing);
+      expect(
+        connection.changeDraft.value.single,
+        isA<ChangeUpdateChannelJob>(),
+      );
+      expect(hub.active!.changeDraft.value, isEmpty);
+      verifyNever(() => api.setUpdateChannel(any()));
+      await tester.pumpWidget(const SizedBox.shrink());
+      hub.dispose();
+      await tester.pump();
+      router.dispose();
+    },
+  );
 
   for (final switching in [false, true]) {
     testWidgets(

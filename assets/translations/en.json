@@ -225,8 +225,24 @@
         "retrying": "Trying again…"
     },
     "server": {
+        "settings_status": {
+            "load_error": "Could not load server settings"
+        },
+        "settings_sections": {
+            "updates": "Updates",
+            "access": "Access and security",
+            "system": "System"
+        },
         "update_channel": {
-            "removed": "The selected update channel is no longer available. Its change was removed from the queue."
+            "title": "Update channel",
+            "hint": "You can choose where your server gets updates from. This can be used, for example, to test new features before release.",
+            "custom": "Custom update source",
+            "confirm_switch": "Switch to {channel}?",
+            "custom_warning": "After switching to this channel, you won't be able to switch back through the app.",
+            "empty": "There are no other update channels yet. More channels might become available later.",
+            "error": "Could not load update channels.",
+            "removed": "The selected update channel is no longer available. Its change was removed from the queue.",
+            "unavailable": "The selected channel is no longer available. Choose another channel."
         },
         "card_title": "Server",
         "description": "All your services live here",

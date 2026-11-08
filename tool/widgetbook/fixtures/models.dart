@@ -7,9 +7,34 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
+import 'package:selfprivacy/logic/models/update_channels.dart';
 import 'package:selfprivacy/logic/operations/operation.dart';
 
 import 'constants.dart';
+
+UpdateChannels demoUpdateChannels({
+  final bool custom = false,
+  final bool empty = false,
+}) {
+  const stable = UpdateChannel(
+    id: 'stable',
+    updateUrl:
+        'git+https://git.selfprivacy.org/SelfPrivacy/selfprivacy-nixos-config.git?ref=flakes',
+    name: 'Stable channel',
+    description: 'Latest tested release of SelfPrivacy system',
+  );
+  return UpdateChannels(
+    currentChannel: custom
+        ? const UpdateChannel(
+            id: 'custom',
+            updateUrl: 'git+https://example.org/server.git?ref=custom',
+            name: 'git+https://example.org/server.git?ref=custom',
+            description: 'Custom update channel',
+          )
+        : stable,
+    channels: empty ? [] : [stable],
+  );
+}
 
 Service demoService({
   final ServiceStatus status = ServiceStatus.active,

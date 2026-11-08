@@ -202,6 +202,8 @@ import 'use_cases/organisms/modals/new_ssh_key_modal.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_modals_new_ssh_key_modal;
 import 'use_cases/organisms/modals/qr_modal.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_modals_qr_modal;
+import 'use_cases/organisms/server_settings_view.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view;
 import 'use_cases/organisms/storage_list_items/consumption_list_item.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_storage_list_items_consumption_list_item;
 import 'use_cases/organisms/storage_list_items/server_storage_list_item.dart'
@@ -210,6 +212,8 @@ import 'use_cases/organisms/storage_list_items/service_consumption_title.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_storage_list_items_service_consumption_title;
 import 'use_cases/organisms/storage_list_items/service_migration_list_item.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_storage_list_items_service_migration_list_item;
+import 'use_cases/organisms/update_channel_selection.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection;
 
 final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
@@ -2505,6 +2509,118 @@ final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
     name: 'Organisms',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'ServerSettingsView',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Applying',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsApplying,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Auto upgrade off',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsAutoUpgradeOff,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Current',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsCurrent,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Loading',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsLoading,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Modified',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsModified,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Partial',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsPartial,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Stale',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsStale,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unsupported',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsUnsupported,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Wide',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_server_settings_view
+                    .settingsWide,
+          ),
+        ],
+      ),
+      _widgetbook.WidgetbookComponent(
+        name: 'UpdateChannelSelection',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Applying',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelApplying,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Current',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelCurrent,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Custom',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelCustom,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Empty',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelEmpty,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Error',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelError,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Loading',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelLoading,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Queued',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelQueued,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Stale',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_update_channel_selection
+                    .updateChannelStale,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookFolder(
         name: 'charts',
         children: [

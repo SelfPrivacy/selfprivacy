@@ -54,6 +54,8 @@ import 'use_cases/atoms/markdown/brand_markdown.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_atoms_markdown_brand_markdown;
 import 'use_cases/atoms/masks/icon_status_mask.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_atoms_masks_icon_status_mask;
+import 'use_cases/atoms/not_applied_label.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_atoms_not_applied_label;
 import 'use_cases/atoms/progress_indicators/brand_linear_indicator.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_atoms_progress_indicators_brand_linear_indicator;
 import 'use_cases/atoms/progress_indicators/brand_loader.dart'
@@ -120,6 +122,8 @@ import 'use_cases/molecules/cards/services_page_card.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_services_page_card;
 import 'use_cases/molecules/cards/ssh_keys_card.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_ssh_keys_card;
+import 'use_cases/molecules/cards/status_card.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_status_card;
 import 'use_cases/molecules/cards/storage_card.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_storage_card;
 import 'use_cases/molecules/charts/cpu_chart.dart'
@@ -211,6 +215,17 @@ final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
     name: 'Atoms',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'NotAppliedLabel',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Default',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_atoms_not_applied_label
+                    .notAppliedLabel,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookFolder(
         name: 'buttons',
         children: [
@@ -355,6 +370,12 @@ final directories = <_widgetbook.WidgetbookNode>[
           _widgetbook.WidgetbookComponent(
             name: 'OutlinedCard',
             useCases: [
+              _widgetbook.WidgetbookUseCase(
+                name: 'Custom background',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_atoms_cards_outlined_card
+                        .outlinedCardCustomBackground,
+              ),
               _widgetbook.WidgetbookUseCase(
                 name: 'Custom border',
                 builder:
@@ -1627,6 +1648,18 @@ final directories = <_widgetbook.WidgetbookNode>[
             name: 'RadioSelectionCard',
             useCases: [
               _widgetbook.WidgetbookUseCase(
+                name: 'Disabled',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_radio_selection_card
+                        .radioSelectionCardDisabled,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Disabled unselected',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_radio_selection_card
+                        .radioSelectionCardDisabledUnselected,
+              ),
+              _widgetbook.WidgetbookUseCase(
                 name: 'Long text',
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_radio_selection_card
@@ -1859,6 +1892,35 @@ final directories = <_widgetbook.WidgetbookNode>[
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_ssh_keys_card
                         .sshKeysCardSSHDisabled,
+              ),
+            ],
+          ),
+          _widgetbook.WidgetbookComponent(
+            name: 'StatusCard',
+            useCases: [
+              _widgetbook.WidgetbookUseCase(
+                name: 'Applying',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_status_card
+                        .statusApplying,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Error',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_status_card
+                        .statusError,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Retrying',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_status_card
+                        .statusRetrying,
+              ),
+              _widgetbook.WidgetbookUseCase(
+                name: 'Stale',
+                builder:
+                    _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_status_card
+                        .statusStale,
               ),
             ],
           ),

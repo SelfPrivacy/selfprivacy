@@ -3,6 +3,21 @@ import 'package:selfprivacy/ui/atoms/cards/outlined_card.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
 import '../../../catalog_case.dart';
 
+@UseCase(name: 'Custom background', type: OutlinedCard, path: '[Atoms]/cards')
+Widget outlinedCardCustomBackground(final BuildContext context) => CatalogCase(
+  id: 'OutlinedCard/Custom background',
+  variant: 'Custom background',
+  width: 560,
+  builder: (final context, final fixtures, final controller, final update) =>
+      OutlinedCard(
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        child: const ListTile(
+          title: Text('Storage volume'),
+          subtitle: Text('40 GiB'),
+        ),
+      ),
+);
+
 @UseCase(name: 'Default', type: OutlinedCard, path: '[Atoms]/cards')
 Widget outlinedCardDefault(final BuildContext context) => CatalogCase(
   key: const ValueKey('OutlinedCard/Default'),

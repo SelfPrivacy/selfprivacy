@@ -214,6 +214,16 @@
         "loading": "The chart is loading…",
         "failed_to_load_memory_metrics": "Couldn't load memory usage data. This might be a connection issue, or there is not enough data yet."
     },
+    "data_status": {
+        "stale_title": "Showing cached data",
+        "stale": "The server might have newer data. Tap here to refresh.",
+        "refreshing": "Refreshing data…",
+        "not_applied": "Not applied",
+        "applying": "Changes are being applied. You can edit settings again when the operation finishes.",
+        "load_error": "Could not load data",
+        "retry": "Tap here to try again.",
+        "retrying": "Trying again…"
+    },
     "server": {
         "update_channel": {
             "removed": "The selected update channel is no longer available. Its change was removed from the queue."

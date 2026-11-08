@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 class OutlinedCard extends StatelessWidget {
   const OutlinedCard({
     required this.child,
+    this.backgroundColor,
     this.borderColor,
     this.borderWidth,
     super.key,
   });
 
   final Widget child;
+  final Color? backgroundColor;
   final Color? borderColor;
   final double? borderWidth;
   @override
   Widget build(final BuildContext context) => Card.outlined(
     elevation: 0,
+    color: backgroundColor,
     shape: RoundedRectangleBorder(
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       side: BorderSide(

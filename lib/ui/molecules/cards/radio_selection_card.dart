@@ -13,42 +13,68 @@ class RadioSelectionCard extends StatelessWidget {
   final bool isSelected;
   final String title;
   final String subtitle;
-  final void Function() onTap;
+  final VoidCallback? onTap;
 
   @override
-  Widget build(final BuildContext context) => OutlinedCard(
-    borderColor: isSelected ? Theme.of(context).colorScheme.primary : null,
-    borderWidth: isSelected ? 3 : 1,
-    child: InkResponse(
-      highlightShape: BoxShape.rectangle,
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            if (isSelected)
-              Icon(
-                Icons.radio_button_on_outlined,
-                color: Theme.of(context).colorScheme.primary,
-              )
-            else
-              Icon(
-                Icons.radio_button_off_outlined,
-                color: Theme.of(context).colorScheme.outline,
-              ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: Theme.of(context).textTheme.titleMedium),
-                  Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-                ],
-              ),
+  Widget build(final BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final disabled = onTap == null;
+    // surfaceContainerHighest changes the disabled background in dark mode.
+    // ignore: deprecated_member_use
+    final backgroundColor = disabled ? colors.surfaceVariant : null;
+    final textColor = disabled ? colors.onSurfaceVariant : null;
+    return Semantics(
+      enabled: !disabled,
+      selected: isSelected,
+      child: OutlinedCard(
+        backgroundColor: backgroundColor,
+        borderColor: disabled
+            ? colors.outlineVariant
+            : isSelected
+            ? colors.primary
+            : null,
+        borderWidth: isSelected ? 3 : 1,
+        child: InkResponse(
+          highlightShape: BoxShape.rectangle,
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Icon(
+                  isSelected
+                      ? Icons.radio_button_on_outlined
+                      : Icons.radio_button_off_outlined,
+                  color: isSelected && !disabled
+                      ? colors.primary
+                      : colors.outline,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: textColor,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: textColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

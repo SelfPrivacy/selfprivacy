@@ -67,7 +67,7 @@ class _PreparedPreviewState extends State<PreparedPreview> {
       case PreviewAction.chipDialog:
         widgets<ActionChip>().first.onPressed!();
       case PreviewAction.inplaceRestore:
-        widgets<RadioSelectionCard>().last.onTap();
+        widgets<RadioSelectionCard>().last.onTap!();
       case PreviewAction.deselectBackups:
         widgets<CheckboxListTile>().first.onChanged!(false);
       case PreviewAction.copyKey:

@@ -13,6 +13,8 @@ import 'package:selfprivacy/logic/bloc/outdated_server_checker/outdated_server_c
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_logs/server_logs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_metadata/server_metadata_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/users/users_bloc.dart';
@@ -21,7 +23,6 @@ import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
@@ -70,7 +71,8 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
   late final RecoveryKeyBloc recoveryKeyBloc;
   late final DevicesBloc devicesBloc;
   late final ServerJobsBloc serverJobsBloc;
-  late final ServerDetailsCubit serverDetailsCubit;
+  late final ServerMetadataBloc serverMetadataBloc;
+  late final ServerSettingsBloc serverSettingsBloc;
   late final VolumesBloc volumesBloc;
   late final ServerLogsBloc serverLogsBloc;
   late final OutdatedServerCheckerBloc outdatedServerCheckerBloc;
@@ -79,6 +81,10 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
   void initState() {
     super.initState();
     final connection = widget.connection;
+    serverSettingsBloc = ServerSettingsBloc(
+      connection: connection,
+      showMessage: getIt<NavigationService>().showSnackBar,
+    );
     usersBloc = createUsersBloc(connection);
     groupsBloc = GroupsBloc(
       groups: observeConnection(
@@ -114,14 +120,11 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
       connection,
       showMessage: getIt<NavigationService>().showSnackBar,
     );
-    serverDetailsCubit = ServerDetailsCubit(
-      onMetadataFailure: () =>
+    serverMetadataBloc = ServerMetadataBloc(
+      isAttached: () => connection.isAttached,
+      connectionChanges: connection.changes,
+      onFailure: () =>
           getIt<NavigationService>().showSnackBar('basis.network_error'.tr()),
-      settings: observeConnection(
-        connection: connection,
-        read: (final connection) => connection.settings.value,
-        changes: (final connection) => connection.settings.changes,
-      ),
       loadMetadata: () async {
         if (!connection.isAttached) {
           return [];
@@ -168,6 +171,7 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
   Widget build(final BuildContext context) => MultiProvider(
     providers: [
       Provider<ServerConnection>.value(value: widget.connection),
+      BlocProvider(create: (_) => serverSettingsBloc, lazy: false),
       BlocProvider(
         create: (_) => createOperationsCubit(
           widget.connection,
@@ -183,7 +187,7 @@ class _ServerBlocConfigState extends State<ServerBlocConfig> {
       BlocProvider(create: (final _) => recoveryKeyBloc, lazy: false),
       BlocProvider(create: (final _) => devicesBloc, lazy: false),
       BlocProvider(create: (final _) => serverJobsBloc, lazy: false),
-      BlocProvider(create: (final _) => serverDetailsCubit, lazy: false),
+      BlocProvider(create: (final _) => serverMetadataBloc, lazy: false),
       BlocProvider(create: (final _) => volumesBloc, lazy: false),
       BlocProvider(
         create: (final _) => createJobsCubit(

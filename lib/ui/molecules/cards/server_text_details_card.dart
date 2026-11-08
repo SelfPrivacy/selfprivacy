@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
+import 'package:selfprivacy/logic/bloc/server_metadata/server_metadata_bloc.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
@@ -14,23 +14,18 @@ class ServerTextDetailsCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final details = context.watch<ServerDetailsCubit>().state;
+    final details = context.watch<ServerMetadataBloc>().state;
 
-    final isLoading = details is! Loaded;
+    final isLoading =
+        details is ServerMetadataLoading && details.metadata.isEmpty;
 
-    if (details is ServerDetailsUnavailable) {
-      return _TempMessage(
-        message:
-            (details.isUnsupported
-                    ? 'basis.feature_unsupported'
-                    : 'basis.network_error')
-                .tr(),
-      );
-    } else if (details is ServerDetailsNotReady) {
+    if (details is ServerMetadataFailed && details.metadata.isEmpty) {
+      return _TempMessage(message: 'basis.network_error'.tr());
+    } else if (details is ServerMetadataDetached) {
       return _TempMessage(message: 'basis.no_data'.tr());
     } else {
       return Skeletonizer(
-        enabled: isLoading || details.metadata.isEmpty,
+        enabled: isLoading,
         containersColor: Theme.of(context).colorScheme.surfaceContainerLow,
         enableSwitchAnimation: true,
         child: FilledCard(
@@ -52,7 +47,7 @@ class ServerTextDetailsCard extends StatelessWidget {
                 ...details.metadata.map(
                   (final metadata) => _ServerTextDetailTile(metadata: metadata),
                 ),
-              if (isLoading || details.metadata.isEmpty)
+              if (isLoading)
                 ...List.generate(
                   8,
                   (final index) => FakeSelfPrivacyData.fakeServerMetadataEntity,

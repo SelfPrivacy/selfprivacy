@@ -61,15 +61,15 @@ Widget serverTextDetailsCardError(final BuildContext context) => CatalogCase(
 );
 
 @UseCase(
-  name: 'Unsupported',
+  name: 'Settings unsupported',
   type: ServerTextDetailsCard,
   path: '[Molecules]/cards',
 )
-Widget serverTextDetailsCardUnsupported(final BuildContext context) =>
+Widget serverTextDetailsCardSettingsUnsupported(final BuildContext context) =>
     CatalogCase(
-      key: const ValueKey('ServerTextDetailsCard/Unsupported'),
-      id: 'ServerTextDetailsCard/Unsupported',
-      variant: 'Unsupported',
+      key: const ValueKey('ServerTextDetailsCard/Settings unsupported'),
+      id: 'ServerTextDetailsCard/Settings unsupported',
+      variant: 'Settings unsupported',
       host: PreviewHost.content,
       width: 560,
       height: 850,

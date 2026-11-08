@@ -7,15 +7,17 @@ import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_metadata/server_metadata_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
 import 'package:selfprivacy/logic/common_enum/common_enum.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
@@ -24,6 +26,7 @@ import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 
+import '../../../test/helpers/fixtures/system_settings_fixtures.dart';
 import 'constants.dart';
 import 'metrics.dart';
 import 'mocks.dart';
@@ -72,16 +75,6 @@ class CatalogFixtures {
     when(
       () => serverJobsState.hasRemovableJobs,
     ).thenReturn(variant == 'Finished' || variant == 'Failed');
-    final loaded = DemoLoadedDetails();
-    final ssh = DemoSshSettings();
-    when(() => ssh.enable).thenReturn(variant != 'SSH disabled');
-    when(() => loaded.sshSettings).thenReturn(ssh);
-    when(() => loaded.metadata).thenReturn([
-      ServerMetadataEntity(
-        trId: 'server.server',
-        value: 'SelfPrivacy — example.org',
-      ),
-    ]);
     bind(
       readiness,
       variant == 'Not configured' ? NoServer() : ServerConfigured(demoServer()),
@@ -94,15 +87,33 @@ class CatalogFixtures {
       volumes,
       VolumesLoaded(serverVolumesHashCode: 0, diskStatus: demoDisks()),
     );
+    bind(details, switch (variant) {
+      'Loading' => ServerMetadataLoading(),
+      'Not ready' => ServerMetadataDetached(),
+      'Error' => ServerMetadataFailed(),
+      _ => ServerMetadataLoaded(
+        metadata: [
+          ServerMetadataEntity(
+            trId: 'server.card_title',
+            value: 'SelfPrivacy — example.org',
+          ),
+        ],
+      ),
+    });
     bind(
-      details,
-      variant == 'Loading'
-          ? ServerDetailsLoading()
-          : variant == 'Not ready'
-          ? ServerDetailsNotReady()
-          : variant == 'Error' || variant == 'Unsupported'
-          ? ServerDetailsUnavailable(isUnsupported: variant == 'Unsupported')
-          : loaded,
+      settings,
+      variant == 'Settings unsupported'
+          ? ServerSettingsUnavailable(
+              settings: const CachedValue(support: DomainSupport.unsupported),
+              channels: const CachedValue(support: DomainSupport.unsupported),
+            )
+          : ServerSettingsReady(
+              settings: CachedValue(
+                data: aSystemSettings(ssh: variant != 'SSH disabled'),
+                support: DomainSupport.supported,
+              ),
+              channels: const CachedValue(),
+            ),
     );
     bind(
       metrics,
@@ -163,6 +174,7 @@ class CatalogFixtures {
   final serverJobs = DemoServerJobs();
   final volumes = DemoVolumes();
   final details = DemoDetails();
+  final settings = DemoSettings();
   final metrics = DemoMetrics();
   final support = DemoSupport();
   final devices = DemoDevices();
@@ -187,7 +199,8 @@ class CatalogFixtures {
       BlocProvider<BackupsBloc>.value(value: backups),
       BlocProvider<ServerJobsBloc>.value(value: serverJobs),
       BlocProvider<VolumesBloc>.value(value: volumes),
-      BlocProvider<ServerDetailsCubit>.value(value: details),
+      BlocProvider<ServerMetadataBloc>.value(value: details),
+      BlocProvider<ServerSettingsBloc>.value(value: settings),
       BlocProvider<MetricsCubit>.value(value: metrics),
       BlocProvider<SupportSystemCubit>.value(value: support),
       BlocProvider<DevicesBloc>.value(value: devices),

@@ -1714,10 +1714,10 @@ final directories = <_widgetbook.WidgetbookNode>[
                         .serverTextDetailsCardNotReady,
               ),
               _widgetbook.WidgetbookUseCase(
-                name: 'Unsupported',
+                name: 'Settings unsupported',
                 builder:
                     _asset_selfprivacy_tool_widgetbook_use_cases_molecules_cards_server_text_details_card
-                        .serverTextDetailsCardUnsupported,
+                        .serverTextDetailsCardSettingsUnsupported,
               ),
             ],
           ),

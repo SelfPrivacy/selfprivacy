@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/ui/atoms/cards/filled_card.dart';
@@ -18,9 +18,8 @@ class SshKeysCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final serverDetailsState = context.watch<ServerDetailsCubit>().state;
-    final bool sshDisabled =
-        serverDetailsState is Loaded && !serverDetailsState.sshSettings.enable;
+    final settings = context.watch<ServerSettingsBloc>().state.settings.data;
+    final bool sshDisabled = settings != null && !settings.sshSettings.enable;
 
     return FilledCard(
       child: Column(

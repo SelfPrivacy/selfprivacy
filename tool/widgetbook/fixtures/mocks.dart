@@ -3,6 +3,8 @@ import 'package:selfprivacy/logic/bloc/backups/backups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/devices/devices_bloc.dart';
 import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
 import 'package:selfprivacy/logic/bloc/server_jobs/server_jobs_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_metadata/server_metadata_bloc.dart';
+import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart';
 import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/bloc/tokens/tokens_bloc.dart';
 import 'package:selfprivacy/logic/bloc/volumes/volumes_bloc.dart';
@@ -10,10 +12,8 @@ import 'package:selfprivacy/logic/cubit/app_readiness/app_readiness_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/operations_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
-import 'package:selfprivacy/logic/cubit/server_detailed_info/server_detailed_info_cubit.dart';
 import 'package:selfprivacy/logic/cubit/support_system/support_system_cubit.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
-import 'package:selfprivacy/logic/models/ssh_settings.dart';
 
 class ActionMock extends Mock {
   void Function(String)? record;
@@ -68,7 +68,9 @@ class DemoServerJobs extends ActionMock implements ServerJobsBloc {}
 
 class DemoVolumes extends ActionMock implements VolumesBloc {}
 
-class DemoDetails extends ActionMock implements ServerDetailsCubit {}
+class DemoDetails extends ActionMock implements ServerMetadataBloc {}
+
+class DemoSettings extends ActionMock implements ServerSettingsBloc {}
 
 class DemoMetrics extends ActionMock implements MetricsCubit {}
 
@@ -87,11 +89,6 @@ class DemoBackupsState extends Mock implements BackupsInitialized {}
 
 // ignore: avoid_implementing_value_types
 class DemoServerJobsState extends Mock implements ServerJobsListWithJobsState {}
-
-// ignore: avoid_implementing_value_types
-class DemoLoadedDetails extends Mock implements Loaded {}
-
-class DemoSshSettings extends Mock implements SshSettings {}
 
 class DemoResources extends Mock implements ResourcesModel {}
 

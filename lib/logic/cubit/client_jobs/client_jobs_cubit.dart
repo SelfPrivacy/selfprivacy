@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
-import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/operations/change_draft.dart';
 import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
@@ -19,53 +18,52 @@ typedef AdmitConfigurationOperation =
       Future<void> Function(ApplyChangesOperation) action,
     );
 
+typedef ApplyChangeDraft =
+    Future<OperationResult<void>?> Function(
+      void Function(ConfigurationProgress) onProgress,
+    );
+
 class JobsCubit extends Cubit<JobsState> {
   JobsCubit({
-    required final Stream<CachedValue<SystemSettings>?> settings,
+    required final ChangeDraft draft,
+    required final bool Function(JobDraft) stageChange,
+    required final ApplyChangeDraft applyDraft,
     required final AdmitConfigurationOperation admitOperation,
     required final void Function(String) showMessage,
-  }) : _admitOperation = admitOperation,
+  }) : _draft = draft,
+       _stageChange = stageChange,
+       _applyDraft = applyDraft,
+       _admitOperation = admitOperation,
        _showMessage = showMessage,
-       super(JobsStateEmpty()) {
-    _settingsSubscription = settings.listen((final observation) {
-      _settings = observation;
-      if (observation == null) {
-        emit(JobsStateEmpty());
-      }
-    });
+       super(_draftState(draft.value)) {
+    _draftSubscription = draft.changes.listen(
+      (final changes) => emit(_draftState(changes)),
+    );
   }
 
   final AdmitConfigurationOperation _admitOperation;
   final void Function(String) _showMessage;
-  late final StreamSubscription<CachedValue<SystemSettings>?>
-  _settingsSubscription;
-  CachedValue<SystemSettings>? _settings;
+  final ChangeDraft _draft;
+  final bool Function(JobDraft) _stageChange;
+  final ApplyChangeDraft _applyDraft;
+  late final StreamSubscription<List<JobDraft>> _draftSubscription;
   bool _submitting = false;
 
-  bool get _isActive => !isClosed && _settings != null;
+  bool get _isActive => !isClosed;
 
   void addJob(final JobDraft job) {
     if (!_isActive) {
       return;
     }
-    final settings = _settings?.data;
-    final previous = state;
-    final next = previous.addJob(job, settings: settings);
-    if (identical(next, previous)) {
+    if (!_stageChange(job)) {
       return;
     }
-    emit(next);
     _showMessage(
-      (job is ReplaceableJobDraft && job.matchesSettings(settings)
-              ? 'jobs.job_removed'
-              : 'jobs.job_added')
-          .tr(),
+      (_draft.value.contains(job) ? 'jobs.job_added' : 'jobs.job_removed').tr(),
     );
   }
 
-  void removeJob(final String id) => emit(
-    _draftState(state.draft.where((final job) => job.id != id).toList()),
-  );
+  void removeJob(final String id) => _draft.remove(id);
 
   Future<void> _perform(
     final OperationKind kind,
@@ -112,39 +110,34 @@ class JobsCubit extends Cubit<JobsState> {
   }
 
   Future<void> applyAll() async {
-    final previous = state;
-    if (!_isActive || _submitting || previous.draft.isEmpty) {
+    if (!_isActive || _submitting) {
       return;
     }
-    final jobs = List<JobDraft>.unmodifiable(previous.draft);
-    emit(JobsStateEmpty());
-    await _perform(
-      OperationKind.applyChanges,
-      (final operation) => operation.run(
-        jobs,
-        onProgress: (final progress) {
-          if (_isActive &&
-              progress.stage == ConfigurationStage.rebuild &&
-              !progress.status.isPending &&
-              progress.status != OperationStatus.succeeded) {
-            _showMessage(progress.messageKey!.tr());
-          }
-        },
-      ),
-      onNotSent: () {
-        var restored = previous;
-        for (final change in state.draft) {
-          restored = restored.addJob(change, settings: _settings?.data);
+    try {
+      final result = await _applyDraft((final progress) {
+        if (_isActive &&
+            progress.stage == ConfigurationStage.rebuild &&
+            !progress.status.isPending &&
+            progress.status != OperationStatus.succeeded) {
+          _showMessage(progress.messageKey!.tr());
         }
-        emit(restored);
-      },
-    );
+      });
+      if (_isActive &&
+          result != null &&
+          (result.status == OperationStatus.notSent ||
+              result.status == OperationStatus.cancelled)) {
+        _showMessage(result.status.translationKey.tr());
+      }
+    } catch (_) {
+      if (_isActive) {
+        _showMessage('server_mutation.outcome_unknown'.tr());
+      }
+    }
   }
 
   @override
   Future<void> close() async {
-    _settings = null;
-    await _settingsSubscription.cancel();
+    await _draftSubscription.cancel();
     return super.close();
   }
 }

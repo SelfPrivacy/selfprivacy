@@ -3,6 +3,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/services_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
+import 'package:selfprivacy/logic/connection/repositories/update_channels_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
@@ -26,6 +27,7 @@ OperationStep configurationStep(
   id: change.id,
   titleKey: switch (change) {
     ChangeServerTimezoneJob() => 'jobs.change_server_timezone',
+    ChangeUpdateChannelJob() => 'jobs.change_update_channel',
     ChangeSshSettingsJob() => 'jobs.change_ssh_settings',
     ChangeAutoUpgradeSettingsJob() => 'jobs.change_auto_upgrade_settings',
     ChangeServiceConfiguration() => 'jobs.change_service_settings',
@@ -41,6 +43,7 @@ OperationStep configurationStep(
     _ => 'operations.kind.apply_changes',
   },
   target: switch (change) {
+    ChangeUpdateChannelJob(:final channelName) => channelName,
     ChangeServiceConfiguration(:final serviceDisplayName) => serviceDisplayName,
     ServiceToggleJob(:final service) => service.displayName,
     DeleteUserJob(:final user) ||
@@ -92,6 +95,7 @@ class ApplyChangesOperation {
   ApplyChangesOperation({
     required final UsersRepository users,
     required final SettingsRepository settings,
+    required final UpdateChannelsRepository updateChannels,
     required final ServicesRepository services,
     required final JobsRepository jobs,
     required final VolumesRepository volumes,
@@ -100,6 +104,7 @@ class ApplyChangesOperation {
     required final ServerDomain domain,
   }) : _users = users,
        _settings = settings,
+       _updateChannels = updateChannels,
        _services = services,
        _jobs = jobs,
        _volumes = volumes,
@@ -109,6 +114,7 @@ class ApplyChangesOperation {
 
   final UsersRepository _users;
   final SettingsRepository _settings;
+  final UpdateChannelsRepository _updateChannels;
   final ServicesRepository _services;
   final JobsRepository _jobs;
   final VolumesRepository _volumes;
@@ -223,6 +229,9 @@ class ApplyChangesOperation {
   Future<ServerMutationResult<Object?>> execute(final JobDraft job) {
     _requireAttached();
     return switch (job) {
+      ChangeUpdateChannelJob(:final channelId) => _updateChannels.setChannel(
+        channelId,
+      ),
       DeleteUserJob(:final user) => _users.deleteUser(user),
       CreateSSHKeyJob(:final user, :final publicKey) => _users.addSshKey(
         user,

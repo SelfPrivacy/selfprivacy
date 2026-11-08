@@ -49,6 +49,15 @@ class OperationQueue {
   };
   bool get isIdle => !_pending.values.any((final item) => item.running);
   bool get isPaused => _paused;
+  bool get hasPendingConfiguration => pending.any(
+    (final operation) => switch (operation.kind) {
+      OperationKind.applyChanges ||
+      OperationKind.rebootServer ||
+      OperationKind.upgradeServer ||
+      OperationKind.collectGarbage => true,
+      _ => false,
+    },
+  );
 
   Future<void> get whenIdle {
     if (isIdle || _disposed) {

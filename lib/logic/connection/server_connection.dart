@@ -28,6 +28,7 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/logic/models/token_renewal_schedule.dart';
+import 'package:selfprivacy/logic/operations/change_draft.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
@@ -50,6 +51,7 @@ class ServerConnection {
     final CacheTimerFactory? createTimer,
   }) : _isAttached = isAttached {
     operations = OperationQueue(serverId: serverId, now: now);
+    changeDraft = ChangeDraft(isAttached: () => this.isAttached);
     cache = ServerStateCache(
       api: () => api,
       now: now,
@@ -83,6 +85,7 @@ class ServerConnection {
     updateChannels = UpdateChannelsRepository(
       commands: commands,
       reader: _reader(cache.updateChannels),
+      draft: changeDraft,
     );
     recoveryKey = RecoveryKeyRepository(
       commands: commands,
@@ -100,6 +103,7 @@ class ServerConnection {
     settings = SettingsRepository(
       commands: commands,
       reader: _reader(settingsStore),
+      draft: changeDraft,
     );
     services = ServicesRepository(
       commands: commands,
@@ -119,6 +123,10 @@ class ServerConnection {
       reader: _reader(volumesStore),
       servicesStore: servicesStore,
     );
+    _subscriptions.addAll([
+      settings.changes.listen((_) => settings.reconcileDraft()),
+      updateChannels.changes.listen((_) => updateChannels.reconcileDraft()),
+    ]);
     for (final store in cache.stores) {
       _subscriptions.add(
         store.stream.listen((_) {
@@ -166,6 +174,7 @@ class ServerConnection {
   bool get _canDispatch => !(_session?.hasUnsavedToken ?? false);
   static final _admissionKey = Object();
   late final OperationQueue operations;
+  late final ChangeDraft changeDraft;
   _Session? _session;
   late final ServerStateCache cache;
   late final ServerCommandCoordinator commands;
@@ -302,6 +311,8 @@ class ServerConnection {
     _disposed = true;
     _changes.add(null);
     _session?.dispose();
+    changeDraft.dispose();
+    updateChannels.dispose();
     operations.dispose();
     scheduler.dispose();
     commands.dispose();

@@ -16,6 +16,7 @@ ApplyChangesOperation configurationOperation(
 ) => ApplyChangesOperation(
   users: connection.users,
   settings: connection.settings,
+  updateChannels: connection.updateChannels,
   services: connection.services,
   jobs: connection.jobs,
   volumes: connection.volumes,

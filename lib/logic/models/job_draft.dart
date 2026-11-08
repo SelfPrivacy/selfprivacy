@@ -136,11 +136,20 @@ abstract class ReplaceableJobDraft extends JobDraft {
     super.requiresDnsUpdate,
   });
 
-  bool matchesSettings(final SystemSettings? settings) => false;
   bool get shouldReplaceOnlyIfSameId => false;
+
+  bool replaces(final JobDraft existing) =>
+      existing.runtimeType == runtimeType &&
+      (!shouldReplaceOnlyIfSameId || existing.id == id);
 }
 
-class ChangeAutoUpgradeSettingsJob extends ReplaceableJobDraft {
+abstract class ServerSettingsJob extends ReplaceableJobDraft {
+  ServerSettingsJob({required super.title, super.id});
+
+  bool matchesSettings(final SystemSettings? settings);
+}
+
+class ChangeAutoUpgradeSettingsJob extends ServerSettingsJob {
   ChangeAutoUpgradeSettingsJob({
     required this.enable,
     required this.allowReboot,
@@ -164,7 +173,21 @@ class ChangeAutoUpgradeSettingsJob extends ReplaceableJobDraft {
   List<Object> get props => [...super.props, enable, allowReboot];
 }
 
-class ChangeServerTimezoneJob extends ReplaceableJobDraft {
+class ChangeUpdateChannelJob extends ReplaceableJobDraft {
+  ChangeUpdateChannelJob({
+    required this.channelId,
+    required this.channelName,
+    super.id,
+  }) : super(title: '${"jobs.change_update_channel".tr()}: $channelName');
+
+  final String channelId;
+  final String channelName;
+
+  @override
+  List<Object> get props => [...super.props, channelId, channelName];
+}
+
+class ChangeServerTimezoneJob extends ServerSettingsJob {
   ChangeServerTimezoneJob({required this.timezone, super.id})
     : super(title: 'jobs.change_server_timezone'.tr());
 
@@ -183,7 +206,7 @@ class ChangeServerTimezoneJob extends ReplaceableJobDraft {
   List<Object> get props => [...super.props, timezone];
 }
 
-class ChangeSshSettingsJob extends ReplaceableJobDraft {
+class ChangeSshSettingsJob extends ServerSettingsJob {
   ChangeSshSettingsJob({required this.enable, super.id})
     : super(title: 'jobs.change_ssh_settings'.tr());
 

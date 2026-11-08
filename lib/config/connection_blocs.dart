@@ -28,6 +28,7 @@ import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/operations/backups/initialize_backups_operation.dart';
 import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
 import 'package:selfprivacy/logic/operations/operation_execution.dart';
@@ -206,23 +207,12 @@ JobsCubit createJobsCubit(
   required final ResourcesModel resources,
   required final DnsProvider? Function() dnsProvider,
   required final void Function(String) showMessage,
-}) => JobsCubit(
-  settings: observeConnection(
-    connection: connection,
-    read: (final owner) => owner.settings.value,
-    changes: (final owner) => owner.settings.changes,
-  ),
-  admitOperation: (final kind, final action) {
-    final busy = connection.operations.pending.any(
-      (final operation) => switch (operation.kind) {
-        OperationKind.applyChanges ||
-        OperationKind.rebootServer ||
-        OperationKind.upgradeServer ||
-        OperationKind.collectGarbage => true,
-        _ => false,
-      },
-    );
-    if (busy) {
+}) {
+  Future<OperationResult<void>> admitOperation(
+    final OperationKind kind,
+    final Future<void> Function(ApplyChangesOperation) action,
+  ) {
+    if (connection.operations.hasPendingConfiguration) {
       return Future.value(const OperationResult<void>(OperationStatus.notSent));
     }
     return connection.submit<void>(kind, (final owner) {
@@ -236,6 +226,7 @@ JobsCubit createJobsCubit(
         ApplyChangesOperation(
           users: owner.users,
           settings: owner.settings,
+          updateChannels: owner.updateChannels,
           services: owner.services,
           jobs: owner.jobs,
           volumes: owner.volumes,
@@ -245,9 +236,37 @@ JobsCubit createJobsCubit(
         ),
       );
     }).result;
-  },
-  showMessage: showMessage,
-);
+  }
+
+  void reconcileDraft() {
+    connection.settings.reconcileDraft();
+    connection.updateChannels.reconcileDraft();
+  }
+
+  return JobsCubit(
+    draft: connection.changeDraft,
+    stageChange: (final change) => switch (change) {
+      ServerSettingsJob() => connection.settings.stageChange(change),
+      ChangeUpdateChannelJob() => connection.updateChannels.stageChange(change),
+      _ => connection.changeDraft.add(change),
+    },
+    applyDraft: (final onProgress) async {
+      reconcileDraft();
+      try {
+        return await connection.changeDraft.apply(
+          (final changes) => admitOperation(
+            OperationKind.applyChanges,
+            (final operation) => operation.run(changes, onProgress: onProgress),
+          ),
+        );
+      } finally {
+        reconcileDraft();
+      }
+    },
+    admitOperation: admitOperation,
+    showMessage: showMessage,
+  );
+}
 
 BackupsBloc createBackupsBloc(
   final ServerConnection connection, {

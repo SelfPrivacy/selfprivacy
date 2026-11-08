@@ -6,9 +6,15 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
+import 'package:selfprivacy/logic/models/update_channels.dart';
+import 'package:selfprivacy/logic/operations/configuration/apply_changes_operation.dart';
+import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../../fakes/graphql/link_transport.dart';
+import '../../../../helpers/connection_fixture.dart';
 import '../../../../helpers/fixtures/json_fixture.dart';
+import '../../../../helpers/fixtures/update_channels_fixtures.dart';
 
 void main() {
   late Map<String, dynamic> responses;
@@ -97,4 +103,60 @@ void main() {
       expect(calls, isEmpty);
     },
   );
+
+  test('channel draft replaces only another channel draft', () {
+    final timezone = ChangeServerTimezoneJob(timezone: 'UTC');
+    final first = ChangeUpdateChannelJob(
+      channelId: testUpdateChannel.id,
+      channelName: testUpdateChannel.name,
+    );
+    final last = ChangeUpdateChannelJob(
+      channelId: 'stable',
+      channelName: 'Stable',
+    );
+    final channels = anUpdateChannels(custom: true);
+    connection.cache.updateChannels.push(
+      UpdateChannels(
+        currentChannel: channels.currentChannel,
+        channels: [...channels.channels, testUpdateChannel],
+      ),
+    );
+    final draft = connection.changeDraft..add(timezone);
+    connection.updateChannels
+      ..stageChange(first)
+      ..stageChange(last);
+    expect(draft.value, [timezone, last]);
+    expect(last.requiresRebuild, isTrue);
+    expect(configurationStep(last).target, 'Stable');
+  });
+
+  for (final scenario in ['confirmed', 'rejected', 'transport']) {
+    test(
+      '$scenario channel change continues independent changes and ends with apply',
+      () async {
+        final data = responses['SetUpdateChannel'] as Map<String, dynamic>;
+        if (scenario == 'rejected') {
+          ((data['system'] as Map<String, dynamic>)['setUpdateChannel']
+                  as Map<String, dynamic>)['success'] =
+              false;
+        }
+        failure = scenario;
+        final progress = <ConfigurationProgress>[];
+        await configurationOperation(connection).run([
+          ChangeUpdateChannelJob(channelId: 'stable', channelName: 'Stable'),
+          ChangeServerTimezoneJob(timezone: 'UTC'),
+        ], onProgress: progress.add);
+        expect(calls, [
+          'SetUpdateChannel',
+          'ChangeTimezone',
+          'RunSystemRebuild',
+        ]);
+        expect(progress[1].status, switch (scenario) {
+          'confirmed' => OperationStatus.succeeded,
+          'rejected' => OperationStatus.rejected,
+          _ => OperationStatus.unknown,
+        });
+      },
+    );
+  }
 }

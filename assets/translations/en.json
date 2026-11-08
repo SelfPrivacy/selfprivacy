@@ -215,6 +215,9 @@
         "failed_to_load_memory_metrics": "Couldn't load memory usage data. This might be a connection issue, or there is not enough data yet."
     },
     "server": {
+        "update_channel": {
+            "removed": "The selected update channel is no longer available. Its change was removed from the queue."
+        },
         "card_title": "Server",
         "description": "All your services live here",
         "general_information": "General information",
@@ -803,6 +806,7 @@
         "start_server_upgrade": "Start the server upgrade",
         "change_auto_upgrade_settings": "Change auto-upgrade settings",
         "change_server_timezone": "Change server timezone",
+        "change_update_channel": "Change update channel",
         "change_ssh_settings": "Change SSH settings",
         "update_dns_records": "Update DNS records",
         "dns_records_did_not_change": "No changes needed",

@@ -5,11 +5,17 @@ import 'package:selfprivacy/logic/connection/cache/domain_reader.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/sync/server_command_coordinator.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
+import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/operations/change_draft.dart';
 
 class SettingsRepository {
-  SettingsRepository({required this.commands, required this.reader}) {
+  SettingsRepository({
+    required this.commands,
+    required this.reader,
+    required final ChangeDraft draft,
+  }) : _draft = draft {
     if (!commands.owns(store)) {
       throw ArgumentError('Settings store belongs to another connection.');
     }
@@ -17,12 +23,31 @@ class SettingsRepository {
 
   final ServerCommandCoordinator commands;
   final DomainReader<SystemSettings> reader;
+  final ChangeDraft _draft;
   DomainStore<SystemSettings> get store => reader.store;
 
   CachedValue<SystemSettings> get value => reader.value;
   Stream<CachedValue<SystemSettings>> get changes => reader.changes;
   Future<RefreshResult> refresh({final bool force = false}) =>
       reader.refresh(force: force);
+
+  bool stageChange(final ServerSettingsJob change) =>
+      change.matchesSettings(value.data)
+      ? _draft.removeWhere(change.replaces)
+      : _draft.add(change);
+
+  void reconcileDraft() {
+    final snapshot = value;
+    if (snapshot.freshness == Freshness.fresh &&
+        snapshot.lastError == null &&
+        !snapshot.needsReconciliation) {
+      _draft.removeWhere(
+        (final change) =>
+            change is ServerSettingsJob &&
+            change.matchesSettings(snapshot.data),
+      );
+    }
+  }
 
   Future<ServerMutationResult<AutoUpgradeSettings>> setAutoUpgradeSettings({
     required final bool enable,

@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/get_it/resources_model.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
+import 'package:selfprivacy/logic/models/update_channels.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 
@@ -22,6 +23,8 @@ import '../../../../helpers/fixtures/dns_record_fixtures.dart';
 import '../../../../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
 import '../../../../helpers/fixtures/service_fixtures.dart';
+import '../../../../helpers/fixtures/system_settings_fixtures.dart';
+import '../../../../helpers/fixtures/update_channels_fixtures.dart';
 import '../../../../helpers/operation_fixture.dart';
 import '../../../../helpers/widget_harness.dart';
 
@@ -71,6 +74,84 @@ void main() {
   tearDown(() async {
     await cubit.close();
     hub.dispose();
+  });
+
+  test('draft survives recreation of its Jobs UI', () async {
+    cubit.addJob(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'));
+    await cubit.close();
+    cubit = createJobsCubit(
+      connection,
+      resources: resources,
+      dnsProvider: () => dnsProvider,
+      showMessage: messages.add,
+    );
+    await pumpEventQueue();
+    expect(cubit.state.draft.single, isA<ChangeServerTimezoneJob>());
+    expect(
+      (cubit.state.draft.single as ChangeServerTimezoneJob).timezone,
+      'Europe/Helsinki',
+    );
+  });
+
+  test(
+    'cancelled submission restores the draft after its Jobs UI closes',
+    () async {
+      connection.operations.pause();
+      cubit.addJob(ChangeServerTimezoneJob(timezone: 'UTC'));
+      final applying = cubit.applyAll();
+      await pumpEventQueue();
+      final operation = connection.operations.pending.single;
+      await cubit.close();
+      expect(connection.operations.cancel(operation.id), true);
+      await applying;
+      cubit = createJobsCubit(
+        connection,
+        resources: resources,
+        dnsProvider: () => dnsProvider,
+        showMessage: messages.add,
+      );
+      expect(
+        (cubit.state.draft.single as ChangeServerTimezoneJob).timezone,
+        'UTC',
+      );
+      verifyNever(() => api.setTimezone(any()));
+    },
+  );
+
+  test('cancelled draft is reconciled without an active Jobs UI', () async {
+    final channels = anUpdateChannels(custom: true);
+    connection.cache
+      ..setVersion(Version(3, 9, 0))
+      ..settings.push(aSystemSettings())
+      ..updateChannels.push(channels);
+    final notices = <String>[];
+    final subscription = connection.updateChannels.notices.listen(notices.add);
+    addTearDown(subscription.cancel);
+    connection.operations.pause();
+    cubit
+      ..addJob(ChangeServerTimezoneJob(timezone: 'UTC'))
+      ..addJob(
+        ChangeUpdateChannelJob(channelId: 'stable', channelName: 'Stable'),
+      );
+    final applying = cubit.applyAll();
+    await pumpEventQueue();
+    final operation = connection.operations.pending.single;
+    await cubit.close();
+    connection.cache
+      ..settings.push(aSystemSettings(timezone: 'UTC'))
+      ..updateChannels.push(
+        UpdateChannels(
+          currentChannel: channels.currentChannel,
+          channels: [channels.currentChannel],
+        ),
+      );
+    expect(connection.operations.cancel(operation.id), isTrue);
+    await applying;
+    expect(connection.changeDraft.value, isEmpty);
+    await pumpEventQueue();
+    expect(notices, ['server.update_channel.removed']);
+    verifyNever(() => api.setTimezone(any()));
+    verifyNever(() => api.setUpdateChannel(any()));
   });
 
   test('maintenance can be submitted after a rejected operation', () async {

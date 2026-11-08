@@ -22,6 +22,10 @@ class BrandHeroScreen extends StatelessWidget {
     this.bodyPadding = const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
     this.ignoreBreakpoints = false,
     this.hasSupportDrawer = false,
+    this.actions = const [],
+    this.appBarTitle,
+    this.pinned = false,
+    this.bottomBar,
   });
 
   final List<Widget> children;
@@ -33,6 +37,10 @@ class BrandHeroScreen extends StatelessWidget {
   final String? heroSubtitle;
   final VoidCallback? onBackButtonPressed;
   final EdgeInsetsGeometry bodyPadding;
+  final List<Widget> actions;
+  final Widget? appBarTitle;
+  final bool pinned;
+  final Widget? bottomBar;
 
   /// On non-mobile screens the buttons of the app bar are hidden.
   /// This is because this widget implies that it is nested inside a bigger layout.
@@ -60,39 +68,54 @@ class BrandHeroScreen extends StatelessWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 640),
-          child: CustomScrollView(
-            slivers: [
-              HeroSliverAppBar(
-                heroTitle: heroTitle,
-                hasHeroIcon: hasHeroIcon,
-                hasBackButton: hasBackButton,
-                onBackButtonPressed: onBackButtonPressed,
-                heroIconWidget: heroIconWidget,
-                hasFlashButton: hasFlashButton,
-                ignoreBreakpoints: ignoreBreakpoints,
-              ),
-              if (heroSubtitle != null)
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate([
-                      Text(
-                        heroSubtitle!,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
+          child: Column(
+            children: [
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    HeroSliverAppBar(
+                      heroTitle: heroTitle,
+                      hasHeroIcon: hasHeroIcon,
+                      hasBackButton: hasBackButton,
+                      onBackButtonPressed: onBackButtonPressed,
+                      heroIconWidget: heroIconWidget,
+                      hasFlashButton: hasFlashButton,
+                      ignoreBreakpoints: ignoreBreakpoints,
+                      actions: actions,
+                      title: appBarTitle,
+                      pinned: pinned,
+                    ),
+                    if (heroSubtitle != null)
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
                         ),
-                        textAlign: TextAlign.center,
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            Text(
+                              heroSubtitle!,
+                              style: Theme.of(context).textTheme.bodyMedium!
+                                  .copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ]),
+                        ),
                       ),
-                    ]),
-                  ),
+                    SliverPadding(
+                      padding: bodyPadding,
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(children),
+                      ),
+                    ),
+                  ],
                 ),
-              SliverPadding(
-                padding: bodyPadding,
-                sliver: SliverList(delegate: SliverChildListDelegate(children)),
               ),
+              if (bottomBar != null) bottomBar!,
             ],
           ),
         ),
@@ -111,6 +134,9 @@ class HeroSliverAppBar extends StatefulWidget {
     required this.hasFlashButton,
     required this.ignoreBreakpoints,
     super.key,
+    this.actions = const [],
+    this.title,
+    this.pinned = false,
   });
 
   final String heroTitle;
@@ -120,6 +146,9 @@ class HeroSliverAppBar extends StatefulWidget {
   final VoidCallback? onBackButtonPressed;
   final Widget heroIconWidget;
   final bool ignoreBreakpoints;
+  final List<Widget> actions;
+  final Widget? title;
+  final bool pinned;
 
   @override
   State<HeroSliverAppBar> createState() => _HeroSliverAppBarState();
@@ -135,17 +164,21 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
         !widget.hasFlashButton ||
         context.watch<JobsCubit>().state is JobsStateEmpty;
     return SliverAppBar(
-      expandedHeight: widget.hasHeroIcon
+      title: widget.title,
+      expandedHeight: widget.title != null
+          ? kToolbarHeight
+          : widget.hasHeroIcon
           ? 148.0 + _size.height
           : 72.0 + _size.height,
       primary: true,
-      pinned: isMobile,
+      pinned: isMobile || widget.pinned,
       stretch: true,
       surfaceTintColor: isMobile ? null : Colors.transparent,
       leading: (widget.hasBackButton && isMobile)
           ? const AutoLeadingButton()
           : const SizedBox.shrink(),
       actions: [
+        ...widget.actions,
         if (widget.hasFlashButton && isMobile)
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
@@ -164,37 +197,39 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
           ),
         const SizedBox.shrink(),
       ],
-      flexibleSpace: FlexibleSpaceBar(
-        title: LayoutBuilder(
-          builder: (final context, final constraints) => SizedBox(
-            width: constraints.maxWidth - 72.0,
-            child: WidgetSize(
-              onChange: (final Size size) => setState(() => _size = size),
-              child: Text(
-                widget.heroTitle,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+      flexibleSpace: widget.title != null
+          ? null
+          : FlexibleSpaceBar(
+              title: LayoutBuilder(
+                builder: (final context, final constraints) => SizedBox(
+                  width: constraints.maxWidth - 72.0,
+                  child: WidgetSize(
+                    onChange: (final Size size) => setState(() => _size = size),
+                    child: Text(
+                      widget.heroTitle,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      overflow: TextOverflow.fade,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
-                overflow: TextOverflow.fade,
-                textAlign: TextAlign.center,
+              ),
+              expandedTitleScale: 1.2,
+              centerTitle: true,
+              collapseMode: CollapseMode.pin,
+              titlePadding: const EdgeInsets.only(bottom: 12, top: 16),
+              background: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 72),
+                    if (widget.hasHeroIcon) widget.heroIconWidget,
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
-        expandedTitleScale: 1.2,
-        centerTitle: true,
-        collapseMode: CollapseMode.pin,
-        titlePadding: const EdgeInsets.only(bottom: 12, top: 16),
-        background: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 72),
-              if (widget.hasHeroIcon) widget.heroIconWidget,
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

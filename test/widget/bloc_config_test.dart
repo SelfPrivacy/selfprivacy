@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:mocktail/mocktail.dart';
@@ -43,12 +44,14 @@ import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 import 'package:selfprivacy/utils/show_jobs_modal.dart';
+import 'package:timezone/data/latest.dart';
 
 import '../fakes/hive/in_memory_hive.dart';
 import '../helpers/fixtures/domain_mutation_fixtures.dart';
 import '../helpers/fixtures/json_fixture.dart';
 import '../helpers/fixtures/server_fixtures.dart';
 import '../helpers/fixtures/service_fixtures.dart';
+import '../helpers/fixtures/system_settings_fixtures.dart';
 import '../helpers/fixtures/update_channels_fixtures.dart';
 import '../helpers/widget_harness.dart';
 
@@ -58,6 +61,7 @@ class _Box extends Mock implements Box {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
+  setUpAll(initializeTimeZones);
   late ResourcesModel resources;
   late ServerConnectionHub hub;
   late _Api api;
@@ -243,6 +247,133 @@ void main() {
       router.dispose();
     },
   );
+
+  for (final deviceZone in [null, 'Unknown/Timezone', 'Asia/Kathmandu']) {
+    final useDevice = deviceZone == 'Asia/Kathmandu';
+    testWidgets(
+      'timezone editor queues only after explicit confirmation: device=$deviceZone',
+      (final tester) async {
+        const timezoneChannel = MethodChannel('flutter_timezone');
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          timezoneChannel,
+          (final call) async {
+            if (call.method == 'getAvailableTimezones') {
+              return <String>[];
+            }
+            if (deviceZone == null) {
+              throw PlatformException(code: 'unavailable');
+            }
+            return deviceZone;
+          },
+        );
+        addTearDown(
+          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+            timezoneChannel,
+            null,
+          ),
+        );
+        final router = RootRouter(getIt<NavigationService>().navigatorKey);
+        await pumpApp(tester, router);
+        await tester.runAsync(() async {
+          await resources.addServer(aServer());
+          await pumpEventQueue();
+        });
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        final connection = hub.active!;
+        connection.cache.setVersion(Version(3, 9, 0));
+        connection.cache.settings.push(aSystemSettings());
+        final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
+        unawaited(serverRouter.push(const SelectTimezoneRoute()));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.text('Device time zone'), findsOneWidget);
+        if (!useDevice) {
+          expect(
+            find.text('Could not detect the device time zone'),
+            findsOneWidget,
+          );
+        }
+        expect(find.byType(TextField), findsNothing);
+        final createButton = find.widgetWithText(FilledButton, 'Create job');
+        final initialButtonRect = tester.getRect(createButton);
+        final scrollable = find
+            .descendant(
+              of: find.byType(CustomScrollView).last,
+              matching: find.byType(Scrollable),
+            )
+            .first;
+        await tester.drag(scrollable, const Offset(0, -2400));
+        await tester.pumpAndSettle();
+        expect(tester.getRect(createButton), initialButtonRect);
+        expect(find.byIcon(Icons.search).hitTestable(), findsOneWidget);
+        await tester.tap(find.byIcon(Icons.search));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+          find.byType(TextField),
+          useDevice ? 'Kathmandu' : 'UTC',
+        );
+        await tester.pump();
+        final utc = find.widgetWithText(
+          RadioListTile<String>,
+          useDevice ? 'Device time zone' : 'UTC',
+        );
+        await tester.scrollUntilVisible(utc, 100, scrollable: scrollable);
+        await tester.tap(utc);
+        await tester.pump();
+        expect(connection.changeDraft.value, isEmpty);
+        if (deviceZone == 'Unknown/Timezone') {
+          await serverRouter.maybePop();
+          await tester.pumpAndSettle();
+          expect(find.byType(TextField), findsNothing);
+          final lastZone = find.byKey(const ValueKey('Pacific/Kiritimati'));
+          await tester.scrollUntilVisible(
+            lastZone,
+            600,
+            maxScrolls: 200,
+            scrollable: scrollable,
+          );
+          await tester.tap(lastZone);
+          await tester.pump();
+          expect(tester.getRect(createButton), initialButtonRect);
+          expect(connection.changeDraft.value, isEmpty);
+        }
+        if (useDevice) {
+          tester.view.viewInsets = FakeViewPadding(
+            bottom: 300 * tester.view.devicePixelRatio,
+          );
+          addTearDown(tester.view.resetViewInsets);
+          await tester.pumpAndSettle();
+          expect(
+            tester.getRect(createButton).bottom,
+            lessThan(
+              tester.view.physicalSize.height / tester.view.devicePixelRatio -
+                  300,
+            ),
+          );
+        }
+        expect(createButton.hitTestable(), findsOneWidget);
+        await tester.tap(find.text('Create job'));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(
+          (connection.changeDraft.value.single as ChangeServerTimezoneJob)
+              .timezone,
+          useDevice
+              ? 'Asia/Kathmandu'
+              : deviceZone == 'Unknown/Timezone'
+              ? 'Pacific/Kiritimati'
+              : 'UTC',
+        );
+        expect(serverRouter.current.name, isNot(SelectTimezoneRoute.name));
+        verifyNever(() => api.setTimezone(any()));
+        await tester.pumpWidget(const SizedBox.shrink());
+        hub.dispose();
+        await tester.pump();
+        router.dispose();
+      },
+    );
+  }
 
   for (final switching in [false, true]) {
     testWidgets(

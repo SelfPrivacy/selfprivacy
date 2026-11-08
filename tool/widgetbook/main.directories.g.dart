@@ -164,6 +164,8 @@ import 'use_cases/molecules/list_items/user_list_item.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_list_items_user_list_item;
 import 'use_cases/molecules/placeholders/empty_page_placeholder.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_placeholders_empty_page_placeholder;
+import 'use_cases/molecules/timezone_selection_tile.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_molecules_timezone_selection_tile;
 import 'use_cases/organisms/charts/server_bandwidth_chart.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_charts_server_bandwidth_chart;
 import 'use_cases/organisms/charts/server_charts.dart'
@@ -1226,6 +1228,30 @@ final directories = <_widgetbook.WidgetbookNode>[
                     .brandHeroScreenNoIcon,
           ),
           _widgetbook.WidgetbookUseCase(
+            name: 'Search and footer',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenSearchAndFooter,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Search desktop',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenSearchDesktop,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Search open',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenSearchOpen,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Search scrolled',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
+                    .brandHeroScreenSearchScrolled,
+          ),
+          _widgetbook.WidgetbookUseCase(
             name: 'With subtitle',
             builder:
                 _asset_selfprivacy_tool_widgetbook_use_cases_layouts_brand_hero_screen
@@ -1427,6 +1453,41 @@ final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
     name: 'Molecules',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'TimezoneSelectionTile',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Choices',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_molecules_timezone_selection_tile
+                    .timezoneChoices,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Device',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_molecules_timezone_selection_tile
+                    .timezoneDevice,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Disabled',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_molecules_timezone_selection_tile
+                    .timezoneDisabled,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Large text',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_molecules_timezone_selection_tile
+                    .timezoneLargeText,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Wide',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_molecules_timezone_selection_tile
+                    .timezoneWide,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookFolder(
         name: 'buttons',
         children: [

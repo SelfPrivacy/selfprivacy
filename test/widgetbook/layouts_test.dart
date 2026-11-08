@@ -249,4 +249,40 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  testWidgets('search and footer stay accessible on mobile and desktop', (
+    final tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    for (final builder in [
+      brandHeroScreenSearchAndFooter,
+      brandHeroScreenSearchOpen,
+      brandHeroScreenSearchScrolled,
+      brandHeroScreenSearchDesktop,
+    ]) {
+      final example = builder(_Context()) as CatalogCase;
+      await pumpCase(tester, example);
+      final button = find.widgetWithText(FilledButton, 'Create job');
+      expect(button.hitTestable(), findsOneWidget, reason: example.id);
+      expect(
+        tester.getRect(button).bottom,
+        lessThanOrEqualTo(example.height),
+        reason: example.id,
+      );
+      final rect = tester.getRect(button);
+      final viewport = find.byType(CustomScrollView);
+      await tester.drag(viewport, const Offset(0, -1200));
+      await tester.pumpAndSettle();
+      expect(tester.getRect(button), rect, reason: example.id);
+      expect(
+        find.byIcon(Icons.search).hitTestable().evaluate().isNotEmpty ||
+            find.byType(TextField).hitTestable().evaluate().isNotEmpty,
+        isTrue,
+        reason: example.id,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+  });
 }

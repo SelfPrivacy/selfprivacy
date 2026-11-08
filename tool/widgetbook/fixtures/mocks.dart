@@ -97,11 +97,4 @@ class DemoGroups extends ActionMock implements GroupsBloc {}
 class DemoGroupsState extends GroupsLoaded {
   DemoGroupsState()
     : super(groups: const ['sp.full_users', 'sp.admins', 'sp.nextcloud.user']);
-
-  @override
-  List<String> get groups => const [
-    'sp.full_users',
-    'sp.admins',
-    'sp.nextcloud.user',
-  ];
 }

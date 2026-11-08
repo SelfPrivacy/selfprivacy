@@ -1,11 +1,5 @@
 part of 'server_settings.dart';
 
-final List<Location> locations = timeZoneDatabase.locations.values.toList()
-  ..sort(
-    (final l1, final l2) =>
-        l1.currentTimeZone.offset.compareTo(l2.currentTimeZone.offset),
-  );
-
 @RoutePage()
 class SelectTimezonePage extends StatefulWidget {
   const SelectTimezonePage({super.key});
@@ -15,135 +9,271 @@ class SelectTimezonePage extends StatefulWidget {
 }
 
 class _SelectTimezonePageState extends State<SelectTimezonePage> {
-  final ScrollController scrollController = ScrollController();
-  final TextEditingController searchController = TextEditingController();
-
-  String? timezoneFilterValue;
-  bool isSearching = false;
+  static const _deviceChoice = 'device';
+  String? _selected;
+  String _filter = '';
+  bool _searching = false;
+  bool _edited = false;
+  bool _useDeviceTimezone = false;
+  bool _loadingDeviceTimezone = false;
+  Location? _deviceTimezone;
+  Map<String, String> _zoneNames = {};
+  String? _locale;
+  DateTime _now = DateTime.now();
+  late final Timer _clock;
+  late final AppLifecycleListener _lifecycle;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    searchController.addListener(() {
-      setState(() {
-        timezoneFilterValue = searchController.text.isNotEmpty
-            ? searchController.text
-            : null;
-      });
-    });
     super.initState();
+    _clock = Timer.periodic(const Duration(minutes: 1), (_) {
+      setState(() => _now = DateTime.now());
+    });
+    _lifecycle = AppLifecycleListener(
+      onResume: () {
+        setState(() => _now = DateTime.now());
+        unawaited(_loadDeviceTimezone());
+      },
+    );
   }
 
-  void _afterLayout(final _) {
-    final t = DateTime.now().timeZoneOffset;
-    final index = locations.indexWhere(
-      (final element) =>
-          Duration(milliseconds: element.currentTimeZone.offset) == t,
-    );
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = context.locale.toLanguageTag();
+    if (_locale == locale) {
+      return;
+    }
+    _locale = locale;
+    _zoneNames = {};
+    unawaited(_loadDeviceTimezone());
+    unawaited(_loadZoneNames(locale));
+  }
 
-    if (index >= 0) {
-      unawaited(
-        scrollController.animateTo(
-          60.0 * index,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-        ),
-      );
+  Future<void> _loadDeviceTimezone() async {
+    if (_loadingDeviceTimezone) {
+      return;
+    }
+    setState(() => _loadingDeviceTimezone = true);
+    Location? location;
+    try {
+      final info = await FlutterTimezone.getLocalTimezone();
+      location = timeZoneDatabase.locations[info.identifier];
+    } on PlatformException {
+      location = null;
+    } on MissingPluginException {
+      location = null;
+    } on ArgumentError {
+      location = null;
+    }
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _deviceTimezone = location;
+      _loadingDeviceTimezone = false;
+      if (_useDeviceTimezone) {
+        _selected = location?.name;
+      }
+    });
+  }
+
+  Future<void> _loadZoneNames(final String locale) async {
+    try {
+      final zones = await FlutterTimezone.getAvailableTimezones(locale);
+      if (!mounted || _locale != locale) {
+        return;
+      }
+      setState(() {
+        _zoneNames = {
+          for (final zone in zones)
+            if (zone.localizedName case final name?) zone.identifier: name.name,
+        };
+      });
+    } on PlatformException {
+      return;
+    } on MissingPluginException {
+      return;
+    } on ArgumentError {
+      return;
     }
   }
 
   @override
   void dispose() {
-    scrollController.dispose();
-    searchController.dispose();
+    _clock.cancel();
+    _lifecycle.dispose();
     super.dispose();
+  }
+
+  void _closeSearch() {
+    FocusScope.of(context).unfocus();
+    setState(() {
+      _searching = false;
+      _filter = '';
+    });
   }
 
   @override
   Widget build(final BuildContext context) {
-    final isDesktop = Breakpoints.mediumAndUp.isActive(context);
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: (isDesktop || isSearching)
-            ? TextField(
-                readOnly: false,
-                textAlign: TextAlign.start,
-                textInputAction: TextInputAction.next,
-                enabled: true,
-                controller: searchController,
-                decoration: InputDecoration(
-                  errorText: null,
-                  hintText: 'server.timezone_search_bar'.tr(),
-                ),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text('server.select_timezone'.tr()),
-              ),
-        leading: !isDesktop
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: isSearching
-                    ? () => setState(() => isSearching = false)
-                    : () => Navigator.of(context).pop(),
-              )
-            : null,
-        actions: [
-          if (!isSearching && !isDesktop)
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () => setState(() => isSearching = true),
-            ),
-        ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          controller: scrollController,
-          children: locations
-              .where(
-                (final Location location) =>
-                    timezoneFilterValue == null ||
-                    location.name.toLowerCase().contains(
-                      timezoneFilterValue!,
-                    ) ||
-                    Duration(
-                      milliseconds: location.currentTimeZone.offset,
-                    ).toTimezoneOffsetFormat().contains(timezoneFilterValue!),
-              )
-              .toList()
-              .asMap()
-              .map(locationToListTile)
-              .values
-              .toList(),
-        ),
-      ),
-    );
-  }
-
-  MapEntry<int, ListTile> locationToListTile(
-    final int key,
-    final Location location,
-  ) {
-    final duration = Duration(milliseconds: location.currentTimeZone.offset);
-    final area = location.currentTimeZone.abbreviation.replaceAll(
-      RegExp(r'[\d+()-]'),
-      '',
-    );
-
-    return MapEntry(
-      key,
-      ListTile(
-        title: Text(location.name),
-        subtitle: Text(
-          'GMT ${duration.toTimezoneOffsetFormat()} ${area.isNotEmpty ? '($area)' : ''}',
-        ),
-        onTap: () {
-          context.read<JobsCubit>().addJob(
-            ChangeServerTimezoneJob(timezone: location.name),
-          );
-          Navigator.of(context).pop();
+    final bloc = context.watch<ServerSettingsBloc>();
+    final state = bloc.state;
+    final selected = _edited ? _selected : state.timezone;
+    final pending = state.pending<ChangeServerTimezoneJob>();
+    final locations =
+        timeZoneDatabase.locations.values
+            .where(
+              (final location) =>
+                  location.name
+                      .replaceAll('_', ' ')
+                      .toLowerCase()
+                      .contains(_filter) ||
+                  location.name.toLowerCase().contains(_filter) ||
+                  (_zoneNames[location.name]?.toLowerCase().contains(_filter) ??
+                      false) ||
+                  Duration(
+                    milliseconds: location
+                        .timeZone(_now.millisecondsSinceEpoch)
+                        .offset,
+                  ).toTimezoneOffsetFormat().contains(_filter),
+            )
+            .toList()
+          ..sort((final a, final b) {
+            final offset = a
+                .timeZone(_now.millisecondsSinceEpoch)
+                .offset
+                .compareTo(b.timeZone(_now.millisecondsSinceEpoch).offset);
+            return offset == 0 ? a.name.compareTo(b.name) : offset;
+          });
+    return PopScope(
+      canPop: !_searching,
+      onPopInvokedWithResult: (final didPop, _) {
+        if (!didPop && _searching) {
+          _closeSearch();
+        }
+      },
+      child: RadioGroup<String>(
+        groupValue: _useDeviceTimezone ? _deviceChoice : selected,
+        onChanged: (final value) {
+          if (state.canEditSettings) {
+            setState(() {
+              _useDeviceTimezone = value == _deviceChoice;
+              _selected = _useDeviceTimezone ? _deviceTimezone?.name : value;
+              _edited = true;
+            });
+          }
         },
+        child: BrandHeroScreen(
+          hasFlashButton: !_searching,
+          heroIcon: Icons.schedule,
+          heroTitle: 'server.select_timezone'.tr(),
+          pinned: true,
+          appBarTitle: _searching
+              ? TextField(
+                  autofocus: true,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: 'server.timezone_search_bar'.tr(),
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (final value) =>
+                      setState(() => _filter = value.toLowerCase()),
+                  onSubmitted: (_) => FocusScope.of(context).unfocus(),
+                )
+              : null,
+          actions: [
+            IconButton(
+              tooltip: _searching
+                  ? MaterialLocalizations.of(context).closeButtonTooltip
+                  : MaterialLocalizations.of(context).searchFieldLabel,
+              icon: Icon(_searching ? Icons.close : Icons.search),
+              onPressed: _searching
+                  ? _closeSearch
+                  : () => setState(() => _searching = true),
+            ),
+          ],
+          bottomBar: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (pending != null) ...[
+                    const NotAppliedLabel(),
+                    const SizedBox(height: 24),
+                  ],
+                  FilledButton(
+                    onPressed:
+                        state.canEditSettings &&
+                            (!_useDeviceTimezone || !_loadingDeviceTimezone) &&
+                            selected != null &&
+                            selected != state.timezone
+                        ? () {
+                            bloc.add(TimezoneSelected(selected));
+                            context.router.pop();
+                          }
+                        : null,
+                    child: Text(
+                      (pending == null
+                              ? 'service_page.create_job'
+                              : 'service_page.update_job')
+                          .tr(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          children: [
+            if (_deviceTimezone case final location?)
+              TimezoneSelectionTile(
+                key: const ValueKey(_deviceChoice),
+                value: _deviceChoice,
+                title: 'server.timezone.device'.tr(),
+                location: location,
+                zoneName: _zoneNames[location.name],
+                now: _now,
+                enabled: state.canEditSettings && !_loadingDeviceTimezone,
+              )
+            else
+              Skeletonizer(
+                enabled: _loadingDeviceTimezone,
+                child: RadioListTile<String>(
+                  value: _deviceChoice,
+                  enabled: false,
+                  title: Text('server.timezone.device'.tr()),
+                  subtitle: Text(
+                    (_loadingDeviceTimezone
+                            ? 'server.timezone.detecting'
+                            : 'server.timezone.unavailable')
+                        .tr(),
+                  ),
+                  secondary: _loadingDeviceTimezone
+                      ? null
+                      : IconButton(
+                          tooltip: 'server.timezone.retry_detection'.tr(),
+                          icon: const Icon(Icons.refresh),
+                          onPressed: _loadDeviceTimezone,
+                        ),
+                ),
+              ),
+            if (locations.isEmpty)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text('server.timezone.no_matches'.tr()),
+              ),
+            for (final location in locations)
+              TimezoneSelectionTile(
+                key: ValueKey(location.name),
+                location: location,
+                zoneName: _zoneNames[location.name],
+                now: _now,
+                enabled: state.canEditSettings,
+              ),
+          ],
+        ),
       ),
     );
   }

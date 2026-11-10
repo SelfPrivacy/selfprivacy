@@ -241,13 +241,58 @@
             "warning": "This policy affects all Kanidm users. Users need suitable credentials to sign in.",
             "error": "Could not load the credential policy"
         },
+        "telemetry": {
+            "title": "Telemetry",
+            "hint": "Send diagnostic data from your server to an OpenTelemetry collector.",
+            "warning": {
+                "title": "Protect your data",
+                "description": "Telemetry contains sensitive information. Only send it to a collector server you control. SelfPrivacy support will never ask you to send telemetry."
+            },
+            "error": "Could not load telemetry settings",
+            "status": {
+                "enabled": "Enabled",
+                "disabled": "Disabled"
+            },
+            "fields": {
+                "enable": "Enable telemetry",
+                "api_traces": "Send traces",
+                "api_traces_description": "Request timings and execution details from the server API.",
+                "memory_tracing": "API memory tracing",
+                "memory_tracing_description": "Helps investigate memory leaks, but makes your server much slower. Enable or disable it through SSH.",
+                "endpoint": "Collector endpoint",
+                "endpoint_hint": "HTTPS address with an explicit port, for example https://collector.example.org:4317",
+                "logs": "Send system logs",
+                "logs_description": "Messages from system services, including warnings and errors.",
+                "metrics": "Send system metrics",
+                "metrics_description": "Resource usage, including CPU, memory, disks, and network traffic."
+            },
+            "sections": {
+                "data": "Diagnostic data",
+                "connection": "Collector connection"
+            },
+            "headers": {
+                "add": "Add header",
+                "name": "Header name",
+                "value": "Header value",
+                "keep": "Keep saved value",
+                "remove": "Remove header",
+                "pending_removal": "Will be removed",
+                "undo_remove": "Undo removal"
+            },
+            "validation": {
+                "invalid_endpoint": "Enter an HTTPS address with an explicit port, without a path, credentials, query, or fragment.",
+                "invalid_header_name": "Use valid, unique header names. Names are not case-sensitive.",
+                "invalid_header_value": "Enter a header value without line breaks or control characters."
+            }
+        },
         "settings_status": {
             "load_error": "Could not load server settings"
         },
         "settings_sections": {
             "updates": "Updates",
             "access": "Access and security",
-            "system": "System"
+            "system": "System",
+            "diagnostics": "Diagnostics"
         },
         "update_channel": {
             "title": "Update channel",
@@ -857,6 +902,7 @@
         "change_server_timezone": "Change server timezone",
         "change_update_channel": "Change update channel",
         "change_credential_policy": "Change minimum sign-in credentials",
+        "change_telemetry_settings": "Change telemetry settings",
         "change_ssh_settings": "Change SSH settings",
         "update_dns_records": "Update DNS records",
         "dns_records_did_not_change": "No changes needed",

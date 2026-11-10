@@ -35,6 +35,7 @@ import 'package:selfprivacy/logic/models/server_logs.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/ssh_settings.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/models/telemetry_settings.dart';
 import 'package:selfprivacy/logic/models/update_channels.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
@@ -264,6 +265,49 @@ class ServerApi extends GraphQLApiMap
       decodePayload: (final data) => data.minimumCredentialType == null
           ? null
           : CredentialPolicy.fromGraphQL(data.minimumCredentialType!),
+    );
+  }
+
+  Future<TelemetrySettings> getTelemetrySettings() async {
+    final client = await getClient();
+    return TelemetrySettings.fromGraphQL(
+      requireServerApiData(
+        await client.query$GetTelemetrySettings(
+          Options$Query$GetTelemetrySettings(context: sensitiveGraphQLContext),
+        ),
+      ).system.settings.openTelemetry,
+    );
+  }
+
+  Future<ServerMutationResult<TelemetrySettings>> setTelemetrySettings(
+    final TelemetryUpdate settings,
+  ) async {
+    final client = await getClient();
+    return decodeServerMutation(
+      await client.mutate$SetTelemetrySettings(
+        Options$Mutation$SetTelemetrySettings(
+          variables: Variables$Mutation$SetTelemetrySettings(
+            settings: Input$OpenTelemetrySettingsInput(
+              enable: settings.enable,
+              uploadSystemLogs: settings.uploadSystemLogs,
+              uploadSystemMetrics: settings.uploadSystemMetrics,
+              headers: settings.headers.entries
+                  .map(
+                    (final entry) => Input$OpenTelemetryHeaderInput(
+                      name: entry.key,
+                    ).copyWith(value: entry.value),
+                  )
+                  .toList(),
+            ).copyWith(endpoint: settings.endpoint),
+          ),
+          context: sensitiveGraphQLContext,
+          errorPolicy: ErrorPolicy.all,
+          fetchPolicy: FetchPolicy.noCache,
+        ),
+      ),
+      select: (final data) => data.system.changeOpenTelemetrySettings,
+      decodePayload: (final data) =>
+          TelemetrySettings.fromGraphQL(data.settings),
     );
   }
 

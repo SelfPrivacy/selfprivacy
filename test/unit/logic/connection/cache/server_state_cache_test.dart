@@ -93,6 +93,7 @@ void main() {
       'SystemSettings',
       'GetUpdateChannels',
       'GetCredentialPolicy',
+      'GetTelemetrySettings',
       'BackupConfiguration',
       'AllBackupSnapshots',
       'GetServerDiskVolumes',
@@ -231,6 +232,7 @@ void main() {
       'settings': 600,
       'updateChannels': 600,
       'credentialPolicy': 600,
+      'telemetry': 600,
     };
     expect(state.stores.map((final store) => store.name), intervals.keys);
     for (final store in state.stores) {

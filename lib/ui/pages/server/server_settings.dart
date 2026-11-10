@@ -52,6 +52,8 @@ class ServerSettingsPage extends StatelessWidget {
                   unawaited(context.pushRoute(const SelectTimezoneRoute())),
               onCredentialPolicy: () =>
                   unawaited(context.pushRoute(const CredentialPolicyRoute())),
+              onTelemetry: () =>
+                  unawaited(context.pushRoute(const TelemetryRoute())),
               onShowOperation: () =>
                   unawaited(showModalJobsSheet(context: context)),
             ),

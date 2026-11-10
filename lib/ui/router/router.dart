@@ -37,6 +37,7 @@ import 'package:selfprivacy/ui/pages/server/memory_usage_by_service.dart';
 import 'package:selfprivacy/ui/pages/server/select_update_channel.dart';
 import 'package:selfprivacy/ui/pages/server/server_details.dart';
 import 'package:selfprivacy/ui/pages/server/server_settings.dart';
+import 'package:selfprivacy/ui/pages/server/telemetry.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/server_storage/extending_volume.dart';
 import 'package:selfprivacy/ui/pages/server_storage/server_storage.dart';
@@ -127,6 +128,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: SelectTimezoneRoute.page),
         AutoRoute(page: SelectUpdateChannelRoute.page),
         AutoRoute(page: CredentialPolicyRoute.page),
+        AutoRoute(page: TelemetryRoute.page),
         AutoRoute(page: DnsDetailsRoute.page),
         AutoRoute(page: BackupDetailsRoute.page),
         AutoRoute(page: BackupsListRoute.page),
@@ -239,6 +241,8 @@ String getRouteTitle(final String routeName) {
       return 'server.update_channel.title';
     case 'CredentialPolicyRoute':
       return 'server.credential_policy.title';
+    case 'TelemetryRoute':
+      return 'server.telemetry.title';
     case 'SelectTimezoneRoute':
       return 'server.select_timezone';
     case 'ServerLogsRoute':

@@ -14,6 +14,7 @@ import 'package:selfprivacy/ui/organisms/server_settings_view.dart';
 import 'package:selfprivacy/ui/pages/server/server_settings.dart';
 
 import '../../../helpers/fixtures/system_settings_fixtures.dart';
+import '../../../helpers/fixtures/telemetry_fixtures.dart';
 import '../../../helpers/fixtures/update_channels_fixtures.dart';
 import '../../../helpers/widget_harness.dart';
 
@@ -32,6 +33,7 @@ void main() {
       SingleChildScrollView(
         child: ServerSettingsView(
           state: ServerSettingsReady(
+            telemetry: const CachedValue(support: DomainSupport.unsupported),
             policy: const CachedValue(
               data: CredentialPolicy.any,
               support: DomainSupport.supported,
@@ -46,6 +48,7 @@ void main() {
           onChannel: () {},
           onTimezone: () {},
           onCredentialPolicy: () {},
+          onTelemetry: () {},
           onShowOperation: () {},
           onRefresh: () {},
         ),
@@ -68,6 +71,11 @@ void main() {
             child: ServerSettingsView(
               state: ServerSettingsReady(
                 policy: const CachedValue(support: DomainSupport.unsupported),
+                telemetry: CachedValue(
+                  data: aTelemetrySettings(),
+                  support: DomainSupport.supported,
+                  freshness: Freshness.stale,
+                ),
                 settings: CachedValue(
                   data: aSystemSettings(),
                   support: DomainSupport.supported,
@@ -86,6 +94,7 @@ void main() {
               onChannel: () {},
               onTimezone: () {},
               onCredentialPolicy: () {},
+              onTelemetry: () {},
               onShowOperation: () {},
               onRefresh: () => refreshes++,
             ),
@@ -117,6 +126,7 @@ void main() {
         child: ServerSettingsView(
           state: ServerSettingsReady(
             policy: const CachedValue(support: DomainSupport.unsupported),
+            telemetry: const CachedValue(support: DomainSupport.unsupported),
             settings: CachedValue(
               data: aSystemSettings(autoUpgrade: false, allowReboot: true),
               support: DomainSupport.supported,
@@ -128,6 +138,7 @@ void main() {
           onChannel: () {},
           onTimezone: () {},
           onCredentialPolicy: () {},
+          onTelemetry: () {},
           onShowOperation: () {},
           onRefresh: () {},
         ),
@@ -154,6 +165,7 @@ void main() {
         child: ServerSettingsView(
           state: ServerSettingsApplying(
             policy: const CachedValue(support: DomainSupport.unsupported),
+            telemetry: const CachedValue(support: DomainSupport.unsupported),
             settings: CachedValue(
               data: aSystemSettings(),
               support: DomainSupport.supported,
@@ -165,6 +177,7 @@ void main() {
           onChannel: () {},
           onTimezone: () {},
           onCredentialPolicy: () {},
+          onTelemetry: () {},
           onShowOperation: () => opened = true,
           onRefresh: () {},
         ),
@@ -186,6 +199,7 @@ void main() {
         child: ServerSettingsView(
           state: ServerSettingsReady(
             policy: const CachedValue(support: DomainSupport.unsupported),
+            telemetry: const CachedValue(support: DomainSupport.unsupported),
             settings: CachedValue(
               support: DomainSupport.supported,
               lastError: StateError('offline'),
@@ -200,6 +214,7 @@ void main() {
           onChannel: () => opened = true,
           onTimezone: () {},
           onCredentialPolicy: () {},
+          onTelemetry: () {},
           onShowOperation: () {},
           onRefresh: () => refreshed = true,
         ),
@@ -224,6 +239,7 @@ void main() {
         isAttached: () => true,
       )..cache.setVersion(Version(3, 9, 0));
       connection.cache.settings.push(aSystemSettings());
+      connection.cache.telemetry.push(aTelemetrySettings());
       connection.cache.credentialPolicy.push(CredentialPolicy.any);
       connection.cache.updateChannels.push(anUpdateChannels());
       final bloc = ServerSettingsBloc(

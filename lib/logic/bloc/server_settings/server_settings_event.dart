@@ -37,3 +37,8 @@ class CredentialPolicySelected extends ServerSettingsEvent {
   const CredentialPolicySelected(this.policy);
   final CredentialPolicy policy;
 }
+
+class TelemetrySettingsSelected extends ServerSettingsEvent {
+  const TelemetrySettingsSelected(this.settings);
+  final TelemetryUpdate settings;
+}

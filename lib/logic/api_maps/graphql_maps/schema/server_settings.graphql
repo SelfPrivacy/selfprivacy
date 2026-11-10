@@ -103,6 +103,32 @@ query GetCredentialPolicy {
   users { minimumCredentialType }
 }
 
+fragment telemetryFields on OpenTelemetrySettings {
+  enable
+  endpoint
+  uploadSystemLogs
+  uploadSystemMetrics
+  headerNames
+  memoryTracingEnabled
+}
+
+query GetTelemetrySettings {
+  system {
+    settings {
+      openTelemetry { ...telemetryFields }
+    }
+  }
+}
+
+mutation SetTelemetrySettings($settings: OpenTelemetrySettingsInput!) {
+  system {
+    changeOpenTelemetrySettings(settings: $settings) {
+      ...basicMutationReturnFields
+      settings { ...telemetryFields }
+    }
+  }
+}
+
 mutation SetCredentialPolicy($policy: KanidmCredentialType!) {
   users {
     setKanidmMinimumCredentialType(minimumCredentialType: $policy) {

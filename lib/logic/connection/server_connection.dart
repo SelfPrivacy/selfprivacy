@@ -14,6 +14,7 @@ import 'package:selfprivacy/logic/connection/lifecycle/reachability.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/server_connection_binding.dart';
 import 'package:selfprivacy/logic/connection/lifecycle/token_rotation.dart';
 import 'package:selfprivacy/logic/connection/repositories/backups_repository.dart';
+import 'package:selfprivacy/logic/connection/repositories/credential_policy_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/recovery_key_repository.dart';
@@ -87,6 +88,11 @@ class ServerConnection {
       reader: _reader(cache.updateChannels),
       draft: changeDraft,
     );
+    credentialPolicy = CredentialPolicyRepository(
+      commands: commands,
+      reader: _reader(cache.credentialPolicy),
+      draft: changeDraft,
+    );
     recoveryKey = RecoveryKeyRepository(
       commands: commands,
       reader: _reader(cache.recoveryKeyStatus),
@@ -126,6 +132,7 @@ class ServerConnection {
     _subscriptions.addAll([
       settings.changes.listen((_) => settings.reconcileDraft()),
       updateChannels.changes.listen((_) => updateChannels.reconcileDraft()),
+      credentialPolicy.changes.listen((_) => credentialPolicy.reconcileDraft()),
     ]);
     for (final store in cache.stores) {
       _subscriptions.add(
@@ -185,6 +192,7 @@ class ServerConnection {
   late final UsersRepository users;
   late final SettingsRepository settings;
   late final UpdateChannelsRepository updateChannels;
+  late final CredentialPolicyRepository credentialPolicy;
   late final ServicesRepository services;
   late final BackupsRepository backups;
   late final VolumesRepository volumes;

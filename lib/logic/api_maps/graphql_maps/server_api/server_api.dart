@@ -19,6 +19,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutati
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/models/auto_upgrade_settings.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
@@ -234,6 +235,35 @@ class ServerApi extends GraphQLApiMap
     return decodeServerMutation(
       response,
       select: (final data) => data.system.setUpdateChannel,
+    );
+  }
+
+  Future<CredentialPolicy> getCredentialPolicy() async {
+    final client = await getClient();
+    return CredentialPolicy.fromGraphQL(
+      requireServerApiData(
+        await client.query$GetCredentialPolicy(),
+      ).users.minimumCredentialType,
+    );
+  }
+
+  Future<ServerMutationResult<CredentialPolicy>> setCredentialPolicy(
+    final CredentialPolicy policy,
+  ) async {
+    final value = policy.graphQL;
+    final client = await getClient();
+    return decodeServerMutation(
+      await client.mutate$SetCredentialPolicy(
+        Options$Mutation$SetCredentialPolicy(
+          variables: Variables$Mutation$SetCredentialPolicy(policy: value),
+          errorPolicy: ErrorPolicy.all,
+          fetchPolicy: FetchPolicy.noCache,
+        ),
+      ),
+      select: (final data) => data.users.setKanidmMinimumCredentialType,
+      decodePayload: (final data) => data.minimumCredentialType == null
+          ? null
+          : CredentialPolicy.fromGraphQL(data.minimumCredentialType!),
     );
   }
 

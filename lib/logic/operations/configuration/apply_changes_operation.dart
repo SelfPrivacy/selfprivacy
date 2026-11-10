@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
+import 'package:selfprivacy/logic/connection/repositories/credential_policy_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/services_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
@@ -28,6 +29,7 @@ OperationStep configurationStep(
   titleKey: switch (change) {
     ChangeServerTimezoneJob() => 'jobs.change_server_timezone',
     ChangeUpdateChannelJob() => 'jobs.change_update_channel',
+    ChangeCredentialPolicyJob() => 'jobs.change_credential_policy',
     ChangeSshSettingsJob() => 'jobs.change_ssh_settings',
     ChangeAutoUpgradeSettingsJob() => 'jobs.change_auto_upgrade_settings',
     ChangeServiceConfiguration() => 'jobs.change_service_settings',
@@ -96,6 +98,7 @@ class ApplyChangesOperation {
     required final UsersRepository users,
     required final SettingsRepository settings,
     required final UpdateChannelsRepository updateChannels,
+    required final CredentialPolicyRepository credentialPolicy,
     required final ServicesRepository services,
     required final JobsRepository jobs,
     required final VolumesRepository volumes,
@@ -105,6 +108,7 @@ class ApplyChangesOperation {
   }) : _users = users,
        _settings = settings,
        _updateChannels = updateChannels,
+       _credentialPolicy = credentialPolicy,
        _services = services,
        _jobs = jobs,
        _volumes = volumes,
@@ -115,6 +119,7 @@ class ApplyChangesOperation {
   final UsersRepository _users;
   final SettingsRepository _settings;
   final UpdateChannelsRepository _updateChannels;
+  final CredentialPolicyRepository _credentialPolicy;
   final ServicesRepository _services;
   final JobsRepository _jobs;
   final VolumesRepository _volumes;
@@ -229,6 +234,9 @@ class ApplyChangesOperation {
   Future<ServerMutationResult<Object?>> execute(final JobDraft job) {
     _requireAttached();
     return switch (job) {
+      ChangeCredentialPolicyJob(:final policy) => _credentialPolicy.setPolicy(
+        policy,
+      ),
       ChangeUpdateChannelJob(:final channelId) => _updateChannels.setChannel(
         channelId,
       ),

@@ -186,6 +186,22 @@ class ConsoleRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CredentialPolicyPage]
+class CredentialPolicyRoute extends PageRouteInfo<void> {
+  const CredentialPolicyRoute({List<PageRouteInfo>? children})
+    : super(CredentialPolicyRoute.name, initialChildren: children);
+
+  static const String name = 'CredentialPolicyRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CredentialPolicyPage();
+    },
+  );
+}
+
+/// generated route for
 /// [DeveloperSettingsPage]
 class DeveloperSettingsRoute extends PageRouteInfo<void> {
   const DeveloperSettingsRoute({List<PageRouteInfo>? children})

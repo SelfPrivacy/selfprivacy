@@ -6,6 +6,7 @@ import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/cache/domain_store.dart';
 import 'package:selfprivacy/logic/connection/repositories/devices_repository.dart';
 import 'package:selfprivacy/logic/models/backup.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
@@ -107,6 +108,12 @@ class ServerStateCache {
       refreshSeconds: 600,
       requiredApiVersion: '>=3.9.0',
     );
+    credentialPolicy = domain(
+      name: 'credentialPolicy',
+      fetch: () => api().getCredentialPolicy(),
+      refreshSeconds: 600,
+      requiredApiVersion: '>=3.9.0',
+    );
     stores = List.unmodifiable([apiVersion, ..._constraints.keys]);
     final names = stores.map((final store) => store.name).toSet();
     final unknownOverrides = staleAfterOverrides.keys.toSet().difference(names);
@@ -128,6 +135,7 @@ class ServerStateCache {
   late final DomainStore<List<String>> groups;
   late final DomainStore<SystemSettings> settings;
   late final DomainStore<UpdateChannels> updateChannels;
+  late final DomainStore<CredentialPolicy> credentialPolicy;
 
   /// Read-only registry for refresh, invalidation and lifecycle operations.
   /// Supply pushed data through the typed domain fields.

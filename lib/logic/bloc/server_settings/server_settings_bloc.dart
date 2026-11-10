@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/logic/models/update_channels.dart';
@@ -28,6 +29,9 @@ class ServerSettingsBloc
           .listen((_) => add(const _SettingsObserved())),
       connection.settings.changes.listen((_) => add(const _SettingsObserved())),
       connection.updateChannels.changes.listen(
+        (_) => add(const _SettingsObserved()),
+      ),
+      connection.credentialPolicy.changes.listen(
         (_) => add(const _SettingsObserved()),
       ),
       connection.changeDraft.changes.listen(
@@ -71,11 +75,16 @@ class ServerSettingsBloc
           channelId: channel.id,
           channelName: channel.name,
         ),
+      CredentialPolicySelected(:final policy) when current.canEditPolicy =>
+        ChangeCredentialPolicyJob(policy: policy),
       _ => null,
     };
     final staged = switch (change) {
       ServerSettingsJob() => _connection.settings.stageChange(change),
       ChangeUpdateChannelJob() => _connection.updateChannels.stageChange(
+        change,
+      ),
+      ChangeCredentialPolicyJob() => _connection.credentialPolicy.stageChange(
         change,
       ),
       _ => false,
@@ -98,6 +107,7 @@ class ServerSettingsBloc
     await Future.wait([
       _connection.settings.refresh(force: true),
       _connection.updateChannels.refresh(force: true),
+      _connection.credentialPolicy.refresh(force: true),
     ]);
   }
 

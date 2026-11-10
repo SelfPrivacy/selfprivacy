@@ -32,3 +32,8 @@ class UpdateChannelSelected extends ServerSettingsEvent {
   const UpdateChannelSelected(this.channel);
   final UpdateChannel channel;
 }
+
+class CredentialPolicySelected extends ServerSettingsEvent {
+  const CredentialPolicySelected(this.policy);
+  final CredentialPolicy policy;
+}

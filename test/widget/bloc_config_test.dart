@@ -27,6 +27,7 @@ import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/get_it/resources_model.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/json/api_token.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
@@ -38,6 +39,7 @@ import 'package:selfprivacy/ui/pages/more/about_application.dart';
 import 'package:selfprivacy/ui/pages/more/console/console_page.dart';
 import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
+import 'package:selfprivacy/ui/pages/server/credential_policy.dart';
 import 'package:selfprivacy/ui/pages/server/select_update_channel.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
@@ -62,6 +64,7 @@ class _Box extends Mock implements Box {}
 void main() {
   setUpAll(setUpWidgetTestHarness);
   setUpAll(initializeTimeZones);
+  setUpAll(() => registerFallbackValue(CredentialPolicy.any));
   late ResourcesModel resources;
   late ServerConnectionHub hub;
   late _Api api;
@@ -241,6 +244,79 @@ void main() {
       );
       expect(hub.active!.changeDraft.value, isEmpty);
       verifyNever(() => api.setUpdateChannel(any()));
+      await tester.pumpWidget(const SizedBox.shrink());
+      hub.dispose();
+      await tester.pump();
+      router.dispose();
+    },
+  );
+
+  testWidgets(
+    'credential policy stays queued on its server when switching with an open editor',
+    (final tester) async {
+      final router = RootRouter(getIt<NavigationService>().navigatorKey);
+      await pumpApp(tester, router);
+      await tester.runAsync(() async {
+        await resources.addServer(aServer());
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final connection = hub.active!;
+      when(
+        api.getCredentialPolicy,
+      ).thenAnswer((_) async => CredentialPolicy.any);
+      connection.cache
+        ..setVersion(Version(3, 9, 0))
+        ..credentialPolicy.push(CredentialPolicy.any);
+      final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
+      unawaited(serverRouter.push(const CredentialPolicyRoute()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      final jobs = tester
+          .element(find.byType(CredentialPolicyPage))
+          .read<JobsCubit>();
+      await tester.ensureVisible(find.text('Multi-factor authentication'));
+      await tester.tap(find.text('Multi-factor authentication'));
+      await tester.pump();
+      expect(connection.changeDraft.value, isEmpty);
+      await tester.ensureVisible(find.text('Create job'));
+      await tester.tap(find.text('Create job'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(jobs.state.draft.single, isA<ChangeCredentialPolicyJob>());
+      expect(connection.credentialPolicy.value.data, CredentialPolicy.any);
+      verifyNever(() => api.setCredentialPolicy(any()));
+      unawaited(serverRouter.push(const CredentialPolicyRoute()));
+      await tester.pumpAndSettle();
+      expect(find.text('Not applied'), findsOneWidget);
+      expect(
+        tester
+            .widgetList<RadioSelectionCard>(find.byType(RadioSelectionCard))
+            .map((final card) => card.isSelected),
+        [false, true, false],
+      );
+      await tester.ensureVisible(find.text('Passkey'));
+      await tester.tap(find.text('Passkey'));
+      await tester.pump();
+      expect(find.byType(CredentialPolicyPage), findsOneWidget);
+      await tester.runAsync(() async {
+        await resources.addServer(aServer(uuid: 'replacement'));
+        await pumpEventQueue();
+        await hub.selectServer('replacement');
+        await pumpEventQueue();
+      });
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(CredentialPolicyPage), findsNothing);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(hub.active!.changeDraft.value, isEmpty);
+      expect(
+        (connection.changeDraft.value.single as ChangeCredentialPolicyJob)
+            .policy,
+        CredentialPolicy.mfa,
+      );
+      verifyNever(() => api.setCredentialPolicy(any()));
       await tester.pumpWidget(const SizedBox.shrink());
       hub.dispose();
       await tester.pump();

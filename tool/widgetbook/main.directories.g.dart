@@ -178,6 +178,8 @@ import 'use_cases/organisms/charts/server_memory_chart.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_charts_server_memory_chart;
 import 'use_cases/organisms/charts/server_swap_chart.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_charts_server_swap_chart;
+import 'use_cases/organisms/credential_policy_selection.dart'
+    as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection;
 import 'use_cases/organisms/displays/key_display.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_organisms_displays_key_display;
 import 'use_cases/organisms/drawers/progress_drawer.dart'
@@ -2570,6 +2572,71 @@ final directories = <_widgetbook.WidgetbookNode>[
   _widgetbook.WidgetbookCategory(
     name: 'Organisms',
     children: [
+      _widgetbook.WidgetbookComponent(
+        name: 'CredentialPolicySelection',
+        useCases: [
+          _widgetbook.WidgetbookUseCase(
+            name: 'Applying',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyApplying,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Attested passkey',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyAttested,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Current',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyCurrent,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Error',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyError,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Loading',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyLoading,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Queued',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyQueued,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Stale',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyStale,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unknown',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyUnknown,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unsupported',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyUnsupported,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Wide',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_organisms_credential_policy_selection
+                    .policyWide,
+          ),
+        ],
+      ),
       _widgetbook.WidgetbookComponent(
         name: 'ServerSettingsView',
         useCases: [

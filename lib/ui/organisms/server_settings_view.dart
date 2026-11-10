@@ -14,6 +14,7 @@ class ServerSettingsView extends StatelessWidget {
     required this.onEvent,
     required this.onChannel,
     required this.onTimezone,
+    required this.onCredentialPolicy,
     required this.onShowOperation,
     required this.onRefresh,
     super.key,
@@ -23,6 +24,7 @@ class ServerSettingsView extends StatelessWidget {
   final ValueChanged<ServerSettingsEvent> onEvent;
   final VoidCallback onChannel;
   final VoidCallback onTimezone;
+  final VoidCallback onCredentialPolicy;
   final VoidCallback onShowOperation;
   final VoidCallback onRefresh;
 
@@ -32,12 +34,18 @@ class ServerSettingsView extends StatelessWidget {
       return Text('basis.no_data'.tr());
     }
     final data = state.settings.data;
-    final staleSnapshots = [state.settings, state.channels].where(
-      (final snapshot) =>
-          snapshot.support != DomainSupport.unsupported &&
-          snapshot.data != null &&
-          (snapshot.freshness == Freshness.stale || snapshot.lastError != null),
-    );
+    final staleSnapshots =
+        <CachedValue<Object>>[
+          state.settings,
+          state.channels,
+          state.policy,
+        ].where(
+          (final snapshot) =>
+              snapshot.support != DomainSupport.unsupported &&
+              snapshot.data != null &&
+              (snapshot.freshness == Freshness.stale ||
+                  snapshot.lastError != null),
+        );
     Widget subtitle(final String text, {required final bool modified}) =>
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,6 +149,29 @@ class ServerSettingsView extends StatelessWidget {
               onEvent(RebootAfterUpgradeChanged(enabled: value)),
         ),
         section('server.settings_sections.access'),
+        if (state.policy.support != DomainSupport.unsupported) ...[
+          Skeletonizer(
+            enabled:
+                state.policy.data == null && state.policy.lastError == null,
+            child: ListTile(
+              title: Text('server.credential_policy.title'.tr()),
+              subtitle: subtitle(
+                state.credentialPolicy?.translationKey.tr() ??
+                    'basis.no_data'.tr(),
+                modified: state.pending<ChangeCredentialPolicyJob>() != null,
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              enabled: state.canEditPolicy,
+              onTap: onCredentialPolicy,
+            ),
+          ),
+          _SettingsStatus(
+            snapshot: state.policy,
+            title: 'server.credential_policy.title'.tr(),
+            errorTitle: 'server.credential_policy.error'.tr(),
+            onRefresh: onRefresh,
+          ),
+        ],
         toggle(
           title: 'server.enable_ssh',
           hint: 'server.enable_ssh_hint',

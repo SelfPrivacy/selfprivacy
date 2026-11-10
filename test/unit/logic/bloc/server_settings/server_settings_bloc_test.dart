@@ -7,6 +7,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
@@ -18,6 +19,76 @@ class _Api extends Mock implements ServerApi {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
+
+  test(
+    'policy draft survives refresh and resets when removed from the queue',
+    () async {
+      final connection = ServerConnection(
+        api: _Api(),
+        serverId: 'server',
+        isAttached: () => true,
+      )..cache.setVersion(Version(3, 9, 0));
+      connection.cache.credentialPolicy.push(CredentialPolicy.any);
+      final bloc = ServerSettingsBloc(
+        connection: connection,
+        showMessage: (_) {},
+      );
+      addTearDown(() async {
+        await bloc.close();
+        connection.dispose();
+      });
+      expect(bloc.state.canEditPolicy, true);
+      expect(bloc.state.canEditSettings, false);
+      bloc.add(const CredentialPolicySelected(CredentialPolicy.mfa));
+      await pumpEventQueue();
+      expect(bloc.state.credentialPolicy, CredentialPolicy.mfa);
+      expect(bloc.state.policy.data, CredentialPolicy.any);
+      connection.cache.credentialPolicy.push(CredentialPolicy.any);
+      await pumpEventQueue();
+      expect(bloc.state.credentialPolicy, CredentialPolicy.mfa);
+      connection.changeDraft.remove(connection.changeDraft.value.single.id);
+      await pumpEventQueue();
+      expect(bloc.state.credentialPolicy, CredentialPolicy.any);
+    },
+  );
+
+  test(
+    'an applying or detached connection cannot queue a policy change',
+    () async {
+      final connection = ServerConnection(
+        api: _Api(),
+        serverId: 'server',
+        isAttached: () => true,
+      )..cache.setVersion(Version(3, 9, 0));
+      connection.cache.credentialPolicy.push(CredentialPolicy.any);
+      final bloc = ServerSettingsBloc(
+        connection: connection,
+        showMessage: (_) {},
+      );
+      addTearDown(() async {
+        await bloc.close();
+        connection.dispose();
+      });
+      final wait = Completer<void>();
+      final handle = connection.submit<void>(
+        OperationKind.applyChanges,
+        (_) => wait.future,
+      );
+      await pumpEventQueue();
+      expect(bloc.state, isA<ServerSettingsApplying>());
+      bloc.add(const CredentialPolicySelected(CredentialPolicy.mfa));
+      await pumpEventQueue();
+      expect(connection.changeDraft.value, isEmpty);
+      wait.complete();
+      await handle.result;
+      connection.dispose();
+      await pumpEventQueue();
+      bloc.add(const CredentialPolicySelected(CredentialPolicy.mfa));
+      await pumpEventQueue();
+      expect(bloc.state, isA<ServerSettingsDetached>());
+      expect(connection.changeDraft.value, isEmpty);
+    },
+  );
 
   test(
     'settings observe queue removal and retain confirmed SSH separately',
@@ -154,6 +225,9 @@ void main() {
     when(
       api.getUpdateChannels,
     ).thenAnswer((_) async => throw StateError('offline'));
+    when(
+      api.getCredentialPolicy,
+    ).thenAnswer((_) async => throw StateError('offline'));
     final connection = ServerConnection(
       api: api,
       serverId: 'server',
@@ -171,6 +245,7 @@ void main() {
     await Future.wait([
       connection.cache.settings.refresh(),
       connection.cache.updateChannels.refresh(),
+      connection.cache.credentialPolicy.refresh(),
     ]);
     await pumpEventQueue();
     expect(bloc.state, isA<ServerSettingsUnavailable>());

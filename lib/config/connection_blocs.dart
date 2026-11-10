@@ -227,6 +227,7 @@ JobsCubit createJobsCubit(
           users: owner.users,
           settings: owner.settings,
           updateChannels: owner.updateChannels,
+          credentialPolicy: owner.credentialPolicy,
           services: owner.services,
           jobs: owner.jobs,
           volumes: owner.volumes,
@@ -241,6 +242,7 @@ JobsCubit createJobsCubit(
   void reconcileDraft() {
     connection.settings.reconcileDraft();
     connection.updateChannels.reconcileDraft();
+    connection.credentialPolicy.reconcileDraft();
   }
 
   return JobsCubit(
@@ -248,6 +250,9 @@ JobsCubit createJobsCubit(
     stageChange: (final change) => switch (change) {
       ServerSettingsJob() => connection.settings.stageChange(change),
       ChangeUpdateChannelJob() => connection.updateChannels.stageChange(change),
+      ChangeCredentialPolicyJob() => connection.credentialPolicy.stageChange(
+        change,
+      ),
       _ => connection.changeDraft.add(change),
     },
     applyDraft: (final onProgress) async {

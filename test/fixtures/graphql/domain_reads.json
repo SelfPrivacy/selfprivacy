@@ -1,4 +1,11 @@
 {
+  "GetCredentialPolicy": {
+    "__typename": "Query",
+    "users": {
+      "__typename": "Users",
+      "minimumCredentialType": "any"
+    }
+  },
   "GetUpdateChannels": {
     "__typename": "Query",
     "system": {

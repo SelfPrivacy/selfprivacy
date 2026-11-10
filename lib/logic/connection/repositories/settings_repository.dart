@@ -31,23 +31,32 @@ class SettingsRepository {
   Future<RefreshResult> refresh({final bool force = false}) =>
       reader.refresh(force: force);
 
-  bool stageChange(final ServerSettingsJob change) =>
-      change.matchesSettings(value.data)
+  bool stageChange(final ServerSettingsJob change) => _matchesCurrent(change)
       ? _draft.removeWhere(change.replaces)
       : _draft.add(change);
 
   void reconcileDraft() {
     final snapshot = value;
-    if (snapshot.freshness == Freshness.fresh &&
-        snapshot.lastError == null &&
-        !snapshot.needsReconciliation) {
-      _draft.removeWhere(
-        (final change) =>
-            change is ServerSettingsJob &&
-            change.matchesSettings(snapshot.data),
-      );
+    if (snapshot.support != DomainSupport.supported ||
+        snapshot.freshness != Freshness.fresh ||
+        snapshot.lastError != null ||
+        snapshot.needsReconciliation) {
+      return;
     }
+    _draft.removeWhere(
+      (final change) => change is ServerSettingsJob && _matchesCurrent(change),
+    );
   }
+
+  bool _matchesCurrent(final ServerSettingsJob change) => switch (change) {
+    ChangeAutoUpgradeSettingsJob(:final enable, :final allowReboot) =>
+      value.data?.autoUpgradeSettings.enable == enable &&
+          value.data?.autoUpgradeSettings.allowReboot == allowReboot,
+    ChangeServerTimezoneJob(:final timezone) =>
+      value.data?.timezone == timezone,
+    ChangeSshSettingsJob(:final enable) =>
+      value.data?.sshSettings.enable == enable,
+  };
 
   Future<ServerMutationResult<AutoUpgradeSettings>> setAutoUpgradeSettings({
     required final bool enable,

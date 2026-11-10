@@ -98,3 +98,16 @@ mutation SetUpdateChannel($channelId: String!) {
     }
   }
 }
+
+query GetCredentialPolicy {
+  users { minimumCredentialType }
+}
+
+mutation SetCredentialPolicy($policy: KanidmCredentialType!) {
+  users {
+    setKanidmMinimumCredentialType(minimumCredentialType: $policy) {
+      ...basicMutationReturnFields
+      minimumCredentialType
+    }
+  }
+}

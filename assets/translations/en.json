@@ -225,6 +225,22 @@
         "retrying": "Trying again…"
     },
     "server": {
+        "credential_policy": {
+            "title": "Minimum sign-in credentials",
+            "hint": "Control how users sign in to your server's services. Allow passwords alone, or require stronger protection with multi-factor authentication or passkeys.",
+            "any": "Any credentials",
+            "any_hint": "Allow signing in with a password only.",
+            "mfa": "Multi-factor authentication",
+            "mfa_hint": "Require multiple authentication factors or a passkey.",
+            "passkey": "Passkey",
+            "passkey_hint": "Require a passkey instead of password-based authentication.",
+            "attested_passkey": "Attested passkey",
+            "attested_passkey_hint": "Require a passkey from an approved authenticator.",
+            "unknown": "Policy not recognized by this app",
+            "unknown_hint": "The server uses a policy this app cannot display. Choose a known policy only if you intend to replace it.",
+            "warning": "This policy affects all Kanidm users. Users need suitable credentials to sign in.",
+            "error": "Could not load the credential policy"
+        },
         "settings_status": {
             "load_error": "Could not load server settings"
         },
@@ -840,6 +856,7 @@
         "change_auto_upgrade_settings": "Change auto-upgrade settings",
         "change_server_timezone": "Change server timezone",
         "change_update_channel": "Change update channel",
+        "change_credential_policy": "Change minimum sign-in credentials",
         "change_ssh_settings": "Change SSH settings",
         "update_dns_records": "Update DNS records",
         "dns_records_did_not_change": "No changes needed",

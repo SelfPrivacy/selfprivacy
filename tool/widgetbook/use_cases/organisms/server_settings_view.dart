@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart';
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/ui/organisms/server_settings_view.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
@@ -78,10 +79,24 @@ CatalogCase _example(final String variant) => CatalogCase(
           freshness: variant == 'Stale' ? Freshness.stale : Freshness.fresh,
           isRefreshing: variant == 'Loading',
         ),
+        policy: CachedValue(
+          support: variant == 'Unsupported'
+              ? DomainSupport.unsupported
+              : DomainSupport.supported,
+          data: variant == 'Loading' || variant == 'Unsupported'
+              ? null
+              : CredentialPolicy.any,
+          freshness: variant == 'Stale' ? Freshness.stale : Freshness.fresh,
+          isRefreshing: variant == 'Loading',
+        ),
         draft: [
           if (variant == 'Modified') ...[
             ChangeSshSettingsJob(enable: false, id: 'ssh'),
             ChangeServerTimezoneJob(timezone: 'UTC', id: 'timezone'),
+            ChangeCredentialPolicyJob(
+              policy: CredentialPolicy.mfa,
+              id: 'policy',
+            ),
           ],
         ],
       ),
@@ -90,6 +105,8 @@ CatalogCase _example(final String variant) => CatalogCase(
       onChannel: () => catalogActions.record('Open channel editor'),
       onRefresh: () => catalogActions.record('Refresh settings'),
       onTimezone: () => catalogActions.record('Open timezone editor'),
+      onCredentialPolicy: () =>
+          catalogActions.record('Open credential policy editor'),
       onShowOperation: () => catalogActions.record('Show operation'),
     );
   },

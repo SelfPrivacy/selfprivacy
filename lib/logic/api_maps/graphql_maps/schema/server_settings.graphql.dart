@@ -6369,3 +6369,1205 @@ class _CopyWithStubImpl$Mutation$SetUpdateChannel$system$setUpdateChannel<TRes>
   call({int? code, String? message, bool? success, String? $__typename}) =>
       _res;
 }
+
+class Query$GetCredentialPolicy {
+  Query$GetCredentialPolicy({required this.users, this.$__typename = 'Query'});
+
+  factory Query$GetCredentialPolicy.fromJson(Map<String, dynamic> json) {
+    final l$users = json['users'];
+    final l$$__typename = json['__typename'];
+    return Query$GetCredentialPolicy(
+      users: Query$GetCredentialPolicy$users.fromJson(
+        (l$users as Map<String, dynamic>),
+      ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Query$GetCredentialPolicy$users users;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$users = users;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$users, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetCredentialPolicy ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetCredentialPolicy
+    on Query$GetCredentialPolicy {
+  CopyWith$Query$GetCredentialPolicy<Query$GetCredentialPolicy> get copyWith =>
+      CopyWith$Query$GetCredentialPolicy(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetCredentialPolicy<TRes> {
+  factory CopyWith$Query$GetCredentialPolicy(
+    Query$GetCredentialPolicy instance,
+    TRes Function(Query$GetCredentialPolicy) then,
+  ) = _CopyWithImpl$Query$GetCredentialPolicy;
+
+  factory CopyWith$Query$GetCredentialPolicy.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetCredentialPolicy;
+
+  TRes call({Query$GetCredentialPolicy$users? users, String? $__typename});
+  CopyWith$Query$GetCredentialPolicy$users<TRes> get users;
+}
+
+class _CopyWithImpl$Query$GetCredentialPolicy<TRes>
+    implements CopyWith$Query$GetCredentialPolicy<TRes> {
+  _CopyWithImpl$Query$GetCredentialPolicy(this._instance, this._then);
+
+  final Query$GetCredentialPolicy _instance;
+
+  final TRes Function(Query$GetCredentialPolicy) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Query$GetCredentialPolicy(
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Query$GetCredentialPolicy$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Query$GetCredentialPolicy$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Query$GetCredentialPolicy$users(
+      local$users,
+      (e) => call(users: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Query$GetCredentialPolicy<TRes>
+    implements CopyWith$Query$GetCredentialPolicy<TRes> {
+  _CopyWithStubImpl$Query$GetCredentialPolicy(this._res);
+
+  TRes _res;
+
+  call({Query$GetCredentialPolicy$users? users, String? $__typename}) => _res;
+
+  CopyWith$Query$GetCredentialPolicy$users<TRes> get users =>
+      CopyWith$Query$GetCredentialPolicy$users.stub(_res);
+}
+
+const documentNodeQueryGetCredentialPolicy = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'GetCredentialPolicy'),
+      variableDefinitions: [],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
+          FieldNode(
+            name: NameNode(value: 'users'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'minimumCredentialType'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ],
+      ),
+    ),
+  ],
+);
+Query$GetCredentialPolicy _parserFn$Query$GetCredentialPolicy(
+  Map<String, dynamic> data,
+) => Query$GetCredentialPolicy.fromJson(data);
+typedef OnQueryComplete$Query$GetCredentialPolicy =
+    FutureOr<void> Function(Map<String, dynamic>?, Query$GetCredentialPolicy?);
+
+class Options$Query$GetCredentialPolicy
+    extends graphql.QueryOptions<Query$GetCredentialPolicy> {
+  Options$Query$GetCredentialPolicy({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$GetCredentialPolicy? typedOptimisticResult,
+    Duration? pollInterval,
+    graphql.Context? context,
+    OnQueryComplete$Query$GetCredentialPolicy? onComplete,
+    graphql.OnQueryError? onError,
+  }) : onCompleteWithParsed = onComplete,
+       super(
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         pollInterval: pollInterval,
+         context: context,
+         onComplete: onComplete == null
+             ? null
+             : (data) => onComplete(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Query$GetCredentialPolicy(data),
+               ),
+         onError: onError,
+         document: documentNodeQueryGetCredentialPolicy,
+         parserFn: _parserFn$Query$GetCredentialPolicy,
+       );
+
+  final OnQueryComplete$Query$GetCredentialPolicy? onCompleteWithParsed;
+
+  @override
+  List<Object?> get properties => [
+    ...super.onComplete == null
+        ? super.properties
+        : super.properties.where((property) => property != onComplete),
+    onCompleteWithParsed,
+  ];
+}
+
+class WatchOptions$Query$GetCredentialPolicy
+    extends graphql.WatchQueryOptions<Query$GetCredentialPolicy> {
+  WatchOptions$Query$GetCredentialPolicy({
+    String? operationName,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Query$GetCredentialPolicy? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeQueryGetCredentialPolicy,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Query$GetCredentialPolicy,
+       );
+}
+
+class FetchMoreOptions$Query$GetCredentialPolicy
+    extends graphql.FetchMoreOptions {
+  FetchMoreOptions$Query$GetCredentialPolicy({
+    required graphql.UpdateQuery updateQuery,
+  }) : super(
+         updateQuery: updateQuery,
+         document: documentNodeQueryGetCredentialPolicy,
+       );
+}
+
+extension ClientExtension$Query$GetCredentialPolicy on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Query$GetCredentialPolicy>>
+  query$GetCredentialPolicy([
+    Options$Query$GetCredentialPolicy? options,
+  ]) async => await this.query(options ?? Options$Query$GetCredentialPolicy());
+
+  graphql.ObservableQuery<Query$GetCredentialPolicy>
+  watchQuery$GetCredentialPolicy([
+    WatchOptions$Query$GetCredentialPolicy? options,
+  ]) => this.watchQuery(options ?? WatchOptions$Query$GetCredentialPolicy());
+
+  void writeQuery$GetCredentialPolicy({
+    required Query$GetCredentialPolicy data,
+    bool broadcast = true,
+  }) => this.writeQuery(
+    graphql.Request(
+      operation: graphql.Operation(
+        document: documentNodeQueryGetCredentialPolicy,
+      ),
+    ),
+    data: data.toJson(),
+    broadcast: broadcast,
+  );
+
+  Query$GetCredentialPolicy? readQuery$GetCredentialPolicy({
+    bool optimistic = true,
+  }) {
+    final result = this.readQuery(
+      graphql.Request(
+        operation: graphql.Operation(
+          document: documentNodeQueryGetCredentialPolicy,
+        ),
+      ),
+      optimistic: optimistic,
+    );
+    return result == null ? null : Query$GetCredentialPolicy.fromJson(result);
+  }
+}
+
+class Query$GetCredentialPolicy$users {
+  Query$GetCredentialPolicy$users({
+    required this.minimumCredentialType,
+    this.$__typename = 'Users',
+  });
+
+  factory Query$GetCredentialPolicy$users.fromJson(Map<String, dynamic> json) {
+    final l$minimumCredentialType = json['minimumCredentialType'];
+    final l$$__typename = json['__typename'];
+    return Query$GetCredentialPolicy$users(
+      minimumCredentialType: fromJson$Enum$KanidmCredentialType(
+        (l$minimumCredentialType as String),
+      ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Enum$KanidmCredentialType minimumCredentialType;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$minimumCredentialType = minimumCredentialType;
+    _resultData['minimumCredentialType'] = toJson$Enum$KanidmCredentialType(
+      l$minimumCredentialType,
+    );
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$minimumCredentialType = minimumCredentialType;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$minimumCredentialType, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Query$GetCredentialPolicy$users ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$minimumCredentialType = minimumCredentialType;
+    final lOther$minimumCredentialType = other.minimumCredentialType;
+    if (l$minimumCredentialType != lOther$minimumCredentialType) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Query$GetCredentialPolicy$users
+    on Query$GetCredentialPolicy$users {
+  CopyWith$Query$GetCredentialPolicy$users<Query$GetCredentialPolicy$users>
+  get copyWith => CopyWith$Query$GetCredentialPolicy$users(this, (i) => i);
+}
+
+abstract class CopyWith$Query$GetCredentialPolicy$users<TRes> {
+  factory CopyWith$Query$GetCredentialPolicy$users(
+    Query$GetCredentialPolicy$users instance,
+    TRes Function(Query$GetCredentialPolicy$users) then,
+  ) = _CopyWithImpl$Query$GetCredentialPolicy$users;
+
+  factory CopyWith$Query$GetCredentialPolicy$users.stub(TRes res) =
+      _CopyWithStubImpl$Query$GetCredentialPolicy$users;
+
+  TRes call({
+    Enum$KanidmCredentialType? minimumCredentialType,
+    String? $__typename,
+  });
+}
+
+class _CopyWithImpl$Query$GetCredentialPolicy$users<TRes>
+    implements CopyWith$Query$GetCredentialPolicy$users<TRes> {
+  _CopyWithImpl$Query$GetCredentialPolicy$users(this._instance, this._then);
+
+  final Query$GetCredentialPolicy$users _instance;
+
+  final TRes Function(Query$GetCredentialPolicy$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? minimumCredentialType = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Query$GetCredentialPolicy$users(
+      minimumCredentialType:
+          minimumCredentialType == _undefined || minimumCredentialType == null
+          ? _instance.minimumCredentialType
+          : (minimumCredentialType as Enum$KanidmCredentialType),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+}
+
+class _CopyWithStubImpl$Query$GetCredentialPolicy$users<TRes>
+    implements CopyWith$Query$GetCredentialPolicy$users<TRes> {
+  _CopyWithStubImpl$Query$GetCredentialPolicy$users(this._res);
+
+  TRes _res;
+
+  call({
+    Enum$KanidmCredentialType? minimumCredentialType,
+    String? $__typename,
+  }) => _res;
+}
+
+class Variables$Mutation$SetCredentialPolicy {
+  factory Variables$Mutation$SetCredentialPolicy({
+    required Enum$KanidmCredentialType policy,
+  }) => Variables$Mutation$SetCredentialPolicy._({r'policy': policy});
+
+  Variables$Mutation$SetCredentialPolicy._(this._$data);
+
+  factory Variables$Mutation$SetCredentialPolicy.fromJson(
+    Map<String, dynamic> data,
+  ) {
+    final result$data = <String, dynamic>{};
+    final l$policy = data['policy'];
+    result$data['policy'] = fromJson$Enum$KanidmCredentialType(
+      (l$policy as String),
+    );
+    return Variables$Mutation$SetCredentialPolicy._(result$data);
+  }
+
+  Map<String, dynamic> _$data;
+
+  Enum$KanidmCredentialType get policy =>
+      (_$data['policy'] as Enum$KanidmCredentialType);
+
+  Map<String, dynamic> toJson() {
+    final result$data = <String, dynamic>{};
+    final l$policy = policy;
+    result$data['policy'] = toJson$Enum$KanidmCredentialType(l$policy);
+    return result$data;
+  }
+
+  CopyWith$Variables$Mutation$SetCredentialPolicy<
+    Variables$Mutation$SetCredentialPolicy
+  >
+  get copyWith =>
+      CopyWith$Variables$Mutation$SetCredentialPolicy(this, (i) => i);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Variables$Mutation$SetCredentialPolicy ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$policy = policy;
+    final lOther$policy = other.policy;
+    if (l$policy != lOther$policy) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    final l$policy = policy;
+    return Object.hashAll([l$policy]);
+  }
+}
+
+abstract class CopyWith$Variables$Mutation$SetCredentialPolicy<TRes> {
+  factory CopyWith$Variables$Mutation$SetCredentialPolicy(
+    Variables$Mutation$SetCredentialPolicy instance,
+    TRes Function(Variables$Mutation$SetCredentialPolicy) then,
+  ) = _CopyWithImpl$Variables$Mutation$SetCredentialPolicy;
+
+  factory CopyWith$Variables$Mutation$SetCredentialPolicy.stub(TRes res) =
+      _CopyWithStubImpl$Variables$Mutation$SetCredentialPolicy;
+
+  TRes call({Enum$KanidmCredentialType? policy});
+}
+
+class _CopyWithImpl$Variables$Mutation$SetCredentialPolicy<TRes>
+    implements CopyWith$Variables$Mutation$SetCredentialPolicy<TRes> {
+  _CopyWithImpl$Variables$Mutation$SetCredentialPolicy(
+    this._instance,
+    this._then,
+  );
+
+  final Variables$Mutation$SetCredentialPolicy _instance;
+
+  final TRes Function(Variables$Mutation$SetCredentialPolicy) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? policy = _undefined}) => _then(
+    Variables$Mutation$SetCredentialPolicy._({
+      ..._instance._$data,
+      if (policy != _undefined && policy != null)
+        'policy': (policy as Enum$KanidmCredentialType),
+    }),
+  );
+}
+
+class _CopyWithStubImpl$Variables$Mutation$SetCredentialPolicy<TRes>
+    implements CopyWith$Variables$Mutation$SetCredentialPolicy<TRes> {
+  _CopyWithStubImpl$Variables$Mutation$SetCredentialPolicy(this._res);
+
+  TRes _res;
+
+  call({Enum$KanidmCredentialType? policy}) => _res;
+}
+
+class Mutation$SetCredentialPolicy {
+  Mutation$SetCredentialPolicy({
+    required this.users,
+    this.$__typename = 'Mutation',
+  });
+
+  factory Mutation$SetCredentialPolicy.fromJson(Map<String, dynamic> json) {
+    final l$users = json['users'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetCredentialPolicy(
+      users: Mutation$SetCredentialPolicy$users.fromJson(
+        (l$users as Map<String, dynamic>),
+      ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$SetCredentialPolicy$users users;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$users = users;
+    _resultData['users'] = l$users.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$users = users;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$users, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Mutation$SetCredentialPolicy ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$users = users;
+    final lOther$users = other.users;
+    if (l$users != lOther$users) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetCredentialPolicy
+    on Mutation$SetCredentialPolicy {
+  CopyWith$Mutation$SetCredentialPolicy<Mutation$SetCredentialPolicy>
+  get copyWith => CopyWith$Mutation$SetCredentialPolicy(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$SetCredentialPolicy<TRes> {
+  factory CopyWith$Mutation$SetCredentialPolicy(
+    Mutation$SetCredentialPolicy instance,
+    TRes Function(Mutation$SetCredentialPolicy) then,
+  ) = _CopyWithImpl$Mutation$SetCredentialPolicy;
+
+  factory CopyWith$Mutation$SetCredentialPolicy.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetCredentialPolicy;
+
+  TRes call({Mutation$SetCredentialPolicy$users? users, String? $__typename});
+  CopyWith$Mutation$SetCredentialPolicy$users<TRes> get users;
+}
+
+class _CopyWithImpl$Mutation$SetCredentialPolicy<TRes>
+    implements CopyWith$Mutation$SetCredentialPolicy<TRes> {
+  _CopyWithImpl$Mutation$SetCredentialPolicy(this._instance, this._then);
+
+  final Mutation$SetCredentialPolicy _instance;
+
+  final TRes Function(Mutation$SetCredentialPolicy) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({Object? users = _undefined, Object? $__typename = _undefined}) =>
+      _then(
+        Mutation$SetCredentialPolicy(
+          users: users == _undefined || users == null
+              ? _instance.users
+              : (users as Mutation$SetCredentialPolicy$users),
+          $__typename: $__typename == _undefined || $__typename == null
+              ? _instance.$__typename
+              : ($__typename as String),
+        ),
+      );
+
+  CopyWith$Mutation$SetCredentialPolicy$users<TRes> get users {
+    final local$users = _instance.users;
+    return CopyWith$Mutation$SetCredentialPolicy$users(
+      local$users,
+      (e) => call(users: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetCredentialPolicy<TRes>
+    implements CopyWith$Mutation$SetCredentialPolicy<TRes> {
+  _CopyWithStubImpl$Mutation$SetCredentialPolicy(this._res);
+
+  TRes _res;
+
+  call({Mutation$SetCredentialPolicy$users? users, String? $__typename}) =>
+      _res;
+
+  CopyWith$Mutation$SetCredentialPolicy$users<TRes> get users =>
+      CopyWith$Mutation$SetCredentialPolicy$users.stub(_res);
+}
+
+const documentNodeMutationSetCredentialPolicy = DocumentNode(
+  definitions: [
+    OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'SetCredentialPolicy'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+          variable: VariableNode(name: NameNode(value: 'policy')),
+          type: NamedTypeNode(
+            name: NameNode(value: 'KanidmCredentialType'),
+            isNonNull: true,
+          ),
+          defaultValue: DefaultValueNode(value: null),
+          directives: [],
+        ),
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(
+        selections: [
+          FieldNode(
+            name: NameNode(value: 'users'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: SelectionSetNode(
+              selections: [
+                FieldNode(
+                  name: NameNode(value: 'setKanidmMinimumCredentialType'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                      name: NameNode(value: 'minimumCredentialType'),
+                      value: VariableNode(name: NameNode(value: 'policy')),
+                    ),
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(
+                    selections: [
+                      FragmentSpreadNode(
+                        name: NameNode(value: 'basicMutationReturnFields'),
+                        directives: [],
+                      ),
+                      FieldNode(
+                        name: NameNode(value: 'minimumCredentialType'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                      FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null,
+                      ),
+                    ],
+                  ),
+                ),
+                FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ],
+            ),
+          ),
+          FieldNode(
+            name: NameNode(value: '__typename'),
+            alias: null,
+            arguments: [],
+            directives: [],
+            selectionSet: null,
+          ),
+        ],
+      ),
+    ),
+    fragmentDefinitionbasicMutationReturnFields,
+  ],
+);
+Mutation$SetCredentialPolicy _parserFn$Mutation$SetCredentialPolicy(
+  Map<String, dynamic> data,
+) => Mutation$SetCredentialPolicy.fromJson(data);
+typedef OnMutationCompleted$Mutation$SetCredentialPolicy =
+    FutureOr<void> Function(
+      Map<String, dynamic>?,
+      Mutation$SetCredentialPolicy?,
+    );
+
+class Options$Mutation$SetCredentialPolicy
+    extends graphql.MutationOptions<Mutation$SetCredentialPolicy> {
+  Options$Mutation$SetCredentialPolicy({
+    String? operationName,
+    required Variables$Mutation$SetCredentialPolicy variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$SetCredentialPolicy? typedOptimisticResult,
+    graphql.Context? context,
+    OnMutationCompleted$Mutation$SetCredentialPolicy? onCompleted,
+    graphql.OnMutationUpdate<Mutation$SetCredentialPolicy>? update,
+    graphql.OnError? onError,
+  }) : onCompletedWithParsed = onCompleted,
+       super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         onCompleted: onCompleted == null
+             ? null
+             : (data) => onCompleted(
+                 data,
+                 data == null
+                     ? null
+                     : _parserFn$Mutation$SetCredentialPolicy(data),
+               ),
+         update: update,
+         onError: onError,
+         document: documentNodeMutationSetCredentialPolicy,
+         parserFn: _parserFn$Mutation$SetCredentialPolicy,
+       );
+
+  final OnMutationCompleted$Mutation$SetCredentialPolicy? onCompletedWithParsed;
+
+  @override
+  List<Object?> get properties => [
+    ...super.onCompleted == null
+        ? super.properties
+        : super.properties.where((property) => property != onCompleted),
+    onCompletedWithParsed,
+  ];
+}
+
+class WatchOptions$Mutation$SetCredentialPolicy
+    extends graphql.WatchQueryOptions<Mutation$SetCredentialPolicy> {
+  WatchOptions$Mutation$SetCredentialPolicy({
+    String? operationName,
+    required Variables$Mutation$SetCredentialPolicy variables,
+    graphql.FetchPolicy? fetchPolicy,
+    graphql.ErrorPolicy? errorPolicy,
+    graphql.CacheRereadPolicy? cacheRereadPolicy,
+    Object? optimisticResult,
+    Mutation$SetCredentialPolicy? typedOptimisticResult,
+    graphql.Context? context,
+    Duration? pollInterval,
+    bool? eagerlyFetchResults,
+    bool carryForwardDataOnException = true,
+    bool fetchResults = false,
+  }) : super(
+         variables: variables.toJson(),
+         operationName: operationName,
+         fetchPolicy: fetchPolicy,
+         errorPolicy: errorPolicy,
+         cacheRereadPolicy: cacheRereadPolicy,
+         optimisticResult: optimisticResult ?? typedOptimisticResult?.toJson(),
+         context: context,
+         document: documentNodeMutationSetCredentialPolicy,
+         pollInterval: pollInterval,
+         eagerlyFetchResults: eagerlyFetchResults,
+         carryForwardDataOnException: carryForwardDataOnException,
+         fetchResults: fetchResults,
+         parserFn: _parserFn$Mutation$SetCredentialPolicy,
+       );
+}
+
+extension ClientExtension$Mutation$SetCredentialPolicy
+    on graphql.GraphQLClient {
+  Future<graphql.QueryResult<Mutation$SetCredentialPolicy>>
+  mutate$SetCredentialPolicy(
+    Options$Mutation$SetCredentialPolicy options,
+  ) async => await this.mutate(options);
+
+  graphql.ObservableQuery<Mutation$SetCredentialPolicy>
+  watchMutation$SetCredentialPolicy(
+    WatchOptions$Mutation$SetCredentialPolicy options,
+  ) => this.watchMutation(options);
+}
+
+class Mutation$SetCredentialPolicy$users {
+  Mutation$SetCredentialPolicy$users({
+    required this.setKanidmMinimumCredentialType,
+    this.$__typename = 'UsersMutations',
+  });
+
+  factory Mutation$SetCredentialPolicy$users.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$setKanidmMinimumCredentialType =
+        json['setKanidmMinimumCredentialType'];
+    final l$$__typename = json['__typename'];
+    return Mutation$SetCredentialPolicy$users(
+      setKanidmMinimumCredentialType:
+          Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType.fromJson(
+            (l$setKanidmMinimumCredentialType as Map<String, dynamic>),
+          ),
+      $__typename: (l$$__typename as String),
+    );
+  }
+
+  final Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType
+  setKanidmMinimumCredentialType;
+
+  final String $__typename;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$setKanidmMinimumCredentialType = setKanidmMinimumCredentialType;
+    _resultData['setKanidmMinimumCredentialType'] =
+        l$setKanidmMinimumCredentialType.toJson();
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$setKanidmMinimumCredentialType = setKanidmMinimumCredentialType;
+    final l$$__typename = $__typename;
+    return Object.hashAll([l$setKanidmMinimumCredentialType, l$$__typename]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! Mutation$SetCredentialPolicy$users ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$setKanidmMinimumCredentialType = setKanidmMinimumCredentialType;
+    final lOther$setKanidmMinimumCredentialType =
+        other.setKanidmMinimumCredentialType;
+    if (l$setKanidmMinimumCredentialType !=
+        lOther$setKanidmMinimumCredentialType) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetCredentialPolicy$users
+    on Mutation$SetCredentialPolicy$users {
+  CopyWith$Mutation$SetCredentialPolicy$users<
+    Mutation$SetCredentialPolicy$users
+  >
+  get copyWith => CopyWith$Mutation$SetCredentialPolicy$users(this, (i) => i);
+}
+
+abstract class CopyWith$Mutation$SetCredentialPolicy$users<TRes> {
+  factory CopyWith$Mutation$SetCredentialPolicy$users(
+    Mutation$SetCredentialPolicy$users instance,
+    TRes Function(Mutation$SetCredentialPolicy$users) then,
+  ) = _CopyWithImpl$Mutation$SetCredentialPolicy$users;
+
+  factory CopyWith$Mutation$SetCredentialPolicy$users.stub(TRes res) =
+      _CopyWithStubImpl$Mutation$SetCredentialPolicy$users;
+
+  TRes call({
+    Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType?
+    setKanidmMinimumCredentialType,
+    String? $__typename,
+  });
+  CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+    TRes
+  >
+  get setKanidmMinimumCredentialType;
+}
+
+class _CopyWithImpl$Mutation$SetCredentialPolicy$users<TRes>
+    implements CopyWith$Mutation$SetCredentialPolicy$users<TRes> {
+  _CopyWithImpl$Mutation$SetCredentialPolicy$users(this._instance, this._then);
+
+  final Mutation$SetCredentialPolicy$users _instance;
+
+  final TRes Function(Mutation$SetCredentialPolicy$users) _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? setKanidmMinimumCredentialType = _undefined,
+    Object? $__typename = _undefined,
+  }) => _then(
+    Mutation$SetCredentialPolicy$users(
+      setKanidmMinimumCredentialType:
+          setKanidmMinimumCredentialType == _undefined ||
+              setKanidmMinimumCredentialType == null
+          ? _instance.setKanidmMinimumCredentialType
+          : (setKanidmMinimumCredentialType
+                as Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+    ),
+  );
+
+  CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+    TRes
+  >
+  get setKanidmMinimumCredentialType {
+    final local$setKanidmMinimumCredentialType =
+        _instance.setKanidmMinimumCredentialType;
+    return CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+      local$setKanidmMinimumCredentialType,
+      (e) => call(setKanidmMinimumCredentialType: e),
+    );
+  }
+}
+
+class _CopyWithStubImpl$Mutation$SetCredentialPolicy$users<TRes>
+    implements CopyWith$Mutation$SetCredentialPolicy$users<TRes> {
+  _CopyWithStubImpl$Mutation$SetCredentialPolicy$users(this._res);
+
+  TRes _res;
+
+  call({
+    Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType?
+    setKanidmMinimumCredentialType,
+    String? $__typename,
+  }) => _res;
+
+  CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+    TRes
+  >
+  get setKanidmMinimumCredentialType =>
+      CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType.stub(
+        _res,
+      );
+}
+
+class Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType
+    implements
+        Fragment$basicMutationReturnFields$$KanidmCredentialTypeMutationReturn {
+  Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType({
+    required this.code,
+    required this.message,
+    required this.success,
+    this.$__typename = 'KanidmCredentialTypeMutationReturn',
+    this.minimumCredentialType,
+  });
+
+  factory Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    final l$code = json['code'];
+    final l$message = json['message'];
+    final l$success = json['success'];
+    final l$$__typename = json['__typename'];
+    final l$minimumCredentialType = json['minimumCredentialType'];
+    return Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+      code: (l$code as int),
+      message: (l$message as String),
+      success: (l$success as bool),
+      $__typename: (l$$__typename as String),
+      minimumCredentialType: l$minimumCredentialType == null
+          ? null
+          : fromJson$Enum$KanidmCredentialType(
+              (l$minimumCredentialType as String),
+            ),
+    );
+  }
+
+  final int code;
+
+  final String message;
+
+  final bool success;
+
+  final String $__typename;
+
+  final Enum$KanidmCredentialType? minimumCredentialType;
+
+  Map<String, dynamic> toJson() {
+    final _resultData = <String, dynamic>{};
+    final l$code = code;
+    _resultData['code'] = l$code;
+    final l$message = message;
+    _resultData['message'] = l$message;
+    final l$success = success;
+    _resultData['success'] = l$success;
+    final l$$__typename = $__typename;
+    _resultData['__typename'] = l$$__typename;
+    final l$minimumCredentialType = minimumCredentialType;
+    _resultData['minimumCredentialType'] = l$minimumCredentialType == null
+        ? null
+        : toJson$Enum$KanidmCredentialType(l$minimumCredentialType);
+    return _resultData;
+  }
+
+  @override
+  int get hashCode {
+    final l$code = code;
+    final l$message = message;
+    final l$success = success;
+    final l$$__typename = $__typename;
+    final l$minimumCredentialType = minimumCredentialType;
+    return Object.hashAll([
+      l$code,
+      l$message,
+      l$success,
+      l$$__typename,
+      l$minimumCredentialType,
+    ]);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other
+            is! Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType ||
+        runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$code = code;
+    final lOther$code = other.code;
+    if (l$code != lOther$code) {
+      return false;
+    }
+    final l$message = message;
+    final lOther$message = other.message;
+    if (l$message != lOther$message) {
+      return false;
+    }
+    final l$success = success;
+    final lOther$success = other.success;
+    if (l$success != lOther$success) {
+      return false;
+    }
+    final l$$__typename = $__typename;
+    final lOther$$__typename = other.$__typename;
+    if (l$$__typename != lOther$$__typename) {
+      return false;
+    }
+    final l$minimumCredentialType = minimumCredentialType;
+    final lOther$minimumCredentialType = other.minimumCredentialType;
+    if (l$minimumCredentialType != lOther$minimumCredentialType) {
+      return false;
+    }
+    return true;
+  }
+}
+
+extension UtilityExtension$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType
+    on Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType {
+  CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+    Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType
+  >
+  get copyWith =>
+      CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+        this,
+        (i) => i,
+      );
+}
+
+abstract class CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+  TRes
+> {
+  factory CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+    Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType instance,
+    TRes Function(
+      Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType,
+    )
+    then,
+  ) = _CopyWithImpl$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType;
+
+  factory CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType.stub(
+    TRes res,
+  ) = _CopyWithStubImpl$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType;
+
+  TRes call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Enum$KanidmCredentialType? minimumCredentialType,
+  });
+}
+
+class _CopyWithImpl$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+  TRes
+>
+    implements
+        CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+          TRes
+        > {
+  _CopyWithImpl$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+    this._instance,
+    this._then,
+  );
+
+  final Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType
+  _instance;
+
+  final TRes Function(
+    Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType,
+  )
+  _then;
+
+  static const _undefined = <dynamic, dynamic>{};
+
+  TRes call({
+    Object? code = _undefined,
+    Object? message = _undefined,
+    Object? success = _undefined,
+    Object? $__typename = _undefined,
+    Object? minimumCredentialType = _undefined,
+  }) => _then(
+    Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+      code: code == _undefined || code == null ? _instance.code : (code as int),
+      message: message == _undefined || message == null
+          ? _instance.message
+          : (message as String),
+      success: success == _undefined || success == null
+          ? _instance.success
+          : (success as bool),
+      $__typename: $__typename == _undefined || $__typename == null
+          ? _instance.$__typename
+          : ($__typename as String),
+      minimumCredentialType: minimumCredentialType == _undefined
+          ? _instance.minimumCredentialType
+          : (minimumCredentialType as Enum$KanidmCredentialType?),
+    ),
+  );
+}
+
+class _CopyWithStubImpl$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+  TRes
+>
+    implements
+        CopyWith$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType<
+          TRes
+        > {
+  _CopyWithStubImpl$Mutation$SetCredentialPolicy$users$setKanidmMinimumCredentialType(
+    this._res,
+  );
+
+  TRes _res;
+
+  call({
+    int? code,
+    String? message,
+    bool? success,
+    String? $__typename,
+    Enum$KanidmCredentialType? minimumCredentialType,
+  }) => _res;
+}

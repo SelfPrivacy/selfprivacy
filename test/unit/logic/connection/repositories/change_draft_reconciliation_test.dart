@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/update_channels.dart';
 
@@ -27,6 +28,61 @@ void main() {
     connection.cache.updateChannels.push(anUpdateChannels());
   });
   tearDown(() => connection.dispose());
+
+  test('all server settings changes share staging and replacement', () {
+    final changes = <ServerSettingsJob>[
+      ChangeAutoUpgradeSettingsJob(enable: false, allowReboot: true),
+      ChangeServerTimezoneJob(timezone: 'UTC'),
+      ChangeSshSettingsJob(enable: false),
+    ];
+    for (final change in changes) {
+      expect(connection.settings.stageChange(change), isTrue);
+    }
+    expect(connection.changeDraft.value, changes);
+    connection.settings
+      ..stageChange(
+        ChangeAutoUpgradeSettingsJob(enable: true, allowReboot: false),
+      )
+      ..stageChange(ChangeServerTimezoneJob(timezone: 'Europe/Helsinki'))
+      ..stageChange(ChangeSshSettingsJob(enable: true));
+    expect(connection.changeDraft.value, isEmpty);
+  });
+
+  test('fresh settings do not reconcile a stale credential policy', () async {
+    connection.cache.credentialPolicy.push(CredentialPolicy.any);
+    final policy = ChangeCredentialPolicyJob(policy: CredentialPolicy.mfa);
+    connection.credentialPolicy.stageChange(policy);
+    connection.settings.stageChange(ChangeSshSettingsJob(enable: false));
+    connection.cache.credentialPolicy
+      ..push(CredentialPolicy.mfa)
+      ..invalidate();
+    connection.cache.settings.push(aSystemSettings(ssh: false));
+    await pumpEventQueue();
+    expect(connection.changeDraft.value, [policy]);
+
+    connection.cache.credentialPolicy.push(CredentialPolicy.mfa);
+    await pumpEventQueue();
+    expect(connection.changeDraft.value, isEmpty);
+  });
+
+  test('fresh credential policy does not reconcile stale settings', () async {
+    connection.cache.credentialPolicy.push(CredentialPolicy.any);
+    final ssh = ChangeSshSettingsJob(enable: false);
+    connection.settings.stageChange(ssh);
+    connection.credentialPolicy.stageChange(
+      ChangeCredentialPolicyJob(policy: CredentialPolicy.mfa),
+    );
+    connection.cache.settings
+      ..push(aSystemSettings(ssh: false))
+      ..invalidate();
+    connection.cache.credentialPolicy.push(CredentialPolicy.mfa);
+    await pumpEventQueue();
+    expect(connection.changeDraft.value, [ssh]);
+
+    connection.cache.settings.push(aSystemSettings(ssh: false));
+    await pumpEventQueue();
+    expect(connection.changeDraft.value, isEmpty);
+  });
 
   test('settings reconciliation retains prepared service changes', () async {
     final serviceChange = ChangeServiceConfiguration(

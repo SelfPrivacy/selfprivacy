@@ -31,6 +31,7 @@ import 'package:selfprivacy/ui/pages/onboarding/onboarding.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/recovery_key/recovery_key.dart';
 import 'package:selfprivacy/ui/pages/root_route.dart';
+import 'package:selfprivacy/ui/pages/server/credential_policy.dart';
 import 'package:selfprivacy/ui/pages/server/logs.dart';
 import 'package:selfprivacy/ui/pages/server/memory_usage_by_service.dart';
 import 'package:selfprivacy/ui/pages/server/select_update_channel.dart';
@@ -125,6 +126,7 @@ class RootRouter extends RootStackRouter {
         AutoRoute(page: ServerDetailsRoute.page),
         AutoRoute(page: SelectTimezoneRoute.page),
         AutoRoute(page: SelectUpdateChannelRoute.page),
+        AutoRoute(page: CredentialPolicyRoute.page),
         AutoRoute(page: DnsDetailsRoute.page),
         AutoRoute(page: BackupDetailsRoute.page),
         AutoRoute(page: BackupsListRoute.page),
@@ -235,6 +237,8 @@ String getRouteTitle(final String routeName) {
       return 'server.settings';
     case 'SelectUpdateChannelRoute':
       return 'server.update_channel.title';
+    case 'CredentialPolicyRoute':
+      return 'server.credential_policy.title';
     case 'SelectTimezoneRoute':
       return 'server.select_timezone';
     case 'ServerLogsRoute':

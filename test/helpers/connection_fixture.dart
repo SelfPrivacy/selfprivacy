@@ -17,6 +17,7 @@ ApplyChangesOperation configurationOperation(
   users: connection.users,
   settings: connection.settings,
   updateChannels: connection.updateChannels,
+  credentialPolicy: connection.credentialPolicy,
   services: connection.services,
   jobs: connection.jobs,
   volumes: connection.volumes,

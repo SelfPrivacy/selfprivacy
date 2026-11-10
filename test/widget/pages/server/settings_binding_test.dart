@@ -8,6 +8,7 @@ import 'package:selfprivacy/logic/bloc/server_settings/server_settings_bloc.dart
 import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/cubit/client_jobs/client_jobs_cubit.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/ui/molecules/cards/status_card.dart';
 import 'package:selfprivacy/ui/organisms/server_settings_view.dart';
 import 'package:selfprivacy/ui/pages/server/server_settings.dart';
@@ -23,6 +24,39 @@ class _Api extends Mock implements ServerApi {}
 void main() {
   setUpAll(setUpWidgetTestHarness);
 
+  testWidgets('credential policy has an independently loaded settings row', (
+    final tester,
+  ) async {
+    await pumpForTest(
+      tester,
+      SingleChildScrollView(
+        child: ServerSettingsView(
+          state: ServerSettingsReady(
+            policy: const CachedValue(
+              data: CredentialPolicy.any,
+              support: DomainSupport.supported,
+            ),
+            settings: CachedValue(
+              data: aSystemSettings(),
+              support: DomainSupport.supported,
+            ),
+            channels: const CachedValue(support: DomainSupport.unsupported),
+          ),
+          onEvent: (_) {},
+          onChannel: () {},
+          onTimezone: () {},
+          onCredentialPolicy: () {},
+          onShowOperation: () {},
+          onRefresh: () {},
+        ),
+      ),
+    );
+    expect(
+      find.widgetWithText(ListTile, 'Minimum sign-in credentials'),
+      findsOneWidget,
+    );
+  });
+
   for (final bothStale in [true, false]) {
     testWidgets(
       'one cached-data notice for the whole settings screen: both stale=$bothStale',
@@ -33,6 +67,7 @@ void main() {
           SingleChildScrollView(
             child: ServerSettingsView(
               state: ServerSettingsReady(
+                policy: const CachedValue(support: DomainSupport.unsupported),
                 settings: CachedValue(
                   data: aSystemSettings(),
                   support: DomainSupport.supported,
@@ -50,6 +85,7 @@ void main() {
               onEvent: (_) {},
               onChannel: () {},
               onTimezone: () {},
+              onCredentialPolicy: () {},
               onShowOperation: () {},
               onRefresh: () => refreshes++,
             ),
@@ -80,6 +116,7 @@ void main() {
       SingleChildScrollView(
         child: ServerSettingsView(
           state: ServerSettingsReady(
+            policy: const CachedValue(support: DomainSupport.unsupported),
             settings: CachedValue(
               data: aSystemSettings(autoUpgrade: false, allowReboot: true),
               support: DomainSupport.supported,
@@ -90,6 +127,7 @@ void main() {
           onEvent: events.add,
           onChannel: () {},
           onTimezone: () {},
+          onCredentialPolicy: () {},
           onShowOperation: () {},
           onRefresh: () {},
         ),
@@ -115,6 +153,7 @@ void main() {
       SingleChildScrollView(
         child: ServerSettingsView(
           state: ServerSettingsApplying(
+            policy: const CachedValue(support: DomainSupport.unsupported),
             settings: CachedValue(
               data: aSystemSettings(),
               support: DomainSupport.supported,
@@ -125,6 +164,7 @@ void main() {
           onEvent: (_) {},
           onChannel: () {},
           onTimezone: () {},
+          onCredentialPolicy: () {},
           onShowOperation: () => opened = true,
           onRefresh: () {},
         ),
@@ -145,6 +185,7 @@ void main() {
       SingleChildScrollView(
         child: ServerSettingsView(
           state: ServerSettingsReady(
+            policy: const CachedValue(support: DomainSupport.unsupported),
             settings: CachedValue(
               support: DomainSupport.supported,
               lastError: StateError('offline'),
@@ -158,6 +199,7 @@ void main() {
           onEvent: (_) {},
           onChannel: () => opened = true,
           onTimezone: () {},
+          onCredentialPolicy: () {},
           onShowOperation: () {},
           onRefresh: () => refreshed = true,
         ),
@@ -182,6 +224,7 @@ void main() {
         isAttached: () => true,
       )..cache.setVersion(Version(3, 9, 0));
       connection.cache.settings.push(aSystemSettings());
+      connection.cache.credentialPolicy.push(CredentialPolicy.any);
       connection.cache.updateChannels.push(anUpdateChannels());
       final bloc = ServerSettingsBloc(
         connection: connection,

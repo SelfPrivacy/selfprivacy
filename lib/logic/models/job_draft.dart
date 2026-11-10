@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/logic/models/system_settings.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 @immutable
@@ -143,10 +143,8 @@ abstract class ReplaceableJobDraft extends JobDraft {
       (!shouldReplaceOnlyIfSameId || existing.id == id);
 }
 
-abstract class ServerSettingsJob extends ReplaceableJobDraft {
+sealed class ServerSettingsJob extends ReplaceableJobDraft {
   ServerSettingsJob({required super.title, super.id});
-
-  bool matchesSettings(final SystemSettings? settings);
 }
 
 class ChangeAutoUpgradeSettingsJob extends ServerSettingsJob {
@@ -158,16 +156,6 @@ class ChangeAutoUpgradeSettingsJob extends ServerSettingsJob {
 
   final bool enable;
   final bool allowReboot;
-
-  @override
-  bool matchesSettings(final SystemSettings? settings) {
-    final currentSettings = settings?.autoUpgradeSettings;
-    if (currentSettings == null) {
-      return false;
-    }
-    return currentSettings.enable == enable &&
-        currentSettings.allowReboot == allowReboot;
-  }
 
   @override
   List<Object> get props => [...super.props, enable, allowReboot];
@@ -187,20 +175,24 @@ class ChangeUpdateChannelJob extends ReplaceableJobDraft {
   List<Object> get props => [...super.props, channelId, channelName];
 }
 
+class ChangeCredentialPolicyJob extends ReplaceableJobDraft {
+  ChangeCredentialPolicyJob({required this.policy, super.id})
+    : super(
+        title: 'jobs.change_credential_policy'.tr(),
+        requiresRebuild: false,
+      );
+
+  final CredentialPolicy policy;
+
+  @override
+  List<Object> get props => [...super.props, policy];
+}
+
 class ChangeServerTimezoneJob extends ServerSettingsJob {
   ChangeServerTimezoneJob({required this.timezone, super.id})
     : super(title: 'jobs.change_server_timezone'.tr());
 
   final String timezone;
-
-  @override
-  bool matchesSettings(final SystemSettings? settings) {
-    final currentSettings = settings?.timezone;
-    if (currentSettings == null) {
-      return false;
-    }
-    return currentSettings == timezone;
-  }
 
   @override
   List<Object> get props => [...super.props, timezone];
@@ -211,15 +203,6 @@ class ChangeSshSettingsJob extends ServerSettingsJob {
     : super(title: 'jobs.change_ssh_settings'.tr());
 
   final bool enable;
-
-  @override
-  bool matchesSettings(final SystemSettings? settings) {
-    final currentSettings = settings?.sshSettings;
-    if (currentSettings == null) {
-      return false;
-    }
-    return currentSettings.enable == enable;
-  }
 
   @override
   List<Object> get props => [...super.props, enable];

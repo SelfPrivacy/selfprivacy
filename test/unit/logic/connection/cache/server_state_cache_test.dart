@@ -92,6 +92,7 @@ void main() {
       'RecoveryKey',
       'SystemSettings',
       'GetUpdateChannels',
+      'GetCredentialPolicy',
       'BackupConfiguration',
       'AllBackupSnapshots',
       'GetServerDiskVolumes',
@@ -229,6 +230,7 @@ void main() {
       'groups': 60,
       'settings': 600,
       'updateChannels': 600,
+      'credentialPolicy': 600,
     };
     expect(state.stores.map((final store) => store.name), intervals.keys);
     for (final store in state.stores) {

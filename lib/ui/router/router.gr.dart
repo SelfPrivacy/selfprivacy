@@ -912,22 +912,6 @@ class ServicesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [TelemetryPage]
-class TelemetryRoute extends PageRouteInfo<void> {
-  const TelemetryRoute({List<PageRouteInfo>? children})
-    : super(TelemetryRoute.name, initialChildren: children);
-
-  static const String name = 'TelemetryRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const TelemetryPage();
-    },
-  );
-}
-
-/// generated route for
 /// [TokensPage]
 class TokensRoute extends PageRouteInfo<void> {
   const TokensRoute({List<PageRouteInfo>? children})

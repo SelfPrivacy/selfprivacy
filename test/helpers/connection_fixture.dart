@@ -18,7 +18,6 @@ ApplyChangesOperation configurationOperation(
   settings: connection.settings,
   updateChannels: connection.updateChannels,
   credentialPolicy: connection.credentialPolicy,
-  telemetry: connection.telemetry,
   services: connection.services,
   jobs: connection.jobs,
   volumes: connection.volumes,

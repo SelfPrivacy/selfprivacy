@@ -41,7 +41,6 @@ import 'package:selfprivacy/ui/pages/more/more.dart';
 import 'package:selfprivacy/ui/pages/providers/providers.dart';
 import 'package:selfprivacy/ui/pages/server/credential_policy.dart';
 import 'package:selfprivacy/ui/pages/server/select_update_channel.dart';
-import 'package:selfprivacy/ui/pages/server/telemetry.dart';
 import 'package:selfprivacy/ui/pages/server_storage/binds_migration/services_migration.dart';
 import 'package:selfprivacy/ui/pages/services/services.dart';
 import 'package:selfprivacy/ui/pages/users/users.dart';
@@ -55,7 +54,6 @@ import '../helpers/fixtures/json_fixture.dart';
 import '../helpers/fixtures/server_fixtures.dart';
 import '../helpers/fixtures/service_fixtures.dart';
 import '../helpers/fixtures/system_settings_fixtures.dart';
-import '../helpers/fixtures/telemetry_fixtures.dart';
 import '../helpers/fixtures/update_channels_fixtures.dart';
 import '../helpers/widget_harness.dart';
 
@@ -67,7 +65,6 @@ void main() {
   setUpAll(setUpWidgetTestHarness);
   setUpAll(initializeTimeZones);
   setUpAll(() => registerFallbackValue(CredentialPolicy.any));
-  setUpAll(() => registerFallbackValue(aTelemetryUpdate()));
   late ResourcesModel resources;
   late ServerConnectionHub hub;
   late _Api api;
@@ -320,82 +317,6 @@ void main() {
         CredentialPolicy.mfa,
       );
       verifyNever(() => api.setCredentialPolicy(any()));
-      await tester.pumpWidget(const SizedBox.shrink());
-      hub.dispose();
-      await tester.pump();
-      router.dispose();
-    },
-  );
-
-  testWidgets(
-    'telemetry editor preserves edits and binds queued changes to its server',
-    (final tester) async {
-      final router = RootRouter(getIt<NavigationService>().navigatorKey);
-      await pumpApp(tester, router);
-      await tester.runAsync(() async {
-        await resources.addServer(aServer());
-        await pumpEventQueue();
-      });
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      final connection = hub.active!;
-      when(
-        api.getTelemetrySettings,
-      ).thenAnswer((_) async => aTelemetrySettings());
-      connection.cache
-        ..setVersion(Version(3, 9, 0))
-        ..telemetry.push(aTelemetrySettings());
-      final serverRouter = router.innerRouterOf<StackRouter>(RootRoute.name)!;
-      unawaited(serverRouter.push(const TelemetryRoute()));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Enable telemetry'));
-      await tester.pump();
-      expect(connection.changeDraft.value, isEmpty);
-      await tester.ensureVisible(find.text('Create job'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Create job'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(
-        connection.changeDraft.value.single,
-        isA<ChangeTelemetrySettingsJob>(),
-      );
-      expect(connection.telemetry.value.data!.enable, false);
-      verifyNever(() => api.setTelemetrySettings(any()));
-
-      unawaited(serverRouter.push(const TelemetryRoute()));
-      await tester.pumpAndSettle();
-      expect(find.text('Not applied'), findsOneWidget);
-      final endpoint = find.widgetWithText(TextField, 'Collector endpoint');
-      await tester.ensureVisible(endpoint);
-      await tester.enterText(endpoint, 'https://edited.example.org:443');
-      connection.cache.telemetry.push(
-        aTelemetrySettings(endpoint: 'https://server.example.org:4317'),
-      );
-      await tester.pump();
-      expect(
-        tester.widget<TextField>(endpoint).controller!.text,
-        'https://edited.example.org:443',
-      );
-      connection.changeDraft.remove(connection.changeDraft.value.single.id);
-      await tester.pump();
-      expect(find.text('Not applied'), findsNothing);
-      expect(
-        tester.widget<TextField>(endpoint).controller!.text,
-        'https://edited.example.org:443',
-      );
-
-      await tester.runAsync(() async {
-        await resources.addServer(aServer(uuid: 'replacement'));
-        await pumpEventQueue();
-        await hub.selectServer('replacement');
-        await pumpEventQueue();
-      });
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byType(TelemetryPage), findsNothing);
-      expect(hub.active!.changeDraft.value, isEmpty);
-      verifyNever(() => api.setTelemetrySettings(any()));
       await tester.pumpWidget(const SizedBox.shrink());
       hub.dispose();
       await tester.pump();

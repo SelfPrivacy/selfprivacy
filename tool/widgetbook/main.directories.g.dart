@@ -80,8 +80,6 @@ import 'use_cases/forms/server_provider_form_view.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_forms_server_provider_form_view;
 import 'use_cases/forms/ssh_key_form_view.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view;
-import 'use_cases/forms/telemetry_form_view.dart'
-    as _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view;
 import 'use_cases/forms/user_form_view.dart'
     as _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view;
 import 'use_cases/layouts/brand_hero_screen.dart'
@@ -1113,95 +1111,6 @@ final directories = <_widgetbook.WidgetbookNode>[
             builder:
                 _asset_selfprivacy_tool_widgetbook_use_cases_forms_ssh_key_form_view
                     .sshKeyFormViewValid,
-          ),
-        ],
-      ),
-      _widgetbook.WidgetbookComponent(
-        name: 'TelemetryFormView',
-        useCases: [
-          _widgetbook.WidgetbookUseCase(
-            name: 'Applying',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryApplying,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Disabled',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryDisabled,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Enabled',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryEnabled,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Error',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryError,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Header removal',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryHeaderRemoval,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Header replacement',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryHeaderreplacement,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Invalid endpoint',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryInvalidEndpoint,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Loading',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryLoading,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Memory tracing',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryMemoryTracing,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'No headers',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryNoHeaders,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Queued',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryQueued,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Stale',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryStale,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Unsupported',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryUnsupported,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Wide',
-            builder:
-                _asset_selfprivacy_tool_widgetbook_use_cases_forms_telemetry_form_view
-                    .telemetryWide,
           ),
         ],
       ),

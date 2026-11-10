@@ -20,7 +20,6 @@ import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/recovery_key_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/services_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
-import 'package:selfprivacy/logic/connection/repositories/telemetry_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/update_channels_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
@@ -94,11 +93,6 @@ class ServerConnection {
       reader: _reader(cache.credentialPolicy),
       draft: changeDraft,
     );
-    telemetry = TelemetryRepository(
-      commands: commands,
-      reader: _reader(cache.telemetry),
-      draft: changeDraft,
-    );
     recoveryKey = RecoveryKeyRepository(
       commands: commands,
       reader: _reader(cache.recoveryKeyStatus),
@@ -139,7 +133,6 @@ class ServerConnection {
       settings.changes.listen((_) => settings.reconcileDraft()),
       updateChannels.changes.listen((_) => updateChannels.reconcileDraft()),
       credentialPolicy.changes.listen((_) => credentialPolicy.reconcileDraft()),
-      telemetry.changes.listen((_) => telemetry.reconcileDraft()),
     ]);
     for (final store in cache.stores) {
       _subscriptions.add(
@@ -200,7 +193,6 @@ class ServerConnection {
   late final SettingsRepository settings;
   late final UpdateChannelsRepository updateChannels;
   late final CredentialPolicyRepository credentialPolicy;
-  late final TelemetryRepository telemetry;
   late final ServicesRepository services;
   late final BackupsRepository backups;
   late final VolumesRepository volumes;

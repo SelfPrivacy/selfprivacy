@@ -228,7 +228,6 @@ JobsCubit createJobsCubit(
           settings: owner.settings,
           updateChannels: owner.updateChannels,
           credentialPolicy: owner.credentialPolicy,
-          telemetry: owner.telemetry,
           services: owner.services,
           jobs: owner.jobs,
           volumes: owner.volumes,
@@ -244,14 +243,12 @@ JobsCubit createJobsCubit(
     connection.settings.reconcileDraft();
     connection.updateChannels.reconcileDraft();
     connection.credentialPolicy.reconcileDraft();
-    connection.telemetry.reconcileDraft();
   }
 
   return JobsCubit(
     draft: connection.changeDraft,
     stageChange: (final change) => switch (change) {
       ServerSettingsJob() => connection.settings.stageChange(change),
-      ChangeTelemetrySettingsJob() => connection.telemetry.stageChange(change),
       ChangeUpdateChannelJob() => connection.updateChannels.stageChange(change),
       ChangeCredentialPolicyJob() => connection.credentialPolicy.stageChange(
         change,

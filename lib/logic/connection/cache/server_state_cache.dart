@@ -14,7 +14,6 @@ import 'package:selfprivacy/logic/models/json/server_disk_volume.dart';
 import 'package:selfprivacy/logic/models/json/server_job.dart';
 import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
-import 'package:selfprivacy/logic/models/telemetry_settings.dart';
 import 'package:selfprivacy/logic/models/update_channels.dart';
 
 /// Owns the stores for one server, but does not own its API transport.
@@ -115,12 +114,6 @@ class ServerStateCache {
       refreshSeconds: 600,
       requiredApiVersion: '>=3.9.0',
     );
-    telemetry = domain(
-      name: 'telemetry',
-      fetch: () => api().getTelemetrySettings(),
-      refreshSeconds: 600,
-      requiredApiVersion: '>=3.9.0',
-    );
     stores = List.unmodifiable([apiVersion, ..._constraints.keys]);
     final names = stores.map((final store) => store.name).toSet();
     final unknownOverrides = staleAfterOverrides.keys.toSet().difference(names);
@@ -143,7 +136,6 @@ class ServerStateCache {
   late final DomainStore<SystemSettings> settings;
   late final DomainStore<UpdateChannels> updateChannels;
   late final DomainStore<CredentialPolicy> credentialPolicy;
-  late final DomainStore<TelemetrySettings> telemetry;
 
   /// Read-only registry for refresh, invalidation and lifecycle operations.
   /// Supply pushed data through the typed domain fields.

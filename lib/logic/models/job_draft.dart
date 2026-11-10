@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/logic/models/service.dart';
-import 'package:selfprivacy/logic/models/telemetry_settings.dart';
 import 'package:selfprivacy/utils/password_generator.dart';
 
 @immutable
@@ -187,16 +186,6 @@ class ChangeCredentialPolicyJob extends ReplaceableJobDraft {
 
   @override
   List<Object> get props => [...super.props, policy];
-}
-
-class ChangeTelemetrySettingsJob extends ReplaceableJobDraft {
-  ChangeTelemetrySettingsJob({required this.settings, super.id})
-    : super(title: 'jobs.change_telemetry_settings'.tr());
-
-  final TelemetryUpdate settings;
-
-  @override
-  List<Object> get props => [...super.props, settings];
 }
 
 class ChangeServerTimezoneJob extends ServerSettingsJob {

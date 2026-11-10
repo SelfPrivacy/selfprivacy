@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/connection/server_connection.dart';
 import 'package:selfprivacy/logic/models/credential_policy.dart';
 import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/models/system_settings.dart';
+import 'package:selfprivacy/logic/models/telemetry_settings.dart';
 import 'package:selfprivacy/logic/models/update_channels.dart';
 
 part 'server_settings_event.dart';
@@ -32,6 +33,9 @@ class ServerSettingsBloc
         (_) => add(const _SettingsObserved()),
       ),
       connection.credentialPolicy.changes.listen(
+        (_) => add(const _SettingsObserved()),
+      ),
+      connection.telemetry.changes.listen(
         (_) => add(const _SettingsObserved()),
       ),
       connection.changeDraft.changes.listen(
@@ -77,10 +81,14 @@ class ServerSettingsBloc
         ),
       CredentialPolicySelected(:final policy) when current.canEditPolicy =>
         ChangeCredentialPolicyJob(policy: policy),
+      TelemetrySettingsSelected(:final settings)
+          when current.canEditTelemetry =>
+        ChangeTelemetrySettingsJob(settings: settings),
       _ => null,
     };
     final staged = switch (change) {
       ServerSettingsJob() => _connection.settings.stageChange(change),
+      ChangeTelemetrySettingsJob() => _connection.telemetry.stageChange(change),
       ChangeUpdateChannelJob() => _connection.updateChannels.stageChange(
         change,
       ),
@@ -108,6 +116,7 @@ class ServerSettingsBloc
       _connection.settings.refresh(force: true),
       _connection.updateChannels.refresh(force: true),
       _connection.credentialPolicy.refresh(force: true),
+      _connection.telemetry.refresh(force: true),
     ]);
   }
 

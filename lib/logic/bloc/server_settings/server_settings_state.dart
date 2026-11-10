@@ -5,6 +5,7 @@ sealed class ServerSettingsState extends Equatable {
     this.settings = const CachedValue(),
     this.channels = const CachedValue(),
     this.policy = const CachedValue(),
+    this.telemetry = const CachedValue(),
     final List<JobDraft> draft = const [],
   }) : draft = List.unmodifiable(draft);
 
@@ -17,16 +18,23 @@ sealed class ServerSettingsState extends Equatable {
     final settings = connection.settings.value;
     final channels = connection.updateChannels.value;
     final policy = connection.credentialPolicy.value;
+    final telemetry = connection.telemetry.value;
     final draft = connection.changeDraft.value;
     if (connection.operations.hasPendingConfiguration) {
       return ServerSettingsApplying(
         settings: settings,
         channels: channels,
         policy: policy,
+        telemetry: telemetry,
         draft: draft,
       );
     }
-    final snapshots = <CachedValue<Object>>[settings, channels, policy];
+    final snapshots = <CachedValue<Object>>[
+      settings,
+      channels,
+      policy,
+      telemetry,
+    ];
     if (snapshots.any(
       (final snapshot) =>
           snapshot.support == DomainSupport.supported && snapshot.data != null,
@@ -35,6 +43,7 @@ sealed class ServerSettingsState extends Equatable {
         settings: settings,
         channels: channels,
         policy: policy,
+        telemetry: telemetry,
         draft: draft,
       );
     }
@@ -47,6 +56,7 @@ sealed class ServerSettingsState extends Equatable {
         settings: settings,
         channels: channels,
         policy: policy,
+        telemetry: telemetry,
         draft: draft,
       );
     }
@@ -54,6 +64,7 @@ sealed class ServerSettingsState extends Equatable {
       settings: settings,
       channels: channels,
       policy: policy,
+      telemetry: telemetry,
       draft: draft,
     );
   }
@@ -61,6 +72,7 @@ sealed class ServerSettingsState extends Equatable {
   final CachedValue<SystemSettings> settings;
   final CachedValue<UpdateChannels> channels;
   final CachedValue<CredentialPolicy> policy;
+  final CachedValue<TelemetrySettings> telemetry;
   final List<JobDraft> draft;
 
   bool get canEditSettings =>
@@ -75,6 +87,10 @@ sealed class ServerSettingsState extends Equatable {
       this is ServerSettingsReady &&
       policy.support == DomainSupport.supported &&
       policy.data != null;
+  bool get canEditTelemetry =>
+      this is ServerSettingsReady &&
+      telemetry.support == DomainSupport.supported &&
+      telemetry.data != null;
   CredentialPolicy? get credentialPolicy =>
       pending<ChangeCredentialPolicyJob>()?.policy ?? policy.data;
   T? pending<T extends JobDraft>() => draft.whereType<T>().firstOrNull;
@@ -94,7 +110,7 @@ sealed class ServerSettingsState extends Equatable {
       channels.data?.currentChannel.name;
 
   @override
-  List<Object?> get props => [settings, channels, policy, draft];
+  List<Object?> get props => [settings, channels, policy, telemetry, draft];
 }
 
 final class ServerSettingsLoading extends ServerSettingsState {
@@ -102,6 +118,7 @@ final class ServerSettingsLoading extends ServerSettingsState {
     required super.settings,
     required super.channels,
     super.policy,
+    super.telemetry,
     super.draft,
   });
 }
@@ -111,6 +128,7 @@ final class ServerSettingsReady extends ServerSettingsState {
     required super.settings,
     required super.channels,
     super.policy,
+    super.telemetry,
     super.draft,
   });
 }
@@ -120,6 +138,7 @@ final class ServerSettingsApplying extends ServerSettingsState {
     required super.settings,
     required super.channels,
     super.policy,
+    super.telemetry,
     super.draft,
   });
 }
@@ -129,6 +148,7 @@ final class ServerSettingsUnavailable extends ServerSettingsState {
     required super.settings,
     required super.channels,
     super.policy,
+    super.telemetry,
     super.draft,
   });
 }

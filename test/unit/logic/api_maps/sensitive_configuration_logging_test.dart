@@ -14,12 +14,16 @@ import 'package:selfprivacy/logic/models/hive/backups_credential.dart';
 import 'package:selfprivacy/logic/models/initialize_repository_input.dart';
 
 import '../../../helpers/fixtures/json_fixture.dart';
+import '../../../helpers/fixtures/telemetry_fixtures.dart';
 
 class _TlsContext extends Mock implements TlsContext {}
 
 void main() {
   setUpAll(() => registerFallbackValue(TlsPolicy.strict));
   final operations = <String, Future<Object?> Function(ServerApi)>{
+    'GetTelemetrySettings': (final api) => api.getTelemetrySettings(),
+    'SetTelemetrySettings': (final api) =>
+        api.setTelemetrySettings(aTelemetryUpdate()),
     'BackupConfiguration': (final api) => api.getBackupsConfiguration(),
     'AllServices': (final api) => api.getAllServices(),
     'SetAutobackupPeriod': (final api) => api.setAutobackupPeriod(period: 60),
@@ -52,7 +56,10 @@ void main() {
         final logs = <ConsoleLog>[];
         final tls = _TlsContext();
         final reads = loadJsonFixture('graphql/domain_reads.json');
-        final mutations = loadJsonFixture('graphql/mutation_results.json');
+        final mutations = {
+          ...loadJsonFixture('graphql/mutation_results.json'),
+          ...loadJsonFixture('graphql/telemetry.json'),
+        };
         final data =
             (reads[operation.key] ?? mutations[operation.key])
                 as Map<String, dynamic>;

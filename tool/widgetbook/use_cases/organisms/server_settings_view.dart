@@ -7,6 +7,7 @@ import 'package:selfprivacy/ui/organisms/server_settings_view.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
 
 import '../../../../test/helpers/fixtures/system_settings_fixtures.dart';
+import '../../../../test/helpers/fixtures/telemetry_fixtures.dart';
 import '../../catalog_case.dart';
 import '../../fixtures/models.dart';
 
@@ -89,7 +90,22 @@ CatalogCase _example(final String variant) => CatalogCase(
           freshness: variant == 'Stale' ? Freshness.stale : Freshness.fresh,
           isRefreshing: variant == 'Loading',
         ),
+        telemetry: CachedValue(
+          support: variant == 'Unsupported'
+              ? DomainSupport.unsupported
+              : DomainSupport.supported,
+          data: variant == 'Loading' || variant == 'Unsupported'
+              ? null
+              : aTelemetrySettings(),
+          freshness: variant == 'Stale' ? Freshness.stale : Freshness.fresh,
+          isRefreshing: variant == 'Loading',
+        ),
         draft: [
+          if (variant == 'Modified')
+            ChangeTelemetrySettingsJob(
+              settings: aTelemetryUpdate(),
+              id: 'telemetry',
+            ),
           if (variant == 'Modified') ...[
             ChangeSshSettingsJob(enable: false, id: 'ssh'),
             ChangeServerTimezoneJob(timezone: 'UTC', id: 'timezone'),
@@ -103,6 +119,7 @@ CatalogCase _example(final String variant) => CatalogCase(
       onEvent: (final event) =>
           catalogActions.record(event.runtimeType.toString()),
       onChannel: () => catalogActions.record('Open channel editor'),
+      onTelemetry: () => catalogActions.record('Open telemetry editor'),
       onRefresh: () => catalogActions.record('Refresh settings'),
       onTimezone: () => catalogActions.record('Open timezone editor'),
       onCredentialPolicy: () =>

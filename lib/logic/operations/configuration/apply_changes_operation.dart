@@ -4,6 +4,7 @@ import 'package:selfprivacy/logic/connection/repositories/credential_policy_repo
 import 'package:selfprivacy/logic/connection/repositories/jobs_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/services_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/settings_repository.dart';
+import 'package:selfprivacy/logic/connection/repositories/telemetry_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/update_channels_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/users_repository.dart';
 import 'package:selfprivacy/logic/connection/repositories/volumes_repository.dart';
@@ -30,6 +31,7 @@ OperationStep configurationStep(
     ChangeServerTimezoneJob() => 'jobs.change_server_timezone',
     ChangeUpdateChannelJob() => 'jobs.change_update_channel',
     ChangeCredentialPolicyJob() => 'jobs.change_credential_policy',
+    ChangeTelemetrySettingsJob() => 'jobs.change_telemetry_settings',
     ChangeSshSettingsJob() => 'jobs.change_ssh_settings',
     ChangeAutoUpgradeSettingsJob() => 'jobs.change_auto_upgrade_settings',
     ChangeServiceConfiguration() => 'jobs.change_service_settings',
@@ -99,6 +101,7 @@ class ApplyChangesOperation {
     required final SettingsRepository settings,
     required final UpdateChannelsRepository updateChannels,
     required final CredentialPolicyRepository credentialPolicy,
+    required final TelemetryRepository telemetry,
     required final ServicesRepository services,
     required final JobsRepository jobs,
     required final VolumesRepository volumes,
@@ -109,6 +112,7 @@ class ApplyChangesOperation {
        _settings = settings,
        _updateChannels = updateChannels,
        _credentialPolicy = credentialPolicy,
+       _telemetry = telemetry,
        _services = services,
        _jobs = jobs,
        _volumes = volumes,
@@ -120,6 +124,7 @@ class ApplyChangesOperation {
   final SettingsRepository _settings;
   final UpdateChannelsRepository _updateChannels;
   final CredentialPolicyRepository _credentialPolicy;
+  final TelemetryRepository _telemetry;
   final ServicesRepository _services;
   final JobsRepository _jobs;
   final VolumesRepository _volumes;
@@ -160,9 +165,7 @@ class ApplyChangesOperation {
     final dnsRequired = submitted.any(
       (final change) => change.requiresDnsUpdate,
     );
-    final rebuildRequired = submitted.any(
-      (final change) => change.requiresRebuild,
-    );
+    var rebuildRequired = false;
     final previousDns = dnsRequired ? await readDns() : null;
     for (final change in submitted) {
       _requireAttached();
@@ -174,6 +177,11 @@ class ApplyChangesOperation {
         ),
       );
       final result = await execute(change);
+      if (change.requiresRebuild &&
+          (change is! ChangeTelemetrySettingsJob ||
+              result.outcome == ServerMutationOutcome.confirmed)) {
+        rebuildRequired = true;
+      }
       publish(
         ConfigurationProgress.fromResult(
           ConfigurationStage.change,
@@ -234,6 +242,7 @@ class ApplyChangesOperation {
   Future<ServerMutationResult<Object?>> execute(final JobDraft job) {
     _requireAttached();
     return switch (job) {
+      ChangeTelemetrySettingsJob(:final settings) => _telemetry.save(settings),
       ChangeCredentialPolicyJob(:final policy) => _credentialPolicy.setPolicy(
         policy,
       ),

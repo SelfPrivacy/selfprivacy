@@ -12,6 +12,7 @@ import 'package:selfprivacy/logic/models/job_draft.dart';
 import 'package:selfprivacy/logic/operations/operation_queue.dart';
 
 import '../../../../helpers/fixtures/system_settings_fixtures.dart';
+import '../../../../helpers/fixtures/telemetry_fixtures.dart';
 import '../../../../helpers/fixtures/update_channels_fixtures.dart';
 import '../../../../helpers/widget_harness.dart';
 
@@ -19,6 +20,45 @@ class _Api extends Mock implements ServerApi {}
 
 void main() {
   setUpAll(setUpWidgetTestHarness);
+
+  test(
+    'telemetry queues locally, survives refresh, and follows draft removal',
+    () async {
+      final connection = ServerConnection(
+        api: _Api(),
+        serverId: 'server',
+        isAttached: () => true,
+      )..cache.setVersion(Version(3, 9, 0));
+      connection.cache.telemetry.push(aTelemetrySettings());
+      final bloc = ServerSettingsBloc(
+        connection: connection,
+        showMessage: (_) {},
+      );
+      addTearDown(() async {
+        await bloc.close();
+        connection.dispose();
+      });
+      expect(bloc.state.canEditTelemetry, true);
+      final update = aTelemetryUpdate();
+      bloc.add(TelemetrySettingsSelected(update));
+      await pumpEventQueue();
+      expect(
+        bloc.state.pending<ChangeTelemetrySettingsJob>()!.settings,
+        update,
+      );
+      expect(bloc.state.telemetry.data!.enable, false);
+      connection.cache.telemetry.push(aTelemetrySettings());
+      await pumpEventQueue();
+      expect(
+        bloc.state.pending<ChangeTelemetrySettingsJob>()!.settings,
+        update,
+      );
+      connection.changeDraft.remove(connection.changeDraft.value.single.id);
+      await pumpEventQueue();
+      expect(bloc.state.pending<ChangeTelemetrySettingsJob>(), isNull);
+      expect(bloc.state.telemetry.data!.enable, false);
+    },
+  );
 
   test(
     'policy draft survives refresh and resets when removed from the queue',
@@ -228,6 +268,9 @@ void main() {
     when(
       api.getCredentialPolicy,
     ).thenAnswer((_) async => throw StateError('offline'));
+    when(
+      api.getTelemetrySettings,
+    ).thenAnswer((_) async => throw StateError('offline'));
     final connection = ServerConnection(
       api: api,
       serverId: 'server',
@@ -246,6 +289,7 @@ void main() {
       connection.cache.settings.refresh(),
       connection.cache.updateChannels.refresh(),
       connection.cache.credentialPolicy.refresh(),
+      connection.cache.telemetry.refresh(),
     ]);
     await pumpEventQueue();
     expect(bloc.state, isA<ServerSettingsUnavailable>());

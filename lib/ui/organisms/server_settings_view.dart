@@ -15,6 +15,7 @@ class ServerSettingsView extends StatelessWidget {
     required this.onChannel,
     required this.onTimezone,
     required this.onCredentialPolicy,
+    required this.onTelemetry,
     required this.onShowOperation,
     required this.onRefresh,
     super.key,
@@ -25,6 +26,7 @@ class ServerSettingsView extends StatelessWidget {
   final VoidCallback onChannel;
   final VoidCallback onTimezone;
   final VoidCallback onCredentialPolicy;
+  final VoidCallback onTelemetry;
   final VoidCallback onShowOperation;
   final VoidCallback onRefresh;
 
@@ -39,6 +41,7 @@ class ServerSettingsView extends StatelessWidget {
           state.settings,
           state.channels,
           state.policy,
+          state.telemetry,
         ].where(
           (final snapshot) =>
               snapshot.support != DomainSupport.unsupported &&
@@ -193,6 +196,39 @@ class ServerSettingsView extends StatelessWidget {
             onTap: onTimezone,
           ),
         ),
+        if (state.telemetry.support != DomainSupport.unsupported) ...[
+          section('server.settings_sections.diagnostics'),
+          Skeletonizer(
+            enabled:
+                state.telemetry.data == null &&
+                state.telemetry.lastError == null,
+            child: ListTile(
+              title: Text('server.telemetry.title'.tr()),
+              subtitle: subtitle(
+                state.telemetry.data == null
+                    ? 'basis.no_data'.tr()
+                    : ((state
+                                      .pending<ChangeTelemetrySettingsJob>()
+                                      ?.settings
+                                      .enable ??
+                                  state.telemetry.data!.enable)
+                              ? 'server.telemetry.status.enabled'
+                              : 'server.telemetry.status.disabled')
+                          .tr(),
+                modified: state.pending<ChangeTelemetrySettingsJob>() != null,
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              enabled: state.canEditTelemetry,
+              onTap: onTelemetry,
+            ),
+          ),
+          _SettingsStatus(
+            snapshot: state.telemetry,
+            title: 'server.telemetry.title'.tr(),
+            errorTitle: 'server.telemetry.error'.tr(),
+            onRefresh: onRefresh,
+          ),
+        ],
       ],
     );
   }

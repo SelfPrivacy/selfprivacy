@@ -12,7 +12,7 @@ enum Period {
       case Period.day:
         return 432;
       case Period.month:
-        return 6480;
+        return 12960;
     }
   }
 }

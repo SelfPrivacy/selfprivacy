@@ -116,7 +116,7 @@ class MetricsRepository {
       case Period.day:
         start = end.subtract(const Duration(days: 1));
       case Period.month:
-        start = end.subtract(const Duration(days: 15));
+        start = end.subtract(const Duration(days: 30));
     }
 
     final result = await _api.getServerMetrics(
@@ -167,7 +167,7 @@ class MetricsRepository {
       case Period.day:
         start = end.subtract(const Duration(days: 1));
       case Period.month:
-        start = end.subtract(const Duration(days: 15));
+        start = end.subtract(const Duration(days: 30));
     }
 
     final providerId = _providerId;

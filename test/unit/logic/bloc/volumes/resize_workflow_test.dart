@@ -333,7 +333,7 @@ void main() {
       ).thenAnswer((_) async => GenericResult(success: true, data: true));
       final stages = <VolumeResizeStage>[];
       final operation = hub.active!.submit(
-        OperationKind.manageVolumes,
+        OperationKind.resizeVolume,
         (final connection) =>
             ResizeVolumeOperation(
               volumes: connection.volumes,

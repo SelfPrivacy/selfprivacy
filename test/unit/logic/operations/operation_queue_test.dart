@@ -14,7 +14,7 @@ void main() {
 
   test('completion waits for server work without holding admission', () async {
     final operation = queue.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       () async => 'job-1',
       describe: (final uid) =>
           OperationReport(OperationStatus.accepted, jobIds: {uid}),
@@ -33,7 +33,7 @@ void main() {
 
   test('unknown dispatch does not abandon already accepted jobs', () async {
     final operation = queue.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       () async {},
       describe: (_) =>
           OperationReport(OperationStatus.unknown, jobIds: {'accepted-backup'}),
@@ -46,7 +46,7 @@ void main() {
 
   test('detach settles completion of an accepted operation', () async {
     final operation = queue.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       () async {},
       describe: (_) =>
           OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
@@ -60,7 +60,7 @@ void main() {
 
   test('a missing job stays unknown after the other job succeeds', () async {
     final operation = queue.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       () async {},
       describe: (_) => OperationReport(
         OperationStatus.accepted,
@@ -76,7 +76,7 @@ void main() {
   });
 
   test('a later exception does not abandon an accepted job', () async {
-    final operation = queue.submit(OperationKind.manageBackups, () {
+    final operation = queue.submit(OperationKind.createBackups, () {
       final result = ServerMutationResult(
         outcome: ServerMutationOutcome.confirmed,
         payload: ServerMutationPayload.available(aBackupJob(uid: 'backup')),
@@ -86,7 +86,7 @@ void main() {
         ..recordStep(
           OperationStep.fromMutation(
             id: 'backup',
-            titleKey: 'operations.kind.manage_backups',
+            titleKey: 'operations.kind.create_backups',
             result: result,
           ),
         );
@@ -101,7 +101,7 @@ void main() {
   });
 
   test('an unsent later step does not abandon an accepted job', () async {
-    final operation = queue.submit(OperationKind.manageBackups, () {
+    final operation = queue.submit(OperationKind.createBackups, () {
       OperationExecution.current!.record(
         ServerMutationResult(
           outcome: ServerMutationOutcome.confirmed,
@@ -289,7 +289,7 @@ void main() {
     () async {
       await queue
           .submit(
-            OperationKind.manageBackups,
+            OperationKind.createBackups,
             () async => 'job-1',
             describe: (final uid) =>
                 OperationReport(OperationStatus.accepted, jobIds: {uid}),
@@ -333,7 +333,7 @@ void main() {
     () async {
       await queue
           .submit(
-            OperationKind.manageBackups,
+            OperationKind.createBackups,
             () async {},
             describe: (_) => OperationReport(
               OperationStatus.accepted,

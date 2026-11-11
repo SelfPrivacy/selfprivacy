@@ -19,7 +19,7 @@ void main() {
     addTearDown(connection.dispose);
     final queue = connection.operations;
     final oldest = queue.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       () async {},
       describe: (_) =>
           OperationReport(OperationStatus.accepted, jobIds: {'oldest-job'}),
@@ -27,7 +27,7 @@ void main() {
     await oldest.result;
     queue.observeJob('oldest-job', succeeded: true);
     for (var i = 1; i < OperationQueue.completedHistoryLimit; i++) {
-      await queue.submit(OperationKind.manageBackups, () async {}).result;
+      await queue.submit(OperationKind.createBackups, () async {}).result;
     }
     final cubit = createOperationsCubit(connection, showMessage: (_) {});
     addTearDown(cubit.close);
@@ -58,7 +58,7 @@ void main() {
       addTearDown(connection.dispose);
       final queue = connection.operations;
       final handle = queue.submit(
-        OperationKind.manageBackups,
+        OperationKind.createBackups,
         () async {},
         describe: (_) =>
             OperationReport(OperationStatus.accepted, jobIds: {'a', 'b'}),
@@ -112,7 +112,7 @@ void main() {
       addTearDown(connection.dispose);
       final queue = connection.operations;
       final handle = queue.submit(
-        OperationKind.manageBackups,
+        OperationKind.createBackups,
         () async {},
         describe: (_) =>
             OperationReport(OperationStatus.accepted, jobIds: {'a'}),

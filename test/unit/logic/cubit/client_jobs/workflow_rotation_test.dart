@@ -117,7 +117,7 @@ void main() {
           await firstSent.future.timeout(const Duration(seconds: 5));
           final rotation = hub.active!.rotateToken();
           final queued = hub.active!.submit(
-            OperationKind.manageVolumes,
+            OperationKind.rebootServer,
             (final owner) => owner.volumes.reboot(),
           );
           await pumpEventQueue();

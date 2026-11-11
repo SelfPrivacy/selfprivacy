@@ -288,7 +288,7 @@ void main() {
     final lookup = Completer<ServerJob?>();
     when(() => api.getServerJob('backup')).thenAnswer((_) => lookup.future);
     final operation = hub.active!.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       (final owner) async {},
       describe: (_) =>
           OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
@@ -313,7 +313,7 @@ void main() {
       when(() => api.getServerJob('backup')).thenThrow(StateError('offline'));
       var sent = 0;
       final operation = hub.active!.submit(
-        OperationKind.manageBackups,
+        OperationKind.createBackups,
         (_) async {
           sent++;
         },
@@ -344,7 +344,7 @@ void main() {
     final lookup = Completer<ServerJob?>();
     when(() => api.getServerJob('backup')).thenAnswer((_) => lookup.future);
     final operation = hub.active!.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       (_) async {},
       describe: (_) =>
           OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
@@ -372,7 +372,7 @@ void main() {
       hub.active!.cache.serverJobs.push([running]);
       var sent = 0;
       final operation = hub.active!.submit(
-        OperationKind.manageBackups,
+        OperationKind.createBackups,
         (_) async {
           sent++;
         },
@@ -406,7 +406,7 @@ void main() {
     await tester.pump();
     final release = Completer<void>();
     final operation = hub.active!.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       (_) => release.future,
       describe: (_) =>
           OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
@@ -430,7 +430,7 @@ void main() {
     when(() => api.getServerJob('backup')).thenAnswer((_) => lookup.future);
     final old = hub.active!;
     final original = old.submit(
-      OperationKind.manageBackups,
+      OperationKind.createBackups,
       (_) async {},
       describe: (_) =>
           OperationReport(OperationStatus.accepted, jobIds: {'backup'}),
@@ -675,7 +675,7 @@ void main() {
       verifyNever(api.refreshDeviceApiToken);
       final pending = Completer<void>();
       final action = hub.active!.submit(
-        OperationKind.manageBackups,
+        OperationKind.createBackups,
         (_) => pending.future,
       );
       automatic = true;

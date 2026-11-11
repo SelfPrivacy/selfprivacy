@@ -17,7 +17,7 @@ Future<List<ServerMutationResult<ServerJob>>> moveServices(
     OperationExecution.current?.recordStep(
       OperationStep(
         id: entry.key,
-        titleKey: 'operations.kind.manage_services',
+        titleKey: 'operations.kind.move_services',
         target: entry.key,
         status: OperationStatus.running,
       ),
@@ -26,7 +26,7 @@ Future<List<ServerMutationResult<ServerJob>>> moveServices(
     OperationExecution.current?.recordStep(
       OperationStep.fromMutation(
         id: entry.key,
-        titleKey: 'operations.kind.manage_services',
+        titleKey: 'operations.kind.move_services',
         target: entry.key,
         result: result,
       ),

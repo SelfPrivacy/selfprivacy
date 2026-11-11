@@ -12,7 +12,7 @@ Future<ServerMutationResult<BackupConfiguration>> removeBackups(
   OperationExecution.current?.recordStep(
     OperationStep.fromMutation(
       id: 'remove',
-      titleKey: 'operations.kind.manage_backups',
+      titleKey: 'backup.detach_repository',
       result: result,
     ),
   );

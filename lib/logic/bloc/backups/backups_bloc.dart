@@ -47,14 +47,46 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
        _showMessage = showMessage,
        super(const BackupsInitial()) {
     on<_BackupsObserved>(_observe, transformer: restartable());
-    _register<InitializeBackupsRepository>(_initializeRepository, droppable());
-    _register<ForceSnapshotListUpdate>(_forceSnapshotListUpdate, droppable());
-    _register<CreateBackups>(_createBackups, sequential());
-    _register<RestoreBackup>(_restoreBackup, sequential());
-    _register<SetAutobackupPeriod>(_setAutobackupPeriod, restartable());
-    _register<SetAutobackupQuotas>(_setAutobackupQuotas, restartable());
-    _register<ForgetSnapshot>(_forgetSnapshot, sequential());
-    _register<RemoveBackupsRepository>(_removeRepository, droppable());
+    _register<InitializeBackupsRepository>(
+      OperationKind.initializeBackups,
+      _initializeRepository,
+      droppable(),
+    );
+    _register<ForceSnapshotListUpdate>(
+      OperationKind.refreshBackupList,
+      _forceSnapshotListUpdate,
+      droppable(),
+    );
+    _register<CreateBackups>(
+      OperationKind.createBackups,
+      _createBackups,
+      sequential(),
+    );
+    _register<RestoreBackup>(
+      OperationKind.restoreBackup,
+      _restoreBackup,
+      sequential(),
+    );
+    _register<SetAutobackupPeriod>(
+      OperationKind.setAutobackupPeriod,
+      _setAutobackupPeriod,
+      restartable(),
+    );
+    _register<SetAutobackupQuotas>(
+      OperationKind.setAutobackupQuotas,
+      _setAutobackupQuotas,
+      restartable(),
+    );
+    _register<ForgetSnapshot>(
+      OperationKind.forgetBackup,
+      _forgetSnapshot,
+      sequential(),
+    );
+    _register<RemoveBackupsRepository>(
+      OperationKind.removeBackups,
+      _removeRepository,
+      droppable(),
+    );
     _subscription = backups.listen((final observation) {
       _latest = observation;
       add(_BackupsObserved(observation));
@@ -77,6 +109,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
   bool get _isActive => !isClosed && _latest != null;
 
   void _register<T extends BackupsEvent>(
+    final OperationKind kind,
     final Future<void> Function(
       T,
       BackupsRepository,
@@ -92,13 +125,7 @@ class BackupsBloc extends Bloc<BackupsEvent, BackupsState> {
       final OperationResult<void> result;
       try {
         result = await _admitOperation(
-          switch (event) {
-            InitializeBackupsRepository() => OperationKind.initializeBackups,
-            RemoveBackupsRepository() => OperationKind.removeBackups,
-            CreateBackups() => OperationKind.createBackups,
-            RestoreBackup() => OperationKind.restoreBackup,
-            _ => OperationKind.manageBackups,
-          },
+          kind,
           (final repository) => action(event, repository, (final value) {
             if (!emit.isDone && _isActive) {
               emit(value);

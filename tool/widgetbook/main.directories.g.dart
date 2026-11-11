@@ -1268,6 +1268,18 @@ final directories = <_widgetbook.WidgetbookNode>[
                 _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
                     .userFormViewTakenLogin,
           ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unknown groups',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewUnknownGroups,
+          ),
+          _widgetbook.WidgetbookUseCase(
+            name: 'Unknown groups without services',
+            builder:
+                _asset_selfprivacy_tool_widgetbook_use_cases_forms_user_form_view
+                    .userFormViewUnknownGroupsWithoutServices,
+          ),
         ],
       ),
     ],

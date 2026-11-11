@@ -140,6 +140,76 @@ void main() {
     expect(groupsControl.value, ['sp.full_users', 'service.group']);
   });
 
+  for (final serviceGroups in const [
+    <String>[],
+    ['sp.nextcloud.users', 'sp.gitea.admins'],
+  ]) {
+    testWidgets(
+      'unknown groups appear once and remain selectable with ${serviceGroups.length} service groups',
+      (final tester) async {
+        when(() => groupsBloc.state).thenReturn(
+          GroupsLoaded(
+            groups: [
+              'sp.full_users',
+              ...serviceGroups,
+              'custom_team',
+              'external_access',
+            ],
+          ),
+        );
+        final groupsControl = FormControl<List<String>>(
+          value: ['sp.full_users', 'custom_team'],
+        );
+        addTearDown(groupsControl.dispose);
+
+        await pumpForTest(
+          tester,
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<GroupsBloc>.value(value: groupsBloc),
+              BlocProvider<ServicesBloc>.value(value: servicesBloc),
+            ],
+            child: SingleChildScrollView(
+              child: GroupsSelector(groupsControl: groupsControl),
+            ),
+          ),
+        );
+
+        final selectedGroup = find.widgetWithText(
+          CheckboxListTile,
+          'custom_team',
+        );
+        final unselectedGroup = find.widgetWithText(
+          CheckboxListTile,
+          'external_access',
+        );
+        expect(selectedGroup, findsOneWidget);
+        expect(unselectedGroup, findsOneWidget);
+        final otherGroups = find.widgetWithText(
+          ListTile,
+          'users.other_groups'.tr(),
+        );
+        expect(otherGroups, findsOneWidget);
+        expect(
+          tester.getTopLeft(otherGroups).dy,
+          lessThan(tester.getTopLeft(selectedGroup).dy),
+        );
+        expect(tester.widget<CheckboxListTile>(selectedGroup).value, isTrue);
+        expect(tester.widget<CheckboxListTile>(unselectedGroup).value, isFalse);
+
+        await tester.ensureVisible(selectedGroup);
+        await tester.tap(selectedGroup);
+        await tester.pumpAndSettle();
+        expect(groupsControl.value, ['sp.full_users']);
+
+        await tester.ensureVisible(unselectedGroup);
+        await tester.tap(unselectedGroup);
+        await tester.pumpAndSettle();
+        expect(groupsControl.value, ['sp.full_users', 'external_access']);
+      },
+    );
+  }
+
   testWidgets('login validation uses the current user snapshot', (
     final tester,
   ) async {

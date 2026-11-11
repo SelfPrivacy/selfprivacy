@@ -308,25 +308,33 @@ class _GroupsSelectorState extends State<GroupsSelector> {
                         },
                       ),
                     ),
-                    ...unrecognizedGroups.map(
-                      (final String group) => CheckboxListTile.adaptive(
-                        value: explicitGroups.contains(group),
-                        title: Text(group),
-                        onChanged: (final bool? value) {
-                          setState(() {
-                            if (value ?? true) {
-                              explicitGroups.add(group);
-                            } else {
-                              explicitGroups.remove(group);
-                            }
-                          });
-                          _updateControl();
-                        },
-                      ),
-                    ),
                   ],
                 );
               }),
+              if (unrecognizedGroups.isNotEmpty)
+                ListTile(
+                  leading: Icon(
+                    Icons.group_outlined,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  title: Text('users.other_groups'.tr()),
+                ),
+              ...unrecognizedGroups.map(
+                (final String group) => CheckboxListTile.adaptive(
+                  value: explicitGroups.contains(group),
+                  title: Text(group),
+                  onChanged: (final bool? value) {
+                    setState(() {
+                      if (value ?? true) {
+                        explicitGroups.add(group);
+                      } else {
+                        explicitGroups.remove(group);
+                      }
+                    });
+                    _updateControl();
+                  },
+                ),
+              ),
             ],
           ),
         ),

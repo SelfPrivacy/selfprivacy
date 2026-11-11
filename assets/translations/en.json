@@ -626,6 +626,7 @@
         "explicit_permissions_title": "Explicit permissions",
         "explicit_permissions_subtitle": "This user will have these permissions regardless of the group selected above",
         "add_explicit_permissions": "Add more permissions",
+        "other_groups": "Other groups",
         "no_groups": "No groups yet",
         "no_groups_subtitle": "Looks like you don't have any services with SSO enabled yet",
         "permission_description_user_access": "User access to {serviceName}",

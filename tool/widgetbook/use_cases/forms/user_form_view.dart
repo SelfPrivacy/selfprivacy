@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:selfprivacy/logic/bloc/groups/groups_bloc.dart';
+import 'package:selfprivacy/logic/bloc/services/services_bloc.dart';
 import 'package:selfprivacy/logic/forms/user_form.dart';
 import 'package:selfprivacy/logic/models/hive/user.dart';
 import 'package:selfprivacy/ui/forms/user_form_view.dart';
@@ -9,6 +11,7 @@ import 'package:selfprivacy/ui/pages/users/new_user.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
 
 import '../../catalog_case.dart';
+import '../../fixtures.dart';
 import '../../form_preview.dart';
 
 @UseCase(name: 'Empty', type: UserFormView, path: '[Forms]')
@@ -47,6 +50,18 @@ Widget userFormViewLongDisplayName(final BuildContext context) =>
 Widget userFormViewSubmitting(final BuildContext context) =>
     _example('Submitting');
 
+@UseCase(name: 'Unknown groups', type: UserFormView, path: '[Forms]')
+Widget userFormViewUnknownGroups(final BuildContext context) =>
+    _example('Unknown groups');
+
+@UseCase(
+  name: 'Unknown groups without services',
+  type: UserFormView,
+  path: '[Forms]',
+)
+Widget userFormViewUnknownGroupsWithoutServices(final BuildContext context) =>
+    _example('Unknown groups without services');
+
 CatalogCase _example(final String variant) => CatalogCase(
   key: ValueKey('UserFormView/$variant'),
   id: 'UserFormView/$variant',
@@ -55,6 +70,38 @@ CatalogCase _example(final String variant) => CatalogCase(
   builder: (final context, final fixtures, final controller, final update) =>
       FormPreview<UserForm>(
         create: (final scope) {
+          final unknownGroups =
+              variant == 'Unknown groups' ||
+              variant == 'Unknown groups without services';
+          if (unknownGroups) {
+            fixtures
+              ..bind<GroupsState>(
+                fixtures.groups,
+                GroupsLoaded(
+                  groups: [
+                    'sp.full_users',
+                    if (variant == 'Unknown groups') ...[
+                      'sp.nextcloud.users',
+                      'sp.gitea.admins',
+                    ],
+                    'custom_team',
+                    'external_access',
+                  ],
+                ),
+              )
+              ..bind<ServicesState>(
+                fixtures.services,
+                ServicesLoaded(
+                  services: [
+                    if (variant == 'Unknown groups') ...[
+                      demoService(),
+                      demoService(id: 'gitea', name: 'Gitea'),
+                    ],
+                  ],
+                  lockedServices: const [],
+                ),
+              );
+          }
           final form = UserForm(
             initialUser: variant == 'Edit'
                 ? User.fake(
@@ -76,6 +123,8 @@ CatalogCase _example(final String variant) => CatalogCase(
           };
           prepareForm(form.form, variant, {
             'login': login,
+            if (unknownGroups)
+              UserForm.groupsControlName: ['sp.full_users', 'custom_team'],
             'displayName': variant == 'Long display name'
                 ? List.filled(260, 'a').join()
                 : 'Alice Example',

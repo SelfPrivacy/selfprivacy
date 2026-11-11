@@ -801,7 +801,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
       final about = tester.element(find.byType(AboutApplicationPage));
       expect(find.text('3.8.3'), findsOneWidget);
-      await tester.tap(find.byTooltip('jobs.title'.tr()).hitTestable());
+      await tester.tap(find.byTooltip('operations.title'.tr()).hitTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byType(JobsContent), findsOneWidget);
@@ -828,13 +828,13 @@ void main() {
       await waitForContent(
         tester,
         () => find
-            .byTooltip('jobs.title'.tr())
+            .byTooltip('operations.title'.tr())
             .hitTestable()
             .evaluate()
             .isNotEmpty,
         'Jobs must remain accessible after replacing the server branch',
       );
-      await tester.tap(find.byTooltip('jobs.title'.tr()).hitTestable());
+      await tester.tap(find.byTooltip('operations.title'.tr()).hitTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byType(JobsContent), findsOneWidget);

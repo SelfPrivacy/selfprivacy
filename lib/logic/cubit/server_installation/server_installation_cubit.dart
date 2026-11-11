@@ -681,7 +681,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
       providerId: server.providerId,
       createTime: server.created,
       volume: ServerProviderVolume(
-        id: 0,
+        id: null,
         name: 'recovered_volume',
         sizeByte: 0,
         serverId: server.providerId,
@@ -768,33 +768,30 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     if (change.nextState.installationDialoguePopUp != null &&
         change.currentState.installationDialoguePopUp !=
             change.nextState.installationDialoguePopUp) {
-      final branching = change.nextState.installationDialoguePopUp;
+      final branching = change.nextState.installationDialoguePopUp!;
+      final action = branching.choices.length > 1 ? branching.choices[1] : null;
+      final cancel = branching.choices.first;
+      Future<void> invoke(final CallbackDialogueChoice choice) async {
+        final result = await choice.callback?.call();
+        if (result == null || result.success || isClosed) {
+          return;
+        }
+        final current = state;
+        if (current is ServerInstallationNotFinished) {
+          emit(current.copyWith(installationDialoguePopUp: result.data));
+        }
+      }
+
       showPopUpAlert(
         context: getIt<NavigationService>().navigatorKey.currentContext!,
-        alertTitle: branching!.title,
+        alertTitle: branching.title,
         description: branching.description,
-        actionButtonTitle: branching.choices[1].title,
-        actionButtonOnPressed: () async {
-          final branchingResult = await branching.choices[1].callback!();
-          if (!branchingResult.success) {
-            emit(
-              (state as ServerInstallationNotFinished).copyWith(
-                installationDialoguePopUp: branchingResult.data,
-              ),
-            );
-          }
-        },
-        cancelButtonTitle: branching.choices[0].title,
-        cancelButtonOnPressed: () async {
-          final branchingResult = await branching.choices[0].callback!();
-          if (!branchingResult.success) {
-            emit(
-              (state as ServerInstallationNotFinished).copyWith(
-                installationDialoguePopUp: branchingResult.data,
-              ),
-            );
-          }
-        },
+        actionButtonTitle: action?.title,
+        actionButtonOnPressed: action == null
+            ? null
+            : () => unawaited(invoke(action)),
+        cancelButtonTitle: cancel.title,
+        cancelButtonOnPressed: () => unawaited(invoke(cancel)),
       );
     }
     super.onChange(change);

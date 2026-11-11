@@ -37,7 +37,7 @@ void main() {
       final buckets = Map<String, BackblazeBucket>.from(
         reopened.get('backblazeBuckets', defaultValue: {}) as Map,
       );
-      expect(settings.get(BNames.databaseVersion), 4);
+      expect(settings.get(BNames.databaseVersion), HiveConfig.version);
       expect(
         (reopened.get(BNames.backblazeBucket) as BackblazeBucket).bucketId,
         legacy.bucketId,

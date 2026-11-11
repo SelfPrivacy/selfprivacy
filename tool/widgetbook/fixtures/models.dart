@@ -94,7 +94,7 @@ Server demoServer({
     createTime: referenceTime,
     apiTokenRotatedAt: rotatedAt,
     volume: ServerProviderVolume(
-      id: 1,
+      id: '1',
       name: 'data',
       sizeByte: 42949672960,
       serverId: '1',

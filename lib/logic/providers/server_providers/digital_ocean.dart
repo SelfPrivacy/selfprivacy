@@ -219,32 +219,31 @@ class DigitalOceanServerProvider extends ServerProvider {
       installationData.serverDomain.domainName,
     );
     final pastServers = await getServers();
+    if (!pastServers.success) {
+      return GenericResult(
+        success: false,
+        code: pastServers.code,
+        message: pastServers.message,
+        data: CallbackDialogueBranching(
+          title: 'modals.unexpected_error'.tr(),
+          description: 'modals.server_validators_error'.tr(),
+          choices: [
+            CallbackDialogueChoice(
+              title: 'basis.cancel'.tr(),
+              callback: () async => installationData.errorCallback(),
+            ),
+            CallbackDialogueChoice(
+              title: 'modals.try_again'.tr(),
+              callback: () => launchInstallation(installationData),
+            ),
+          ],
+        ),
+      );
+    }
     for (final pastServer in pastServers.data) {
       if (pastServer.name == hostname) {
-        return GenericResult(
-          data: CallbackDialogueBranching(
-            choices: [
-              CallbackDialogueChoice(
-                title: 'basis.cancel'.tr(),
-                callback: () async => installationData.errorCallback(),
-              ),
-              CallbackDialogueChoice(
-                title: 'modals.yes'.tr(),
-                callback: () async {
-                  final deleting = await deleteServer(hostname);
-                  if (deleting.success) {
-                    await Future.delayed(const Duration(seconds: 20));
-                    return launchInstallation(installationData);
-                  }
-
-                  return deleting;
-                },
-              ),
-            ],
-            description: 'modals.destroy_server'.tr(),
-            title: 'modals.already_exists'.tr(),
-          ),
-          success: false,
+        return serverNameConflictResult(
+          installationData: installationData,
           message: 'Droplet "$hostname" already exists.',
         );
       }
@@ -294,12 +293,14 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
+    String? createdVolumeId;
     try {
       final int dropletId = serverResult.data!;
       final volumeResult = await createVolume(
         installationData.storageSize.gibibyte.toInt(),
         installationData.location,
       );
+      createdVolumeId = volumeResult.resourceId;
       if (volumeResult.wasCreated && !volumeResult.success) {
         return unreadableCreationResult(
           installationData: installationData,
@@ -319,7 +320,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       }
       final newVolume = volumeResult.data;
       final bool attachedVolume = (await _adapter.api().attachVolume(
-        name: newVolume!.name,
+        uuid: newVolume!.id!,
         serverId: dropletId,
         region: installationData.location,
       )).data;
@@ -334,7 +335,8 @@ class DigitalOceanServerProvider extends ServerProvider {
         await Future.delayed(const Duration(seconds: 20));
         final servers = await getServers();
         for (final server in servers.data) {
-          if (server.name == hostname && server.ip != '0.0.0.0') {
+          if (server.providerId == dropletId.toString() &&
+              server.ip != '0.0.0.0') {
             ipv4 = server.ip;
             break;
           }
@@ -364,13 +366,14 @@ class DigitalOceanServerProvider extends ServerProvider {
             CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async {
-                await Future.delayed(const Duration(seconds: 5));
-                final deletion = await deleteServer(hostname);
-                return deletion.success
-                    ? await launchInstallation(installationData)
-                    : deletion;
-              },
+              callback: () => cleanupInstallationResources(
+                installationData: installationData,
+                cleanup: () => _deleteDigitalOceanResources(
+                  serverId: serverResult.data,
+                  volumeId: createdVolumeId,
+                ),
+                onSuccess: () => launchInstallation(installationData),
+              ),
             ),
           ],
           description: 'modals.try_again'.tr(),
@@ -388,85 +391,25 @@ class DigitalOceanServerProvider extends ServerProvider {
     final int? serverId,
     final String? volumeId,
   }) async {
-    final results = <GenericResult>[];
-    if (volumeId != null) {
-      results.add(await _adapter.api().deleteVolume(volumeId));
-    }
     if (serverId != null) {
-      results.add(await _adapter.api().deleteServer(serverId));
+      final result = await deleteServer(serverId.toString());
+      if (!result.success) {
+        return result;
+      }
     }
-
-    final failedResults = results.where((final result) => !result.success);
-    final failed = failedResults.isEmpty ? null : failedResults.first;
-    return GenericResult(
-      success: results.isNotEmpty && failed == null,
-      data: null,
-      message: failed?.message,
-      code: failed?.code,
-    );
+    if (volumeId != null) {
+      return _adapter.api().deleteVolume(volumeId);
+    }
+    return GenericResult(success: serverId != null, data: null);
   }
 
   @override
-  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
-    final String hostname,
-  ) async {
-    final String deletionName = getHostnameFromDomain(hostname);
-    final serversResult = await getServers();
-    try {
-      final servers = serversResult.data;
-      ServerBasicInfo? foundServer;
-      for (final server in servers) {
-        if (server.name == deletionName) {
-          foundServer = server;
-          break;
-        }
-      }
-
-      final volumes = await getVolumes();
-      final ServerProviderVolume volumeToRemove;
-      volumeToRemove = volumes.data.firstWhere(
-        (final el) => el.serverId == foundServer!.providerId,
-      );
-
-      if (volumeToRemove.location == null) {
-        throw Exception('Volume location is null!');
-      }
-
-      await _adapter.api().detachVolume(
-        name: volumeToRemove.name,
-        serverId: int.parse(volumeToRemove.serverId!),
-        region: volumeToRemove.location!,
-      );
-
-      await Future.delayed(const Duration(seconds: 10));
-      final List<Future> laterFutures = <Future>[
-        _adapter.api().deleteVolume(volumeToRemove.uuid!),
-        _adapter.api().deleteServer(int.parse(foundServer!.providerId)),
-      ];
-
-      await Future.wait(laterFutures);
-    } catch (e) {
-      return GenericResult(
-        success: false,
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () async {
-                await Future.delayed(const Duration(seconds: 5));
-                return deleteServer(hostname);
-              },
-            ),
-          ],
-          description: 'modals.try_again'.tr(),
-          title: 'modals.server_deletion_error'.tr(),
-        ),
-        message: e.toString(),
-      );
+  Future<GenericResult<void>> deleteServer(final String providerId) async {
+    final id = int.tryParse(providerId);
+    if (id == null || id <= 0) {
+      return GenericResult(success: false, data: null);
     }
-
-    return GenericResult(success: true, data: null);
+    return _adapter.api().deleteServer(id);
   }
 
   @override
@@ -623,13 +566,13 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     try {
-      int id = 0;
       for (final rawVolume in result.data) {
         final String? volumeUuid = rawVolume.id;
         final String? volumeName = rawVolume.name;
         final int? sizeGigabytes = rawVolume.sizeGigabytes;
         final DigitalOceanLocation? region = rawVolume.region;
         if (volumeUuid == null ||
+            volumeUuid.trim().isEmpty ||
             volumeName == null ||
             sizeGigabytes == null ||
             region == null) {
@@ -638,7 +581,7 @@ class DigitalOceanServerProvider extends ServerProvider {
           );
         }
         final volume = ServerProviderVolume(
-          id: id++,
+          id: volumeUuid,
           name: volumeName,
           sizeByte: sizeGigabytes * 1024 * 1024 * 1024,
           serverId:
@@ -646,7 +589,6 @@ class DigitalOceanServerProvider extends ServerProvider {
               ? rawVolume.dropletIds![0].toString()
               : null,
           linuxDevice: 'scsi-0DO_Volume_$volumeName',
-          uuid: volumeUuid,
           location: region.slug,
         );
         volumes.add(volume);
@@ -683,6 +625,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     final int? sizeGigabytes = result.data!.sizeGigabytes;
     final DigitalOceanLocation? region = result.data!.region;
     if (volumeUuid == null ||
+        volumeUuid.trim().isEmpty ||
         volumeName == null ||
         sizeGigabytes == null ||
         region == null) {
@@ -696,26 +639,12 @@ class DigitalOceanServerProvider extends ServerProvider {
       );
     }
 
-    final getVolumesResult = await _adapter.api().getVolumes();
-
-    if (!getVolumesResult.success || getVolumesResult.data.isEmpty) {
-      return ResourceCreationResult(
-        data: null,
-        success: false,
-        wasCreated: result.wasCreated,
-        resourceId: result.resourceId,
-        code: getVolumesResult.code,
-        message: getVolumesResult.message,
-      );
-    }
-
     volume = ServerProviderVolume(
-      id: getVolumesResult.data.length,
+      id: volumeUuid,
       name: volumeName,
       sizeByte: sizeGigabytes * 1024 * 1024 * 1024,
       serverId: null,
       linuxDevice: '/dev/disk/by-id/scsi-0DO_Volume_$volumeName',
-      uuid: volumeUuid,
       location: region.slug,
     );
 
@@ -744,7 +673,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     }
 
     for (final volume in result.data) {
-      if (volume.uuid == volumeUuid) {
+      if (volume.id == volumeUuid) {
         requestedVolume = volume;
       }
     }
@@ -756,33 +685,59 @@ class DigitalOceanServerProvider extends ServerProvider {
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final String providerId,
-  ) => _adapter.api().attachVolume(
-    name: volume.name,
-    serverId: int.parse(providerId),
-    region: volume.location!,
-  );
+  ) async {
+    final id = volume.id;
+    if (id == null || id.trim().isEmpty) {
+      return GenericResult(success: false, data: false);
+    }
+    return _adapter.api().attachVolume(
+      uuid: id,
+      serverId: int.parse(providerId),
+      region: volume.location!,
+    );
+  }
 
   @override
-  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
-      _adapter.api().detachVolume(
-        name: volume.name,
-        serverId: int.parse(volume.serverId!),
-        region: volume.location!,
-      );
+  Future<GenericResult<bool>> detachVolume(
+    final ServerProviderVolume volume,
+  ) async {
+    final id = volume.id;
+    if (id == null || id.trim().isEmpty) {
+      return GenericResult(success: false, data: false);
+    }
+    return _adapter.api().detachVolume(
+      uuid: id,
+      serverId: int.parse(volume.serverId!),
+      region: volume.location!,
+    );
+  }
 
   @override
-  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
-      _adapter.api().deleteVolume(volume.uuid!);
+  Future<GenericResult<void>> deleteVolume(
+    final ServerProviderVolume volume,
+  ) async {
+    final id = volume.id;
+    if (id == null || id.trim().isEmpty) {
+      return GenericResult(success: false, data: null);
+    }
+    return _adapter.api().deleteVolume(id);
+  }
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) => _adapter.api().resizeVolume(
-    uuid: volume.uuid!,
-    gb: size.gibibyte.toInt(),
-    region: volume.location!,
-  );
+  ) async {
+    final id = volume.id;
+    if (id == null || id.trim().isEmpty) {
+      return GenericResult(success: false, data: false);
+    }
+    return _adapter.api().resizeVolume(
+      uuid: id,
+      gb: size.gibibyte.toInt(),
+      region: volume.location!,
+    );
+  }
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(

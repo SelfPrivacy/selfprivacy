@@ -91,13 +91,14 @@ class ServerProviderVolume {
     required this.sizeByte,
     required this.serverId,
     required this.linuxDevice,
+    this.legacyId,
     this.legacyServerId,
-    this.uuid,
+    this.legacyUuid,
     this.location,
   });
 
   @HiveField(1)
-  int id;
+  int? legacyId;
   @HiveField(2)
   String name;
   @HiveField(3, defaultValue: 10737418240) // 10 Gb
@@ -107,11 +108,13 @@ class ServerProviderVolume {
   @HiveField(5, defaultValue: null)
   String? linuxDevice;
   @HiveField(6, defaultValue: null)
-  String? uuid;
+  String? legacyUuid;
   @HiveField(7, defaultValue: null)
   String? location;
   @HiveField(8, defaultValue: null)
   String? serverId;
+  @HiveField(9, defaultValue: null)
+  String? id;
 }
 
 @HiveType(typeId: 101)

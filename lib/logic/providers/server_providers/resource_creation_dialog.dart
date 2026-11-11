@@ -13,7 +13,7 @@ GenericResult<CallbackDialogueBranching?> unreadableCreationResult({
   final int? code,
 }) => GenericResult(
   success: false,
-  data: resourceId == null
+  data: resourceId == null || resourceId.trim().isEmpty
       ? _manualCleanupDialog(installationData)
       : _cleanupConfirmationDialog(
           installationData: installationData,
@@ -38,8 +38,10 @@ CallbackDialogueBranching _cleanupConfirmationDialog({
     ),
     CallbackDialogueChoice(
       title: 'modals.delete_and_stop'.tr(),
-      callback: () =>
-          _runCleanup(installationData: installationData, cleanup: cleanup),
+      callback: () => cleanupInstallationResources(
+        installationData: installationData,
+        cleanup: cleanup,
+      ),
     ),
   ],
 );
@@ -61,13 +63,16 @@ CallbackDialogueBranching _manualCleanupDialog(
   ],
 );
 
-Future<GenericResult<CallbackDialogueBranching?>> _runCleanup({
+Future<GenericResult<CallbackDialogueBranching?>> cleanupInstallationResources({
   required final LaunchInstallationData installationData,
   required final ResourceCleanup cleanup,
+  final Future<GenericResult<CallbackDialogueBranching?>> Function()? onSuccess,
 }) async {
   final result = await cleanup();
   if (result.success) {
-    return _stopInstallation(installationData);
+    return onSuccess == null
+        ? _stopInstallation(installationData)
+        : onSuccess();
   }
 
   return GenericResult(
@@ -82,8 +87,11 @@ Future<GenericResult<CallbackDialogueBranching?>> _runCleanup({
         ),
         CallbackDialogueChoice(
           title: 'modals.retry_cleanup'.tr(),
-          callback: () =>
-              _runCleanup(installationData: installationData, cleanup: cleanup),
+          callback: () => cleanupInstallationResources(
+            installationData: installationData,
+            cleanup: cleanup,
+            onSuccess: onSuccess,
+          ),
         ),
       ],
     ),
@@ -91,6 +99,26 @@ Future<GenericResult<CallbackDialogueBranching?>> _runCleanup({
     code: result.code,
   );
 }
+
+GenericResult<CallbackDialogueBranching?> serverNameConflictResult({
+  required final LaunchInstallationData installationData,
+  final String? message,
+  final int? code,
+}) => GenericResult(
+  success: false,
+  message: message,
+  code: code,
+  data: CallbackDialogueBranching(
+    title: 'modals.already_exists'.tr(),
+    description: 'modals.server_name_conflict_manual_cleanup'.tr(),
+    choices: [
+      CallbackDialogueChoice(
+        title: 'basis.cancel'.tr(),
+        callback: () => _stopInstallation(installationData),
+      ),
+    ],
+  ),
+);
 
 Future<GenericResult<CallbackDialogueBranching?>> _stopInstallation(
   final LaunchInstallationData installationData,

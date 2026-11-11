@@ -833,6 +833,7 @@
         "already_exists": "A server with this name already exists.",
         "unexpected_error": "Could not complete the request to your server provider.",
         "destroy_server": "Destroy the server and create a new one?",
+        "server_name_conflict_manual_cleanup": "A server with this name already exists. Check your provider account and remove conflicting resources manually before trying again. Existing resources may continue to incur charges.",
         "try_again": "Try again?",
         "are_you_sure": "Are you sure?",
         "purge_all_keys": "Clear saved app data from this device? Your servers and their data will remain unchanged.",

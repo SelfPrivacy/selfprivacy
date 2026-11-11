@@ -12,7 +12,7 @@ void main() {
       providerId: '42',
       ip4: '198.51.100.42',
       createTime: DateTime.utc(2026, 7, 1),
-      volume: aServerProviderVolume(id: 42, serverId: '42'),
+      volume: aServerProviderVolume(id: 'volume-uuid', serverId: '42'),
       provider: ServerProviderType.digitalOcean,
       serverLocation: 'ams1',
     );

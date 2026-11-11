@@ -77,8 +77,9 @@ void main() {
     expect(servers.single.hostingDetails.provider, ServerProviderType.hetzner);
     expect(servers.single.hostingDetails.serverLocation, v1ServerLocation);
     expect(servers.single.hostingDetails.serverType, v1ServerType);
-    expect(servers.single.hostingDetails.volume.id, 84);
-    expect(servers.single.hostingDetails.volume.uuid, 'volume-uuid');
+    expect(servers.single.hostingDetails.volume.legacyId, 84);
+    expect(servers.single.hostingDetails.volume.id, '84');
+    expect(servers.single.hostingDetails.volume.legacyUuid, 'volume-uuid');
     expect(servers.single.hostingDetails.volume.legacyServerId, isNull);
     expect(servers.single.hostingDetails.volume.serverId, '$v1ServerId');
 

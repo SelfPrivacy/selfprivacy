@@ -184,7 +184,13 @@ class HetznerApi extends RestApiMap {
     try {
       await client.delete('/servers/$serverId');
     } catch (e) {
-      return GenericResult(success: false, data: null, message: e.toString());
+      final status = e is DioException ? e.response?.statusCode : null;
+      return GenericResult(
+        success: status == 404,
+        data: null,
+        code: status,
+        message: status == 404 ? null : e.toString(),
+      );
     } finally {
       close(client);
     }
@@ -466,7 +472,13 @@ class HetznerApi extends RestApiMap {
     try {
       await client.delete('/volumes/$volumeId');
     } catch (e) {
-      return GenericResult(success: false, data: false, message: e.toString());
+      final status = e is DioException ? e.response?.statusCode : null;
+      return GenericResult(
+        success: status == 404,
+        data: status == 404,
+        code: status,
+        message: status == 404 ? null : e.toString(),
+      );
     } finally {
       client.close();
     }

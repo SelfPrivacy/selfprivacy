@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
@@ -8,17 +9,22 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider.dar
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 import '../../../helpers/fixtures/json_fixture.dart';
+import '../../../helpers/fixtures/server_fixtures.dart';
 
 class _DigitalOceanClientFactory {
   _DigitalOceanClientFactory({
     this.volume,
     this.dropletsResponse,
     this.sizesResponse,
+    this.volumesResponse,
+    this.actionStatus = 'completed',
   });
 
   final Map<String, dynamic>? volume;
   final Map<String, dynamic>? dropletsResponse;
   final Map<String, dynamic>? sizesResponse;
+  final Map<String, dynamic>? volumesResponse;
+  final String actionStatus;
   final List<RequestOptions> requests = [];
 
   Map<String, dynamic> get _volume =>
@@ -29,6 +35,9 @@ class _DigitalOceanClientFactory {
       );
 
   Map<String, dynamic> get _volumesResponse {
+    if (volumesResponse != null) {
+      return volumesResponse!;
+    }
     final response = loadJsonFixture(
       'server_providers/digital_ocean/volumes.json',
     );
@@ -97,12 +106,16 @@ class _DigitalOceanClientFactory {
                   );
                 case ('POST', '/droplets/7/actions'):
                 case ('POST', '/volumes/actions'):
+                case (
+                  'POST',
+                  '/volumes/7724db7c-e098-11e5-b522-000f53304e51/actions',
+                ):
                   handler.resolve(
                     _response(
                       request,
                       statusCode: 201,
                       data: {
-                        'action': {'status': 'completed'},
+                        'action': {'status': actionStatus},
                       },
                     ),
                   );
@@ -176,6 +189,20 @@ void main() {
   });
 
   group('createVolume', () {
+    test('uses the created UUID without listing volumes', () async {
+      final clients = _DigitalOceanClientFactory(
+        volumesResponse: {'volumes': <Object>[]},
+      );
+
+      final result = await _provider(clients).createVolume(10, 'nyc1');
+
+      expect(result.success, isTrue);
+      expect(result.data!.id, '7724db7c-e098-11e5-b522-000f53304e51');
+      expect(
+        clients.requests.map((final request) => (request.method, request.path)),
+        [('POST', '/volumes')],
+      );
+    });
     testWidgets('converts DigitalOcean GiB to bytes', (final tester) async {
       final clients = _DigitalOceanClientFactory();
       final provider = _provider(clients);
@@ -397,7 +424,7 @@ void main() {
     final detachResult = await provider.detachVolume(volume);
 
     expect(volume.serverId, '7');
-    expect(volume.uuid, '7724db7c-e098-11e5-b522-000f53304e51');
+    expect(volume.id, '7724db7c-e098-11e5-b522-000f53304e51');
     expect(volume.name, 'selfprivacy-volume');
     expect(volume.sizeByte, 10 * 1024 * 1024 * 1024);
     expect(volume.linuxDevice, 'scsi-0DO_Volume_selfprivacy-volume');
@@ -405,14 +432,77 @@ void main() {
     expect(attachResult.success, isTrue);
     expect(detachResult.success, isTrue);
     final actionRequests = clients.requests.where(
-      (final request) => request.path == '/volumes/actions',
+      (final request) =>
+          request.path.startsWith('/volumes/') &&
+          request.path.endsWith('/actions'),
     );
+    expect(actionRequests.map((final request) => request.path), [
+      '/volumes/7724db7c-e098-11e5-b522-000f53304e51/actions',
+      '/volumes/7724db7c-e098-11e5-b522-000f53304e51/actions',
+    ]);
     expect(
       actionRequests.map(
         (final request) => (request.data as Map<String, dynamic>)['droplet_id'],
       ),
       [7, 7],
     );
+  });
+
+  test(
+    'errored volume actions are not treated as successful attachments',
+    () async {
+      final clients = _DigitalOceanClientFactory(actionStatus: 'errored');
+      final provider = _provider(clients);
+      final volume = (await provider.getVolumes()).data.single;
+
+      expect((await provider.attachVolume(volume, '7')).data, isFalse);
+      expect((await provider.detachVolume(volume)).data, isFalse);
+    },
+  );
+
+  test(
+    'unresolved volume identity cannot trigger provider mutations',
+    () async {
+      final clients = _DigitalOceanClientFactory();
+      final provider = _provider(clients);
+      final volume = aServerProviderVolume(id: null)..location = 'nyc1';
+      final results = [
+        await provider.deleteVolume(volume),
+        await provider.attachVolume(volume, '7'),
+        await provider.detachVolume(volume),
+        await provider.resizeVolume(volume, DiskSize.fromGibibyte(20)),
+      ];
+      expect(results.every((final result) => !result.success), isTrue);
+      expect(clients.requests, isEmpty);
+    },
+  );
+
+  test('volume IDs are stable when the provider list changes order', () async {
+    final first = loadJsonFixtureItem(
+      'server_providers/digital_ocean/volumes.json',
+      'volumes',
+    );
+    final second = Map<String, dynamic>.from(first)
+      ..['id'] = '8724db7c-e098-11e5-b522-000f53304e51'
+      ..['name'] = 'another-volume';
+    final expected = {
+      'selfprivacy-volume': '7724db7c-e098-11e5-b522-000f53304e51',
+      'another-volume': '8724db7c-e098-11e5-b522-000f53304e51',
+    };
+
+    for (final volumes in [
+      [first, second],
+      [second, first],
+    ]) {
+      final result = await _provider(
+        _DigitalOceanClientFactory(volumesResponse: {'volumes': volumes}),
+      ).getVolumes();
+
+      expect(result.success, isTrue);
+      expect({
+        for (final volume in result.data) volume.name: volume.id,
+      }, expected);
+    }
   });
 
   test('metadata selects a droplet by its string provider ID', () async {
@@ -458,26 +548,21 @@ void main() {
     );
   });
 
-  testWidgets('deleteServer converts associated resource IDs', (
-    final tester,
-  ) async {
-    final clients = _DigitalOceanClientFactory();
-    final resultFuture = _provider(
-      clients,
-    ).deleteServer('selfprivacy-server.example.org');
+  test(
+    'deleteServer targets its provider ID without deleting volumes',
+    () async {
+      final clients = _DigitalOceanClientFactory();
+      final result = await _provider(clients).deleteServer('7');
 
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 10));
-    final result = await resultFuture;
-
-    expect(result.success, isTrue);
-    expect(
-      clients.requests
-          .where((final request) => request.method == 'DELETE')
-          .map((final request) => request.path),
-      ['/volumes/7724db7c-e098-11e5-b522-000f53304e51', '/droplets/7'],
-    );
-  });
+      expect(result.success, isTrue);
+      expect(
+        clients.requests
+            .where((final request) => request.method == 'DELETE')
+            .map((final request) => request.path),
+        ['/droplets/7'],
+      );
+    },
+  );
 
   test('maps available server types for a location', () async {
     final clients = _DigitalOceanClientFactory();

@@ -362,7 +362,7 @@ class ServerInstallationRepository {
         apiToken: secret,
         apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
-          id: 0,
+          id: null,
           name: '',
           sizeByte: 0,
           serverId: null,
@@ -400,7 +400,7 @@ class ServerInstallationRepository {
         apiToken: secret,
         apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
-          id: 0,
+          id: null,
           name: '',
           sizeByte: 0,
           serverId: null,
@@ -434,7 +434,7 @@ class ServerInstallationRepository {
         return ServerHostingDetails(
           apiToken: apiToken,
           volume: ServerProviderVolume(
-            id: 0,
+            id: null,
             name: '',
             serverId: null,
             sizeByte: 0,
@@ -469,7 +469,7 @@ class ServerInstallationRepository {
         apiToken: secret,
         apiTokenRotatedAt: DateTime.now(),
         volume: ServerProviderVolume(
-          id: 0,
+          id: null,
           name: '',
           sizeByte: 0,
           serverId: null,

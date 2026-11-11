@@ -83,13 +83,14 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ServerProviderVolume(
-      id: (fields[1] as num).toInt(),
+      id: fields[9] as String?,
       name: fields[2] as String,
       sizeByte: fields[3] == null ? 10737418240 : (fields[3] as num).toInt(),
       serverId: fields[8] as String?,
       linuxDevice: fields[5] as String?,
+      legacyId: (fields[1] as num?)?.toInt(),
       legacyServerId: (fields[4] as num?)?.toInt(),
-      uuid: fields[6] as String?,
+      legacyUuid: fields[6] as String?,
       location: fields[7] as String?,
     );
   }
@@ -97,9 +98,9 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
   @override
   void write(BinaryWriter writer, ServerProviderVolume obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(1)
-      ..write(obj.id)
+      ..write(obj.legacyId)
       ..writeByte(2)
       ..write(obj.name)
       ..writeByte(3)
@@ -109,11 +110,13 @@ class ServerProviderVolumeAdapter extends TypeAdapter<ServerProviderVolume> {
       ..writeByte(5)
       ..write(obj.linuxDevice)
       ..writeByte(6)
-      ..write(obj.uuid)
+      ..write(obj.legacyUuid)
       ..writeByte(7)
       ..write(obj.location)
       ..writeByte(8)
-      ..write(obj.serverId);
+      ..write(obj.serverId)
+      ..writeByte(9)
+      ..write(obj.id);
   }
 
   @override

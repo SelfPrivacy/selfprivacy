@@ -23,6 +23,9 @@ class _HetznerInstallationClientFactory {
   _HetznerInstallationClientFactory(this.failureStage);
 
   final _FailureStage failureStage;
+  final List<RequestOptions> requests = [];
+  int serverDeleteStatus = 204;
+  int volumeDeleteStatus = 204;
 
   Dio call(final BaseOptions options) => Dio(options)
     ..interceptors.add(
@@ -32,7 +35,28 @@ class _HetznerInstallationClientFactory {
               final RequestOptions request,
               final RequestInterceptorHandler handler,
             ) {
+              requests.add(request);
               switch ((request.method, request.path)) {
+                case ('GET', '/servers'):
+                  final server =
+                      loadJsonFixtureItem(
+                          'server_providers/hetzner/servers.json',
+                          'servers',
+                        )
+                        ..['name'] = 'example'
+                        ..['volumes'] = [41, 99];
+                  handler.resolve(
+                    _response(
+                      request,
+                      statusCode: 200,
+                      data: {
+                        'servers': [server],
+                      },
+                    ),
+                  );
+                case ('POST', '/volumes/41/actions/detach'):
+                case ('POST', '/volumes/99/actions/detach'):
+                  handler.resolve(_response(request, statusCode: 201));
                 case ('POST', '/volumes'):
                   handler.resolve(
                     _response(
@@ -48,7 +72,11 @@ class _HetznerInstallationClientFactory {
                     ),
                   );
                 case ('DELETE', '/volumes/41'):
+                  _deleteResponse(request, handler, volumeDeleteStatus);
+                case ('DELETE', '/volumes/99'):
                   handler.resolve(_response(request, statusCode: 204));
+                case ('DELETE', '/servers/7'):
+                  _deleteResponse(request, handler, serverDeleteStatus);
                 case ('POST', '/servers'):
                   _handleServerCreation(request, handler);
                 case ('POST', '/servers/7/actions/change_dns_ptr'):
@@ -70,6 +98,25 @@ class _HetznerInstallationClientFactory {
             },
       ),
     );
+
+  void _deleteResponse(
+    final RequestOptions request,
+    final RequestInterceptorHandler handler,
+    final int status,
+  ) {
+    final response = _response(request, statusCode: status);
+    if (status >= 400) {
+      handler.reject(
+        DioException(
+          requestOptions: request,
+          response: response,
+          type: DioExceptionType.badResponse,
+        ),
+      );
+    } else {
+      handler.resolve(response);
+    }
+  }
 
   void _handleServerCreation(
     final RequestOptions request,
@@ -233,25 +280,29 @@ class _HetznerMetadataClientFactory {
 
 LaunchInstallationData _installationData({
   required final void Function() onSuccess,
+  final void Function()? onError,
 }) => LaunchInstallationData(
   dnsApiCredential: aDnsProviderCredential(),
   serverDomain: aServerDomain(),
   serverTypeId: 'cpx12',
-  errorCallback: () {},
+  errorCallback: onError ?? () {},
   successCallback: (final _) => onSuccess(),
   storageSize: DiskSize.fromGibibyte(10),
   customSshKey: null,
   location: 'fsn1',
 );
 
-ServerProvider _provider(final _FailureStage failureStage) =>
-    ServerProviderFactory.createServerProviderInterface(
-      ServerProviderSettings(
-        provider: ServerProviderType.hetzner,
-        credentials: const BearerTokenCredential(token: 'provider-token'),
-      ),
-      clientFactory: _HetznerInstallationClientFactory(failureStage).call,
-    );
+ServerProvider _provider(
+  final _FailureStage failureStage, {
+  final _HetznerInstallationClientFactory? clients,
+}) => ServerProviderFactory.createServerProviderInterface(
+  ServerProviderSettings(
+    provider: ServerProviderType.hetzner,
+    credentials: const BearerTokenCredential(token: 'provider-token'),
+  ),
+  clientFactory:
+      (clients ?? _HetznerInstallationClientFactory(failureStage)).call,
+);
 
 ServerProvider _metadataProvider(final _HetznerMetadataClientFactory clients) =>
     ServerProviderFactory.createServerProviderInterface(
@@ -281,6 +332,89 @@ void main() {
   });
 
   group('launchInstallation', () {
+    test('name conflict stops without deleting any resources', () async {
+      final clients = _HetznerInstallationClientFactory(
+        _FailureStage.uniqueness,
+      );
+      var stopped = false;
+      final pending = _provider(_FailureStage.uniqueness, clients: clients)
+          .launchInstallation(
+            _installationData(onSuccess: () {}, onError: () => stopped = true),
+          );
+      final result = await pending;
+
+      expect(result.success, isFalse);
+      expect(result.data!.choices, hasLength(1));
+      await result.data!.choices.single.callback!();
+      expect(stopped, isTrue);
+      expect(
+        clients.requests.where((final request) => request.method == 'DELETE'),
+        isEmpty,
+      );
+      expect(
+        clients.requests.where(
+          (final request) =>
+              request.path == '/servers' && request.method == 'POST',
+        ),
+        hasLength(1),
+      );
+    });
+
+    test('cleanup deletes only the created server and volume', () async {
+      final clients = _HetznerInstallationClientFactory(
+        _FailureStage.reverseDns,
+      );
+      var stopped = false;
+      final resultFuture = _provider(_FailureStage.reverseDns, clients: clients)
+          .launchInstallation(
+            _installationData(onSuccess: () {}, onError: () => stopped = true),
+          );
+      final result = await resultFuture;
+      final pending = result.data!.choices.first.callback!();
+      final cleanup = await pending;
+
+      expect(cleanup.success, isTrue);
+      expect(stopped, isTrue);
+      expect(
+        clients.requests
+            .where((final request) => request.method == 'DELETE')
+            .map((final request) => request.path),
+        ['/servers/7', '/volumes/41'],
+      );
+      expect(
+        clients.requests.where((final request) => request.method == 'GET'),
+        isEmpty,
+      );
+    });
+
+    test('failed cleanup cannot start another installation', () async {
+      final clients = _HetznerInstallationClientFactory(
+        _FailureStage.reverseDns,
+      )..serverDeleteStatus = 500;
+      final resultFuture = _provider(
+        _FailureStage.reverseDns,
+        clients: clients,
+      ).launchInstallation(_installationData(onSuccess: () {}));
+      final result = await resultFuture;
+      final pending = result.data!.choices[1].callback!();
+      final cleanup = await pending;
+
+      expect(cleanup.success, isFalse);
+      expect(
+        clients.requests.where(
+          (final request) =>
+              request.path == '/servers' && request.method == 'POST',
+        ),
+        hasLength(1),
+      );
+      expect(
+        clients.requests
+            .where((final request) => request.method == 'DELETE')
+            .map((final request) => request.path),
+        ['/servers/7'],
+      );
+    });
+
     testWidgets('server creation failure uses the server result', (
       final tester,
     ) async {
@@ -395,6 +529,23 @@ void main() {
     ]);
   });
 
+  test(
+    'unresolved volume identity cannot trigger provider mutations',
+    () async {
+      final clients = _HetznerMetadataClientFactory();
+      final provider = _metadataProvider(clients);
+      final volume = aServerProviderVolume(id: null);
+      final results = [
+        await provider.deleteVolume(volume),
+        await provider.attachVolume(volume, '7'),
+        await provider.detachVolume(volume),
+        await provider.resizeVolume(volume, DiskSize.fromGibibyte(20)),
+      ];
+      expect(results.every((final result) => !result.success), isTrue);
+      expect(clients.requests, isEmpty);
+    },
+  );
+
   test('volume reads and creation expose associated IDs as strings', () async {
     final clients = _HetznerMetadataClientFactory();
     final provider = _metadataProvider(clients);
@@ -403,7 +554,7 @@ void main() {
     final creationResult = await provider.createVolume(10, 'fsn1');
 
     final volume = volumesResult.data.single;
-    expect(volume.id, 41);
+    expect(volume.id, '41');
     expect(volume.name, 'selfprivacy-volume');
     expect(volume.sizeByte, 10 * 1024 * 1024 * 1024);
     expect(volume.serverId, '7');

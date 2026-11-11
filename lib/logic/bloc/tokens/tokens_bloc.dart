@@ -234,7 +234,7 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
         providerId: event.providerServer.providerId,
         createTime: event.providerServer.created,
         volume: ServerProviderVolume(
-          id: 0,
+          id: null,
           name: 'recovered_volume',
           sizeByte: 0,
           serverId: event.providerServer.providerId,

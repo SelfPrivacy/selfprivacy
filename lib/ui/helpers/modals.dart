@@ -7,8 +7,8 @@ import 'package:selfprivacy/ui/atoms/buttons/dialog_action_button.dart';
 DialogRoute<void> showPopUpAlert({
   required final BuildContext context,
   required final String description,
-  required final String actionButtonTitle,
-  required final void Function() actionButtonOnPressed,
+  final String? actionButtonTitle,
+  final void Function()? actionButtonOnPressed,
   final void Function()? cancelButtonOnPressed,
   final String? alertTitle,
   final String? cancelButtonTitle,
@@ -19,11 +19,12 @@ DialogRoute<void> showPopUpAlert({
       title: Text(alertTitle ?? 'basis.alert'.tr()),
       content: Text(description),
       actions: [
-        DialogActionButton(
-          text: actionButtonTitle,
-          isRed: true,
-          onPressed: actionButtonOnPressed,
-        ),
+        if (actionButtonTitle != null)
+          DialogActionButton(
+            text: actionButtonTitle,
+            isRed: true,
+            onPressed: actionButtonOnPressed,
+          ),
         DialogActionButton(
           text: cancelButtonTitle ?? 'basis.cancel'.tr(),
           onPressed: cancelButtonOnPressed,

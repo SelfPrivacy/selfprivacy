@@ -16,7 +16,7 @@ import 'package:uuid/uuid.dart';
 
 class HiveConfig {
   /// bump on schema changes
-  static const version = 4;
+  static const version = 5;
 
   static Future<void> init() async {
     final String? storagePath = PlatformAdapter.storagePath;
@@ -109,6 +109,9 @@ class HiveConfig {
       }
       if (savedVersion < 4) {
         await migrateFrom3To4();
+      }
+      if (savedVersion < 5) {
+        await migrateFrom4To5();
       }
     }
 
@@ -218,6 +221,63 @@ class HiveConfig {
     }
   }
 
+  static Future<void> migrateFrom4To5() async {
+    ServerHostingDetails migrateDetails(final ServerHostingDetails details) {
+      final volume = details.volume;
+      final String? id =
+          volume.id ??
+          switch (details.provider) {
+            ServerProviderType.hetzner => switch (volume.legacyId) {
+              final id? when id > 0 => id.toString(),
+              _ => null,
+            },
+            ServerProviderType.digitalOcean => switch (volume.legacyUuid) {
+              final uuid? when uuid.trim().isNotEmpty => uuid,
+              _ => null,
+            },
+            ServerProviderType.unknown => null,
+          };
+      return details.copyWith(
+        volume: ServerProviderVolume(
+          id: id,
+          legacyId: volume.legacyId,
+          legacyUuid: volume.legacyUuid,
+          name: volume.name,
+          sizeByte: volume.sizeByte,
+          serverId: volume.serverId,
+          legacyServerId: volume.legacyServerId,
+          linuxDevice: volume.linuxDevice,
+          location: volume.location,
+        ),
+      );
+    }
+
+    final resources = Hive.box(BNames.resourcesBox);
+    final servers = List<Server>.from(
+      resources.get(BNames.servers, defaultValue: <Server>[]) as List,
+    );
+    await resources.put(BNames.servers, [
+      for (final server in servers)
+        Server(
+          uuid: server.uuid,
+          domain: server.domain,
+          hostingDetails: migrateDetails(server.hostingDetails),
+        ),
+    ]);
+    final wizard = await Hive.openBox(BNames.wizardDataBox);
+    final draft =
+        wizard.get(BNames.serverInstallationWizardData)
+            as ServerInstallationWizardData?;
+    if (draft?.serverDetails case final details?) {
+      await wizard.put(
+        BNames.serverInstallationWizardData,
+        draft!.copyWith(serverDetails: () => migrateDetails(details)),
+      );
+    }
+    await resources.flush();
+    await wizard.flush();
+  }
+
   static Future<void> migrateFrom3To4() async {
     final resources = Hive.box(BNames.resourcesBox);
     final legacy = resources.get(BNames.backblazeBucket) as BackblazeBucket?;
@@ -266,11 +326,12 @@ class HiveConfig {
           createTime: hostingDetails.createTime,
           volume: ServerProviderVolume(
             id: volume.id,
+            legacyId: volume.legacyId,
             name: volume.name,
             sizeByte: volume.sizeByte,
             serverId: volume.serverId ?? volume.legacyServerId?.toString(),
             linuxDevice: volume.linuxDevice,
-            uuid: volume.uuid,
+            legacyUuid: volume.legacyUuid,
             location: volume.location,
           ),
           apiToken: hostingDetails.apiToken,

@@ -49,15 +49,8 @@ abstract class ServerProvider {
     final LaunchInstallationData installationData,
   );
 
-  /// Tries to delete the requested server entry
-  /// from the authorized account, including all assigned
-  /// storage extensions.
-  ///
-  /// If failure, returns error dialogue information to
-  /// write in ServerInstallationState.
-  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
-    final String hostname,
-  );
+  /// Deletes the server with this provider ID, preserving attached volumes.
+  Future<GenericResult<void>> deleteServer(final String providerId);
 
   /// Tries to access an account linked to the provided token.
   ///

@@ -155,7 +155,13 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.delete('/droplets/$serverId');
     } catch (e) {
-      return GenericResult(success: false, data: null, message: e.toString());
+      final status = e is DioException ? e.response?.statusCode : null;
+      return GenericResult(
+        success: status == 404,
+        data: null,
+        code: status,
+        message: status == 404 ? null : e.toString(),
+      );
     } finally {
       close(client);
     }
@@ -409,7 +415,7 @@ class DigitalOceanApi extends RestApiMap {
   }
 
   Future<GenericResult<bool>> attachVolume({
-    required final String name,
+    required final String uuid,
     required final int serverId,
     required final String region,
   }) async {
@@ -419,16 +425,11 @@ class DigitalOceanApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       attachVolumeResponse = await client.post(
-        '/volumes/actions',
-        data: {
-          'type': 'attach',
-          'volume_name': name,
-          'region': region,
-          'droplet_id': serverId,
-        },
+        '/volumes/$uuid/actions',
+        data: {'type': 'attach', 'region': region, 'droplet_id': serverId},
       );
-      success =
-          attachVolumeResponse.data['action']['status'].toString() != 'error';
+      final status = attachVolumeResponse.data['action']['status'].toString();
+      success = status != 'error' && status != 'errored';
     } catch (e) {
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
@@ -444,7 +445,7 @@ class DigitalOceanApi extends RestApiMap {
   }
 
   Future<GenericResult<bool>> detachVolume({
-    required final String name,
+    required final String uuid,
     required final int serverId,
     required final String region,
   }) async {
@@ -454,16 +455,11 @@ class DigitalOceanApi extends RestApiMap {
     final Dio client = await getClient();
     try {
       detachVolumeResponse = await client.post(
-        '/volumes/actions',
-        data: {
-          'type': 'detach',
-          'volume_name': name,
-          'droplet_id': serverId,
-          'region': region,
-        },
+        '/volumes/$uuid/actions',
+        data: {'type': 'detach', 'droplet_id': serverId, 'region': region},
       );
-      success =
-          detachVolumeResponse.data['action']['status'].toString() != 'error';
+      final status = detachVolumeResponse.data['action']['status'].toString();
+      success = status != 'error' && status != 'errored';
     } catch (e) {
       return GenericResult(data: false, success: false, message: e.toString());
     } finally {
@@ -478,7 +474,13 @@ class DigitalOceanApi extends RestApiMap {
     try {
       await client.delete('/volumes/$uuid');
     } catch (e) {
-      return GenericResult(data: null, success: false, message: e.toString());
+      final status = e is DioException ? e.response?.statusCode : null;
+      return GenericResult(
+        success: status == 404,
+        data: null,
+        code: status,
+        message: status == 404 ? null : e.toString(),
+      );
     } finally {
       client.close();
     }

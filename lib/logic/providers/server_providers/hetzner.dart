@@ -238,33 +238,10 @@ class HetznerServerProvider extends ServerProvider {
     }
 
     if (!serverResult.success || serverResult.data == null) {
-      await _adapter.api().deleteVolume(volume.id);
-      await Future.delayed(const Duration(seconds: 5));
       if (serverResult.message != null &&
           serverResult.message == 'uniqueness_error') {
-        return GenericResult(
-          data: CallbackDialogueBranching(
-            choices: [
-              CallbackDialogueChoice(
-                title: 'basis.cancel'.tr(),
-                callback: () async => installationData.errorCallback(),
-              ),
-              CallbackDialogueChoice(
-                title: 'modals.yes'.tr(),
-                callback: () async {
-                  final deleting = await deleteServer(hostname);
-                  if (deleting.success) {
-                    return launchInstallation(installationData);
-                  }
-
-                  return deleting;
-                },
-              ),
-            ],
-            description: 'modals.destroy_server'.tr(),
-            title: 'modals.already_exists'.tr(),
-          ),
-          success: false,
+        return serverNameConflictResult(
+          installationData: installationData,
           message: serverResult.message,
           code: serverResult.code,
         );
@@ -274,18 +251,18 @@ class HetznerServerProvider extends ServerProvider {
             choices: [
               CallbackDialogueChoice(
                 title: 'basis.cancel'.tr(),
-                callback: () async {
-                  final deletion = await deleteServer(hostname);
-                  if (deletion.success) {
-                    installationData.errorCallback();
-                  }
-
-                  return deletion;
-                },
+                callback: () => cleanupInstallationResources(
+                  installationData: installationData,
+                  cleanup: () => _deleteHetznerResources(volumeId: volume.id),
+                ),
               ),
               CallbackDialogueChoice(
                 title: 'modals.try_again'.tr(),
-                callback: () => launchInstallation(installationData),
+                callback: () => cleanupInstallationResources(
+                  installationData: installationData,
+                  cleanup: () => _deleteHetznerResources(volumeId: volume.id),
+                  onSuccess: () => launchInstallation(installationData),
+                ),
               ),
             ],
             description:
@@ -304,7 +281,7 @@ class HetznerServerProvider extends ServerProvider {
       ip4: serverResult.data!.publicNet.ipv4!.ip,
       createTime: DateTime.now(),
       volume: ServerProviderVolume(
-        id: volume.id,
+        id: volume.id.toString(),
         name: volume.name,
         sizeByte: volume.size * 1024 * 1024 * 1024,
         serverId: volume.serverId?.toString(),
@@ -328,28 +305,24 @@ class HetznerServerProvider extends ServerProvider {
           choices: [
             CallbackDialogueChoice(
               title: 'basis.cancel'.tr(),
-              callback: () async {
-                final deletion = await deleteServer(hostname);
-                if (deletion.success) {
-                  installationData.errorCallback();
-                }
-
-                return deletion;
-              },
+              callback: () => cleanupInstallationResources(
+                installationData: installationData,
+                cleanup: () => _deleteHetznerResources(
+                  serverId: serverResult.data!.id,
+                  volumeId: volume.id,
+                ),
+              ),
             ),
             CallbackDialogueChoice(
               title: 'modals.try_again'.tr(),
-              callback: () async {
-                await _adapter.api().deleteVolume(volume.id);
-                await Future.delayed(const Duration(seconds: 5));
-                final deletion = await deleteServer(hostname);
-                if (deletion.success) {
-                  await Future.delayed(const Duration(seconds: 5));
-                  return launchInstallation(installationData);
-                }
-
-                return deletion;
-              },
+              callback: () => cleanupInstallationResources(
+                installationData: installationData,
+                cleanup: () => _deleteHetznerResources(
+                  serverId: serverResult.data!.id,
+                  volumeId: volume.id,
+                ),
+                onSuccess: () => launchInstallation(installationData),
+              ),
             ),
           ],
           description:
@@ -370,75 +343,25 @@ class HetznerServerProvider extends ServerProvider {
     final int? serverId,
     final int? volumeId,
   }) async {
-    final results = <GenericResult>[];
-
     if (serverId != null) {
-      results.add(await _adapter.api().deleteServer(serverId: serverId));
+      final result = await deleteServer(serverId.toString());
+      if (!result.success) {
+        return result;
+      }
     }
     if (volumeId != null) {
-      results.add(await _adapter.api().deleteVolume(volumeId));
+      return _adapter.api().deleteVolume(volumeId);
     }
-
-    final failedResults = results.where((final result) => !result.success);
-    final failed = failedResults.isEmpty ? null : failedResults.first;
-    return GenericResult(
-      success: results.isNotEmpty && failed == null,
-      data: null,
-      message: failed?.message,
-      code: failed?.code,
-    );
+    return GenericResult(success: serverId != null, data: null);
   }
 
   @override
-  Future<GenericResult<CallbackDialogueBranching?>> deleteServer(
-    final String hostname,
-  ) async {
-    final serversResult = await _adapter.api().getServers();
-    try {
-      final servers = serversResult.data;
-      HetznerServerInfo? foundServer;
-      for (final server in servers) {
-        if (server.name == hostname) {
-          foundServer = server;
-          break;
-        }
-      }
-
-      for (final volumeId in foundServer!.volumes) {
-        await _adapter.api().detachVolume(volumeId);
-      }
-
-      await Future.delayed(const Duration(seconds: 10));
-      final List<Future> laterFutures = <Future>[];
-
-      for (final volumeId in foundServer.volumes) {
-        laterFutures.add(_adapter.api().deleteVolume(volumeId));
-      }
-      laterFutures.add(_adapter.api().deleteServer(serverId: foundServer.id));
-
-      await Future.wait(laterFutures);
-    } catch (e) {
-      return GenericResult(
-        success: false,
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () async {
-                await Future.delayed(const Duration(seconds: 5));
-                return deleteServer(hostname);
-              },
-            ),
-          ],
-          description: 'modals.try_again'.tr(),
-          title: 'modals.server_deletion_error'.tr(),
-        ),
-        message: e.toString(),
-      );
+  Future<GenericResult<void>> deleteServer(final String providerId) async {
+    final id = int.tryParse(providerId);
+    if (id == null || id <= 0) {
+      return GenericResult(success: false, data: null);
     }
-
-    return GenericResult(success: true, data: null);
+    return _adapter.api().deleteServer(serverId: id);
   }
 
   @override
@@ -619,7 +542,7 @@ class HetznerServerProvider extends ServerProvider {
         final volumeDevice = rawVolume.linuxDevice;
         final volumeLocation = rawVolume.location.name;
         final volume = ServerProviderVolume(
-          id: volumeId,
+          id: volumeId.toString(),
           name: volumeName,
           sizeByte: volumeSize,
           serverId: volumeServer?.toString(),
@@ -662,7 +585,7 @@ class HetznerServerProvider extends ServerProvider {
 
     try {
       volume = ServerProviderVolume(
-        id: result.data!.id,
+        id: result.data!.id.toString(),
         name: result.data!.name,
         sizeByte: result.data!.size * 1024 * 1024 * 1024,
         serverId: result.data!.serverId?.toString(),
@@ -689,44 +612,70 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<void>> deleteVolume(final ServerProviderVolume volume) =>
-      _adapter.api().deleteVolume(volume.id);
+  Future<GenericResult<void>> deleteVolume(
+    final ServerProviderVolume volume,
+  ) async {
+    final id = int.tryParse(volume.id ?? '');
+    if (id == null || id <= 0) {
+      return GenericResult(success: false, data: null);
+    }
+    return _adapter.api().deleteVolume(id);
+  }
 
   @override
   Future<GenericResult<bool>> resizeVolume(
     final ServerProviderVolume volume,
     final DiskSize size,
-  ) => _adapter.api().resizeVolume(
-    HetznerVolume(
-      volume.id,
-      volume.sizeByte,
-      int.tryParse(volume.serverId ?? ''),
-      volume.name,
-      volume.linuxDevice,
-      HetznerLocation.empty(),
-    ),
-    size,
-  );
+  ) async {
+    final id = int.tryParse(volume.id ?? '');
+    if (id == null || id <= 0) {
+      return GenericResult(success: false, data: false);
+    }
+    return _adapter.api().resizeVolume(
+      HetznerVolume(
+        id,
+        volume.sizeByte,
+        int.tryParse(volume.serverId ?? ''),
+        volume.name,
+        volume.linuxDevice,
+        HetznerLocation.empty(),
+      ),
+      size,
+    );
+  }
 
   @override
   Future<GenericResult<bool>> attachVolume(
     final ServerProviderVolume volume,
     final String providerId,
-  ) => _adapter.api().attachVolume(
-    HetznerVolume(
-      volume.id,
-      volume.sizeByte,
-      int.tryParse(volume.serverId ?? ''),
-      volume.name,
-      volume.linuxDevice,
-      HetznerLocation.empty(),
-    ),
-    int.parse(providerId),
-  );
+  ) async {
+    final id = int.tryParse(volume.id ?? '');
+    if (id == null || id <= 0) {
+      return GenericResult(success: false, data: false);
+    }
+    return _adapter.api().attachVolume(
+      HetznerVolume(
+        id,
+        volume.sizeByte,
+        int.tryParse(volume.serverId ?? ''),
+        volume.name,
+        volume.linuxDevice,
+        HetznerLocation.empty(),
+      ),
+      int.parse(providerId),
+    );
+  }
 
   @override
-  Future<GenericResult<bool>> detachVolume(final ServerProviderVolume volume) =>
-      _adapter.api().detachVolume(volume.id);
+  Future<GenericResult<bool>> detachVolume(
+    final ServerProviderVolume volume,
+  ) async {
+    final id = int.tryParse(volume.id ?? '');
+    if (id == null || id <= 0) {
+      return GenericResult(success: false, data: false);
+    }
+    return _adapter.api().detachVolume(id);
+  }
 
   @override
   Future<GenericResult<List<ServerMetadataEntity>>> getMetadata(

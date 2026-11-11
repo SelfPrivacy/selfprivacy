@@ -3,13 +3,17 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 
 ServerProviderVolume aServerProviderVolume({
-  final int id = 0,
+  final String? id = '1',
+  final int? legacyId,
+  final String? legacyUuid,
   final String name = '',
   final int sizeByte = 0,
   final String serverId = '1',
   final String linuxDevice = '',
 }) => ServerProviderVolume(
   id: id,
+  legacyId: legacyId,
+  legacyUuid: legacyUuid,
   name: name,
   sizeByte: sizeByte,
   serverId: serverId,

@@ -147,7 +147,7 @@
             "beginning": "Diese Grafik zeigt die Festplatten-Auslastung im letzten {period}. ",
             "disk": "Für {disk} stieg die Auslastung von {beginningValue} % auf {endValue} %. "
         },
-        "memory_chart_screen_reader_explanation": "Diese Grafik zeigt die Arbeitsspeicher-Auslastung im letzten {Zeitraum}. Der letzte Wert liegt bei {lastValue} %. Die durchschnittliche Auslastung liegt bei {averageUsage} %. Die maximale Auslastung liegt bei {maxUsage} % bei {maxUsageTime}.",
+        "memory_chart_screen_reader_explanation": "Diese Grafik zeigt die Arbeitsspeicher-Auslastung im letzten {period}. Der letzte Wert liegt bei {lastValue} %. Die durchschnittliche Auslastung liegt bei {averageUsage} %. Die maximale Auslastung liegt bei {maxUsage} % bei {maxUsageTime}.",
         "loading": "Die Grafik wird geladen …",
         "unsupported": "Ohne das Token des Dienstanbieters können Sie keine Diagramme zur Auslastung der Ressourcen anzeigen.",
         "system": "System",

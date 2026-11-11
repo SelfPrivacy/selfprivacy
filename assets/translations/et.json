@@ -297,7 +297,7 @@
         "autobackup_period_title": "Automaatsete varukoopiate periood",
         "autobackup_period_subtitle": "Varukoopiaid luuakse iga {period}",
         "autobackup_period_never": "Automaatne varundamine on keelatud",
-        "autobackup_period_every": "iga {periood}",
+        "autobackup_period_every": "iga {period}",
         "autobackup_period_disable": "Keela automaatne varundamine",
         "autobackup_set_period": "Määra periood",
         "backups_encryption_key": "Krüpteerimisvõti",

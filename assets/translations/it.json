@@ -297,12 +297,12 @@
         "change_service_settings": "Modificare le impostazioni del servizio per {}"
     },
     "resource_chart": {
-        "network_chart_screen_reader_explanation": "Questo grafico mostra l'utilizzo della rete nell'ultimo {periodo}. L'ultimo valore si trova a {lastValueIn} in entrata e {lastValueOut} in uscita. L'utilizzo medio è in corrispondenza di {averageUsageIn} in entrata e {averageUsageOut} in uscita. L'uso massimo in entrata è a {maxUsageIn} a {maxUsageTimeIn} e massimo in uscita {maxUsageOut} a {maxUsageTimeOut}.",
+        "network_chart_screen_reader_explanation": "Questo grafico mostra l'utilizzo della rete nell'ultimo {period}. L'ultimo valore si trova a {lastValueIn} in entrata e {lastValueOut} in uscita. L'utilizzo medio è in corrispondenza di {averageUsageIn} in entrata e {averageUsageOut} in uscita. L'uso massimo in entrata è a {maxUsageIn} a {maxUsageTimeIn} e massimo in uscita {maxUsageOut} a {maxUsageTimeOut}.",
         "day": "Giorno",
         "hour": "Ora",
         "cpu_title": "Utilizzo CPU",
         "network_title": "Utilizzo rete",
-        "cpu_chart_screen_reader_explanation": "Questo grafico mostra l'utilizzo della CPU nell'ultimo {periodo}. L'ultimo valore si trova al {lastValue}%. L'utilizzo medio è pari al {averageUsage}%. L'utilizzo massimo è al {maxUsage}% a {maxUsageTime}.",
+        "cpu_chart_screen_reader_explanation": "Questo grafico mostra l'utilizzo della CPU nell'ultimo {period}. L'ultimo valore si trova al {lastValue}%. L'utilizzo medio è pari al {averageUsage}%. L'utilizzo massimo è al {maxUsage}% a {maxUsageTime}.",
         "disk_chart_screen_reader_explanation": {
             "disk": "Per {disk} il consumo è passato da {beginningValue}% a {endValue}%. ",
             "beginning": "Questo grafico mostra l'utilizzo del disco nell'ultimo {period}. "

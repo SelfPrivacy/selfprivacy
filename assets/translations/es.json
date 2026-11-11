@@ -37,7 +37,7 @@
         "copied_to_clipboard": "Copiado al portapapeles!",
         "copy": "Copiar",
         "network_error": "Error de conexión",
-        "feature_unsupported_on_api_version": "Esta funcionalidad solo esta soportada servidores versión {versionConstrain}. Tu servidor se encuentra en la versión {currentVersion}."
+        "feature_unsupported_on_api_version": "Esta funcionalidad solo esta soportada servidores versión {versionConstraint}. Tu servidor se encuentra en la versión {currentVersion}."
     },
     "test": "es-test",
     "locale": "es",

@@ -161,7 +161,7 @@
         "latest_snapshots_subtitle": "Wyświetlanie ostatnich 15 migawek",
         "show_more": "Pokaż więcej",
         "autobackup_period_title": "Okres automatycznego tworzenia kopii zapasowych",
-        "autobackup_period_subtitle": "Kopie zapasowe tworzone co {okres}",
+        "autobackup_period_subtitle": "Kopie zapasowe tworzone co {period}",
         "autobackup_period_never": "Automatyczne kopie zapasowe są wyłączone",
         "snapshot_reasons": {
             "unknown": "Nieznany",
@@ -193,7 +193,7 @@
         "snapshot_reason_title": "Przyczyna stworzenia",
         "service_busy": "Trwa kolejna operacja tworzenia kopii zapasowej",
         "latest_snapshots": "Najnowsze zdjęcia",
-        "autobackup_period_every": "Każdy {okres}",
+        "autobackup_period_every": "Każdy {period}",
         "autobackup_period_disable": "Wyłącz automatyczne tworzenie kopii zapasowych",
         "autobackup_set_period": "Ustawiony okres",
         "backups_encryption_key": "Klucz szyfrowania"

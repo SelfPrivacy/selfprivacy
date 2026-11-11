@@ -19,7 +19,7 @@ class CpuChart extends GenericLineChart {
         data.first
             .map((final e) => e.value)
             .reduce((final a, final b) => a + b) /
-        data.length;
+        data.first.length;
     final maxUsage = data.first
         .map((final e) => e.value)
         .reduce((final a, final b) => a > b ? a : b);

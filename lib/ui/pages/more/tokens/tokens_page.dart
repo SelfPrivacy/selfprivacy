@@ -344,7 +344,7 @@ extension on String {
 }
 
 extension on DnsProviderCredential {
-  String get tokenPrefix => tokenId ?? token.substring(0, 8);
+  String get tokenPrefix => tokenId ?? token.safeTokenPrefix;
 }
 
 extension on BackupsCredential {

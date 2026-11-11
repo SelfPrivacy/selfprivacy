@@ -153,4 +153,42 @@ void main() {
       ),
     );
   });
+
+  for (final scenario in const [
+    (name: 'empty token', token: '', tokenId: null, prefix: '********'),
+    (name: 'short token', token: '1234567', tokenId: null, prefix: '********'),
+    (
+      name: 'eight-character token',
+      token: '12345678',
+      tokenId: null,
+      prefix: '********',
+    ),
+    (name: 'long token', token: '123456789', tokenId: null, prefix: '12345678'),
+    (name: 'token identifier', token: 'secret', tokenId: 'id', prefix: 'id'),
+  ]) {
+    testWidgets('shows a safe DNS credential prefix for ${scenario.name}', (
+      final tester,
+    ) async {
+      when(() => tokensBloc.state).thenReturn(
+        TokensChecked(
+          serverProviderCredentials: const [],
+          dnsProviderCredentials: [
+            TokenStatusWrapper(
+              data: aDnsProviderCredential(
+                token: scenario.token,
+                tokenId: scenario.tokenId,
+              ),
+              status: TokenStatus.valid,
+            ),
+          ],
+          backupsCredentials: const [],
+        ),
+      );
+
+      await pumpPage(tester, const TokensPage());
+
+      expect(tester.takeException(), isNull);
+      expect(find.textContaining('(${scenario.prefix}...)'), findsOneWidget);
+    });
+  }
 }

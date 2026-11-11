@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
@@ -75,7 +76,7 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     final SecretRecipient? recipient,
   }) async {
     if (!_isActive) {
-      throw GenerationError('server_mutation.not_sent');
+      throw GenerationError('server_mutation.not_sent'.tr());
     }
     final target = recipient ?? SecretRecipient();
     if (recipient == null) {
@@ -84,7 +85,7 @@ class RecoveryKeyBloc extends Bloc<RecoveryKeyEvent, RecoveryKeyState> {
     try {
       final response = await _generate(target, expirationDate, numberOfUses);
       if (response == null || !_isActive) {
-        throw GenerationError('server_mutation.not_sent');
+        throw GenerationError('server_mutation.not_sent'.tr());
       }
       final secret = response.confirmedSecret;
       if (secret == null) {

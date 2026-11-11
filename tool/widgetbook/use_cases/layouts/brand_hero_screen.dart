@@ -131,7 +131,7 @@ CatalogCase _example(final String variant, final double width) {
                               onPressed: () => catalogActions.record(
                                 'Queue time zone: $selected',
                               ),
-                              child: const Text('Create job'),
+                              child: const Text('Queue change'),
                             ),
                           ),
                         ),

@@ -192,7 +192,7 @@ class _HeroSliverAppBarState extends State<HeroSliverAppBar> {
               color: isJobsListEmpty
                   ? Theme.of(context).colorScheme.onSurface
                   : Theme.of(context).colorScheme.primary,
-              tooltip: 'jobs.title'.tr(),
+              tooltip: 'operations.title'.tr(),
             ),
           ),
         const SizedBox.shrink(),

@@ -23,7 +23,7 @@ class RecoverByNewDeviceKeyInstruction extends StatelessWidget {
         .revertRecoveryStep,
     children: [
       BrandButton.filled(
-        child: Text('recovering.method_device_button'.tr()),
+        child: Text('recovering.new_device_key_button'.tr()),
         onPressed: () => Navigator.of(
           context,
         ).push(materialRoute(const RecoverByNewDeviceKeyInput())),
@@ -73,7 +73,7 @@ class _RecoverByNewDeviceKeyInputState
             },
         child: BrandHeroScreen(
           heroTitle: 'recovering.recovery_main_header'.tr(),
-          heroSubtitle: 'recovering.method_device_input_description'.tr(),
+          heroSubtitle: 'recovering.new_device_key_input_description'.tr(),
           hasBackButton: true,
           hasFlashButton: false,
           ignoreBreakpoints: true,

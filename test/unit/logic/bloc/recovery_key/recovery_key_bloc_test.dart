@@ -9,6 +9,7 @@ import 'package:selfprivacy/config/connection_blocs.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/bloc/recovery_key/recovery_key_bloc.dart';
+import 'package:selfprivacy/logic/connection/cache/cached_value.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
 import 'package:selfprivacy/logic/models/json/recovery_token_status.dart';
 
@@ -76,6 +77,38 @@ void main() {
     await pumpEventQueue();
     verifyNever(api.getRecoveryTokenStatus);
   });
+
+  for (final active in [false, true]) {
+    testWidgets(
+      'generation failure is translated when ${active ? 'no response returns' : 'the caller is inactive'}',
+      (final tester) async {
+        await pumpForTest(tester, const SizedBox.shrink());
+        await tester.runAsync(() async {
+          final caller = RecoveryKeyBloc(
+            status: active
+                ? Stream.value(const CachedValue<RecoveryKeyStatus>())
+                : const Stream.empty(),
+            refresh: () async {},
+            generate: (_, _, _) async => null,
+          );
+          await pumpEventQueue();
+          final translated = 'server_mutation.not_sent'.tr();
+          expect(translated, isNot('server_mutation.not_sent'));
+          await expectLater(
+            caller.generateRecoveryKey(),
+            throwsA(
+              isA<GenerationError>().having(
+                (final error) => error.message,
+                'message',
+                translated,
+              ),
+            ),
+          );
+          await caller.close();
+        });
+      },
+    );
+  }
 
   test('closing the caller discards a late generated secret', () async {
     final pending = Completer<ServerMutationResult<String>>();

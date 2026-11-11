@@ -53,7 +53,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.text('Server with such domain was not found'),
+        find.text('Could not connect to a SelfPrivacy server at this domain.'),
         findsOneWidget,
       );
     });

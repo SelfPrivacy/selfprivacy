@@ -20,6 +20,79 @@ class _Provider extends Mock implements ServerProvider {}
 void main() {
   setUpAll(() => registerFallbackValue(DateTime.utc(2026)));
 
+  test('month requests 30 days from every server metric endpoint', () async {
+    final api = _Api();
+    when(
+      () => api.getServerMetrics(
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+        step: any(named: 'step'),
+      ),
+    ).thenAnswer(
+      (_) async => GenericResult(success: true, data: aServerMetrics()),
+    );
+    when(
+      () => api.getMemoryMetrics(
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+        step: any(named: 'step'),
+      ),
+    ).thenAnswer((_) async => GenericResult(success: false, data: null));
+    when(
+      () => api.getDiskMetrics(
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+        step: any(named: 'step'),
+      ),
+    ).thenAnswer((_) async => GenericResult(success: false, data: null));
+
+    final update = await MetricsRepository(
+      api: api,
+      version: Version(3, 6, 0),
+      isAvailable: () => true,
+    ).getRelevantServerMetrics(Period.month);
+    expect(update.newState, isA<MetricsLoaded>());
+    final arguments = verify(
+      () => api.getServerMetrics(
+        start: captureAny(named: 'start'),
+        end: captureAny(named: 'end'),
+        step: 21600,
+      ),
+    ).captured;
+    final start = arguments[0] as DateTime;
+    final end = arguments[1] as DateTime;
+    expect(end.difference(start), const Duration(days: 30));
+    verify(
+      () => api.getMemoryMetrics(start: start, end: end, step: 21600),
+    ).called(1);
+    verify(
+      () => api.getDiskMetrics(start: start, end: end, step: 21600),
+    ).called(1);
+  });
+
+  test('month requests 30 days from the legacy provider', () async {
+    final provider = _Provider();
+    when(() => provider.isAuthorized).thenReturn(true);
+    when(() => provider.getMetrics('provider-123', any(), any())).thenAnswer(
+      (_) async => GenericResult(success: true, data: aServerMetrics()),
+    );
+    final update = await MetricsRepository(
+      api: _Api(),
+      version: Version(3, 0, 0),
+      isAvailable: () => true,
+      provider: provider,
+      providerId: 'provider-123',
+    ).getRelevantServerMetrics(Period.month);
+    expect(update.newState, isA<MetricsLoaded>());
+    final arguments = verify(
+      () => provider.getMetrics('provider-123', captureAny(), captureAny()),
+    ).captured;
+    expect(
+      (arguments[1] as DateTime).difference(arguments[0] as DateTime),
+      const Duration(days: 30),
+    );
+  });
+
   test('one captured API supplies the complete aggregate', () async {
     final api = _Api();
     final metrics = aServerMetrics();

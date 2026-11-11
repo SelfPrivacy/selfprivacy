@@ -133,10 +133,10 @@ void main() {
     await pumpRouter(tester, router);
 
     expect(find.text('Nobody here'), findsOneWidget);
-    expect(find.text('Add a first user'), findsOneWidget);
+    expect(find.text('Add your first user'), findsOneWidget);
     expect(find.text("Couldn't fetch users list"), findsNothing);
 
-    await tester.tap(find.text('Add a first user'));
+    await tester.tap(find.text('Add your first user'));
     await tester.pumpAndSettle();
 
     expect(router.stack.last.name, NewUserRoute.name);

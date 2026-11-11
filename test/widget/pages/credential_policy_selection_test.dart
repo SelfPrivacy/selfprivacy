@@ -59,8 +59,8 @@ void main() {
     await tester.pump();
     expect(submitted, isEmpty);
     expect(find.text('Not applied'), findsNothing);
-    await tester.ensureVisible(find.text('Create job'));
-    await tester.tap(find.text('Create job'));
+    await tester.ensureVisible(find.text('Queue change'));
+    await tester.tap(find.text('Queue change'));
     await tester.pumpAndSettle();
     expect(submitted, [CredentialPolicy.mfa]);
     expect(find.byType(AlertDialog), findsNothing);
@@ -130,8 +130,8 @@ void main() {
     );
     await tester.tap(find.text('Attested passkey'));
     await tester.pump();
-    await tester.ensureVisible(find.text('Update job'));
-    await tester.tap(find.text('Update job'));
+    await tester.ensureVisible(find.text('Update queued change'));
+    await tester.tap(find.text('Update queued change'));
     await tester.pumpAndSettle();
     expect(submitted, [CredentialPolicy.attestedPasskey]);
     expect(find.byType(AlertDialog), findsNothing);
@@ -142,7 +142,7 @@ void main() {
   ) async {
     await show(tester, pending: CredentialPolicy.mfa);
     expect(find.text('Not applied'), findsOneWidget);
-    expect(find.text('Update job'), findsOneWidget);
+    expect(find.text('Update queued change'), findsOneWidget);
     await show(tester);
     expect(find.text('Not applied'), findsNothing);
     expect(

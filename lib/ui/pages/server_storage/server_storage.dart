@@ -152,7 +152,7 @@ class ServerStorageSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BrandOutlinedButton(
-            title: 'storage.extend_volume_button.title'.tr(),
+            title: 'storage.extend_volume_button'.tr(),
             onPressed: () => context.pushRoute(
               ExtendingVolumeRoute(
                 diskVolumeToResize: volume,

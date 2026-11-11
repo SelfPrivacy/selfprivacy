@@ -8,6 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/ui/molecules/cards/radio_selection_card.dart';
+import 'package:selfprivacy/ui/molecules/charts/cpu_chart.dart';
+import 'package:selfprivacy/ui/molecules/charts/memory_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../tool/widgetbook/catalog_case.dart';
@@ -61,6 +63,52 @@ void main() {
     EasyLocalization.logger.enableBuildModes = [];
     await EasyLocalization.ensureInitialized();
   });
+  for (final kind in ['CPU', 'memory', 'swap']) {
+    testWidgets('$kind screen reader reports the mean of its data points', (
+      final tester,
+    ) async {
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final series = [
+        TimeSeriesData(1767225600, 10),
+        TimeSeriesData(1767225900, 20),
+        TimeSeriesData(1767226200, 60),
+      ];
+      await pumpCase(
+        tester,
+        CatalogCase(
+          id: 'ChartAverage/$kind',
+          variant: 'Average',
+          builder:
+              (final context, final fixtures, final controller, final update) =>
+                  SizedBox(
+                    height: 240,
+                    child: kind == 'CPU'
+                        ? CpuChart(
+                            data: [series],
+                            period: Period.hour,
+                            start: referenceTime,
+                          )
+                        : MemoryChart(
+                            data: [series],
+                            period: Period.hour,
+                            start: referenceTime,
+                            isSwap: kind == 'swap',
+                          ),
+                  ),
+        ),
+      );
+      expect(
+        find.byWidgetPredicate(
+          (final widget) =>
+              widget is Semantics &&
+              (widget.properties.label?.contains('30.0%') ?? false),
+        ),
+        findsOneWidget,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
   testWidgets(
     'default content host sizes future cards independently of viewport height',
     (final tester) async {

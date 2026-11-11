@@ -212,7 +212,7 @@ class _ExtendingVolumePageState extends State<ExtendingVolumePage> {
                           },
                         );
                       },
-                child: Text('storage.extend_volume_button.title'.tr()),
+                child: Text('storage.extend_volume_button'.tr()),
               ),
               const SizedBox(height: 16),
               const Divider(height: 1),

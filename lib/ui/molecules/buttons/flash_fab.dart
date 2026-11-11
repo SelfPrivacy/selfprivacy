@@ -81,14 +81,14 @@ class _BrandFabState extends State<BrandFab>
       child: widget.extended
           ? FloatingActionButton.extended(
               onPressed: widget.onPressed ?? openJobs,
-              tooltip: 'jobs.title'.tr(),
+              tooltip: 'operations.title'.tr(),
               elevation: widget.elevation,
               icon: icon,
-              label: Text('jobs.title'.tr()),
+              label: Text('operations.title'.tr()),
             )
           : FloatingActionButton(
               onPressed: widget.onPressed ?? openJobs,
-              tooltip: 'jobs.title'.tr(),
+              tooltip: 'operations.title'.tr(),
               elevation: widget.elevation,
               child: icon,
             ),

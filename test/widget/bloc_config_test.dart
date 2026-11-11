@@ -207,9 +207,9 @@ void main() {
           .read<JobsCubit>();
       await tester.tap(find.text('Test channel'));
       await tester.pump();
-      await tester.ensureVisible(find.text('Create job'));
+      await tester.ensureVisible(find.text('Queue change'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Create job'));
+      await tester.tap(find.text('Queue change'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
       expect(
@@ -283,8 +283,8 @@ void main() {
       await tester.tap(find.text('Multi-factor authentication'));
       await tester.pump();
       expect(connection.changeDraft.value, isEmpty);
-      await tester.ensureVisible(find.text('Create job'));
-      await tester.tap(find.text('Create job'));
+      await tester.ensureVisible(find.text('Queue change'));
+      await tester.tap(find.text('Queue change'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
       expect(jobs.state.draft.single, isA<ChangeCredentialPolicyJob>());
@@ -351,9 +351,9 @@ void main() {
       await tester.tap(find.text('Enable telemetry'));
       await tester.pump();
       expect(connection.changeDraft.value, isEmpty);
-      await tester.ensureVisible(find.text('Create job'));
+      await tester.ensureVisible(find.text('Queue change'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Create job'));
+      await tester.tap(find.text('Queue change'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
       expect(
@@ -450,7 +450,7 @@ void main() {
           );
         }
         expect(find.byType(TextField), findsNothing);
-        final createButton = find.widgetWithText(FilledButton, 'Create job');
+        final createButton = find.widgetWithText(FilledButton, 'Queue change');
         final initialButtonRect = tester.getRect(createButton);
         final scrollable = find
             .descendant(
@@ -508,7 +508,7 @@ void main() {
           );
         }
         expect(createButton.hitTestable(), findsOneWidget);
-        await tester.tap(find.text('Create job'));
+        await tester.tap(find.text('Queue change'));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 500));
         expect(

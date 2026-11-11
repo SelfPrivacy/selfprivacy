@@ -153,7 +153,7 @@ void main() {
               find.byKey(const ValueKey('navigation-content-title')),
             )
             .data,
-        'Your Data Center',
+        'Providers',
       );
       await tester.pumpWidget(const SizedBox.shrink());
     },
@@ -263,7 +263,7 @@ void main() {
     ]) {
       final example = builder(_Context()) as CatalogCase;
       await pumpCase(tester, example);
-      final button = find.widgetWithText(FilledButton, 'Create job');
+      final button = find.widgetWithText(FilledButton, 'Queue change');
       expect(button.hitTestable(), findsOneWidget, reason: example.id);
       expect(
         tester.getRect(button).bottom,

@@ -177,7 +177,7 @@ void main() {
           .map((final card) => card.isSelected),
       [true, false],
     );
-    await tester.tap(find.text('Create job'));
+    await tester.tap(find.text('Queue change'));
     expect(submitted.single.id, 'stable');
   });
 
@@ -209,16 +209,16 @@ void main() {
       );
       await tester.tap(find.text('Stable channel'));
       await tester.pump();
-      await tester.tap(find.text('Create job'));
+      await tester.tap(find.text('Queue change'));
       await tester.pumpAndSettle();
       expect(find.byType(AlertDialog), findsOneWidget);
       expect(submitted, isEmpty);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       expect(submitted, isEmpty);
-      await tester.tap(find.text('Create job'));
+      await tester.tap(find.text('Queue change'));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(TextButton, 'Create job'));
+      await tester.tap(find.widgetWithText(TextButton, 'Queue change'));
       await tester.pumpAndSettle();
       expect(submitted.single.id, 'stable');
       expect(find.byType(AlertDialog), findsNothing);
@@ -239,7 +239,7 @@ void main() {
     );
     await tester.tap(find.text('Test channel'));
     await tester.pump();
-    await tester.tap(find.text('Create job'));
+    await tester.tap(find.text('Queue change'));
     await tester.pump();
     expect(submitted.single.id, 'test-channel');
   });

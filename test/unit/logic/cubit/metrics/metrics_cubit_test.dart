@@ -7,6 +7,35 @@ import 'package:selfprivacy/logic/cubit/metrics/metrics_cubit.dart';
 import 'package:selfprivacy/logic/cubit/metrics/metrics_repository.dart';
 
 void main() {
+  testWidgets('month fallback refresh follows the 30-day range', (
+    final tester,
+  ) async {
+    final access = StreamController<bool?>(sync: true);
+    final periods = <Period>[];
+    final cubit = MetricsCubit(
+      access: access.stream,
+      loadMetrics: (final period) async {
+        periods.add(period);
+        return MetricsStateUpdate(MetricsUnsupported(period), 0);
+      },
+    );
+    try {
+      access.add(true);
+      await tester.pump();
+      await cubit.changePeriod(Period.month);
+      periods.clear();
+      await tester.pump(const Duration(seconds: 12959));
+      expect(periods, isEmpty);
+      await tester.pump(const Duration(seconds: 1));
+      expect(periods, [Period.month]);
+    } finally {
+      await tester.runAsync(() async {
+        await cubit.close();
+        await access.close();
+      });
+    }
+  });
+
   test('an access change during deferred dispatch resumes the poll', () async {
     final access = StreamController<bool?>(sync: true);
     final pending = Completer<MetricsStateUpdate>();

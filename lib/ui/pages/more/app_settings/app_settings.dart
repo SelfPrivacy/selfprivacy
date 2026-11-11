@@ -31,13 +31,13 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     heroTitle: 'application_settings.title'.tr(),
     heroIcon: Icons.settings_outlined,
     children: [
-      _ThemePicker(key: ValueKey('theme_picker'.tr())),
-      _LanguagePicker(key: ValueKey('language_picker'.tr())),
+      const _ThemePicker(key: ValueKey('theme_picker')),
+      const _LanguagePicker(key: ValueKey('language_picker')),
       SectionTitle(
         title: 'application_settings.dangerous_settings'.tr(),
         error: true,
       ),
-      _ResetAppTile(key: ValueKey('reset_app'.tr())),
+      const _ResetAppTile(key: ValueKey('reset_app')),
     ],
   );
 }

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/graphql_transport.dart';
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.dart';
+import 'package:selfprivacy/logic/api_maps/rest_maps/dns_providers/desired_dns_record.dart';
 import 'package:selfprivacy/logic/cubit/dns_records/dns_records_repository.dart';
 import 'package:selfprivacy/logic/models/json/dns_records.dart';
 import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
@@ -44,6 +45,34 @@ void main() {
     expect(result.success, isTrue);
     expect(result.data.single.isSatisfied, isTrue);
     verify(() => provider.getDnsRecords(domain: domain)).called(1);
+  });
+
+  test('IPv4 and IPv6 address records belong to services', () async {
+    const records = [
+      DnsRecord(name: 'gitea', type: 'A', content: '203.0.113.10'),
+      DnsRecord(name: 'gitea', type: 'AAAA', content: '2001:db8::10'),
+      DnsRecord(name: 'mail', type: 'MX', content: 'mail.example.com'),
+    ];
+    when(api.getDnsRecords).thenAnswer((_) async => records);
+    when(
+      () => provider.getDnsRecords(domain: domain),
+    ).thenAnswer((_) async => GenericResult(success: true, data: records));
+    final result = await repository.read();
+    expect(result.success, isTrue);
+    expect(
+      result.data
+          .where(
+            (final record) => record.category == DnsRecordsCategory.services,
+          )
+          .map((final record) => record.type),
+      ['A', 'AAAA'],
+    );
+    expect(
+      result.data
+          .where((final record) => record.category == DnsRecordsCategory.email)
+          .map((final record) => record.type),
+      ['MX'],
+    );
   });
 
   test(

@@ -116,7 +116,7 @@ class _SnapshotModalState extends State<SnapshotModal> {
                           );
                           Navigator.of(context).pop();
                           getIt<NavigationService>().showSnackBar(
-                            'backup.restore_started'.tr(),
+                            'backup.restore_requested'.tr(),
                           );
                         },
                   title: 'backup.restore'.tr(),

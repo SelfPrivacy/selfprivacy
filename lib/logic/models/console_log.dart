@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:gql/language.dart' as gql;
 import 'package:graphql/client.dart' as gql_client;
-import 'package:intl/intl.dart';
 
 enum ConsoleLogSeverity { normal, warning }
 
@@ -75,7 +75,7 @@ class RestApiRequestConsoleLog extends ConsoleLog {
   final String? data;
 
   @override
-  String get title => 'Rest API Request';
+  String get title => 'console_page.rest_api_request'.tr();
 
   Map<String, dynamic> get filteredHeaders => Map.fromEntries(
     headers?.entries.where(
@@ -107,7 +107,7 @@ class RestApiResponseConsoleLog extends ConsoleLog {
   final String? data;
 
   @override
-  String get title => 'Rest API Response';
+  String get title => 'console_page.rest_api_response'.tr();
   @override
   String get content =>
       '"method": "$method",\n'
@@ -143,7 +143,7 @@ class GraphQlRequestConsoleLog extends ConsoleLog {
   final Map<String, dynamic>? variables;
 
   @override
-  String get title => 'GraphQL Request';
+  String get title => 'console_page.graphql_request'.tr();
   @override
   String get content =>
       // '"context": ${context?.encode},\n'
@@ -170,7 +170,7 @@ class GraphQlResponseConsoleLog extends ConsoleLog
   final List<gql_client.GraphQLError>? errors;
 
   @override
-  String get title => 'GraphQL Response';
+  String get title => 'console_page.graphql_response'.tr();
   @override
   String get content =>
       // '"context": ${context?.encode},\n'

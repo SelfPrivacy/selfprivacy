@@ -22,7 +22,14 @@ class RecoveryDeviceFormView extends StatelessWidget {
           autofocus: true,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            labelText: 'recovering.method_device_input_placeholder'.tr(),
+            labelText: switch (recoveryDeviceForm.tokenType) {
+              RecoveryDeviceTokenType.recoveryKey =>
+                'recovery_key.key_main_header'.tr(),
+              RecoveryDeviceTokenType.newDeviceKey =>
+                'recovering.new_device_key_input_placeholder'.tr(),
+              RecoveryDeviceTokenType.oldToken =>
+                'recovering.method_device_input_placeholder'.tr(),
+            },
           ),
           validationMessages: {
             ValidationMessage.required: (final _) =>

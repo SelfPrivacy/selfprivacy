@@ -20,6 +20,7 @@ class DesiredDnsRecord {
   DnsRecordsCategory get category {
     switch (type) {
       case 'A':
+      case 'AAAA':
         return DnsRecordsCategory.services;
       case 'CAA':
         return DnsRecordsCategory.other;

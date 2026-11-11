@@ -9,6 +9,7 @@ import 'package:selfprivacy/logic/models/service.dart';
 import 'package:selfprivacy/logic/models/state_types.dart';
 import 'package:selfprivacy/ui/atoms/masks/icon_status_mask.dart';
 import 'package:selfprivacy/ui/layouts/brand_hero_screen.dart';
+import 'package:selfprivacy/ui/molecules/cards/status_card.dart';
 import 'package:selfprivacy/ui/molecules/placeholders/empty_page_placeholder.dart';
 import 'package:selfprivacy/ui/router/router.dart';
 
@@ -18,16 +19,35 @@ class ServicesCatalogPage extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final availableServices = context
-        .watch<ServicesBloc>()
-        .state
-        .availableServices;
+    final state = context.watch<ServicesBloc>().state;
 
-    if (availableServices.isEmpty) {
-      return BrandHeroScreen(
-        heroTitle: 'services_catalog.title'.tr(),
-        heroIcon: Icons.menu_book_outlined,
-        children: [
+    return BrandHeroScreen(
+      heroTitle: 'services_catalog.title'.tr(),
+      heroIcon: Icons.menu_book_outlined,
+      children: [
+        if (state is ServicesError)
+          StatusCard.loadError(
+            title: 'services_catalog.load_error'.tr(),
+            onRetry: () =>
+                context.read<ServicesBloc>().add(const ServicesReload()),
+          )
+        else if (state is ServicesUnsupported)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 64),
+            child: EmptyPagePlaceholder(
+              title: 'basis.feature_unsupported'.tr(),
+              iconData: Icons.info_outline,
+            ),
+          )
+        else if (state is! ServicesLoaded)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 64),
+            child: EmptyPagePlaceholder(
+              title: 'basis.loading'.tr(),
+              iconData: Icons.hourglass_empty,
+            ),
+          )
+        else if (state.availableServices.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 64),
             child: EmptyPagePlaceholder(
@@ -35,21 +55,14 @@ class ServicesCatalogPage extends StatelessWidget {
               description: 'services_catalog.empty_subtitle'.tr(),
               iconData: Icons.widgets_outlined,
             ),
+          )
+        else
+          ...state.availableServices.map(
+            (final service) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _ServicesCatalogPageCard(service: service),
+            ),
           ),
-        ],
-      );
-    }
-
-    return BrandHeroScreen(
-      heroTitle: 'services_catalog.title'.tr(),
-      heroIcon: Icons.menu_book_outlined,
-      children: [
-        ...availableServices.map(
-          (final service) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: _ServicesCatalogPageCard(service: service),
-          ),
-        ),
       ],
     );
   }

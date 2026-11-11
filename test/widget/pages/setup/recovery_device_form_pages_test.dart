@@ -157,7 +157,7 @@ void main() {
     ).thenAnswer((final _) async {});
 
     await pumpRecoveryPage(tester);
-    await tester.tap(find.text('I have received my token'));
+    await tester.tap(find.text('I have the key'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(ReactiveTextField<String>), phrase);
     await tester.tap(find.widgetWithText(FilledButton, 'Continue'));

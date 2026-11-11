@@ -31,11 +31,6 @@ extension on ConsoleLog {
       _DataRow('${log.data}'),
     ],
     (final GraphQlRequestConsoleLog log) => [
-      // // context
-      // if (log.context != null) ...[
-      //   const _SectionRow('console_page.context'),
-      //   _DataRow('${log.context}'),
-      // ],
       const _SectionRow('console_page.operation'),
       if (log.operation != null) ...[
         _KeyValueRow('console_page.operation_type'.tr(), log.operationType),
@@ -55,9 +50,6 @@ extension on ConsoleLog {
       ],
     ],
     (final GraphQlResponseConsoleLog log) => [
-      // // context
-      // const _SectionRow('console_page.context'),
-      // _DataRow('${log.context}'),
       // data
       if (log.data != null) ...[
         const _SectionRow('console_page.data'),
@@ -68,7 +60,7 @@ extension on ConsoleLog {
       if (log.errors?.isNotEmpty ?? false) ...[
         const _SectionRow('console_page.errors'),
         for (final entry in log.errors!) ...[
-          _KeyValueRow('${'console_page.error_message'.tr()}: ', entry.message),
+          _KeyValueRow('${'console_page.error'.tr()}: ', entry.message),
           _KeyValueRow('${'console_page.error_path'.tr()}: ', '${entry.path}'),
           if (entry.locations?.isNotEmpty ?? false)
             _KeyValueRow(

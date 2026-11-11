@@ -88,7 +88,7 @@ void main() {
           child: const BackupDetailsPage(),
         ),
       );
-      await tester.tap(find.text('Initialize'));
+      await tester.tap(find.text('Set up backup storage'));
       await tester.pump();
       if (count == 1) {
         final event =

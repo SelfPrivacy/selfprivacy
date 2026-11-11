@@ -11,22 +11,16 @@
         "more": "Plus",
         "next": "Suivant",
         "got_it": "Compris",
-        "settings": "Paramètres",
-        "password": "Mot de passe",
         "create": "Ajouter nouveau",
         "confirmation": "Confirmation",
         "cancel": "Annuler",
         "delete": "Supprimer",
         "close": "Fermer",
         "connect": "Connecter",
-        "domain": "Domaine",
         "saving": "Enregistrement…",
-        "username": "Nom d'utilisateur",
         "loading": "Chargement…",
         "later": "Passer à la configuration plus tard",
         "connect_to_existing": "J'ai déjà un serveur SelfPrivacy !",
-        "reset": "Réinitialiser",
-        "details": "Détails",
         "no_data": "Pas de données",
         "wait": "Chargement",
         "remove": "Supprimer",
@@ -37,8 +31,6 @@
         "app_name": "SelfPrivacy",
         "please_connect": "Veuillez connecter votre serveur, domaine et fournisseur DNS pour vous lancer dans le bain !",
         "copied_to_clipboard": "Copié dans le presse-papier !",
-        "copy": "Copier",
-        "qr_code": "Code QR",
         "share_link": "Partager le lien",
         "network_error": "Erreur du réseau",
         "feature_unsupported_on_api_version": "Cette fonctionnalité n'est disponible qu'avec la version du serveur {versionConstraint}. Votre serveur fonctionne avec la version {currentVersion}.",
@@ -138,7 +130,6 @@
         "status": "Statut",
         "cpu": "Processeur",
         "ram": "Mémoire",
-        "disk": "Disque local",
         "monthly_cost": "Coût mensuel",
         "location": "Localisation",
         "core_count": {
@@ -156,7 +147,6 @@
         "settings": "Paramètres du serveur"
     },
     "domain": {
-        "card_title": "Domaine",
         "screen_title": "Domaines et DNS",
         "error": "Problèmes détectés",
         "error_subtitle": "Appuyez ici pour les corriger. Cela supprimera également les enregistrements personnalisés.",
@@ -171,14 +161,10 @@
     },
     "backup": {
         "card_title": "Sauvegarde",
-        "reuploaded_key": "Clés republiées",
         "initialize": "Initialise",
         "restore": "Restaurer depuis la sauvegarde",
         "create_new": "Créer une nouvelle sauvegarde",
-        "restore_alert": "Vous allez restaurer depuis la sauvegarde créée le {}. Toutes les données existantes vont être perdues. Êtes-vous sûr ?",
-        "refresh": "Statut d'avancement",
         "refetching_list": "Dans quelques minutes, la liste sera mise à jour",
-        "reupload_key": "Forcer la republication de la clé",
         "no_backups": "Il n'y a pour l'instant aucune sauvegarde",
         "refetch_backups": "Récupérer la liste des mise à jour"
     },
@@ -230,7 +216,6 @@
         "in_menu": "Le serveur n'est pas encore configuré. Veuillez finir le paramétrage en utilisant l'assistant d'installation pour aller plus loin."
     },
     "validations": {
-        "invalid_format_password": "Le mot de passe ne doit pas contenir d'espaces",
         "invalid_format": "Format invalide",
         "already_exist": "Existe déjà",
         "required": "Requis",
@@ -239,21 +224,13 @@
     },
     "jobs": {
         "create_ssh_key": "Ajouter une clé SSH pour {}",
-        "reboot_failed": "Impossible de redémarrer le serveur. Veuillez vérifier les logs applicatifs.",
         "delete_user": "Supprimer utilisateur",
-        "generic_error": "Impossible de se connecter au serveur!",
         "delete_ssh_key": "Supprimer la clé SSH pour {}",
         "reboot_server": "Redémarrer le serveur",
         "upgrade_server": "Mise à jour du serveur",
-        "upgrade_failed": "Impossible de mettre à jour le serveur",
-        "upgrade_success": "Mise à jour du serveur démarrée",
-        "reboot_success": "Le serveur redémarre",
-        "run_jobs": "Lancer des jobs",
         "job_added": "Job ajouté",
         "service_turn_on": "Lancer",
-        "reset_user_password": "Réinitialiser le mot de passe de l'utilisateur",
         "service_turn_off": "Arrêter",
-        "create_user": "Créer utilisateur",
         "empty": "Pas de jobs",
         "server_jobs": "Jobs sur le serveur",
         "start": "Démarrer",
@@ -302,15 +279,11 @@
             "yes": "Révoquer"
         }
     },
-    "users": {
-        "account": "Compte"
-    },
     "initializing": {
         "select_provider_price_free": "Gratuit",
         "locations_not_found": "Oups!",
         "steps": {
             "server": "Serveur",
-            "backups_provider": "Sauvegardes",
             "domain": "Domaine",
             "hosting": "Hébergement"
         },

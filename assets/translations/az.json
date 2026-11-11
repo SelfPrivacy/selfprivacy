@@ -10,21 +10,15 @@
         "more": "Çox",
         "next": "Sonrakı",
         "got_it": "Anladım",
-        "settings": "Parametrlər",
-        "password": "Parol",
         "create": "Yeni əlavə et",
         "confirmation": "Təsdiq",
         "cancel": "Ləğv edin",
         "delete": "Silin",
         "close": "Bağla",
         "connect": "Qoşulmaq",
-        "domain": "Domen",
         "saving": "Qənaət…",
-        "username": "İstifadəçilər adı",
         "later": "Keçidin, sonra tənzimləyin",
         "connect_to_existing": "Mövcud serverə qoşulun",
-        "reset": "Sıfırlayın",
-        "details": "Təfərrüatlar",
         "no_data": "İnformasiya yoxdur",
         "wait": "Gözləyin",
         "remove": "Silin",
@@ -108,7 +102,6 @@
         "status": "Status",
         "cpu": "CPU",
         "ram": "RAM yaddaşı",
-        "disk": "Disk",
         "monthly_cost": "Aylıq xərc",
         "location": "Yerləşdirmə",
         "core_count": {
@@ -120,7 +113,6 @@
         }
     },
     "domain": {
-        "card_title": "Domen",
         "screen_title": "Domain və DNS",
         "ok": "Qeydlər qaydasındadır",
         "error": "Problemlər tapıldı",
@@ -135,14 +127,10 @@
     },
     "backup": {
         "card_title": "Ehtiyat nüsxəsi",
-        "reupload_key": "Açar yeniləməsini məcbur edin",
-        "reuploaded_key": "Server açarı yeniləndi",
         "initialize": "Qurunmaq",
         "restore": "Kopyadan bərpa edin",
         "no_backups": "Yedəkləmə hələ yoxdur",
         "create_new": "Yeni nüsxə yaradın",
-        "restore_alert": "Siz {} tərəfindən yaradılmış nüsxədən bərpa etmək üzrəsiniz. Bütün cari məlumatlar itiriləcək. Sən əminsən?",
-        "refresh": "Statusu yenilə",
         "refetch_backups": "Kopya siyahısını yeniləyin",
         "refetching_list": "Siyahı bir neçə dəqiqəyə yenilənəcək",
         "description": "İstənilən vəziyyətdə sizə kömək edəcək: haker hücumu, serverin silinməsi və s."
@@ -198,7 +186,6 @@
     },
     "users": {
         "could_not_fetch_description": "İnternet bağlantısını yoxlayın və yenidən cəhd edin",
-        "username_rule": "Adda yalnız kiçik Latın hərfləri, rəqəmlər, alt xətt ola bilər, rəqəmlərlə başlaya bilməz",
         "add_new_user": "İlk istifadəçini əlavə edin",
         "new_user": "Yeni istifadəçi",
         "delete_user": "İstifadəçini silin",
@@ -206,14 +193,9 @@
         "login": "Daxil ol",
         "delete_confirm_question": "Hesabınızı silmək istədiyinizə əminsiniz?",
         "reset_password": "Parolu sıfırlayın",
-        "account": "Hesab",
         "could_not_fetch_users": "İstifadəçiləri əldə etmək alınmadı",
         "refresh_users": "İstifadəçi siyahısını yeniləyin",
-        "could_not_create_user": "İstifadəçi yaratmaq alınmadı",
-        "could_not_delete_user": "İstifadəçini silmək alınmadı",
-        "could_not_add_ssh_key": "SSH açarı yaratmaq alınmadı",
         "email_login": "E-poçt Avtorizasiyası",
-        "no_ssh_notice": "Bu istifadəçi üçün yalnız SSH və E-poçt hesabları yaradılmışdır. Bütün xidmətlər üçün vahid icazə hələ tətbiq edilməyib.",
         "details_title": "İstifadəçi məlumatları"
     },
     "initializing": {
@@ -262,16 +244,12 @@
         "server_created": "Server yaradıldı. DNS ünvanları yoxlanılır və server işə salınır…",
         "until_the_next_check": "Növbəti yoxlamaya qədər: ",
         "check": "Yoxlanış",
-        "create_master_account": "Əsas hesab yaradın",
-        "enter_username_and_password": "İstifadəçi adı və mürəkkəb parol daxil edin",
         "checks": "Yoxlamalar aparıldı:. \n{done} / {total}",
         "steps": {
             "hosting": "Hostinq",
             "server_type": "Server növü",
             "dns_provider": "DNS provayderi",
-            "backups_provider": "Yedəkləmələr",
             "domain": "Domen",
-            "master_account": "Master hesab",
             "server": "Server",
             "dns_setup": "DNS qurulması",
             "nixos_installation": "NixOS quraşdırılması",
@@ -337,10 +315,7 @@
         "add_new_device_screen": {
             "header": "Yeni Cihaz Avtorizasiyası",
             "description": "Bu açarı yeni cihaza daxil edin:",
-            "please_wait": "Zəhmət olmasa, gözləyin",
-            "tip": "Açar 10 dəqiqə etibarlıdır.",
-            "expired": "Açarın müddəti bitib.",
-            "get_new_key": "Yeni açar alın"
+            "tip": "Açar 10 dəqiqə etibarlıdır."
         }
     },
     "recovery_key": {
@@ -365,7 +340,6 @@
     },
     "modals": {
         "unexpected_error": "Provayder tərəfindən gözlənilməz xəta.",
-        "dns_removal_error": "DNS qeydlərini silmək mümkün deyil.",
         "server_deletion_error": "Server silinə bilməz.",
         "server_validators_error": "Server siyahısını əldə etmək alınmadı.",
         "already_exists": "Belə bir server artıq mövcuddur.",
@@ -383,30 +357,19 @@
         "title": "Tapşırıqlar",
         "start": "İcra etməyə başlayın",
         "empty": "Tapşırıq yoxdur",
-        "create_user": "İstifadəçi yaradın",
         "delete_user": "İstifadəçini silin",
         "service_turn_off": "Dayan",
         "service_turn_on": "Başlayın",
         "job_added": "Tapşırıq əlavə edildi",
-        "run_jobs": "Tapşırıqları yerinə yetirin",
-        "reboot_success": "Server yenidən işə salınır",
-        "reboot_failed": "Serveri yenidən başlatmaq alınmadı, qeydləri yoxlayın.",
-        "config_pull_failed": "Server konfiqurasiyasını yeniləmək alınmadı. Proqram təminatı yeniləməsi başladı.",
-        "upgrade_success": "Server yeniləməsi başladı",
-        "upgrade_failed": "Server yeniləməsi uğursuz oldu",
         "upgrade_server": "Serveri yeniləyin",
         "reboot_server": "Serveri yenidən başladın",
         "delete_ssh_key": "{} üçün SSH açarını silin",
-        "server_jobs": "Serverdəki tapşırıqlar",
-        "reset_user_password": "İstifadəçi parolunu sıfırlayın",
-        "generic_error": "Serverə qoşulmaq alınmadı!"
+        "server_jobs": "Serverdəki tapşırıqlar"
     },
     "validations": {
         "already_exist": "Artıq mövcuddur",
-        "length_not_equal": "[] sətirinin uzunluğu {}-ə bərabər olmalıdır",
         "required": "Məcburi sahə",
         "invalid_format": "Səhv format",
-        "invalid_format_password": "İçərisində boş simvol olmamalıdır",
         "invalid_format_ssh": "SSH açar formatına əməl edilməlidir",
         "root_name": "İstifadəçi adı 'root' ola bilməz",
         "length_longer": "{actualLength} sətirinin uzunluğu {maxLength}-dən kiçik və ya ona bərabər olmalıdır"

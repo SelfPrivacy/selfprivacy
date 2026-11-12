@@ -1,23 +1,21 @@
 // ignore_for_file: avoid_dynamic_calls
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/hetzner/hetzner_api.dart';
-import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/hetzner_server_info.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
+import 'package:selfprivacy/logic/models/provisioning_request.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/logic/providers/server_providers/resource_creation_dialog.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
-import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
   ApiAdapter({
@@ -164,195 +162,134 @@ class HetznerServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
-    final LaunchInstallationData installationData,
+  Future<ProvisioningResult> provisionServer(
+    final ProvisioningRequest request,
   ) async {
+    final resources = <ProvisionedResource>[];
     final volumeResult = await _adapter.api().createVolume(
-      gb: installationData.storageSize.gibibyte.toInt(),
-      region: installationData.location,
+      gb: request.storageSize.gibibyte.toInt(),
+      region: request.location,
     );
-
-    if (volumeResult.wasCreated && !volumeResult.success) {
-      return unreadableCreationResult(
-        installationData: installationData,
-        resourceId: volumeResult.resourceId,
-        cleanup: () => _deleteHetznerResources(
-          volumeId: int.tryParse(volumeResult.resourceId ?? ''),
+    if (volumeResult.wasCreated) {
+      resources.add(
+        ProvisionedResource(
+          provider: type,
+          kind: ProvisionedResourceKind.volume,
+          id: volumeResult.resourceId,
         ),
-        message: volumeResult.message,
-        code: volumeResult.code,
       );
     }
-
-    if (!volumeResult.success || volumeResult.data == null) {
-      return GenericResult(
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: () async => await installationData.errorCallback(),
-            ),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () => launchInstallation(installationData),
-            ),
-          ],
-          description:
-              volumeResult.message ?? 'modals.volume_creation_error'.tr(),
-          title: 'modals.unexpected_error'.tr(),
-        ),
-        success: false,
-        message: volumeResult.message,
+    if (!volumeResult.success ||
+        volumeResult.data == null ||
+        volumeResult.outcome != ResourceCreationOutcome.confirmed) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.createVolume,
+        kind: switch (volumeResult.outcome) {
+          ResourceCreationOutcome.confirmed =>
+            ProvisioningFailureKind.unreadable,
+          ResourceCreationOutcome.rejected => ProvisioningFailureKind.rejected,
+          ResourceCreationOutcome.indeterminate =>
+            ProvisioningFailureKind.indeterminate,
+        },
+        resources: resources,
         code: volumeResult.code,
       );
     }
 
     final volume = volumeResult.data!;
-    final serverApiToken = StringGenerators.apiToken();
-    final hostname = getHostnameFromDomain(
-      installationData.serverDomain.domainName,
-    );
-
     final serverResult = await _adapter.api().createServer(
-      dnsApiCredential: installationData.dnsApiCredential,
-      domainName: installationData.serverDomain.domainName,
-      serverType: installationData.serverTypeId,
-      hostName: hostname,
+      dnsApiCredential: request.dnsApiCredential,
+      domainName: request.serverDomain.domainName,
+      serverType: request.serverTypeId,
+      hostName: getHostnameFromDomain(request.serverDomain.domainName),
       volumeId: volume.id,
-      serverApiToken: serverApiToken,
-      customSshKey: installationData.customSshKey,
-      region: installationData.location,
+      serverApiToken: request.serverApiToken,
+      customSshKey: request.customSshKey,
+      region: request.location,
     );
-
-    if (serverResult.wasCreated && !serverResult.success) {
-      return unreadableCreationResult(
-        installationData: installationData,
-        resourceId: serverResult.resourceId,
-        cleanup: () => _deleteHetznerResources(
-          serverId: int.tryParse(serverResult.resourceId ?? ''),
-          volumeId: volume.id,
+    if (serverResult.wasCreated) {
+      resources.add(
+        ProvisionedResource(
+          provider: type,
+          kind: ProvisionedResourceKind.server,
+          id: serverResult.resourceId,
         ),
-        message: serverResult.message,
+      );
+    }
+    if (!serverResult.success ||
+        serverResult.data == null ||
+        serverResult.outcome != ResourceCreationOutcome.confirmed) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.createServer,
+        kind: switch (serverResult.outcome) {
+          ResourceCreationOutcome.confirmed =>
+            ProvisioningFailureKind.unreadable,
+          ResourceCreationOutcome.rejected
+              when serverResult.message == 'uniqueness_error' =>
+            ProvisioningFailureKind.nameConflict,
+          ResourceCreationOutcome.rejected => ProvisioningFailureKind.rejected,
+          ResourceCreationOutcome.indeterminate =>
+            ProvisioningFailureKind.indeterminate,
+        },
+        resources: resources,
         code: serverResult.code,
       );
     }
 
-    if (!serverResult.success || serverResult.data == null) {
-      if (serverResult.message != null &&
-          serverResult.message == 'uniqueness_error') {
-        return serverNameConflictResult(
-          installationData: installationData,
-          message: serverResult.message,
-          code: serverResult.code,
-        );
-      } else {
-        return GenericResult(
-          data: CallbackDialogueBranching(
-            choices: [
-              CallbackDialogueChoice(
-                title: 'basis.cancel'.tr(),
-                callback: () => cleanupInstallationResources(
-                  installationData: installationData,
-                  cleanup: () => _deleteHetznerResources(volumeId: volume.id),
-                ),
-              ),
-              CallbackDialogueChoice(
-                title: 'modals.try_again'.tr(),
-                callback: () => cleanupInstallationResources(
-                  installationData: installationData,
-                  cleanup: () => _deleteHetznerResources(volumeId: volume.id),
-                  onSuccess: () => launchInstallation(installationData),
-                ),
-              ),
-            ],
-            description:
-                serverResult.message ?? 'recovering.generic_error'.tr(),
-            title: 'modals.unexpected_error'.tr(),
-          ),
-          success: false,
-          message: serverResult.message,
-          code: serverResult.code,
-        );
-      }
-    }
-
-    final serverDetails = ServerHostingDetails(
-      providerId: serverResult.data!.id.toString(),
-      ip4: serverResult.data!.publicNet.ipv4!.ip,
-      createTime: DateTime.now(),
-      volume: ServerProviderVolume(
-        id: volume.id.toString(),
-        name: volume.name,
-        sizeByte: volume.size * 1024 * 1024 * 1024,
-        serverId: volume.serverId?.toString(),
-        linuxDevice: volume.linuxDevice,
-      ),
-      apiToken: serverApiToken,
-      provider: ServerProviderType.hetzner,
-    );
-
-    cachedCoreAmount = serverResult.data!.serverType.cores;
-
-    final createDnsResult = await _adapter.api().createReverseDns(
-      serverId: serverResult.data!.id,
-      ip4: serverDetails.ip4,
-      dnsPtr: installationData.serverDomain.domainName,
-    );
-
-    if (!createDnsResult.success) {
-      return GenericResult(
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: () => cleanupInstallationResources(
-                installationData: installationData,
-                cleanup: () => _deleteHetznerResources(
-                  serverId: serverResult.data!.id,
-                  volumeId: volume.id,
-                ),
-              ),
-            ),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () => cleanupInstallationResources(
-                installationData: installationData,
-                cleanup: () => _deleteHetznerResources(
-                  serverId: serverResult.data!.id,
-                  volumeId: volume.id,
-                ),
-                onSuccess: () => launchInstallation(installationData),
-              ),
-            ),
-          ],
-          description:
-              createDnsResult.message ?? 'recovering.generic_error'.tr(),
-          title: 'modals.unexpected_error'.tr(),
-        ),
-        success: false,
-        message: createDnsResult.message,
-        code: createDnsResult.code,
+    final server = serverResult.data!;
+    final ipv4 = server.publicNet.ipv4?.ip;
+    if (ipv4 == null) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.awaitIpv4,
+        kind: ProvisioningFailureKind.unreadable,
+        resources: resources,
       );
     }
-
-    await installationData.successCallback(serverDetails);
-    return GenericResult(success: true, data: null);
+    cachedCoreAmount = server.serverType.cores;
+    final reverseDns = await _adapter.api().createReverseDns(
+      serverId: server.id,
+      ip4: ipv4,
+      dnsPtr: request.serverDomain.domainName,
+    );
+    if (!reverseDns.success) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.setReverseDns,
+        kind: ProvisioningFailureKind.actionFailed,
+        resources: resources,
+        code: reverseDns.code,
+      );
+    }
+    return ProvisioningCompleted(
+      details: ServerHostingDetails(
+        providerId: server.id.toString(),
+        ip4: ipv4,
+        createTime: DateTime.now(),
+        volume: ServerProviderVolume(
+          id: volume.id.toString(),
+          name: volume.name,
+          sizeByte: volume.size * 1024 * 1024 * 1024,
+          serverId: volume.serverId?.toString(),
+          linuxDevice: volume.linuxDevice,
+        ),
+        apiToken: request.serverApiToken,
+        provider: type,
+      ),
+      resources: resources,
+    );
   }
 
-  Future<GenericResult<void>> _deleteHetznerResources({
-    final int? serverId,
-    final int? volumeId,
-  }) async {
-    if (serverId != null) {
-      final result = await deleteServer(serverId.toString());
-      if (!result.success) {
-        return result;
-      }
+  @override
+  Future<GenericResult<void>> deleteProvisionedResource(
+    final ProvisionedResource resource,
+  ) async {
+    final id = int.tryParse(resource.id ?? '');
+    if (resource.provider != type || id == null || id <= 0) {
+      return GenericResult(success: false, data: null);
     }
-    if (volumeId != null) {
-      return _adapter.api().deleteVolume(volumeId);
-    }
-    return GenericResult(success: serverId != null, data: null);
+    return switch (resource.kind) {
+      ProvisionedResourceKind.server => deleteServer(resource.id!),
+      ProvisionedResourceKind.volume => _adapter.api().deleteVolume(id),
+    };
   }
 
   @override

@@ -1,6 +1,20 @@
+import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
+import 'package:selfprivacy/logic/models/provisioning_request.dart';
+
+import 'credential_fixtures.dart';
+
+ProvisioningRequest aProvisioningRequest() => ProvisioningRequest(
+  dnsApiCredential: aDnsProviderCredential(),
+  serverDomain: aServerDomain(),
+  serverTypeId: 'cpx22',
+  serverApiToken: 'installation-token',
+  storageSize: DiskSize.fromGibibyte(10),
+  customSshKey: null,
+  location: 'fsn1',
+);
 
 ServerProviderVolume aServerProviderVolume({
   final String? id = '1',

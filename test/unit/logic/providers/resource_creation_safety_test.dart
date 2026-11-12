@@ -3,671 +3,353 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
 import 'package:selfprivacy/config/hive_config.dart';
-import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
-import '../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 
-enum _HetznerResponse { unreadableVolume, unreadableServer, serverWithoutId }
-
-class _HetznerCreationClientFactory {
-  _HetznerCreationClientFactory(this.response);
-
-  final _HetznerResponse response;
-  final List<RequestOptions> requests = [];
-
-  Dio call(final BaseOptions options) => Dio(options)
-    ..interceptors.add(
-      InterceptorsWrapper(
-        onRequest:
-            (
-              final RequestOptions request,
-              final RequestInterceptorHandler handler,
-            ) {
-              requests.add(request);
-              switch ((request.method, request.path)) {
-                case ('POST', '/volumes'):
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 201,
-                      data: {
-                        'volume': response == _HetznerResponse.unreadableVolume
-                            ? {'id': 41}
-                            : _hetznerVolume(),
-                      },
-                    ),
-                  );
-                case ('POST', '/servers'):
-                  final server = _hetznerServer();
-                  server.remove('server_type');
-                  if (response == _HetznerResponse.serverWithoutId) {
-                    server.remove('id');
-                  }
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 201,
-                      data: {'server': server},
-                    ),
-                  );
-                case ('POST', '/volumes/41/actions/detach'):
-                  handler.resolve(_responseFor(request, statusCode: 201));
-                case ('DELETE', '/servers/7'):
-                case ('DELETE', '/volumes/41'):
-                  handler.resolve(_responseFor(request, statusCode: 204));
-                default:
-                  handler.reject(_unexpectedRequest(request));
-              }
-            },
-      ),
-    );
-}
-
-enum _DigitalOceanResponse {
-  dropletWithoutId,
-  unreadableVolume,
-  nameConflict,
-  serverDiscoveryFailed,
-  attachmentFailed,
-}
-
-class _DigitalOceanCreationClientFactory {
-  _DigitalOceanCreationClientFactory(
-    this.response, {
-    this.failCleanup = false,
-    this.emptyVolumeId = false,
+class _CreationClient {
+  _CreationClient(
+    this.provider,
+    this.failure, {
+    this.status = 201,
+    this.missingId = false,
+    this.unreadable = false,
+    this.nameConflict = false,
   });
 
-  final _DigitalOceanResponse response;
-  bool failCleanup;
-  final bool emptyVolumeId;
+  final ServerProviderType provider;
+  final ProvisioningStage failure;
+  final int? status;
+  final bool missingId;
+  final bool unreadable;
+  final bool nameConflict;
   final List<RequestOptions> requests = [];
-  bool _created = false;
+
+  bool get _hetzner => provider == ServerProviderType.hetzner;
 
   Dio call(final BaseOptions options) => Dio(options)
     ..interceptors.add(
       InterceptorsWrapper(
-        onRequest:
-            (
-              final RequestOptions request,
-              final RequestInterceptorHandler handler,
-            ) {
-              requests.add(request);
-              switch ((request.method, request.path)) {
-                case ('GET', '/droplets'):
-                  if (response == _DigitalOceanResponse.serverDiscoveryFailed) {
-                    handler.reject(
-                      DioException(
+        onRequest: (final request, final handler) {
+          requests.add(request);
+          final serverPath = _hetzner ? '/servers' : '/droplets';
+          final stage = switch ((request.method, request.path)) {
+            ('GET', _) => ProvisioningStage.discoverServers,
+            ('POST', '/volumes') => ProvisioningStage.createVolume,
+            ('POST', final path) when path == serverPath =>
+              ProvisioningStage.createServer,
+            _ => ProvisioningStage.attachVolume,
+          };
+          if (stage == failure && (status == null || status! >= 400)) {
+            handler.reject(
+              DioException(
+                requestOptions: request,
+                type: status == null
+                    ? DioExceptionType.connectionError
+                    : DioExceptionType.badResponse,
+                response: status == null
+                    ? null
+                    : Response<dynamic>(
                         requestOptions: request,
-                        type: DioExceptionType.connectionError,
-                      ),
-                    );
-                    return;
-                  }
-                  final server = loadJsonFixtureItem(
-                    'server_providers/digital_ocean/droplets.json',
-                    'droplets',
-                  )..['name'] = 'example';
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 200,
-                      data: {
-                        'droplets': [
-                          if (_created ||
-                              response == _DigitalOceanResponse.nameConflict)
-                            server,
-                        ],
-                      },
-                    ),
-                  );
-                case ('POST', '/droplets'):
-                  _created = true;
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 202,
-                      data: {
-                        'droplet':
-                            response == _DigitalOceanResponse.dropletWithoutId
-                            ? <String, Object>{}
-                            : {'id': 7},
-                      },
-                    ),
-                  );
-                case ('POST', '/volumes'):
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 201,
-                      data: {
-                        'volume':
-                            response == _DigitalOceanResponse.attachmentFailed
-                            ? loadJsonFixtureItem(
-                                'server_providers/digital_ocean/volumes.json',
-                                'volumes',
-                              )
-                            : {'id': emptyVolumeId ? '' : 'volume-id'},
-                      },
-                    ),
-                  );
-                case ('GET', '/volumes'):
-                  final volume = loadJsonFixtureItem(
-                    'server_providers/digital_ocean/volumes.json',
-                    'volumes',
-                  );
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 200,
-                      data: {
-                        'volumes': [
-                          {...volume, 'id': 'unrelated-volume'},
-                          volume,
-                        ],
-                      },
-                    ),
-                  );
-                case ('POST', '/volumes/actions'):
-                case (
-                  'POST',
-                  '/volumes/7724db7c-e098-11e5-b522-000f53304e51/actions',
-                ):
-                  handler.resolve(
-                    _responseFor(
-                      request,
-                      statusCode: 201,
-                      data: {
-                        'action': {
-                          'status':
-                              (request.data as Map<String, dynamic>)['type'] ==
-                                  'attach'
-                              ? 'errored'
-                              : 'completed',
+                        statusCode: status,
+                        data: {
+                          'error': {
+                            'code': nameConflict
+                                ? 'uniqueness_error'
+                                : 'rejected',
+                          },
                         },
-                      },
-                    ),
-                  );
-                case ('DELETE', '/volumes/volume-id'):
-                case (
-                  'DELETE',
-                  '/volumes/7724db7c-e098-11e5-b522-000f53304e51',
-                ):
-                  if (failCleanup) {
-                    handler.reject(
-                      DioException(
-                        requestOptions: request,
-                        response: _responseFor(request, statusCode: 500),
-                        type: DioExceptionType.badResponse,
                       ),
-                    );
-                  } else {
-                    handler.resolve(_responseFor(request, statusCode: 204));
-                  }
-                case ('DELETE', '/droplets/7'):
-                  if (!_created) {
-                    handler.reject(
-                      DioException(
-                        requestOptions: request,
-                        response: _responseFor(request, statusCode: 404),
-                        type: DioExceptionType.badResponse,
-                      ),
-                    );
-                    return;
-                  }
-                  _created = false;
-                  handler.resolve(_responseFor(request, statusCode: 204));
-                case ('DELETE', '/volumes/unrelated-volume'):
-                  handler.resolve(_responseFor(request, statusCode: 204));
-                default:
-                  handler.reject(_unexpectedRequest(request));
-              }
+              ),
+            );
+            return;
+          }
+          final volume = loadJsonFixtureItem(
+            'server_providers/${_hetzner ? 'hetzner' : 'digital_ocean'}/volumes.json',
+            'volumes',
+          );
+          final server = loadJsonFixtureItem(
+            'server_providers/${_hetzner ? 'hetzner/servers' : 'digital_ocean/droplets'}.json',
+            _hetzner ? 'servers' : 'droplets',
+          )..['id'] = 7;
+          if (unreadable && stage == failure) {
+            if (stage == ProvisioningStage.createVolume) {
+              volume.remove('name');
+            } else {
+              server.remove('server_type');
+            }
+          }
+          if (missingId && stage == failure) {
+            (stage == ProvisioningStage.createVolume ? volume : server).remove(
+              'id',
+            );
+          }
+          final data = switch ((request.method, request.path)) {
+            ('GET', _) => {_hetzner ? 'servers' : 'droplets': <Object>[]},
+            ('POST', '/volumes') => {'volume': volume},
+            ('POST', final path) when path == serverPath => {
+              _hetzner ? 'server' : 'droplet': server,
             },
+            _ => {
+              'action': {'status': 'errored'},
+            },
+          };
+          handler.resolve(
+            Response<dynamic>(
+              requestOptions: request,
+              statusCode: 201,
+              data: data,
+            ),
+          );
+        },
       ),
     );
+
+  ServerProvider get instance =>
+      ServerProviderFactory.createServerProviderInterface(
+        ServerProviderSettings(
+          provider: provider,
+          credentials: const BearerTokenCredential(token: 'provider-token'),
+        ),
+        clientFactory: call,
+      );
 }
-
-Response<dynamic> _responseFor(
-  final RequestOptions request, {
-  required final int statusCode,
-  final Object? data,
-}) => Response<dynamic>(
-  requestOptions: request,
-  statusCode: statusCode,
-  data: data,
-);
-
-DioException _unexpectedRequest(final RequestOptions request) => DioException(
-  requestOptions: request,
-  error: StateError('Unexpected request: ${request.uri}'),
-);
-
-Map<String, dynamic> _hetznerVolume() => {
-  'id': 41,
-  'size': 10,
-  'server': null,
-  'name': 'selfprivacy-volume',
-  'linux_device': null,
-  'location': _hetznerLocation(),
-};
-
-Map<String, dynamic> _hetznerServer() => {
-  'id': 7,
-  'name': 'example',
-  'status': 'initializing',
-  'created': '2026-08-29T12:00:00Z',
-  'server_type': {
-    'name': 'cpx12',
-    'description': 'CPX 12',
-    'architecture': 'x86',
-    'cores': 1,
-    'memory': 2,
-    'disk': 40,
-    'prices': <Object>[],
-    'locations': <Object>[],
-  },
-  'location': _hetznerLocation(),
-  'public_net': {
-    'ipv4': {
-      'id': 8,
-      'ip': '203.0.113.10',
-      'blocked': false,
-      'dns_ptr': 'example.org',
-    },
-  },
-  'volumes': [41],
-};
-
-Map<String, dynamic> _hetznerLocation() => {
-  'name': 'fsn1',
-  'country': 'DE',
-  'city': 'Falkenstein',
-  'description': 'Falkenstein DC Park 1',
-  'network_zone': 'eu-central',
-};
-
-LaunchInstallationData _installationData({
-  required final void Function() onError,
-}) => LaunchInstallationData(
-  dnsApiCredential: aDnsProviderCredential(),
-  serverDomain: aServerDomain(),
-  serverTypeId: 'cpx12',
-  errorCallback: onError,
-  successCallback: (final _) {},
-  storageSize: DiskSize.fromGibibyte(10),
-  customSshKey: null,
-  location: 'fsn1',
-);
-
-ServerProvider _provider(
-  final ServerProviderType type,
-  final Dio Function(BaseOptions) clientFactory,
-) => ServerProviderFactory.createServerProviderInterface(
-  ServerProviderSettings(
-    provider: type,
-    credentials: const BearerTokenCredential(token: 'provider-token'),
-  ),
-  clientFactory: clientFactory,
-);
 
 void main() {
   setUpAll(setUpInMemoryHive);
   tearDownAll(tearDownInMemoryHive);
-
   setUp(() async {
     await Hive.openBox(BNames.appSettingsBox);
     getIt
       ..registerSingleton<ConsoleModel>(ConsoleModel())
       ..registerSingleton<DeveloperSettingsModel>(DeveloperSettingsModel());
   });
-
   tearDown(() async {
     await getIt.reset();
-    final box = Hive.box(BNames.appSettingsBox);
-    await box.clear();
-    await box.close();
+    await Hive.box(BNames.appSettingsBox).clear();
+    await Hive.box(BNames.appSettingsBox).close();
   });
 
-  test('Hetzner waits for confirmation before deleting a server', () async {
-    final clients = _HetznerCreationClientFactory(
-      _HetznerResponse.unreadableServer,
-    );
-    int errorCalls = 0;
-
-    final result = await _provider(
-      ServerProviderType.hetzner,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => errorCalls++));
-
-    expect(result.success, isFalse);
-    expect(result.data, isNotNull);
-    expect(
-      clients.requests.where((final request) => request.method == 'DELETE'),
-      isEmpty,
-    );
-
-    final cleanupFuture = result.data!.choices[1].callback!();
-    final cleanupResult = await cleanupFuture;
-
-    expect(cleanupResult.success, isTrue);
-    expect(errorCalls, 1);
-    expect(
-      clients.requests.map((final request) => (request.method, request.path)),
-      [
-        ('POST', '/volumes'),
-        ('POST', '/servers'),
-        ('DELETE', '/servers/7'),
-        ('DELETE', '/volumes/41'),
-      ],
-    );
-  });
-
-  test('Hetzner deletes only an unreadable volume and stops', () async {
-    final clients = _HetznerCreationClientFactory(
-      _HetznerResponse.unreadableVolume,
-    );
-    int errorCalls = 0;
-
-    final result = await _provider(
-      ServerProviderType.hetzner,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => errorCalls++));
-    final cleanupResult = await result.data!.choices[1].callback!();
-
-    expect(cleanupResult.success, isTrue);
-    expect(errorCalls, 1);
-    expect(
-      clients.requests.map((final request) => (request.method, request.path)),
-      [('POST', '/volumes'), ('DELETE', '/volumes/41')],
-    );
-  });
-
-  test('leaving an unreadable resource does not delete it', () async {
-    final clients = _HetznerCreationClientFactory(
-      _HetznerResponse.unreadableVolume,
-    );
-    int errorCalls = 0;
-
-    final result = await _provider(
-      ServerProviderType.hetzner,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => errorCalls++));
-    final stopResult = await result.data!.choices[0].callback!();
-
-    expect(stopResult.success, isTrue);
-    expect(errorCalls, 1);
-    expect(
-      clients.requests.map((final request) => (request.method, request.path)),
-      [('POST', '/volumes')],
-    );
-  });
-
-  test('Hetzner does not guess when the response has no resource ID', () async {
-    final clients = _HetznerCreationClientFactory(
-      _HetznerResponse.serverWithoutId,
-    );
-    int errorCalls = 0;
-
-    final result = await _provider(
-      ServerProviderType.hetzner,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => errorCalls++));
-    final stopResult = await result.data!.choices[1].callback!();
-
-    expect(stopResult.success, isTrue);
-    expect(errorCalls, 1);
-    expect(
-      clients.requests.where((final request) => request.method == 'DELETE'),
-      isEmpty,
-    );
-  });
-
-  test('DigitalOcean stops when an accepted droplet has no ID', () async {
-    final clients = _DigitalOceanCreationClientFactory(
-      _DigitalOceanResponse.dropletWithoutId,
-    );
-    int errorCalls = 0;
-
-    final result = await _provider(
-      ServerProviderType.digitalOcean,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => errorCalls++));
-    final stopResult = await result.data!.choices[1].callback!();
-
-    expect(stopResult.success, isTrue);
-    expect(errorCalls, 1);
-    expect(
-      clients.requests.map((final request) => (request.method, request.path)),
-      [('GET', '/droplets'), ('POST', '/droplets')],
-    );
-  });
-
-  test('DigitalOcean name conflict requires manual cleanup', () async {
-    final clients = _DigitalOceanCreationClientFactory(
-      _DigitalOceanResponse.nameConflict,
-    );
-    var stopped = false;
-    final result = await _provider(
-      ServerProviderType.digitalOcean,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => stopped = true));
-    expect(result.success, isFalse);
-    expect(result.data!.choices, hasLength(1));
-    await result.data!.choices.single.callback!();
-    expect(stopped, isTrue);
-    expect(clients.requests.map((final request) => request.method), ['GET']);
-  });
-
-  test('DigitalOcean does not create resources when discovery fails', () async {
-    final clients = _DigitalOceanCreationClientFactory(
-      _DigitalOceanResponse.serverDiscoveryFailed,
-    );
-    final result = await _provider(
-      ServerProviderType.digitalOcean,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () {}));
-    expect(result.success, isFalse);
-    expect(clients.requests.map((final request) => request.method), ['GET']);
-  });
-
-  testWidgets(
-    'DigitalOcean cleanup retains exact IDs after attachment failure',
-    (final tester) async {
-      final clients = _DigitalOceanCreationClientFactory(
-        _DigitalOceanResponse.attachmentFailed,
-        failCleanup: true,
-      );
-      final resultFuture = _provider(
-        ServerProviderType.digitalOcean,
-        clients.call,
-      ).launchInstallation(_installationData(onError: () {}));
-      for (var i = 0; i < 10; i++) {
-        await tester.pump();
-        if (clients.requests.any(
-          (final request) =>
-              request.method == 'POST' && request.path == '/droplets',
-        )) {
-          break;
-        }
-      }
-      await tester.pump();
+  Future<ProvisioningFailed> provision(
+    final _CreationClient client,
+    final WidgetTester tester,
+  ) async {
+    final pending = client.instance.provisionServer(aProvisioningRequest());
+    await tester.pump(Duration.zero);
+    if (client.provider == ServerProviderType.digitalOcean) {
       await tester.pump(const Duration(seconds: 6));
-      final result = await resultFuture;
-      final pending = result.data!.choices[1].callback!();
-      await tester.pump();
-      await tester.pump(const Duration(seconds: 5));
-      await tester.pump(const Duration(seconds: 10));
+    }
+    final result = await pending;
+    expect(result, isA<ProvisioningFailed>());
+    expect(client.requests.where((final r) => r.method == 'DELETE'), isEmpty);
+    return result as ProvisioningFailed;
+  }
 
-      expect(
-        clients.requests
-            .where((final request) => request.method == 'DELETE')
-            .map((final request) => request.path),
-        ['/droplets/7', '/volumes/7724db7c-e098-11e5-b522-000f53304e51'],
-      );
-      final cleanup = await pending;
-      expect(cleanup.success, isFalse);
-      expect(
-        clients.requests.where(
-          (final request) =>
-              request.path == '/droplets' && request.method == 'POST',
-        ),
-        hasLength(1),
-      );
-      expect(
-        clients.requests.where(
-          (final request) =>
-              request.path == '/volumes' && request.method == 'GET',
-        ),
-        isEmpty,
-      );
-    },
-  );
-
-  testWidgets('DigitalOcean requires manual cleanup for an empty accepted ID', (
+  testWidgets('Hetzner rejected server retains the confirmed volume', (
     final tester,
   ) async {
-    final clients = _DigitalOceanCreationClientFactory(
-      _DigitalOceanResponse.unreadableVolume,
-      emptyVolumeId: true,
+    final client = _CreationClient(
+      ServerProviderType.hetzner,
+      ProvisioningStage.createServer,
+      status: 422,
     );
-    var stopped = false;
-    final pending = _provider(
+    final result = await provision(client, tester);
+    expect(result.kind, ProvisioningFailureKind.rejected);
+    expect(result.stage, ProvisioningStage.createServer);
+    expect(result.code, 422);
+    expect(result.resources.map((final r) => (r.kind, r.id)), [
+      (ProvisionedResourceKind.volume, '41'),
+    ]);
+  });
+
+  testWidgets('Hetzner name conflict never deletes resources', (
+    final tester,
+  ) async {
+    final result = await provision(
+      _CreationClient(
+        ServerProviderType.hetzner,
+        ProvisioningStage.createServer,
+        status: 409,
+        nameConflict: true,
+      ),
+      tester,
+    );
+    expect(result.kind, ProvisioningFailureKind.nameConflict);
+    expect(result.resources.single.id, '41');
+  });
+
+  for (final missingId in [false, true]) {
+    testWidgets(
+      'Hetzner unreadable server preserves IDs (missing: $missingId)',
+      (final tester) async {
+        final result = await provision(
+          _CreationClient(
+            ServerProviderType.hetzner,
+            ProvisioningStage.createServer,
+            unreadable: true,
+            missingId: missingId,
+          ),
+          tester,
+        );
+        expect(result.kind, ProvisioningFailureKind.unreadable);
+        expect(result.resources.map((final r) => (r.kind, r.id)), [
+          (ProvisionedResourceKind.volume, '41'),
+          (ProvisionedResourceKind.server, missingId ? null : '7'),
+        ]);
+      },
+    );
+  }
+
+  testWidgets('DigitalOcean failed discovery creates nothing', (
+    final tester,
+  ) async {
+    final client = _CreationClient(
       ServerProviderType.digitalOcean,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => stopped = true));
-    for (var i = 0; i < 10; i++) {
-      await tester.pump();
-      if (clients.requests.any(
-        (final request) =>
-            request.path == '/droplets' && request.method == 'POST',
-      )) {
-        break;
-      }
-    }
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 6));
-    final result = await pending;
-    await result.data!.choices[1].callback!();
-    expect(stopped, isTrue);
-    expect(clients.requests.map((final request) => request.method), [
-      'GET',
-      'POST',
-      'POST',
+      ProvisioningStage.discoverServers,
+      status: null,
+    );
+    final result = await provision(client, tester);
+    expect(result.kind, ProvisioningFailureKind.unavailable);
+    expect(result.resources, isEmpty);
+    expect(client.requests.map((final r) => r.method), ['GET']);
+  });
+
+  testWidgets('DigitalOcean unreadable volume retains both created IDs', (
+    final tester,
+  ) async {
+    final result = await provision(
+      _CreationClient(
+        ServerProviderType.digitalOcean,
+        ProvisioningStage.createVolume,
+        unreadable: true,
+      ),
+      tester,
+    );
+    expect(result.kind, ProvisioningFailureKind.unreadable);
+    expect(result.resources.map((final r) => (r.kind, r.id)), [
+      (ProvisionedResourceKind.server, '7'),
+      (ProvisionedResourceKind.volume, '7724db7c-e098-11e5-b522-000f53304e51'),
     ]);
   });
 
   testWidgets(
-    'DigitalOcean deletes an unreadable volume and its droplet without retry',
+    'DigitalOcean attach failure retains exact IDs without rediscovery',
     (final tester) async {
-      final clients = _DigitalOceanCreationClientFactory(
-        _DigitalOceanResponse.unreadableVolume,
-      );
-      int errorCalls = 0;
-
-      final resultFuture = _provider(
+      final client = _CreationClient(
         ServerProviderType.digitalOcean,
-        clients.call,
-      ).launchInstallation(_installationData(onError: () => errorCalls++));
-      for (var i = 0; i < 10; i++) {
-        await tester.pump();
-        if (clients.requests.any(
-          (final request) =>
-              request.method == 'POST' && request.path == '/droplets',
-        )) {
-          break;
-        }
-      }
-      await tester.pump();
-      await tester.pump(const Duration(seconds: 6));
-      final result = await resultFuture;
-
-      expect(
-        clients.requests.where((final request) => request.method == 'DELETE'),
-        isEmpty,
+        ProvisioningStage.attachVolume,
       );
-      final cleanupFuture = result.data!.choices[1].callback!();
-      await tester.pumpAndSettle();
-      final cleanupResult = await cleanupFuture;
-
-      expect(cleanupResult.success, isTrue);
-      expect(errorCalls, 1);
+      final result = await provision(client, tester);
+      expect(result.stage, ProvisioningStage.attachVolume);
+      expect(result.kind, ProvisioningFailureKind.actionFailed);
+      expect(result.resources.map((final r) => r.id), [
+        '7',
+        '7724db7c-e098-11e5-b522-000f53304e51',
+      ]);
       expect(
-        clients.requests.map((final request) => (request.method, request.path)),
-        [
-          ('GET', '/droplets'),
-          ('POST', '/droplets'),
-          ('POST', '/volumes'),
-          ('DELETE', '/droplets/7'),
-          ('DELETE', '/volumes/volume-id'),
-        ],
+        client.requests.where(
+          (final r) => r.path == '/volumes' && r.method == 'GET',
+        ),
+        isEmpty,
       );
     },
   );
 
-  testWidgets('cleanup failure retries the same DigitalOcean resources', (
-    final tester,
-  ) async {
-    final clients = _DigitalOceanCreationClientFactory(
-      _DigitalOceanResponse.unreadableVolume,
-      failCleanup: true,
-    );
-    var stopped = false;
-
-    final resultFuture = _provider(
-      ServerProviderType.digitalOcean,
-      clients.call,
-    ).launchInstallation(_installationData(onError: () => stopped = true));
-    for (var i = 0; i < 10; i++) {
-      await tester.pump();
-      if (clients.requests.any(
-        (final request) =>
-            request.method == 'POST' && request.path == '/droplets',
-      )) {
-        break;
+  for (final provider in [
+    ServerProviderType.hetzner,
+    ServerProviderType.digitalOcean,
+  ]) {
+    for (final stage in [
+      ProvisioningStage.createServer,
+      ProvisioningStage.createVolume,
+    ]) {
+      testWidgets('$provider $stage without ID requires manual handling', (
+        final tester,
+      ) async {
+        final client = _CreationClient(provider, stage, missingId: true);
+        final result = await provision(client, tester);
+        expect(result.kind, ProvisioningFailureKind.unreadable);
+        expect(result.stage, stage);
+        expect(result.resources.last.id, isNull);
+        expect(
+          result.resources.last.kind,
+          stage == ProvisioningStage.createServer
+              ? ProvisionedResourceKind.server
+              : ProvisionedResourceKind.volume,
+        );
+      });
+      for (final status in [null, 408, 500]) {
+        testWidgets('$provider $stage ($status) stops at uncertain creation', (
+          final tester,
+        ) async {
+          final client = _CreationClient(provider, stage, status: status);
+          final result = await provision(client, tester);
+          expect(result.stage, stage);
+          expect(result.kind, ProvisioningFailureKind.indeterminate);
+          final firstStage = provider == ServerProviderType.hetzner
+              ? ProvisioningStage.createVolume
+              : ProvisioningStage.createServer;
+          expect(result.resources, hasLength(stage == firstStage ? 0 : 1));
+          expect(
+            client.requests.where((final r) => r.method == 'POST'),
+            hasLength(stage == firstStage ? 1 : 2),
+          );
+          expect(
+            result.resources.every((final r) => r.provider == provider),
+            isTrue,
+          );
+        });
       }
     }
-    await tester.pump();
-    await tester.pump(const Duration(seconds: 6));
-    final result = await resultFuture;
-
-    final cleanupFuture = result.data!.choices[1].callback!();
-    await tester.pumpAndSettle();
-    final cleanupResult = await cleanupFuture;
-    expect(cleanupResult.success, isFalse);
-    expect(cleanupResult.data, isNotNull);
-    expect(stopped, isFalse);
-
-    clients.failCleanup = false;
-    final retryFuture = cleanupResult.data!.choices[1].callback!();
-    await tester.pumpAndSettle();
-    final retryResult = await retryFuture;
-
-    expect(retryResult.success, isTrue);
-    expect(stopped, isTrue);
-    expect(
-      clients.requests
-          .where((final request) => request.method == 'POST')
-          .length,
-      2,
+    test(
+      'deleteProvisionedResource refuses unknown and foreign IDs on $provider',
+      () async {
+        final client = _CreationClient(
+          provider,
+          ProvisioningStage.createVolume,
+        );
+        final instance = client.instance;
+        for (final kind in ProvisionedResourceKind.values) {
+          for (final id in [
+            null,
+            '',
+            '   ',
+            if (kind == ProvisionedResourceKind.server ||
+                provider == ServerProviderType.hetzner) ...[
+              '-1',
+              '0',
+              'invalid',
+            ],
+          ]) {
+            expect(
+              (await instance.deleteProvisionedResource(
+                ProvisionedResource(provider: provider, kind: kind, id: id),
+              )).success,
+              isFalse,
+            );
+          }
+          expect(
+            (await instance.deleteProvisionedResource(
+              ProvisionedResource(
+                provider: provider == ServerProviderType.hetzner
+                    ? ServerProviderType.digitalOcean
+                    : ServerProviderType.hetzner,
+                kind: kind,
+                id: '7',
+              ),
+            )).success,
+            isFalse,
+          );
+        }
+        expect(client.requests, isEmpty);
+      },
     );
-    expect(
-      clients.requests
-          .where((final request) => request.method == 'DELETE')
-          .map((final request) => request.path),
-      [
-        '/droplets/7',
-        '/volumes/volume-id',
-        '/droplets/7',
-        '/volumes/volume-id',
-      ],
-    );
-  });
+  }
 }

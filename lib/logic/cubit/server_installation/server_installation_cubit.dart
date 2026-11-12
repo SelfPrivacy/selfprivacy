@@ -10,6 +10,7 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/api_maps/tls_policy.dart';
 import 'package:selfprivacy/logic/connection/server_connection_hub.dart';
+import 'package:selfprivacy/logic/cubit/server_installation/provisioning_dialog.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
 import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
@@ -19,14 +20,18 @@ import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/hive/server_domain.dart';
 import 'package:selfprivacy/logic/models/hive/wizards_data/server_installation_wizard_data.dart';
 import 'package:selfprivacy/logic/models/price.dart';
+import 'package:selfprivacy/logic/models/provisioning_request.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
+import 'package:selfprivacy/logic/providers/dns_providers/dns_provider.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/providers_controller.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/ui/helpers/modals.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
+import 'package:selfprivacy/utils/password_generator.dart';
 import 'package:selfprivacy/utils/server_mutation_feedback.dart';
 
 export 'package:provider/provider.dart';
@@ -34,11 +39,19 @@ export 'package:provider/provider.dart';
 part '../server_installation/server_installation_state.dart';
 
 class ServerInstallationCubit extends Cubit<ServerInstallationState> {
-  ServerInstallationCubit({final ServerInstallationRepository? repository})
-    : repository = repository ?? ServerInstallationRepository(),
-      super(const ServerInstallationEmpty());
+  ServerInstallationCubit({
+    final ServerInstallationRepository? repository,
+    final ServerProvider? serverProvider,
+    final DnsProvider? dnsProvider,
+  }) : repository = repository ?? ServerInstallationRepository(),
+       _serverProvider = serverProvider,
+       _dnsProvider = dnsProvider,
+       super(const ServerInstallationEmpty());
 
   final ServerInstallationRepository repository;
+  final ServerProvider? _serverProvider;
+  final DnsProvider? _dnsProvider;
+  ProvisioningRequest? _provisioningRequest;
 
   Timer? timer;
 
@@ -57,6 +70,7 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   );
 
   Future<void> load() async {
+    _provisioningRequest = null;
     final ServerInstallationState state = await repository.load();
 
     if (state is ServerInstallationFinished) {
@@ -215,25 +229,41 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   Future<void> onCreateServerSuccess(
     final ServerHostingDetails serverDetails,
   ) async {
+    final request = _provisioningRequest;
+    if (request == null || !_isCurrentProvisioning(request)) {
+      return;
+    }
+    final dnsProvider = _dnsProvider ?? ProvidersController.currentDnsProvider!;
     await repository.saveServerDetails(serverDetails);
+    if (!_isCurrentProvisioning(request)) {
+      return;
+    }
 
     // TODO(NaiJi): Error handling?
-    await ProvidersController.currentDnsProvider!.removeDomainRecords(
+    await dnsProvider.removeDomainRecords(
       records: getProjectDnsRecords(
-        domainName: state.serverDomain!.domainName,
+        domainName: request.serverDomain.domainName,
         ip4: serverDetails.ip4,
         isCreating: false,
       ),
-      domain: state.serverDomain!,
+      domain: request.serverDomain,
     );
-    await ProvidersController.currentDnsProvider!.createDomainRecords(
+    if (!_isCurrentProvisioning(request)) {
+      return;
+    }
+    await dnsProvider.createDomainRecords(
       records: getProjectDnsRecords(
-        domainName: state.serverDomain!.domainName,
+        domainName: request.serverDomain.domainName,
         ip4: serverDetails.ip4,
         isCreating: true,
       ),
-      domain: state.serverDomain!,
+      domain: request.serverDomain,
     );
+
+    if (!_isCurrentProvisioning(request)) {
+      return;
+    }
+    _provisioningRequest = null;
 
     emit(
       (state as ServerInstallationNotFinished).copyWith(
@@ -251,26 +281,87 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
     emit((state as ServerInstallationNotFinished).copyWith(customSshKey: key));
   }
 
+  bool _isCurrentProvisioning(final ProvisioningRequest request) =>
+      !isClosed &&
+      identical(_provisioningRequest, request) &&
+      state is ServerInstallationNotFinished &&
+      state.progress == ServerSetupProgress.domainFilled;
+
   Future<void> createServerAndSetDnsRecords() async {
-    emit(
-      (state as ServerInstallationNotFinished).copyWith(isLoading: () => true),
-    );
+    final selected = state;
+    if (isClosed ||
+        _provisioningRequest != null ||
+        selected is! ServerInstallationNotFinished ||
+        selected.progress != ServerSetupProgress.domainFilled) {
+      return;
+    }
+    final provider =
+        _serverProvider ?? ProvidersController.currentServerProvider!;
+    Future<GenericResult<CallbackDialogueBranching?>>? pending;
+    late final Future<GenericResult<CallbackDialogueBranching?>> Function()
+    attempt;
 
-    final installationData = LaunchInstallationData(
-      dnsApiCredential: state.dnsApiCredential!,
-      serverDomain: state.serverDomain!,
-      serverTypeId: state.serverTypeIdentificator!,
-      errorCallback: clearAppConfig,
-      successCallback: onCreateServerSuccess,
-      storageSize: initialStorage,
-      customSshKey: (state as ServerInstallationNotFinished).customSshKey,
-      location: state.serverLocation!,
-    );
+    Future<GenericResult<CallbackDialogueBranching?>> execute() async {
+      final request = ProvisioningRequest(
+        dnsApiCredential: selected.dnsApiCredential!,
+        serverDomain: selected.serverDomain!,
+        serverTypeId: selected.serverTypeIdentificator!,
+        serverApiToken: StringGenerators.apiToken(),
+        storageSize: initialStorage,
+        customSshKey: selected.customSshKey,
+        location: selected.serverLocation!,
+      );
+      _provisioningRequest = request;
+      emit(
+        (state as ServerInstallationNotFinished).copyWith(
+          isLoading: () => true,
+          installationDialoguePopUp: null,
+        ),
+      );
+      final result = await provider.provisionServer(request);
+      if (!_isCurrentProvisioning(request)) {
+        return GenericResult(success: true, data: null);
+      }
+      switch (result) {
+        case ProvisioningCompleted():
+          await onCreateServerSuccess(result.details);
+          return GenericResult(success: true, data: null);
+        case ProvisioningFailed():
+          return GenericResult(
+            success: false,
+            data: provisioningFailureDialog(
+              failure: result,
+              onStop: () async {
+                if (_isCurrentProvisioning(request)) {
+                  await clearAppConfig();
+                }
+              },
+              onRetry: () {
+                if (!_isCurrentProvisioning(request)) {
+                  return Future.value(GenericResult(success: true, data: null));
+                }
+                return attempt();
+              },
+              deleteResource: (final resource) {
+                if (!_isCurrentProvisioning(request)) {
+                  return Future.value(
+                    GenericResult(success: false, data: null),
+                  );
+                }
+                return provider.deleteProvisionedResource(resource);
+              },
+            ),
+          );
+      }
+    }
 
-    final result = await ProvidersController.currentServerProvider!
-        .launchInstallation(installationData);
+    attempt = () => pending ??= execute().whenComplete(() => pending = null);
 
-    if (!result.success && result.data != null) {
+    final result = await attempt();
+    if (!isClosed &&
+        state is ServerInstallationNotFinished &&
+        _provisioningRequest != null &&
+        !result.success) {
       emit(
         (state as ServerInstallationNotFinished).copyWith(
           installationDialoguePopUp: result.data,
@@ -798,12 +889,15 @@ class ServerInstallationCubit extends Cubit<ServerInstallationState> {
   }
 
   Future<void> clearAppConfig() async {
+    _provisioningRequest = null;
     closeTimer();
     ProvidersController.clearProviders();
     getIt<DeveloperSettingsModel>().clear();
     getIt<TlsContext>().reset();
     await repository.clearAppConfig();
-    emit(const ServerInstallationEmpty());
+    if (!isClosed) {
+      emit(const ServerInstallationEmpty());
+    }
   }
 
   @override

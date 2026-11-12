@@ -1,11 +1,11 @@
 import 'package:selfprivacy/logic/api_maps/generic_result.dart';
 import 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
-import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
-import 'package:selfprivacy/logic/models/launch_installation_data.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
+import 'package:selfprivacy/logic/models/provisioning_request.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
@@ -13,7 +13,6 @@ import 'package:selfprivacy/logic/models/server_type.dart';
 
 export 'package:selfprivacy/logic/api_maps/generic_result.dart';
 export 'package:selfprivacy/logic/api_maps/resource_creation_result.dart';
-export 'package:selfprivacy/logic/models/launch_installation_data.dart';
 
 const serverProviderConnectionErrorMessageKey =
     'initializing.could_not_connect';
@@ -36,17 +35,10 @@ abstract class ServerProvider {
   /// to the authorized user.
   Future<GenericResult<ServerType?>> getServerType(final String providerId);
 
-  /// Tries to launch installation of SelfPrivacy on
-  /// the requested server entry for the authorized account.
-  /// Depending on a server provider, the algorithm
-  /// and instructions vary drastically.
-  ///
-  /// If successly launched, stores new server information.
-  ///
-  /// If failure, returns error dialogue information to
-  /// write in ServerInstallationState.
-  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
-    final LaunchInstallationData installationData,
+  Future<ProvisioningResult> provisionServer(final ProvisioningRequest request);
+
+  Future<GenericResult<void>> deleteProvisionedResource(
+    final ProvisionedResource resource,
   );
 
   /// Deletes the server with this provider ID, preserving attached volumes.

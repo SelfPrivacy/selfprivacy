@@ -2,24 +2,22 @@
 
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/rest_api_map.dart';
 import 'package:selfprivacy/logic/api_maps/rest_maps/server_providers/digital_ocean/digital_ocean_api.dart';
-import 'package:selfprivacy/logic/models/callback_dialogue_branching.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
 import 'package:selfprivacy/logic/models/json/digital_ocean_server_info.dart';
 import 'package:selfprivacy/logic/models/metrics.dart';
 import 'package:selfprivacy/logic/models/price.dart';
+import 'package:selfprivacy/logic/models/provisioning_request.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/models/server_basic_info.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/models/server_type.dart';
-import 'package:selfprivacy/logic/providers/server_providers/resource_creation_dialog.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/utils/extensions/string_extensions.dart';
 import 'package:selfprivacy/utils/network_utils.dart';
-import 'package:selfprivacy/utils/password_generator.dart';
 
 class ApiAdapter {
   ApiAdapter({
@@ -84,16 +82,20 @@ class DigitalOceanServerProvider extends ServerProvider {
         continue;
       }
 
-      servers.add(
-        ServerBasicInfo(
-          providerId: server['id'].toString(),
-          reverseDns: server['name'],
-          created: DateTime.now(),
-          ip: ipv4,
-          name: server['name'],
-          location: server['region']['slug'],
-        ),
-      );
+      try {
+        servers.add(
+          ServerBasicInfo(
+            providerId: server['id'].toString(),
+            reverseDns: server['name'],
+            created: DateTime.now(),
+            ip: ipv4,
+            name: server['name'],
+            location: server['region']['slug'],
+          ),
+        );
+      } catch (_) {
+        return GenericResult(success: false, data: [], code: result.code);
+      }
     }
 
     return GenericResult(success: true, data: servers);
@@ -210,197 +212,149 @@ class DigitalOceanServerProvider extends ServerProvider {
   }
 
   @override
-  Future<GenericResult<CallbackDialogueBranching?>> launchInstallation(
-    final LaunchInstallationData installationData,
+  Future<ProvisioningResult> provisionServer(
+    final ProvisioningRequest request,
   ) async {
-    late final ServerHostingDetails serverDetails;
-    final serverApiToken = StringGenerators.apiToken();
-    final hostname = getHostnameFromDomain(
-      installationData.serverDomain.domainName,
-    );
+    final resources = <ProvisionedResource>[];
+    final hostname = getHostnameFromDomain(request.serverDomain.domainName);
     final pastServers = await getServers();
     if (!pastServers.success) {
-      return GenericResult(
-        success: false,
+      return ProvisioningFailed(
+        stage: ProvisioningStage.discoverServers,
+        kind: ProvisioningFailureKind.unavailable,
+        resources: resources,
         code: pastServers.code,
-        message: pastServers.message,
-        data: CallbackDialogueBranching(
-          title: 'modals.unexpected_error'.tr(),
-          description: 'modals.server_validators_error'.tr(),
-          choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: () async => installationData.errorCallback(),
-            ),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () => launchInstallation(installationData),
-            ),
-          ],
-        ),
       );
     }
-    for (final pastServer in pastServers.data) {
-      if (pastServer.name == hostname) {
-        return serverNameConflictResult(
-          installationData: installationData,
-          message: 'Droplet "$hostname" already exists.',
-        );
-      }
+    if (pastServers.data.any((final server) => server.name == hostname)) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.discoverServers,
+        kind: ProvisioningFailureKind.nameConflict,
+        resources: resources,
+      );
     }
 
     final serverResult = await _adapter.api().createServer(
-      dnsApiCredential: installationData.dnsApiCredential,
-      domainName: installationData.serverDomain.domainName,
-      serverType: installationData.serverTypeId,
+      dnsApiCredential: request.dnsApiCredential,
+      domainName: request.serverDomain.domainName,
+      serverType: request.serverTypeId,
       hostName: hostname,
-      serverApiToken: serverApiToken,
-      customSshKey: installationData.customSshKey,
-      region: installationData.location,
+      serverApiToken: request.serverApiToken,
+      customSshKey: request.customSshKey,
+      region: request.location,
     );
-
-    if (serverResult.wasCreated && !serverResult.success) {
-      return unreadableCreationResult(
-        installationData: installationData,
-        resourceId: serverResult.resourceId,
-        cleanup: () => _deleteDigitalOceanResources(
-          serverId: int.tryParse(serverResult.resourceId ?? ''),
+    if (serverResult.wasCreated) {
+      resources.add(
+        ProvisionedResource(
+          provider: type,
+          kind: ProvisionedResourceKind.server,
+          id: serverResult.resourceId,
         ),
-        message: serverResult.message,
+      );
+    }
+    if (!serverResult.success ||
+        serverResult.data == null ||
+        serverResult.outcome != ResourceCreationOutcome.confirmed) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.createServer,
+        kind: switch (serverResult.outcome) {
+          ResourceCreationOutcome.confirmed =>
+            ProvisioningFailureKind.unreadable,
+          ResourceCreationOutcome.rejected => ProvisioningFailureKind.rejected,
+          ResourceCreationOutcome.indeterminate =>
+            ProvisioningFailureKind.indeterminate,
+        },
+        resources: resources,
         code: serverResult.code,
       );
     }
 
-    if (!serverResult.success || serverResult.data == null) {
-      return GenericResult(
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(
-              title: 'basis.cancel'.tr(),
-              callback: () async => await installationData.errorCallback(),
-            ),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () => launchInstallation(installationData),
-            ),
-          ],
-          description: serverResult.message ?? 'recovering.generic_error'.tr(),
-          title: 'modals.unexpected_error'.tr(),
+    final dropletId = serverResult.data!;
+    final volumeResult = await createVolume(
+      request.storageSize.gibibyte.toInt(),
+      request.location,
+    );
+    if (volumeResult.wasCreated) {
+      resources.add(
+        ProvisionedResource(
+          provider: type,
+          kind: ProvisionedResourceKind.volume,
+          id: volumeResult.resourceId,
         ),
-        success: false,
-        message: serverResult.message,
-        code: serverResult.code,
+      );
+    }
+    if (!volumeResult.success ||
+        volumeResult.data == null ||
+        volumeResult.outcome != ResourceCreationOutcome.confirmed) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.createVolume,
+        kind: switch (volumeResult.outcome) {
+          ResourceCreationOutcome.confirmed =>
+            ProvisioningFailureKind.unreadable,
+          ResourceCreationOutcome.rejected => ProvisioningFailureKind.rejected,
+          ResourceCreationOutcome.indeterminate =>
+            ProvisioningFailureKind.indeterminate,
+        },
+        resources: resources,
+        code: volumeResult.code,
       );
     }
 
-    String? createdVolumeId;
-    try {
-      final int dropletId = serverResult.data!;
-      final volumeResult = await createVolume(
-        installationData.storageSize.gibibyte.toInt(),
-        installationData.location,
+    final volume = volumeResult.data!;
+    final attachment = await _adapter.api().attachVolume(
+      uuid: volume.id!,
+      serverId: dropletId,
+      region: request.location,
+    );
+    if (!attachment.success || !attachment.data) {
+      return ProvisioningFailed(
+        stage: ProvisioningStage.attachVolume,
+        kind: ProvisioningFailureKind.actionFailed,
+        resources: resources,
+        code: attachment.code,
       );
-      createdVolumeId = volumeResult.resourceId;
-      if (volumeResult.wasCreated && !volumeResult.success) {
-        return unreadableCreationResult(
-          installationData: installationData,
-          resourceId: volumeResult.resourceId,
-          cleanup: () => _deleteDigitalOceanResources(
-            serverId: dropletId,
-            volumeId: volumeResult.resourceId,
-          ),
-          message: volumeResult.message,
-          code: volumeResult.code,
-        );
-      }
-      if (!volumeResult.success || volumeResult.data == null) {
-        throw StateError(
-          volumeResult.message ?? 'DigitalOcean volume creation failed.',
-        );
-      }
-      final newVolume = volumeResult.data;
-      final bool attachedVolume = (await _adapter.api().attachVolume(
-        uuid: newVolume!.id!,
-        serverId: dropletId,
-        region: installationData.location,
-      )).data;
+    }
 
-      if (!attachedVolume) {
-        throw StateError('DigitalOcean volume attachment failed.');
-      }
-
-      String? ipv4;
-      int attempts = 0;
-      while (attempts < 10 && ipv4 == null) {
-        await Future.delayed(const Duration(seconds: 20));
-        final servers = await getServers();
-        for (final server in servers.data) {
-          if (server.providerId == dropletId.toString() &&
-              server.ip != '0.0.0.0') {
-            ipv4 = server.ip;
-            break;
-          }
+    for (var attempt = 0; attempt < 10; attempt++) {
+      await Future<void>.delayed(const Duration(seconds: 20));
+      final servers = await getServers();
+      for (final server in servers.data) {
+        if (server.providerId == dropletId.toString() &&
+            server.ip != '0.0.0.0') {
+          return ProvisioningCompleted(
+            details: ServerHostingDetails(
+              providerId: dropletId.toString(),
+              ip4: server.ip,
+              createTime: DateTime.now(),
+              volume: volume,
+              apiToken: request.serverApiToken,
+              provider: type,
+            ),
+            resources: resources,
+          );
         }
-        ++attempts;
       }
-
-      if (ipv4 == null) {
-        throw StateError(
-          'Timed out while waiting for the DigitalOcean droplet IPv4 address.',
-        );
-      }
-
-      serverDetails = ServerHostingDetails(
-        providerId: dropletId.toString(),
-        ip4: ipv4,
-        createTime: DateTime.now(),
-        volume: newVolume,
-        apiToken: serverApiToken,
-        provider: ServerProviderType.digitalOcean,
-      );
-    } catch (e) {
-      return GenericResult(
-        success: false,
-        data: CallbackDialogueBranching(
-          choices: [
-            CallbackDialogueChoice(title: 'basis.cancel'.tr(), callback: null),
-            CallbackDialogueChoice(
-              title: 'modals.try_again'.tr(),
-              callback: () => cleanupInstallationResources(
-                installationData: installationData,
-                cleanup: () => _deleteDigitalOceanResources(
-                  serverId: serverResult.data,
-                  volumeId: createdVolumeId,
-                ),
-                onSuccess: () => launchInstallation(installationData),
-              ),
-            ),
-          ],
-          description: 'modals.try_again'.tr(),
-          title: 'modals.server_deletion_error'.tr(),
-        ),
-        message: e.toString(),
-      );
     }
-
-    await installationData.successCallback(serverDetails);
-    return GenericResult(success: true, data: null);
+    return ProvisioningFailed(
+      stage: ProvisioningStage.awaitIpv4,
+      kind: ProvisioningFailureKind.unavailable,
+      resources: resources,
+    );
   }
 
-  Future<GenericResult<void>> _deleteDigitalOceanResources({
-    final int? serverId,
-    final String? volumeId,
-  }) async {
-    if (serverId != null) {
-      final result = await deleteServer(serverId.toString());
-      if (!result.success) {
-        return result;
-      }
+  @override
+  Future<GenericResult<void>> deleteProvisionedResource(
+    final ProvisionedResource resource,
+  ) async {
+    if (resource.provider != type || resource.id == null) {
+      return GenericResult(success: false, data: null);
     }
-    if (volumeId != null) {
-      return _adapter.api().deleteVolume(volumeId);
-    }
-    return GenericResult(success: serverId != null, data: null);
+    return switch (resource.kind) {
+      ProvisionedResourceKind.server => deleteServer(resource.id!),
+      ProvisionedResourceKind.volume => _adapter.api().deleteVolume(
+        resource.id!,
+      ),
+    };
   }
 
   @override

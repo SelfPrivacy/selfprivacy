@@ -821,6 +821,8 @@
         "server_deletion_error": "Couldn't delete active server.",
         "volume_creation_error": "Couldn't create volume.",
         "resource_created": "The provider created a resource",
+        "resource_creation_unknown": "Could not confirm resource creation",
+        "resource_creation_unknown_description": "The provider may have created a resource. Check your provider account before trying again. Resources may continue to incur charges.",
         "resource_response_unreadable": "The provider created a resource, but the app could not read the response. Resource ID: {}. Delete the resources from this setup to stop billing.",
         "resource_id_unreadable": "The provider created a resource, but did not return a usable ID. Check your provider account and delete the resource manually.",
         "resource_cleanup_failed": "Resource cleanup failed",

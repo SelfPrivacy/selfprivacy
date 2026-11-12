@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
@@ -5,6 +7,8 @@ import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_api.da
 import 'package:selfprivacy/logic/api_maps/graphql_maps/server_api/server_mutation_result.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_cubit.dart';
 import 'package:selfprivacy/logic/cubit/server_installation/server_installation_repository.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
+import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 
 import '../../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../../helpers/fixtures/server_fixtures.dart';
@@ -12,6 +16,8 @@ import '../../../../helpers/fixtures/server_fixtures.dart';
 class _Navigation extends Mock implements NavigationService {}
 
 class _MockRepository extends Mock implements ServerInstallationRepository {}
+
+class _ServerProvider extends Mock implements ServerProvider {}
 
 ServerInstallationNotFinished _stateAfterServerStarted({
   final bool isCertificateVerified = false,
@@ -31,6 +37,10 @@ ServerInstallationNotFinished _stateAfterServerStarted({
 );
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(aProvisioningRequest());
+    registerFallbackValue(aServerHostingDetails());
+  });
   late _MockRepository repository;
   late ServerInstallationCubit cubit;
 
@@ -55,6 +65,95 @@ void main() {
     cubit.closeTimer();
     await cubit.close();
     await getIt.reset();
+  });
+
+  group('provisioning', () {
+    late _ServerProvider provider;
+    late Completer<ProvisioningResult> response;
+
+    setUp(() async {
+      await cubit.close();
+      provider = _ServerProvider();
+      cubit = ServerInstallationCubit(
+        repository: repository,
+        serverProvider: provider,
+      );
+      response = Completer<ProvisioningResult>();
+      when(
+        () => provider.provisionServer(any()),
+      ).thenAnswer((_) => response.future);
+      when(() => repository.load()).thenAnswer(
+        (_) async => ServerInstallationNotFinished(
+          providerApiToken: 'provider-token',
+          serverTypeIdentificator: 'cpx22',
+          serverLocation: 'fsn1',
+          dnsApiCredential: aDnsProviderCredential(),
+          serverDomain: aServerDomain(),
+          isServerStarted: false,
+          isCertificateVerified: false,
+          isServerRebooted: false,
+          isLoading: false,
+          dnsMatches: null,
+          customSshKey: null,
+        ),
+      );
+      await cubit.load();
+    });
+
+    test('double submission creates only one attempt', () async {
+      final first = cubit.createServerAndSetDnsRecords();
+      final second = cubit.createServerAndSetDnsRecords();
+      verify(() => provider.provisionServer(any())).called(1);
+      await cubit.close();
+      response.complete(
+        ProvisioningFailed(
+          stage: ProvisioningStage.createServer,
+          kind: ProvisioningFailureKind.indeterminate,
+          resources: [],
+        ),
+      );
+      await Future.wait([first, second]);
+      verifyNever(() => repository.saveServerDetails(any()));
+    });
+
+    test(
+      'late completion after close cannot persist or continue DNS',
+      () async {
+        final pending = cubit.createServerAndSetDnsRecords();
+        await cubit.close();
+        response.complete(
+          ProvisioningCompleted(
+            details: aServerHostingDetails(),
+            resources: [],
+          ),
+        );
+        await pending;
+        verifyNever(() => repository.saveServerDetails(any()));
+      },
+    );
+
+    test(
+      'late completion in another phase cannot persist or continue DNS',
+      () async {
+        final pending = cubit.createServerAndSetDnsRecords();
+        when(() => repository.load()).thenAnswer(
+          (_) async => const ServerInstallationRecovery(
+            currentStep: RecoveryStep.serverProviderToken,
+            recoveryCapabilities: ServerRecoveryCapabilities.none,
+          ),
+        );
+        await cubit.load();
+        response.complete(
+          ProvisioningCompleted(
+            details: aServerHostingDetails(),
+            resources: [],
+          ),
+        );
+        await pending;
+        expect(cubit.state, isA<ServerInstallationRecovery>());
+        verifyNever(() => repository.saveServerDetails(any()));
+      },
+    );
   });
 
   test('an unreachable server keeps waiting and sends nothing', () async {

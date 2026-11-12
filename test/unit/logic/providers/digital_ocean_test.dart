@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:selfprivacy/config/get_it_config.dart';
+import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider.dart';
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
+import '../../../fakes/hive/in_memory_hive.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 
@@ -18,6 +22,7 @@ class _DigitalOceanClientFactory {
     this.sizesResponse,
     this.volumesResponse,
     this.actionStatus = 'completed',
+    this.provisioning = false,
   });
 
   final Map<String, dynamic>? volume;
@@ -25,6 +30,8 @@ class _DigitalOceanClientFactory {
   final Map<String, dynamic>? sizesResponse;
   final Map<String, dynamic>? volumesResponse;
   final String actionStatus;
+  final bool provisioning;
+  bool _created = false;
   final List<RequestOptions> requests = [];
 
   Map<String, dynamic> get _volume =>
@@ -58,6 +65,20 @@ class _DigitalOceanClientFactory {
               requests.add(request);
 
               switch ((request.method, request.path)) {
+                case ('POST', '/droplets'):
+                  _created = true;
+                  handler.resolve(
+                    _response(
+                      request,
+                      statusCode: 202,
+                      data: {
+                        'droplet': loadJsonFixtureItem(
+                          'server_providers/digital_ocean/droplets.json',
+                          'droplets',
+                        ),
+                      },
+                    ),
+                  );
                 case ('POST', '/volumes'):
                   handler.resolve(
                     _response(
@@ -88,7 +109,9 @@ class _DigitalOceanClientFactory {
                       request,
                       statusCode: 200,
                       data:
-                          dropletsResponse ??
+                          (provisioning && !_created
+                              ? {'droplets': <Object>[]}
+                              : dropletsResponse) ??
                           loadJsonFixture(
                             'server_providers/digital_ocean/droplets.json',
                           ),
@@ -180,12 +203,145 @@ ServerProvider _provider(final _DigitalOceanClientFactory clients) =>
     );
 
 void main() {
-  setUp(() {
-    getIt.registerSingleton<ConsoleModel>(ConsoleModel());
+  setUpAll(setUpInMemoryHive);
+  tearDownAll(tearDownInMemoryHive);
+  setUp(() async {
+    await Hive.openBox(BNames.appSettingsBox);
+    getIt
+      ..registerSingleton<ConsoleModel>(ConsoleModel())
+      ..registerSingleton<DeveloperSettingsModel>(DeveloperSettingsModel());
   });
 
   tearDown(() async {
     await getIt.reset();
+    await Hive.box(BNames.appSettingsBox).clear();
+    await Hive.box(BNames.appSettingsBox).close();
+  });
+
+  group('provisionServer', () {
+    test('unreadable discovery returns a failure without creating', () async {
+      final response = loadJsonFixture(
+        'server_providers/digital_ocean/droplets.json',
+      );
+      final server = loadJsonFixtureItem(
+        'server_providers/digital_ocean/droplets.json',
+        'droplets',
+      )..remove('region');
+      response['droplets'] = [server];
+      final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+      final result =
+          await _provider(clients).provisionServer(aProvisioningRequest())
+              as ProvisioningFailed;
+      expect(result.stage, ProvisioningStage.discoverServers);
+      expect(result.kind, ProvisioningFailureKind.unavailable);
+      expect(clients.requests.map((final r) => r.method), ['GET']);
+    });
+    testWidgets('completes with the created IDs and caller token', (
+      final tester,
+    ) async {
+      final response = loadJsonFixture(
+        'server_providers/digital_ocean/droplets.json',
+      );
+      final original = loadJsonFixtureItem(
+        'server_providers/digital_ocean/droplets.json',
+        'droplets',
+      );
+      final unrelated =
+          loadJsonFixtureItem(
+              'server_providers/digital_ocean/droplets.json',
+              'droplets',
+            )
+            ..['id'] = 99
+            ..['networks'] = {
+              'v4': [
+                {'type': 'public', 'ip_address': '203.0.113.99'},
+              ],
+            };
+      response['droplets'] = [unrelated, original];
+      final clients = _DigitalOceanClientFactory(
+        provisioning: true,
+        dropletsResponse: response,
+      );
+      final pending = _provider(
+        clients,
+      ).provisionServer(aProvisioningRequest());
+      await tester.pump(Duration.zero);
+      await tester.pump(const Duration(seconds: 6));
+      await tester.pump(const Duration(seconds: 20));
+      final result = await pending as ProvisioningCompleted;
+      expect(result.details.providerId, '7');
+      expect(result.details.ip4, '135.181.45.111');
+      expect(result.details.apiToken, 'installation-token');
+      expect(result.details.volume.id, '7724db7c-e098-11e5-b522-000f53304e51');
+      expect(result.resources.map((final r) => r.id), [
+        '7',
+        '7724db7c-e098-11e5-b522-000f53304e51',
+      ]);
+      expect(clients.requests.map((final r) => (r.method, r.path)), [
+        ('GET', '/droplets'),
+        ('POST', '/droplets'),
+        ('POST', '/volumes'),
+        ('POST', '/volumes/7724db7c-e098-11e5-b522-000f53304e51/actions'),
+        ('GET', '/droplets'),
+      ]);
+    });
+
+    testWidgets('IPv4 timeout retains resources without cleanup', (
+      final tester,
+    ) async {
+      final clients = _DigitalOceanClientFactory(
+        provisioning: true,
+        dropletsResponse: {'droplets': <Object>[]},
+      );
+      final pending = _provider(
+        clients,
+      ).provisionServer(aProvisioningRequest());
+      await tester.pump(Duration.zero);
+      await tester.pump(const Duration(seconds: 6));
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(seconds: 20));
+      }
+      final result = await pending as ProvisioningFailed;
+      expect(result.stage, ProvisioningStage.awaitIpv4);
+      expect(result.resources, hasLength(2));
+      expect(
+        clients.requests.where((final r) => r.method == 'DELETE'),
+        isEmpty,
+      );
+    });
+
+    test('name conflict returns without a create or delete', () async {
+      final response = loadJsonFixture(
+        'server_providers/digital_ocean/droplets.json',
+      );
+      final server = loadJsonFixtureItem(
+        'server_providers/digital_ocean/droplets.json',
+        'droplets',
+      )..['name'] = 'example';
+      response['droplets'] = [server];
+      final clients = _DigitalOceanClientFactory(dropletsResponse: response);
+      final result =
+          await _provider(clients).provisionServer(aProvisioningRequest())
+              as ProvisioningFailed;
+      expect(result.kind, ProvisioningFailureKind.nameConflict);
+      expect(result.resources, isEmpty);
+      expect(clients.requests.map((final r) => r.method), ['GET']);
+    });
+
+    test('deletes a recorded volume directly by UUID', () async {
+      final clients = _DigitalOceanClientFactory();
+      final result = await _provider(clients).deleteProvisionedResource(
+        ProvisionedResource(
+          provider: ServerProviderType.digitalOcean,
+          kind: ProvisionedResourceKind.volume,
+          id: '7724db7c-e098-11e5-b522-000f53304e51',
+        ),
+      );
+      expect(result.success, isTrue);
+      expect(clients.requests.map((final r) => (r.method, r.path)), [
+        ('DELETE', '/volumes/7724db7c-e098-11e5-b522-000f53304e51'),
+      ]);
+    });
   });
 
   group('createVolume', () {

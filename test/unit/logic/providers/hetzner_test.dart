@@ -6,6 +6,7 @@ import 'package:selfprivacy/config/hive_config.dart';
 import 'package:selfprivacy/logic/models/disk_size.dart';
 import 'package:selfprivacy/logic/models/hive/provider_credentials.dart';
 import 'package:selfprivacy/logic/models/hive/server_details.dart';
+import 'package:selfprivacy/logic/models/provisioning_result.dart';
 import 'package:selfprivacy/logic/models/server_metadata.dart';
 import 'package:selfprivacy/logic/models/server_provider_location.dart';
 import 'package:selfprivacy/logic/providers/provider_settings.dart';
@@ -13,7 +14,6 @@ import 'package:selfprivacy/logic/providers/server_providers/server_provider.dar
 import 'package:selfprivacy/logic/providers/server_providers/server_provider_factory.dart';
 
 import '../../../fakes/hive/in_memory_hive.dart';
-import '../../../helpers/fixtures/credential_fixtures.dart';
 import '../../../helpers/fixtures/json_fixture.dart';
 import '../../../helpers/fixtures/server_fixtures.dart';
 
@@ -278,20 +278,6 @@ class _HetznerMetadataClientFactory {
   }) => Response<dynamic>(requestOptions: request, statusCode: 200, data: data);
 }
 
-LaunchInstallationData _installationData({
-  required final void Function() onSuccess,
-  final void Function()? onError,
-}) => LaunchInstallationData(
-  dnsApiCredential: aDnsProviderCredential(),
-  serverDomain: aServerDomain(),
-  serverTypeId: 'cpx12',
-  errorCallback: onError ?? () {},
-  successCallback: (final _) => onSuccess(),
-  storageSize: DiskSize.fromGibibyte(10),
-  customSshKey: null,
-  location: 'fsn1',
-);
-
 ServerProvider _provider(
   final _FailureStage failureStage, {
   final _HetznerInstallationClientFactory? clients,
@@ -331,147 +317,72 @@ void main() {
     await box.close();
   });
 
-  group('launchInstallation', () {
-    test('name conflict stops without deleting any resources', () async {
+  group('provisionServer', () {
+    test('name conflict retains the volume and never deletes', () async {
       final clients = _HetznerInstallationClientFactory(
         _FailureStage.uniqueness,
       );
-      var stopped = false;
-      final pending = _provider(_FailureStage.uniqueness, clients: clients)
-          .launchInstallation(
-            _installationData(onSuccess: () {}, onError: () => stopped = true),
-          );
-      final result = await pending;
-
-      expect(result.success, isFalse);
-      expect(result.data!.choices, hasLength(1));
-      await result.data!.choices.single.callback!();
-      expect(stopped, isTrue);
+      final result =
+          await _provider(
+                _FailureStage.uniqueness,
+                clients: clients,
+              ).provisionServer(aProvisioningRequest())
+              as ProvisioningFailed;
+      expect(result.kind, ProvisioningFailureKind.nameConflict);
+      expect(result.code, 409);
+      expect(result.resources.single.id, '41');
       expect(
-        clients.requests.where((final request) => request.method == 'DELETE'),
+        clients.requests.where((final r) => r.method == 'DELETE'),
         isEmpty,
-      );
-      expect(
-        clients.requests.where(
-          (final request) =>
-              request.path == '/servers' && request.method == 'POST',
-        ),
-        hasLength(1),
       );
     });
 
-    test('cleanup deletes only the created server and volume', () async {
+    test(
+      'server rejection reports its stage and the volume it created',
+      () async {
+        final result =
+            await _provider(
+                  _FailureStage.server,
+                ).provisionServer(aProvisioningRequest())
+                as ProvisioningFailed;
+        expect(result.stage, ProvisioningStage.createServer);
+        expect(result.kind, ProvisioningFailureKind.rejected);
+        expect(result.code, 422);
+        expect(result.resources.single.id, '41');
+      },
+    );
+
+    test('reverse DNS failure retains the exact server and volume', () async {
       final clients = _HetznerInstallationClientFactory(
         _FailureStage.reverseDns,
       );
-      var stopped = false;
-      final resultFuture = _provider(_FailureStage.reverseDns, clients: clients)
-          .launchInstallation(
-            _installationData(onSuccess: () {}, onError: () => stopped = true),
-          );
-      final result = await resultFuture;
-      final pending = result.data!.choices.first.callback!();
-      final cleanup = await pending;
-
-      expect(cleanup.success, isTrue);
-      expect(stopped, isTrue);
+      final provider = _provider(_FailureStage.reverseDns, clients: clients);
+      final result =
+          await provider.provisionServer(aProvisioningRequest())
+              as ProvisioningFailed;
+      expect(result.stage, ProvisioningStage.setReverseDns);
+      expect(result.kind, ProvisioningFailureKind.actionFailed);
+      expect(result.resources.map((final r) => (r.kind, r.id)), [
+        (ProvisionedResourceKind.volume, '41'),
+        (ProvisionedResourceKind.server, '7'),
+      ]);
+      expect(
+        clients.requests.where((final r) => r.method == 'DELETE'),
+        isEmpty,
+      );
+      for (final resource in result.resources.reversed) {
+        expect(
+          (await provider.deleteProvisionedResource(resource)).success,
+          isTrue,
+        );
+      }
       expect(
         clients.requests
-            .where((final request) => request.method == 'DELETE')
-            .map((final request) => request.path),
+            .where((final r) => r.method == 'DELETE')
+            .map((final r) => r.path),
         ['/servers/7', '/volumes/41'],
       );
-      expect(
-        clients.requests.where((final request) => request.method == 'GET'),
-        isEmpty,
-      );
-    });
-
-    test('failed cleanup cannot start another installation', () async {
-      final clients = _HetznerInstallationClientFactory(
-        _FailureStage.reverseDns,
-      )..serverDeleteStatus = 500;
-      final resultFuture = _provider(
-        _FailureStage.reverseDns,
-        clients: clients,
-      ).launchInstallation(_installationData(onSuccess: () {}));
-      final result = await resultFuture;
-      final pending = result.data!.choices[1].callback!();
-      final cleanup = await pending;
-
-      expect(cleanup.success, isFalse);
-      expect(
-        clients.requests.where(
-          (final request) =>
-              request.path == '/servers' && request.method == 'POST',
-        ),
-        hasLength(1),
-      );
-      expect(
-        clients.requests
-            .where((final request) => request.method == 'DELETE')
-            .map((final request) => request.path),
-        ['/servers/7'],
-      );
-    });
-
-    testWidgets('server creation failure uses the server result', (
-      final tester,
-    ) async {
-      bool successCalled = false;
-      final resultFuture = _provider(_FailureStage.server).launchInstallation(
-        _installationData(onSuccess: () => successCalled = true),
-      );
-
-      await tester.pump();
-      await tester.pump(const Duration(seconds: 5));
-      final result = await resultFuture;
-
-      expect(result.success, isFalse);
-      expect(result.message, 'server-create-failed');
-      expect(result.code, 422);
-      expect(result.data!.description, 'server-create-failed');
-      expect(successCalled, isFalse);
-    });
-
-    testWidgets('uniqueness failure uses the server result metadata', (
-      final tester,
-    ) async {
-      bool successCalled = false;
-      final resultFuture = _provider(_FailureStage.uniqueness)
-          .launchInstallation(
-            _installationData(onSuccess: () => successCalled = true),
-          );
-
-      await tester.pump();
-      await tester.pump(const Duration(seconds: 5));
-      final result = await resultFuture;
-
-      expect(result.success, isFalse);
-      expect(result.message, 'uniqueness_error');
-      expect(result.code, 409);
-      expect(result.data, isNotNull);
-      expect(successCalled, isFalse);
-    });
-
-    testWidgets('reverse DNS failure uses the reverse DNS result', (
-      final tester,
-    ) async {
-      bool successCalled = false;
-      final resultFuture = _provider(_FailureStage.reverseDns)
-          .launchInstallation(
-            _installationData(onSuccess: () => successCalled = true),
-          );
-
-      await tester.pump();
-      await tester.pump(const Duration(seconds: 5));
-      final result = await resultFuture;
-
-      expect(result.success, isFalse);
-      expect(result.message, contains('reverse-dns-failed'));
-      expect(result.code, isNull);
-      expect(result.data!.description, result.message);
-      expect(successCalled, isFalse);
+      expect(clients.requests.where((final r) => r.method == 'GET'), isEmpty);
     });
   });
 

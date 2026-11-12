@@ -129,7 +129,9 @@ class DigitalOceanApi extends RestApiMap {
       return ResourceCreationResult(
         success: false,
         data: null,
-        wasCreated: _isSuccessfulCreateResponse(serverCreateResponse),
+        outcome: resourceCreationOutcomeForStatus(
+          serverCreateResponse?.statusCode,
+        ),
         resourceId: rawDropletId,
         code: serverCreateResponse?.statusCode,
         message: e.toString(),
@@ -138,12 +140,14 @@ class DigitalOceanApi extends RestApiMap {
       close(client);
     }
 
+    final outcome = resourceCreationOutcomeForStatus(
+      serverCreateResponse.statusCode,
+    );
     return ResourceCreationResult(
       data: dropletId,
       success:
-          _isSuccessfulCreateResponse(serverCreateResponse) &&
-          dropletId != null,
-      wasCreated: _isSuccessfulCreateResponse(serverCreateResponse),
+          outcome == ResourceCreationOutcome.confirmed && dropletId != null,
+      outcome: outcome,
       resourceId: rawDropletId,
       code: serverCreateResponse.statusCode,
       message: serverCreateResponse.statusMessage,
@@ -390,7 +394,9 @@ class DigitalOceanApi extends RestApiMap {
       return ResourceCreationResult(
         data: null,
         success: false,
-        wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+        outcome: resourceCreationOutcomeForStatus(
+          createVolumeResponse?.statusCode,
+        ),
         resourceId: volumeId,
         code: createVolumeResponse?.statusCode,
         message: e.toString(),
@@ -399,19 +405,17 @@ class DigitalOceanApi extends RestApiMap {
       client.close();
     }
 
+    final outcome = resourceCreationOutcomeForStatus(
+      createVolumeResponse.statusCode,
+    );
     return ResourceCreationResult(
       data: volume,
-      success: _isSuccessfulCreateResponse(createVolumeResponse),
-      wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+      success: outcome == ResourceCreationOutcome.confirmed,
+      outcome: outcome,
       resourceId: volumeId,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
-  }
-
-  bool _isSuccessfulCreateResponse(final Response? response) {
-    final statusCode = response?.statusCode;
-    return statusCode != null && statusCode >= 200 && statusCode < 300;
   }
 
   Future<GenericResult<bool>> attachVolume({

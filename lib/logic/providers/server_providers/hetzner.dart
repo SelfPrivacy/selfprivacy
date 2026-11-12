@@ -576,7 +576,7 @@ class HetznerServerProvider extends ServerProvider {
       return ResourceCreationResult(
         data: null,
         success: false,
-        wasCreated: result.wasCreated,
+        outcome: result.outcome,
         resourceId: result.resourceId,
         message: result.message,
         code: result.code,
@@ -595,7 +595,7 @@ class HetznerServerProvider extends ServerProvider {
       return ResourceCreationResult(
         data: null,
         success: false,
-        wasCreated: result.wasCreated,
+        outcome: result.outcome,
         resourceId: result.resourceId,
         message: e.toString(),
       );
@@ -604,7 +604,7 @@ class HetznerServerProvider extends ServerProvider {
     return ResourceCreationResult(
       data: volume,
       success: true,
-      wasCreated: result.wasCreated,
+      outcome: result.outcome,
       resourceId: result.resourceId,
       code: result.code,
       message: result.message,

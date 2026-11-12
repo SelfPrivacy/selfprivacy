@@ -91,7 +91,6 @@ class HetznerApi extends RestApiMap {
     String? serverId;
     DioException? hetznerError;
     Object? parsingError;
-    bool success = false;
 
     final Dio client = await getClient();
     try {
@@ -127,7 +126,6 @@ class HetznerApi extends RestApiMap {
         serverId = rawServerId.toString();
       }
       serverInfo = HetznerServerInfo.fromJson(rawServer);
-      success = _isSuccessfulCreateResponse(serverCreateResponse);
     } on DioException catch (e) {
       hetznerError = e;
     } catch (e) {
@@ -141,18 +139,21 @@ class HetznerApi extends RestApiMap {
       apiResultMessage = 'uniqueness_error';
     }
 
-    final wasCreated = _isSuccessfulCreateResponse(serverCreateResponse);
-    if (wasCreated && parsingError != null) {
+    final statusCode =
+        serverCreateResponse?.statusCode ?? hetznerError?.response?.statusCode;
+    final outcome = resourceCreationOutcomeForStatus(statusCode);
+    if (outcome == ResourceCreationOutcome.confirmed && parsingError != null) {
       apiResultMessage = parsingError.toString();
     }
     return ResourceCreationResult(
       data: serverInfo,
-      success: success && hetznerError == null && serverInfo != null,
-      wasCreated: wasCreated,
+      success:
+          outcome == ResourceCreationOutcome.confirmed &&
+          hetznerError == null &&
+          serverInfo != null,
+      outcome: outcome,
       resourceId: serverId,
-      code:
-          serverCreateResponse?.statusCode ??
-          hetznerError?.response?.statusCode,
+      code: statusCode,
       message: apiResultMessage,
     );
   }
@@ -443,7 +444,9 @@ class HetznerApi extends RestApiMap {
       return ResourceCreationResult(
         data: null,
         success: false,
-        wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+        outcome: resourceCreationOutcomeForStatus(
+          createVolumeResponse?.statusCode,
+        ),
         resourceId: volumeId,
         code: createVolumeResponse?.statusCode,
         message: e.toString(),
@@ -452,19 +455,17 @@ class HetznerApi extends RestApiMap {
       client.close();
     }
 
+    final outcome = resourceCreationOutcomeForStatus(
+      createVolumeResponse.statusCode,
+    );
     return ResourceCreationResult(
       data: volume,
-      success: _isSuccessfulCreateResponse(createVolumeResponse),
-      wasCreated: _isSuccessfulCreateResponse(createVolumeResponse),
+      success: outcome == ResourceCreationOutcome.confirmed,
+      outcome: outcome,
       resourceId: volumeId,
       code: createVolumeResponse.statusCode,
       message: createVolumeResponse.statusMessage,
     );
-  }
-
-  bool _isSuccessfulCreateResponse(final Response? response) {
-    final statusCode = response?.statusCode;
-    return statusCode != null && statusCode >= 200 && statusCode < 300;
   }
 
   Future<GenericResult<bool>> deleteVolume(final int volumeId) async {

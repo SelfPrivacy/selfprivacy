@@ -613,7 +613,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       return ResourceCreationResult(
         data: null,
         success: false,
-        wasCreated: result.wasCreated,
+        outcome: result.outcome,
         resourceId: result.resourceId,
         code: result.code,
         message: result.message,
@@ -632,7 +632,7 @@ class DigitalOceanServerProvider extends ServerProvider {
       return ResourceCreationResult(
         data: null,
         success: false,
-        wasCreated: result.wasCreated,
+        outcome: result.outcome,
         resourceId: result.resourceId,
         code: result.code,
         message: 'DigitalOcean returned an incomplete volume.',
@@ -651,7 +651,7 @@ class DigitalOceanServerProvider extends ServerProvider {
     return ResourceCreationResult(
       data: volume,
       success: true,
-      wasCreated: result.wasCreated,
+      outcome: result.outcome,
       resourceId: result.resourceId,
     );
   }
